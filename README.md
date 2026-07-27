@@ -156,6 +156,22 @@ own pricing, which is theirs to set and change. StormATC does not resell them, d
 free tier to offer on their behalf, and makes no claim about what they cost. Check their current
 rates before enabling them.
 
+### Provider roadmap
+
+OpenRouter and Deepgram are the first supported cloud integrations, not a permanent limit or an
+exclusive partnership. StormATC's provider abstractions are intended to support more user-selected
+options over time. Areas being considered include:
+
+- direct model integrations such as OpenAI, Anthropic, DeepSeek, and other compatible providers;
+- additional cloud speech-to-text and text-to-speech services; and
+- local or fully offline speech recognition and text-to-speech, including voices that do not
+  require a Deepgram account.
+
+These are roadmap directions, not claims that the integrations already exist or promises of
+specific release dates. Every cloud integration will remain optional. Users and contributors must
+use their own provider accounts and API keys; StormATC will not issue, bundle, or share credentials.
+Local and offline options should require no cloud key.
+
 ---
 
 ## API keys

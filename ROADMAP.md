@@ -12,6 +12,21 @@ promise of dates or a claim that an item is already assigned.
 - Make partial readbacks and corrections feel natural instead of repetitive.
 - Add repeatable transcript fixtures for real failure cases with all personal data removed.
 
+### Provider choice and local AI
+
+- Keep OpenRouter and Deepgram as optional integrations rather than hard dependencies.
+- Explore direct model adapters for providers such as OpenAI, Anthropic, DeepSeek, and other
+  compatible APIs.
+- Add more speech-to-text and text-to-speech provider choices behind the existing interfaces.
+- Investigate local and fully offline speech recognition and text-to-speech, including controller
+  voices that do not require a Deepgram account.
+- Preserve explicit consent, encrypted per-user credentials, official-endpoint restrictions, and
+  the deterministic ATC authority boundary for every future provider.
+
+Provider names describe areas for investigation, not endorsements, confirmed integrations, or
+release-date commitments. Cloud users and contributors supply their own accounts and API keys;
+StormATC will not distribute shared credentials.
+
 ### Complete gate-to-gate ATC
 
 - Strengthen delivery, ground, tower, departure, approach, and handoff transitions.
