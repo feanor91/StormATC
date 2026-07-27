@@ -1,0 +1,39 @@
+{
+  "$comment": [
+    "FICTIONAL SAMPLE AIRSPACE. The Storm FIR does not exist.",
+    "Two sectors cover the STMR-STMD demonstration route: a low sector for terminal",
+    "operations and a high sector for the cruise segment. Boundaries are rectangles,",
+    "which is all the prototype's sector logic needs."
+  ],
+  "firIdentifier": "STFIR",
+  "firName": "Storm FIR",
+  "isFictional": true,
+  "sectors": [
+    {
+      "sectorId": "STFIR-LOW",
+      "controllerName": "Storm Approach",
+      "position": "Approach",
+      "frequency": 120.400,
+      "minimumLatitude": 52.0,
+      "maximumLatitude": 53.5,
+      "minimumLongitude": 4.0,
+      "maximumLongitude": 6.0,
+      "minimumAltitudeFeet": 0,
+      "maximumAltitudeFeet": 9500,
+      "neighborSectorIds": ["STFIR-HIGH"]
+    },
+    {
+      "sectorId": "STFIR-HIGH",
+      "controllerName": "Storm Center",
+      "position": "Center",
+      "frequency": 128.500,
+      "minimumLatitude": 52.0,
+      "maximumLatitude": 53.5,
+      "minimumLongitude": 4.0,
+      "maximumLongitude": 6.0,
+      "minimumAltitudeFeet": 9500,
+      "maximumAltitudeFeet": 45000,
+      "neighborSectorIds": ["STFIR-LOW"]
+    }
+  ]
+}

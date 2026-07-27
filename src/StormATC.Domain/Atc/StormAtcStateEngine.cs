@@ -1,0 +1,2389 @@
+using StormATC.Domain.Airports;
+using StormATC.Domain.Intents;
+using StormATC.Domain.Phraseology;
+using StormATC.Domain.Readback;
+using StormATC.Domain.Sessions;
+using StormATC.Domain.ValueObjects;
+
+namespace StormATC.Domain.Atc;
+
+/// <summary>
+/// The deterministic ATC state engine. Decides what is permitted, given what is true.
+/// </summary>
+/// <remarks>
+/// <para>
+/// Every rule in this class is a pure function of <see cref="AtcEvaluationContext"/>. There is
+/// no clock, no network, no persistence, and no randomness. Two identical contexts always
+/// produce identical decisions, which is what lets the whole clearance model be tested.
+/// </para>
+/// <para>
+/// The engine is organised as a guard chain followed by an intent dispatch. Guards handle the
+/// concerns that apply to every transmission — emergency priority, callsign, confidence,
+/// jurisdiction, outstanding readbacks — and each intent handler then deals only with its own
+/// preconditions.
+/// </para>
+/// </remarks>
+public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : IAtcStateEngine
+{
+    private readonly IReadbackEvaluator _readbackEvaluator =
+        readbackEvaluator ?? throw new ArgumentNullException(nameof(readbackEvaluator));
+
+    /// <summary>
+    /// Lateral distance from a runway centreline, in metres, inside which an aircraft is
+    /// considered to have entered the protected runway surface.
+    /// </summary>
+    private const double RunwayIncursionThresholdMeters = 40;
+
+    /// <summary>
+    /// Ground speed above which the engine treats the aircraft as committed to the takeoff roll
+    /// rather than taxiing.
+    /// </summary>
+    private const double TakeoffRollGroundSpeedKnots = 45;
+
+    /// <summary>Distance within which an aircraft counts as "at" a stand or holding point.</summary>
+    private const double ProximityNauticalMiles = 0.08;
+
+    /// <inheritdoc />
+    public AtcDecision Evaluate(AtcEvaluationContext context)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        if (context.Intent is not PilotIntent intent)
+        {
+            return AtcDecision.Silent();
+        }
+
+        // --- Guard 1: emergencies bypass every other rule. ---------------------------------
+        if (intent.IsEmergency)
+        {
+            return HandleEmergency(context, intent);
+        }
+
+        // --- Guard 2: transmissions that never depend on state. ----------------------------
+        switch (intent.Type)
+        {
+            case PilotIntentType.SayAgain:
+                return HandleSayAgain(context);
+            case PilotIntentType.RadioCheck:
+                return HandleRadioCheck(context);
+            case PilotIntentType.RequestFrequency:
+                return HandleFrequencyRequest(context);
+            case PilotIntentType.Unknown:
+                return HandleUnrecognized(context, intent);
+        }
+
+        // --- Guard 3: the parser was not sure enough to act on something safety-critical. ---
+        if (intent.RequiresClarification
+            || (intent.IsSafetyCritical && intent.Confidence < context.Realism.MinimumIntentConfidence))
+        {
+            return AtcDecision.Reject(
+                $"Intent confidence {intent.Confidence:F2} is below the {context.Realism.MinimumIntentConfidence:F2} threshold for a safety-critical request.",
+                DeterministicPhraseology.SayAgain(context.Session.Callsign));
+        }
+
+        // --- Guard 4: is this transmission from our aircraft? -------------------------------
+        if (context.Realism.RequireCorrectCallsign
+            && intent.Callsign is Callsign spoken
+            && context.Session.Callsign is Callsign expected
+            && spoken != expected)
+        {
+            return AtcDecision.Reject(
+                $"Transmission used callsign {spoken} but the session aircraft is {expected}.",
+                DeterministicPhraseology.SayAgain(expected));
+        }
+
+        // --- Guard 5: is the pilot talking to the right controller? -------------------------
+        AtcDecision? jurisdictionFailure = CheckJurisdiction(context, intent);
+        if (jurisdictionFailure is not null)
+        {
+            return jurisdictionFailure;
+        }
+
+        // --- Guard 6: an outstanding mandatory readback blocks new requests. ----------------
+        // Readback and correction intents are exempt: they are how the pilot resolves it.
+        bool isReadbackIntent = IsReadbackIntent(intent.Type);
+        if (!isReadbackIntent
+            && context.Realism.RequireReadbackBeforeProgressing
+            && context.Session.HasOutstandingMandatoryReadback)
+        {
+            return AtcDecision.Reject(
+                "A mandatory readback is still outstanding.",
+                BuildReadbackReminder(context));
+        }
+
+        return intent.Type switch
+        {
+            PilotIntentType.InitialCall => HandleInitialCall(context),
+            PilotIntentType.RequestIFRClearance => HandleClearanceRequest(context),
+            PilotIntentType.ClearanceReadback
+                or PilotIntentType.TaxiReadback
+                or PilotIntentType.TakeoffReadback
+                or PilotIntentType.LandingReadback
+                or PilotIntentType.AltitudeReadback
+                or PilotIntentType.HeadingReadback
+                or PilotIntentType.FrequencyReadback
+                or PilotIntentType.Correction => HandleReadback(context, intent),
+            PilotIntentType.RequestPushback => HandlePushbackRequest(context),
+            PilotIntentType.RequestTaxi => HandleTaxiRequest(context),
+            PilotIntentType.ReportHoldingShort => HandleHoldingShortReport(context, intent),
+            PilotIntentType.ReadyForDeparture => HandleReadyForDeparture(context),
+            PilotIntentType.ReportAirborne => HandleAirborneReport(context),
+            PilotIntentType.CheckIn => HandleCheckIn(context),
+            PilotIntentType.RequestClimb => HandleClimbRequest(context, intent),
+            PilotIntentType.RequestDescent => HandleDescentRequest(context, intent),
+            PilotIntentType.RequestDirect => HandleDirectRequest(context, intent),
+            PilotIntentType.RequestDeviation => HandleDeviationRequest(context),
+            PilotIntentType.RequestApproach => HandleApproachRequest(context, intent),
+            PilotIntentType.ReportEstablished => HandleEstablishedReport(context, intent),
+            PilotIntentType.ReportRunwayVacated => HandleRunwayVacated(context),
+            PilotIntentType.RequestTaxiToStand => HandleTaxiToStandRequest(context, intent),
+            PilotIntentType.GoAround => HandleGoAround(context),
+            PilotIntentType.Unable => HandleUnable(context),
+            PilotIntentType.PilotAcknowledgement => HandlePilotAcknowledgement(),
+            _ => HandleUnrecognized(context, intent),
+        };
+    }
+
+    /// <inheritdoc />
+    public AtcDecision EvaluateStateChange(AtcEvaluationContext context)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        AtcSession session = context.Session;
+        Aircraft.AircraftState aircraft = context.AircraftState;
+
+        // --- Unauthorised runway entry. ----------------------------------------------------
+        // Checked first because it is the only state change that raises a warning rather than
+        // simply advancing the flight.
+        AtcDecision? incursion = CheckRunwayIncursion(context);
+        if (incursion is not null)
+        {
+            return incursion;
+        }
+
+        // --- Becoming airborne. ------------------------------------------------------------
+        if (!aircraft.IsOnGround
+            && session.Phase is FlightPhase.Takeoff or FlightPhase.LineUp or FlightPhase.HoldingShort)
+        {
+            return new AtcDecision
+            {
+                Accepted = true,
+                ResponseType = AtcResponseType.None,
+                NewPhase = FlightPhase.InitialClimb,
+                FallbackPhraseology = string.Empty,
+                AllowLanguageModelPhraseology = false,
+            };
+        }
+
+        // --- Departure handoff trigger. ----------------------------------------------------
+        // Real towers hand off shortly after the aircraft is established in the climb. The mock
+        // trigger is a stable climb through 1000 ft above aerodrome elevation.
+        if (session.Phase == FlightPhase.InitialClimb
+            && session.CurrentController == ControllerPosition.Tower
+            && aircraft.IsClimbing
+            && IsAboveAerodromeBy(context, 1000))
+        {
+            Frequency? departureFrequency = ResolveFrequency(context, ControllerPosition.Departure);
+            if (departureFrequency is Frequency frequency && session.Callsign is Callsign callsign)
+            {
+                return BuildHandoff(
+                    context,
+                    ControllerPosition.Departure,
+                    frequency,
+                    FlightPhase.Departure,
+                    "Established in the climb after departure.",
+                    DeterministicPhraseology.Handoff(callsign, ControllerPosition.Departure, frequency));
+            }
+        }
+
+        // --- Arrival handoff trigger. -------------------------------------------------------
+        // The mirror of the departure handoff: a radar controller passes an arriving aircraft
+        // to Approach once it is descending inside the terminal area. Without this the aircraft
+        // would still be with Departure or Center when it asks for the approach, and Approach
+        // clearance is not theirs to give.
+        if (session.Phase == FlightPhase.Descent
+            && session.CurrentController is ControllerPosition.Departure or ControllerPosition.Center
+            && !aircraft.IsOnGround
+            && IsWithinTerminalArea(context))
+        {
+            Frequency? approachFrequency = ResolveFrequency(context, ControllerPosition.Approach);
+            if (approachFrequency is Frequency frequency && session.Callsign is Callsign arriving)
+            {
+                return BuildHandoff(
+                    context,
+                    ControllerPosition.Approach,
+                    frequency,
+                    newPhase: null,
+                    "Descending into the terminal area.",
+                    DeterministicPhraseology.Handoff(arriving, ControllerPosition.Approach, frequency));
+            }
+        }
+
+        // --- Touchdown. --------------------------------------------------------------------
+        if (aircraft.IsOnGround
+            && session.Phase is FlightPhase.Final or FlightPhase.Approach)
+        {
+            string vacate = BuildVacateInstruction(context);
+            return new AtcDecision
+            {
+                Accepted = true,
+                ResponseType = AtcResponseType.VacateInstruction,
+                NewPhase = FlightPhase.Landed,
+                FallbackPhraseology = vacate,
+                ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+                {
+                    ["instruction"] = "vacate runway",
+                },
+                ProhibitedFacts = ["takeoff clearance", "taxi to stand"],
+            };
+        }
+
+        // --- Parked. -----------------------------------------------------------------------
+        if (session.Phase == FlightPhase.TaxiIn
+            && aircraft.IsStationary
+            && aircraft.ParkingBrakeSet
+            && IsAtAssignedStand(context))
+        {
+            return new AtcDecision
+            {
+                Accepted = true,
+                ResponseType = AtcResponseType.None,
+                NewPhase = FlightPhase.Parked,
+                FallbackPhraseology = string.Empty,
+                AllowLanguageModelPhraseology = false,
+            };
+        }
+
+        return AtcDecision.Silent();
+    }
+
+    // =====================================================================================
+    // Intent handlers
+    // =====================================================================================
+
+    private static AtcDecision HandleInitialCall(AtcEvaluationContext context)
+    {
+        if (context.Session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Reject(
+                "No flight plan is loaded, so the aircraft has no callsign.",
+                "Station calling, no flight plan is loaded. Import a flight plan to begin.");
+        }
+
+        ControllerPosition controller = context.Session.CurrentController == ControllerPosition.None
+            ? ControllerPosition.ClearanceDelivery
+            : context.Session.CurrentController;
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.Acknowledgement,
+            FallbackPhraseology = $"{callsign.ToSpoken()}, {DeterministicPhraseology.SpokenControllerName(controller)}, go ahead.",
+            ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["controller"] = DeterministicPhraseology.SpokenControllerName(controller),
+            },
+            ProhibitedFacts = ["any clearance"],
+        };
+    }
+
+    private static AtcDecision HandleRadioCheck(AtcEvaluationContext context)
+    {
+        if (context.Session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        ControllerPosition controller = context.Session.CurrentController == ControllerPosition.None
+            ? ControllerPosition.ClearanceDelivery
+            : context.Session.CurrentController;
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.RadioCheckReply,
+            FallbackPhraseology = DeterministicPhraseology.RadioCheckReply(callsign, controller),
+            ProhibitedFacts = ["any clearance"],
+        };
+    }
+
+    private static AtcDecision HandleSayAgain(AtcEvaluationContext context)
+    {
+        // Repeat the last controller transmission verbatim. This is deterministic by design:
+        // "say again" means say the same thing, not paraphrase it.
+        string? lastControllerText = null;
+        IReadOnlyList<ConversationTurn> conversation = context.Session.Conversation;
+        for (int i = conversation.Count - 1; i >= 0; i--)
+        {
+            if (conversation[i].Speaker == ConversationSpeaker.Controller)
+            {
+                lastControllerText = conversation[i].Text;
+                break;
+            }
+        }
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.SayAgain,
+            FallbackPhraseology = lastControllerText
+                ?? DeterministicPhraseology.SayAgain(context.Session.Callsign),
+            AllowLanguageModelPhraseology = false,
+        };
+    }
+
+    private static AtcDecision HandleUnrecognized(AtcEvaluationContext context, PilotIntent intent)
+    {
+        string reason = intent.ClarificationReason ?? "The transmission was not understood.";
+
+        return new AtcDecision
+        {
+            Accepted = false,
+            ResponseType = AtcResponseType.SayAgain,
+            RejectionReason = reason,
+            FallbackPhraseology = DeterministicPhraseology.SayAgain(context.Session.Callsign),
+            AllowLanguageModelPhraseology = false,
+        };
+    }
+
+    private static AtcDecision HandleUnable(AtcEvaluationContext context)
+    {
+        // The pilot has declined an instruction. Acknowledge and leave the clearance in place;
+        // resolving it is the pilot's next transmission, not something to guess at here.
+        if (context.Session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.Acknowledgement,
+            FallbackPhraseology = $"{callsign.ToSpoken()}, roger, say intentions.",
+            ProhibitedFacts = ["new clearance"],
+        };
+    }
+
+    private static AtcDecision HandleEmergency(AtcEvaluationContext context, PilotIntent intent)
+    {
+        if (context.Session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        bool isMayday = intent.Type == PilotIntentType.Mayday;
+
+        var warning = new AtcWarning
+        {
+            Severity = AtcSeverity.Warning,
+            Code = isMayday ? "MaydayDeclared" : "PanPanDeclared",
+            Message = isMayday
+                ? "Simulated emergency declared (MAYDAY). This is a flight simulation only."
+                : "Simulated urgency declared (PAN PAN). This is a flight simulation only.",
+            RaisedAt = context.CurrentTime,
+        };
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.EmergencyAcknowledgement,
+            NewPhase = FlightPhase.Abnormal,
+            FallbackPhraseology = DeterministicPhraseology.EmergencyAcknowledgement(callsign, isMayday),
+            Warnings = [warning],
+            ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["acknowledgement"] = isMayday ? "mayday acknowledged" : "pan pan acknowledged",
+                ["request"] = "say intentions",
+            },
+
+            // The model must not offer assistance StormATC cannot simulate, nor imply that any
+            // real emergency service is involved.
+            ProhibitedFacts =
+            [
+                "emergency services dispatched",
+                "real-world assistance",
+                "vectors to nearest airport",
+                "any clearance not listed in approved facts",
+            ],
+        };
+    }
+
+    private static AtcDecision HandleClearanceRequest(AtcEvaluationContext context)
+    {
+        AtcSession session = context.Session;
+
+        if (session.FlightPlan is not FlightPlanning.FlightPlan plan || session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Reject(
+                "No flight plan is loaded.",
+                "Station calling, no flight plan is loaded. Import a flight plan first.");
+        }
+
+        if (!context.AircraftState.IsOnGround)
+        {
+            return AtcDecision.Reject(
+                "IFR clearance may only be requested on the ground before departure.",
+                DeterministicPhraseology.Unable(callsign, "you are already airborne"));
+        }
+
+        if (session.Phase is not (FlightPhase.Preflight or FlightPhase.ClearanceRequested or FlightPhase.Disconnected))
+        {
+            return AtcDecision.Reject(
+                $"Clearance cannot be issued in the {session.Phase} phase.",
+                DeterministicPhraseology.Unable(callsign, "clearance has already been issued"));
+        }
+
+        // A SimBrief plan can name the runway even when StormATC has no detailed ground-layout
+        // file for that real aerodrome. That is enough to issue an en-route IFR clearance: omit
+        // local frequencies and taxiways rather than rejecting the entire clearance.
+        RunwayIdentifier? runway = plan.DepartureRunway
+            ?? context.DepartureAirport?
+                .SelectActiveRunway(context.Weather?.WindDirection)?.Identifier;
+
+        if (runway is not RunwayIdentifier departureRunway)
+        {
+            return AtcDecision.Reject(
+                context.DepartureAirport is null
+                    ? "No airport data or filed departure runway is available."
+                    : "The departure aerodrome publishes no usable runway.",
+                DeterministicPhraseology.Unable(callsign, "no departure runway is available"));
+        }
+
+        Altitude initialAltitude = ResolveInitialAltitude(context, plan);
+        SquawkCode squawk = ResolveSquawk(context, callsign);
+        Frequency? departureFrequency = ResolveFrequency(context, ControllerPosition.Departure);
+        bool alsoRequestedPushback =
+            context.Transcript.Contains("pushback", StringComparison.OrdinalIgnoreCase)
+            || context.Transcript.Contains("request push", StringComparison.OrdinalIgnoreCase);
+
+        var clearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.IfrClearance,
+            IssuedBy = ControllerPosition.ClearanceDelivery,
+            IssuedAt = context.CurrentTime,
+            ClearedToDestination = plan.DestinationIcao,
+            ClearedRoute = plan.Route ?? "flight planned route",
+            InitialAltitude = initialAltitude,
+            CruiseAltitude = plan.CruiseAltitude,
+            Runway = departureRunway,
+            DepartureProcedure = plan.StandardInstrumentDeparture,
+            Squawk = squawk,
+            NextFrequency = departureFrequency,
+            RequiredReadbackItems = BuildClearanceReadbackItemTypes(departureFrequency),
+        };
+
+        var expectedItems = new List<ExpectedReadbackItem>
+        {
+            new()
+            {
+                Type = ReadbackItemType.Callsign,
+                ExpectedValue = callsign.Normalized,
+                SpokenValue = callsign.ToSpoken(),
+                IsCritical = true,
+            },
+            new()
+            {
+                Type = ReadbackItemType.Runway,
+                ExpectedValue = departureRunway.ToComparisonValue(),
+                SpokenValue = departureRunway.ToSpoken(),
+                IsCritical = true,
+            },
+            new()
+            {
+                Type = ReadbackItemType.InitialAltitude,
+                ExpectedValue = initialAltitude.ToComparisonValue(),
+                SpokenValue = $"climb initially {initialAltitude.ToSpoken()}",
+                IsCritical = true,
+            },
+            new()
+            {
+                Type = ReadbackItemType.Squawk,
+                ExpectedValue = squawk.ToComparisonValue(),
+                SpokenValue = $"squawk {squawk.ToSpoken()}",
+                IsCritical = true,
+            },
+        };
+
+        if (departureFrequency is Frequency frequency)
+        {
+            expectedItems.Add(new ExpectedReadbackItem
+            {
+                Type = ReadbackItemType.Frequency,
+                ExpectedValue = frequency.ToComparisonValue(),
+                SpokenValue = $"departure frequency {frequency.ToSpoken()}",
+
+                // The departure frequency is read back in practice but a missing readback is a
+                // phraseology slip, not a safety issue — the pilot is told again at handoff.
+                IsCritical = false,
+            });
+        }
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.IfrClearance,
+            NewPhase = FlightPhase.IFRClearanceIssued,
+            IssuedClearance = clearance,
+            RequiredReadback = new PendingReadback
+            {
+                ClearanceId = clearance.ClearanceId,
+                ClearanceType = ClearanceType.IfrClearance,
+                ExpectedItems = expectedItems,
+                IssuedAt = context.CurrentTime,
+                IsMandatory = true,
+            },
+            ApprovedFacts = clearance.ToRequiredFacts(),
+            ProhibitedFacts =
+            [
+                "taxi clearance",
+                "pushback approval",
+                "takeoff clearance",
+                "any altitude other than the approved initial altitude",
+            ],
+            FallbackPhraseology = alsoRequestedPushback
+                ? DeterministicPhraseology.IfrClearance(callsign, clearance)
+                    + " Read back the clearance, then request pushback."
+                : DeterministicPhraseology.IfrClearance(callsign, clearance),
+
+            // A compound clearance-and-pushback request needs the explicit sequencing sentence
+            // above. Do not let a style model omit it and silently ignore half the request.
+            AllowLanguageModelPhraseology = !alsoRequestedPushback,
+        };
+    }
+
+    private AtcDecision HandleReadback(AtcEvaluationContext context, PilotIntent intent)
+    {
+        AtcSession session = context.Session;
+
+        if (session.PendingReadback is not PendingReadback pending)
+        {
+            // Nothing outstanding. Acknowledge rather than refuse — a pilot reading back an
+            // instruction the engine considers already settled is harmless.
+            return new AtcDecision
+            {
+                Accepted = true,
+                ResponseType = AtcResponseType.Acknowledgement,
+                FallbackPhraseology = session.Callsign is Callsign cs
+                    ? DeterministicPhraseology.Acknowledgement(cs)
+                    : "Roger.",
+                ProhibitedFacts = ["any new clearance"],
+            };
+        }
+
+        ReadbackAssessment assessment = _readbackEvaluator.Evaluate(
+            pending, intent, context.Transcript, session);
+
+        if (!assessment.IsAccepted)
+        {
+            IReadOnlyList<ReadbackItemType> satisfiedItems =
+                assessment.Outcome == ReadbackOutcome.WrongCallsign
+                    ? pending.SatisfiedItems
+                    : assessment.CorrectItems;
+
+            return new AtcDecision
+            {
+                Accepted = false,
+                ResponseType = AtcResponseType.ClearanceReadbackCorrection,
+                RejectionReason = $"Readback {assessment.Outcome}.",
+                ReadbackAssessment = assessment,
+                RequiredReadback = pending.WithAttempt(satisfiedItems),
+                FallbackPhraseology = assessment.RequiredCorrection
+                    ?? DeterministicPhraseology.SayAgain(session.Callsign),
+
+                // Corrections are spoken exactly as generated. Letting a model rephrase a
+                // correction risks it restating the wrong value the pilot just used.
+                AllowLanguageModelPhraseology = false,
+            };
+        }
+
+        return BuildAcceptedReadbackDecision(context, pending, assessment);
+    }
+
+    /// <summary>
+    /// Builds the response to a correct readback, including the handoff that usually follows.
+    /// </summary>
+    private static AtcDecision BuildAcceptedReadbackDecision(
+        AtcEvaluationContext context,
+        PendingReadback pending,
+        ReadbackAssessment assessment)
+    {
+        AtcSession session = context.Session;
+        Callsign? callsign = session.Callsign;
+
+        // After a correct IFR clearance readback the aircraft moves to Ground.
+        if (pending.ClearanceType == ClearanceType.IfrClearance && callsign is Callsign cs)
+        {
+            Frequency? groundFrequency = ResolveFrequency(context, ControllerPosition.Ground);
+
+            if (groundFrequency is Frequency ground)
+            {
+                var handoff = new ControllerHandoff
+                {
+                    FromController = ControllerPosition.ClearanceDelivery,
+                    ToController = ControllerPosition.Ground,
+                    ToFrequency = ground,
+                    InstructedAt = context.CurrentTime,
+                    State = HandoffState.Instructed,
+                    Reason = "IFR clearance readback accepted.",
+                };
+
+                return new AtcDecision
+                {
+                    Accepted = true,
+                    ResponseType = AtcResponseType.Handoff,
+                    ClearsPendingReadback = true,
+                    Handoff = handoff,
+                    ReadbackAssessment = assessment,
+                    ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+                    {
+                        ["readback"] = "correct",
+                        ["nextController"] = "Ground",
+                        ["frequency"] = ground.ToComparisonValue(),
+                    },
+                    ProhibitedFacts = ["taxi clearance", "pushback approval"],
+                    FallbackPhraseology = DeterministicPhraseology.ReadbackCorrect(
+                        cs, ground, ControllerPosition.Ground),
+                };
+            }
+        }
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.Acknowledgement,
+            ClearsPendingReadback = true,
+            ReadbackAssessment = assessment,
+            NewPhase = ResolvePhaseAfterReadback(session, pending),
+            ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["readback"] = "correct",
+            },
+            ProhibitedFacts = ["any new clearance"],
+            FallbackPhraseology = callsign is Callsign c
+                ? $"{c.ToSpoken()}, readback correct."
+                : "Readback correct.",
+        };
+    }
+
+    /// <summary>
+    /// Some readbacks imply a phase change: acknowledging a taxi clearance means the aircraft
+    /// is taxiing, acknowledging a takeoff clearance means it is departing.
+    /// </summary>
+    private static FlightPhase? ResolvePhaseAfterReadback(AtcSession session, PendingReadback pending) =>
+        pending.ClearanceType switch
+        {
+            ClearanceType.Taxi when session.Phase is FlightPhase.Pushback or FlightPhase.IFRClearanceIssued
+                => FlightPhase.TaxiOut,
+            ClearanceType.TaxiToStand when session.Phase == FlightPhase.Landed
+                => FlightPhase.TaxiIn,
+            ClearanceType.LineUp => FlightPhase.LineUp,
+            ClearanceType.Takeoff => FlightPhase.Takeoff,
+            ClearanceType.LandingClearance => FlightPhase.Final,
+            _ => null,
+        };
+
+    private static AtcDecision HandlePushbackRequest(AtcEvaluationContext context)
+    {
+        AtcSession session = context.Session;
+
+        if (session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        if (!context.AircraftState.IsOnGround)
+        {
+            return AtcDecision.Reject(
+                "Pushback cannot be approved for an airborne aircraft.",
+                DeterministicPhraseology.Unable(callsign, "you are airborne"));
+        }
+
+        // Moving faster than a walking pace means the aircraft is already taxiing.
+        if (context.AircraftState.GroundSpeedKnots > 3)
+        {
+            return AtcDecision.Reject(
+                "The aircraft is already moving; pushback is not applicable.",
+                DeterministicPhraseology.Unable(callsign, "you are already moving"));
+        }
+
+        if (session.Phase is not (FlightPhase.Preflight or FlightPhase.IFRClearanceIssued or FlightPhase.ClearanceRequested))
+        {
+            return AtcDecision.Reject(
+                $"Pushback is not available in the {session.Phase} phase.",
+                DeterministicPhraseology.Unable(callsign, "not at this stage of flight"));
+        }
+
+        // Realism setting decides whether an unread-back clearance blocks pushback. Guard 6
+        // has already handled the mandatory case; this covers the relaxed profile explicitly.
+        if (context.Realism.RequireReadbackBeforeProgressing
+            && session.IfrClearance is { IsAcknowledged: false })
+        {
+            return AtcDecision.Reject(
+                "The IFR clearance has not been read back.",
+                DeterministicPhraseology.Unable(callsign, "read back your clearance first"));
+        }
+
+        var clearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.Pushback,
+            IssuedBy = ControllerPosition.Ground,
+            IssuedAt = context.CurrentTime,
+        };
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.PushbackApproval,
+            NewPhase = FlightPhase.Pushback,
+            IssuedClearance = clearance,
+            ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["approval"] = "pushback approved",
+            },
+            ProhibitedFacts = ["taxi clearance", "takeoff clearance", "runway assignment"],
+            FallbackPhraseology = DeterministicPhraseology.PushbackApproval(callsign),
+        };
+    }
+
+    private static AtcDecision HandleTaxiRequest(AtcEvaluationContext context)
+    {
+        AtcSession session = context.Session;
+
+        if (session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        if (!context.AircraftState.IsOnGround)
+        {
+            return AtcDecision.Reject(
+                "Taxi cannot be issued to an airborne aircraft.",
+                DeterministicPhraseology.Unable(callsign, "you are airborne"));
+        }
+
+        if (session.Phase is not (FlightPhase.Preflight or FlightPhase.IFRClearanceIssued
+            or FlightPhase.Pushback or FlightPhase.TaxiOut))
+        {
+            return AtcDecision.Reject(
+                $"Taxi is not available in the {session.Phase} phase.",
+                DeterministicPhraseology.Unable(callsign, "not at this stage of flight"));
+        }
+
+        RunwayIdentifier? runway = session.AssignedDepartureRunway
+            ?? session.IfrClearance?.Runway
+            ?? session.FlightPlan?.DepartureRunway
+            ?? context.DepartureAirport?
+                .SelectActiveRunway(context.Weather?.WindDirection)?.Identifier;
+
+        if (runway is not RunwayIdentifier departureRunway)
+        {
+            return AtcDecision.Reject(
+                "No departure runway has been assigned.",
+                DeterministicPhraseology.Unable(callsign, "no departure runway is assigned"));
+        }
+
+        // Most imported SimBrief aerodromes do not yet have a bundled StormATC taxi graph. The
+        // filed runway is still enough to issue a limited clearance to its holding point. Never
+        // invent taxiway names: tell the pilot that detailed routing is unavailable and require
+        // the runway hold-short readback.
+        if (context.DepartureAirport is not AirportData airport)
+        {
+            return BuildUnroutedTaxiClearance(context, callsign, departureRunway);
+        }
+
+        string standName = session.AssignedStand
+            ?? (airport.Stands.Count > 0 ? airport.Stands[0].Name : null)
+            ?? string.Empty;
+
+        // A detailed route is computed from the aerodrome graph or omitted. There is no path
+        // here that invents a taxiway name.
+        if (!airport.SupportsTaxiRouting || standName.Length == 0)
+        {
+            return BuildUnroutedTaxiClearance(context, callsign, departureRunway);
+        }
+
+        TaxiRoute route = TaxiPathfinder.FindRouteToHoldingPoint(airport, standName, departureRunway);
+
+        if (!route.Found)
+        {
+            return BuildUnroutedTaxiClearance(context, callsign, departureRunway);
+        }
+
+        var clearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.Taxi,
+            IssuedBy = ControllerPosition.Ground,
+            IssuedAt = context.CurrentTime,
+            Runway = departureRunway,
+            TaxiRoute = route.TaxiwayNames,
+            TaxiDestination = $"holding point {departureRunway.ToDisplay()}",
+            HoldShortOfRunway = departureRunway,
+            RequiredReadbackItems = [ReadbackItemType.TaxiRoute, ReadbackItemType.HoldShortRunway],
+        };
+
+        var expectedItems = new List<ExpectedReadbackItem>
+        {
+            new()
+            {
+                Type = ReadbackItemType.TaxiRoute,
+                ExpectedValue = string.Join(",", route.TaxiwayNames),
+                SpokenValue = $"via {DeterministicPhraseology.SpellTaxiways(route.TaxiwayNames)}",
+
+                // A misheard taxi route sends the aircraft the wrong way on the manoeuvring
+                // area, so it is treated as critical.
+                IsCritical = true,
+            },
+            new()
+            {
+                Type = ReadbackItemType.HoldShortRunway,
+                ExpectedValue = departureRunway.ToComparisonValue(),
+                SpokenValue = $"hold short {departureRunway.ToSpoken()}",
+                IsCritical = true,
+            },
+        };
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.TaxiClearance,
+            NewPhase = FlightPhase.TaxiOut,
+            IssuedClearance = clearance,
+            RequiredReadback = new PendingReadback
+            {
+                ClearanceId = clearance.ClearanceId,
+                ClearanceType = ClearanceType.Taxi,
+                ExpectedItems = expectedItems,
+                IssuedAt = context.CurrentTime,
+                IsMandatory = true,
+            },
+            ApprovedFacts = clearance.ToRequiredFacts(),
+            ProhibitedFacts =
+            [
+                "takeoff clearance",
+                "line up",
+                $"cross runway {departureRunway.ToDisplay()}",
+                "any taxiway not listed in the approved taxi route",
+            ],
+            FallbackPhraseology = DeterministicPhraseology.TaxiClearance(callsign, clearance),
+        };
+    }
+
+    private static AtcDecision HandlePilotAcknowledgement() => new()
+    {
+        Accepted = true,
+        ResponseType = AtcResponseType.None,
+        FallbackPhraseology = string.Empty,
+        AllowLanguageModelPhraseology = false,
+        ProhibitedFacts = ["any clearance"],
+    };
+
+    private static AtcDecision HandleFrequencyRequest(AtcEvaluationContext context)
+    {
+        AtcSession session = context.Session;
+        if (session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        ControllerPosition target = InferFrequencyTarget(context);
+        AirportFrequencies? published = context.RelevantAirport?.Frequencies;
+        Frequency? exact = published?.For(target);
+
+        if (exact is Frequency frequency)
+        {
+            return new AtcDecision
+            {
+                Accepted = true,
+                ResponseType = AtcResponseType.Acknowledgement,
+                ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+                {
+                    ["controller"] = DeterministicPhraseology.SpokenControllerName(target),
+                    ["frequency"] = frequency.ToComparisonValue(),
+                },
+                ProhibitedFacts = ["any clearance"],
+                FallbackPhraseology =
+                    $"{callsign.ToSpoken()}, {DeterministicPhraseology.SpokenControllerName(target)} "
+                    + $"frequency {frequency.ToSpoken()}.",
+                AllowLanguageModelPhraseology = false,
+            };
+        }
+
+        // No separate published frequency means the local position is combined. Keeping the
+        // aircraft on its present channel is safer than inventing a real-world frequency.
+        if (target is ControllerPosition.ClearanceDelivery
+            or ControllerPosition.Ground
+            or ControllerPosition.Tower)
+        {
+            return new AtcDecision
+            {
+                Accepted = true,
+                ResponseType = AtcResponseType.Acknowledgement,
+                ProhibitedFacts = ["any frequency not present in airport data", "any clearance"],
+                FallbackPhraseology =
+                    $"{callsign.ToSpoken()}, no separate "
+                    + $"{DeterministicPhraseology.SpokenControllerName(target)} frequency is available, "
+                    + "remain this frequency.",
+                AllowLanguageModelPhraseology = false,
+            };
+        }
+
+        Frequency? fallback = ResolveFrequency(context, target);
+        return fallback is Frequency resolved
+            ? new AtcDecision
+            {
+                Accepted = true,
+                ResponseType = AtcResponseType.Acknowledgement,
+                ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+                {
+                    ["controller"] = DeterministicPhraseology.SpokenControllerName(target),
+                    ["frequency"] = resolved.ToComparisonValue(),
+                },
+                ProhibitedFacts = ["any clearance"],
+                FallbackPhraseology =
+                    $"{callsign.ToSpoken()}, {DeterministicPhraseology.SpokenControllerName(target)} "
+                    + $"frequency {resolved.ToSpoken()}.",
+                AllowLanguageModelPhraseology = false,
+            }
+            : AtcDecision.Reject(
+                $"No frequency data is available for {target}.",
+                $"{callsign.ToSpoken()}, {DeterministicPhraseology.SpokenControllerName(target)} "
+                + "frequency unavailable, remain this frequency.");
+    }
+
+    private static ControllerPosition InferFrequencyTarget(AtcEvaluationContext context)
+    {
+        string transcript = context.Transcript;
+        foreach ((string word, ControllerPosition controller) in new[]
+        {
+            ("delivery", ControllerPosition.ClearanceDelivery),
+            ("ground", ControllerPosition.Ground),
+            ("tower", ControllerPosition.Tower),
+            ("departure", ControllerPosition.Departure),
+            ("approach", ControllerPosition.Approach),
+            ("center", ControllerPosition.Center),
+            ("centre", ControllerPosition.Center),
+        })
+        {
+            if (transcript.Contains(word, StringComparison.OrdinalIgnoreCase))
+            {
+                return controller;
+            }
+        }
+
+        // A generic "what's the frequency?" usually refers to the controller named in the
+        // immediately preceding handoff instruction.
+        IReadOnlyList<ConversationTurn> conversation = context.Session.Conversation;
+        for (int index = conversation.Count - 1; index >= 0; index--)
+        {
+            ConversationTurn turn = conversation[index];
+            if (turn.Speaker != ConversationSpeaker.Controller)
+            {
+                continue;
+            }
+
+            string text = turn.Text;
+            if (text.Contains("contact Ground", StringComparison.OrdinalIgnoreCase))
+            {
+                return ControllerPosition.Ground;
+            }
+
+            if (text.Contains("contact Tower", StringComparison.OrdinalIgnoreCase))
+            {
+                return ControllerPosition.Tower;
+            }
+
+            if (text.Contains("contact Departure", StringComparison.OrdinalIgnoreCase))
+            {
+                return ControllerPosition.Departure;
+            }
+
+            if (text.Contains("contact Approach", StringComparison.OrdinalIgnoreCase))
+            {
+                return ControllerPosition.Approach;
+            }
+
+            break;
+        }
+
+        AtcSession session = context.Session;
+        if (session.CurrentController == ControllerPosition.ClearanceDelivery
+            && session.Phase is FlightPhase.IFRClearanceIssued
+                or FlightPhase.Pushback
+                or FlightPhase.TaxiOut)
+        {
+            return ControllerPosition.Ground;
+        }
+
+        return session.CurrentController == ControllerPosition.None
+            ? ControllerPosition.ClearanceDelivery
+            : session.CurrentController;
+    }
+
+    private static AtcDecision BuildUnroutedTaxiClearance(
+        AtcEvaluationContext context,
+        Callsign callsign,
+        RunwayIdentifier departureRunway)
+    {
+        var clearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.Taxi,
+            IssuedBy = ControllerPosition.Ground,
+            IssuedAt = context.CurrentTime,
+            Runway = departureRunway,
+            TaxiDestination = $"holding point {departureRunway.ToDisplay()}",
+            HoldShortOfRunway = departureRunway,
+            RequiredReadbackItems = [ReadbackItemType.HoldShortRunway],
+        };
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.TaxiClearance,
+            NewPhase = FlightPhase.TaxiOut,
+            IssuedClearance = clearance,
+            RequiredReadback = new PendingReadback
+            {
+                ClearanceId = clearance.ClearanceId,
+                ClearanceType = ClearanceType.Taxi,
+                ExpectedItems =
+                [
+                    new ExpectedReadbackItem
+                    {
+                        Type = ReadbackItemType.HoldShortRunway,
+                        ExpectedValue = departureRunway.ToComparisonValue(),
+                        SpokenValue = $"hold short {departureRunway.ToSpoken()}",
+                        IsCritical = true,
+                    },
+                ],
+                IssuedAt = context.CurrentTime,
+                IsMandatory = true,
+            },
+            ApprovedFacts = clearance.ToRequiredFacts(),
+            ProhibitedFacts =
+            [
+                "takeoff clearance",
+                "line up",
+                $"cross runway {departureRunway.ToDisplay()}",
+                "any named taxiway",
+            ],
+            FallbackPhraseology =
+                $"{callsign.ToSpoken()}, taxi to holding point runway "
+                + $"{departureRunway.ToSpokenDesignator()}, detailed taxi routing unavailable, "
+                + $"hold short runway {departureRunway.ToSpokenDesignator()}.",
+        };
+    }
+
+    private static AtcDecision HandleHoldingShortReport(AtcEvaluationContext context, PilotIntent intent)
+    {
+        AtcSession session = context.Session;
+
+        if (session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        RunwayIdentifier? reported = intent.Entities.Runway ?? intent.Entities.HoldShortRunway;
+        RunwayIdentifier? assigned = session.AssignedDepartureRunway;
+
+        // A pilot reporting at the wrong holding point is a real and common error worth
+        // catching: it means the aircraft is somewhere the controller does not expect.
+        if (reported is RunwayIdentifier reportedRunway
+            && assigned is RunwayIdentifier assignedRunway
+            && reportedRunway != assignedRunway)
+        {
+            return AtcDecision.Reject(
+                $"Pilot reported holding short of {reportedRunway} but the assigned departure runway is {assignedRunway}.",
+                $"{callsign.ToSpoken()}, negative, your departure runway is {assignedRunway.ToSpokenDesignator()}, confirm position.");
+        }
+
+        Frequency? towerFrequency = ResolveFrequency(context, ControllerPosition.Tower);
+
+        // Ground hands to Tower at the holding point.
+        if (session.CurrentController == ControllerPosition.Ground && towerFrequency is Frequency tower)
+        {
+            return BuildHandoff(
+                context,
+                ControllerPosition.Tower,
+                tower,
+                FlightPhase.HoldingShort,
+                "Reported holding short of the departure runway.",
+                DeterministicPhraseology.Handoff(callsign, ControllerPosition.Tower, tower));
+        }
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.Acknowledgement,
+            NewPhase = FlightPhase.HoldingShort,
+            ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["acknowledgement"] = "holding short acknowledged",
+            },
+            ProhibitedFacts = ["takeoff clearance", "line up clearance"],
+            FallbackPhraseology = $"{callsign.ToSpoken()}, roger, hold short.",
+        };
+    }
+
+    private static AtcDecision HandleReadyForDeparture(AtcEvaluationContext context)
+    {
+        AtcSession session = context.Session;
+
+        if (session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        // --- Takeoff clearance preconditions, checked in the order a controller would. ------
+
+        if (!context.AircraftState.IsOnGround)
+        {
+            return AtcDecision.Reject(
+                "The aircraft is already airborne.",
+                DeterministicPhraseology.Unable(callsign, "you are already airborne"));
+        }
+
+        if (session.CurrentController != ControllerPosition.Tower)
+        {
+            return AtcDecision.Reject(
+                $"Takeoff clearance requires Tower; the aircraft is with {session.CurrentController}.",
+                DeterministicPhraseology.Unable(callsign, "contact Tower for departure"));
+        }
+
+        if (session.Phase is not (FlightPhase.HoldingShort or FlightPhase.LineUp or FlightPhase.TaxiOut))
+        {
+            return AtcDecision.Reject(
+                $"Takeoff clearance is not available in the {session.Phase} phase.",
+                DeterministicPhraseology.Unable(callsign, "you are not at the holding point"));
+        }
+
+        if (session.AssignedDepartureRunway is not RunwayIdentifier runway)
+        {
+            return AtcDecision.Reject(
+                "No departure runway has been assigned.",
+                DeterministicPhraseology.Unable(callsign, "no departure runway is assigned"));
+        }
+
+        // The mock runway-occupancy model: any traffic reported on this runway blocks it.
+        if (IsRunwayOccupied(context, runway))
+        {
+            return AtcDecision.Reject(
+                $"Runway {runway} is occupied.",
+                $"{callsign.ToSpoken()}, hold short {runway.ToSpokenDesignator()}, traffic on the runway.");
+        }
+
+        var clearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.Takeoff,
+            IssuedBy = ControllerPosition.Tower,
+            IssuedAt = context.CurrentTime,
+            Runway = runway,
+            InitialAltitude = session.ClearedAltitude,
+            RequiredReadbackItems = [ReadbackItemType.Runway],
+        };
+
+        var expectedItems = new List<ExpectedReadbackItem>
+        {
+            new()
+            {
+                Type = ReadbackItemType.Runway,
+                ExpectedValue = runway.ToComparisonValue(),
+                SpokenValue = runway.ToSpoken(),
+                IsCritical = true,
+            },
+        };
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.TakeoffClearance,
+            NewPhase = FlightPhase.Takeoff,
+            IssuedClearance = clearance,
+            RequiredReadback = new PendingReadback
+            {
+                ClearanceId = clearance.ClearanceId,
+                ClearanceType = ClearanceType.Takeoff,
+                ExpectedItems = expectedItems,
+                IssuedAt = context.CurrentTime,
+                IsMandatory = true,
+            },
+            ApprovedFacts = BuildTakeoffFacts(context, runway),
+            ProhibitedFacts =
+            [
+                "any runway other than the assigned runway",
+                "landing clearance",
+                "wind information unless supplied in approved facts",
+            ],
+            FallbackPhraseology = DeterministicPhraseology.TakeoffClearance(
+                callsign,
+                runway,
+                context.Weather?.WindDirection,
+                context.Weather?.WindSpeedKnots,
+                initialHeading: null),
+        };
+    }
+
+    private static AtcDecision HandleAirborneReport(AtcEvaluationContext context)
+    {
+        if (context.Session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.Acknowledgement,
+            NewPhase = context.AircraftState.IsOnGround ? null : FlightPhase.InitialClimb,
+            ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["acknowledgement"] = "roger",
+            },
+            ProhibitedFacts = ["any new clearance"],
+            FallbackPhraseology = DeterministicPhraseology.Acknowledgement(callsign),
+        };
+    }
+
+    private static AtcDecision HandleCheckIn(AtcEvaluationContext context)
+    {
+        AtcSession session = context.Session;
+
+        if (session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        ControllerPosition controller = session.CurrentController;
+
+        // Departure's job on check-in is to confirm radar contact and clear the aircraft to its
+        // cruise level, if one is filed and it is above the current cleared altitude.
+        Altitude? climbTo = null;
+        Clearance? climbClearance = null;
+
+        if (controller is ControllerPosition.Departure or ControllerPosition.Center
+            && session.FlightPlan?.CruiseAltitude is Altitude cruise
+            && (session.ClearedAltitude is null || cruise > session.ClearedAltitude.Value))
+        {
+            climbTo = cruise;
+            climbClearance = new Clearance
+            {
+                ClearanceId = Guid.CreateVersion7(),
+                Type = ClearanceType.Climb,
+                IssuedBy = controller,
+                IssuedAt = context.CurrentTime,
+                InitialAltitude = cruise,
+                RequiredReadbackItems = [ReadbackItemType.CruiseAltitude],
+            };
+        }
+
+        var facts = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["controller"] = DeterministicPhraseology.SpokenControllerName(controller),
+            ["radarContact"] = "true",
+        };
+
+        if (climbTo is Altitude target)
+        {
+            facts["climbAltitude"] = target.ToComparisonValue();
+        }
+
+        PendingReadback? readback = climbClearance is null ? null : new PendingReadback
+        {
+            ClearanceId = climbClearance.ClearanceId,
+            ClearanceType = ClearanceType.Climb,
+            ExpectedItems =
+            [
+                new ExpectedReadbackItem
+                {
+                    Type = ReadbackItemType.CruiseAltitude,
+                    ExpectedValue = climbTo!.Value.ToComparisonValue(),
+                    SpokenValue = $"climb {climbTo.Value.ToSpoken()}",
+                    IsCritical = true,
+                },
+            ],
+            IssuedAt = context.CurrentTime,
+            IsMandatory = true,
+        };
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.CheckInAcknowledgement,
+            NewPhase = controller == ControllerPosition.Center ? FlightPhase.Enroute : null,
+            IssuedClearance = climbClearance,
+            RequiredReadback = readback,
+            ApprovedFacts = facts,
+            ProhibitedFacts = ["any altitude other than the approved climb altitude", "traffic information"],
+            FallbackPhraseology = DeterministicPhraseology.CheckInAcknowledgement(
+                callsign, controller, climbTo, radarContact: true),
+        };
+    }
+
+    private static AtcDecision HandleClimbRequest(AtcEvaluationContext context, PilotIntent intent)
+    {
+        AtcSession session = context.Session;
+
+        if (session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        if (session.CurrentController is not (ControllerPosition.Departure or ControllerPosition.Center
+            or ControllerPosition.Approach))
+        {
+            return AtcDecision.Reject(
+                "Climb requests are handled by a radar controller.",
+                DeterministicPhraseology.Unable(callsign, "not with this controller"));
+        }
+
+        // The requested level, or the filed cruise level when the pilot did not name one.
+        Altitude? requested = intent.Entities.Altitude ?? session.FlightPlan?.CruiseAltitude;
+
+        if (requested is not Altitude target)
+        {
+            return AtcDecision.Reject(
+                "No climb level was specified and no cruise level is filed.",
+                $"{callsign.ToSpoken()}, say requested level.");
+        }
+
+        // Never approve a climb above the filed cruise level: the engine has no traffic picture
+        // above it and would be inventing airspace clearance.
+        if (session.FlightPlan?.CruiseAltitude is Altitude filedCruise && target > filedCruise)
+        {
+            return AtcDecision.Reject(
+                $"Requested level {target} is above the filed cruise level {filedCruise}.",
+                DeterministicPhraseology.Unable(callsign, $"maintain {filedCruise.ToSpoken()}"));
+        }
+
+        var clearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.Climb,
+            IssuedBy = session.CurrentController,
+            IssuedAt = context.CurrentTime,
+            InitialAltitude = target,
+            RequiredReadbackItems = [ReadbackItemType.CruiseAltitude],
+        };
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.ClimbInstruction,
+            IssuedClearance = clearance,
+            RequiredReadback = BuildAltitudeReadback(clearance, target, context.CurrentTime, isClimb: true),
+            ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["climbAltitude"] = target.ToComparisonValue(),
+            },
+            ProhibitedFacts = ["any altitude other than the approved climb altitude"],
+            FallbackPhraseology = DeterministicPhraseology.ClimbInstruction(callsign, target),
+        };
+    }
+
+    private static AtcDecision HandleDescentRequest(AtcEvaluationContext context, PilotIntent intent)
+    {
+        AtcSession session = context.Session;
+
+        if (session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        if (session.CurrentController is not (ControllerPosition.Center or ControllerPosition.Approach
+            or ControllerPosition.Departure))
+        {
+            return AtcDecision.Reject(
+                "Descent requests are handled by a radar controller.",
+                DeterministicPhraseology.Unable(callsign, "not with this controller"));
+        }
+
+        // Default to a plausible initial descent level when the pilot simply requests descent.
+        Altitude target = intent.Entities.Altitude ?? Altitude.FromFlightLevel(70);
+
+        var clearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.Descent,
+            IssuedBy = session.CurrentController,
+            IssuedAt = context.CurrentTime,
+            InitialAltitude = target,
+            RequiredReadbackItems = [ReadbackItemType.CruiseAltitude],
+        };
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.DescentInstruction,
+            NewPhase = FlightPhase.Descent,
+            IssuedClearance = clearance,
+            RequiredReadback = BuildAltitudeReadback(clearance, target, context.CurrentTime, isClimb: false),
+            ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["descentAltitude"] = target.ToComparisonValue(),
+            },
+            ProhibitedFacts = ["any altitude other than the approved descent altitude", "approach clearance"],
+            FallbackPhraseology = DeterministicPhraseology.DescentInstruction(callsign, target),
+        };
+    }
+
+    private static AtcDecision HandleDirectRequest(AtcEvaluationContext context, PilotIntent intent)
+    {
+        AtcSession session = context.Session;
+
+        if (session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        if (intent.Entities.Waypoint is not { Length: > 0 } waypoint)
+        {
+            return AtcDecision.Reject(
+                "No waypoint was identified in the direct-to request.",
+                $"{callsign.ToSpoken()}, say again the requested waypoint.");
+        }
+
+        // The waypoint must exist on the filed route. Clearing an aircraft direct to a fix the
+        // engine has never heard of would be inventing navigation data.
+        bool onRoute = session.FlightPlan?.RouteLegs
+            .Any(leg => string.Equals(leg.Identifier, waypoint, StringComparison.OrdinalIgnoreCase)) ?? false;
+
+        if (!onRoute)
+        {
+            return AtcDecision.Reject(
+                $"Waypoint {waypoint} is not on the filed route.",
+                DeterministicPhraseology.Unable(callsign, "that waypoint is not on your route"));
+        }
+
+        var clearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.DirectTo,
+            IssuedBy = session.CurrentController,
+            IssuedAt = context.CurrentTime,
+            ClearedRoute = $"DCT {waypoint}",
+        };
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.DirectToApproval,
+            IssuedClearance = clearance,
+            ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["directTo"] = waypoint,
+            },
+            ProhibitedFacts = ["any waypoint other than the approved one", "altitude change"],
+            FallbackPhraseology = DeterministicPhraseology.DirectToApproval(callsign, waypoint),
+        };
+    }
+
+    private static AtcDecision HandleDeviationRequest(AtcEvaluationContext context)
+    {
+        if (context.Session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        // Weather deviations are approved only in terms the engine can express. With no weather
+        // provider there is nothing to quote, so the approval stays generic.
+        var clearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.Heading,
+            IssuedBy = context.Session.CurrentController,
+            IssuedAt = context.CurrentTime,
+        };
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.Acknowledgement,
+            IssuedClearance = clearance,
+            ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["approval"] = "deviation approved",
+                ["condition"] = "advise when able to resume own navigation",
+            },
+            ProhibitedFacts = ["specific weather information", "traffic information", "altitude change"],
+            FallbackPhraseology =
+                $"{callsign.ToSpoken()}, deviation approved, advise when able to resume own navigation.",
+        };
+    }
+
+    private static AtcDecision HandleApproachRequest(AtcEvaluationContext context, PilotIntent intent)
+    {
+        AtcSession session = context.Session;
+
+        if (session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        if (session.CurrentController is not (ControllerPosition.Approach or ControllerPosition.Center))
+        {
+            return AtcDecision.Reject(
+                "Approach clearance requires Approach control.",
+                DeterministicPhraseology.Unable(callsign, "contact Approach"));
+        }
+
+        if (context.DestinationAirport is not AirportData airport)
+        {
+            return AtcDecision.Reject(
+                "No airport data is available for the destination.",
+                DeterministicPhraseology.Unable(callsign, "destination aerodrome data is unavailable"));
+        }
+
+        RunwayIdentifier? runway = intent.Entities.Runway
+            ?? session.FlightPlan?.ArrivalRunway
+            ?? airport.SelectActiveRunway(context.Weather?.WindDirection)?.Identifier;
+
+        if (runway is not RunwayIdentifier arrivalRunway)
+        {
+            return AtcDecision.Reject(
+                "No arrival runway is available.",
+                DeterministicPhraseology.Unable(callsign, "no arrival runway is available"));
+        }
+
+        RunwayData? runwayData = airport.FindRunway(arrivalRunway);
+        if (runwayData is null)
+        {
+            return AtcDecision.Reject(
+                $"Runway {arrivalRunway} does not exist at {airport.Icao}.",
+                DeterministicPhraseology.Unable(callsign, "that runway is not available"));
+        }
+
+        // The approach name comes from published data, never from the pilot's request alone.
+        string approachName = intent.Entities.ApproachName is { Length: > 0 } requested
+            && runwayData.PublishesApproach(requested)
+                ? requested
+                : runwayData.Approaches.Count > 0 ? runwayData.Approaches[0] : "ILS";
+
+        var clearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.ApproachClearance,
+            IssuedBy = session.CurrentController,
+            IssuedAt = context.CurrentTime,
+            Runway = arrivalRunway,
+            ApproachName = approachName,
+            RequiredReadbackItems = [ReadbackItemType.Runway, ReadbackItemType.ApproachName],
+        };
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.ApproachClearance,
+            NewPhase = FlightPhase.Approach,
+            IssuedClearance = clearance,
+            RequiredReadback = new PendingReadback
+            {
+                ClearanceId = clearance.ClearanceId,
+                ClearanceType = ClearanceType.ApproachClearance,
+                ExpectedItems =
+                [
+                    new ExpectedReadbackItem
+                    {
+                        Type = ReadbackItemType.Runway,
+                        ExpectedValue = arrivalRunway.ToComparisonValue(),
+                        SpokenValue = arrivalRunway.ToSpoken(),
+                        IsCritical = true,
+                    },
+                    new ExpectedReadbackItem
+                    {
+                        Type = ReadbackItemType.ApproachName,
+                        ExpectedValue = approachName,
+                        SpokenValue = $"{approachName} approach",
+                        IsCritical = false,
+                    },
+                ],
+                IssuedAt = context.CurrentTime,
+                IsMandatory = true,
+            },
+            ApprovedFacts = clearance.ToRequiredFacts(),
+
+            // The single most important prohibition in the whole system: an approach clearance
+            // is not a landing clearance, and a model must never blur the two.
+            ProhibitedFacts =
+            [
+                "landing clearance",
+                "cleared to land",
+                "any runway other than the approved runway",
+            ],
+            FallbackPhraseology = DeterministicPhraseology.ApproachClearance(
+                callsign, approachName, arrivalRunway),
+        };
+    }
+
+    private static AtcDecision HandleEstablishedReport(AtcEvaluationContext context, PilotIntent intent)
+    {
+        AtcSession session = context.Session;
+
+        if (session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        if (session.ArrivalClearance is not { Type: ClearanceType.ApproachClearance } approachClearance)
+        {
+            return AtcDecision.Reject(
+                "The aircraft has not been cleared for an approach.",
+                DeterministicPhraseology.Unable(callsign, "you are not cleared for the approach"));
+        }
+
+        // Reporting established on a runway other than the cleared one means the aircraft is
+        // lined up on the wrong final. That must be caught, not acknowledged.
+        if (intent.Entities.Runway is RunwayIdentifier reported
+            && approachClearance.Runway is RunwayIdentifier cleared
+            && reported != cleared)
+        {
+            return AtcDecision.Reject(
+                $"Pilot reported established on runway {reported} but is cleared for runway {cleared}.",
+                $"{callsign.ToSpoken()}, negative, you are cleared for the approach {cleared.ToSpoken()}, confirm.");
+        }
+
+        Frequency? towerFrequency = ResolveFrequency(context, ControllerPosition.Tower);
+
+        if (session.CurrentController != ControllerPosition.Tower && towerFrequency is Frequency tower)
+        {
+            return BuildHandoff(
+                context,
+                ControllerPosition.Tower,
+                tower,
+                FlightPhase.Final,
+                "Established on the approach.",
+                DeterministicPhraseology.Handoff(callsign, ControllerPosition.Tower, tower));
+        }
+
+        return HandleLandingClearance(context, callsign);
+    }
+
+    /// <summary>
+    /// Issues a landing clearance, which is a separate permission from the approach clearance.
+    /// </summary>
+    private static AtcDecision HandleLandingClearance(AtcEvaluationContext context, Callsign callsign)
+    {
+        AtcSession session = context.Session;
+
+        if (session.CurrentController != ControllerPosition.Tower)
+        {
+            return AtcDecision.Reject(
+                "Landing clearance requires Tower.",
+                DeterministicPhraseology.Unable(callsign, "contact Tower"));
+        }
+
+        RunwayIdentifier? runway = session.ArrivalClearance?.Runway ?? session.AssignedArrivalRunway;
+
+        if (runway is not RunwayIdentifier landingRunway)
+        {
+            return AtcDecision.Reject(
+                "No arrival runway has been assigned.",
+                DeterministicPhraseology.Unable(callsign, "no landing runway is assigned"));
+        }
+
+        if (IsRunwayOccupied(context, landingRunway))
+        {
+            return AtcDecision.Reject(
+                $"Runway {landingRunway} is occupied.",
+                $"{callsign.ToSpoken()}, continue approach, traffic on the runway.");
+        }
+
+        var clearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.LandingClearance,
+            IssuedBy = ControllerPosition.Tower,
+            IssuedAt = context.CurrentTime,
+            Runway = landingRunway,
+            RequiredReadbackItems = [ReadbackItemType.Runway],
+        };
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.LandingClearance,
+            NewPhase = FlightPhase.Final,
+            IssuedClearance = clearance,
+            RequiredReadback = new PendingReadback
+            {
+                ClearanceId = clearance.ClearanceId,
+                ClearanceType = ClearanceType.LandingClearance,
+                ExpectedItems =
+                [
+                    new ExpectedReadbackItem
+                    {
+                        Type = ReadbackItemType.Runway,
+                        ExpectedValue = landingRunway.ToComparisonValue(),
+                        SpokenValue = landingRunway.ToSpoken(),
+                        IsCritical = true,
+                    },
+                ],
+                IssuedAt = context.CurrentTime,
+                IsMandatory = true,
+            },
+            ApprovedFacts = BuildLandingFacts(context, landingRunway),
+            ProhibitedFacts = ["takeoff clearance", "any runway other than the assigned runway"],
+            FallbackPhraseology = DeterministicPhraseology.LandingClearance(
+                callsign,
+                landingRunway,
+                context.Weather?.WindDirection,
+                context.Weather?.WindSpeedKnots),
+        };
+    }
+
+    private static AtcDecision HandleGoAround(AtcEvaluationContext context)
+    {
+        AtcSession session = context.Session;
+
+        if (session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        // A go-around is always approved. Refusing one would be nonsense: the aircraft is
+        // already going around by the time the pilot says so.
+        Altitude climbTo = session.ClearedAltitude ?? Altitude.FromFeet(3000);
+
+        var clearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.Climb,
+            IssuedBy = ControllerPosition.Tower,
+            IssuedAt = context.CurrentTime,
+            InitialAltitude = climbTo,
+        };
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.GoAroundInstruction,
+            NewPhase = FlightPhase.GoAround,
+            IssuedClearance = clearance,
+            ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["instruction"] = "go around",
+                ["climbAltitude"] = climbTo.ToComparisonValue(),
+            },
+            ProhibitedFacts = ["landing clearance", "traffic information"],
+            FallbackPhraseology = DeterministicPhraseology.GoAroundInstruction(callsign, climbTo, heading: null),
+        };
+    }
+
+    private static AtcDecision HandleRunwayVacated(AtcEvaluationContext context)
+    {
+        AtcSession session = context.Session;
+
+        if (session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        Frequency? groundFrequency = ResolveFrequency(context, ControllerPosition.Ground);
+
+        if (session.CurrentController == ControllerPosition.Tower && groundFrequency is Frequency ground)
+        {
+            return BuildHandoff(
+                context,
+                ControllerPosition.Ground,
+                ground,
+                FlightPhase.Landed,
+                "Runway vacated after landing.",
+                DeterministicPhraseology.Handoff(callsign, ControllerPosition.Ground, ground));
+        }
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.Acknowledgement,
+            NewPhase = FlightPhase.Landed,
+            ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["acknowledgement"] = "roger",
+            },
+            ProhibitedFacts = ["taxi clearance"],
+            FallbackPhraseology = DeterministicPhraseology.Acknowledgement(callsign),
+        };
+    }
+
+    private static AtcDecision HandleTaxiToStandRequest(AtcEvaluationContext context, PilotIntent intent)
+    {
+        AtcSession session = context.Session;
+
+        if (session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        if (session.Phase is not (FlightPhase.Landed or FlightPhase.TaxiIn))
+        {
+            return AtcDecision.Reject(
+                $"Taxi to stand is not available in the {session.Phase} phase.",
+                DeterministicPhraseology.Unable(callsign, "you have not landed"));
+        }
+
+        if (context.DestinationAirport is not AirportData airport)
+        {
+            return AtcDecision.Reject(
+                "No airport data is available for the destination.",
+                DeterministicPhraseology.Unable(callsign, "aerodrome data is unavailable"));
+        }
+
+        RunwayIdentifier? landingRunway = session.AssignedArrivalRunway
+            ?? session.ArrivalClearance?.Runway;
+
+        // The stand has to exist at the arrival aerodrome. The session's assigned stand is the
+        // departure one until this clearance replaces it, so it is only usable here if the
+        // destination happens to publish a stand by the same name.
+        string standName = ExistingStand(airport, intent.Entities.Stand)
+            ?? ExistingStand(airport, session.AssignedStand)
+            ?? (airport.Stands.Count > 0 ? airport.Stands[0].Name : null)
+            ?? string.Empty;
+
+        if (standName.Length == 0 || landingRunway is not RunwayIdentifier runway)
+        {
+            return AtcDecision.Reject(
+                "No stand or landing runway is known.",
+                DeterministicPhraseology.Unable(callsign, "no stand is available"));
+        }
+
+        if (!airport.SupportsTaxiRouting)
+        {
+            return AtcDecision.Reject(
+                "The aerodrome has no taxi graph.",
+                $"{callsign.ToSpoken()}, taxi to stand {PhoneticAlphabet.SpellOut(standName)}, no published route available.");
+        }
+
+        TaxiRoute route = TaxiPathfinder.FindRouteFromRunwayToStand(airport, runway, standName);
+
+        if (!route.Found)
+        {
+            return AtcDecision.Reject(
+                $"No taxi route exists from runway {runway} to stand {standName}.",
+                $"{callsign.ToSpoken()}, taxi to stand {PhoneticAlphabet.SpellOut(standName)}, no published route available.");
+        }
+
+        var clearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.TaxiToStand,
+            IssuedBy = ControllerPosition.Ground,
+            IssuedAt = context.CurrentTime,
+            TaxiRoute = route.TaxiwayNames,
+            TaxiDestination = standName,
+            HoldShortOfRunway = route.RequiresRunwayCrossing ? route.CrossedRunways[0] : null,
+            RequiredReadbackItems = [ReadbackItemType.TaxiRoute],
+        };
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.TaxiToStandClearance,
+            NewPhase = FlightPhase.TaxiIn,
+            IssuedClearance = clearance,
+            RequiredReadback = new PendingReadback
+            {
+                ClearanceId = clearance.ClearanceId,
+                ClearanceType = ClearanceType.TaxiToStand,
+                ExpectedItems =
+                [
+                    new ExpectedReadbackItem
+                    {
+                        Type = ReadbackItemType.TaxiRoute,
+                        ExpectedValue = string.Join(",", route.TaxiwayNames),
+                        SpokenValue = $"via {DeterministicPhraseology.SpellTaxiways(route.TaxiwayNames)}",
+                        IsCritical = true,
+                    },
+                ],
+                IssuedAt = context.CurrentTime,
+                IsMandatory = true,
+            },
+            ApprovedFacts = clearance.ToRequiredFacts(),
+            ProhibitedFacts = ["any taxiway not listed in the approved taxi route", "runway crossing not listed"],
+            FallbackPhraseology = DeterministicPhraseology.TaxiToStandClearance(callsign, clearance),
+        };
+    }
+
+    // =====================================================================================
+    // Guards and helpers
+    // =====================================================================================
+
+    /// <summary>
+    /// Rejects transmissions sent to a controller that does not handle that request.
+    /// </summary>
+    private static AtcDecision? CheckJurisdiction(AtcEvaluationContext context, PilotIntent intent)
+    {
+        AtcSession session = context.Session;
+        ControllerPosition current = session.CurrentController;
+
+        // Before the first contact any position may be addressed.
+        if (current == ControllerPosition.None)
+        {
+            return null;
+        }
+
+        ControllerPosition? required = RequiredControllerFor(intent.Type);
+        if (required is not ControllerPosition needed || needed == current)
+        {
+            return null;
+        }
+
+        // A combined position covers the roles it absorbs — at a quiet aerodrome Tower may work
+        // ground and delivery too. Only reject when the aerodrome actually staffs them apart.
+        if (IsCoveredByCombinedPosition(context, current, needed))
+        {
+            return null;
+        }
+
+        string callsignText = session.Callsign?.ToSpoken() ?? "Station calling";
+
+        return AtcDecision.Reject(
+            $"{intent.Type} is handled by {needed}, but the aircraft is with {current}.",
+            $"{callsignText}, contact {DeterministicPhraseology.SpokenControllerName(needed)}.");
+    }
+
+    private static ControllerPosition? RequiredControllerFor(PilotIntentType intent) => intent switch
+    {
+        PilotIntentType.RequestIFRClearance => ControllerPosition.ClearanceDelivery,
+        PilotIntentType.RequestPushback or PilotIntentType.RequestTaxi
+            or PilotIntentType.RequestTaxiToStand => ControllerPosition.Ground,
+        PilotIntentType.ReadyForDeparture => ControllerPosition.Tower,
+        _ => null,
+    };
+
+    /// <summary>
+    /// True when the aerodrome does not publish a separate frequency for the required position,
+    /// meaning the current controller is working it as a combined position.
+    /// </summary>
+    private static bool IsCoveredByCombinedPosition(
+        AtcEvaluationContext context,
+        ControllerPosition current,
+        ControllerPosition required)
+    {
+        AirportFrequencies? frequencies = context.RelevantAirport?.Frequencies;
+        if (frequencies is null)
+        {
+            // Imported plans commonly have a runway but no bundled local frequency file. In
+            // that case Delivery safely covers Ground instead of ordering the pilot to contact
+            // an unnamed frequency. Tower remains separate because runway control must never
+            // be silently folded into a position just because data is missing.
+            return (current, required) is
+                (ControllerPosition.ClearanceDelivery, ControllerPosition.Ground)
+                or (ControllerPosition.Ground, ControllerPosition.ClearanceDelivery);
+        }
+
+        // If the required position has no published frequency of its own, whoever the pilot is
+        // talking to is covering it.
+        if (frequencies.For(required) is null)
+        {
+            return true;
+        }
+
+        // Delivery folding into Ground is the common real-world combination.
+        return (current, required) is
+            (ControllerPosition.Ground, ControllerPosition.ClearanceDelivery)
+            or (ControllerPosition.Tower, ControllerPosition.Ground)
+            or (ControllerPosition.Tower, ControllerPosition.ClearanceDelivery);
+    }
+
+    private static bool IsReadbackIntent(PilotIntentType type) => type is
+        PilotIntentType.ClearanceReadback
+        or PilotIntentType.TaxiReadback
+        or PilotIntentType.TakeoffReadback
+        or PilotIntentType.LandingReadback
+        or PilotIntentType.AltitudeReadback
+        or PilotIntentType.HeadingReadback
+        or PilotIntentType.FrequencyReadback
+        or PilotIntentType.Correction
+        or PilotIntentType.SayAgain;
+
+    private static string BuildReadbackReminder(AtcEvaluationContext context)
+    {
+        string callsign = context.Session.Callsign?.ToSpoken() ?? "Station calling";
+        return $"{callsign}, standby, read back your clearance.";
+    }
+
+    /// <summary>
+    /// Detects the aircraft crossing onto a runway it was told to hold short of.
+    /// </summary>
+    /// <remarks>
+    /// This is simulation logic only. It exists so that a pilot practising discipline gets
+    /// feedback, not as any kind of safety protection — StormATC has no connection to real
+    /// traffic and makes no claim to detect real conflicts.
+    /// </remarks>
+    private static AtcDecision? CheckRunwayIncursion(AtcEvaluationContext context)
+    {
+        if (!context.Realism.EnforceHoldShort)
+        {
+            return null;
+        }
+
+        AtcSession session = context.Session;
+        Aircraft.AircraftState aircraft = context.AircraftState;
+
+        if (!aircraft.IsOnGround || aircraft.GroundSpeedKnots < 1)
+        {
+            return null;
+        }
+
+        // A hold-short restriction only exists while a taxi clearance carries one.
+        if (session.TaxiClearance?.HoldShortOfRunway is not RunwayIdentifier holdShort)
+        {
+            return null;
+        }
+
+        // Once cleared for takeoff or to line up, entering the runway is exactly what was asked.
+        if (session.DepartureClearance?.Type is ClearanceType.Takeoff or ClearanceType.LineUp
+            || session.Phase is FlightPhase.LineUp or FlightPhase.Takeoff or FlightPhase.Landed
+                or FlightPhase.TaxiIn)
+        {
+            return null;
+        }
+
+        if (context.RelevantAirport?.FindRunway(holdShort) is not RunwayData runway)
+        {
+            return null;
+        }
+
+        double distance = DistanceToRunwayCenterlineMeters(aircraft.Position, runway);
+        if (distance > RunwayIncursionThresholdMeters)
+        {
+            return null;
+        }
+
+        // Already warned about this runway — do not spam a warning every state update.
+        bool alreadyWarned = session.ActiveWarnings.Any(w =>
+            string.Equals(w.Code, "HoldShortViolation", StringComparison.Ordinal));
+
+        if (alreadyWarned)
+        {
+            return null;
+        }
+
+        string callsign = session.Callsign?.ToSpoken() ?? "Aircraft";
+
+        return new AtcDecision
+        {
+            Accepted = false,
+            ResponseType = AtcResponseType.Rejection,
+            RejectionReason = $"Aircraft entered runway {holdShort} without clearance.",
+            Warnings =
+            [
+                new AtcWarning
+                {
+                    Severity = AtcSeverity.Warning,
+                    Code = "HoldShortViolation",
+                    Message = $"Simulated hold-short violation: the aircraft entered runway {holdShort.ToDisplay()} without clearance.",
+                    RaisedAt = context.CurrentTime,
+                },
+            ],
+            FallbackPhraseology =
+                $"{callsign}, you were instructed to hold short {holdShort.ToSpokenDesignator()}, vacate the runway immediately.",
+            AllowLanguageModelPhraseology = false,
+        };
+    }
+
+    /// <summary>
+    /// Perpendicular distance from a point to the runway centreline segment, in metres.
+    /// </summary>
+    /// <remarks>
+    /// Uses a local flat-earth projection: over a runway's few kilometres the curvature error
+    /// is far below the 40 m threshold this feeds, and the closed-form segment projection is
+    /// much easier to verify than a spherical equivalent.
+    /// </remarks>
+    private static double DistanceToRunwayCenterlineMeters(GeoPosition point, RunwayData runway)
+    {
+        // Convert to a local metre grid centred on the threshold.
+        const double MetersPerDegreeLatitude = 111_320.0;
+        double metersPerDegreeLongitude =
+            MetersPerDegreeLatitude * Math.Cos(runway.ThresholdPosition.Latitude * Math.PI / 180.0);
+
+        double ax = 0;
+        double ay = 0;
+        double bx = (runway.EndPosition.Longitude - runway.ThresholdPosition.Longitude) * metersPerDegreeLongitude;
+        double by = (runway.EndPosition.Latitude - runway.ThresholdPosition.Latitude) * MetersPerDegreeLatitude;
+        double px = (point.Longitude - runway.ThresholdPosition.Longitude) * metersPerDegreeLongitude;
+        double py = (point.Latitude - runway.ThresholdPosition.Latitude) * MetersPerDegreeLatitude;
+
+        double dx = bx - ax;
+        double dy = by - ay;
+        double lengthSquared = (dx * dx) + (dy * dy);
+
+        if (lengthSquared < 1e-6)
+        {
+            return Math.Sqrt((px * px) + (py * py));
+        }
+
+        // Project the point onto the segment and clamp to the endpoints.
+        double t = Math.Clamp(((px * dx) + (py * dy)) / lengthSquared, 0, 1);
+        double closestX = t * dx;
+        double closestY = t * dy;
+
+        double offsetX = px - closestX;
+        double offsetY = py - closestY;
+
+        return Math.Sqrt((offsetX * offsetX) + (offsetY * offsetY));
+    }
+
+    private static bool IsRunwayOccupied(AtcEvaluationContext context, RunwayIdentifier runway)
+    {
+        foreach (TrafficContact contact in context.Traffic)
+        {
+            if (contact.IsOnRunway
+                && (contact.OccupiedRunway == runway || contact.OccupiedRunway == runway.Reciprocal()))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool IsAboveAerodromeBy(AtcEvaluationContext context, int feet)
+    {
+        int elevation = context.DepartureAirport?.ElevationFeet ?? 0;
+        return context.AircraftState.IndicatedAltitudeFeet > elevation + feet;
+    }
+
+    /// <summary>
+    /// Radius, in nautical miles, inside which an arriving aircraft is treated as being in the
+    /// destination's terminal area.
+    /// </summary>
+    /// <remarks>
+    /// A single radius stands in for published terminal airspace, which would need procedure
+    /// data StormATC does not bundle. Forty miles is roughly where a real arrival is handed to
+    /// approach control, and it is generous enough that the handoff never fails to happen.
+    /// </remarks>
+    private const double TerminalAreaRadiusNauticalMiles = 40;
+
+    /// <summary>Returns the stand name only if that aerodrome actually publishes it.</summary>
+    private static string? ExistingStand(AirportData airport, string? standName) =>
+        standName is { Length: > 0 } name && airport.FindStand(name) is not null ? name : null;
+
+    /// <summary>True when the aircraft is close enough to its destination for Approach to own it.</summary>
+    private static bool IsWithinTerminalArea(AtcEvaluationContext context)
+    {
+        if (context.DestinationAirport is not AirportData destination)
+        {
+            return false;
+        }
+
+        return context.AircraftState.Position.IsWithin(
+            destination.ReferencePosition, TerminalAreaRadiusNauticalMiles);
+    }
+
+    private static bool IsAtAssignedStand(AtcEvaluationContext context)
+    {
+        if (context.Session.AssignedStand is not { Length: > 0 } standName
+            || context.RelevantAirport?.FindStand(standName) is not StandData stand)
+        {
+            // With no stand assigned, being stationary with the brake set is enough.
+            return true;
+        }
+
+        return context.AircraftState.Position.IsWithin(stand.Position, ProximityNauticalMiles);
+    }
+
+    private static string BuildVacateInstruction(AtcEvaluationContext context)
+    {
+        Callsign? callsign = context.Session.Callsign;
+        if (callsign is null)
+        {
+            return "Vacate the runway when able.";
+        }
+
+        RunwayIdentifier? runway = context.Session.AssignedArrivalRunway;
+        string? exit = null;
+
+        // Name an exit only if the aerodrome data actually publishes one.
+        if (runway is RunwayIdentifier landing
+            && context.RelevantAirport?.FindRunway(landing) is RunwayData runwayData
+            && runwayData.ExitNodes.Count > 0)
+        {
+            TaxiNode? exitNode = context.RelevantAirport.TaxiGraph?.FindNode(runwayData.ExitNodes[0]);
+
+            // Use the taxiway that the exit edge belongs to, not the node name.
+            exit = context.RelevantAirport.TaxiGraph?.Edges
+                .FirstOrDefault(e =>
+                    string.Equals(e.FromNode, exitNode?.Name, StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(e.ToNode, exitNode?.Name, StringComparison.OrdinalIgnoreCase))
+                ?.TaxiwayName;
+        }
+
+        return DeterministicPhraseology.VacateInstruction(callsign, exit);
+    }
+
+    private static AtcDecision BuildHandoff(
+        AtcEvaluationContext context,
+        ControllerPosition toController,
+        Frequency frequency,
+        FlightPhase? newPhase,
+        string reason,
+        string fallbackPhraseology)
+    {
+        var handoff = new ControllerHandoff
+        {
+            FromController = context.Session.CurrentController,
+            ToController = toController,
+            ToFrequency = frequency,
+            InstructedAt = context.CurrentTime,
+            State = HandoffState.Instructed,
+            Reason = reason,
+        };
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.Handoff,
+            NewPhase = newPhase,
+            Handoff = handoff,
+            ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["nextController"] = DeterministicPhraseology.SpokenControllerName(toController),
+                ["frequency"] = frequency.ToComparisonValue(),
+            },
+            ProhibitedFacts = ["any clearance", "any altitude change"],
+            FallbackPhraseology = fallbackPhraseology,
+        };
+    }
+
+    private static PendingReadback BuildAltitudeReadback(
+        Clearance clearance,
+        Altitude altitude,
+        DateTimeOffset now,
+        bool isClimb) => new()
+        {
+            ClearanceId = clearance.ClearanceId,
+            ClearanceType = clearance.Type,
+            ExpectedItems =
+            [
+                new ExpectedReadbackItem
+                {
+                    Type = ReadbackItemType.CruiseAltitude,
+                    ExpectedValue = altitude.ToComparisonValue(),
+                    SpokenValue = $"{(isClimb ? "climb" : "descend")} {altitude.ToSpoken()}",
+                    IsCritical = true,
+                },
+            ],
+            IssuedAt = now,
+            IsMandatory = true,
+        };
+
+    private static Dictionary<string, string> BuildTakeoffFacts(
+        AtcEvaluationContext context,
+        RunwayIdentifier runway)
+    {
+        var facts = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["runway"] = runway.ToComparisonValue(),
+            ["clearance"] = "cleared for takeoff",
+        };
+
+        AddWindFacts(context, facts);
+        return facts;
+    }
+
+    private static Dictionary<string, string> BuildLandingFacts(
+        AtcEvaluationContext context,
+        RunwayIdentifier runway)
+    {
+        var facts = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["runway"] = runway.ToComparisonValue(),
+            ["clearance"] = "cleared to land",
+        };
+
+        AddWindFacts(context, facts);
+        return facts;
+    }
+
+    /// <summary>
+    /// Adds wind to the approved facts only when a weather source actually provided it. With no
+    /// provider configured the response simply omits wind rather than inventing a plausible one.
+    /// </summary>
+    private static void AddWindFacts(AtcEvaluationContext context, Dictionary<string, string> facts)
+    {
+        if (context.Weather is { HasWind: true } weather)
+        {
+            facts["windDirection"] = weather.WindDirection!.Value.ToComparisonValue();
+            facts["windSpeed"] = weather.WindSpeedKnots!.Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        }
+    }
+
+    private static List<ReadbackItemType> BuildClearanceReadbackItemTypes(Frequency? departureFrequency)
+    {
+        var items = new List<ReadbackItemType>
+        {
+            ReadbackItemType.Callsign,
+            ReadbackItemType.Runway,
+            ReadbackItemType.InitialAltitude,
+            ReadbackItemType.Squawk,
+        };
+
+        if (departureFrequency is not null)
+        {
+            items.Add(ReadbackItemType.Frequency);
+        }
+
+        return items;
+    }
+
+    private static Altitude ResolveInitialAltitude(
+        AtcEvaluationContext context,
+        FlightPlanning.FlightPlan plan)
+    {
+        // A published SID initial altitude would come from procedure data StormATC does not
+        // bundle. Until it does, use a conservative default well below any filed cruise level.
+        const int DefaultInitialClimbFeet = 7000;
+
+        int elevation = context.DepartureAirport?.ElevationFeet ?? 0;
+        int candidate = DefaultInitialClimbFeet;
+
+        if (plan.CruiseAltitude is Altitude cruise && cruise.Feet < candidate)
+        {
+            candidate = Math.Max(cruise.Feet, elevation + 2000);
+        }
+
+        return Altitude.FromFeet(candidate);
+    }
+
+    /// <summary>
+    /// Chooses the transponder code for a clearance.
+    /// </summary>
+    /// <remarks>
+    /// A pre-assigned code from the scenario data wins, so the sample flight is reproducible.
+    /// Otherwise a code is derived deterministically from the callsign: octal digits only, and
+    /// never one of the reserved emergency codes.
+    /// </remarks>
+    private static SquawkCode ResolveSquawk(AtcEvaluationContext context, Callsign callsign)
+    {
+        if (context.PreassignedSquawk is SquawkCode assigned)
+        {
+            return assigned;
+        }
+
+        // Stable hash over the normalised callsign — deliberately not string.GetHashCode(),
+        // which is randomised per process and would make sessions irreproducible.
+        int hash = 17;
+        foreach (char c in callsign.Normalized)
+        {
+            hash = unchecked((hash * 31) + c);
+        }
+
+        hash = Math.Abs(hash);
+
+        // Build four octal digits, keeping the first digit in 1-6 so the result can never be a
+        // reserved 75xx/76xx/77xx code or the 0000 conspicuity code.
+        int d1 = (hash % 6) + 1;
+        int d2 = (hash / 6) % 8;
+        int d3 = (hash / 48) % 8;
+        int d4 = (hash / 384) % 8;
+
+        return SquawkCode.Create($"{d1}{d2}{d3}{d4}");
+    }
+
+    private static Frequency? ResolveFrequency(AtcEvaluationContext context, ControllerPosition position) =>
+        context.RelevantAirport?.Frequencies.ResolveWithFallback(position);
+}

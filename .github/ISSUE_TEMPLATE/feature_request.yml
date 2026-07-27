@@ -1,0 +1,23 @@
+name: Feature request
+description: Suggest a simulation or usability improvement
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: scenario
+    attributes:
+      label: Flight-simulation scenario
+      description: What were you trying to do in the simulator?
+    validations:
+      required: true
+  - type: textarea
+    id: improvement
+    attributes:
+      label: Proposed improvement
+    validations:
+      required: true
+  - type: textarea
+    id: safety
+    attributes:
+      label: Safety and privacy considerations
+      description: Does this send new data, store new data, or change simulator state?

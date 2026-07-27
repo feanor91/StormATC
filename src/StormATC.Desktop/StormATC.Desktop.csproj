@@ -1,0 +1,81 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>StormATC.Desktop</RootNamespace>
+    <UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>..\..\assets\branding\StormATC.ico</ApplicationIcon>
+    <AssemblyName>StormATC</AssemblyName>
+    <PlatformTarget>x64</PlatformTarget>
+    <Description>StormATC desktop shell. WPF + MVVM. No domain logic lives here.</Description>
+  </PropertyGroup>
+
+  <!-- A direct executable reference is intentional: it adds the optional managed wrapper
+       to StormATC.deps.json so the .NET host will probe and load it at runtime. -->
+  <ItemGroup Condition="'$(MsfsSimConnectPath)' != '' AND Exists('$(MsfsSimConnectPath)')">
+    <Reference Include="Microsoft.FlightSimulator.SimConnect">
+      <HintPath>$(MsfsSimConnectPath)</HintPath>
+      <Private>true</Private>
+      <IncludeRuntimeDependency>true</IncludeRuntimeDependency>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(MsfsSimConnectNativePath)' != '' AND Exists('$(MsfsSimConnectNativePath)')">
+    <Content Include="$(MsfsSimConnectNativePath)" Link="SimConnect.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StormATC.Application\StormATC.Application.csproj" />
+    <ProjectReference Include="..\StormATC.Domain\StormATC.Domain.csproj" />
+    <ProjectReference Include="..\StormATC.Infrastructure\StormATC.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="..\..\assets\branding\stormatc-logo.png"
+              Link="Assets\stormatc-logo.png" />
+    <Resource Include="..\..\assets\branding\StormATC.ico"
+              Link="Assets\StormATC.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
+  </ItemGroup>
+
+  <!-- GenerateBuildDependencyFile does not include arbitrary MSBuild property values in its
+       incremental inputs. Switching MsfsSimConnectPath on or off could therefore leave the
+       previous build mode's StormATC.deps.json in place. It is a small generated file, so always
+       regenerate it for the executable instead of allowing a stale runtime manifest. -->
+  <Target Name="InvalidateStormAtcDependencyManifest"
+          BeforeTargets="GenerateBuildDependencyFile">
+    <Delete Files="$(ProjectDepsFilePath)" />
+  </Target>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+
+  <!-- Prompts and sample data are loaded from disk at runtime, not embedded, so that users
+       and contributors can edit controller behaviour without rebuilding. -->
+  <ItemGroup>
+    <Content Include="..\..\prompts\**\*.md" LinkBase="prompts">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\data\**\*.json" LinkBase="data">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,185 @@
+<UserControl x:Class="StormATC.Desktop.Views.FlightPlanView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:conv="clr-namespace:StormATC.Desktop.Converters"
+             xmlns:vm="clr-namespace:StormATC.Desktop.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DataContext="{d:DesignInstance Type=vm:FlightPlanViewModel}"
+             mc:Ignorable="d">
+
+  <UserControl.Resources>
+    <conv:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    <conv:StringToVisibilityConverter x:Key="StringToVisibility" />
+    <conv:InverseBooleanConverter x:Key="InverseBoolean" />
+  </UserControl.Resources>
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,24">
+    <StackPanel>
+
+      <!-- Import -->
+      <Border Style="{StaticResource CardStyle}">
+        <StackPanel>
+          <TextBlock Text="Import" Style="{StaticResource SectionHeaderStyle}" />
+
+          <StackPanel Margin="0,0,0,10">
+            <TextBlock Text="SIMBRIEF USER ID OR USERNAME" Style="{StaticResource LabelTextStyle}" />
+            <TextBox Text="{Binding SimBriefUserId, UpdateSourceTrigger=PropertyChanged}"
+                     MaxWidth="320"
+                     HorizontalAlignment="Left" />
+            <TextBlock Text="Enter it once and StormATC imports your latest plan directly — there is nothing to download or open by hand. Leave it empty to fly the bundled fictional sample."
+                       Style="{StaticResource SecondaryTextStyle}"
+                       TextWrapping="Wrap"
+                       Margin="0,6,0,0" />
+            <TextBlock Text="A SimBrief account number is not a credential, so it is stored in ordinary settings rather than the secret store."
+                       Style="{StaticResource SecondaryTextStyle}"
+                       TextWrapping="Wrap"
+                       Margin="0,4,0,0" />
+          </StackPanel>
+
+          <StackPanel Orientation="Horizontal">
+            <Button Content="{Binding ImportButtonText}"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Command="{Binding ImportCommand}"
+                    IsEnabled="{Binding IsImporting, Converter={StaticResource InverseBoolean}}" />
+            <TextBlock Text="{Binding ProviderName}"
+                       Style="{StaticResource SecondaryTextStyle}"
+                       VerticalAlignment="Center"
+                       Margin="12,0,0,0" />
+          </StackPanel>
+
+          <TextBlock Text="{Binding StatusMessage}"
+                     Style="{StaticResource SecondaryTextStyle}"
+                     TextWrapping="Wrap"
+                     Margin="0,10,0,0"
+                     Visibility="{Binding StatusMessage, Converter={StaticResource StringToVisibility}}" />
+
+          <Border Background="{StaticResource SurfaceElevatedBrush}"
+                  BorderBrush="{StaticResource StatusWarnBrush}"
+                  BorderThickness="1"
+                  CornerRadius="4"
+                  Padding="12,8"
+                  Margin="0,10,0,0"
+                  Visibility="{Binding IsStale, Converter={StaticResource BoolToVisibility}}">
+            <TextBlock Text="{Binding StaleMessage}"
+                       Style="{StaticResource SecondaryTextStyle}"
+                       TextWrapping="Wrap" />
+          </Border>
+
+          <ItemsControl ItemsSource="{Binding Warnings}" Margin="0,10,0,0">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding}"
+                           Style="{StaticResource SecondaryTextStyle}"
+                           TextWrapping="Wrap"
+                           Margin="0,2" />
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </Border>
+
+      <!-- Summary -->
+      <Border Style="{StaticResource CardStyle}"
+              Visibility="{Binding HasPlan, Converter={StaticResource BoolToVisibility}}">
+        <StackPanel>
+          <TextBlock Text="Filed plan" Style="{StaticResource SectionHeaderStyle}" />
+
+          <UniformGrid Columns="4" Rows="3">
+            <StackPanel Margin="0,0,12,14">
+              <TextBlock Text="CALLSIGN" Style="{StaticResource LabelTextStyle}" />
+              <TextBlock Text="{Binding Callsign}" Style="{StaticResource ValueTextStyle}" />
+            </StackPanel>
+            <StackPanel Margin="0,0,12,14">
+              <TextBlock Text="AIRCRAFT" Style="{StaticResource LabelTextStyle}" />
+              <TextBlock Text="{Binding AircraftType}" Style="{StaticResource ValueTextStyle}" />
+            </StackPanel>
+            <StackPanel Margin="0,0,12,14">
+              <TextBlock Text="DEPARTURE" Style="{StaticResource LabelTextStyle}" />
+              <TextBlock Text="{Binding Departure}" Style="{StaticResource ValueTextStyle}" />
+            </StackPanel>
+            <StackPanel Margin="0,0,0,14">
+              <TextBlock Text="DESTINATION" Style="{StaticResource LabelTextStyle}" />
+              <TextBlock Text="{Binding Destination}" Style="{StaticResource ValueTextStyle}" />
+            </StackPanel>
+
+            <StackPanel Margin="0,0,12,14">
+              <TextBlock Text="CRUISE" Style="{StaticResource LabelTextStyle}" />
+              <TextBlock Text="{Binding CruiseAltitude}" Style="{StaticResource ValueTextStyle}" />
+            </StackPanel>
+            <StackPanel Margin="0,0,12,14">
+              <TextBlock Text="DEP RUNWAY" Style="{StaticResource LabelTextStyle}" />
+              <TextBlock Text="{Binding DepartureRunway}" Style="{StaticResource ValueTextStyle}" />
+            </StackPanel>
+            <StackPanel Margin="0,0,12,14">
+              <TextBlock Text="ARR RUNWAY" Style="{StaticResource LabelTextStyle}" />
+              <TextBlock Text="{Binding ArrivalRunway}" Style="{StaticResource ValueTextStyle}" />
+            </StackPanel>
+            <StackPanel Margin="0,0,0,14">
+              <TextBlock Text="ALTERNATES" Style="{StaticResource LabelTextStyle}" />
+              <TextBlock Text="{Binding Alternates}" Style="{StaticResource ValueTextStyle}" />
+            </StackPanel>
+
+            <StackPanel Margin="0,0,12,0">
+              <TextBlock Text="SID" Style="{StaticResource LabelTextStyle}" />
+              <TextBlock Text="{Binding DepartureProcedure}" Style="{StaticResource ValueTextStyle}" />
+            </StackPanel>
+            <StackPanel Margin="0,0,12,0">
+              <TextBlock Text="STAR / APPROACH" Style="{StaticResource LabelTextStyle}" />
+              <TextBlock Text="{Binding ArrivalProcedure}" Style="{StaticResource ValueTextStyle}" />
+            </StackPanel>
+            <StackPanel Margin="0,0,12,0">
+              <TextBlock Text="BLOCK TIME" Style="{StaticResource LabelTextStyle}" />
+              <TextBlock Text="{Binding BlockTime}" Style="{StaticResource ValueTextStyle}" />
+            </StackPanel>
+            <StackPanel>
+              <TextBlock Text="GENERATED" Style="{StaticResource LabelTextStyle}" />
+              <TextBlock Text="{Binding GeneratedAt}" Style="{StaticResource ValueTextStyle}" />
+            </StackPanel>
+          </UniformGrid>
+
+          <Border Style="{StaticResource DividerStyle}" Margin="0,4,0,14" />
+
+          <TextBlock Text="ROUTE" Style="{StaticResource LabelTextStyle}" />
+          <TextBlock Text="{Binding Route}"
+                     Style="{StaticResource ValueTextStyle}"
+                     TextWrapping="Wrap" />
+        </StackPanel>
+      </Border>
+
+      <!-- Legs -->
+      <Border Style="{StaticResource CardStyle}"
+              Visibility="{Binding HasPlan, Converter={StaticResource BoolToVisibility}}">
+        <StackPanel>
+          <TextBlock Text="Route legs" Style="{StaticResource SectionHeaderStyle}" />
+
+          <DataGrid ItemsSource="{Binding RouteLegs}"
+                    AutoGenerateColumns="False"
+                    IsReadOnly="True"
+                    HeadersVisibility="Column"
+                    GridLinesVisibility="Horizontal"
+                    Background="Transparent"
+                    RowBackground="Transparent"
+                    AlternatingRowBackground="{StaticResource SurfaceElevatedBrush}"
+                    BorderThickness="0"
+                    HorizontalGridLinesBrush="{StaticResource BorderBrush}"
+                    Foreground="{StaticResource TextPrimaryBrush}"
+                    MaxHeight="320">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Fix" Binding="{Binding Identifier}" Width="*" />
+              <DataGridTextColumn Header="Via" Binding="{Binding Via}" Width="*" />
+              <DataGridTextColumn Header="Planned altitude" Binding="{Binding PlannedAltitude}" Width="*" />
+              <DataGridTextColumn Header="Distance" Binding="{Binding Distance}" Width="*" />
+              <DataGridTextColumn Header="Stage" Binding="{Binding Stage}" Width="*" />
+            </DataGrid.Columns>
+          </DataGrid>
+        </StackPanel>
+      </Border>
+
+      <TextBlock Text="A flight plan states intentions. What the aircraft is actually cleared to do comes only from the ATC engine."
+                 Style="{StaticResource SecondaryTextStyle}"
+                 TextWrapping="Wrap"
+                 Margin="4,4,0,0" />
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

@@ -1,0 +1,190 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using StormATC.Domain.Phraseology;
+
+namespace StormATC.Domain.ValueObjects;
+
+/// <summary>
+/// An aircraft callsign, stored in a normalised comparison form alongside the text the user
+/// or flight plan originally supplied.
+/// </summary>
+/// <remarks>
+/// <para>
+/// Callsign matching is the single most error-prone comparison in the whole pipeline, because
+/// speech-to-text renders the same callsign many different ways. "STORM123" may arrive as
+/// "storm one two three", "storm 123", "Storm123", or "storm one twenty three". Normalisation
+/// therefore strips whitespace and punctuation, uppercases, and folds spelled-out digits.
+/// </para>
+/// <para>
+/// The <see cref="Normalized"/> form is the only value that should ever be compared.
+/// </para>
+/// </remarks>
+public sealed class Callsign : IEquatable<Callsign>
+{
+    private Callsign(string original, string normalized, string? telephony, string? numericSuffix)
+    {
+        Original = original;
+        Normalized = normalized;
+        Telephony = telephony;
+        NumericSuffix = numericSuffix;
+    }
+
+    /// <summary>The callsign exactly as supplied.</summary>
+    public string Original { get; }
+
+    /// <summary>Uppercase, alphanumeric-only comparison form. For example <c>STORM123</c>.</summary>
+    public string Normalized { get; }
+
+    /// <summary>
+    /// The alphabetic prefix, where one exists — the airline telephony designator part.
+    /// <c>STORM</c> for <c>STORM123</c>.
+    /// </summary>
+    public string? Telephony { get; }
+
+    /// <summary>The trailing flight number, where one exists. <c>123</c> for <c>STORM123</c>.</summary>
+    public string? NumericSuffix { get; }
+
+    /// <summary>
+    /// Creates a callsign, throwing when the input cannot yield any usable identifier.
+    /// </summary>
+    /// <exception cref="ArgumentException">The value is empty or has no alphanumeric content.</exception>
+    public static Callsign Create(string value)
+    {
+        if (!TryCreate(value, out Callsign? callsign))
+        {
+            throw new ArgumentException(
+                $"'{value}' is not a usable callsign. A callsign needs at least one letter or digit.",
+                nameof(value));
+        }
+
+        return callsign;
+    }
+
+    /// <summary>Attempts to create a callsign. Returns false rather than throwing.</summary>
+    public static bool TryCreate(string? value, [NotNullWhen(true)] out Callsign? callsign)
+    {
+        callsign = null;
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return false;
+        }
+
+        string normalized = Normalize(value);
+        if (normalized.Length == 0)
+        {
+            return false;
+        }
+
+        // Split into a leading alphabetic run and a trailing alphanumeric run. Real callsigns
+        // are either all-alphanumeric registrations (G-ABCD -> GABCD) or telephony + number
+        // (STORM123). Both shapes are preserved; only the split differs.
+        int firstDigit = -1;
+        for (int i = 0; i < normalized.Length; i++)
+        {
+            if (char.IsDigit(normalized[i]))
+            {
+                firstDigit = i;
+                break;
+            }
+        }
+
+        string? telephony = firstDigit > 0 ? normalized[..firstDigit] : null;
+        string? suffix = firstDigit >= 0 ? normalized[firstDigit..] : null;
+
+        callsign = new Callsign(value.Trim(), normalized, telephony, suffix);
+        return true;
+    }
+
+    /// <summary>
+    /// Reduces a raw string to the canonical comparison form: uppercase alphanumerics only,
+    /// with spelled-out digit words folded into digits.
+    /// </summary>
+    public static string Normalize(string value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+
+        // Fold digit words first, while token boundaries still exist.
+        string folded = SpokenNumbers.FoldDigitWords(value);
+
+        var builder = new StringBuilder(folded.Length);
+        foreach (char c in folded)
+        {
+            if (char.IsLetterOrDigit(c))
+            {
+                builder.Append(char.ToUpperInvariant(c));
+            }
+        }
+
+        return builder.ToString();
+    }
+
+    /// <summary>
+    /// Determines whether a transcript plausibly addresses this callsign.
+    /// </summary>
+    /// <remarks>
+    /// Speech-to-text frequently drops or mangles the telephony prefix while keeping the flight
+    /// number intact ("one two three, ready to copy"). A bare numeric-suffix match is therefore
+    /// accepted, but only when the suffix is at least two characters, to avoid matching stray
+    /// digits such as an altitude. This is a recognition aid, never a clearance authority.
+    /// </remarks>
+    public bool MatchesTranscript(string transcript)
+    {
+        if (string.IsNullOrWhiteSpace(transcript))
+        {
+            return false;
+        }
+
+        string normalizedTranscript = Normalize(transcript);
+        if (normalizedTranscript.Contains(Normalized, StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        return NumericSuffix is { Length: >= 2 }
+            && normalizedTranscript.Contains(NumericSuffix, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// Renders the callsign the way a controller would say it: telephony as a word, flight
+    /// number digit-by-digit. <c>STORM123</c> becomes <c>Storm one two three</c>.
+    /// </summary>
+    public string ToSpoken()
+    {
+        if (Telephony is null)
+        {
+            // A registration-style callsign is spelled phonetically: G-ABCD -> Golf Alfa Bravo…
+            return PhoneticAlphabet.SpellOut(Normalized);
+        }
+
+        // One- and two-letter prefixes are normally registrations or ad-hoc identifiers rather
+        // than an ICAO airline telephony word. Spell them phonetically so ST123 is spoken as
+        // "Sierra Tango one two three", not the ambiguous word "St".
+        string telephonyWord = Telephony.Length <= 2
+            ? PhoneticAlphabet.SpellOut(Telephony)
+            : string.Concat(
+                char.ToUpperInvariant(Telephony[0]),
+                Telephony[1..].ToLowerInvariant());
+
+        return NumericSuffix is null
+            ? telephonyWord
+            : $"{telephonyWord} {SpokenNumbers.DigitsIndividually(NumericSuffix)}";
+    }
+
+    /// <inheritdoc />
+    public bool Equals(Callsign? other) =>
+        other is not null && string.Equals(Normalized, other.Normalized, StringComparison.Ordinal);
+
+    /// <inheritdoc />
+    public override bool Equals(object? obj) => Equals(obj as Callsign);
+
+    /// <inheritdoc />
+    public override int GetHashCode() => StringComparer.Ordinal.GetHashCode(Normalized);
+
+    /// <inheritdoc />
+    public override string ToString() => Normalized;
+
+    public static bool operator ==(Callsign? left, Callsign? right) =>
+        left is null ? right is null : left.Equals(right);
+
+    public static bool operator !=(Callsign? left, Callsign? right) => !(left == right);
+}

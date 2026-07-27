@@ -1,0 +1,56 @@
+## Build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+artifacts/
+TestResults/
+*.user
+*.suo
+.vs/
+.vscode/
+.idea/
+
+## NuGet
+*.nupkg
+packages/
+
+## StormATC local state — never commit these.
+## API keys are stored via the OS secret store, not in files, but be defensive.
+secrets.json
+secrets.dat
+secrets.dat.tmp
+usersettings.json
+usersettings.json.tmp
+appsettings.Local.json
+appsettings.*.local.json
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.pfx
+*.p12
+*.snk
+**/recordings/
+*.wav
+
+## Local MSFS SDK assemblies. See docs/simconnect-setup.md — the managed SimConnect
+## assembly is redistributed by Microsoft under its own licence and is NOT vendored here.
+lib/msfs/
+**/Microsoft.FlightSimulator.SimConnect.dll
+**/SimConnect.dll
+
+## Local diagnostics
+logs/
+*.log
+*.db
+*.db-shm
+*.db-wal
+diagnostics-bundle*.zip
+stormatc-diagnostics-*.txt
+
+## Local publish output
+publish/
+*.zip
+*.sha256

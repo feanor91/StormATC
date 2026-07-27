@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>StormATC.Application</RootNamespace>
+    <Description>
+      Application layer for StormATC: use cases, provider abstractions, the pilot transmission
+      pipeline, and strongly typed options. Depends on the domain and on abstractions only —
+      never on a concrete provider implementation.
+    </Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StormATC.Domain\StormATC.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" />
+  </ItemGroup>
+
+</Project>

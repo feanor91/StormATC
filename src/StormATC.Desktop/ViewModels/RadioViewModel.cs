@@ -1,0 +1,295 @@
+using System.Collections.ObjectModel;
+using System.Text.Json.Nodes;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Options;
+using StormATC.Application.Abstractions;
+using StormATC.Application.Options;
+using StormATC.Application.Sessions;
+using StormATC.Desktop.Services;
+using StormATC.Domain;
+using StormATC.Domain.Airports;
+using StormATC.Domain.Sessions;
+using StormATC.Domain.ValueObjects;
+using StormATC.Infrastructure.Simulator;
+
+namespace StormATC.Desktop.ViewModels;
+
+/// <summary>
+/// The Radio page: which frequency the session is on, what the aircraft has tuned, and the
+/// audio treatment applied to the controller voice.
+/// </summary>
+/// <remarks>
+/// <para>
+/// The frequency the aircraft has tuned comes from the simulator and is authoritative. The
+/// frequency the session expects comes from the last handoff the engine issued. When they
+/// disagree, this page says so — it does not silently retune the radio or pretend the pilot is
+/// on the right frequency.
+/// </para>
+/// </remarks>
+public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage, IDisposable
+{
+    private readonly AtcSessionContext _sessionContext;
+    private readonly MockSimulatorConnector _mockSimulator;
+    private readonly SimulatorConnectorRouter _simulatorRouter;
+    private readonly ITextToSpeechService _textToSpeech;
+    private readonly UserSettingsService _userSettings;
+    private readonly AudioOptions _audioOptions;
+
+    private bool _disposed;
+
+    [ObservableProperty]
+    private string _sessionFrequency = "—";
+
+    [ObservableProperty]
+    private string _sessionController = "—";
+
+    [ObservableProperty]
+    private string _tunedFrequency = "—";
+
+    [ObservableProperty]
+    private bool _frequencyMismatch;
+
+    [ObservableProperty]
+    private string _mismatchMessage = string.Empty;
+
+    [ObservableProperty]
+    private string _handoffStatus = "No handoff in progress";
+
+    [ObservableProperty]
+    private bool _hasPublishedFrequencies;
+
+    [ObservableProperty]
+    private string _frequencyDataMessage =
+        "No local airport frequency data is available for this flight.";
+
+    [ObservableProperty]
+    private double _controllerVolume;
+
+    [ObservableProperty]
+    private bool _radioEffectEnabled;
+
+    [ObservableProperty]
+    private double _radioEffectStrength;
+
+    [ObservableProperty]
+    private double _staticLevel;
+
+    [ObservableProperty]
+    private bool _transmissionClicksEnabled;
+
+    [ObservableProperty]
+    private bool _cleanAudioMode;
+
+    [ObservableProperty]
+    private bool _muted;
+
+    [ObservableProperty]
+    private string _statusMessage = string.Empty;
+
+    /// <summary>Creates the radio view model.</summary>
+    public RadioViewModel(
+        AtcSessionContext sessionContext,
+        MockSimulatorConnector mockSimulator,
+        SimulatorConnectorRouter simulatorRouter,
+        ITextToSpeechService textToSpeech,
+        UserSettingsService userSettings,
+        IOptions<AudioOptions> audioOptions)
+    {
+        _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
+        _mockSimulator = mockSimulator ?? throw new ArgumentNullException(nameof(mockSimulator));
+        _simulatorRouter = simulatorRouter ?? throw new ArgumentNullException(nameof(simulatorRouter));
+        _textToSpeech = textToSpeech ?? throw new ArgumentNullException(nameof(textToSpeech));
+        _userSettings = userSettings ?? throw new ArgumentNullException(nameof(userSettings));
+        _audioOptions = audioOptions?.Value ?? throw new ArgumentNullException(nameof(audioOptions));
+
+        _controllerVolume = _audioOptions.ControllerVolume;
+        _radioEffectEnabled = _audioOptions.RadioEffectEnabled;
+        _radioEffectStrength = _audioOptions.RadioEffectStrength;
+        _staticLevel = _audioOptions.StaticLevel;
+        _transmissionClicksEnabled = _audioOptions.TransmissionClicksEnabled;
+        _cleanAudioMode = _audioOptions.CleanAudioMode;
+        _muted = _audioOptions.Muted;
+
+        AvailableFrequencies = [];
+
+        _sessionContext.SessionChanged += OnSessionChanged;
+        UpdateFromSession(_sessionContext.CurrentSession);
+    }
+
+    /// <summary>Every published frequency at the departure aerodrome.</summary>
+    public ObservableCollection<FrequencyEntry> AvailableFrequencies { get; }
+
+    /// <summary>The push-to-talk key, shown so the binding is discoverable.</summary>
+    public string PushToTalkKey => _audioOptions.PushToTalkKey;
+
+    /// <summary>
+    /// True when the mock simulator can be retuned from here.
+    /// </summary>
+    /// <remarks>
+    /// Only the scripted aircraft's radio can be changed from StormATC. A real simulator's radio
+    /// belongs to the pilot: StormATC reads SimConnect and never writes to it.
+    /// </remarks>
+    public bool CanTuneRadio => _simulatorRouter.IsMockActive;
+
+    /// <inheritdoc />
+    public async Task RefreshAsync()
+    {
+        UpdateFromSession(_sessionContext.CurrentSession);
+        await LoadFrequenciesAsync().ConfigureAwait(true);
+    }
+
+    /// <summary>Tunes the mock aircraft's COM1 to a published frequency.</summary>
+    [RelayCommand]
+    private void TuneTo(FrequencyEntry? entry)
+    {
+        if (entry is null || !CanTuneRadio)
+        {
+            return;
+        }
+
+        _mockSimulator.SetCom1Active(entry.Frequency);
+        StatusMessage = $"COM1 tuned to {entry.Frequency.ToDisplay()}.";
+        UpdateFromSession(_sessionContext.CurrentSession);
+    }
+
+    /// <summary>Replays the last controller transmission.</summary>
+    [RelayCommand]
+    private async Task ReplayLastAsync() =>
+        await _textToSpeech.ReplayLastAsync(CancellationToken.None).ConfigureAwait(true);
+
+    /// <summary>Persists the audio settings to the user settings file.</summary>
+    [RelayCommand]
+    private async Task SaveAudioSettingsAsync()
+    {
+        await _userSettings.SaveManyAsync(
+            [
+                (AudioOptions.SectionName, "ControllerVolume", JsonValue.Create(Math.Round(ControllerVolume, 2))),
+                (AudioOptions.SectionName, "RadioEffectEnabled", JsonValue.Create(RadioEffectEnabled)),
+                (AudioOptions.SectionName, "RadioEffectStrength", JsonValue.Create(Math.Round(RadioEffectStrength, 2))),
+                (AudioOptions.SectionName, "StaticLevel", JsonValue.Create(Math.Round(StaticLevel, 2))),
+                (AudioOptions.SectionName, "TransmissionClicksEnabled", JsonValue.Create(TransmissionClicksEnabled)),
+                (AudioOptions.SectionName, "CleanAudioMode", JsonValue.Create(CleanAudioMode)),
+                (AudioOptions.SectionName, "Muted", JsonValue.Create(Muted)),
+            ],
+            CancellationToken.None).ConfigureAwait(true);
+
+        StatusMessage = "Audio settings saved. They take effect on the next transmission.";
+    }
+
+    private async Task LoadFrequenciesAsync()
+    {
+        AtcSession session = _sessionContext.CurrentSession;
+        AvailableFrequencies.Clear();
+        HasPublishedFrequencies = false;
+
+        if (session.FlightPlan?.DepartureIcao is not { Length: > 0 } icao)
+        {
+            FrequencyDataMessage = "Import a flight plan to load its airport frequencies.";
+            return;
+        }
+
+        AirportData? airport = await _sessionContext
+            .GetAirportAsync(icao, CancellationToken.None)
+            .ConfigureAwait(true);
+
+        if (airport is null)
+        {
+            FrequencyDataMessage =
+                $"StormATC has no bundled frequency data for {icao}. "
+                + "It will keep local positions combined and never invent a frequency.";
+            return;
+        }
+
+        AddFrequency("Clearance delivery", airport.Frequencies.ClearanceDelivery);
+        AddFrequency("Ground", airport.Frequencies.Ground);
+        AddFrequency("Tower", airport.Frequencies.Tower);
+        AddFrequency("Departure", airport.Frequencies.Departure);
+        AddFrequency("Approach", airport.Frequencies.Approach);
+        AddFrequency("Center", airport.Frequencies.Center);
+        AddFrequency("ATIS", airport.Frequencies.Atis);
+        HasPublishedFrequencies = AvailableFrequencies.Count > 0;
+        FrequencyDataMessage = HasPublishedFrequencies
+            ? string.Empty
+            : $"The bundled {icao} airport file does not publish radio frequencies.";
+
+        void AddFrequency(string label, Frequency? frequency)
+        {
+            if (frequency is Frequency value)
+            {
+                AvailableFrequencies.Add(new FrequencyEntry(label, value));
+            }
+        }
+    }
+
+    private void OnSessionChanged(object? sender, AtcSession session) =>
+        RunOnUiThread(() => UpdateFromSession(session));
+
+    private void UpdateFromSession(AtcSession session)
+    {
+        Frequency tuned = session.AircraftState.Radio.ActiveTransmitFrequency;
+        SessionFrequency = session.CurrentFrequency?.ToDisplay() ?? tuned.ToDisplay();
+
+        SessionController = session.CurrentController == ControllerPosition.None
+            ? "—"
+            : Domain.Phraseology.DeterministicPhraseology.SpokenControllerName(session.CurrentController);
+
+        TunedFrequency = tuned.ToDisplay();
+
+        // The engine never assumes the pilot changed frequency. Saying so plainly is more
+        // useful than quietly correcting it.
+        FrequencyMismatch = session.CurrentFrequency is Frequency expected && expected != tuned;
+
+        MismatchMessage = FrequencyMismatch
+            ? $"The aircraft is tuned to {tuned.ToDisplay()} but the session is on "
+              + $"{session.CurrentFrequency?.ToDisplay()}. Retune COM1 to be heard."
+            : string.Empty;
+
+        HandoffStatus = session.HandoffState switch
+        {
+            HandoffState.Instructed => session.HandoffHistory.Count > 0
+                ? $"Instructed to contact {DescribeHandoff(session.HandoffHistory[^1])} — check in when ready."
+                : "A frequency change has been issued.",
+            HandoffState.Acknowledged => "Frequency change read back. Check in on the new frequency.",
+            HandoffState.CheckedIn => "Checked in with the new controller.",
+            _ => "No handoff in progress",
+        };
+    }
+
+    private static string DescribeHandoff(ControllerHandoff handoff) =>
+        $"{Domain.Phraseology.DeterministicPhraseology.SpokenControllerName(handoff.ToController)} "
+        + $"on {handoff.ToFrequency.ToDisplay()}";
+
+    private static void RunOnUiThread(Action action)
+    {
+        System.Windows.Threading.Dispatcher? dispatcher = System.Windows.Application.Current?.Dispatcher;
+
+        if (dispatcher is null || dispatcher.CheckAccess())
+        {
+            action();
+        }
+        else
+        {
+            dispatcher.BeginInvoke(action);
+        }
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        _disposed = true;
+        _sessionContext.SessionChanged -= OnSessionChanged;
+    }
+}
+
+/// <summary>One published frequency at an aerodrome.</summary>
+public sealed record FrequencyEntry(string Label, Frequency Frequency)
+{
+    /// <summary>The frequency formatted for display.</summary>
+    public string Display => Frequency.ToDisplay();
+}

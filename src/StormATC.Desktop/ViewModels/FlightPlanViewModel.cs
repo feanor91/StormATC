@@ -1,0 +1,334 @@
+using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using StormATC.Application.Abstractions;
+using StormATC.Application.Options;
+using StormATC.Application.Sessions;
+using StormATC.Desktop.Services;
+using StormATC.Domain.FlightPlanning;
+using StormATC.Domain.Sessions;
+using StormATC.Infrastructure.FlightPlanning;
+
+namespace StormATC.Desktop.ViewModels;
+
+/// <summary>
+/// The Flight Plan page: import, review, and confirm the plan the session runs against.
+/// </summary>
+/// <remarks>
+/// Nothing here changes ATC state. The plan is a set of intentions; what the aircraft is actually
+/// cleared to do comes from the engine, and only from the engine.
+/// </remarks>
+public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshablePage, IDisposable
+{
+    private readonly AtcSessionContext _sessionContext;
+    private readonly FlightPlanProviderRouter _flightPlanProvider;
+    private readonly ProviderStatusService _providerStatus;
+    private readonly UserSettingsService _userSettings;
+    private readonly IClock _clock;
+    private readonly SimBriefOptions _simBriefOptions;
+    private readonly ILogger<FlightPlanViewModel> _logger;
+
+    private bool _disposed;
+
+    [ObservableProperty]
+    private string _callsign = "—";
+
+    [ObservableProperty]
+    private string _aircraftType = "—";
+
+    [ObservableProperty]
+    private string _departure = "—";
+
+    [ObservableProperty]
+    private string _destination = "—";
+
+    [ObservableProperty]
+    private string _alternates = "—";
+
+    [ObservableProperty]
+    private string _cruiseAltitude = "—";
+
+    [ObservableProperty]
+    private string _departureRunway = "—";
+
+    [ObservableProperty]
+    private string _arrivalRunway = "—";
+
+    [ObservableProperty]
+    private string _departureProcedure = "—";
+
+    [ObservableProperty]
+    private string _arrivalProcedure = "—";
+
+    [ObservableProperty]
+    private string _route = "No route filed";
+
+    [ObservableProperty]
+    private string _blockTime = "—";
+
+    [ObservableProperty]
+    private string _source = "—";
+
+    [ObservableProperty]
+    private string _generatedAt = "—";
+
+    [ObservableProperty]
+    private bool _isStale;
+
+    [ObservableProperty]
+    private string _staleMessage = string.Empty;
+
+    [ObservableProperty]
+    private bool _hasPlan;
+
+    [ObservableProperty]
+    private bool _isImporting;
+
+    [ObservableProperty]
+    private string _statusMessage = string.Empty;
+
+    [ObservableProperty]
+    private bool _statusIsError;
+
+    [ObservableProperty]
+    private string _simBriefUserId = string.Empty;
+
+    /// <summary>Creates the flight plan view model.</summary>
+    public FlightPlanViewModel(
+        AtcSessionContext sessionContext,
+        FlightPlanProviderRouter flightPlanProvider,
+        ProviderStatusService providerStatus,
+        UserSettingsService userSettings,
+        IClock clock,
+        IOptions<SimBriefOptions> simBriefOptions,
+        ILogger<FlightPlanViewModel> logger)
+    {
+        _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
+        _flightPlanProvider = flightPlanProvider ?? throw new ArgumentNullException(nameof(flightPlanProvider));
+        _providerStatus = providerStatus ?? throw new ArgumentNullException(nameof(providerStatus));
+        _userSettings = userSettings ?? throw new ArgumentNullException(nameof(userSettings));
+        _clock = clock ?? throw new ArgumentNullException(nameof(clock));
+        _simBriefOptions = simBriefOptions?.Value ?? throw new ArgumentNullException(nameof(simBriefOptions));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+        _simBriefUserId = _simBriefOptions.UserId ?? string.Empty;
+
+        RouteLegs = [];
+        Warnings = [];
+
+        _sessionContext.SessionChanged += OnSessionChanged;
+        UpdateFromSession(_sessionContext.CurrentSession);
+    }
+
+    /// <summary>The filed route, leg by leg.</summary>
+    public ObservableCollection<RouteLegDisplay> RouteLegs { get; }
+
+    /// <summary>Non-fatal problems reported by the importer.</summary>
+    public ObservableCollection<string> Warnings { get; }
+
+    /// <summary>
+    /// What the import button will actually contact, given what is configured right now.
+    /// </summary>
+    /// <remarks>
+    /// Recomputed rather than fixed at construction: typing a SimBrief user ID changes the
+    /// answer, and the button should say so before it is pressed rather than afterwards.
+    /// </remarks>
+    public string ProviderName =>
+        string.IsNullOrWhiteSpace(SimBriefUserId) ? _flightPlanProvider.ProviderName : "SimBrief";
+
+    /// <summary>True when SimBrief is what an import would use.</summary>
+    public bool UsesSimBrief => !string.IsNullOrWhiteSpace(SimBriefUserId);
+
+    /// <summary>The label on the import button.</summary>
+    public string ImportButtonText =>
+        UsesSimBrief ? "Import latest SimBrief plan" : "Load the bundled sample flight";
+
+    /// <inheritdoc />
+    public Task RefreshAsync()
+    {
+        UpdateFromSession(_sessionContext.CurrentSession);
+        return Task.CompletedTask;
+    }
+
+    partial void OnSimBriefUserIdChanged(string value)
+    {
+        OnPropertyChanged(nameof(ProviderName));
+        OnPropertyChanged(nameof(UsesSimBrief));
+        OnPropertyChanged(nameof(ImportButtonText));
+    }
+
+    /// <summary>Imports the latest plan and attaches it to the session.</summary>
+    [RelayCommand]
+    private async Task ImportAsync()
+    {
+        IsImporting = true;
+        StatusIsError = false;
+        StatusMessage = UsesSimBrief
+            ? "Fetching your latest flight plan from SimBrief…"
+            : "Loading the bundled sample flight…";
+
+        try
+        {
+            string? userId = string.IsNullOrWhiteSpace(SimBriefUserId)
+                ? _simBriefOptions.UserId
+                : SimBriefUserId.Trim();
+
+            if (!string.IsNullOrWhiteSpace(userId))
+            {
+                // Saved before the import, not after, so a failed fetch still leaves the ID in
+                // place to retry with. A SimBrief user ID is an account number, not a credential,
+                // so it belongs in ordinary settings rather than the secret store.
+                await _userSettings
+                    .SaveAsync(SimBriefOptions.SectionName, "UserId", userId, CancellationToken.None)
+                    .ConfigureAwait(true);
+            }
+
+            var request = new FlightPlanImportRequest
+            {
+                UserId = userId,
+                ForceRefresh = true,
+            };
+
+            FlightPlanImportResult result = await _flightPlanProvider
+                .ImportLatestAsync(request, CancellationToken.None)
+                .ConfigureAwait(true);
+
+            Warnings.Clear();
+            foreach (string warning in result.Warnings)
+            {
+                Warnings.Add(warning);
+            }
+
+            if (!result.Success || result.FlightPlan is not FlightPlan plan)
+            {
+                StatusIsError = true;
+                StatusMessage = result.SuggestedAction is { Length: > 0 } action
+                    ? $"{result.ErrorMessage} {action}"
+                    : result.ErrorMessage ?? "The import failed.";
+
+                _providerStatus.SetFlightPlanStatus(false, "Import failed");
+                return;
+            }
+
+            // Only the sample scenario pins a transponder code. Reading it from the router rather
+            // than testing the provider type means a SimBrief import correctly clears it.
+            _sessionContext.PreassignedSquawk = _flightPlanProvider.PreassignedSquawk;
+
+            await _sessionContext.LoadFlightPlanAsync(plan, CancellationToken.None).ConfigureAwait(true);
+
+            _providerStatus.SetFlightPlanStatus(
+                true,
+                $"{plan.ToSummary()} · {_flightPlanProvider.LastProviderUsed}");
+
+            StatusMessage = $"Imported {plan.ToSummary()} from {_flightPlanProvider.LastProviderUsed}.";
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "The flight plan import failed.");
+            StatusIsError = true;
+            StatusMessage = "The import failed. See the Diagnostics page for details.";
+        }
+        finally
+        {
+            IsImporting = false;
+        }
+    }
+
+    private void OnSessionChanged(object? sender, AtcSession session) =>
+        RunOnUiThread(() => UpdateFromSession(session));
+
+    private void UpdateFromSession(AtcSession session)
+    {
+        if (session.FlightPlan is not FlightPlan plan)
+        {
+            HasPlan = false;
+            RouteLegs.Clear();
+            return;
+        }
+
+        HasPlan = true;
+
+        Callsign = plan.Callsign.Original;
+        AircraftType = plan.AircraftIcaoType ?? "—";
+        Departure = plan.DepartureIcao;
+        Destination = plan.DestinationIcao;
+        Alternates = plan.AlternateIcaos.Count > 0 ? string.Join(", ", plan.AlternateIcaos) : "None filed";
+        CruiseAltitude = plan.CruiseAltitude?.ToDisplay() ?? "—";
+        DepartureRunway = plan.DepartureRunway?.ToDisplay() ?? "—";
+        ArrivalRunway = plan.ArrivalRunway?.ToDisplay() ?? "—";
+        DepartureProcedure = plan.StandardInstrumentDeparture ?? "—";
+        ArrivalProcedure = plan.StandardTerminalArrival ?? plan.Approach ?? "—";
+        Route = plan.Route is { Length: > 0 } route ? route : "No route filed";
+        Source = plan.SourceIdentifier ?? "—";
+
+        BlockTime = plan.EstimatedBlockTime is TimeSpan block
+            ? $"{(int)block.TotalHours:00}:{block.Minutes:00}"
+            : "—";
+
+        GeneratedAt = plan.GeneratedAt is DateTimeOffset generated
+            ? generated.ToLocalTime().ToString("yyyy-MM-dd HH:mm", System.Globalization.CultureInfo.CurrentCulture)
+            : "—";
+
+        // A stale plan is a warning, not a refusal: the pilot may well intend to fly it anyway.
+        if (plan.GeneratedAt is DateTimeOffset when)
+        {
+            TimeSpan age = _clock.UtcNow - when;
+            IsStale = age > _simBriefOptions.StaleThreshold;
+            StaleMessage = IsStale
+                ? $"This plan was generated {(int)age.TotalHours} hours ago and may not reflect current conditions."
+                : string.Empty;
+        }
+        else
+        {
+            IsStale = false;
+            StaleMessage = string.Empty;
+        }
+
+        RouteLegs.Clear();
+        foreach (RouteLeg leg in plan.RouteLegs)
+        {
+            RouteLegs.Add(new RouteLegDisplay(
+                leg.Identifier,
+                leg.Via ?? "DCT",
+                leg.PlannedAltitude?.ToDisplay() ?? "—",
+                leg.CumulativeDistanceNauticalMiles is double distance ? $"{distance:F0} NM" : "—",
+                leg.Stage ?? "—"));
+        }
+    }
+
+    private static void RunOnUiThread(Action action)
+    {
+        System.Windows.Threading.Dispatcher? dispatcher = System.Windows.Application.Current?.Dispatcher;
+
+        if (dispatcher is null || dispatcher.CheckAccess())
+        {
+            action();
+        }
+        else
+        {
+            dispatcher.BeginInvoke(action);
+        }
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        _disposed = true;
+        _sessionContext.SessionChanged -= OnSessionChanged;
+    }
+}
+
+/// <summary>One row in the route table.</summary>
+public sealed record RouteLegDisplay(
+    string Identifier,
+    string Via,
+    string PlannedAltitude,
+    string Distance,
+    string Stage);

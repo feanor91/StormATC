@@ -1,0 +1,40 @@
+<Project>
+
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Application host, DI, configuration, logging, options. -->
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Options.DataAnnotations" Version="10.0.0" />
+
+    <!-- Local persistence. Chosen over EF Core: the schema is small, explicit, and the
+         prototype benefits from readable SQL and zero migration tooling. -->
+    <PackageVersion Include="Microsoft.Data.Sqlite" Version="10.0.0" />
+    <!-- Microsoft.Data.Sqlite 10.0.0 pulls SQLitePCLRaw 2.1.11, whose bundled SQLite build is
+         flagged by NU1903 (GHSA-2m69-gcr7-jv3q). Transitive pinning lifts it to a patched 3.0.x
+         native bundle. Remove these once Microsoft.Data.Sqlite ships with 3.x by default. -->
+    <PackageVersion Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.4" />
+    <PackageVersion Include="SQLitePCLRaw.core" Version="3.0.4" />
+    <PackageVersion Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.0.4" />
+    <PackageVersion Include="SQLitePCLRaw.provider.e_sqlite3" Version="3.0.4" />
+
+    <!-- MVVM source generators for the WPF layer. -->
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+
+    <!-- Microphone capture, playback, and the radio effect DSP chain. -->
+    <PackageVersion Include="NAudio" Version="2.2.1" />
+
+    <!-- Windows DPAPI for user-scoped API key protection. -->
+    <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="10.0.0" />
+
+    <!-- Testing. -->
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.0" />
+  </ItemGroup>
+
+</Project>

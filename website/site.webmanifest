@@ -1,0 +1,16 @@
+{
+  "name": "StormATC",
+  "short_name": "StormATC",
+  "description": "Open-source, voice-first ATC for Microsoft Flight Simulator.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#07111c",
+  "theme_color": "#08121e",
+  "icons": [
+    {
+      "src": "assets/stormatc-logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+name: Release validation
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+*"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate-and-create-draft:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      CI: "true"
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+          cache: true
+          cache-dependency-path: "**/packages.lock.json"
+
+      - name: Check repository for secrets
+        shell: pwsh
+        run: ./scripts/Test-RepositorySafety.ps1
+
+      - name: Restore locked dependencies
+        run: dotnet restore StormATC.sln --locked-mode --nologo
+
+      - name: Build
+        run: dotnet build StormATC.sln -c Release --no-restore --nologo
+
+      - name: Test
+        run: dotnet test StormATC.sln -c Release --no-build --no-restore --nologo
+
+      - name: Create draft GitHub release
+        shell: pwsh
+        run: |
+          $tag = $env:GITHUB_REF_NAME
+          gh release view $tag --json isDraft 2>$null | Out-Null
+          if ($LASTEXITCODE -ne 0) {
+            gh release create $tag `
+              --draft `
+              --verify-tag `
+              --generate-notes `
+              --title "StormATC $tag"
+          }
+
+          if ($LASTEXITCODE -ne 0) {
+            throw "The draft GitHub release could not be created."
+          }

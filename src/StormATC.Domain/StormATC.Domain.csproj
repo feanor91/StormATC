@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>StormATC.Domain</RootNamespace>
+    <Description>
+      Pure domain layer for StormATC. Contains aviation value objects, the ATC session
+      aggregate, deterministic state-transition rules, readback comparison, and phraseology
+      formatting. This project deliberately has NO package references: no WPF, no HTTP, no
+      SimConnect, no SQLite, no hosting. If a dependency is ever needed here, the rule has
+      been placed in the wrong layer.
+    </Description>
+  </PropertyGroup>
+
+</Project>

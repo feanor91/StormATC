@@ -1,0 +1,187 @@
+<UserControl x:Class="StormATC.Desktop.Views.RadioView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:conv="clr-namespace:StormATC.Desktop.Converters"
+             xmlns:vm="clr-namespace:StormATC.Desktop.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DataContext="{d:DesignInstance Type=vm:RadioViewModel}"
+             mc:Ignorable="d">
+
+  <UserControl.Resources>
+    <conv:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    <conv:StringToVisibilityConverter x:Key="StringToVisibility" />
+  </UserControl.Resources>
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,24">
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="16" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+
+      <StackPanel Grid.Column="0">
+
+        <Border Style="{StaticResource CardStyle}">
+          <StackPanel>
+            <TextBlock Text="Frequency" Style="{StaticResource SectionHeaderStyle}" />
+
+            <UniformGrid Columns="2">
+              <StackPanel>
+                <TextBlock Text="SESSION IS ON" Style="{StaticResource LabelTextStyle}" />
+                <TextBlock Text="{Binding SessionFrequency}" Style="{StaticResource LargeValueTextStyle}" />
+                <TextBlock Text="{Binding SessionController}" Style="{StaticResource SecondaryTextStyle}" />
+              </StackPanel>
+              <StackPanel>
+                <TextBlock Text="AIRCRAFT COM1" Style="{StaticResource LabelTextStyle}" />
+                <TextBlock Text="{Binding TunedFrequency}" Style="{StaticResource LargeValueTextStyle}" />
+                <TextBlock Text="Reported by the simulator" Style="{StaticResource SecondaryTextStyle}" />
+              </StackPanel>
+            </UniformGrid>
+
+            <Border Background="{StaticResource SurfaceElevatedBrush}"
+                    BorderBrush="{StaticResource StatusWarnBrush}"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Padding="12,8"
+                    Margin="0,14,0,0"
+                    Visibility="{Binding FrequencyMismatch, Converter={StaticResource BoolToVisibility}}">
+              <TextBlock Text="{Binding MismatchMessage}"
+                         Style="{StaticResource SecondaryTextStyle}"
+                         TextWrapping="Wrap" />
+            </Border>
+
+            <Border Style="{StaticResource DividerStyle}" Margin="0,14,0,14" />
+
+            <TextBlock Text="HANDOFF" Style="{StaticResource LabelTextStyle}" />
+            <TextBlock Text="{Binding HandoffStatus}"
+                       Style="{StaticResource BodyTextStyle}"
+                       TextWrapping="Wrap" />
+          </StackPanel>
+        </Border>
+
+        <Border Style="{StaticResource CardStyle}">
+          <StackPanel>
+            <TextBlock Text="Published frequencies" Style="{StaticResource SectionHeaderStyle}" />
+
+            <ItemsControl ItemsSource="{Binding AvailableFrequencies}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <Grid Margin="0,3">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*" />
+                      <ColumnDefinition Width="Auto" />
+                      <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="{Binding Label}"
+                               Style="{StaticResource BodyTextStyle}"
+                               VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="1" Text="{Binding Display}"
+                               Style="{StaticResource ValueTextStyle}"
+                               VerticalAlignment="Center"
+                               Margin="0,0,12,0" />
+                    <Button Grid.Column="2"
+                            Content="Tune"
+                            Style="{StaticResource BaseButtonStyle}"
+                            Command="{Binding DataContext.TuneToCommand,
+                                              RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                            CommandParameter="{Binding}"
+                            Visibility="{Binding DataContext.CanTuneRadio,
+                                                 RelativeSource={RelativeSource AncestorType=ItemsControl},
+                                                 Converter={StaticResource BoolToVisibility}}" />
+                  </Grid>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Border Background="{StaticResource StatusWarnSubtleBrush}"
+                    BorderBrush="{StaticResource StatusWarnBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="12,9"
+                    Margin="0,4,0,10"
+                    Visibility="{Binding FrequencyDataMessage,
+                                         Converter={StaticResource StringToVisibility}}">
+              <TextBlock Text="{Binding FrequencyDataMessage}"
+                         Style="{StaticResource SecondaryTextStyle}"
+                         TextWrapping="Wrap" />
+            </Border>
+
+            <TextBlock Text="Tuning from here works only while the scripted mock aircraft is flying. With a real simulator connected, the radio is set in the aircraft — StormATC reads SimConnect and never writes to it."
+                       Style="{StaticResource SecondaryTextStyle}"
+                       TextWrapping="Wrap"
+                       Margin="0,10,0,0" />
+          </StackPanel>
+        </Border>
+      </StackPanel>
+
+      <StackPanel Grid.Column="2">
+
+        <Border Style="{StaticResource CardStyle}">
+          <StackPanel>
+            <TextBlock Text="Audio" Style="{StaticResource SectionHeaderStyle}" />
+
+            <TextBlock Text="CONTROLLER VOLUME" Style="{StaticResource LabelTextStyle}" />
+            <Slider Value="{Binding ControllerVolume}" Minimum="0" Maximum="1"
+                    TickFrequency="0.05" IsSnapToTickEnabled="True" Margin="0,0,0,12" />
+
+            <CheckBox Content="Apply the radio effect"
+                      IsChecked="{Binding RadioEffectEnabled}"
+                      Margin="0,0,0,8" />
+
+            <TextBlock Text="RADIO EFFECT STRENGTH" Style="{StaticResource LabelTextStyle}" />
+            <Slider Value="{Binding RadioEffectStrength}" Minimum="0" Maximum="1"
+                    TickFrequency="0.05" IsSnapToTickEnabled="True"
+                    IsEnabled="{Binding RadioEffectEnabled}" Margin="0,0,0,12" />
+
+            <TextBlock Text="BACKGROUND STATIC" Style="{StaticResource LabelTextStyle}" />
+            <Slider Value="{Binding StaticLevel}" Minimum="0" Maximum="1"
+                    TickFrequency="0.02" IsSnapToTickEnabled="True"
+                    IsEnabled="{Binding RadioEffectEnabled}" Margin="0,0,0,12" />
+
+            <CheckBox Content="Play transmission clicks"
+                      IsChecked="{Binding TransmissionClicksEnabled}"
+                      Margin="0,0,0,8" />
+
+            <CheckBox Content="Clean audio mode (bypass the radio effect entirely)"
+                      IsChecked="{Binding CleanAudioMode}"
+                      Margin="0,0,0,8" />
+
+            <CheckBox Content="Mute the controller voice"
+                      IsChecked="{Binding Muted}"
+                      Margin="0,0,0,14" />
+
+            <StackPanel Orientation="Horizontal">
+              <Button Content="Save audio settings"
+                      Style="{StaticResource PrimaryButtonStyle}"
+                      Command="{Binding SaveAudioSettingsCommand}" />
+              <Button Content="Replay last"
+                      Style="{StaticResource BaseButtonStyle}"
+                      Command="{Binding ReplayLastCommand}"
+                      Margin="8,0,0,0" />
+            </StackPanel>
+
+            <TextBlock Text="{Binding StatusMessage}"
+                       Style="{StaticResource SecondaryTextStyle}"
+                       TextWrapping="Wrap"
+                       Margin="0,10,0,0"
+                       Visibility="{Binding StatusMessage, Converter={StaticResource StringToVisibility}}" />
+          </StackPanel>
+        </Border>
+
+        <Border Style="{StaticResource CardStyle}">
+          <StackPanel>
+            <TextBlock Text="Push to talk" Style="{StaticResource SectionHeaderStyle}" />
+            <TextBlock Style="{StaticResource BodyTextStyle}" TextWrapping="Wrap">
+              <Run Text="Hold " />
+              <Run Text="{Binding PushToTalkKey, Mode=OneWay}" FontWeight="SemiBold" />
+              <Run Text=" to transmit, hold the button on the dashboard, or use your assigned joystick/HOTAS button. The microphone is open only while a PTT control is held — StormATC never listens continuously and never writes raw audio to disk by default." />
+            </TextBlock>
+          </StackPanel>
+        </Border>
+      </StackPanel>
+    </Grid>
+  </ScrollViewer>
+</UserControl>

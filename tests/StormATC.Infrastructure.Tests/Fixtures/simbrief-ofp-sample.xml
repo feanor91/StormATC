@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  FICTIONAL TEST FIXTURE. This is not a real SimBrief response and describes no real flight.
+  Every identifier, coordinate, and aerodrome below is invented for StormATC's tests.
+  The ICAO prefix ST.. is not assigned to any real region.
+
+  The shape follows the public SimBrief OFP XML so the parser is exercised against realistic
+  nesting, but the content is entirely made up.
+-->
+<OFP>
+  <params>
+    <request_id>0</request_id>
+    <user_id>000000</user_id>
+    <time_generated>1772366400</time_generated>
+    <ofp_layout>lido</ofp_layout>
+    <units>kgs</units>
+  </params>
+
+  <general>
+    <icao_airline>STM</icao_airline>
+    <flight_number>123</flight_number>
+    <route>STORM1A KILOX DCT NOVAR DCT STMD</route>
+    <route_ifps>KILOX DCT NOVAR</route_ifps>
+    <sid_ident>STORM1A</sid_ident>
+    <star_ident></star_ident>
+    <costindex>25</costindex>
+    <initial_altitude>12000</initial_altitude>
+    <stepclimb_string></stepclimb_string>
+    <avg_wind_comp>-4</avg_wind_comp>
+  </general>
+
+  <origin>
+    <icao_code>STMR</icao_code>
+    <iata_code>STR</iata_code>
+    <name>Storm International</name>
+    <elevation>20</elevation>
+    <plan_rwy>18</plan_rwy>
+    <trans_alt>5000</trans_alt>
+    <pos_lat>52.300000</pos_lat>
+    <pos_long>4.700000</pos_long>
+  </origin>
+
+  <destination>
+    <icao_code>STMD</icao_code>
+    <iata_code>STD</iata_code>
+    <name>Storm Delta Regional</name>
+    <elevation>45</elevation>
+    <plan_rwy>36</plan_rwy>
+    <pos_lat>52.900000</pos_lat>
+    <pos_long>5.100000</pos_long>
+  </destination>
+
+  <alternate>
+    <icao_code>STMA</icao_code>
+    <name>Storm Alpha Field</name>
+    <plan_rwy>09</plan_rwy>
+  </alternate>
+
+  <aircraft>
+    <icaocode>A320</icaocode>
+    <name>Airbus A320-200</name>
+    <reg>ST-TST</reg>
+    <equip>SDE3FGHIRWXY</equip>
+  </aircraft>
+
+  <fuel>
+    <plan_ramp>7350</plan_ramp>
+    <plan_takeoff>7100</plan_takeoff>
+    <enroute_burn>4820</enroute_burn>
+    <reserve>1200</reserve>
+  </fuel>
+
+  <times>
+    <est_time_enroute>3900</est_time_enroute>
+    <est_block>4500</est_block>
+    <sched_out>1772370000</sched_out>
+  </times>
+
+  <navlog>
+    <fix>
+      <ident>STMR</ident>
+      <name>Storm International</name>
+      <type>apt</type>
+      <pos_lat>52.300000</pos_lat>
+      <pos_long>4.700000</pos_long>
+      <stage>CLB</stage>
+      <via_airway>DCT</via_airway>
+      <distance>0</distance>
+      <altitude_feet>20</altitude_feet>
+    </fix>
+    <fix>
+      <ident>KILOX</ident>
+      <name>KILOX</name>
+      <type>wpt</type>
+      <pos_lat>52.480000</pos_lat>
+      <pos_long>4.820000</pos_long>
+      <stage>CLB</stage>
+      <via_airway>STORM1A</via_airway>
+      <distance>14</distance>
+      <altitude_feet>9000</altitude_feet>
+    </fix>
+    <fix>
+      <ident>NOVAR</ident>
+      <name>NOVAR</name>
+      <type>wpt</type>
+      <pos_lat>52.700000</pos_lat>
+      <pos_long>4.980000</pos_long>
+      <stage>CRZ</stage>
+      <via_airway>DCT</via_airway>
+      <distance>31</distance>
+      <altitude_feet>12000</altitude_feet>
+    </fix>
+    <fix>
+      <ident>STMD</ident>
+      <name>Storm Delta Regional</name>
+      <type>apt</type>
+      <pos_lat>52.900000</pos_lat>
+      <pos_long>5.100000</pos_long>
+      <stage>DSC</stage>
+      <via_airway>DCT</via_airway>
+      <distance>48</distance>
+      <altitude_feet>45</altitude_feet>
+    </fix>
+  </navlog>
+
+  <atc>
+    <callsign>STM123</callsign>
+    <flightplan_text>(FPL-STM123-IS -A320/M-SDE3FGHIRWXY/LB1 -STMR1200 -N0450F120 STORM1A KILOX DCT NOVAR -STMD0105 STMA)</flightplan_text>
+  </atc>
+</OFP>

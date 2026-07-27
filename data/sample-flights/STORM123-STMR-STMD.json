@@ -1,0 +1,39 @@
+{
+  "$comment": [
+    "FICTIONAL SAMPLE FLIGHT PLAN. STORM123 is not a real flight.",
+    "STMR and STMD are invented aerodromes; the route fixes are invented.",
+    "This exists so the full ATC pipeline can be exercised with no SimBrief account,",
+    "no API keys, no simulator, and no network access.",
+    "",
+    "The squawk is pinned here so the demonstration and the end-to-end test are",
+    "reproducible. In normal use the ATC engine allocates a code itself."
+  ],
+  "flightPlanId": "sample-storm123",
+  "sourceIdentifier": "Sample",
+  "callsign": "STORM123",
+  "flightNumber": "123",
+  "aircraftIcaoType": "A320",
+  "registration": "ST-ORM",
+  "departureIcao": "STMR",
+  "destinationIcao": "STMD",
+  "alternateIcaos": ["STMR"],
+  "departureRunway": "18",
+  "arrivalRunway": "36",
+  "standardInstrumentDeparture": null,
+  "standardTerminalArrival": null,
+  "approach": "ILS 36",
+  "route": "STORM1A KILOX DCT NOVAR DCT STMD",
+  "cruiseAltitudeFlightLevel": 120,
+  "initialAltitudeFeet": 7000,
+  "preassignedSquawk": "4271",
+  "estimatedBlockTimeMinutes": 52,
+  "plannedBlockFuelKilograms": 5400,
+  "plannedTripFuelKilograms": 3100,
+
+  "routeLegs": [
+    { "identifier": "STMR",  "stage": "DEP", "position": { "latitude": 52.30000, "longitude": 4.70000 }, "cumulativeDistanceNauticalMiles": 0 },
+    { "identifier": "KILOX", "via": "DCT", "stage": "CLB", "position": { "latitude": 52.55000, "longitude": 4.85000 }, "plannedAltitudeFeet": 12000, "cumulativeDistanceNauticalMiles": 17 },
+    { "identifier": "NOVAR", "via": "DCT", "stage": "CRZ", "position": { "latitude": 52.85000, "longitude": 5.15000 }, "plannedAltitudeFeet": 12000, "cumulativeDistanceNauticalMiles": 38 },
+    { "identifier": "STMD",  "via": "DCT", "stage": "DST", "position": { "latitude": 53.10000, "longitude": 5.40000 }, "cumulativeDistanceNauticalMiles": 58 }
+  ]
+}

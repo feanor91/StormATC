@@ -1,0 +1,209 @@
+<Window x:Class="StormATC.Desktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:StormATC.Desktop.ViewModels"
+        xmlns:views="clr-namespace:StormATC.Desktop.Views"
+        xmlns:conv="clr-namespace:StormATC.Desktop.Converters"
+        Title="StormATC — flight simulation only"
+        Icon="pack://application:,,,/Assets/StormATC.ico"
+        Height="900"
+        Width="1440"
+        MinHeight="640"
+        MinWidth="1000"
+        Background="{StaticResource SurfaceBackgroundBrush}"
+        TextElement.Foreground="{StaticResource TextPrimaryBrush}"
+        FontFamily="{StaticResource UiFontFamily}"
+        FontSize="{StaticResource FontSizeBody}"
+        WindowStartupLocation="CenterScreen"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True">
+
+  <Window.Resources>
+    <conv:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    <conv:ReferenceEqualityConverter x:Key="ReferenceEquality" />
+
+    <!-- Page selection. The shell holds a view model; WPF picks the matching view. -->
+    <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
+      <views:DashboardView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:FlightPlanViewModel}">
+      <views:FlightPlanView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:RadioViewModel}">
+      <views:RadioView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:TranscriptViewModel}">
+      <views:TranscriptView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+      <views:SettingsView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:DiagnosticsViewModel}">
+      <views:DiagnosticsView />
+    </DataTemplate>
+  </Window.Resources>
+
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="232" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+
+    <!-- Navigation rail -->
+    <Border Grid.Column="0"
+            Background="{StaticResource SurfaceElevatedBrush}"
+            BorderBrush="{StaticResource BorderBrush}"
+            BorderThickness="0,0,1,0">
+      <DockPanel LastChildFill="True">
+
+        <Grid DockPanel.Dock="Top" Margin="20,22,18,24">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="42" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
+          <Image Width="40"
+                 Height="40"
+                 Source="pack://application:,,,/Assets/stormatc-logo.png"
+                 Stretch="Uniform"
+                 VerticalAlignment="Top"
+                 RenderOptions.BitmapScalingMode="HighQuality" />
+          <StackPanel Grid.Column="1" Margin="10,1,0,0">
+            <TextBlock Text="StormATC"
+                       FontSize="19"
+                       FontWeight="SemiBold"
+                       Foreground="{StaticResource TextPrimaryBrush}" />
+            <TextBlock Text="SIM ATC COMPANION"
+                       FontSize="9"
+                       FontWeight="SemiBold"
+                       Foreground="{StaticResource TextTertiaryBrush}"
+                       Margin="0,2,0,0" />
+          </StackPanel>
+        </Grid>
+
+        <StackPanel DockPanel.Dock="Bottom" Margin="20,0,18,18">
+          <Border Style="{StaticResource DividerStyle}" Margin="0,0,0,12" />
+          <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <Ellipse Width="7" Height="7"
+                     Fill="{StaticResource StatusOkBrush}"
+                     VerticalAlignment="Center" />
+            <TextBlock Text="LOCAL DATA PROTECTED"
+                       Style="{StaticResource LabelTextStyle}"
+                       Foreground="{StaticResource TextSecondaryBrush}"
+                       Margin="7,0,0,0" />
+          </StackPanel>
+          <TextBlock Text="{Binding VersionText}"
+                     Style="{StaticResource SecondaryTextStyle}" />
+          <TextBlock Text="{Binding DisclaimerText}"
+                     Style="{StaticResource SecondaryTextStyle}"
+                     TextWrapping="Wrap"
+                     Margin="0,8,0,0" />
+        </StackPanel>
+
+        <ItemsControl ItemsSource="{Binding Pages}" Margin="10,0,10,0">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <RadioButton GroupName="Navigation"
+                           Style="{StaticResource NavigationButtonStyle}"
+                           Command="{Binding DataContext.NavigateCommand,
+                                             RelativeSource={RelativeSource AncestorType=Window}}"
+                           CommandParameter="{Binding}"
+                           ToolTip="{Binding Shortcut}">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="28" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                  </Grid.ColumnDefinitions>
+                  <TextBlock Text="{Binding Glyph}"
+                             FontFamily="{StaticResource IconFontFamily}"
+                             FontSize="16"
+                             Foreground="{Binding Foreground,
+                                                  RelativeSource={RelativeSource AncestorType=RadioButton}}"
+                             VerticalAlignment="Center" />
+                  <StackPanel Grid.Column="1">
+                    <TextBlock Text="{Binding Title}"
+                               FontSize="13"
+                               FontWeight="SemiBold" />
+                    <TextBlock Text="{Binding Description}"
+                               FontSize="10"
+                               Foreground="{StaticResource TextTertiaryBrush}"
+                               Margin="0,2,0,0" />
+                  </StackPanel>
+                  <TextBlock Grid.Column="2"
+                             Text="{Binding Shortcut}"
+                             FontSize="9"
+                             Foreground="{StaticResource TextTertiaryBrush}"
+                             VerticalAlignment="Center"
+                             Margin="8,0,0,0" />
+                </Grid>
+                <RadioButton.IsChecked>
+                  <!-- Selection follows the shell's current page rather than click order, so
+                       the rail stays correct if navigation happens from anywhere else. -->
+                  <MultiBinding Converter="{StaticResource ReferenceEquality}" Mode="OneWay">
+                    <Binding Path="ViewModel" />
+                    <Binding Path="DataContext.CurrentPage"
+                             RelativeSource="{RelativeSource AncestorType=Window}" />
+                  </MultiBinding>
+                </RadioButton.IsChecked>
+              </RadioButton>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </DockPanel>
+    </Border>
+
+    <!-- Page host -->
+    <DockPanel Grid.Column="1" LastChildFill="True">
+
+      <Border DockPanel.Dock="Top"
+              Background="{StaticResource SurfaceElevatedBrush}"
+              BorderBrush="{StaticResource BorderBrush}"
+              BorderThickness="0,0,0,1"
+              Padding="26,14">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+
+          <StackPanel Grid.Column="0">
+            <TextBlock Text="{Binding CurrentPageTitle}"
+                       Style="{StaticResource PageTitleStyle}"
+                       FontSize="22"
+                       Margin="0" />
+            <TextBlock Text="{Binding CurrentPageDescription}"
+                       Style="{StaticResource SecondaryTextStyle}"
+                       FontSize="11"
+                       Margin="0,3,0,0" />
+          </StackPanel>
+
+          <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+            <Border Background="{StaticResource StatusOkSubtleBrush}"
+                    BorderBrush="{StaticResource StatusOkBrush}"
+                    BorderThickness="1"
+                    CornerRadius="9"
+                    Padding="10,5"
+                    Margin="0,0,8,0">
+              <TextBlock Text="LOCAL-FIRST"
+                         FontSize="{StaticResource FontSizeSmall}"
+                         FontWeight="SemiBold"
+                         Foreground="{StaticResource StatusOkBrush}" />
+            </Border>
+            <Border Background="{StaticResource SurfaceCardBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="9"
+                    Padding="11,5">
+              <TextBlock Text="SIMULATION ONLY"
+                         FontSize="{StaticResource FontSizeSmall}"
+                         FontWeight="SemiBold"
+                         Foreground="{StaticResource StatusWarnBrush}" />
+            </Border>
+          </StackPanel>
+        </Grid>
+      </Border>
+
+      <ContentControl Content="{Binding CurrentPage}" />
+    </DockPanel>
+  </Grid>
+</Window>

@@ -1,0 +1,45 @@
+name: Bug report
+description: Report a reproducible StormATC problem
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not paste API keys, raw audio, or the contents of `secrets.dat`.
+        For security vulnerabilities, use GitHub private vulnerability reporting instead.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Include the exact ATC exchange when relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: StormATC version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: simulator
+    attributes:
+      label: Simulator source
+      options:
+        - Microsoft Flight Simulator
+        - Mock simulator
+        - Not connected
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Redacted diagnostics
+      description: Paste or attach the report exported from Diagnostics. Review it before sharing.

@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- net10.0-windows (not plain net10.0) because this layer owns DPAPI secret protection
+         and NAudio WinMM/WASAPI device access. Both are Windows-only; declaring the platform
+         here keeps CA1416 honest instead of suppressing it. -->
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>StormATC.Infrastructure</RootNamespace>
+    <UseWPF>false</UseWPF>
+    <UseWindowsForms>false</UseWindowsForms>
+    <PlatformTarget>x64</PlatformTarget>
+    <Description>
+      Concrete provider implementations: OpenRouter, Deepgram STT/TTS, SimBrief, SimConnect,
+      SQLite persistence, DPAPI secret storage, NAudio audio, JSON airport data, and the full
+      set of mock providers that let the application run with no credentials at all.
+    </Description>
+  </PropertyGroup>
+
+  <!-- ============================================================================
+       Optional Microsoft Flight Simulator SDK integration.
+
+       The managed SimConnect assembly (Microsoft.FlightSimulator.SimConnect.dll) ships with
+       the MSFS SDK under Microsoft's own licence and is NOT vendored in this repository.
+
+       Resolution is shared in Directory.Build.props so the final executable can package
+       both the managed wrapper and its native SimConnect.dll dependency.
+
+       When none resolve, MSFS_SDK_AVAILABLE stays undefined and a stub connector compiles
+       instead, reporting that the SDK is unavailable. The solution always builds.
+       ============================================================================ -->
+  <ItemGroup Condition="'$(MsfsSimConnectPath)' != '' AND Exists('$(MsfsSimConnectPath)')">
+    <Reference Include="Microsoft.FlightSimulator.SimConnect">
+      <HintPath>$(MsfsSimConnectPath)</HintPath>
+      <Private>true</Private>
+      <IncludeRuntimeDependency>true</IncludeRuntimeDependency>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(MsfsSimConnectNativePath)' != '' AND Exists('$(MsfsSimConnectNativePath)')">
+    <Content Include="$(MsfsSimConnectNativePath)" Link="SimConnect.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StormATC.Application\StormATC.Application.csproj" />
+    <ProjectReference Include="..\StormATC.Domain\StormATC.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
+    <PackageReference Include="Microsoft.Data.Sqlite" />
+    <PackageReference Include="NAudio" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" />
+  </ItemGroup>
+
+</Project>

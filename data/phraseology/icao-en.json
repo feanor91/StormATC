@@ -1,0 +1,78 @@
+{
+  "$comment": [
+    "Phraseology profile: ICAO-style English.",
+    "This file documents the vocabulary the deterministic renderer produces and gives",
+    "future regional profiles (FAA, localised) a shape to follow. The renderer's",
+    "behaviour lives in DeterministicPhraseology.cs; this is reference and validation data,",
+    "not a template the renderer interpolates."
+  ],
+  "profileId": "icao-en",
+  "displayName": "ICAO (English)",
+  "language": "en",
+
+  "digits": {
+    "0": "zero", "1": "one", "2": "two", "3": "three", "4": "four",
+    "5": "five", "6": "six", "7": "seven", "8": "eight", "9": "nine",
+    "decimalSeparator": "decimal"
+  },
+
+  "phoneticAlphabet": {
+    "A": "Alfa", "B": "Bravo", "C": "Charlie", "D": "Delta", "E": "Echo",
+    "F": "Foxtrot", "G": "Golf", "H": "Hotel", "I": "India", "J": "Juliett",
+    "K": "Kilo", "L": "Lima", "M": "Mike", "N": "November", "O": "Oscar",
+    "P": "Papa", "Q": "Quebec", "R": "Romeo", "S": "Sierra", "T": "Tango",
+    "U": "Uniform", "V": "Victor", "W": "Whiskey", "X": "Xray", "Y": "Yankee",
+    "Z": "Zulu"
+  },
+
+  "controllerNames": {
+    "ClearanceDelivery": "Delivery",
+    "Ground": "Ground",
+    "Tower": "Tower",
+    "Departure": "Departure",
+    "Center": "Center",
+    "Approach": "Approach"
+  },
+
+  "examples": {
+    "$comment": "Canonical renderings. The domain unit tests assert against these exact strings.",
+    "heading270": "two seven zero",
+    "altitude7000": "seven thousand",
+    "altitude3500": "three thousand five hundred",
+    "flightLevel120": "flight level one two zero",
+    "frequency121700": "one two one decimal seven",
+    "frequency119125": "one one nine decimal one two five",
+    "runway01L": "runway zero one left",
+    "runway18": "runway one eight",
+    "squawk4271": "four two seven one",
+    "callsignSTORM123": "Storm one two three"
+  },
+
+  "clearanceTemplates": {
+    "$comment": "Descriptive only. Shows the element order the renderer uses.",
+    "ifrClearance": "{callsign}, cleared to {destination}, {route}, {runway}, climb initially {initialAltitude}, squawk {squawk}, departure frequency {frequency}.",
+    "taxi": "{callsign}, taxi holding point {runway} via {taxiRoute}, hold short {holdShortRunway}.",
+    "takeoff": "{callsign}, {wind}, {runway}, cleared for takeoff.",
+    "landing": "{callsign}, {wind}, {runway}, cleared to land.",
+    "approach": "{callsign}, cleared {approachName} approach {runway}.",
+    "handoff": "{callsign}, contact {nextController} {frequency}.",
+    "readbackCorrect": "{callsign}, readback correct.",
+    "readbackNegative": "{callsign}, negative, {correctValues}."
+  },
+
+  "prohibitedInGeneratedText": {
+    "$comment": [
+      "Phrases the phraseology validator treats as permission grants. Generated text",
+      "containing any of these must be backed by a matching approved fact in the decision,",
+      "or the output is discarded and deterministic phraseology is used instead."
+    ],
+    "phrases": [
+      "cleared for takeoff",
+      "cleared to land",
+      "line up and wait",
+      "cleared for the approach",
+      "pushback approved",
+      "cross runway"
+    ]
+  }
+}

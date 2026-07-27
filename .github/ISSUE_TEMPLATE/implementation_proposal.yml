@@ -1,0 +1,44 @@
+name: Implementation proposal
+description: Propose and claim a scoped contribution before writing substantial code
+title: "[Proposal]: "
+labels: ["needs design"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping build StormATC. Search existing Issues and Discussions first.
+        Do not include API keys, personal data, raw audio, or proprietary SDK files.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Describe one concrete user or contributor problem.
+    validations:
+      required: true
+  - type: textarea
+    id: approach
+    attributes:
+      label: Proposed approach
+      description: Which layer or files would change, and why?
+    validations:
+      required: true
+  - type: textarea
+    id: boundaries
+    attributes:
+      label: Security, privacy, licensing, and ATC boundaries
+      description: Identify new storage, network, model, simulator, or redistribution effects.
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification plan
+      description: What tests and manual checks will prove the change works?
+    validations:
+      required: true
+  - type: checkboxes
+    id: ownership
+    attributes:
+      label: Contribution
+      options:
+        - label: I am willing to work on this after maintainers agree on the direction.

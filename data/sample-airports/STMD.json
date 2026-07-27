@@ -1,0 +1,108 @@
+{
+  "$comment": [
+    "FICTIONAL SAMPLE DATA. Storm Delta (STMD) does not exist.",
+    "Destination aerodrome for the STORM123 demonstration flight.",
+    "Arrival runway 36 is the preferred direction here, mirroring STMR's departure 18."
+  ],
+  "icao": "STMD",
+  "name": "Storm Delta Regional",
+  "isFictional": true,
+  "referencePosition": { "latitude": 53.10000, "longitude": 5.40000 },
+  "elevationFeet": 45,
+  "magneticVariationDegrees": 1.8,
+
+  "frequencies": {
+    "clearanceDelivery": 121.900,
+    "ground": 121.600,
+    "tower": 118.700,
+    "departure": 119.400,
+    "approach": 120.900,
+    "center": 128.500,
+    "atis": 132.450
+  },
+
+  "runways": [
+    {
+      "identifier": "36",
+      "thresholdPosition": { "latitude": 53.08800, "longitude": 5.40000 },
+      "endPosition": { "latitude": 53.11100, "longitude": 5.40000 },
+      "lengthFeet": 9200,
+      "widthFeet": 148,
+      "surface": "Asphalt",
+      "isPreferred": true,
+      "approaches": ["ILS", "RNAV"],
+      "holdingPointNodes": ["H36"],
+      "exitNodes": ["X1", "X2"]
+    },
+    {
+      "identifier": "18",
+      "thresholdPosition": { "latitude": 53.11100, "longitude": 5.40000 },
+      "endPosition": { "latitude": 53.08800, "longitude": 5.40000 },
+      "lengthFeet": 9200,
+      "widthFeet": 148,
+      "surface": "Asphalt",
+      "isPreferred": false,
+      "approaches": ["ILS", "RNAV"],
+      "holdingPointNodes": ["H18"],
+      "exitNodes": ["X1", "X2"]
+    }
+  ],
+
+  "stands": [
+    {
+      "name": "C1",
+      "position": { "latitude": 53.10100, "longitude": 5.39300 },
+      "taxiNodeName": "S_C1",
+      "suitableFor": ["Narrowbody"],
+      "requiresPushback": true
+    },
+    {
+      "name": "C2",
+      "position": { "latitude": 53.10030, "longitude": 5.39300 },
+      "taxiNodeName": "S_C2",
+      "suitableFor": ["Narrowbody"],
+      "requiresPushback": true
+    }
+  ],
+
+  "taxiGraph": {
+    "$comment": "Simple single-runway layout: apron west, taxiway Echo parallel, Foxtrot and Golf as runway links.",
+    "nodes": [
+      { "name": "S_C1", "kind": "Stand",        "standName": "C1", "position": { "latitude": 53.10100, "longitude": 5.39300 } },
+      { "name": "S_C2", "kind": "Stand",        "standName": "C2", "position": { "latitude": 53.10030, "longitude": 5.39300 } },
+
+      { "name": "E_N",  "kind": "Intersection", "position": { "latitude": 53.10400, "longitude": 5.39500 } },
+      { "name": "E_M",  "kind": "Intersection", "position": { "latitude": 53.10050, "longitude": 5.39500 } },
+      { "name": "E_S",  "kind": "Intersection", "position": { "latitude": 53.09200, "longitude": 5.39500 } },
+
+      { "name": "F_W",  "kind": "Intersection", "position": { "latitude": 53.08950, "longitude": 5.39500 } },
+      { "name": "H36",  "kind": "HoldingPoint", "associatedRunway": "36", "position": { "latitude": 53.08880, "longitude": 5.39900 } },
+      { "name": "R36",  "kind": "RunwayEntry",  "associatedRunway": "36", "position": { "latitude": 53.08810, "longitude": 5.40000 } },
+
+      { "name": "G_W",  "kind": "Intersection", "position": { "latitude": 53.11000, "longitude": 5.39500 } },
+      { "name": "H18",  "kind": "HoldingPoint", "associatedRunway": "18", "position": { "latitude": 53.11050, "longitude": 5.39900 } },
+      { "name": "R18",  "kind": "RunwayEntry",  "associatedRunway": "18", "position": { "latitude": 53.11090, "longitude": 5.40000 } },
+
+      { "name": "X1",   "kind": "RunwayExit",   "associatedRunway": "36", "position": { "latitude": 53.10050, "longitude": 5.40000 } },
+      { "name": "X2",   "kind": "RunwayExit",   "associatedRunway": "36", "position": { "latitude": 53.10450, "longitude": 5.40000 } }
+    ],
+
+    "edges": [
+      { "from": "S_C1", "to": "E_N", "taxiway": "E", "lengthMeters": 260 },
+      { "from": "S_C2", "to": "E_M", "taxiway": "E", "lengthMeters": 140 },
+      { "from": "E_N",  "to": "E_M", "taxiway": "E", "lengthMeters": 390 },
+      { "from": "E_M",  "to": "E_S", "taxiway": "E", "lengthMeters": 950 },
+      { "from": "E_N",  "to": "G_W", "taxiway": "E", "lengthMeters": 670 },
+      { "from": "E_S",  "to": "F_W", "taxiway": "E", "lengthMeters": 280 },
+
+      { "from": "F_W",  "to": "H36", "taxiway": "F", "lengthMeters": 275 },
+      { "from": "H36",  "to": "R36", "taxiway": "F", "lengthMeters": 100 },
+
+      { "from": "G_W",  "to": "H18", "taxiway": "G", "lengthMeters": 275 },
+      { "from": "H18",  "to": "R18", "taxiway": "G", "lengthMeters": 90 },
+
+      { "from": "X1",   "to": "E_M", "taxiway": "E", "lengthMeters": 335 },
+      { "from": "X2",   "to": "E_N", "taxiway": "E", "lengthMeters": 340 }
+    ]
+  }
+}

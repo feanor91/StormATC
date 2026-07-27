@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      CI: "true"
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+          cache: true
+          cache-dependency-path: "**/packages.lock.json"
+
+      - name: Check repository for secrets
+        shell: pwsh
+        run: ./scripts/Test-RepositorySafety.ps1
+
+      - name: Restore locked dependencies
+        run: dotnet restore StormATC.sln --locked-mode --nologo
+
+      - name: Build
+        run: dotnet build StormATC.sln -c Release --no-restore --nologo
+
+      - name: Test
+        run: dotnet test StormATC.sln -c Release --no-build --no-restore --nologo
+
+      - name: List vulnerable dependencies
+        run: dotnet list StormATC.sln package --vulnerable --include-transitive
