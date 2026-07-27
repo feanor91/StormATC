@@ -8,7 +8,9 @@
 - Windows 10 or 11 (WPF, DPAPI, and NAudio are Windows-only)
 - .NET 10 SDK
 
-Nothing else. No simulator, no SDK, no API key.
+Those prerequisites cover the core build and automated tests. Live integration testing requires
+the contributor's own simulator, SDK, hardware, service account, and API key as applicable.
+StormATC does not provide shared credentials.
 
 ## Build and test
 

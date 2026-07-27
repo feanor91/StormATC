@@ -285,8 +285,10 @@ no real navigation data and none of it may be used for navigation.
 ## Contributing
 
 StormATC is actively looking for co-builders: C# developers, UI designers, testers, documentation
-writers, pilots, controller enthusiasts, and people with different accents and hardware. You do
-not need MSFS, an API key, or previous open-source experience to start.
+writers, pilots, controller enthusiasts, and people with different accents and hardware. Built-in
+mocks support routine development and testing. Contributors testing live integrations must use
+their own MSFS installation, hardware, service accounts, and API keys where applicable. The
+project does not issue or share credentials.
 
 Run one command to verify a new checkout:
 

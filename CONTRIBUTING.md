@@ -50,9 +50,11 @@ For the fastest verified setup on Windows:
 .\scripts\Setup-Development.ps1
 ```
 
-You do not need Microsoft Flight Simulator, the SimConnect SDK, or any API key to build, run, or
-test. Every provider falls back to something that works offline, and the test suite contacts
-nothing.
+Built-in mocks support routine development and automated testing without contacting external
+services. If your change affects a live integration, test it with your own Microsoft Flight
+Simulator installation, hardware, service account, and API key where applicable. Maintainers do
+not issue or share credentials. Never place a credential in source code, logs, issues, or pull
+requests.
 
 See [docs/contributor-quickstart.md](docs/contributor-quickstart.md) for forking, branching, and
 opening your first pull request.

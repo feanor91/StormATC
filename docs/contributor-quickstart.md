@@ -1,8 +1,10 @@
 # Contributor quickstart
 
-You can contribute to most of StormATC without Microsoft Flight Simulator, the MSFS SDK, a
-microphone, or any API key. The deterministic engine, mock simulator, typed-transmission path, and
-test suite work offline.
+The deterministic engine, mock simulator, typed-transmission path, and automated test suite
+support routine development without contacting external services. For live integration testing,
+contributors provide their own Microsoft Flight Simulator installation, SDK, microphone,
+hardware, service accounts, and API keys as applicable. StormATC does not issue or share
+credentials.
 
 ## What you need
 
