@@ -57,8 +57,8 @@
       <!-- Compact service health: visible, but no longer the visual focus. -->
       <DockPanel Margin="0,0,0,14">
         <StackPanel DockPanel.Dock="Left">
-          <TextBlock Text="LIVE OPERATIONS" Style="{StaticResource LabelTextStyle}" />
-          <TextBlock Text="Your flight, radio, and next ATC call in one place"
+          <TextBlock Text="FLIGHT COMMAND CENTER" Style="{StaticResource LabelTextStyle}" />
+          <TextBlock Text="Live simulator context, controller guidance, and radio workflow"
                      Style="{StaticResource SecondaryTextStyle}"
                      Margin="0,3,0,0" />
         </StackPanel>
@@ -93,6 +93,93 @@
         </ItemsControl>
       </DockPanel>
 
+      <!-- The operational context strip answers the four questions that used to require
+           opening Diagnostics: is MSFS live, what is the weather, is traffic nearby, and
+           did the current scenery produce a usable airport graph? -->
+      <Border Background="{StaticResource SurfaceInsetBrush}"
+              BorderBrush="{StaticResource BorderStrongBrush}"
+              BorderThickness="1"
+              CornerRadius="12"
+              Padding="6"
+              Margin="0,0,0,14">
+        <UniformGrid Columns="4">
+          <Border Background="{StaticResource SurfaceCardBrush}"
+                  CornerRadius="8"
+                  Padding="14,11"
+                  Margin="0,0,4,0">
+            <StackPanel>
+              <TextBlock Text="SIMULATOR" Style="{StaticResource LabelTextStyle}" />
+              <TextBlock Text="{Binding SimulatorStatus}"
+                         FontSize="14"
+                         FontWeight="SemiBold"
+                         Foreground="{StaticResource TextPrimaryBrush}"
+                         Margin="0,4,0,0" />
+              <TextBlock Text="{Binding SimulatorStatusDetail}"
+                         Style="{StaticResource SecondaryTextStyle}"
+                         FontSize="10"
+                         TextTrimming="CharacterEllipsis"
+                         Margin="0,3,0,0" />
+            </StackPanel>
+          </Border>
+
+          <Border Background="{StaticResource SurfaceCardBrush}"
+                  CornerRadius="8"
+                  Padding="14,11"
+                  Margin="4,0">
+            <StackPanel>
+              <TextBlock Text="LIVE WEATHER" Style="{StaticResource LabelTextStyle}" />
+              <TextBlock Text="{Binding WeatherSummary}"
+                         FontFamily="{StaticResource ValueFontFamily}"
+                         FontSize="14"
+                         FontWeight="SemiBold"
+                         Margin="0,4,0,0" />
+              <TextBlock Text="{Binding WeatherDetail}"
+                         Style="{StaticResource SecondaryTextStyle}"
+                         FontSize="10"
+                         TextTrimming="CharacterEllipsis"
+                         Margin="0,3,0,0" />
+            </StackPanel>
+          </Border>
+
+          <Border Background="{StaticResource SurfaceCardBrush}"
+                  CornerRadius="8"
+                  Padding="14,11"
+                  Margin="4,0">
+            <StackPanel>
+              <TextBlock Text="NEARBY TRAFFIC" Style="{StaticResource LabelTextStyle}" />
+              <TextBlock Text="{Binding TrafficSummary}"
+                         FontSize="14"
+                         FontWeight="SemiBold"
+                         Margin="0,4,0,0" />
+              <TextBlock Text="{Binding TrafficDetail}"
+                         Style="{StaticResource SecondaryTextStyle}"
+                         FontSize="10"
+                         TextTrimming="CharacterEllipsis"
+                         Margin="0,3,0,0" />
+            </StackPanel>
+          </Border>
+
+          <Border Background="{StaticResource SurfaceCardBrush}"
+                  CornerRadius="8"
+                  Padding="14,11"
+                  Margin="4,0,0,0">
+            <StackPanel>
+              <TextBlock Text="AIRPORT SCENERY" Style="{StaticResource LabelTextStyle}" />
+              <TextBlock Text="{Binding AirportDataSummary}"
+                         FontSize="14"
+                         FontWeight="SemiBold"
+                         Foreground="{StaticResource AccentBrush}"
+                         Margin="0,4,0,0" />
+              <TextBlock Text="{Binding AirportDataDetail}"
+                         Style="{StaticResource SecondaryTextStyle}"
+                         FontSize="10"
+                         TextTrimming="CharacterEllipsis"
+                         Margin="0,3,0,0" />
+            </StackPanel>
+          </Border>
+        </UniformGrid>
+      </Border>
+
       <Border Background="{StaticResource StatusErrorSubtleBrush}"
               BorderBrush="{StaticResource StatusErrorBrush}"
               BorderThickness="1"
@@ -125,7 +212,7 @@
 
       <Grid>
         <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="1.6*" />
+          <ColumnDefinition Width="1.72*" />
           <ColumnDefinition Width="16" />
           <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
@@ -271,6 +358,111 @@
             </StackPanel>
           </Border>
 
+          <!-- Live surface guidance supplements concise VATSIM-style radio phraseology. -->
+          <Border Style="{StaticResource CardStyle}"
+                  Margin="0,0,0,14"
+                  Visibility="{Binding HasSurfaceGuidance, Converter={StaticResource BoolToVisibility}}">
+            <StackPanel>
+              <DockPanel Margin="0,0,0,12">
+                <TextBlock Text="Surface route"
+                           Style="{StaticResource SectionHeaderStyle}"
+                           Margin="0" />
+                <TextBlock DockPanel.Dock="Right"
+                           Text="{Binding SurfaceProgress}"
+                           FontSize="10"
+                           FontWeight="SemiBold"
+                           Foreground="{StaticResource AccentBrush}"
+                           HorizontalAlignment="Right" />
+              </DockPanel>
+
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="1*" />
+                  <ColumnDefinition Width="18" />
+                  <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                  <TextBlock Text="AIRCRAFT IS HERE"
+                             Style="{StaticResource MetricLabelStyle}" />
+                  <TextBlock Text="{Binding SurfacePosition}"
+                             FontSize="15"
+                             FontWeight="SemiBold"
+                             TextWrapping="Wrap"
+                             Margin="0,4,0,0" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                  <TextBlock Text="CLEARANCE LIMIT"
+                             Style="{StaticResource MetricLabelStyle}" />
+                  <TextBlock Text="{Binding SurfaceDestination}"
+                             FontSize="15"
+                             FontWeight="SemiBold"
+                             TextWrapping="Wrap"
+                             Margin="0,4,0,0" />
+                </StackPanel>
+              </Grid>
+
+              <Border Background="{StaticResource SurfaceBackgroundBrush}"
+                      BorderBrush="{StaticResource BorderStrongBrush}"
+                      BorderThickness="1"
+                      CornerRadius="8"
+                      Padding="13,10"
+                      Margin="0,13,0,0">
+                <StackPanel>
+                  <TextBlock Text="CLEARED TAXIWAYS"
+                             Style="{StaticResource MetricLabelStyle}" />
+                  <TextBlock Text="{Binding SurfaceRoute}"
+                             FontFamily="{StaticResource ValueFontFamily}"
+                             FontSize="14"
+                             FontWeight="SemiBold"
+                             TextWrapping="Wrap"
+                             Margin="0,5,0,0" />
+                </StackPanel>
+              </Border>
+
+              <Border Background="{StaticResource AccentSubtleBrush}"
+                      BorderBrush="{StaticResource AccentDimBrush}"
+                      BorderThickness="1"
+                      CornerRadius="8"
+                      Padding="13,10"
+                      Margin="0,10,0,0">
+                <StackPanel>
+                  <TextBlock Text="NEXT MOVEMENT"
+                             Style="{StaticResource MetricLabelStyle}"
+                             Foreground="{StaticResource AccentBrush}" />
+                  <TextBlock Text="{Binding SurfaceNextAction}"
+                             FontSize="16"
+                             FontWeight="SemiBold"
+                             TextWrapping="Wrap"
+                             Margin="0,5,0,0" />
+                </StackPanel>
+              </Border>
+
+              <Border Background="{StaticResource StatusWarnSubtleBrush}"
+                      BorderBrush="{StaticResource StatusWarnBrush}"
+                      BorderThickness="1"
+                      CornerRadius="8"
+                      Padding="13,10"
+                      Margin="0,10,0,0">
+                <StackPanel>
+                  <TextBlock Text="EXPECTED SIGN CUES · INFERRED FROM MSFS TAXI GRAPH"
+                             Style="{StaticResource MetricLabelStyle}"
+                             Foreground="{StaticResource StatusWarnBrush}" />
+                  <TextBlock Text="{Binding SurfaceSignCue}"
+                             Style="{StaticResource BodyTextStyle}"
+                             TextWrapping="Wrap"
+                             Margin="0,5,0,0" />
+                  <TextBlock Text="Always cross-check the current airport chart. StormATC cannot read placed sign objects from SimConnect."
+                             Style="{StaticResource SecondaryTextStyle}"
+                             FontSize="10"
+                             TextWrapping="Wrap"
+                             Margin="0,6,0,0" />
+                </StackPanel>
+              </Border>
+            </StackPanel>
+          </Border>
+
           <Grid Margin="0,0,0,14">
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="1*" />
@@ -307,7 +499,16 @@
 
             <Border Grid.Column="2" Style="{StaticResource CardStyle}">
               <StackPanel>
-                <TextBlock Text="Aircraft" Style="{StaticResource SectionHeaderStyle}" />
+                <DockPanel Margin="0,0,0,10">
+                  <TextBlock Text="Aircraft" Style="{StaticResource SectionHeaderStyle}" Margin="0" />
+                  <TextBlock DockPanel.Dock="Right"
+                             Text="{Binding AircraftIdentity}"
+                             Style="{StaticResource SecondaryTextStyle}"
+                             FontSize="10"
+                             TextTrimming="CharacterEllipsis"
+                             MaxWidth="190"
+                             HorizontalAlignment="Right" />
+                </DockPanel>
                 <UniformGrid Columns="3">
                   <StackPanel>
                     <TextBlock Text="ALTITUDE" Style="{StaticResource MetricLabelStyle}" />
@@ -325,9 +526,35 @@
                                FontSize="17" />
                   </StackPanel>
                 </UniformGrid>
-                <Border Style="{StaticResource DividerStyle}" Margin="0,15,0,11" />
-                <TextBlock Text="{Binding FrequencyStatus}"
-                           Style="{StaticResource SecondaryTextStyle}" />
+                <Border Style="{StaticResource DividerStyle}" Margin="0,13,0,11" />
+                <UniformGrid Columns="3">
+                  <StackPanel>
+                    <TextBlock Text="AIRSPEED" Style="{StaticResource MetricLabelStyle}" />
+                    <TextBlock Text="{Binding IndicatedAirspeed}"
+                               FontFamily="{StaticResource ValueFontFamily}"
+                               FontSize="13"
+                               FontWeight="SemiBold" />
+                  </StackPanel>
+                  <StackPanel>
+                    <TextBlock Text="VERTICAL" Style="{StaticResource MetricLabelStyle}" />
+                    <TextBlock Text="{Binding VerticalSpeed}"
+                               FontFamily="{StaticResource ValueFontFamily}"
+                               FontSize="13"
+                               FontWeight="SemiBold" />
+                  </StackPanel>
+                  <StackPanel>
+                    <TextBlock Text="HEIGHT" Style="{StaticResource MetricLabelStyle}" />
+                    <TextBlock Text="{Binding AltitudeAboveGround}"
+                               FontFamily="{StaticResource ValueFontFamily}"
+                               FontSize="13"
+                               FontWeight="SemiBold" />
+                  </StackPanel>
+                </UniformGrid>
+                <TextBlock Text="{Binding AircraftConfiguration}"
+                           Style="{StaticResource SecondaryTextStyle}"
+                           FontSize="10"
+                           TextWrapping="Wrap"
+                           Margin="0,11,0,0" />
               </StackPanel>
             </Border>
           </Grid>
@@ -381,6 +608,7 @@
               <TextBlock Text="Push to talk" Style="{StaticResource SectionHeaderStyle}" />
               <TextBlock Text="{Binding PushToTalkHint}"
                          Style="{StaticResource SecondaryTextStyle}"
+                         TextWrapping="Wrap"
                          Margin="0,0,0,14" />
 
               <Button Style="{StaticResource PushToTalkButtonStyle}"
@@ -430,7 +658,8 @@
 
           <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
             <StackPanel>
-              <DockPanel Margin="0,0,0,12">
+              <DockPanel Margin="0,0,0,12"
+                         LastChildFill="False">
                 <TextBlock Text="Radio" Style="{StaticResource SectionHeaderStyle}" Margin="0" />
                 <Border DockPanel.Dock="Right"
                         Background="{StaticResource SurfaceElevatedBrush}"
@@ -464,6 +693,32 @@
             </StackPanel>
           </Border>
 
+          <Border Style="{StaticResource CardStyle}"
+                  Margin="0,0,0,14"
+                  Visibility="{Binding HasTrafficRadioExchange,
+                                       Converter={StaticResource BoolToVisibility}}">
+            <StackPanel>
+              <DockPanel Margin="0,0,0,10"
+                         LastChildFill="False">
+                <TextBlock Text="Traffic radio"
+                           Style="{StaticResource SectionHeaderStyle}"
+                           Margin="0" />
+                <Border DockPanel.Dock="Right"
+                        Background="{StaticResource StatusOkSubtleBrush}"
+                        CornerRadius="8"
+                        Padding="8,3">
+                  <TextBlock Text="SIMULATED"
+                             Style="{StaticResource LabelTextStyle}"
+                             Foreground="{StaticResource StatusOkBrush}" />
+                </Border>
+              </DockPanel>
+              <TextBlock Text="{Binding LatestTrafficRadio}"
+                         Style="{StaticResource BodyTextStyle}"
+                         TextWrapping="Wrap"
+                         LineHeight="20" />
+            </StackPanel>
+          </Border>
+
           <Border Background="{StaticResource SurfaceElevatedBrush}"
                   BorderBrush="{StaticResource BorderBrush}"
                   BorderThickness="1"
@@ -478,7 +733,8 @@
           <!-- Typed calls keep the complete app usable without a microphone or cloud service. -->
           <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
             <StackPanel>
-              <DockPanel Margin="0,0,0,6">
+              <DockPanel Margin="0,0,0,6"
+                         LastChildFill="False">
                 <TextBlock Text="Typed transmission"
                            Style="{StaticResource SectionHeaderStyle}"
                            Margin="0" />

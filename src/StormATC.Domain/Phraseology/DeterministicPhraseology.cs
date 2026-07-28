@@ -85,14 +85,14 @@ public static class DeterministicPhraseology
     }
 
     /// <summary>Renders pushback approval.</summary>
-    public static string PushbackApproval(Callsign callsign, string? facingDirection = null)
+    public static string PushbackApproval(Callsign callsign, string? pushbackDirection = null)
     {
         var builder = new PhraseBuilder(callsign);
         builder.Add("pushback approved");
 
-        if (facingDirection is { Length: > 0 } facing)
+        if (pushbackDirection is { Length: > 0 } direction)
         {
-            builder.Add($"face {facing}");
+            builder.Add(direction);
         }
 
         return builder.Build();
@@ -362,8 +362,13 @@ public static class DeterministicPhraseology
         var parts = new List<string>(taxiways.Count);
         foreach (string taxiway in taxiways)
         {
-            // A single-letter taxiway is spelled phonetically; a named one is spoken as-is.
-            parts.Add(taxiway.Length <= 2 ? PhoneticAlphabet.SpellOut(taxiway) : taxiway);
+            // Letter and alphanumeric designators are spelled phonetically, including identifiers
+            // such as A6 and A10. Named surfaces such as "apron" and "inner" are spoken as words.
+            bool isDesignator =
+                taxiway.Length == 1
+                || taxiway.Any(char.IsDigit)
+                    && taxiway.All(char.IsLetterOrDigit);
+            parts.Add(isDesignator ? PhoneticAlphabet.SpellOut(taxiway) : taxiway);
         }
 
         return string.Join(", ", parts);
@@ -372,6 +377,7 @@ public static class DeterministicPhraseology
     /// <summary>The name a controller position is addressed by on the radio.</summary>
     public static string SpokenControllerName(ControllerPosition position) => position switch
     {
+        ControllerPosition.Atis => "ATIS",
         ControllerPosition.ClearanceDelivery => "Delivery",
         ControllerPosition.Ground => "Ground",
         ControllerPosition.Tower => "Tower",

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
 using StormATC.Application.Options;
 using StormATC.Domain;
+using StormATC.Domain.ValueObjects;
 
 namespace StormATC.Infrastructure.Simulator;
 
@@ -73,6 +74,7 @@ public sealed class SimulatorConnectorRouter : ISimulatorConnector
     private CancellationTokenSource? _retryCancellation;
     private Task? _retryLoop;
     private bool _disposed;
+    private Frequency? _requestedCom1Frequency;
 
     /// <summary>Creates the router.</summary>
     public SimulatorConnectorRouter(
@@ -185,6 +187,28 @@ public sealed class SimulatorConnectorRouter : ISimulatorConnector
         }
     }
 
+    /// <inheritdoc />
+    public async Task<bool> TuneCom1Async(
+        Frequency frequency,
+        CancellationToken cancellationToken)
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+
+        await _transitionLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            _requestedCom1Frequency = frequency;
+
+            return _active is ISimulatorConnector connector
+                && connector.ConnectionState == SimulatorConnectionState.Connected
+                && await connector.TuneCom1Async(frequency, cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            _transitionLock.Release();
+        }
+    }
+
     /// <summary>Connects the preferred connector, falling back to the mock. Caller holds the lock.</summary>
     private async Task ConnectPreferredAsync(CancellationToken cancellationToken)
     {
@@ -263,6 +287,12 @@ public sealed class SimulatorConnectorRouter : ISimulatorConnector
         _active = connector;
 
         await connector.ConnectAsync(cancellationToken).ConfigureAwait(false);
+
+        if (connector.ConnectionState == SimulatorConnectionState.Connected
+            && _requestedCom1Frequency is Frequency requested)
+        {
+            await connector.TuneCom1Async(requested, cancellationToken).ConfigureAwait(false);
+        }
     }
 
     /// <summary>Disconnects and unsubscribes from whichever connector is live.</summary>
@@ -385,6 +415,12 @@ public sealed class SimulatorConnectorRouter : ISimulatorConnector
                     _msfs.AircraftStateChanged += OnAircraftStateChanged;
                     _msfs.ConnectionChanged += OnConnectionChanged;
                     _active = _msfs;
+
+                    if (_requestedCom1Frequency is Frequency requested)
+                    {
+                        await _msfs.TuneCom1Async(requested, cancellationToken)
+                            .ConfigureAwait(false);
+                    }
 
                     StatusMessage = "Connected to Microsoft Flight Simulator.";
                     ConnectionChanged?.Invoke(

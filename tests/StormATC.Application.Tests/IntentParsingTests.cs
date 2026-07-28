@@ -54,6 +54,34 @@ public class TranscriptNormalizerTests
 
         Assert.Contains("climb 7000 squawk", normalized, StringComparison.Ordinal);
     }
+
+    [Fact]
+    public void Missing_aviation_token_boundaries_are_repaired_for_display_and_parsing()
+    {
+        const string compact =
+            "Runway20Climb7000Squawk2555 Departure frequency one one eight decimal eight Alpha21.";
+
+        string display = TranscriptNormalizer.FormatForDisplay(compact);
+        string normalized = TranscriptNormalizer.Normalize(compact);
+
+        Assert.Equal(
+            "Runway 20 Climb 7000 Squawk 2555 Departure frequency one one eight decimal eight Alpha 21.",
+            display);
+        Assert.Contains(
+            "runway 20 climb 7000 squawk 2555 departure frequency",
+            normalized,
+            StringComparison.Ordinal);
+        Assert.Contains("alpha 21", normalized, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void Aviation_identifiers_are_not_split_while_repairing_spacing()
+    {
+        string display = TranscriptNormalizer.FormatForDisplay(
+            "MITO3A departure for LOWS in an A21.");
+
+        Assert.Equal("MITO3A departure for LOWS in an A21.", display);
+    }
 }
 
 /// <summary>
@@ -73,6 +101,7 @@ public class DeterministicPilotIntentParserTests
     [InlineData("roger storm one two three", PilotIntentType.PilotAcknowledgement)]
     [InlineData("storm one two three thank you", PilotIntentType.PilotAcknowledgement)]
     [InlineData("storm one two three ready for taxi", PilotIntentType.RequestTaxi)]
+    [InlineData("storm one two three request progressive taxi", PilotIntentType.RequestProgressiveTaxi)]
     [InlineData("storm one two three holding short runway one eight", PilotIntentType.ReportHoldingShort)]
     [InlineData("storm one two three ready for departure", PilotIntentType.ReadyForDeparture)]
     [InlineData("storm one two three request descent", PilotIntentType.RequestDescent)]
@@ -84,6 +113,30 @@ public class DeterministicPilotIntentParserTests
 
         Assert.Equal(expected, intent.Type);
         Assert.Equal(IntentParserSource.Deterministic, intent.Source);
+    }
+
+    [Theory]
+    [InlineData("storm one two three request pushback tail left", "tail left")]
+    [InlineData("storm one two three request pushback tail to the right", "tail right")]
+    [InlineData("storm one two three request pushback facing left", "tail left")]
+    public void Relative_pushback_direction_is_extracted(
+        string transcript,
+        string expectedDirection)
+    {
+        PilotIntent intent = DeterministicPilotIntentParser.Parse(transcript, Fixture.Session());
+
+        Assert.Equal(PilotIntentType.RequestPushback, intent.Type);
+        Assert.Equal(expectedDirection, intent.Entities.PushbackDirection);
+    }
+
+    [Fact]
+    public void Pushback_direction_is_not_guessed_when_the_pilot_did_not_say_one()
+    {
+        PilotIntent intent = DeterministicPilotIntentParser.Parse(
+            "storm one two three request pushback",
+            Fixture.Session());
+
+        Assert.Null(intent.Entities.PushbackDirection);
     }
 
     [Theory]
@@ -184,6 +237,16 @@ public class DeterministicPilotIntentParserTests
             Fixture.Session());
 
         Assert.Equal(["A", "C"], intent.Entities.Taxiways);
+    }
+
+    [Fact]
+    public void Named_and_alphanumeric_taxiways_are_preserved()
+    {
+        PilotIntent intent = DeterministicPilotIntentParser.Parse(
+            "via apron alfa six hold short runway one zero alpha two one",
+            Fixture.Session());
+
+        Assert.Equal(["apron", "A6"], intent.Entities.Taxiways);
     }
 
     [Fact]

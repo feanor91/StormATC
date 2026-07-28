@@ -108,6 +108,69 @@ public class TaxiRoutingTests
     }
 
     [Fact]
+    public void Position_aware_routing_starts_at_the_aircraft_not_the_first_airport_stand()
+    {
+        TaxiGraph graph = TestScenario.Departure_STMR.TaxiGraph!;
+        GeoPosition aircraftPosition = graph.FindNode("S_A2")!.Position;
+
+        TaxiRoute route = TaxiPathfinder.FindRouteFromPositionToHoldingPoint(
+            TestScenario.Departure_STMR,
+            aircraftPosition,
+            RunwayIdentifier.Create("18"));
+
+        Assert.True(route.Found);
+        Assert.Equal("S_A2", route.Nodes[0]);
+        Assert.NotEqual("S_A1", route.Nodes[0]);
+        Assert.Equal("H18", route.Nodes[^1]);
+    }
+
+    [Fact]
+    public void Position_aware_routing_refuses_to_snap_an_aircraft_far_from_the_airport()
+    {
+        TaxiRoute route = TaxiPathfinder.FindRouteFromPositionToHoldingPoint(
+            TestScenario.Departure_STMR,
+            GeoPosition.Create(0, 0),
+            RunwayIdentifier.Create("18"));
+
+        Assert.False(route.Found);
+    }
+
+    [Fact]
+    public void A_stored_node_sequence_rebuilds_the_exact_taxi_route()
+    {
+        TaxiRoute original = TaxiPathfinder.FindRoute(Graph, "S_A1", "H18");
+
+        TaxiRoute rebuilt = TaxiPathfinder.FromNodeSequence(Graph, original.Nodes);
+
+        Assert.True(rebuilt.Found);
+        Assert.Equal(original.Nodes, rebuilt.Nodes);
+        Assert.Equal(original.TaxiwayNames, rebuilt.TaxiwayNames);
+        Assert.Equal(original.TotalLengthMeters, rebuilt.TotalLengthMeters);
+    }
+
+    [Fact]
+    public void Surface_guidance_reports_current_stand_next_taxiway_and_expected_route_sign()
+    {
+        TaxiRoute route = TaxiPathfinder.FindRoute(Graph, "S_A1", "H18");
+        GeoPosition aircraftPosition = Graph.FindNode("S_A1")!.Position;
+
+        TaxiRouteProgress progress = TaxiSurfaceAdvisor.Analyze(
+            Graph,
+            route,
+            aircraftPosition);
+
+        Assert.True(progress.Found);
+        Assert.True(progress.IsOnRoute);
+        Assert.Equal("A1", progress.SurfacePosition.StandName);
+        Assert.Equal("A", progress.CurrentTaxiway);
+        Assert.Equal("C", progress.NextTaxiway);
+        Assert.Contains(
+            progress.JunctionSignCues,
+            cue => cue.TaxiwayName == "C" && cue.IsClearedRoute);
+        Assert.True(progress.RemainingDistanceMeters > 0);
+    }
+
+    [Fact]
     public void FindRouteFromRunwayToStand_starts_at_a_published_exit()
     {
         TaxiRoute route = TaxiPathfinder.FindRouteFromRunwayToStand(

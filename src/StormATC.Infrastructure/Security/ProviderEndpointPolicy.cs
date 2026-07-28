@@ -15,6 +15,22 @@ public static class ProviderEndpointPolicy
     public static bool IsAllowedOpenRouter(string? value) =>
         IsAllowed(value, "https", "openrouter.ai", "/api/v1");
 
+    /// <summary>True only for OpenAI's official versioned API root.</summary>
+    public static bool IsAllowedOpenAI(string? value) =>
+        IsAllowed(value, "https", "api.openai.com", "/v1");
+
+    /// <summary>True only for Groq's official OpenAI-compatible API root.</summary>
+    public static bool IsAllowedGroq(string? value) =>
+        IsAllowed(value, "https", "api.groq.com", "/openai/v1");
+
+    /// <summary>True only for DeepSeek's official API root.</summary>
+    public static bool IsAllowedDeepSeek(string? value) =>
+        IsAllowed(value, "https", "api.deepseek.com", "/");
+
+    /// <summary>True only for Anthropic's official API root.</summary>
+    public static bool IsAllowedAnthropic(string? value) =>
+        IsAllowed(value, "https", "api.anthropic.com", "/");
+
     /// <summary>True only for Deepgram's official REST API root.</summary>
     public static bool IsAllowedDeepgramRest(string? value) =>
         IsAllowed(value, "https", "api.deepgram.com", "/");

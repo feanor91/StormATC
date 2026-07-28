@@ -128,6 +128,12 @@ public sealed record IntentEntities
     /// <summary>Stand name, for a taxi-to-stand request.</summary>
     public string? Stand { get; init; }
 
+    /// <summary>
+    /// Relative tail direction requested for pushback, normalised to <c>tail left</c> or
+    /// <c>tail right</c>.
+    /// </summary>
+    public string? PushbackDirection { get; init; }
+
     /// <summary>Speed in knots, where one was mentioned.</summary>
     public int? SpeedKnots { get; init; }
 
@@ -141,7 +147,41 @@ public sealed record IntentEntities
     public bool IsEmpty =>
         Runway is null && Altitude is null && Squawk is null && Frequency is null
         && Heading is null && Taxiways.Count == 0 && Waypoint is null
-        && ApproachName is null && Stand is null && SpeedKnots is null && !MentionsHoldShort;
+        && ApproachName is null && Stand is null && PushbackDirection is null
+        && SpeedKnots is null && !MentionsHoldShort;
+}
+
+/// <summary>Validation and normalisation for directions used in pushback phraseology.</summary>
+public static class PushbackDirections
+{
+    /// <summary>The aircraft tail moves to the pilot's left during pushback.</summary>
+    public const string TailLeft = "tail left";
+
+    /// <summary>The aircraft tail moves to the pilot's right during pushback.</summary>
+    public const string TailRight = "tail right";
+
+    /// <summary>Directions shown in settings.</summary>
+    public static IReadOnlyList<string> All { get; } = [TailLeft, TailRight];
+
+    /// <summary>Returns a canonical relative tail direction, or null when unsupported.</summary>
+    public static string? Normalize(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return null;
+        }
+
+        string compact = value.Trim()
+            .Replace("-", string.Empty, StringComparison.Ordinal)
+            .Replace(" ", string.Empty, StringComparison.Ordinal)
+            .ToLowerInvariant();
+        return compact switch
+        {
+            "left" or "tailleft" or "tailtotheleft" => TailLeft,
+            "right" or "tailright" or "tailtotheright" => TailRight,
+            _ => null,
+        };
+    }
 }
 
 /// <summary>A value the pilot appears to be reading back.</summary>

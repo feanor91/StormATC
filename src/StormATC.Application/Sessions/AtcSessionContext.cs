@@ -52,6 +52,9 @@ public sealed class AtcSessionContext(
         new(StringComparer.OrdinalIgnoreCase);
 
     private readonly Lock _stateLock = new();
+    private Frequency? _departureAtisFrequency;
+    private Frequency? _departureDeliveryFrequency;
+    private bool _departureAtisWasMonitored;
 
     private AtcSession _currentSession = AtcSession.Create(
         Guid.CreateVersion7(),
@@ -76,6 +79,11 @@ public sealed class AtcSessionContext(
 
     /// <summary>How strictly the engine should enforce procedure.</summary>
     public RealismProfile Realism { get; set; } = RealismProfile.Standard;
+
+    /// <summary>
+    /// Relative tail direction used for pushback when the pilot does not request one.
+    /// </summary>
+    public string DefaultPushbackDirection { get; set; } = PushbackDirections.TailLeft;
 
     /// <summary>
     /// A transponder code fixed by the scenario. Set by the sample-flight loader so the
@@ -123,6 +131,13 @@ public sealed class AtcSessionContext(
             mode,
             initialState ?? AircraftState.Unknown(now));
 
+        lock (_stateLock)
+        {
+            _departureAtisFrequency = null;
+            _departureDeliveryFrequency = null;
+            _departureAtisWasMonitored = false;
+        }
+
         UpdateSession(session);
         return session;
     }
@@ -137,9 +152,28 @@ public sealed class AtcSessionContext(
         AirportData? departure = await GetAirportAsync(flightPlan.DepartureIcao, cancellationToken)
             .ConfigureAwait(false);
 
-        // Seed the departure stand from the aerodrome data so a taxi route can be computed
-        // before the pilot has said anything.
-        string? stand = departure?.Stands.Count > 0 ? departure.Stands[0].Name : null;
+        Frequency? atisFrequency = departure?.Frequencies.Atis;
+        Frequency? deliveryFrequency =
+            departure?.Frequencies.ResolveWithFallback(ControllerPosition.ClearanceDelivery);
+        bool hasDistinctAtis = atisFrequency is Frequency atis
+            && (deliveryFrequency is not Frequency delivery
+                || !atis.IsSameChannel(delivery));
+
+        lock (_stateLock)
+        {
+            _departureAtisFrequency = hasDistinctAtis ? atisFrequency : null;
+            _departureDeliveryFrequency = deliveryFrequency;
+            _departureAtisWasMonitored = false;
+        }
+
+        // Seed the stand only when the live aircraft is actually close to one. Airport facility
+        // arrays are not ordered by the pilot's parking position, so choosing the first stand
+        // can produce a physically wrong taxi route.
+        string? stand = departure?.TaxiGraph is TaxiGraph graph
+            && TaxiPathfinder.FindNearestNode(graph, CurrentSession.AircraftState.Position, 150)
+                is TaxiNode { Kind: TaxiNodeKind.Stand, StandName: { Length: > 0 } nearbyStand }
+            ? nearbyStand
+            : null;
 
         return Mutate(session => session
             .WithFlightPlan(flightPlan)
@@ -150,10 +184,12 @@ public sealed class AtcSessionContext(
                 AssignedStand = stand,
                 Phase = session.Phase == FlightPhase.Disconnected ? FlightPhase.Preflight : session.Phase,
                 CurrentController = session.CurrentController == ControllerPosition.None
-                    ? ControllerPosition.ClearanceDelivery
+                    ? hasDistinctAtis
+                        ? ControllerPosition.Atis
+                        : ControllerPosition.ClearanceDelivery
                     : session.CurrentController,
                 CurrentFrequency = session.CurrentFrequency
-                    ?? departure?.Frequencies.ResolveWithFallback(ControllerPosition.ClearanceDelivery),
+                    ?? (hasDistinctAtis ? atisFrequency : deliveryFrequency),
             });
     }
 
@@ -161,7 +197,31 @@ public sealed class AtcSessionContext(
     public AtcSession UpdateAircraftState(AircraftState state)
     {
         ArgumentNullException.ThrowIfNull(state);
-        return Mutate(session => session.WithAircraftState(state));
+        return Mutate(session =>
+        {
+            AtcSession updated = session.WithAircraftState(state);
+
+            // ATIS is a receive-only first step. Tuning the published Delivery (or its realistic
+            // combined-position fallback) is the explicit action that moves the session from
+            // listening to ATIS into two-way ATC.
+            if (session.CurrentController == ControllerPosition.Atis
+                && _departureAtisFrequency is Frequency atis)
+            {
+                Frequency tuned = state.Radio.ActiveTransmitFrequency;
+                if (tuned.IsSameChannel(atis))
+                {
+                    _departureAtisWasMonitored = true;
+                }
+                else if (_departureAtisWasMonitored
+                    && _departureDeliveryFrequency is Frequency delivery
+                    && tuned.IsSameChannel(delivery))
+                {
+                    return updated.WithController(ControllerPosition.ClearanceDelivery, delivery);
+                }
+            }
+
+            return updated;
+        });
     }
 
     /// <summary>
@@ -244,6 +304,7 @@ public sealed class AtcSessionContext(
             Weather = weather,
             CurrentTime = now,
             Realism = Realism,
+            DefaultPushbackDirection = DefaultPushbackDirection,
             PreassignedSquawk = PreassignedSquawk,
         };
     }
@@ -276,9 +337,12 @@ public sealed class AtcSessionContext(
             _logger.LogError(ex, "Failed to load airport data for {Icao}.", icao);
         }
 
-        // Cache the miss too — repeatedly retrying a missing aerodrome on every transmission
-        // would add latency for no benefit.
-        _airportCache[icao] = airport;
+        // Do not cache a miss: MSFS may connect later and make live facility data available.
+        if (airport is not null)
+        {
+            _airportCache[icao] = airport;
+        }
+
         return airport;
     }
 

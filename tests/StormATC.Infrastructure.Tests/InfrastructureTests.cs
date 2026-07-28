@@ -551,6 +551,32 @@ public class ProviderSecurityTests
     }
 
     [Fact]
+    public void Official_language_model_endpoints_are_allowed()
+    {
+        Assert.True(ProviderEndpointPolicy.IsAllowedOpenAI("https://api.openai.com/v1"));
+        Assert.True(ProviderEndpointPolicy.IsAllowedGroq(
+            "https://api.groq.com/openai/v1"));
+        Assert.True(ProviderEndpointPolicy.IsAllowedDeepSeek("https://api.deepseek.com"));
+        Assert.True(ProviderEndpointPolicy.IsAllowedAnthropic("https://api.anthropic.com"));
+    }
+
+    [Theory]
+    [InlineData("https://api.openai.com.evil.example/v1")]
+    [InlineData("http://api.groq.com/openai/v1")]
+    [InlineData("https://api.deepseek.com:8443")]
+    [InlineData("https://user@api.anthropic.com")]
+    public void Additional_provider_credentials_cannot_be_redirected(string endpoint)
+    {
+        bool allowed =
+            ProviderEndpointPolicy.IsAllowedOpenAI(endpoint)
+            || ProviderEndpointPolicy.IsAllowedGroq(endpoint)
+            || ProviderEndpointPolicy.IsAllowedDeepSeek(endpoint)
+            || ProviderEndpointPolicy.IsAllowedAnthropic(endpoint);
+
+        Assert.False(allowed);
+    }
+
+    [Fact]
     public void Redactor_removes_headers_fields_and_provider_keys()
     {
         const string Input =

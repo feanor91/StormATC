@@ -5,9 +5,8 @@ namespace StormATC.Application.Abstractions;
 /// </summary>
 /// <remarks>
 /// <para>
-/// Deliberately provider-neutral. OpenRouter is the first implementation, but nothing in this
-/// interface is OpenRouter-shaped, so a local model or a different gateway can be added without
-/// touching the application layer.
+/// Deliberately provider-neutral. OpenRouter, OpenAI, Groq, DeepSeek, and Anthropic share this
+/// boundary, so the application layer never branches on a vendor-specific response shape.
 /// </para>
 /// <para>
 /// Every result from this interface is untrusted. Callers must validate against the schema, then

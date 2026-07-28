@@ -93,7 +93,7 @@
                            Style="{StaticResource SecondaryTextStyle}"
                            Margin="0,0,0,12" />
 
-                <CheckBox Content="I understand OpenRouter and Deepgram are paid third-party services billed to my own accounts"
+                <CheckBox Content="I understand configured cloud APIs are third-party services billed to my own accounts"
                           IsChecked="{Binding CloudServicesConsentGiven}"
                           Margin="0,0,0,8" />
                 <CheckBox Content="Offline mode — block every network provider"
@@ -145,17 +145,124 @@
                               Style="{StaticResource PrimaryButtonStyle}"
                               Click="OnSaveOpenRouterKey"
                               Margin="0,0,8,0" />
-                      <Button Content="Test connection"
-                              Command="{Binding TestOpenRouterCommand}"
-                              Margin="0,0,8,0" />
                       <Button Content="Remove"
                               Command="{Binding RemoveOpenRouterKeyCommand}" />
                     </WrapPanel>
-                    <TextBlock Text="{Binding OpenRouterTestResult}"
+                  </StackPanel>
+                </Grid>
+
+                <Border Style="{StaticResource DividerStyle}" Margin="0,0,0,18" />
+
+                <Grid Margin="0,0,0,18">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="*" />
+                  </Grid.ColumnDefinitions>
+                  <StackPanel>
+                    <TextBlock Text="OPENAI API" Style="{StaticResource LabelTextStyle}" />
+                    <TextBlock Text="{Binding OpenAIKeyStatus}"
                                Style="{StaticResource SecondaryTextStyle}"
-                               Margin="0,8,0,0"
-                               Visibility="{Binding OpenRouterTestResult,
-                                                    Converter={StaticResource StringToVisibility}}" />
+                               Margin="0,5,0,0" />
+                  </StackPanel>
+                  <StackPanel Grid.Column="1">
+                    <PasswordBox x:Name="OpenAIKeyBox"
+                                 MaxWidth="500"
+                                 HorizontalAlignment="Stretch" />
+                    <WrapPanel Margin="0,8,0,0">
+                      <Button Content="Save key"
+                              Style="{StaticResource PrimaryButtonStyle}"
+                              Click="OnSaveOpenAIKey"
+                              Margin="0,0,8,0" />
+                      <Button Content="Remove"
+                              Command="{Binding RemoveOpenAIKeyCommand}" />
+                    </WrapPanel>
+                    <TextBlock Text="Use an OpenAI Platform API key. ChatGPT subscriptions are billed separately."
+                               Style="{StaticResource SecondaryTextStyle}"
+                               Margin="0,7,0,0" />
+                  </StackPanel>
+                </Grid>
+
+                <Border Style="{StaticResource DividerStyle}" Margin="0,0,0,18" />
+
+                <Grid Margin="0,0,0,18">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="*" />
+                  </Grid.ColumnDefinitions>
+                  <StackPanel>
+                    <TextBlock Text="GROQ" Style="{StaticResource LabelTextStyle}" />
+                    <TextBlock Text="{Binding GroqKeyStatus}"
+                               Style="{StaticResource SecondaryTextStyle}"
+                               Margin="0,5,0,0" />
+                  </StackPanel>
+                  <StackPanel Grid.Column="1">
+                    <PasswordBox x:Name="GroqKeyBox"
+                                 MaxWidth="500"
+                                 HorizontalAlignment="Stretch" />
+                    <WrapPanel Margin="0,8,0,0">
+                      <Button Content="Save key"
+                              Style="{StaticResource PrimaryButtonStyle}"
+                              Click="OnSaveGroqKey"
+                              Margin="0,0,8,0" />
+                      <Button Content="Remove"
+                              Command="{Binding RemoveGroqKeyCommand}" />
+                    </WrapPanel>
+                  </StackPanel>
+                </Grid>
+
+                <Border Style="{StaticResource DividerStyle}" Margin="0,0,0,18" />
+
+                <Grid Margin="0,0,0,18">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="*" />
+                  </Grid.ColumnDefinitions>
+                  <StackPanel>
+                    <TextBlock Text="DEEPSEEK" Style="{StaticResource LabelTextStyle}" />
+                    <TextBlock Text="{Binding DeepSeekKeyStatus}"
+                               Style="{StaticResource SecondaryTextStyle}"
+                               Margin="0,5,0,0" />
+                  </StackPanel>
+                  <StackPanel Grid.Column="1">
+                    <PasswordBox x:Name="DeepSeekKeyBox"
+                                 MaxWidth="500"
+                                 HorizontalAlignment="Stretch" />
+                    <WrapPanel Margin="0,8,0,0">
+                      <Button Content="Save key"
+                              Style="{StaticResource PrimaryButtonStyle}"
+                              Click="OnSaveDeepSeekKey"
+                              Margin="0,0,8,0" />
+                      <Button Content="Remove"
+                              Command="{Binding RemoveDeepSeekKeyCommand}" />
+                    </WrapPanel>
+                  </StackPanel>
+                </Grid>
+
+                <Border Style="{StaticResource DividerStyle}" Margin="0,0,0,18" />
+
+                <Grid Margin="0,0,0,18">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="*" />
+                  </Grid.ColumnDefinitions>
+                  <StackPanel>
+                    <TextBlock Text="ANTHROPIC" Style="{StaticResource LabelTextStyle}" />
+                    <TextBlock Text="{Binding AnthropicKeyStatus}"
+                               Style="{StaticResource SecondaryTextStyle}"
+                               Margin="0,5,0,0" />
+                  </StackPanel>
+                  <StackPanel Grid.Column="1">
+                    <PasswordBox x:Name="AnthropicKeyBox"
+                                 MaxWidth="500"
+                                 HorizontalAlignment="Stretch" />
+                    <WrapPanel Margin="0,8,0,0">
+                      <Button Content="Save key"
+                              Style="{StaticResource PrimaryButtonStyle}"
+                              Click="OnSaveAnthropicKey"
+                              Margin="0,0,8,0" />
+                      <Button Content="Remove"
+                              Command="{Binding RemoveAnthropicKeyCommand}" />
+                    </WrapPanel>
                   </StackPanel>
                 </Grid>
 
@@ -201,6 +308,9 @@
               <StackPanel>
                 <TextBlock Text="Provider configuration"
                            Style="{StaticResource SectionHeaderStyle}" />
+                <TextBlock Text="Choose one language-model provider. Save settings before testing the connection."
+                           Style="{StaticResource SecondaryTextStyle}"
+                           Margin="0,0,0,14" />
 
                 <Grid>
                   <Grid.ColumnDefinitions>
@@ -210,10 +320,43 @@
                   </Grid.ColumnDefinitions>
 
                   <StackPanel>
+                    <TextBlock Text="ACTIVE LANGUAGE MODEL PROVIDER"
+                               Style="{StaticResource LabelTextStyle}" />
+                    <ComboBox ItemsSource="{Binding LanguageModelProviderNames}"
+                              SelectedItem="{Binding SelectedLanguageModelProvider}"
+                              Margin="0,0,0,8" />
+                    <WrapPanel Margin="0,0,0,14">
+                      <Button Content="Test selected provider"
+                              Command="{Binding TestLanguageModelCommand}"
+                              Style="{StaticResource PrimaryButtonStyle}" />
+                      <TextBlock Text="{Binding LanguageModelTestResult}"
+                                 Style="{StaticResource SecondaryTextStyle}"
+                                 Margin="10,7,0,0"
+                                 Visibility="{Binding LanguageModelTestResult,
+                                                      Converter={StaticResource StringToVisibility}}" />
+                    </WrapPanel>
+
                     <TextBlock Text="OPENROUTER MODEL" Style="{StaticResource LabelTextStyle}" />
                     <TextBox Text="{Binding OpenRouterModel, UpdateSourceTrigger=PropertyChanged}"
                              Margin="0,0,0,12" />
 
+                    <TextBlock Text="OPENAI MODEL" Style="{StaticResource LabelTextStyle}" />
+                    <TextBox Text="{Binding OpenAIModel, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,12" />
+
+                    <TextBlock Text="GROQ MODEL" Style="{StaticResource LabelTextStyle}" />
+                    <TextBox Text="{Binding GroqModel, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,12" />
+
+                    <TextBlock Text="DEEPSEEK MODEL" Style="{StaticResource LabelTextStyle}" />
+                    <TextBox Text="{Binding DeepSeekModel, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,12" />
+
+                    <TextBlock Text="ANTHROPIC MODEL" Style="{StaticResource LabelTextStyle}" />
+                    <TextBox Text="{Binding AnthropicModel, UpdateSourceTrigger=PropertyChanged}" />
+                  </StackPanel>
+
+                  <StackPanel Grid.Column="2">
                     <TextBlock Text="DEEPGRAM SPEECH MODEL"
                                Style="{StaticResource LabelTextStyle}" />
                     <TextBox Text="{Binding DeepgramSpeechModel, UpdateSourceTrigger=PropertyChanged}"
@@ -221,10 +364,9 @@
 
                     <TextBlock Text="DEEPGRAM CONTROLLER VOICE"
                                Style="{StaticResource LabelTextStyle}" />
-                    <TextBox Text="{Binding DeepgramVoice, UpdateSourceTrigger=PropertyChanged}" />
-                  </StackPanel>
+                    <TextBox Text="{Binding DeepgramVoice, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,12" />
 
-                  <StackPanel Grid.Column="2">
                     <TextBlock Text="SIMBRIEF USER ID" Style="{StaticResource LabelTextStyle}" />
                     <TextBox Text="{Binding SimBriefUserId, UpdateSourceTrigger=PropertyChanged}"
                              Margin="0,0,0,4" />
@@ -237,7 +379,7 @@
                     <ComboBox ItemsSource="{Binding Connectors}"
                               SelectedItem="{Binding PreferredConnector}"
                               Margin="0,0,0,6" />
-                    <TextBlock Text="MSFS uses local SimConnect in read-only mode. Developer Mode is not required."
+                    <TextBlock Text="MSFS uses local SimConnect for live data and the initial COM1 ATIS tune. Developer Mode is not required."
                                Style="{StaticResource SecondaryTextStyle}" />
                     <TextBlock Text="{Binding SimulatorStatus}"
                                Foreground="{StaticResource AccentBrush}"
@@ -247,6 +389,194 @@
                                                     Converter={StaticResource StringToVisibility}}" />
                   </StackPanel>
                 </Grid>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <!-- ==================== Live integrations ==================== -->
+      <TabItem Header="Live integrations"
+               Style="{StaticResource SettingsTabItemStyle}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
+                      Padding="0,0,8,18">
+          <StackPanel MaxWidth="1040" HorizontalAlignment="Left">
+
+            <Border Background="{StaticResource StatusWarnSubtleBrush}"
+                    BorderBrush="{StaticResource StatusWarnBrush}"
+                    BorderThickness="1"
+                    CornerRadius="12"
+                    Padding="16,13"
+                    Margin="0,0,0,14">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="&#xE7BA;"
+                           FontFamily="{StaticResource IconFontFamily}"
+                           FontSize="22"
+                           Foreground="{StaticResource StatusWarnBrush}"
+                           VerticalAlignment="Top" />
+                <StackPanel Grid.Column="1" Margin="13,0,0,0">
+                  <TextBlock Text="Nothing on this page activates itself"
+                             FontSize="15"
+                             FontWeight="SemiBold" />
+                  <TextBlock Text="{Binding TrafficCreditNotice}"
+                             Style="{StaticResource SecondaryTextStyle}"
+                             Margin="0,5,0,0"
+                             TextWrapping="Wrap" />
+                </StackPanel>
+              </Grid>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
+              <StackPanel>
+                <Grid Margin="0,0,0,12">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                  </Grid.ColumnDefinitions>
+                  <StackPanel Margin="0,0,20,0">
+                    <TextBlock Text="FSLTL and simulator traffic"
+                               Style="{StaticResource SectionHeaderStyle}"
+                               Margin="0" />
+                    <TextBlock Text="Observe aircraft injected through SimConnect by FSLTL, vPilot, xPilot, or MSFS."
+                               Style="{StaticResource SecondaryTextStyle}"
+                               Margin="0,4,0,0" />
+                  </StackPanel>
+                  <Border Grid.Column="1"
+                          Background="{StaticResource StatusOkSubtleBrush}"
+                          CornerRadius="8"
+                          Padding="9,4"
+                          HorizontalAlignment="Right"
+                          VerticalAlignment="Top">
+                    <TextBlock Text="LOCAL · NO API CREDITS"
+                               Style="{StaticResource LabelTextStyle}"
+                               Foreground="{StaticResource StatusOkBrush}" />
+                  </Border>
+                </Grid>
+
+                <CheckBox Content="Enable live traffic awareness"
+                          IsChecked="{Binding EnableLiveTraffic}"
+                          FontWeight="SemiBold"
+                          Margin="0,0,0,6" />
+                <TextBlock Text="FSLTL supplies the model and airline; Microsoft Flight Simulator controls the aircraft movement. StormATC reads position, speed, heading, vertical speed, and ground state. It never spawns, steers, or removes traffic."
+                           Style="{StaticResource SecondaryTextStyle}"
+                           TextWrapping="Wrap"
+                           Margin="24,0,0,12" />
+
+                <Border Background="{StaticResource SurfaceInsetBrush}"
+                        BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="12,10">
+                  <StackPanel>
+                    <TextBlock Text="DETECTION STATUS" Style="{StaticResource LabelTextStyle}" />
+                    <TextBlock Text="{Binding TrafficIntegrationStatus}"
+                               Style="{StaticResource BodyTextStyle}"
+                               Margin="0,4,0,0"
+                               TextWrapping="Wrap" />
+                  </StackPanel>
+                </Border>
+
+                <TextBlock Text="FlyByWire SimBridge is not required for traffic. FSLTL traffic is identified from its SimConnect aircraft model title, including models installed through the FlyByWire Installer."
+                           Style="{StaticResource SecondaryTextStyle}"
+                           Margin="0,12,0,0"
+                           TextWrapping="Wrap" />
+              </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
+              <StackPanel>
+                <Grid Margin="0,0,0,12">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                  </Grid.ColumnDefinitions>
+                  <StackPanel Margin="0,0,20,0">
+                    <TextBlock Text="Background traffic radio"
+                               Style="{StaticResource SectionHeaderStyle}"
+                               Margin="0" />
+                    <TextBlock Text="Optional controller-and-pilot exchanges for aircraft already moving in the simulator."
+                               Style="{StaticResource SecondaryTextStyle}"
+                               Margin="0,4,0,0" />
+                  </StackPanel>
+                  <Border Grid.Column="1"
+                          Background="{StaticResource StatusWarnSubtleBrush}"
+                          CornerRadius="8"
+                          Padding="9,4"
+                          HorizontalAlignment="Right"
+                          VerticalAlignment="Top">
+                    <TextBlock Text="EXPERIMENTAL · OPT IN"
+                               Style="{StaticResource LabelTextStyle}"
+                               Foreground="{StaticResource StatusWarnBrush}" />
+                  </Border>
+                </Grid>
+
+                <CheckBox Content="Generate occasional traffic radio exchanges"
+                          IsChecked="{Binding EnableRadioChatter}"
+                          IsEnabled="{Binding IsTrafficEnabled}"
+                          Margin="0,0,0,8" />
+                <CheckBox Content="Use the selected language model for more natural wording"
+                          IsChecked="{Binding UseLanguageModelForChatter}"
+                          IsEnabled="{Binding IsTrafficChatterEnabled}"
+                          Margin="24,0,0,8" />
+                <TextBlock Text="Off uses the local deterministic phrase set and consumes no language-model credits. On permits one short, constrained model request per exchange."
+                           Style="{StaticResource SecondaryTextStyle}"
+                           Margin="48,-3,0,9"
+                           TextWrapping="Wrap" />
+                <CheckBox Content="Speak both controller and traffic-pilot lines"
+                          IsChecked="{Binding SpeakChatter}"
+                          IsEnabled="{Binding IsTrafficChatterEnabled}"
+                          Margin="24,0,0,8" />
+                <TextBlock Text="Speaking uses the configured text-to-speech service twice per exchange. Text-only exchanges remain visible without TTS."
+                           Style="{StaticResource SecondaryTextStyle}"
+                           Margin="48,-3,0,0"
+                           TextWrapping="Wrap" />
+              </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}">
+              <StackPanel>
+                <TextBlock Text="Usage and online-network safeguards"
+                           Style="{StaticResource SectionHeaderStyle}" />
+                <CheckBox Content="Pause generated chatter while vPilot, xPilot, swift, or PilotEdge is running"
+                          IsChecked="{Binding PauseChatterWhenOnlineAtcClientDetected}"
+                          Margin="0,0,0,12" />
+                <TextBlock Text="This avoids fake background calls competing with real online controllers and pilots."
+                           Style="{StaticResource SecondaryTextStyle}"
+                           Margin="24,-8,0,14" />
+
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="240" />
+                    <ColumnDefinition Width="*" />
+                  </Grid.ColumnDefinitions>
+                  <StackPanel>
+                    <TextBlock Text="MAXIMUM EXCHANGES PER HOUR"
+                               Style="{StaticResource LabelTextStyle}" />
+                    <TextBlock Text="{Binding MaximumTrafficExchangesPerHour,
+                                              StringFormat={}{0} exchanges / hour}"
+                               FontFamily="{StaticResource ValueFontFamily}"
+                               FontSize="17"
+                               FontWeight="SemiBold"
+                               Margin="0,5,0,0" />
+                  </StackPanel>
+                  <Slider Grid.Column="1"
+                          Minimum="1"
+                          Maximum="30"
+                          TickFrequency="1"
+                          IsSnapToTickEnabled="True"
+                          Value="{Binding MaximumTrafficExchangesPerHour}"
+                          IsEnabled="{Binding IsTrafficChatterEnabled}"
+                          VerticalAlignment="Center" />
+                </Grid>
+                <TextBlock Text="This is a hard runtime ceiling. With speech enabled, each exchange can make two TTS requests; with AI wording enabled, it can make one model request."
+                           Style="{StaticResource SecondaryTextStyle}"
+                           Margin="0,12,0,0"
+                           TextWrapping="Wrap" />
               </StackPanel>
             </Border>
           </StackPanel>
@@ -269,18 +599,27 @@
                            Margin="0,0,0,14" />
 
                 <Grid>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="14" />
+                    <RowDefinition Height="Auto" />
+                  </Grid.RowDefinitions>
                   <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="22" />
                     <ColumnDefinition Width="1*" />
                   </Grid.ColumnDefinitions>
 
-                  <StackPanel>
+                  <StackPanel Grid.Row="0" Grid.ColumnSpan="3">
                     <TextBlock Text="MICROPHONE" Style="{StaticResource LabelTextStyle}" />
                     <ComboBox ItemsSource="{Binding InputDevices}"
                               SelectedItem="{Binding SelectedInputDevice}"
-                              Margin="0,0,0,12" />
+                              ToolTip="{Binding SelectedInputDevice}"
+                              ToolTipService.ShowDuration="60000"
+                              MaxDropDownHeight="360" />
+                  </StackPanel>
 
+                  <StackPanel Grid.Row="2">
                     <TextBlock Text="RECOGNITION LANGUAGE"
                                Style="{StaticResource LabelTextStyle}" />
                     <ComboBox ItemsSource="{Binding SpeechRecognitionLanguages}"
@@ -303,7 +642,7 @@
                             HorizontalAlignment="Left" />
                   </StackPanel>
 
-                  <StackPanel Grid.Column="2">
+                  <StackPanel Grid.Row="2" Grid.Column="2">
                     <TextBlock Text="HEARD BY DEEPGRAM"
                                Style="{StaticResource LabelTextStyle}" />
                     <TextBox Text="{Binding TrainingTranscript,
@@ -416,7 +755,41 @@
                           SelectedItem="{Binding RealismProfile}"
                           Width="240"
                           HorizontalAlignment="Left"
-                          Margin="0,0,0,14" />
+                          Margin="0,0,0,6" />
+                <TextBlock Text="{Binding RealismProfileDescription}"
+                           Style="{StaticResource SecondaryTextStyle}"
+                           TextWrapping="Wrap"
+                           MaxWidth="760"
+                           HorizontalAlignment="Left"
+                           Margin="0,0,0,10" />
+                <Border Background="{StaticResource AccentSubtleBrush}"
+                        BorderBrush="{StaticResource AccentDimBrush}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="12"
+                        Margin="0,0,0,16">
+                  <StackPanel>
+                    <TextBlock Text="TRANSCRIPT INTERPRETATION"
+                               Style="{StaticResource LabelTextStyle}"
+                               Foreground="{StaticResource AccentBrush}" />
+                    <TextBlock Text="{Binding TranscriptToleranceNotice}"
+                               Style="{StaticResource SecondaryTextStyle}"
+                               TextWrapping="Wrap"
+                               Margin="0,4,0,0" />
+                  </StackPanel>
+                </Border>
+
+                <TextBlock Text="Default GSX pushback direction"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,6" />
+                <ComboBox ItemsSource="{Binding PushbackDirectionChoices}"
+                          SelectedItem="{Binding DefaultPushbackDirection}"
+                          Width="240"
+                          HorizontalAlignment="Left"
+                          Margin="0,0,0,4" />
+                <TextBlock Text="Used when the pilot requests pushback without saying tail left or tail right."
+                           Style="{StaticResource SecondaryTextStyle}"
+                           Margin="0,0,0,14" />
 
                 <CheckBox Content="Hold further clearances until an outstanding readback is correct"
                           IsChecked="{Binding RequireReadbackBeforeProgressing}"

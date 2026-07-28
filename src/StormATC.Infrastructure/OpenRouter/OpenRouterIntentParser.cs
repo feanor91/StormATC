@@ -33,7 +33,7 @@ namespace StormATC.Infrastructure.OpenRouter;
 public sealed class OpenRouterIntentParser(
     ILanguageModelClient client,
     IPromptCatalog promptCatalog,
-    IOptionsMonitor<OpenRouterOptions> options,
+    IOptionsMonitor<LanguageModelOptions> options,
     ILogger<OpenRouterIntentParser> logger) : ILanguageModelIntentParser
 {
     /// <summary>
@@ -72,6 +72,10 @@ public sealed class OpenRouterIntentParser(
             "waypoint": { "type": ["string", "null"] },
             "approachName": { "type": ["string", "null"] },
             "stand": { "type": ["string", "null"] },
+            "pushbackDirection": {
+              "type": ["string", "null"],
+              "enum": ["tail left", "tail right", null]
+            },
             "needsClarification": { "type": ["boolean", "null"] },
             "clarificationReason": { "type": ["string", "null"] }
           }
@@ -85,7 +89,7 @@ public sealed class OpenRouterIntentParser(
     private readonly IPromptCatalog _promptCatalog =
         promptCatalog ?? throw new ArgumentNullException(nameof(promptCatalog));
 
-    private readonly IOptionsMonitor<OpenRouterOptions> _options = options
+    private readonly IOptionsMonitor<LanguageModelOptions> _options = options
         ?? throw new ArgumentNullException(nameof(options));
 
     private readonly ILogger<OpenRouterIntentParser> _logger =
@@ -320,18 +324,26 @@ public sealed class OpenRouterIntentParser(
             heading = parsedHeading;
         }
 
-        // Taxiway designators are single letters at every aerodrome StormATC models.
+        // Real scenery includes alphanumeric designators such as A6 as well as named movement
+        // areas such as APRON and INNER. Accept only a compact, display-safe identifier here;
+        // the domain still compares it against the deterministic clearance.
         var taxiways = new List<string>();
         foreach (string taxiway in response.Taxiways ?? [])
         {
             string trimmed = taxiway.Trim().ToUpperInvariant();
-            if (trimmed.Length is not 1 || !char.IsAsciiLetterUpper(trimmed[0]))
+            bool namedSegment = trimmed is "APRON" or "RAMP" or "TAXILANE" or "INNER" or "OUTER";
+            bool compactDesignator =
+                trimmed.Length is >= 1 and <= 4
+                && char.IsAsciiLetterUpper(trimmed[0])
+                && trimmed.Skip(1).All(char.IsAsciiLetterOrDigit);
+
+            if (!namedSegment && !compactDesignator)
             {
                 _logger.LogWarning("The intent model returned an unusable taxiway; the answer was discarded.");
                 return null;
             }
 
-            taxiways.Add(trimmed);
+            taxiways.Add(namedSegment ? trimmed.ToLowerInvariant() : trimmed);
         }
 
         return new PilotIntent
@@ -352,6 +364,7 @@ public sealed class OpenRouterIntentParser(
                 Waypoint = Trim(response.Waypoint),
                 ApproachName = Trim(response.ApproachName),
                 Stand = Trim(response.Stand),
+                PushbackDirection = PushbackDirections.Normalize(response.PushbackDirection),
             },
             Source = IntentParserSource.LanguageModel,
             SourceTranscript = transcript,
@@ -407,6 +420,9 @@ public sealed class OpenRouterIntentParser(
 
         [JsonPropertyName("stand")]
         public string? Stand { get; init; }
+
+        [JsonPropertyName("pushbackDirection")]
+        public string? PushbackDirection { get; init; }
 
         [JsonPropertyName("needsClarification")]
         public bool? NeedsClarification { get; init; }

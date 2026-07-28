@@ -45,6 +45,8 @@ Handoffs happen for a reason, not on a timer:
 
 | Trigger | From → to |
 | --- | --- |
+| Flight plan loaded with a published ATIS | None → ATIS |
+| Pilot tunes the published Delivery frequency after monitoring ATIS | ATIS → Delivery |
 | IFR clearance read back correctly | Delivery → Ground |
 | Reporting holding short | Ground → Tower |
 | Established in the climb, 1000 ft above aerodrome elevation | Tower → Departure |
@@ -55,9 +57,22 @@ Handoffs happen for a reason, not on a timer:
 The two physical triggers — climb and terminal area — come from `EvaluateStateChange`, which
 watches the simulator rather than the radio.
 
-The session tracks the frequency it expects. If the aircraft's tuned COM1 disagrees, the Radio
-page says so plainly. StormATC never silently retunes your radio and never pretends you are on
-the right frequency.
+The session starts on the published departure ATIS and tunes COM1 to it once when the flight plan
+is loaded. ATIS is receive-only. While the selected radio is on that frequency, StormATC generates
+and speaks a deterministic departure broadcast from the airport, assigned runway, and observed
+weather. It never asks a language model to invent or compare operational ATIS facts. The broadcast
+loops while tuned using named in-memory audio, so an unchanged repeat makes no new synthesis
+request. Between repeats, normalized runway and weather values are compared locally. Only a
+material change advances the information letter and synthesizes one updated recording; time
+passing and small simulator-value jitter do not.
+
+Tuning away stops the broadcast. Returning to the ATIS channel resumes the cached loop without
+moving controller jurisdiction back from Delivery.
+
+Tuning the published Delivery frequency opens two-way ATC. After that, frequency changes remain
+pilot actions. If the selected transmit radio disagrees with the assigned controller frequency,
+the Radio page says so and the transmission is discarded before transcription, parsing,
+persistence, or any language-model request.
 
 ## Clearances
 

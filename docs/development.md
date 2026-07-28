@@ -89,7 +89,8 @@ routing one through by accident.
 | Section | Controls |
 | --- | --- |
 | `Application` | Offline mode, developer mode, realism profile, first-run state |
-| `OpenRouter` | Base URL, model, timeout, retries, temperatures |
+| `LanguageModel` | Active provider and intent/phraseology temperatures |
+| `OpenRouter`, `OpenAI`, `Groq`, `DeepSeek`, `Anthropic` | Official base URL, model, timeout, retries |
 | `Deepgram` | URLs, models, voice, sample rate, devices, transmission limits |
 | `SimBrief` | Base URL, user ID, timeouts, staleness, caching |
 | `Simulator` | Preferred connector, update rate, reconnection |
@@ -101,17 +102,17 @@ routing one through by accident.
 Options are bound with `ValidateDataAnnotations().ValidateOnStart()`, so an invalid value fails at
 startup with a clear message rather than at the moment it is first used.
 
-OpenRouter, Deepgram, and SimBrief endpoints are additionally pinned to their official HTTPS/WSS
-locations. Environment variables and command-line arguments may tune ordinary options, but they
-cannot redirect a credential-bearing request to another host.
+Every language-model provider, Deepgram, and SimBrief is additionally pinned to its official
+HTTPS/WSS location. Environment variables and command-line arguments may tune ordinary options,
+but they cannot redirect a credential-bearing request to another host.
 
 ### Which settings need a restart
 
 Almost none. Provider selection is resolved at run time by
 `SimulatorConnectorRouter` and `FlightPlanProviderRouter`, so changing the simulator connector or
-the SimBrief user ID takes effect on the next connect or the next import. OpenRouter and Deepgram
-use options monitors, so their model, voice, device, and PTT settings also update after the
-Settings file reloads.
+the SimBrief user ID takes effect on the next connect or import. Language-model and Deepgram
+configuration uses options monitors, so provider, model, voice, device, and PTT settings also
+update after the Settings file reloads.
 
 `Application:OfflineMode` is the exception: it decides which implementations are registered in the
 container, which happens once when the host is built. The Settings page says so, and only when the

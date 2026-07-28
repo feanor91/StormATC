@@ -68,6 +68,20 @@ public class AtcStateEngineTests
     }
 
     [Fact]
+    public void Realism_profiles_select_the_expected_transcript_tolerance()
+    {
+        Assert.Equal(
+            TranscriptToleranceMode.Relaxed,
+            RealismProfile.Relaxed.TranscriptTolerance);
+        Assert.Equal(
+            TranscriptToleranceMode.Standard,
+            RealismProfile.Standard.TranscriptTolerance);
+        Assert.Equal(
+            TranscriptToleranceMode.Strict,
+            RealismProfile.Strict.TranscriptTolerance);
+    }
+
+    [Fact]
     public void A_low_confidence_safety_critical_transmission_is_not_acted_on()
     {
         // "Ready for departure" mis-heard is how an aircraft gets a takeoff clearance it never
@@ -309,6 +323,106 @@ public class AtcStateEngineTests
     }
 
     [Fact]
+    public void Standard_profile_does_not_call_an_unannounced_parser_guess_wrong()
+    {
+        AtcSession session = IssueClearance(TestScenario.NewSession(), SquawkCode.Create("4271"));
+        const string Transcript =
+            "runway one eight climb seven thousand storm one two three";
+        PilotIntent intent = TestScenario.Intent(
+            PilotIntentType.ClearanceReadback,
+            Transcript,
+            readbackItems:
+            [
+                new ParsedReadbackItem
+                {
+                    Type = ReadbackItemType.Squawk,
+                    NormalizedValue = "7000",
+                    SourceText = Transcript,
+                },
+            ]);
+
+        AtcDecision decision = _engine.Evaluate(TestScenario.Context(
+            session,
+            intent,
+            transcript: Transcript,
+            realism: RealismProfile.Standard));
+
+        Assert.Equal(ReadbackOutcome.Incomplete, decision.ReadbackAssessment?.Outcome);
+        Assert.Contains(
+            ReadbackItemType.Squawk,
+            decision.ReadbackAssessment!.MissingItems);
+        Assert.Empty(decision.ReadbackAssessment.IncorrectItems);
+        Assert.Contains(
+            "readback incomplete",
+            decision.FallbackPhraseology,
+            StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain(
+            "negative",
+            decision.FallbackPhraseology,
+            StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void Strict_profile_judges_the_same_structured_parser_value_as_intentional()
+    {
+        AtcSession session = IssueClearance(TestScenario.NewSession(), SquawkCode.Create("4271"));
+        const string Transcript =
+            "runway one eight climb seven thousand storm one two three";
+        PilotIntent intent = TestScenario.Intent(
+            PilotIntentType.ClearanceReadback,
+            Transcript,
+            readbackItems:
+            [
+                new ParsedReadbackItem
+                {
+                    Type = ReadbackItemType.Squawk,
+                    NormalizedValue = "7000",
+                    SourceText = Transcript,
+                },
+            ]);
+
+        AtcDecision decision = _engine.Evaluate(TestScenario.Context(
+            session,
+            intent,
+            transcript: Transcript,
+            realism: RealismProfile.Strict));
+
+        Assert.Equal(ReadbackOutcome.Incorrect, decision.ReadbackAssessment?.Outcome);
+        Assert.Contains(
+            decision.ReadbackAssessment!.IncorrectItems,
+            item => item.Type == ReadbackItemType.Squawk);
+        Assert.Contains(
+            "negative",
+            decision.FallbackPhraseology,
+            StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void Relaxed_profile_accepts_a_complete_readback_without_the_callsign()
+    {
+        AtcSession session = IssueClearance(TestScenario.NewSession(), SquawkCode.Create("4271"));
+        const string Transcript =
+            "runway one eight climb seven thousand squawk four two seven one";
+        var intent = new PilotIntent
+        {
+            Type = PilotIntentType.ClearanceReadback,
+            Confidence = 0.95,
+            Entities = IntentEntities.Empty,
+            Source = IntentParserSource.Deterministic,
+            SourceTranscript = Transcript,
+        };
+
+        AtcDecision decision = _engine.Evaluate(TestScenario.Context(
+            session,
+            intent,
+            transcript: Transcript,
+            realism: RealismProfile.Relaxed));
+
+        Assert.Equal(ReadbackOutcome.Correct, decision.ReadbackAssessment?.Outcome);
+        Assert.True(decision.ClearsPendingReadback);
+    }
+
+    [Fact]
     public void An_incomplete_readback_asks_only_for_what_is_missing()
     {
         AtcSession session = IssueClearance(TestScenario.NewSession(), SquawkCode.Create("4271"));
@@ -369,6 +483,50 @@ public class AtcStateEngineTests
     }
 
     [Fact]
+    public void Pushback_approval_repeats_the_requested_tail_direction()
+    {
+        AtcSession session = AcknowledgedClearance();
+        var entities = new IntentEntities { PushbackDirection = "tail right" };
+
+        AtcDecision decision = _engine.Evaluate(TestScenario.Context(
+            session with
+            {
+                CurrentController = ControllerPosition.Ground,
+                CurrentFrequency = TestScenario.Ground,
+            },
+            TestScenario.Intent(
+                PilotIntentType.RequestPushback,
+                "storm one two three request pushback tail right",
+                entities: entities)));
+
+        Assert.True(decision.Accepted);
+        Assert.Equal("tail right", decision.ApprovedFacts["pushbackDirection"]);
+        Assert.Contains("pushback approved", decision.FallbackPhraseology);
+        Assert.Contains("tail right", decision.FallbackPhraseology);
+    }
+
+    [Fact]
+    public void Pushback_without_a_requested_direction_uses_the_configured_GSX_default()
+    {
+        AtcSession session = AcknowledgedClearance();
+
+        AtcDecision decision = _engine.Evaluate(TestScenario.Context(
+            session with
+            {
+                CurrentController = ControllerPosition.Ground,
+                CurrentFrequency = TestScenario.Ground,
+            },
+            TestScenario.Intent(
+                PilotIntentType.RequestPushback,
+                "storm one two three request pushback"),
+            defaultPushbackDirection: PushbackDirections.TailLeft));
+
+        Assert.Equal("tail left", decision.ApprovedFacts["pushbackDirection"]);
+        Assert.Contains("tail left", decision.FallbackPhraseology);
+        Assert.DoesNotContain("east", decision.FallbackPhraseology);
+    }
+
+    [Fact]
     public void A_taxi_clearance_routes_via_real_taxiways_and_ends_at_a_holding_point()
     {
         AtcSession session = AcknowledgedClearance() with
@@ -387,10 +545,70 @@ public class AtcStateEngineTests
         Clearance clearance = Assert.IsType<Clearance>(decision.IssuedClearance);
         Assert.Equal(ClearanceType.Taxi, clearance.Type);
         Assert.NotEmpty(clearance.TaxiRoute);
+        Assert.NotEmpty(clearance.TaxiPathNodes);
+        Assert.True(clearance.TaxiRouteLengthMeters > 0);
         Assert.Equal(RunwayIdentifier.Create("18"), clearance.HoldShortOfRunway);
 
         // The route must be taxiways that exist at this aerodrome.
         Assert.All(clearance.TaxiRoute, taxiway => Assert.Contains(taxiway, new[] { "A", "B", "C", "D" }));
+    }
+
+    [Fact]
+    public void Taxi_clearance_uses_live_aircraft_position_even_if_an_old_stand_is_assigned()
+    {
+        AtcSession session = AcknowledgedClearance() with
+        {
+            CurrentController = ControllerPosition.Ground,
+            CurrentFrequency = TestScenario.Ground,
+            Phase = FlightPhase.Pushback,
+            AssignedStand = "A1",
+        };
+        GeoPosition standA2 = TestScenario.Departure_STMR.TaxiGraph!.FindNode("S_A2")!.Position;
+        session = session with
+        {
+            AircraftState = session.AircraftState with { Position = standA2 },
+        };
+
+        AtcDecision decision = _engine.Evaluate(TestScenario.Context(
+            session,
+            TestScenario.Intent(PilotIntentType.RequestTaxi, "request taxi")));
+
+        Clearance clearance = Assert.IsType<Clearance>(decision.IssuedClearance);
+        Assert.Equal("S_A2", clearance.TaxiPathNodes[0]);
+        Assert.NotEqual("S_A1", clearance.TaxiPathNodes[0]);
+    }
+
+    [Fact]
+    public void Progressive_taxi_gives_the_next_graph_derived_step()
+    {
+        AtcSession session = AcknowledgedClearance() with
+        {
+            CurrentController = ControllerPosition.Ground,
+            CurrentFrequency = TestScenario.Ground,
+            Phase = FlightPhase.Pushback,
+        };
+        AtcDecision taxiDecision = _engine.Evaluate(TestScenario.Context(
+            session,
+            TestScenario.Intent(PilotIntentType.RequestTaxi, "request taxi")));
+        Clearance taxiClearance = Assert.IsType<Clearance>(taxiDecision.IssuedClearance)
+            with { AcknowledgedAt = TestScenario.Now };
+        session = session.WithClearance(taxiClearance) with
+        {
+            Phase = FlightPhase.TaxiOut,
+            PendingReadback = null,
+        };
+
+        AtcDecision progressive = _engine.Evaluate(TestScenario.Context(
+            session,
+            TestScenario.Intent(
+                PilotIntentType.RequestProgressiveTaxi,
+                "request progressive taxi")));
+
+        Assert.True(progressive.Accepted);
+        Assert.False(progressive.AllowLanguageModelPhraseology);
+        Assert.Contains("continue on Alfa", progressive.FallbackPhraseology);
+        Assert.Contains("Charlie", progressive.FallbackPhraseology);
+        Assert.Contains("next junction", progressive.FallbackPhraseology);
     }
 
     [Fact]

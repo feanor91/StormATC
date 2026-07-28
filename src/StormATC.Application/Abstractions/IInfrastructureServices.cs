@@ -32,6 +32,18 @@ public static class SecretKeys
     /// <summary>The OpenRouter API key.</summary>
     public const string OpenRouterApiKey = "openrouter.apiKey";
 
+    /// <summary>The OpenAI API key.</summary>
+    public const string OpenAIApiKey = "openai.apiKey";
+
+    /// <summary>The Groq API key.</summary>
+    public const string GroqApiKey = "groq.apiKey";
+
+    /// <summary>The DeepSeek API key.</summary>
+    public const string DeepSeekApiKey = "deepseek.apiKey";
+
+    /// <summary>The Anthropic API key.</summary>
+    public const string AnthropicApiKey = "anthropic.apiKey";
+
     /// <summary>The Deepgram API key.</summary>
     public const string DeepgramApiKey = "deepgram.apiKey";
 }
@@ -113,6 +125,7 @@ public static class PromptNames
     public const string GroundController = "30-ground-controller";
     public const string TowerController = "40-tower-controller";
     public const string DepartureController = "50-departure-controller";
+    public const string TrafficChatter = "55-traffic-chatter";
     public const string CenterController = "60-center-controller";
     public const string ApproachController = "70-approach-controller";
     public const string ReadbackEvaluator = "80-readback-evaluator";
@@ -123,7 +136,7 @@ public static class PromptNames
     public static IReadOnlyList<string> All { get; } =
     [
         GlobalControllerRules, PilotIntentParser, ClearanceDelivery, GroundController,
-        TowerController, DepartureController, CenterController, ApproachController,
+        TowerController, DepartureController, TrafficChatter, CenterController, ApproachController,
         ReadbackEvaluator, PhraseologyRenderer, AbnormalRequests,
     ];
 

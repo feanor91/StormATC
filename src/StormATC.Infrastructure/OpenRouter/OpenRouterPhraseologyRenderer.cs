@@ -32,7 +32,7 @@ namespace StormATC.Infrastructure.OpenRouter;
 public sealed class OpenRouterPhraseologyRenderer(
     ILanguageModelClient client,
     IPromptCatalog promptCatalog,
-    IOptionsMonitor<OpenRouterOptions> options,
+    IOptionsMonitor<LanguageModelOptions> options,
     IOptionsMonitor<AtcRealismOptions> realismOptions,
     ILogger<OpenRouterPhraseologyRenderer> logger) : ILanguageModelPhraseologyRenderer
 {
@@ -68,7 +68,7 @@ public sealed class OpenRouterPhraseologyRenderer(
     private readonly IPromptCatalog _promptCatalog =
         promptCatalog ?? throw new ArgumentNullException(nameof(promptCatalog));
 
-    private readonly IOptionsMonitor<OpenRouterOptions> _options = options
+    private readonly IOptionsMonitor<LanguageModelOptions> _options = options
         ?? throw new ArgumentNullException(nameof(options));
 
     private readonly IOptionsMonitor<AtcRealismOptions> _realismOptions = realismOptions
@@ -235,9 +235,9 @@ public sealed class OpenRouterPhraseologyRenderer(
 
         builder.AppendLine();
         builder.AppendLine(
-            "Say the same instruction in natural controller speech. Speak every number as a "
+            "Return the reference wording unchanged unless a punctuation-only cadence improvement "
             + "controller does — digits individually, 'decimal' for the point. Add nothing: no "
-            + "traffic information, no weather, no explanation, no value that is not listed above.");
+            + "traffic, weather, greeting, coaching, explanation, or value not listed above.");
 
         return builder.ToString();
     }

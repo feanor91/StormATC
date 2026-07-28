@@ -27,6 +27,13 @@ public static class TaxiPathfinder
     private const double RunwayCrossingPenaltyMeters = 50_000;
 
     /// <summary>
+    /// Maximum distance at which an aircraft may be snapped to a taxi-graph node. A position
+    /// farther away is treated as a scenery mismatch instead of pretending the aircraft is on
+    /// the manoeuvring area.
+    /// </summary>
+    private const double MaximumSurfaceSnapDistanceMeters = 600;
+
+    /// <summary>
     /// Finds the lowest-cost route between two nodes.
     /// </summary>
     /// <param name="graph">The aerodrome taxi graph.</param>
@@ -152,6 +159,33 @@ public static class TaxiPathfinder
     }
 
     /// <summary>
+    /// Finds a departure taxi route from the aircraft's actual simulator position.
+    /// </summary>
+    /// <remarks>
+    /// The position is snapped to the nearest published graph node only when that node is close
+    /// enough to be credible. This avoids the old behaviour of routing from the first stand in
+    /// the airport list even when the aircraft was parked somewhere else.
+    /// </remarks>
+    public static TaxiRoute FindRouteFromPositionToHoldingPoint(
+        AirportData airport,
+        GeoPosition position,
+        RunwayIdentifier runway)
+    {
+        ArgumentNullException.ThrowIfNull(airport);
+
+        if (airport.TaxiGraph is not TaxiGraph graph
+            || airport.FindRunway(runway) is not RunwayData runwayData
+            || runwayData.HoldingPointNodes.Count == 0
+            || FindNearestNode(graph, position, MaximumSurfaceSnapDistanceMeters)
+                is not TaxiNode start)
+        {
+            return TaxiRoute.NotFound;
+        }
+
+        return FindBestRouteToAny(graph, start.Name, runwayData.HoldingPointNodes);
+    }
+
+    /// <summary>
     /// Finds a route from a runway exit to a stand, for taxi-in after landing.
     /// </summary>
     public static TaxiRoute FindRouteFromRunwayToStand(
@@ -186,6 +220,111 @@ public static class TaxiPathfinder
         }
 
         return best;
+    }
+
+    /// <summary>
+    /// Finds an inbound taxi route from the aircraft's actual simulator position to a stand.
+    /// </summary>
+    public static TaxiRoute FindRouteFromPositionToStand(
+        AirportData airport,
+        GeoPosition position,
+        string standName)
+    {
+        ArgumentNullException.ThrowIfNull(airport);
+
+        if (airport.TaxiGraph is not TaxiGraph graph
+            || airport.FindStand(standName) is not StandData stand
+            || FindNearestNode(graph, position, MaximumSurfaceSnapDistanceMeters)
+                is not TaxiNode start)
+        {
+            return TaxiRoute.NotFound;
+        }
+
+        return FindRoute(graph, start.Name, stand.TaxiNodeName);
+    }
+
+    /// <summary>Returns the closest graph node within a credible surface-position radius.</summary>
+    public static TaxiNode? FindNearestNode(
+        TaxiGraph graph,
+        GeoPosition position,
+        double maximumDistanceMeters = MaximumSurfaceSnapDistanceMeters)
+    {
+        ArgumentNullException.ThrowIfNull(graph);
+
+        TaxiNode? nearest = null;
+        double nearestDistance = double.MaxValue;
+
+        foreach (TaxiNode node in graph.Nodes.Values)
+        {
+            double distance = position.DistanceMetersTo(node.Position);
+            if (distance < nearestDistance)
+            {
+                nearest = node;
+                nearestDistance = distance;
+            }
+        }
+
+        return nearestDistance <= maximumDistanceMeters ? nearest : null;
+    }
+
+    /// <summary>
+    /// Rebuilds a route from a node sequence stored on a clearance.
+    /// </summary>
+    public static TaxiRoute FromNodeSequence(
+        TaxiGraph graph,
+        IReadOnlyList<string> nodeNames,
+        IReadOnlyList<string>? edgeTaxiwayNames = null)
+    {
+        ArgumentNullException.ThrowIfNull(graph);
+        ArgumentNullException.ThrowIfNull(nodeNames);
+
+        if (nodeNames.Count == 0 || nodeNames.Any(name => !graph.HasNode(name)))
+        {
+            return TaxiRoute.NotFound;
+        }
+
+        if (nodeNames.Count == 1)
+        {
+            return new TaxiRoute
+            {
+                Found = true,
+                Nodes = [nodeNames[0]],
+                Edges = [],
+                TaxiwayNames = [],
+                TotalLengthMeters = 0,
+            };
+        }
+
+        var edges = new List<TaxiEdge>(nodeNames.Count - 1);
+        for (int i = 0; i < nodeNames.Count - 1; i++)
+        {
+            string from = nodeNames[i];
+            string to = nodeNames[i + 1];
+            string? expectedTaxiway = edgeTaxiwayNames is { Count: > 0 }
+                && i < edgeTaxiwayNames.Count
+                ? edgeTaxiwayNames[i]
+                : null;
+            TaxiEdge? edge = graph.Edges.FirstOrDefault(candidate =>
+                (expectedTaxiway is null
+                    || string.Equals(
+                        candidate.TaxiwayName,
+                        expectedTaxiway,
+                        StringComparison.OrdinalIgnoreCase))
+                && (string.Equals(candidate.FromNode, from, StringComparison.OrdinalIgnoreCase)
+                    && string.Equals(candidate.ToNode, to, StringComparison.OrdinalIgnoreCase)
+                || !candidate.IsOneWay
+                    && string.Equals(candidate.FromNode, to, StringComparison.OrdinalIgnoreCase)
+                    && string.Equals(candidate.ToNode, from, StringComparison.OrdinalIgnoreCase)));
+
+            if (edge is null)
+            {
+                return TaxiRoute.NotFound;
+            }
+
+            edges.Add(edge);
+        }
+
+        return BuildRoute(nodeNames, edges);
     }
 
     /// <summary>Finds the cheapest route from one node to whichever of several targets is closest.</summary>
@@ -268,6 +407,13 @@ public static class TaxiPathfinder
         nodes.Reverse();
         edges.Reverse();
 
+        return BuildRoute(nodes, edges);
+    }
+
+    private static TaxiRoute BuildRoute(
+        IReadOnlyList<string> nodes,
+        IReadOnlyList<TaxiEdge> edges)
+    {
         // Collapse consecutive edges on the same taxiway: a clearance says "via Alpha, Charlie",
         // not "via Alpha, Alpha, Alpha, Charlie".
         var taxiwayNames = new List<string>();

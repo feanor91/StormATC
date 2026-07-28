@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using StormATC.Application.Atis;
 using StormATC.Desktop.Services;
 using StormATC.Desktop.ViewModels;
 using StormATC.Desktop.Views;
@@ -23,6 +24,7 @@ public static class DesktopServiceCollectionExtensions
 
         services.AddSingleton<ProviderStatusService>();
         services.AddSingleton<UserSettingsService>();
+        services.AddSingleton<AtisBroadcastService>();
         services.AddSingleton<ApplicationStartupService>();
 
         services.AddSingleton<DashboardViewModel>();

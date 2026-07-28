@@ -7,6 +7,21 @@ namespace StormATC.Application.Tests;
 public class AtcGuidanceAdvisorTests
 {
     [Fact]
+    public void Atis_guidance_is_receive_only_and_points_to_delivery()
+    {
+        AtcSession session = Fixture.Session() with
+        {
+            CurrentController = ControllerPosition.Atis,
+        };
+
+        AtcGuidance guidance = AtcGuidanceAdvisor.ForSession(session);
+
+        Assert.Equal("Listen to departure ATIS", guidance.Title);
+        Assert.Contains("Delivery", guidance.Detail, StringComparison.OrdinalIgnoreCase);
+        Assert.False(guidance.HasExample);
+    }
+
+    [Fact]
     public void Preflight_guidance_prompts_for_clearance()
     {
         AtcGuidance guidance = AtcGuidanceAdvisor.ForSession(Fixture.Session());

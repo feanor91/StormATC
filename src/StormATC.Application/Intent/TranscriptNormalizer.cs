@@ -76,7 +76,7 @@ public static partial class TranscriptNormalizer
             return string.Empty;
         }
 
-        string working = transcript.ToLowerInvariant();
+        string working = FormatForDisplay(transcript).ToLowerInvariant();
 
         // Strip everything except letters, digits, spaces, and the decimal point, which is
         // meaningful inside frequencies.
@@ -120,6 +120,33 @@ public static partial class TranscriptNormalizer
         }
 
         working = RemoveFillerWords(working);
+
+        return WhitespaceRegex().Replace(working, " ").Trim();
+    }
+
+    /// <summary>
+    /// Repairs missing token boundaries in recognizer output while preserving the words,
+    /// capitalization, and punctuation suitable for display.
+    /// </summary>
+    /// <remarks>
+    /// Speech providers occasionally smart-format an entire readback into a value such as
+    /// <c>Runway20Climb7000Squawk2555</c>. These are not harmless cosmetic defects: without
+    /// boundaries, the runway, altitude, and squawk parsers cannot see their individual fields.
+    /// The rules are deliberately aviation-scoped so identifiers such as <c>MITO3A</c> stay
+    /// intact.
+    /// </remarks>
+    public static string FormatForDisplay(string transcript)
+    {
+        ArgumentNullException.ThrowIfNull(transcript);
+
+        if (transcript.Length == 0)
+        {
+            return string.Empty;
+        }
+
+        string working = LowerOrDigitToCapitalizedWordRegex().Replace(transcript, " ");
+        working = AviationWordBeforeDigitsRegex().Replace(working, "$1 ");
+        working = DigitsBeforeAviationWordRegex().Replace(working, " ");
 
         return WhitespaceRegex().Replace(working, " ").Trim();
     }
@@ -174,4 +201,17 @@ public static partial class TranscriptNormalizer
 
     [GeneratedRegex(@"\s+")]
     private static partial Regex WhitespaceRegex();
+
+    [GeneratedRegex(@"(?<=[\p{Ll}\d])(?=\p{Lu}\p{Ll})", RegexOptions.CultureInvariant)]
+    private static partial Regex LowerOrDigitToCapitalizedWordRegex();
+
+    [GeneratedRegex(
+        @"\b(runways?|climbs?|climbing|descends?|descending|maintains?|maintaining|squawks?|headings?|frequenc(?:y|ies)|flightlevel|level|departure|approach|ground|tower|center|centre|alpha|alfa|bravo|charlie|delta|echo|foxtrot|golf|hotel|india|juliett?|kilo|lima|mike|november|oscar|papa|quebec|romeo|sierra|tango|uniform|victor|whiskey|xray|yankee|zulu)(?=\d)",
+        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    private static partial Regex AviationWordBeforeDigitsRegex();
+
+    [GeneratedRegex(
+        @"(?<=\d)(?=(?:runways?|climbs?|climbing|descends?|descending|maintains?|maintaining|squawks?|headings?|frequenc(?:y|ies)|flightlevel|departure|approach|ground|tower|center|centre|alpha|alfa|bravo|charlie|delta|echo|foxtrot|golf|hotel|india|juliett?|kilo|lima|mike|november|oscar|papa|quebec|romeo|sierra|tango|uniform|victor|whiskey|xray|yankee|zulu))",
+        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    private static partial Regex DigitsBeforeAviationWordRegex();
 }

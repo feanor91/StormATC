@@ -113,6 +113,14 @@ public class DeterministicPhraseologyTests
     }
 
     [Fact]
+    public void Alphanumeric_taxiways_are_spoken_phonetically_while_named_surfaces_remain_words()
+    {
+        string spoken = DeterministicPhraseology.SpellTaxiways(["apron", "A6", "A10", "inner"]);
+
+        Assert.Equal("apron, Alfa six, Alfa one zero, inner", spoken);
+    }
+
+    [Fact]
     public void A_handoff_gives_the_controller_and_the_frequency()
     {
         string spoken = DeterministicPhraseology.Handoff(
@@ -195,6 +203,20 @@ public class PhoneticAlphabetTests
     public void ExtractLetters_ignores_words_that_are_not_letters()
     {
         Assert.Equal("AC", PhoneticAlphabet.ExtractLetters("taxi via alfa and charlie"));
+    }
+
+    [Theory]
+    [InlineData("apron, Alfa six", "apron,A6")]
+    [InlineData("Alfa six and Bravo two", "A6,B2")]
+    [InlineData("A6, Charlie", "A6,C")]
+    [InlineData("Alfa and Charlie", "A,C")]
+    public void Complete_taxiway_identifiers_are_extracted(
+        string text,
+        string expected)
+    {
+        Assert.Equal(
+            expected,
+            string.Join(",", PhoneticAlphabet.ExtractTaxiwayIdentifiers(text)));
     }
 }
 

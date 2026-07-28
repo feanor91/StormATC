@@ -109,10 +109,62 @@
                          TextWrapping="Wrap" />
             </Border>
 
-            <TextBlock Text="Tuning from here works only while the scripted mock aircraft is flying. With a real simulator connected, the radio is set in the aircraft — StormATC reads SimConnect and never writes to it."
+            <TextBlock Text="StormATC automatically tunes COM1 to the departure ATIS when a flight is loaded. After that, make each instructed frequency change in the aircraft. The Tune buttons above are available only for the scripted mock aircraft."
                        Style="{StaticResource SecondaryTextStyle}"
                        TextWrapping="Wrap"
                        Margin="0,10,0,0" />
+          </StackPanel>
+        </Border>
+
+        <Border Style="{StaticResource CardStyle}">
+          <StackPanel>
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+              </Grid.ColumnDefinitions>
+              <StackPanel Grid.Column="0">
+                <TextBlock Text="Departure ATIS" Style="{StaticResource SectionHeaderStyle}" />
+                <TextBlock Text="CURRENT EDITION" Style="{StaticResource LabelTextStyle}" />
+              </StackPanel>
+              <Border Grid.Column="1"
+                      Background="{StaticResource AccentSubtleBrush}"
+                      BorderBrush="{StaticResource AccentBrush}"
+                      BorderThickness="1"
+                      CornerRadius="12"
+                      Padding="12,5"
+                      VerticalAlignment="Top">
+                <TextBlock Text="{Binding AtisInformation}"
+                           Foreground="{StaticResource AccentBrush}"
+                           FontWeight="SemiBold" />
+              </Border>
+            </Grid>
+
+            <TextBlock Text="{Binding AtisText}"
+                       Style="{StaticResource BodyTextStyle}"
+                       TextWrapping="Wrap"
+                       Margin="0,10,0,0" />
+
+            <TextBlock Text="{Binding AtisWeatherSource}"
+                       Style="{StaticResource SecondaryTextStyle}"
+                       TextWrapping="Wrap"
+                       Margin="0,8,0,0"
+                       Visibility="{Binding AtisWeatherSource,
+                                            Converter={StaticResource StringToVisibility}}" />
+
+            <Border Background="{StaticResource SurfaceElevatedBrush}"
+                    CornerRadius="8"
+                    Padding="12,9"
+                    Margin="0,12,0,10">
+              <TextBlock Text="{Binding AtisStatus}"
+                         Style="{StaticResource SecondaryTextStyle}"
+                         TextWrapping="Wrap" />
+            </Border>
+
+            <Button Content="Replay ATIS"
+                    Style="{StaticResource BaseButtonStyle}"
+                    HorizontalAlignment="Left"
+                    Command="{Binding ReplayAtisCommand}" />
           </StackPanel>
         </Border>
       </StackPanel>

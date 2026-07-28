@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Options;
 using StormATC.Domain;
 
 namespace StormATC.Desktop.Services;
@@ -26,6 +27,8 @@ public sealed class ProviderStatusService
     private readonly ITextToSpeechService _textToSpeech;
     private readonly IFlightPlanProvider _flightPlanProvider;
     private readonly ISecretStore _secretStore;
+    private readonly Microsoft.Extensions.Options.IOptionsMonitor<LanguageModelOptions>
+        _languageModelOptions;
     private readonly bool _offlineMode;
 
     /// <summary>Shown on every cloud badge in offline mode, so the reason is never ambiguous.</summary>
@@ -46,6 +49,7 @@ public sealed class ProviderStatusService
         ITextToSpeechService textToSpeech,
         IFlightPlanProvider flightPlanProvider,
         ISecretStore secretStore,
+        Microsoft.Extensions.Options.IOptionsMonitor<LanguageModelOptions> languageModelOptions,
         Microsoft.Extensions.Options.IOptions<StormATC.Application.Options.ApplicationOptions> applicationOptions)
     {
         ArgumentNullException.ThrowIfNull(applicationOptions);
@@ -57,6 +61,8 @@ public sealed class ProviderStatusService
         _textToSpeech = textToSpeech ?? throw new ArgumentNullException(nameof(textToSpeech));
         _flightPlanProvider = flightPlanProvider ?? throw new ArgumentNullException(nameof(flightPlanProvider));
         _secretStore = secretStore ?? throw new ArgumentNullException(nameof(secretStore));
+        _languageModelOptions =
+            languageModelOptions ?? throw new ArgumentNullException(nameof(languageModelOptions));
 
         _simulator = new ProviderStatusItem("Simulator", _simulatorConnector.ConnectorName);
         _model = new ProviderStatusItem("Language model", _languageModel.ProviderName);
@@ -125,13 +131,16 @@ public sealed class ProviderStatusService
             return;
         }
 
-        bool hasOpenRouterKey;
+        bool hasLanguageModelKey;
         bool hasDeepgramKey;
 
         try
         {
-            hasOpenRouterKey = await _secretStore
-                .HasSecretAsync(SecretKeys.OpenRouterApiKey, cancellationToken).ConfigureAwait(false);
+            hasLanguageModelKey = await _secretStore
+                .HasSecretAsync(
+                    SecretKeyForProvider(_languageModelOptions.CurrentValue.Provider),
+                    cancellationToken)
+                .ConfigureAwait(false);
 
             hasDeepgramKey = await _secretStore
                 .HasSecretAsync(SecretKeys.DeepgramApiKey, cancellationToken).ConfigureAwait(false);
@@ -147,9 +156,19 @@ public sealed class ProviderStatusService
             return;
         }
 
-        UpdateModelBadge(_languageModel.IsConfigured, hasOpenRouterKey);
+        UpdateModelBadge(_languageModel.IsConfigured, hasLanguageModelKey);
         UpdateSpeechBadges(hasDeepgramKey);
     }
+
+    private static string SecretKeyForProvider(string? provider) =>
+        LanguageModelProviders.Normalize(provider) switch
+        {
+            LanguageModelProviders.OpenAI => SecretKeys.OpenAIApiKey,
+            LanguageModelProviders.Groq => SecretKeys.GroqApiKey,
+            LanguageModelProviders.DeepSeek => SecretKeys.DeepSeekApiKey,
+            LanguageModelProviders.Anthropic => SecretKeys.AnthropicApiKey,
+            _ => SecretKeys.OpenRouterApiKey,
+        };
 
     /// <summary>
     /// Writes the language-model badge.

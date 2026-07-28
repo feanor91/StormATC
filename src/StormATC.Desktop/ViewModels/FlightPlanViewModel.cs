@@ -9,7 +9,9 @@ using StormATC.Application.Sessions;
 using StormATC.Desktop.Services;
 using StormATC.Domain.FlightPlanning;
 using StormATC.Domain.Sessions;
+using StormATC.Domain.ValueObjects;
 using StormATC.Infrastructure.FlightPlanning;
+using StormATC.Infrastructure.Simulator;
 
 namespace StormATC.Desktop.ViewModels;
 
@@ -24,6 +26,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
 {
     private readonly AtcSessionContext _sessionContext;
     private readonly FlightPlanProviderRouter _flightPlanProvider;
+    private readonly SimulatorConnectorRouter _simulatorConnector;
     private readonly ProviderStatusService _providerStatus;
     private readonly UserSettingsService _userSettings;
     private readonly IClock _clock;
@@ -99,6 +102,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
     public FlightPlanViewModel(
         AtcSessionContext sessionContext,
         FlightPlanProviderRouter flightPlanProvider,
+        SimulatorConnectorRouter simulatorConnector,
         ProviderStatusService providerStatus,
         UserSettingsService userSettings,
         IClock clock,
@@ -107,6 +111,8 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
     {
         _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
         _flightPlanProvider = flightPlanProvider ?? throw new ArgumentNullException(nameof(flightPlanProvider));
+        _simulatorConnector =
+            simulatorConnector ?? throw new ArgumentNullException(nameof(simulatorConnector));
         _providerStatus = providerStatus ?? throw new ArgumentNullException(nameof(providerStatus));
         _userSettings = userSettings ?? throw new ArgumentNullException(nameof(userSettings));
         _clock = clock ?? throw new ArgumentNullException(nameof(clock));
@@ -216,13 +222,24 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
             // than testing the provider type means a SimBrief import correctly clears it.
             _sessionContext.PreassignedSquawk = _flightPlanProvider.PreassignedSquawk;
 
-            await _sessionContext.LoadFlightPlanAsync(plan, CancellationToken.None).ConfigureAwait(true);
+            AtcSession session = await _sessionContext
+                .LoadFlightPlanAsync(plan, CancellationToken.None)
+                .ConfigureAwait(true);
+
+            bool tuned = session.CurrentFrequency is not Frequency initialFrequency
+                || await _simulatorConnector
+                    .TuneCom1Async(initialFrequency, CancellationToken.None)
+                    .ConfigureAwait(true);
 
             _providerStatus.SetFlightPlanStatus(
                 true,
                 $"{plan.ToSummary()} · {_flightPlanProvider.LastProviderUsed}");
 
-            StatusMessage = $"Imported {plan.ToSummary()} from {_flightPlanProvider.LastProviderUsed}.";
+            StatusMessage = tuned
+                ? $"Imported {plan.ToSummary()} from {_flightPlanProvider.LastProviderUsed}. "
+                    + $"COM1 is tuned to {session.CurrentFrequency?.ToDisplay()}."
+                : $"Imported {plan.ToSummary()} from {_flightPlanProvider.LastProviderUsed}. "
+                    + $"Tune COM1 to {session.CurrentFrequency?.ToDisplay()} before transmitting.";
         }
         catch (Exception ex)
         {

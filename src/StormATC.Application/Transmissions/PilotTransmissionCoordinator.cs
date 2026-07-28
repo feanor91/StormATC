@@ -9,6 +9,7 @@ using StormATC.Domain.Atc;
 using StormATC.Domain.Intents;
 using StormATC.Domain.Readback;
 using StormATC.Domain.Sessions;
+using StormATC.Domain.ValueObjects;
 
 namespace StormATC.Application.Transmissions;
 
@@ -141,9 +142,48 @@ public sealed class PilotTransmissionCoordinator(
         AtcSession session = _sessionContext.CurrentSession;
         DateTimeOffset now = _clock.UtcNow;
 
+        // A transmission is heard only on the frequency selected for transmission in the
+        // aircraft. ATIS is receive-only; every other staffed position requires the active
+        // transmit channel to match the frequency assigned by the session. This gate runs
+        // before transcript recording, parsing, language-model calls, or persistence.
+        if (session.CurrentController == ControllerPosition.Atis)
+        {
+            totalStopwatch.Stop();
+            LogRadioGatedTransmission(
+                _logger,
+                transmission.CorrelationId,
+                session.AircraftState.Radio.ActiveTransmitFrequency.ToDisplay(),
+                session.CurrentFrequency?.ToDisplay() ?? "ATIS",
+                "ATIS is receive-only",
+                null);
+            return TransmissionProcessingResult.IgnoredByRadio(
+                transmission.CorrelationId,
+                session,
+                onAtis: true);
+        }
+
+        if (session.CurrentFrequency is Frequency expected
+            && !session.AircraftState.Radio.ActiveTransmitFrequency.IsSameChannel(expected))
+        {
+            totalStopwatch.Stop();
+            LogRadioGatedTransmission(
+                _logger,
+                transmission.CorrelationId,
+                session.AircraftState.Radio.ActiveTransmitFrequency.ToDisplay(),
+                expected.ToDisplay(),
+                "off frequency",
+                null);
+            return TransmissionProcessingResult.IgnoredByRadio(
+                transmission.CorrelationId,
+                session,
+                onAtis: false);
+        }
+
         // --- 2. Record the original transmission. --------------------------------------------
         var normalizationStopwatch = Stopwatch.StartNew();
-        string normalized = TranscriptNormalizer.Normalize(transmission.RawTranscript);
+        string displayTranscript =
+            TranscriptNormalizer.FormatForDisplay(transmission.RawTranscript);
+        string normalized = TranscriptNormalizer.Normalize(displayTranscript);
         normalizationStopwatch.Stop();
 
         var pilotTurn = new ConversationTurn
@@ -152,8 +192,8 @@ public sealed class PilotTransmissionCoordinator(
             Timestamp = transmission.Timestamp,
             Speaker = ConversationSpeaker.Pilot,
             Controller = session.CurrentController,
-            Text = transmission.RawTranscript,
-            NormalizedText = TranscriptNormalizer.DiffersMeaningfully(transmission.RawTranscript, normalized)
+            Text = displayTranscript,
+            NormalizedText = TranscriptNormalizer.DiffersMeaningfully(displayTranscript, normalized)
                 ? normalized
                 : null,
             CorrelationId = transmission.CorrelationId,
@@ -561,6 +601,13 @@ public sealed class PilotTransmissionCoordinator(
             LogLevel.Information,
             new EventId(1004, nameof(LogReadbackAssessment)),
             "Readback {CorrelationId}: outcome={Outcome}, correct=[{Correct}], missing=[{Missing}], incorrect=[{Incorrect}].");
+
+    private static readonly Action<ILogger, string, string, string, string, Exception?>
+        LogRadioGatedTransmission = LoggerMessage.Define<string, string, string, string>(
+            LogLevel.Information,
+            new EventId(1005, nameof(LogRadioGatedTransmission)),
+            "Transmission {CorrelationId} was not received: tuned={TunedFrequency}, "
+                + "expected={ExpectedFrequency}, reason={Reason}.");
 
     /// <summary>Bounds the deduplication set so a long session does not leak memory.</summary>
     private void TrackProcessedId(Guid id)

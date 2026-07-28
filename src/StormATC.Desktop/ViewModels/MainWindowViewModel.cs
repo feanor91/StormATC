@@ -105,7 +105,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
 
     /// <summary>The application version shown in the shell footer.</summary>
     public static string VersionText =>
-        $"v{typeof(MainWindowViewModel).Assembly.GetName().Version?.ToString(3) ?? "0.1.0"}";
+        $"v{typeof(MainWindowViewModel).Assembly.GetName().Version?.ToString(3) ?? "0.1.2"}";
 
     /// <summary>
     /// The simulation-only disclaimer, shown persistently in the shell.

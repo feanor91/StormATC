@@ -234,6 +234,7 @@ public sealed record AirportFrequencies
     /// </remarks>
     public Frequency? For(ControllerPosition position) => position switch
     {
+        ControllerPosition.Atis => Atis,
         ControllerPosition.ClearanceDelivery => ClearanceDelivery,
         ControllerPosition.Ground => Ground,
         ControllerPosition.Tower => Tower,
@@ -250,6 +251,7 @@ public sealed record AirportFrequencies
     /// </summary>
     public Frequency? ResolveWithFallback(ControllerPosition position) => position switch
     {
+        ControllerPosition.Atis => Atis,
         ControllerPosition.ClearanceDelivery => ClearanceDelivery ?? Ground ?? Tower,
         ControllerPosition.Ground => Ground ?? Tower,
         ControllerPosition.Tower => Tower,

@@ -5,6 +5,7 @@ using StormATC.Application.Sessions;
 using StormATC.Application.Transmissions;
 using StormATC.Domain;
 using StormATC.Domain.Aircraft;
+using StormATC.Domain.Airports;
 using StormATC.Domain.Atc;
 using StormATC.Domain.FlightPlanning;
 using StormATC.Domain.Intents;
@@ -101,6 +102,114 @@ public class PilotTransmissionCoordinatorTests : IAsyncLifetime
             CancellationToken.None);
 
     // =====================================================================================
+
+    [Fact]
+    public async Task A_loaded_flight_starts_on_receive_only_atis_then_delivery_tuning_opens_the_radio()
+    {
+        AtcSession fresh = _context.StartNewSession(
+            SessionMode.Mock,
+            TestAerodromes.AtStand(_clock.UtcNow));
+        FlightPlan plan = StartingSession().FlightPlan!;
+
+        await _context.LoadFlightPlanAsync(plan, CancellationToken.None);
+
+        Assert.Equal(ControllerPosition.Atis, _context.CurrentSession.CurrentController);
+        Assert.Equal(
+            Frequency.FromMegahertz(132.150m),
+            _context.CurrentSession.CurrentFrequency);
+
+        TransmissionProcessingResult onAtis = await SendAsync(
+            "storm one two three request IFR clearance");
+
+        Assert.False(onAtis.Processed);
+        Assert.True(onAtis.WasIgnoredOnAtis);
+        Assert.Null(onAtis.Intent);
+        Assert.Null(onAtis.Decision);
+        Assert.Empty(_context.CurrentSession.Conversation);
+
+        AircraftState monitoringAtis = fresh.AircraftState with
+        {
+            Radio = fresh.AircraftState.Radio with
+            {
+                Com1Active = Frequency.FromMegahertz(132.150m),
+                TransmitOnCom1 = true,
+            },
+        };
+        _context.UpdateAircraftState(monitoringAtis);
+
+        AircraftState onDelivery = monitoringAtis with
+        {
+            Radio = monitoringAtis.Radio with
+            {
+                Com1Active = Frequency.FromMegahertz(121.800m),
+                TransmitOnCom1 = true,
+            },
+        };
+        _context.UpdateAircraftState(onDelivery);
+
+        Assert.Equal(ControllerPosition.ClearanceDelivery, _context.CurrentSession.CurrentController);
+        Assert.Equal(
+            Frequency.FromMegahertz(121.800m),
+            _context.CurrentSession.CurrentFrequency);
+
+        TransmissionProcessingResult heard = await SendAsync(
+            "storm one two three request IFR clearance");
+
+        Assert.True(heard.Processed);
+        Assert.NotNull(heard.Decision?.IssuedClearance);
+    }
+
+    [Fact]
+    public async Task An_off_frequency_transmission_is_discarded_before_parsing_or_transcript_storage()
+    {
+        AtcSession session = _context.CurrentSession;
+        _context.UpdateAircraftState(session.AircraftState with
+        {
+            Radio = session.AircraftState.Radio with
+            {
+                Com1Active = Frequency.FromMegahertz(121.700m),
+                TransmitOnCom1 = true,
+            },
+        });
+
+        int conversationCount = _context.CurrentSession.Conversation.Count;
+        TransmissionProcessingResult result = await SendAsync(
+            "storm one two three request IFR clearance");
+
+        Assert.False(result.Processed);
+        Assert.True(result.WasIgnoredOffFrequency);
+        Assert.Equal(Frequency.FromMegahertz(121.800m), result.ExpectedFrequency);
+        Assert.Equal(Frequency.FromMegahertz(121.700m), result.TunedFrequency);
+        Assert.Null(result.Intent);
+        Assert.Null(result.Decision);
+        Assert.Null(result.ControllerSpokenText);
+        Assert.Equal(conversationCount, _context.CurrentSession.Conversation.Count);
+        Assert.Empty(_repository.SavedTurns);
+        Assert.Empty(_repository.SavedDecisions);
+    }
+
+    [Fact]
+    public async Task An_airport_without_atis_starts_directly_on_its_delivery_or_combined_frequency()
+    {
+        AirportData withoutAtis = TestAerodromes.Departure with
+        {
+            Frequencies = TestAerodromes.Departure.Frequencies with { Atis = null },
+        };
+        var context = new AtcSessionContext(
+            new StubAirportDataProvider(departureOverride: withoutAtis),
+            _traffic,
+            _weather,
+            _clock,
+            NullLogger<AtcSessionContext>.Instance);
+
+        context.StartNewSession(SessionMode.Mock, TestAerodromes.AtStand(_clock.UtcNow));
+        AtcSession session = await context.LoadFlightPlanAsync(
+            StartingSession().FlightPlan!,
+            CancellationToken.None);
+
+        Assert.Equal(ControllerPosition.ClearanceDelivery, session.CurrentController);
+        Assert.Equal(Frequency.FromMegahertz(121.800m), session.CurrentFrequency);
+    }
 
     [Fact]
     public async Task A_clearance_request_produces_a_clearance_and_a_spoken_response()
@@ -245,6 +354,147 @@ public class PilotTransmissionCoordinatorTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Joined_clearance_fields_are_spaced_and_a_partial_correction_keeps_confirmed_items()
+    {
+        _context.PreassignedSquawk = SquawkCode.Create("2555");
+        AtcSession original = _context.CurrentSession;
+        _context.UpdateSession(original with
+        {
+            FlightPlan = original.FlightPlan! with
+            {
+                Callsign = Callsign.Create("A21"),
+                DestinationIcao = "LOWS",
+                DepartureRunway = RunwayIdentifier.Create("10"),
+                StandardInstrumentDeparture = "MITO3A",
+                Route = "MITO3A flight planned route",
+            },
+            AssignedDepartureRunway = RunwayIdentifier.Create("10"),
+        });
+
+        await SendAsync("Alfa two one request IFR clearance.");
+
+        TransmissionProcessingResult firstReadback = await SendAsync(
+            "Runway20Climb7000Squawk2555 Departure frequency one one eight decimal eight alpha two one.");
+
+        Assert.Equal(ReadbackOutcome.Incorrect, firstReadback.ReadbackAssessment?.Outcome);
+        Assert.Contains(
+            firstReadback.ReadbackAssessment!.IncorrectItems,
+            item => item.Type == ReadbackItemType.Runway && item.ActualValue == "20");
+        Assert.Contains(ReadbackItemType.InitialAltitude, firstReadback.ReadbackAssessment.CorrectItems);
+        Assert.Contains(ReadbackItemType.Squawk, firstReadback.ReadbackAssessment.CorrectItems);
+        Assert.DoesNotContain(
+            "climb initially",
+            firstReadback.ControllerSpokenText!,
+            StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain(
+            "squawk",
+            firstReadback.ControllerSpokenText!,
+            StringComparison.OrdinalIgnoreCase);
+
+        PendingReadback pending = Assert.IsType<PendingReadback>(
+            _context.CurrentSession.PendingReadback);
+        Assert.Contains(ReadbackItemType.InitialAltitude, pending.SatisfiedItems);
+        Assert.Contains(ReadbackItemType.Squawk, pending.SatisfiedItems);
+
+        ConversationTurn displayedPilotTurn = _context.CurrentSession.Conversation
+            .Last(turn => turn.Speaker == ConversationSpeaker.Pilot);
+        Assert.StartsWith(
+            "Runway 20 Climb 7000 Squawk 2555",
+            displayedPilotTurn.Text,
+            StringComparison.Ordinal);
+
+        TransmissionProcessingResult correctedReadback = await SendAsync(
+            "Runway 10 climb initial at 7000 Alpha 21.");
+
+        Assert.Equal(ReadbackOutcome.Correct, correctedReadback.ReadbackAssessment?.Outcome);
+        Assert.Null(_context.CurrentSession.PendingReadback);
+        Assert.True(_context.CurrentSession.IfrClearance?.IsAcknowledged);
+    }
+
+    [Theory]
+    [InlineData("Via apron, Alfa six, hold short Runway 10 Alpha 21.")]
+    [InlineData("Holding short Runway 10 via apron, Alfa six hold short Runway 10 Alpha 21.")]
+    public async Task Apron_and_alphanumeric_taxiway_readback_is_accepted_on_the_first_attempt(
+        string transmission)
+    {
+        Guid clearanceId = Guid.CreateVersion7();
+        RunwayIdentifier runway = RunwayIdentifier.Create("10");
+        var taxiClearance = new Clearance
+        {
+            ClearanceId = clearanceId,
+            Type = ClearanceType.Taxi,
+            IssuedBy = ControllerPosition.Ground,
+            IssuedAt = _clock.UtcNow,
+            Runway = runway,
+            TaxiRoute = ["apron", "A6"],
+            TaxiDestination = "holding point 10",
+            HoldShortOfRunway = runway,
+            RequiredReadbackItems =
+            [
+                ReadbackItemType.TaxiRoute,
+                ReadbackItemType.HoldShortRunway,
+            ],
+        };
+        var pending = new PendingReadback
+        {
+            ClearanceId = clearanceId,
+            ClearanceType = ClearanceType.Taxi,
+            IssuedAt = _clock.UtcNow,
+            ExpectedItems =
+            [
+                new ExpectedReadbackItem
+                {
+                    Type = ReadbackItemType.TaxiRoute,
+                    ExpectedValue = "apron,A6",
+                    SpokenValue = "via apron, Alfa six",
+                    IsCritical = true,
+                },
+                new ExpectedReadbackItem
+                {
+                    Type = ReadbackItemType.HoldShortRunway,
+                    ExpectedValue = runway.ToComparisonValue(),
+                    SpokenValue = "hold short runway one zero",
+                    IsCritical = true,
+                },
+            ],
+        };
+
+        AtcSession original = _context.CurrentSession;
+        AtcSession awaitingTaxiReadback = original with
+        {
+            FlightPlan = original.FlightPlan! with
+            {
+                Callsign = Callsign.Create("A21"),
+                DepartureRunway = runway,
+            },
+            AssignedDepartureRunway = runway,
+            CurrentController = ControllerPosition.Ground,
+            CurrentFrequency = Frequency.FromMegahertz(130.655m),
+            Phase = FlightPhase.TaxiOut,
+            AircraftState = original.AircraftState with
+            {
+                Radio = original.AircraftState.Radio with
+                {
+                    Com1Active = Frequency.FromMegahertz(130.655m),
+                    TransmitOnCom1 = true,
+                },
+            },
+        };
+        awaitingTaxiReadback = awaitingTaxiReadback
+            .WithClearance(taxiClearance)
+            .WithPendingReadback(pending);
+        _context.UpdateSession(awaitingTaxiReadback);
+
+        TransmissionProcessingResult result = await SendAsync(transmission);
+
+        Assert.True(
+            result.ReadbackAssessment?.Outcome == ReadbackOutcome.Correct,
+            DescribeReadback(result.ReadbackAssessment));
+        Assert.Null(_context.CurrentSession.PendingReadback);
+        Assert.True(_context.CurrentSession.TaxiClearance?.IsAcknowledged);
+    }
+
+    [Fact]
     public async Task The_exact_full_ST123_readback_is_accepted_on_the_first_attempt()
     {
         _context.PreassignedSquawk = SquawkCode.Create("5217");
@@ -269,7 +519,9 @@ public class PilotTransmissionCoordinatorTests : IAsyncLifetime
             "Clear to Echo November Victor Alfa. FRAN1M departure, Runway 26 left, "
             + "climb 7,000, squawk five two one seven, Sierra Tango one two three.");
 
-        Assert.Equal(ReadbackOutcome.Correct, readback.ReadbackAssessment?.Outcome);
+        Assert.True(
+            readback.ReadbackAssessment?.Outcome == ReadbackOutcome.Correct,
+            DescribeReadback(readback.ReadbackAssessment));
         Assert.Null(_context.CurrentSession.PendingReadback);
         Assert.True(_context.CurrentSession.IfrClearance?.IsAcknowledged);
     }
@@ -317,7 +569,9 @@ public class PilotTransmissionCoordinatorTests : IAsyncLifetime
             + "Runway 26 left, climb 7,000, squawk five two point seven, "
             + "departure frequency one two one decimal seven.");
 
-        Assert.Equal(ReadbackOutcome.Correct, readback.ReadbackAssessment?.Outcome);
+        Assert.True(
+            readback.ReadbackAssessment?.Outcome == ReadbackOutcome.Correct,
+            DescribeReadback(readback.ReadbackAssessment));
         Assert.Empty(readback.ReadbackAssessment!.IncorrectItems);
         Assert.DoesNotContain(
             ReadbackItemType.InitialAltitude,
@@ -360,7 +614,9 @@ public class PilotTransmissionCoordinatorTests : IAsyncLifetime
         TransmissionProcessingResult readback = await SendAsync(
             "SierraTango123 clear to Echo November Victor from 1 M Departure "
             + "Runway 26 left climb initially 7,000, squawk five two one seven.");
-        Assert.Equal(ReadbackOutcome.Correct, readback.ReadbackAssessment?.Outcome);
+        Assert.True(
+            readback.ReadbackAssessment?.Outcome == ReadbackOutcome.Correct,
+            DescribeReadback(readback.ReadbackAssessment));
         Assert.Equal(
             ControllerPosition.ClearanceDelivery,
             _context.CurrentSession.CurrentController);
@@ -611,4 +867,13 @@ public class PilotTransmissionCoordinatorTests : IAsyncLifetime
         Assert.NotNull(captured);
         Assert.True(captured.Result.Processed);
     }
+
+    private static string DescribeReadback(ReadbackAssessment? assessment) =>
+        assessment is null
+            ? "No readback assessment was produced."
+            : $"Outcome={assessment.Outcome}; "
+                + $"correct=[{string.Join(',', assessment.CorrectItems)}]; "
+                + $"missing=[{string.Join(',', assessment.MissingItems)}]; "
+                + $"incorrect=[{string.Join(',', assessment.IncorrectItems.Select(item =>
+                    $"{item.Type}:{item.ActualValue}->{item.ExpectedValue}"))}]";
 }

@@ -123,8 +123,9 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 or PilotIntentType.HeadingReadback
                 or PilotIntentType.FrequencyReadback
                 or PilotIntentType.Correction => HandleReadback(context, intent),
-            PilotIntentType.RequestPushback => HandlePushbackRequest(context),
+            PilotIntentType.RequestPushback => HandlePushbackRequest(context, intent),
             PilotIntentType.RequestTaxi => HandleTaxiRequest(context),
+            PilotIntentType.RequestProgressiveTaxi => HandleProgressiveTaxiRequest(context),
             PilotIntentType.ReportHoldingShort => HandleHoldingShortReport(context, intent),
             PilotIntentType.ReadyForDeparture => HandleReadyForDeparture(context),
             PilotIntentType.ReportAirborne => HandleAirborneReport(context),
@@ -572,7 +573,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         }
 
         ReadbackAssessment assessment = _readbackEvaluator.Evaluate(
-            pending, intent, context.Transcript, session);
+            pending, intent, context.Transcript, session, context.Realism);
 
         if (!assessment.IsAccepted)
         {
@@ -683,7 +684,9 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             _ => null,
         };
 
-    private static AtcDecision HandlePushbackRequest(AtcEvaluationContext context)
+    private static AtcDecision HandlePushbackRequest(
+        AtcEvaluationContext context,
+        PilotIntent intent)
     {
         AtcSession session = context.Session;
 
@@ -732,18 +735,28 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             IssuedAt = context.CurrentTime,
         };
 
+        // A pilot-requested direction wins. The configured relative default is used otherwise
+        // because aircraft heading alone cannot reveal which apron lead-out is appropriate.
+        string pushbackDirection =
+            PushbackDirections.Normalize(intent.Entities.PushbackDirection)
+            ?? PushbackDirections.Normalize(context.DefaultPushbackDirection)
+            ?? PushbackDirections.TailLeft;
+        var approvedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["approval"] = "pushback approved",
+            ["pushbackDirection"] = pushbackDirection,
+        };
+
         return new AtcDecision
         {
             Accepted = true,
             ResponseType = AtcResponseType.PushbackApproval,
             NewPhase = FlightPhase.Pushback,
             IssuedClearance = clearance,
-            ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
-            {
-                ["approval"] = "pushback approved",
-            },
+            ApprovedFacts = approvedFacts,
             ProhibitedFacts = ["taxi clearance", "takeoff clearance", "runway assignment"],
-            FallbackPhraseology = DeterministicPhraseology.PushbackApproval(callsign),
+            FallbackPhraseology =
+                DeterministicPhraseology.PushbackApproval(callsign, pushbackDirection),
         };
     }
 
@@ -793,18 +806,27 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             return BuildUnroutedTaxiClearance(context, callsign, departureRunway);
         }
 
-        string standName = session.AssignedStand
-            ?? (airport.Stands.Count > 0 ? airport.Stands[0].Name : null)
-            ?? string.Empty;
-
-        // A detailed route is computed from the aerodrome graph or omitted. There is no path
-        // here that invents a taxiway name.
-        if (!airport.SupportsTaxiRouting || standName.Length == 0)
+        // A detailed route is computed from the aircraft's current simulator position. The
+        // assigned stand is only a fallback for sessions created before a live position was
+        // available. There is no path here that invents a taxiway name.
+        if (!airport.SupportsTaxiRouting)
         {
             return BuildUnroutedTaxiClearance(context, callsign, departureRunway);
         }
 
-        TaxiRoute route = TaxiPathfinder.FindRouteToHoldingPoint(airport, standName, departureRunway);
+        TaxiRoute route = TaxiPathfinder.FindRouteFromPositionToHoldingPoint(
+            airport,
+            context.AircraftState.Position,
+            departureRunway);
+
+        if (!route.Found
+            && ExistingStand(airport, session.AssignedStand) is string assignedStand)
+        {
+            route = TaxiPathfinder.FindRouteToHoldingPoint(
+                airport,
+                assignedStand,
+                departureRunway);
+        }
 
         if (!route.Found)
         {
@@ -819,6 +841,9 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             IssuedAt = context.CurrentTime,
             Runway = departureRunway,
             TaxiRoute = route.TaxiwayNames,
+            TaxiPathNodes = route.Nodes,
+            TaxiPathTaxiways = route.Edges.Select(edge => edge.TaxiwayName).ToArray(),
+            TaxiRouteLengthMeters = route.TotalLengthMeters,
             TaxiDestination = $"holding point {departureRunway.ToDisplay()}",
             HoldShortOfRunway = departureRunway,
             RequiredReadbackItems = [ReadbackItemType.TaxiRoute, ReadbackItemType.HoldShortRunway],
@@ -879,6 +904,102 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         AllowLanguageModelPhraseology = false,
         ProhibitedFacts = ["any clearance"],
     };
+
+    private static AtcDecision HandleProgressiveTaxiRequest(AtcEvaluationContext context)
+    {
+        AtcSession session = context.Session;
+        if (session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        if (!context.AircraftState.IsOnGround)
+        {
+            return AtcDecision.Reject(
+                "Progressive taxi is only available on the ground.",
+                DeterministicPhraseology.Unable(callsign, "progressive taxi is only available on the ground"));
+        }
+
+        if (session.TaxiClearance is not Clearance clearance
+            || context.RelevantAirport?.TaxiGraph is not TaxiGraph graph
+            || clearance.TaxiPathNodes.Count == 0)
+        {
+            return AtcDecision.Reject(
+                "There is no active taxi path to guide.",
+                DeterministicPhraseology.Unable(callsign, "no active taxi route is available"));
+        }
+
+        TaxiRoute route = TaxiPathfinder.FromNodeSequence(
+            graph,
+            clearance.TaxiPathNodes,
+            clearance.TaxiPathTaxiways);
+        TaxiRouteProgress progress = TaxiSurfaceAdvisor.Analyze(
+            graph,
+            route,
+            context.AircraftState.Position);
+
+        if (!progress.Found || !progress.IsOnRoute)
+        {
+            return new AtcDecision
+            {
+                Accepted = true,
+                ResponseType = AtcResponseType.HoldShortInstruction,
+                ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+                {
+                    ["instruction"] = "hold position",
+                },
+                ProhibitedFacts = ["taxi route guess", "runway crossing"],
+                AllowLanguageModelPhraseology = false,
+                FallbackPhraseology =
+                    $"{callsign.ToSpoken()}, hold position, confirm your position.",
+            };
+        }
+
+        string currentTaxiway = progress.CurrentTaxiway is { Length: > 0 } current
+            ? DeterministicPhraseology.SpellTaxiways([current])
+            : "the cleared route";
+        string instruction;
+
+        if (progress.IsAtDestination || progress.IsApproachingHoldShort)
+        {
+            instruction = clearance.Runway is RunwayIdentifier runway
+                ? $"continue on {currentTaxiway} to holding point {runway.ToSpoken()}, "
+                    + $"hold short {runway.ToSpoken()}"
+                : $"continue on {currentTaxiway} to {clearance.TaxiDestination ?? "the clearance limit"}";
+        }
+        else if (progress.NextTaxiway is { Length: > 0 } next
+            && progress.NextTurn is TaxiTurnDirection turn)
+        {
+            string nextSpoken = DeterministicPhraseology.SpellTaxiways([next]);
+            instruction = turn switch
+            {
+                TaxiTurnDirection.Left =>
+                    $"continue on {currentTaxiway}, at the next junction turn left onto {nextSpoken}",
+                TaxiTurnDirection.Right =>
+                    $"continue on {currentTaxiway}, at the next junction turn right onto {nextSpoken}",
+                _ =>
+                    $"continue on {currentTaxiway}, then continue straight onto {nextSpoken}",
+            };
+        }
+        else
+        {
+            instruction =
+                $"continue on {currentTaxiway} to {clearance.TaxiDestination ?? "the clearance limit"}";
+        }
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.Acknowledgement,
+            ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["progressiveTaxi"] = instruction,
+            },
+            ProhibitedFacts = ["new taxiway", "runway crossing", "takeoff clearance"],
+            AllowLanguageModelPhraseology = false,
+            FallbackPhraseology = $"{callsign.ToSpoken()}, {instruction}.",
+        };
+    }
 
     private static AtcDecision HandleFrequencyRequest(AtcEvaluationContext context)
     {
@@ -1856,7 +1977,15 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 $"{callsign.ToSpoken()}, taxi to stand {PhoneticAlphabet.SpellOut(standName)}, no published route available.");
         }
 
-        TaxiRoute route = TaxiPathfinder.FindRouteFromRunwayToStand(airport, runway, standName);
+        TaxiRoute route = TaxiPathfinder.FindRouteFromPositionToStand(
+            airport,
+            context.AircraftState.Position,
+            standName);
+
+        if (!route.Found)
+        {
+            route = TaxiPathfinder.FindRouteFromRunwayToStand(airport, runway, standName);
+        }
 
         if (!route.Found)
         {
@@ -1872,6 +2001,9 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             IssuedBy = ControllerPosition.Ground,
             IssuedAt = context.CurrentTime,
             TaxiRoute = route.TaxiwayNames,
+            TaxiPathNodes = route.Nodes,
+            TaxiPathTaxiways = route.Edges.Select(edge => edge.TaxiwayName).ToArray(),
+            TaxiRouteLengthMeters = route.TotalLengthMeters,
             TaxiDestination = standName,
             HoldShortOfRunway = route.RequiresRunwayCrossing ? route.CrossedRunways[0] : null,
             RequiredReadbackItems = [ReadbackItemType.TaxiRoute],
@@ -1948,6 +2080,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
     {
         PilotIntentType.RequestIFRClearance => ControllerPosition.ClearanceDelivery,
         PilotIntentType.RequestPushback or PilotIntentType.RequestTaxi
+            or PilotIntentType.RequestProgressiveTaxi
             or PilotIntentType.RequestTaxiToStand => ControllerPosition.Ground,
         PilotIntentType.ReadyForDeparture => ControllerPosition.Tower,
         _ => null,

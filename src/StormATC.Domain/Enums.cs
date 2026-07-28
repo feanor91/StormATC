@@ -47,6 +47,7 @@ public enum ControllerPosition
     Departure,
     Center,
     Approach,
+    Atis,
 }
 
 /// <summary>
@@ -62,6 +63,7 @@ public enum PilotIntentType
     ClearanceReadback,
     RequestPushback,
     RequestTaxi,
+    RequestProgressiveTaxi,
     TaxiReadback,
     ReportHoldingShort,
     ReadyForDeparture,

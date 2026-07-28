@@ -17,15 +17,23 @@
 | --- | --- |
 | Nothing configured | **Nothing.** Deterministic phraseology, typed transmissions, entirely offline. |
 | Deepgram enabled | Audio captured while push-to-talk is held goes to Deepgram to be transcribed. Controller text goes to Deepgram to be spoken. |
-| OpenRouter enabled | The transcript and the facts a controller has approved go to the model you chose. |
+| A language-model provider enabled | The transcript and approved controller facts go only to the selected OpenRouter, OpenAI, Groq, DeepSeek, or Anthropic API. |
+| AI traffic wording explicitly enabled | A nearby traffic callsign and coarse observed situation go to the selected language-model API, at most once per generated exchange. |
+| Spoken traffic explicitly enabled | The generated controller and pilot lines go to the configured text-to-speech service, as two short requests per exchange. |
 | SimBrief configured | Your SimBrief user ID, to fetch your own plan. |
-| MSFS connected | Nothing. SimConnect is local, and StormATC only reads. |
+| MSFS connected | Nothing goes to the internet. SimConnect stays local; StormATC reads flight/facility data and sends one local COM1 tuning event when a flight is loaded. |
 
-That table is the whole of it. There is no sixth row.
+That table is the whole of it.
 
-Each row is independent. Entering a SimBrief user ID enables the fourth row and nothing else;
-connecting a simulator enables no row at all. There is no setting that turns several of them on
-together.
+Each networked row is independently controlled. Entering a key stores it but does not enable
+background traffic requests. Live traffic reading, generated exchanges, AI wording, and spoken
+traffic are separate switches under **Settings > Live integrations**; all four start off.
+Connecting a simulator sends nothing to the internet.
+
+Generated traffic has a hard hourly exchange ceiling (six by default), waits at least two minutes
+between exchanges, yields to user push-to-talk, and pauses by default while a common online ATC
+client is running. Local deterministic traffic wording uses no model credits. Spoken exchanges can
+make two text-to-speech requests each, so they require a separate opt-in.
 
 ### Offline mode
 
@@ -88,15 +96,15 @@ StormATC:
 | never includes a key in a diagnostics export | the export records presence, never value |
 | never displays a stored key | the Settings page shows "A key is stored (hidden)" |
 | stores a key only on an explicit action | saving requires a button click |
-| requires consent before using a cloud key | OpenRouter and Deepgram refuse requests until consent is enabled |
+| requires consent before using a cloud key | every language-model provider and Deepgram refuses requests until consent is enabled |
 | cannot redirect a key to another host | official provider hosts are pinned and HTTP redirects are disabled |
 
 The rolling file logger and diagnostics exporter also apply credential-pattern redaction as a
 last line of defence. This supplements the stronger rule that call sites never log a secret in
 the first place.
 
-`OpenRouterOptions` has **no `ApiKey` property at all**. There is no field for a key to be bound
-into, serialised from, or logged out of.
+No provider options class has an `ApiKey` property. There is no field for a key to be bound into,
+serialised from, or logged out of.
 
 ### The password box
 
@@ -108,8 +116,8 @@ screenshot of the element, or a serialised binding.
 ### Removing a key
 
 Settings → **Remove key**. It is deleted from the store immediately. The relevant feature reverts
-to its degraded mode: deterministic phraseology without OpenRouter, typed transmissions and text
-responses without Deepgram.
+to its degraded mode: deterministic phraseology without a model provider, typed transmissions and
+text responses without Deepgram.
 
 ## The diagnostics export
 
@@ -126,7 +134,8 @@ Credentials appear as `Stored` or `Not stored` — presence only.
 
 ## Third-party services
 
-OpenRouter and Deepgram are independent companies. When you enable them:
+OpenRouter, OpenAI, Groq, DeepSeek, Anthropic, and Deepgram are independent companies. When you
+enable one:
 
 - You are their customer under their terms, not StormATC's.
 - **They bill you according to their own pricing**, which is theirs to set and change. StormATC

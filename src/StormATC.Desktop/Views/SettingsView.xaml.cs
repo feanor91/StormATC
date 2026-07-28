@@ -38,6 +38,54 @@ public partial class SettingsView : UserControl
         await viewModel.SaveOpenRouterKeyAsync(key).ConfigureAwait(true);
     }
 
+    private async void OnSaveOpenAIKey(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel is not SettingsViewModel viewModel)
+        {
+            return;
+        }
+
+        string key = OpenAIKeyBox.Password;
+        OpenAIKeyBox.Clear();
+        await viewModel.SaveOpenAIKeyAsync(key).ConfigureAwait(true);
+    }
+
+    private async void OnSaveGroqKey(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel is not SettingsViewModel viewModel)
+        {
+            return;
+        }
+
+        string key = GroqKeyBox.Password;
+        GroqKeyBox.Clear();
+        await viewModel.SaveGroqKeyAsync(key).ConfigureAwait(true);
+    }
+
+    private async void OnSaveDeepSeekKey(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel is not SettingsViewModel viewModel)
+        {
+            return;
+        }
+
+        string key = DeepSeekKeyBox.Password;
+        DeepSeekKeyBox.Clear();
+        await viewModel.SaveDeepSeekKeyAsync(key).ConfigureAwait(true);
+    }
+
+    private async void OnSaveAnthropicKey(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel is not SettingsViewModel viewModel)
+        {
+            return;
+        }
+
+        string key = AnthropicKeyBox.Password;
+        AnthropicKeyBox.Clear();
+        await viewModel.SaveAnthropicKeyAsync(key).ConfigureAwait(true);
+    }
+
     private async void OnSaveDeepgramKey(object sender, RoutedEventArgs e)
     {
         if (ViewModel is not SettingsViewModel viewModel)

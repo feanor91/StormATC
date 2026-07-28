@@ -10,6 +10,9 @@ using StormATC.Application.Sessions;
 using StormATC.Application.Transmissions;
 using StormATC.Desktop.Services;
 using StormATC.Domain;
+using StormATC.Domain.Airports;
+using StormATC.Domain.Atc;
+using StormATC.Domain.Phraseology;
 using StormATC.Domain.Sessions;
 using StormATC.Domain.ValueObjects;
 using StormATC.Infrastructure.Mocks;
@@ -35,9 +38,12 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
 {
     private readonly AtcSessionContext _sessionContext;
     private readonly PilotTransmissionCoordinator _coordinator;
+    private readonly RadioActivityState _radioActivity;
     private readonly ISpeechRecognitionService _speechRecognition;
     private readonly ITextToSpeechService _textToSpeech;
     private readonly SimulatorConnectorRouter _simulatorRouter;
+    private readonly MsfsSimConnectConnector _msfsConnector;
+    private readonly TrafficRadioService _trafficRadio;
     private readonly MockSimulatorConnector _mockSimulator;
     private readonly MockTrafficProvider _mockTraffic;
     private readonly ProviderStatusService _providerStatus;
@@ -45,7 +51,9 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
     private readonly ILogger<DashboardViewModel> _logger;
     private readonly IOptionsMonitor<ApplicationOptions> _applicationOptions;
     private readonly IOptionsMonitor<AudioOptions> _audioOptions;
+    private readonly IOptionsMonitor<TrafficOptions> _trafficOptions;
     private readonly IDisposable? _audioOptionsSubscription;
+    private readonly IDisposable? _trafficOptionsSubscription;
 
     private bool _disposed;
 
@@ -88,6 +96,21 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
     private string _groundSpeed = "—";
 
     [ObservableProperty]
+    private string _indicatedAirspeed = "—";
+
+    [ObservableProperty]
+    private string _verticalSpeed = "—";
+
+    [ObservableProperty]
+    private string _altitudeAboveGround = "—";
+
+    [ObservableProperty]
+    private string _aircraftIdentity = "Waiting for simulator data";
+
+    [ObservableProperty]
+    private string _aircraftConfiguration = "No live aircraft state";
+
+    [ObservableProperty]
     private string _activeRunway = "—";
 
     [ObservableProperty]
@@ -125,6 +148,57 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
 
     [ObservableProperty]
     private bool _hasNextCallExample;
+
+    [ObservableProperty]
+    private string _simulatorStatus = "SIMULATOR OFFLINE";
+
+    [ObservableProperty]
+    private string _simulatorStatusDetail = "Waiting for Microsoft Flight Simulator";
+
+    [ObservableProperty]
+    private string _weatherSummary = "Weather unavailable";
+
+    [ObservableProperty]
+    private string _weatherDetail = "Connect MSFS to read ambient conditions";
+
+    [ObservableProperty]
+    private string _trafficSummary = "No traffic feed";
+
+    [ObservableProperty]
+    private string _trafficDetail = "Connect MSFS to scan nearby aircraft";
+
+    [ObservableProperty]
+    private string _latestTrafficRadio = string.Empty;
+
+    [ObservableProperty]
+    private bool _hasTrafficRadioExchange;
+
+    [ObservableProperty]
+    private string _airportDataSummary = "Airport data pending";
+
+    [ObservableProperty]
+    private string _airportDataDetail = "Load a flight plan to read live scenery";
+
+    [ObservableProperty]
+    private bool _hasSurfaceGuidance;
+
+    [ObservableProperty]
+    private string _surfacePosition = "Position unavailable";
+
+    [ObservableProperty]
+    private string _surfaceDestination = "No taxi clearance";
+
+    [ObservableProperty]
+    private string _surfaceRoute = "Request taxi to calculate a route";
+
+    [ObservableProperty]
+    private string _surfaceNextAction = "Remain on the stand";
+
+    [ObservableProperty]
+    private string _surfaceSignCue = "Keep the airport chart open while taxiing";
+
+    [ObservableProperty]
+    private string _surfaceProgress = string.Empty;
 
     // --- Speech and PTT ------------------------------------------------------------------
 
@@ -164,36 +238,47 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
     public DashboardViewModel(
         AtcSessionContext sessionContext,
         PilotTransmissionCoordinator coordinator,
+        RadioActivityState radioActivity,
         ISpeechRecognitionService speechRecognition,
         ITextToSpeechService textToSpeech,
         SimulatorConnectorRouter simulatorRouter,
+        MsfsSimConnectConnector msfsConnector,
+        TrafficRadioService trafficRadio,
         MockSimulatorConnector mockSimulator,
         MockTrafficProvider mockTraffic,
         ProviderStatusService providerStatus,
         IClock clock,
         IOptionsMonitor<ApplicationOptions> applicationOptions,
         IOptionsMonitor<AudioOptions> audioOptions,
+        IOptionsMonitor<TrafficOptions> trafficOptions,
         ILogger<DashboardViewModel> logger)
     {
         _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
         _coordinator = coordinator ?? throw new ArgumentNullException(nameof(coordinator));
+        _radioActivity = radioActivity ?? throw new ArgumentNullException(nameof(radioActivity));
         _speechRecognition = speechRecognition ?? throw new ArgumentNullException(nameof(speechRecognition));
         _textToSpeech = textToSpeech ?? throw new ArgumentNullException(nameof(textToSpeech));
         _simulatorRouter = simulatorRouter ?? throw new ArgumentNullException(nameof(simulatorRouter));
+        _msfsConnector = msfsConnector ?? throw new ArgumentNullException(nameof(msfsConnector));
+        _trafficRadio = trafficRadio ?? throw new ArgumentNullException(nameof(trafficRadio));
         _mockSimulator = mockSimulator ?? throw new ArgumentNullException(nameof(mockSimulator));
         _mockTraffic = mockTraffic ?? throw new ArgumentNullException(nameof(mockTraffic));
         _providerStatus = providerStatus ?? throw new ArgumentNullException(nameof(providerStatus));
         _clock = clock ?? throw new ArgumentNullException(nameof(clock));
         _applicationOptions = applicationOptions ?? throw new ArgumentNullException(nameof(applicationOptions));
         _audioOptions = audioOptions ?? throw new ArgumentNullException(nameof(audioOptions));
+        _trafficOptions = trafficOptions ?? throw new ArgumentNullException(nameof(trafficOptions));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _audioOptionsSubscription = _audioOptions.OnChange(
             _ => RunOnUiThread(() => OnPropertyChanged(nameof(PushToTalkHint))));
+        _trafficOptionsSubscription = _trafficOptions.OnChange(
+            _ => RunOnUiThread(() => UpdateLiveContext(_sessionContext.CurrentSession)));
 
         _sessionContext.SessionChanged += OnSessionChanged;
         _coordinator.TransmissionProcessed += OnTransmissionProcessed;
         _simulatorRouter.AircraftStateChanged += OnAircraftStateChanged;
         _simulatorRouter.ConnectionChanged += OnSimulatorConnectionChanged;
+        _trafficRadio.ExchangeGenerated += OnTrafficRadioExchangeGenerated;
 
         _speechRecognition.InterimTranscriptReceived += OnInterimTranscript;
         _speechRecognition.FinalTranscriptReceived += OnFinalTranscript;
@@ -241,7 +326,20 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
             return;
         }
 
+        if (!CanTransmitToCurrentStation(out string reason))
+        {
+            StatusMessage = reason;
+            SetSpeechState(
+                SpeechState.Idle,
+                _sessionContext.CurrentSession.CurrentController == ControllerPosition.Atis
+                    ? "ATIS — receive only"
+                    : "Wrong frequency",
+                "PUSH TO TALK");
+            return;
+        }
+
         IsTransmitting = true;
+        _radioActivity.SetUserTransmitting(true);
         SetSpeechState(SpeechState.Connecting, "Connecting…", "RELEASE TO SEND");
         InterimTranscript = string.Empty;
 
@@ -261,6 +359,7 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
             _logger.LogError(ex, "Failed to start a transmission.");
             SetSpeechState(SpeechState.Error, "Could not start capture", "PUSH TO TALK");
             IsTransmitting = false;
+            _radioActivity.SetUserTransmitting(false);
         }
     }
 
@@ -274,6 +373,7 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
         }
 
         IsTransmitting = false;
+        _radioActivity.SetUserTransmitting(false);
         SetSpeechState(SpeechState.Processing, "Processing…", "PUSH TO TALK");
 
         try
@@ -343,7 +443,10 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
         await SubmitTransmissionAsync(text, TransmissionSource.ManualText).ConfigureAwait(true);
     }
 
-    private bool CanSendManualTransmission() => !IsBusy && !string.IsNullOrWhiteSpace(ManualTransmissionText);
+    private bool CanSendManualTransmission() =>
+        !IsBusy
+        && !string.IsNullOrWhiteSpace(ManualTransmissionText)
+        && CanTransmitToCurrentStation(out _);
 
     partial void OnManualTransmissionTextChanged(string value) =>
         SendManualTransmissionCommand.NotifyCanExecuteChanged();
@@ -441,6 +544,23 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
                 return;
             }
 
+            if (result.WasIgnoredOnAtis)
+            {
+                StatusMessage =
+                    "ATIS is receive-only. Copy the information, then tune Delivery before calling.";
+                SetSpeechState(SpeechState.Idle, "ATIS — receive only", "PUSH TO TALK");
+                return;
+            }
+
+            if (result.WasIgnoredOffFrequency)
+            {
+                StatusMessage =
+                    $"No controller heard the transmission. Tune the selected transmit radio to "
+                    + $"{result.ExpectedFrequency?.ToDisplay()}.";
+                SetSpeechState(SpeechState.Idle, "Wrong frequency", "PUSH TO TALK");
+                return;
+            }
+
             if (result.ControllerSpokenText is { Length: > 0 } spoken)
             {
                 SetSpeechState(SpeechState.PlayingAudio, "Controller responding…", "PUSH TO TALK");
@@ -495,6 +615,7 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
             OnPropertyChanged(nameof(IsMockMode));
             OnPropertyChanged(nameof(IsDeveloperMode));
             OnPropertyChanged(nameof(ModeBadge));
+            UpdateLiveContext(_sessionContext.CurrentSession);
 
             if (e.Message is { Length: > 0 } message)
             {
@@ -521,6 +642,7 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
         RunOnUiThread(() =>
         {
             IsTransmitting = false;
+            _radioActivity.SetUserTransmitting(false);
             SetSpeechState(SpeechState.Error, e.Message, "PUSH TO TALK");
 
             StatusMessage = e.SuggestedAction is { Length: > 0 } action
@@ -530,6 +652,20 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
 
     private void OnAudioLevel(object? sender, AudioLevelEventArgs e) =>
         RunOnUiThread(() => InputLevel = e.Level);
+
+    private void OnTrafficRadioExchangeGenerated(
+        object? sender,
+        TrafficRadioExchangeEventArgs e) =>
+        RunOnUiThread(() =>
+        {
+            string source = e.IsFslTlTraffic ? "FSLTL" : "MSFS";
+            string wording = e.Exchange.UsedLanguageModel ? "AI wording" : "local wording";
+            LatestTrafficRadio =
+                $"ATC: {e.Exchange.ControllerLine}\n"
+                + $"PILOT: {e.Exchange.PilotLine}\n"
+                + $"{source} · {wording} · {e.Timestamp:HH:mm}";
+            HasTrafficRadioExchange = true;
+        });
 
     /// <summary>Projects the session into display strings.</summary>
     private void UpdateFromSession(AtcSession session)
@@ -545,14 +681,19 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
         CurrentFrequency = session.CurrentFrequency?.ToDisplay() ?? tuned.ToDisplay();
         FrequencySource = session.CurrentFrequency is null
             ? "Tuned COM — no local frequency data"
-            : "ATC assigned";
+            : session.CurrentController == ControllerPosition.Atis
+                ? "Departure ATIS"
+                : "ATC assigned";
         HasFrequencyMismatch =
             session.CurrentFrequency is Frequency assigned && assigned != tuned;
-        FrequencyStatus = HasFrequencyMismatch
-            ? $"Tune COM to {session.CurrentFrequency?.ToDisplay()} before transmitting."
-            : session.CurrentFrequency is null
-                ? "StormATC is using your active transmit radio."
-                : "Radio tuned correctly.";
+        FrequencyStatus = session.CurrentController == ControllerPosition.Atis
+            ? "Listen to ATIS, then tune Delivery. ATIS does not receive pilot calls."
+            : HasFrequencyMismatch
+                ? $"Tune COM to {session.CurrentFrequency?.ToDisplay()} before transmitting."
+                : session.CurrentFrequency is null
+                    ? "StormATC is using your active transmit radio."
+                    : "Radio tuned correctly.";
+        SendManualTransmissionCommand.NotifyCanExecuteChanged();
 
         FlightPhase = FormatPhase(session.Phase);
 
@@ -562,6 +703,21 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
 
         Heading = session.AircraftState.MagneticHeading.ToDisplay();
         GroundSpeed = $"{session.AircraftState.GroundSpeedKnots:F0} kt";
+        IndicatedAirspeed = $"{session.AircraftState.IndicatedAirspeedKnots:F0} kt IAS";
+        VerticalSpeed = string.Create(
+            System.Globalization.CultureInfo.InvariantCulture,
+            $"{session.AircraftState.VerticalSpeedFeetPerMinute:+0;-0;0} fpm");
+        AltitudeAboveGround = $"{session.AircraftState.AltitudeAboveGroundFeet:N0} ft AGL";
+        AircraftIdentity = !string.IsNullOrWhiteSpace(session.AircraftState.AtcIdentifier)
+            ? $"{session.AircraftState.AtcIdentifier} · {session.AircraftState.AircraftTitle}"
+            : session.AircraftState.AircraftTitle;
+        AircraftConfiguration = string.Join(
+            "  ·  ",
+            session.AircraftState.EnginesRunning ? "ENGINES ON" : "ENGINES OFF",
+            session.AircraftState.ParkingBrakeSet ? "PARK BRAKE SET" : "PARK BRAKE RELEASED",
+            session.AircraftState.AutopilotEngaged ? "AUTOPILOT ON" : "AUTOPILOT OFF",
+            session.AircraftState.GearHandleDown ? "GEAR DOWN" : "GEAR UP",
+            $"FLAPS {session.AircraftState.FlapsHandleIndex}");
         Squawk = session.AircraftState.Transponder.Code.ToDisplay();
 
         ActiveRunway = (session.AssignedDepartureRunway ?? session.AssignedArrivalRunway)?.ToDisplay() ?? "—";
@@ -590,7 +746,356 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
         NextCallExample = guidance.Example;
         HasNextCallExample = guidance.HasExample;
 
+        UpdateLiveContext(session);
         MockStageText = FormatStage(_mockSimulator.Stage);
+    }
+
+    private bool CanTransmitToCurrentStation(out string reason)
+    {
+        AtcSession session = _sessionContext.CurrentSession;
+        if (session.CurrentController == ControllerPosition.Atis)
+        {
+            reason =
+                "ATIS is receive-only. Copy the information, then tune Delivery before calling.";
+            return false;
+        }
+
+        Frequency tuned = session.AircraftState.Radio.ActiveTransmitFrequency;
+        if (session.CurrentFrequency is Frequency expected
+            && !tuned.IsSameChannel(expected))
+        {
+            reason =
+                $"The selected transmit radio is on {tuned.ToDisplay()}. "
+                + $"Tune {expected.ToDisplay()} before transmitting.";
+            return false;
+        }
+
+        reason = string.Empty;
+        return true;
+    }
+
+    private void UpdateLiveContext(AtcSession session)
+    {
+        if (_msfsConnector.ConnectionState != SimulatorConnectionState.Connected)
+        {
+            SimulatorStatus = IsMockMode ? "TRAINING MODE" : "SIMULATOR OFFLINE";
+            SimulatorStatusDetail = IsMockMode
+                ? "Using the scripted training aircraft"
+                : _msfsConnector.StatusMessage;
+            WeatherSummary = IsMockMode ? "Sample conditions" : "Weather unavailable";
+            WeatherDetail = IsMockMode
+                ? "Fictional training weather is used when available"
+                : "Connect MSFS to read ambient conditions";
+            TrafficSummary = IsMockMode
+                ? "Scripted traffic"
+                : _trafficOptions.CurrentValue.EnableLiveTraffic
+                    ? "No traffic feed"
+                    : "Traffic disabled";
+            TrafficDetail = IsMockMode
+                ? "Developer scenarios can inject runway traffic"
+                : _trafficOptions.CurrentValue.EnableLiveTraffic
+                    ? "Connect MSFS to scan nearby aircraft"
+                    : "Enable it in Settings > Live integrations";
+            AirportDataSummary = IsMockMode ? "Sample airport data" : "Airport data pending";
+            AirportDataDetail = IsMockMode
+                ? "Bundled fictional airports support repeatable training"
+                : "Connect MSFS and load a flight plan";
+            HasSurfaceGuidance = false;
+            return;
+        }
+
+        SimulatorStatus = "MSFS LIVE";
+        SimulatorStatusDetail = _msfsConnector.StatusMessage;
+
+        if (_msfsConnector.LatestWeather is WeatherSnapshot weather)
+        {
+            string wind = weather.HasWind
+                ? $"{weather.WindDirection!.Value.ToDisplay()} / {weather.WindSpeedKnots} kt"
+                : "Wind unavailable";
+            WeatherSummary = wind;
+
+            var details = new List<string>();
+            if (weather.QnhHectopascals is int qnh)
+            {
+                details.Add($"QNH {qnh}");
+            }
+
+            if (weather.TemperatureCelsius is int temperature)
+            {
+                details.Add($"{temperature:+0;-0;0} °C");
+            }
+
+            if (weather.VisibilityMeters is int visibility)
+            {
+                details.Add(visibility >= 10_000
+                    ? "VIS 10+ km"
+                    : $"VIS {visibility / 1000.0:F1} km");
+            }
+
+            WeatherDetail = details.Count > 0
+                ? string.Join("  ·  ", details)
+                : "Ambient conditions at the aircraft";
+        }
+        else
+        {
+            WeatherSummary = "Reading live weather…";
+            WeatherDetail = "Waiting for the next simulator data frame";
+        }
+
+        if (!_trafficOptions.CurrentValue.EnableLiveTraffic)
+        {
+            TrafficSummary = "Traffic disabled";
+            TrafficDetail = "Enable it in Settings > Live integrations";
+        }
+        else
+        {
+            IReadOnlyList<MsfsTrafficSnapshot> traffic = _msfsConnector.NearbyTraffic;
+            TrafficSummary = traffic.Count switch
+            {
+                0 => "No nearby traffic",
+                1 => "1 nearby aircraft",
+                _ => $"{traffic.Count} nearby aircraft",
+            };
+
+            MsfsTrafficSnapshot? nearest = traffic
+                .OrderBy(contact =>
+                    contact.Position.DistanceNauticalMilesTo(session.AircraftState.Position))
+                .FirstOrDefault();
+            TrafficDetail = nearest is null
+                ? "20 km simulator traffic scan is clear"
+                : $"{nearest.Callsign} · "
+                    + $"{nearest.Position.DistanceNauticalMilesTo(session.AircraftState.Position):F1} NM";
+        }
+
+        string? relevantIcao = RelevantAirportIcao(session);
+        AirportData? airport = relevantIcao is not null
+            ? _msfsConnector.GetCachedAirport(relevantIcao)
+            : _msfsConnector.GetCachedAirports()
+                .OrderBy(candidate =>
+                    candidate.ReferencePosition.DistanceNauticalMilesTo(
+                        session.AircraftState.Position))
+                .FirstOrDefault();
+
+        if (airport is null)
+        {
+            AirportDataSummary = relevantIcao is null
+                ? "Load a flight plan"
+                : $"Reading {relevantIcao} scenery…";
+            AirportDataDetail = "Taxiways, stands and frequencies load automatically";
+            HasSurfaceGuidance = false;
+        }
+        else
+        {
+            AirportDataSummary = airport.SupportsTaxiRouting
+                ? $"{airport.Icao} routing ready"
+                : $"{airport.Icao} limited data";
+            AirportDataDetail = airport.SupportsTaxiRouting
+                ? $"{airport.Stands.Count} stands  ·  "
+                    + $"{airport.TaxiGraph?.Edges.Count ?? 0} taxi paths  ·  "
+                    + $"{airport.Runways.Count} runway ends"
+                : "The installed scenery did not publish a usable taxi graph";
+            UpdateSurfaceGuidance(session, airport);
+        }
+    }
+
+    private void UpdateSurfaceGuidance(AtcSession session, AirportData airport)
+    {
+        if (!session.AircraftState.IsOnGround || airport.TaxiGraph is not TaxiGraph graph)
+        {
+            HasSurfaceGuidance = false;
+            return;
+        }
+
+        HasSurfaceGuidance = true;
+        TaxiSurfacePosition position = TaxiSurfaceAdvisor.Locate(
+            graph,
+            session.AircraftState.Position);
+        SurfacePosition = FormatSurfacePosition(position);
+
+        Clearance? clearance = session.TaxiClearance;
+        if (clearance is null || clearance.Type is not (ClearanceType.Taxi or ClearanceType.TaxiToStand))
+        {
+            SurfaceDestination = "No taxi clearance issued";
+            SurfaceRoute = "Request taxi from Ground to calculate the route";
+            SurfaceNextAction = "Hold position until Ground issues a taxi clearance";
+            SurfaceSignCue =
+                "Chart check: black/yellow identifies your current taxiway; "
+                + "yellow/black with an arrow points to another taxiway.";
+            SurfaceProgress = "MSFS scenery position is live";
+            return;
+        }
+
+        SurfaceDestination = clearance.Runway is RunwayIdentifier runway
+            ? $"Holding point runway {runway.ToDisplay()}"
+            : clearance.TaxiDestination is { Length: > 0 } stand
+                ? $"Stand {stand}"
+                : "Taxi clearance limit";
+
+        string routeText = clearance.TaxiRoute.Count > 0
+            ? string.Join("  >  ", clearance.TaxiRoute.Select(FormatTaxiwayDesignator))
+            : "Route detail unavailable";
+        SurfaceRoute = $"{routeText}  >  {SurfaceDestination}";
+
+        TaxiRoute route = clearance.TaxiPathNodes.Count > 0
+            ? TaxiPathfinder.FromNodeSequence(
+                graph,
+                clearance.TaxiPathNodes,
+                clearance.TaxiPathTaxiways)
+            : TaxiRoute.NotFound;
+        TaxiRouteProgress progress = TaxiSurfaceAdvisor.Analyze(
+            graph,
+            route,
+            session.AircraftState.Position);
+
+        if (!progress.Found)
+        {
+            SurfaceNextAction =
+                "The clearance has no stored geometry. Stop if unsure and request progressive taxi.";
+            SurfaceSignCue =
+                "Use the current aerodrome chart; StormATC will not invent a junction or sign.";
+            SurfaceProgress = clearance.TaxiRouteLengthMeters is double planned
+                ? $"{FormatDistance(planned)} planned"
+                : "Position matched, route geometry unavailable";
+            return;
+        }
+
+        SurfacePosition = FormatSurfacePosition(progress.SurfacePosition);
+        SurfaceProgress =
+            $"{FormatDistance(progress.RemainingDistanceMeters)} remaining"
+            + (progress.IsOnRoute ? " · ON CLEARED ROUTE" : " · ROUTE DEVIATION");
+
+        if (!progress.IsOnRoute)
+        {
+            SurfaceNextAction =
+                $"Stop if unsure — aircraft is {progress.SurfacePosition.OffsetMeters:F0} m "
+                + "from the cleared path. Ask Ground for progressive taxi.";
+            SurfaceSignCue =
+                "Do not chase a sign across the apron. Confirm position with Ground before continuing.";
+            return;
+        }
+
+        if (progress.IsAtDestination || progress.IsApproachingHoldShort)
+        {
+            SurfaceNextAction = progress.IsAtDestination
+                ? $"Stop at {SurfaceDestination}"
+                : $"Continue {FormatDistance(progress.RemainingDistanceMeters)} to "
+                    + $"{SurfaceDestination}, then stop before the hold line";
+            SurfaceSignCue = clearance.Runway is RunwayIdentifier holdRunway
+                ? $"MANDATORY: look for the red/white runway {holdRunway.ToDisplay()} sign "
+                    + "and the runway holding-position marking."
+                : "Confirm the stand number and follow the stand lead-in line.";
+            return;
+        }
+
+        if (progress.NextTaxiway is { Length: > 0 } nextTaxiway
+            && progress.NextTurn is TaxiTurnDirection turn)
+        {
+            string action = turn switch
+            {
+                TaxiTurnDirection.Left => "turn left",
+                TaxiTurnDirection.Right => "turn right",
+                _ => "continue straight",
+            };
+            SurfaceNextAction =
+                $"{FormatDistance(progress.DistanceToNextInstructionMeters)}: "
+                + $"{action} onto {FormatTaxiwayDesignator(nextTaxiway)}";
+        }
+        else
+        {
+            SurfaceNextAction =
+                $"Continue on {FormatTaxiwayDesignator(progress.CurrentTaxiway ?? "taxiway")} "
+                + $"for {FormatDistance(progress.RemainingDistanceMeters)} to {SurfaceDestination}";
+        }
+
+        TaxiwaySignCue[] cues =
+        [
+            .. progress.JunctionSignCues
+                .Where(cue => !string.IsNullOrWhiteSpace(cue.TaxiwayName))
+                .Take(4),
+        ];
+        SurfaceSignCue = cues.Length > 0
+            ? "EXPECTED AT NEXT JUNCTION: "
+                + string.Join("  ·  ", cues.Select(FormatSignCue))
+                + ". Yellow/black panels are direction signs; the route cue is marked."
+            : "Follow the centreline and confirm your position against the airport chart.";
+    }
+
+    private static string FormatSurfacePosition(TaxiSurfacePosition position)
+    {
+        if (!position.Found)
+        {
+            return "Outside the published MSFS taxi graph";
+        }
+
+        if (position.StandName is { Length: > 0 } stand)
+        {
+            return $"Stand {stand} · live aircraft position";
+        }
+
+        if (position.TaxiwayName is { Length: > 0 } taxiway)
+        {
+            string offset = position.OffsetMeters <= 12
+                ? "on centreline"
+                : $"{position.OffsetMeters:F0} m from centreline";
+            return $"{FormatTaxiwayDesignator(taxiway)} · {offset}";
+        }
+
+        return position.NearestNodeName is { Length: > 0 } node
+            ? $"Near surface point {node}"
+            : "Position available, surface feature unknown";
+    }
+
+    private static string FormatTaxiwayDesignator(string value)
+    {
+        if (string.Equals(value, "apron", StringComparison.OrdinalIgnoreCase))
+        {
+            return "APRON";
+        }
+
+        bool isCompactDesignator =
+            value.Length == 1
+            || value.Any(char.IsDigit) && value.All(char.IsLetterOrDigit);
+        if (value.Contains(' ') || !isCompactDesignator)
+        {
+            return value.ToUpperInvariant();
+        }
+
+        return $"{value.ToUpperInvariant()} ({PhoneticAlphabet.SpellOut(value)})";
+    }
+
+    private static string FormatSignCue(TaxiwaySignCue cue)
+    {
+        string arrow = cue.Direction switch
+        {
+            TaxiTurnDirection.Left => "←",
+            TaxiTurnDirection.Right => "→",
+            _ => "↑",
+        };
+        string route = cue.IsClearedRoute ? " [ROUTE]" : string.Empty;
+        return $"{cue.TaxiwayName.ToUpperInvariant()} {arrow}{route}";
+    }
+
+    private static string FormatDistance(double metres) =>
+        metres >= 1000
+            ? $"{metres / 1000:F1} km"
+            : $"{Math.Max(0, metres):F0} m";
+
+    private static string? RelevantAirportIcao(AtcSession session)
+    {
+        if (session.FlightPlan is null)
+        {
+            return null;
+        }
+
+        return session.Phase is StormATC.Domain.FlightPhase.Arrival
+            or StormATC.Domain.FlightPhase.Approach
+            or StormATC.Domain.FlightPhase.Final
+            or StormATC.Domain.FlightPhase.Landed
+            or StormATC.Domain.FlightPhase.TaxiIn
+            or StormATC.Domain.FlightPhase.Parked
+            or StormATC.Domain.FlightPhase.GoAround
+            ? session.FlightPlan.DestinationIcao
+            : session.FlightPlan.DepartureIcao;
     }
 
     private static string FormatClearance(AtcSession session)
@@ -724,6 +1229,7 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
             {
                 IsBusy = false;
                 IsTransmitting = false;
+                _radioActivity.SetUserTransmitting(false);
                 StatusMessage =
                     "The recognized transmission could not be submitted. Check Diagnostics and try again.";
                 SetSpeechState(SpeechState.Error, "Transmission failed", "PUSH TO TALK");
@@ -745,10 +1251,13 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
         _coordinator.TransmissionProcessed -= OnTransmissionProcessed;
         _simulatorRouter.AircraftStateChanged -= OnAircraftStateChanged;
         _simulatorRouter.ConnectionChanged -= OnSimulatorConnectionChanged;
+        _trafficRadio.ExchangeGenerated -= OnTrafficRadioExchangeGenerated;
         _speechRecognition.InterimTranscriptReceived -= OnInterimTranscript;
         _speechRecognition.FinalTranscriptReceived -= OnFinalTranscript;
         _speechRecognition.ErrorOccurred -= OnSpeechError;
         _speechRecognition.AudioLevelChanged -= OnAudioLevel;
         _audioOptionsSubscription?.Dispose();
+        _trafficOptionsSubscription?.Dispose();
+        _radioActivity.SetUserTransmitting(false);
     }
 }

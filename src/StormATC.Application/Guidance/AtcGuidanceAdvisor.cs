@@ -30,6 +30,15 @@ public static class AtcGuidanceAdvisor
 
         string spokenCallsign = callsign.ToSpoken();
 
+        if (session.CurrentController == ControllerPosition.Atis)
+        {
+            return new AtcGuidance(
+                "Listen to departure ATIS",
+                "Copy the airport information, then tune the published Delivery frequency. "
+                    + "ATIS is receive-only, so no pilot call is required.",
+                string.Empty);
+        }
+
         if (session.PendingReadback is PendingReadback pending)
         {
             ExpectedReadbackItem[] remaining =

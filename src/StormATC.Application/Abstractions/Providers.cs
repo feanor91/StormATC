@@ -131,6 +131,14 @@ public interface ISimulatorConnector : IAsyncDisposable
 
     /// <summary>Closes the connection.</summary>
     Task DisconnectAsync(CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Tunes COM1 active to a published frequency and selects COM1 for transmission.
+    /// Returns false when the active connector cannot apply radio commands.
+    /// </summary>
+    Task<bool> TuneCom1Async(
+        Domain.ValueObjects.Frequency frequency,
+        CancellationToken cancellationToken);
 }
 
 /// <summary>Carries a new aircraft snapshot.</summary>

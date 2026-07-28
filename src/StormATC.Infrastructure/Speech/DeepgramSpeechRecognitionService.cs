@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Intent;
 using StormATC.Application.Options;
 using StormATC.Application.Sessions;
 using StormATC.Infrastructure.Security;
@@ -86,17 +87,42 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
         {
             try
             {
-                var devices = new List<string>(WaveInEvent.DeviceCount);
+                var legacyNames = new List<string>(WaveInEvent.DeviceCount);
                 for (int index = 0; index < WaveInEvent.DeviceCount; index++)
                 {
                     string name = WaveInEvent.GetCapabilities(index).ProductName;
-                    if (!devices.Contains(name, StringComparer.OrdinalIgnoreCase))
+                    if (!legacyNames.Contains(name, StringComparer.OrdinalIgnoreCase))
                     {
-                        devices.Add(name);
+                        legacyNames.Add(name);
                     }
                 }
 
-                return devices;
+                var fullNames = new List<string>();
+                try
+                {
+                    using var enumerator = new MMDeviceEnumerator();
+                    foreach (MMDevice endpoint in enumerator.EnumerateAudioEndPoints(
+                        DataFlow.Capture,
+                        DeviceState.Active))
+                    {
+                        string name = endpoint.FriendlyName?.Trim() ?? string.Empty;
+                        if (name.Length > 0
+                            && !fullNames.Contains(name, StringComparer.OrdinalIgnoreCase))
+                        {
+                            fullNames.Add(name);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // WinMM remains a valid capture fallback. The UI will show its shorter
+                    // product names if Core Audio endpoint discovery is unavailable.
+                    _logger.LogDebug(
+                        ex,
+                        "Could not resolve full Windows microphone endpoint names.");
+                }
+
+                return PreferFullInputDeviceNames(legacyNames, fullNames);
             }
             catch (Exception ex)
             {
@@ -520,9 +546,7 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
 
                 // WinMM truncates names to 31 characters, while Core Audio returns the complete
                 // name. Prefix matching maps the two views of the same endpoint.
-                if (comparableProduct.Equals(comparableWanted, StringComparison.Ordinal)
-                    || comparableProduct.StartsWith(comparableWanted, StringComparison.Ordinal)
-                    || comparableWanted.StartsWith(comparableProduct, StringComparison.Ordinal))
+                if (DeviceNamesReferToSameEndpoint(comparableProduct, comparableWanted))
                 {
                     return index;
                 }
@@ -559,6 +583,56 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
             .Where(char.IsLetterOrDigit)
             .Select(char.ToUpperInvariant)
             .ToArray());
+
+    /// <summary>
+    /// Replaces WinMM's 31-character product labels with the corresponding complete Core Audio
+    /// endpoint names while retaining any legacy-only recording devices.
+    /// </summary>
+    internal static IReadOnlyList<string> PreferFullInputDeviceNames(
+        IReadOnlyList<string> legacyNames,
+        IReadOnlyList<string> fullEndpointNames)
+    {
+        var result = new List<string>();
+        var matchedLegacyNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (string fullName in fullEndpointNames.Where(name =>
+            !string.IsNullOrWhiteSpace(name)))
+        {
+            string comparableFullName = ComparableDeviceName(fullName);
+            string? matchingLegacyName = legacyNames.FirstOrDefault(legacyName =>
+                DeviceNamesReferToSameEndpoint(
+                    ComparableDeviceName(legacyName),
+                    comparableFullName));
+
+            if (matchingLegacyName is not null
+                && !result.Contains(fullName, StringComparer.OrdinalIgnoreCase))
+            {
+                result.Add(fullName.Trim());
+                matchedLegacyNames.Add(matchingLegacyName);
+            }
+        }
+
+        foreach (string legacyName in legacyNames.Where(name =>
+            !string.IsNullOrWhiteSpace(name)))
+        {
+            if (!matchedLegacyNames.Contains(legacyName)
+                && !result.Contains(legacyName, StringComparer.OrdinalIgnoreCase))
+            {
+                result.Add(legacyName.Trim());
+            }
+        }
+
+        return result;
+    }
+
+    private static bool DeviceNamesReferToSameEndpoint(
+        string firstComparableName,
+        string secondComparableName) =>
+        firstComparableName.Length > 0
+        && secondComparableName.Length > 0
+        && (firstComparableName.Equals(secondComparableName, StringComparison.Ordinal)
+            || firstComparableName.StartsWith(secondComparableName, StringComparison.Ordinal)
+            || secondComparableName.StartsWith(firstComparableName, StringComparison.Ordinal));
 
     private async Task ReceiveLoopAsync(CancellationToken cancellationToken)
     {
@@ -649,9 +723,11 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
             }
             else
             {
+                string interim = TranscriptNormalizer.FormatForDisplay(
+                    $"{_finalTranscript} {transcript}".Trim());
                 InterimTranscriptReceived?.Invoke(
                     this,
-                    new InterimTranscriptEventArgs($"{_finalTranscript} {transcript}".Trim()));
+                    new InterimTranscriptEventArgs(interim));
             }
         }
         catch (JsonException ex)
@@ -677,6 +753,8 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
                 text,
                 profile.TranscriptCorrections);
         }
+
+        text = TranscriptNormalizer.FormatForDisplay(text);
 
         double confidence = _confidenceSegments == 0
             ? 0

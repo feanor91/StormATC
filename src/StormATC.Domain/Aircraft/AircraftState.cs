@@ -57,6 +57,21 @@ public sealed record AircraftState
     /// <summary>The aircraft title string reported by the simulator.</summary>
     public required string AircraftTitle { get; init; }
 
+    /// <summary>The callsign or registration reported by the simulator, when available.</summary>
+    public string AtcIdentifier { get; init; } = string.Empty;
+
+    /// <summary>Height above the surface directly below the aircraft, in feet.</summary>
+    public double AltitudeAboveGroundFeet { get; init; }
+
+    /// <summary>True when the autopilot master is engaged.</summary>
+    public bool AutopilotEngaged { get; init; }
+
+    /// <summary>True when the landing-gear handle is in the down position.</summary>
+    public bool GearHandleDown { get; init; } = true;
+
+    /// <summary>The currently selected flap-handle detent.</summary>
+    public int FlapsHandleIndex { get; init; }
+
     /// <summary>COM radio state.</summary>
     public required RadioState Radio { get; init; }
 
@@ -110,6 +125,11 @@ public sealed record AircraftState
         ParkingBrakeSet = true,
         EnginesRunning = false,
         AircraftTitle = "Unknown",
+        AtcIdentifier = string.Empty,
+        AltitudeAboveGroundFeet = 0,
+        AutopilotEngaged = false,
+        GearHandleDown = true,
+        FlapsHandleIndex = 0,
         Radio = RadioState.Default,
         Transponder = TransponderState.Default,
     };

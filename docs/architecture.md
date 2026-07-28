@@ -57,6 +57,7 @@ is chosen on **its own** configuration:
 | --- | --- | --- |
 | Secret store | Always DPAPI | No file exists until a key is stored |
 | Simulator | `Simulator:PreferredConnector`, resolved at run time by `SimulatorConnectorRouter` | The scripted mock aircraft, with the reason shown |
+| Airport data | A bundled airport file when present, otherwise the connected simulator's Facility Data API | No detailed route until MSFS is connected |
 | Flight plan | Whether a SimBrief user ID is set, resolved per import by `FlightPlanProviderRouter` | The bundled fictional sample flight |
 | Language model | A stored key **and** a model name | Deterministic phraseology only |
 | Speech | A stored Deepgram key | Typed transmissions, text responses |
@@ -82,6 +83,14 @@ a choice was made:
   keeps watching for the simulator to appear, and hands over the moment it does. Exactly one
   connector is subscribed at a time, so a stale scripted aircraft can never overwrite real
   simulator state. It can also be switched while a session is running.
+- **`MsfsAirportDataProvider`** keeps bundled fictional aerodromes deterministic, but requests
+  real airport runways, frequencies, stands, taxi points, taxi names, and taxi paths from the
+  connected simulator. The resulting graph remains deterministic; the language model never
+  chooses or invents a taxiway.
+- **`TaxiSurfaceAdvisor`** matches the live aircraft position to that graph, tracks progress along
+  the exact stored clearance path, and derives the next turn and expected junction direction
+  cues. It never claims to know the placement of sign objects because SimConnect Facility Data
+  does not publish them.
 - **`FlightPlanProviderRouter`** sends the import to SimBrief when a user ID is available and to
   the bundled sample when it is not. A SimBrief *failure* is reported rather than silently
   replaced with the sample — substituting a different aircraft, route, and callsign for the one
@@ -183,7 +192,7 @@ error:
 | Missing | What happens |
 | --- | --- |
 | Simulator | Aircraft state does not update; ATC still works on typed transmissions |
-| OpenRouter | Deterministic phraseology and the local parser only |
+| Selected language-model provider | Deterministic phraseology and the local parser only |
 | Deepgram | Type transmissions; controller responses are text |
 | SimBrief | Load the bundled sample flight, or none |
 | Database | The session runs; nothing is saved, and the UI says so |

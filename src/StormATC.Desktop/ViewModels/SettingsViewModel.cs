@@ -9,6 +9,7 @@ using StormATC.Application.Abstractions;
 using StormATC.Application.Options;
 using StormATC.Application.Sessions;
 using StormATC.Desktop.Services;
+using StormATC.Domain.Intents;
 using StormATC.Infrastructure.Simulator;
 
 namespace StormATC.Desktop.ViewModels;
@@ -38,6 +39,8 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     private readonly ITextToSpeechService _textToSpeech;
     private readonly ISessionRepository _sessionRepository;
     private readonly SimulatorConnectorRouter _simulatorConnector;
+    private readonly MsfsSimConnectConnector _msfsConnector;
+    private readonly TrafficRadioService _trafficRadio;
     private readonly UserSettingsService _userSettings;
     private readonly ProviderStatusService _providerStatus;
     private readonly AtcSessionContext _sessionContext;
@@ -54,16 +57,40 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     private bool _hasOpenRouterKey;
 
     [ObservableProperty]
+    private bool _hasOpenAIKey;
+
+    [ObservableProperty]
+    private bool _hasGroqKey;
+
+    [ObservableProperty]
+    private bool _hasDeepSeekKey;
+
+    [ObservableProperty]
+    private bool _hasAnthropicKey;
+
+    [ObservableProperty]
     private bool _hasDeepgramKey;
 
     [ObservableProperty]
     private string _openRouterKeyStatus = "No key stored";
 
     [ObservableProperty]
+    private string _openAIKeyStatus = "No key stored";
+
+    [ObservableProperty]
+    private string _groqKeyStatus = "No key stored";
+
+    [ObservableProperty]
+    private string _deepSeekKeyStatus = "No key stored";
+
+    [ObservableProperty]
+    private string _anthropicKeyStatus = "No key stored";
+
+    [ObservableProperty]
     private string _deepgramKeyStatus = "No key stored";
 
     [ObservableProperty]
-    private string _openRouterTestResult = string.Empty;
+    private string _languageModelTestResult = string.Empty;
 
     [ObservableProperty]
     private string _deepgramTestResult = string.Empty;
@@ -73,6 +100,21 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
 
     [ObservableProperty]
     private string _openRouterModel = string.Empty;
+
+    [ObservableProperty]
+    private string _openAIModel = string.Empty;
+
+    [ObservableProperty]
+    private string _groqModel = string.Empty;
+
+    [ObservableProperty]
+    private string _deepSeekModel = string.Empty;
+
+    [ObservableProperty]
+    private string _anthropicModel = string.Empty;
+
+    [ObservableProperty]
+    private string _selectedLanguageModelProvider = LanguageModelProviders.OpenRouter;
 
     [ObservableProperty]
     private string _deepgramVoice = string.Empty;
@@ -108,6 +150,9 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     private string _realismProfile = "Standard";
 
     [ObservableProperty]
+    private string _defaultPushbackDirection = PushbackDirections.TailLeft;
+
+    [ObservableProperty]
     private bool _offlineMode;
 
     [ObservableProperty]
@@ -118,6 +163,27 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
 
     [ObservableProperty]
     private bool _useLanguageModelPhraseology;
+
+    [ObservableProperty]
+    private bool _enableLiveTraffic;
+
+    [ObservableProperty]
+    private bool _enableRadioChatter;
+
+    [ObservableProperty]
+    private bool _useLanguageModelForChatter;
+
+    [ObservableProperty]
+    private bool _speakChatter;
+
+    [ObservableProperty]
+    private bool _pauseChatterWhenOnlineAtcClientDetected = true;
+
+    [ObservableProperty]
+    private int _maximumTrafficExchangesPerHour = 6;
+
+    [ObservableProperty]
+    private string _trafficIntegrationStatus = "Traffic integration is disabled.";
 
     [ObservableProperty]
     private bool _requireReadbackBeforeProgressing;
@@ -172,15 +238,23 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         ITextToSpeechService textToSpeech,
         ISessionRepository sessionRepository,
         SimulatorConnectorRouter simulatorConnector,
+        MsfsSimConnectConnector msfsConnector,
+        TrafficRadioService trafficRadio,
         UserSettingsService userSettings,
         ProviderStatusService providerStatus,
         AtcSessionContext sessionContext,
         IJoystickInputService joystickInput,
         IOptions<ApplicationOptions> applicationOptions,
+        IOptions<LanguageModelOptions> languageModelOptions,
         IOptions<OpenRouterOptions> openRouterOptions,
+        IOptions<OpenAIOptions> openAIOptions,
+        IOptions<GroqOptions> groqOptions,
+        IOptions<DeepSeekOptions> deepSeekOptions,
+        IOptions<AnthropicOptions> anthropicOptions,
         IOptions<DeepgramOptions> deepgramOptions,
         IOptions<SimBriefOptions> simBriefOptions,
         IOptions<SimulatorOptions> simulatorOptions,
+        IOptions<TrafficOptions> trafficOptions,
         IOptions<AtcRealismOptions> realismOptions,
         IOptions<PersistenceOptions> persistenceOptions,
         IOptions<AudioOptions> audioOptions,
@@ -192,6 +266,8 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         _textToSpeech = textToSpeech ?? throw new ArgumentNullException(nameof(textToSpeech));
         _sessionRepository = sessionRepository ?? throw new ArgumentNullException(nameof(sessionRepository));
         _simulatorConnector = simulatorConnector ?? throw new ArgumentNullException(nameof(simulatorConnector));
+        _msfsConnector = msfsConnector ?? throw new ArgumentNullException(nameof(msfsConnector));
+        _trafficRadio = trafficRadio ?? throw new ArgumentNullException(nameof(trafficRadio));
         _userSettings = userSettings ?? throw new ArgumentNullException(nameof(userSettings));
         _providerStatus = providerStatus ?? throw new ArgumentNullException(nameof(providerStatus));
         _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
@@ -199,15 +275,27 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         ArgumentNullException.ThrowIfNull(applicationOptions);
+        ArgumentNullException.ThrowIfNull(languageModelOptions);
         ArgumentNullException.ThrowIfNull(openRouterOptions);
+        ArgumentNullException.ThrowIfNull(openAIOptions);
+        ArgumentNullException.ThrowIfNull(groqOptions);
+        ArgumentNullException.ThrowIfNull(deepSeekOptions);
+        ArgumentNullException.ThrowIfNull(anthropicOptions);
         ArgumentNullException.ThrowIfNull(deepgramOptions);
         ArgumentNullException.ThrowIfNull(simBriefOptions);
         ArgumentNullException.ThrowIfNull(simulatorOptions);
+        ArgumentNullException.ThrowIfNull(trafficOptions);
         ArgumentNullException.ThrowIfNull(realismOptions);
         ArgumentNullException.ThrowIfNull(persistenceOptions);
         ArgumentNullException.ThrowIfNull(audioOptions);
 
         _openRouterModel = openRouterOptions.Value.Model;
+        _openAIModel = openAIOptions.Value.Model;
+        _groqModel = groqOptions.Value.Model;
+        _deepSeekModel = deepSeekOptions.Value.Model;
+        _anthropicModel = anthropicOptions.Value.Model;
+        _selectedLanguageModelProvider =
+            LanguageModelProviders.Normalize(languageModelOptions.Value.Provider);
         _deepgramVoice = deepgramOptions.Value.Voice;
         _deepgramSpeechModel = deepgramOptions.Value.SpeechToTextModel;
         _speechRecognitionLanguage = string.IsNullOrWhiteSpace(deepgramOptions.Value.Language)
@@ -226,11 +314,21 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         _trainingCorrectionCount = _transcriptCorrections.Count;
         _simBriefUserId = simBriefOptions.Value.UserId ?? string.Empty;
         _realismProfile = applicationOptions.Value.RealismProfile;
+        _defaultPushbackDirection =
+            PushbackDirections.Normalize(realismOptions.Value.DefaultPushbackDirection)
+            ?? PushbackDirections.TailLeft;
         _offlineMode = applicationOptions.Value.OfflineMode;
         _offlineModeAtStartup = _offlineMode;
         _cloudServicesConsentGiven = applicationOptions.Value.CloudServicesConsentGiven;
         _preferredConnector = SimulatorConnectorNames.Normalize(simulatorOptions.Value.PreferredConnector);
         _simulatorStatus = _simulatorConnector.StatusMessage;
+        _enableLiveTraffic = trafficOptions.Value.EnableLiveTraffic;
+        _enableRadioChatter = trafficOptions.Value.EnableRadioChatter;
+        _useLanguageModelForChatter = trafficOptions.Value.UseLanguageModelForChatter;
+        _speakChatter = trafficOptions.Value.SpeakChatter;
+        _pauseChatterWhenOnlineAtcClientDetected =
+            trafficOptions.Value.PauseChatterWhenOnlineAtcClientDetected;
+        _maximumTrafficExchangesPerHour = trafficOptions.Value.MaximumExchangesPerHour;
         _useLanguageModelPhraseology = realismOptions.Value.UseLanguageModelPhraseology;
         _requireReadbackBeforeProgressing = realismOptions.Value.RequireReadbackBeforeProgressing;
         _requireCorrectCallsign = realismOptions.Value.RequireCorrectCallsign;
@@ -242,6 +340,8 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         _joystickButtonIndex = audioOptions.Value.JoystickButtonIndex;
 
         RealismProfiles = ["Relaxed", "Standard", "Strict"];
+        PushbackDirectionChoices = [.. PushbackDirections.All];
+        LanguageModelProviderNames = [.. LanguageModelProviders.All];
         Connectors = [.. SimulatorConnectorNames.All];
         SpeechRecognitionLanguages =
         [
@@ -275,6 +375,34 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     /// <summary>The selectable realism profiles.</summary>
     public ObservableCollection<string> RealismProfiles { get; }
 
+    /// <summary>Explains the transcript/readback behaviour of the selected profile.</summary>
+    public string RealismProfileDescription => RealismProfile.Trim().ToUpperInvariant() switch
+    {
+        "RELAXED" =>
+            "Most forgiving. Callsign wording is optional and ambiguous transcript guesses are "
+            + "treated as missing, not wrong. Runway, altitude, squawk, taxi route, and hold-short "
+            + "values are still never guessed.",
+        "STRICT" =>
+            "Training challenge. Every structured value returned by the transcript parser is "
+            + "judged as intentional, and full callsign/readback discipline is enforced.",
+        _ =>
+            "Recommended. Repairs common speech-to-text formatting, accepts equivalent ICAO and "
+            + "numeric wording, remembers partial corrections, and says “negative” only when a "
+            + "conflicting value was clearly announced.",
+    };
+
+    /// <summary>Safety boundary shared by every transcript-tolerance profile.</summary>
+    public static string TranscriptToleranceNotice =>
+        "All profiles understand spoken digits, written numbers, Alfa/Alpha variants, compact "
+        + "transcripts, and named/alphanumeric taxiways. No profile silently changes a conflicting "
+        + "runway, altitude, squawk, heading, frequency, taxi route, or hold-short instruction.";
+
+    /// <summary>GSX-style relative tail directions available for pushback.</summary>
+    public ObservableCollection<string> PushbackDirectionChoices { get; }
+
+    /// <summary>Language-model providers supported directly by StormATC.</summary>
+    public ObservableCollection<string> LanguageModelProviderNames { get; }
+
     /// <summary>The selectable simulator connectors.</summary>
     public ObservableCollection<string> Connectors { get; }
 
@@ -302,17 +430,95 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
 
     /// <summary>The cost statement shown beside the API key fields.</summary>
     public static string CostNotice =>
-        "StormATC is free and open source. OpenRouter and Deepgram are independent services that "
-        + "bill you according to their own pricing. Check their current rates before enabling them.";
+        "StormATC is free and open source. OpenRouter, OpenAI, Groq, DeepSeek, Anthropic, and "
+        + "Deepgram are independent services that bill their own API accounts. A ChatGPT "
+        + "subscription does not include OpenAI API usage. Check current rates before enabling one.";
+
+    /// <summary>True when traffic-dependent options may be changed.</summary>
+    public bool IsTrafficEnabled => EnableLiveTraffic;
+
+    /// <summary>True when model and speech options for traffic chatter may be changed.</summary>
+    public bool IsTrafficChatterEnabled => EnableLiveTraffic && EnableRadioChatter;
+
+    /// <summary>Credit warning shown beside the opt-in traffic-radio controls.</summary>
+    public static string TrafficCreditNotice =>
+        "Live traffic reading is local and uses no API credits. Language-model chatter uses up "
+        + "to one model request per exchange. Spoken chatter uses two TTS requests per exchange. "
+        + "All are off by default and the hourly exchange limit is a hard ceiling.";
+
+    partial void OnEnableLiveTrafficChanged(bool value)
+    {
+        if (!value)
+        {
+            EnableRadioChatter = false;
+            UseLanguageModelForChatter = false;
+            SpeakChatter = false;
+        }
+
+        OnPropertyChanged(nameof(IsTrafficEnabled));
+        OnPropertyChanged(nameof(IsTrafficChatterEnabled));
+    }
+
+    partial void OnRealismProfileChanged(string value)
+    {
+        Domain.Atc.RealismProfile preset =
+            Domain.Atc.RealismProfile.FromName(value);
+
+        RequireReadbackBeforeProgressing = preset.RequireReadbackBeforeProgressing;
+        RequireCorrectCallsign = preset.RequireCorrectCallsign;
+        EnforceHoldShort = preset.EnforceHoldShort;
+        RequireCheckInOnFrequencyChange = preset.RequireCheckInOnFrequencyChange;
+        OnPropertyChanged(nameof(RealismProfileDescription));
+    }
+
+    partial void OnEnableRadioChatterChanged(bool value)
+    {
+        if (!value)
+        {
+            UseLanguageModelForChatter = false;
+            SpeakChatter = false;
+        }
+
+        OnPropertyChanged(nameof(IsTrafficChatterEnabled));
+    }
 
     /// <inheritdoc />
     public async Task RefreshAsync()
     {
         SimulatorStatus = _simulatorConnector.StatusMessage;
+        RefreshTrafficIntegrationStatus();
         RefreshInputDevices();
         RefreshTrainingPhrases();
         RefreshJoysticks();
         await RefreshKeyStatusAsync().ConfigureAwait(true);
+    }
+
+    private void RefreshTrafficIntegrationStatus()
+    {
+        if (!EnableLiveTraffic)
+        {
+            TrafficIntegrationStatus = "Disabled — no live traffic scan or recurring API use.";
+            return;
+        }
+
+        if (_msfsConnector.ConnectionState != Domain.SimulatorConnectionState.Connected)
+        {
+            TrafficIntegrationStatus = "Enabled, waiting for Microsoft Flight Simulator.";
+            return;
+        }
+
+        IReadOnlyList<MsfsTrafficSnapshot> contacts = _msfsConnector.NearbyTraffic;
+        int fslTlContacts = contacts.Count(contact => contact.IsFslTlModel);
+        string detected = contacts.Count switch
+        {
+            0 => "No nearby simulator traffic detected yet.",
+            1 => "1 nearby aircraft detected.",
+            _ => $"{contacts.Count} nearby aircraft detected.",
+        };
+
+        TrafficIntegrationStatus = fslTlContacts > 0
+            ? $"{detected} {fslTlContacts} use FSLTL models. {_trafficRadio.Status}"
+            : $"{detected} {_trafficRadio.Status}";
     }
 
     // =====================================================================================
@@ -322,6 +528,22 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     /// <summary>Stores the OpenRouter key. Called from the view with the password box contents.</summary>
     public async Task SaveOpenRouterKeyAsync(string key) =>
         await SaveKeyAsync(SecretKeys.OpenRouterApiKey, key, "OpenRouter").ConfigureAwait(true);
+
+    /// <summary>Stores the OpenAI API key.</summary>
+    public async Task SaveOpenAIKeyAsync(string key) =>
+        await SaveKeyAsync(SecretKeys.OpenAIApiKey, key, "OpenAI").ConfigureAwait(true);
+
+    /// <summary>Stores the Groq API key.</summary>
+    public async Task SaveGroqKeyAsync(string key) =>
+        await SaveKeyAsync(SecretKeys.GroqApiKey, key, "Groq").ConfigureAwait(true);
+
+    /// <summary>Stores the DeepSeek API key.</summary>
+    public async Task SaveDeepSeekKeyAsync(string key) =>
+        await SaveKeyAsync(SecretKeys.DeepSeekApiKey, key, "DeepSeek").ConfigureAwait(true);
+
+    /// <summary>Stores the Anthropic API key.</summary>
+    public async Task SaveAnthropicKeyAsync(string key) =>
+        await SaveKeyAsync(SecretKeys.AnthropicApiKey, key, "Anthropic").ConfigureAwait(true);
 
     /// <summary>Stores the Deepgram key. Called from the view with the password box contents.</summary>
     public async Task SaveDeepgramKeyAsync(string key) =>
@@ -357,6 +579,26 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     private async Task RemoveOpenRouterKeyAsync() =>
         await RemoveKeyAsync(SecretKeys.OpenRouterApiKey, "OpenRouter").ConfigureAwait(true);
 
+    /// <summary>Deletes the stored OpenAI key.</summary>
+    [RelayCommand]
+    private async Task RemoveOpenAIKeyAsync() =>
+        await RemoveKeyAsync(SecretKeys.OpenAIApiKey, "OpenAI").ConfigureAwait(true);
+
+    /// <summary>Deletes the stored Groq key.</summary>
+    [RelayCommand]
+    private async Task RemoveGroqKeyAsync() =>
+        await RemoveKeyAsync(SecretKeys.GroqApiKey, "Groq").ConfigureAwait(true);
+
+    /// <summary>Deletes the stored DeepSeek key.</summary>
+    [RelayCommand]
+    private async Task RemoveDeepSeekKeyAsync() =>
+        await RemoveKeyAsync(SecretKeys.DeepSeekApiKey, "DeepSeek").ConfigureAwait(true);
+
+    /// <summary>Deletes the stored Anthropic key.</summary>
+    [RelayCommand]
+    private async Task RemoveAnthropicKeyAsync() =>
+        await RemoveKeyAsync(SecretKeys.AnthropicApiKey, "Anthropic").ConfigureAwait(true);
+
     /// <summary>Deletes the stored Deepgram key.</summary>
     [RelayCommand]
     private async Task RemoveDeepgramKeyAsync() =>
@@ -377,12 +619,12 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         }
     }
 
-    /// <summary>Verifies the OpenRouter credentials.</summary>
+    /// <summary>Verifies the currently selected language-model provider.</summary>
     [RelayCommand]
-    private async Task TestOpenRouterAsync()
+    private async Task TestLanguageModelAsync()
     {
         IsTesting = true;
-        OpenRouterTestResult = "Testing…";
+        LanguageModelTestResult = $"Testing {SelectedLanguageModelProvider}…";
 
         try
         {
@@ -390,12 +632,12 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
                 .TestConnectionAsync(CancellationToken.None)
                 .ConfigureAwait(true);
 
-            OpenRouterTestResult = Describe(result);
+            LanguageModelTestResult = Describe(result);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "The OpenRouter connection test failed.");
-            OpenRouterTestResult = "The test failed. See the Diagnostics page.";
+            _logger.LogError(ex, "The language-model connection test failed.");
+            LanguageModelTestResult = "The test failed. See the Diagnostics page.";
         }
         finally
         {
@@ -805,6 +1047,22 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
                 .HasSecretAsync(SecretKeys.OpenRouterApiKey, CancellationToken.None)
                 .ConfigureAwait(true);
 
+            HasOpenAIKey = await _secretStore
+                .HasSecretAsync(SecretKeys.OpenAIApiKey, CancellationToken.None)
+                .ConfigureAwait(true);
+
+            HasGroqKey = await _secretStore
+                .HasSecretAsync(SecretKeys.GroqApiKey, CancellationToken.None)
+                .ConfigureAwait(true);
+
+            HasDeepSeekKey = await _secretStore
+                .HasSecretAsync(SecretKeys.DeepSeekApiKey, CancellationToken.None)
+                .ConfigureAwait(true);
+
+            HasAnthropicKey = await _secretStore
+                .HasSecretAsync(SecretKeys.AnthropicApiKey, CancellationToken.None)
+                .ConfigureAwait(true);
+
             HasDeepgramKey = await _secretStore
                 .HasSecretAsync(SecretKeys.DeepgramApiKey, CancellationToken.None)
                 .ConfigureAwait(true);
@@ -813,10 +1071,18 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         {
             _logger.LogError(ex, "The secret store could not be read.");
             HasOpenRouterKey = false;
+            HasOpenAIKey = false;
+            HasGroqKey = false;
+            HasDeepSeekKey = false;
+            HasAnthropicKey = false;
             HasDeepgramKey = false;
         }
 
         OpenRouterKeyStatus = HasOpenRouterKey ? "A key is stored (hidden)" : "No key stored";
+        OpenAIKeyStatus = HasOpenAIKey ? "A key is stored (hidden)" : "No key stored";
+        GroqKeyStatus = HasGroqKey ? "A key is stored (hidden)" : "No key stored";
+        DeepSeekKeyStatus = HasDeepSeekKey ? "A key is stored (hidden)" : "No key stored";
+        AnthropicKeyStatus = HasAnthropicKey ? "A key is stored (hidden)" : "No key stored";
         DeepgramKeyStatus = HasDeepgramKey ? "A key is stored (hidden)" : "No key stored";
     }
 
@@ -839,7 +1105,13 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
                     (ApplicationOptions.SectionName, "CloudServicesConsentGiven", JsonValue.Create(CloudServicesConsentGiven)),
                     (ApplicationOptions.SectionName, "FirstRunCompleted", JsonValue.Create(true)),
 
+                    (LanguageModelOptions.SectionName, "Provider",
+                        JsonValue.Create(LanguageModelProviders.Normalize(SelectedLanguageModelProvider))),
                     (OpenRouterOptions.SectionName, "Model", JsonValue.Create(OpenRouterModel.Trim())),
+                    (OpenAIOptions.SectionName, "Model", JsonValue.Create(OpenAIModel.Trim())),
+                    (GroqOptions.SectionName, "Model", JsonValue.Create(GroqModel.Trim())),
+                    (DeepSeekOptions.SectionName, "Model", JsonValue.Create(DeepSeekModel.Trim())),
+                    (AnthropicOptions.SectionName, "Model", JsonValue.Create(AnthropicModel.Trim())),
 
                     (DeepgramOptions.SectionName, "Voice", JsonValue.Create(DeepgramVoice.Trim())),
                     (DeepgramOptions.SectionName, "SpeechToTextModel", JsonValue.Create(DeepgramSpeechModel.Trim())),
@@ -862,7 +1134,24 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
 
                     (SimulatorOptions.SectionName, "PreferredConnector", JsonValue.Create(PreferredConnector)),
 
+                    (TrafficOptions.SectionName, "EnableLiveTraffic", JsonValue.Create(EnableLiveTraffic)),
+                    (TrafficOptions.SectionName, "EnableRadioChatter", JsonValue.Create(
+                        EnableLiveTraffic && EnableRadioChatter)),
+                    (TrafficOptions.SectionName, "UseLanguageModelForChatter", JsonValue.Create(
+                        EnableLiveTraffic
+                        && EnableRadioChatter
+                        && UseLanguageModelForChatter)),
+                    (TrafficOptions.SectionName, "SpeakChatter", JsonValue.Create(
+                        EnableLiveTraffic && EnableRadioChatter && SpeakChatter)),
+                    (TrafficOptions.SectionName, "PauseChatterWhenOnlineAtcClientDetected",
+                        JsonValue.Create(PauseChatterWhenOnlineAtcClientDetected)),
+                    (TrafficOptions.SectionName, "MaximumExchangesPerHour", JsonValue.Create(
+                        Math.Clamp(MaximumTrafficExchangesPerHour, 1, 30))),
+
                     (AtcRealismOptions.SectionName, "UseLanguageModelPhraseology", JsonValue.Create(UseLanguageModelPhraseology)),
+                    (AtcRealismOptions.SectionName, "DefaultPushbackDirection", JsonValue.Create(
+                        PushbackDirections.Normalize(DefaultPushbackDirection)
+                            ?? PushbackDirections.TailLeft)),
                     (AtcRealismOptions.SectionName, "RequireReadbackBeforeProgressing", JsonValue.Create(RequireReadbackBeforeProgressing)),
                     (AtcRealismOptions.SectionName, "RequireCorrectCallsign", JsonValue.Create(RequireCorrectCallsign)),
                     (AtcRealismOptions.SectionName, "EnforceHoldShort", JsonValue.Create(EnforceHoldShort)),
@@ -881,7 +1170,17 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
 
             // The realism profile is read live by the engine, so apply it now rather than at
             // the next restart.
-            _sessionContext.Realism = Domain.Atc.RealismProfile.FromName(RealismProfile);
+            _sessionContext.Realism =
+                Domain.Atc.RealismProfile.FromName(RealismProfile) with
+                {
+                    RequireReadbackBeforeProgressing = RequireReadbackBeforeProgressing,
+                    RequireCorrectCallsign = RequireCorrectCallsign,
+                    EnforceHoldShort = EnforceHoldShort,
+                    RequireCheckInOnFrequencyChange = RequireCheckInOnFrequencyChange,
+                };
+            _sessionContext.DefaultPushbackDirection =
+                PushbackDirections.Normalize(DefaultPushbackDirection)
+                ?? PushbackDirections.TailLeft;
             _speechRecognition.ApplyRecognitionProfile(BuildSpeechProfile());
             _joystickInput.Configure(
                 joystickBinding,
@@ -894,6 +1193,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
                 .ConfigureAwait(true);
 
             await _providerStatus.RefreshAsync(CancellationToken.None).ConfigureAwait(true);
+            RefreshTrafficIntegrationStatus();
 
             // Offline mode decides which implementations are registered, which happens once when
             // the host is built. It is the only setting on this page that still needs a restart.

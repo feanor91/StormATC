@@ -11,9 +11,11 @@ Configure the SDK only when StormATC should follow a real MSFS flight.
 
 ## Supported simulators
 
-StormATC uses the public, read-only SimConnect API from the MSFS 2020 SDK. Microsoft documents
-that a client compiled with the 2020 SDK also runs against MSFS 2024 as a legacy client. It will
-not receive 2024-only API features, which StormATC does not currently need.
+StormATC uses the public SimConnect API from the MSFS 2020 SDK. It reads aircraft and airport
+facility data and sends one radio event to tune COM1 to the published departure ATIS when a
+flight is loaded. Microsoft documents that a client compiled with the 2020 SDK also runs against
+MSFS 2024 as a legacy client. It will not receive 2024-only API features, which StormATC does not
+currently need.
 
 - [MSFS 2020 SimConnect documentation](https://docs.flightsimulator.com/html/Programming_Tools/SimConnect/SimConnect_SDK.htm)
 - [MSFS 2024 SimConnect compatibility](https://docs.flightsimulator.com/msfs2024/html/6_Programming_APIs/SimConnect/SimConnect_SDK.htm)
@@ -109,11 +111,50 @@ StormATC requests these 17 user-aircraft variables:
 | Radio | COM1 active and standby, COM2 active and standby |
 | Transponder | code |
 
-It never sends simulator events, writes data definitions, moves the aircraft, or changes radios.
+It never sends simulator events, moves the aircraft, changes radios, or otherwise writes
+simulator state.
+
+### FSLTL and nearby traffic
+
+The **Settings > Live integrations** switch enables a local 20 km nearby-aircraft scan. StormATC
+reads callsign, model title, position, altitude, ground speed, magnetic heading, vertical speed,
+weight-on-wheels, and runway state. A model title containing `FSLTL` is identified as FSLTL in
+the UI.
+
+StormATC does not inject, spawn, steer, remove, or animate those aircraft. FSLTL supplies the
+aircraft model and flight data through SimConnect, and MSFS manages the aircraft movement. Keep
+FSLTL running when live injected traffic is wanted. FlyByWire SimBridge is a separate FlyByWire
+aircraft companion service and is not required for StormATC traffic awareness.
+
+Traffic reading and all generated-radio features default off. Generated exchanges can use local
+wording without an API, while language-model wording and synthesized speech require separate
+opt-ins. The app pauses generated chatter by default when an online ATC client is detected so it
+does not compete with a real VATSIM or PilotEdge session.
+
+For a real airport, StormATC also uses SimConnect's read-only Facility Data API. It requests the
+airport reference point, runway directions, controller frequencies, parking spots, taxi points,
+taxiway names, and taxi paths. Those records are converted into the same deterministic graph used
+by bundled sample airports. If MSFS connects after startup, an earlier airport-data miss is
+retried automatically.
+
+Taxi clearance starts by snapping the aircraft's live latitude/longitude to a nearby published
+surface node. A snap farther than 600 metres is rejected as a scenery/position mismatch rather
+than silently routing from an unrelated stand. The clearance retains its exact graph nodes and
+edge names so the dashboard can report remaining distance and the next taxiway change.
+
+The SimConnect Facility Data interface exposes taxi points, paths, parking positions, names, and
+hold-short point types, but it does not expose placed taxiway-sign objects. StormATC therefore
+labels sign information as **expected sign cues inferred from the taxi graph**. These cues are a
+training aid and must be cross-checked against the current aerodrome chart and visible scenery.
 
 COM frequencies are requested in MHz. The transponder is requested in `number` units, which
 returns its decimal display digits; StormATC pads that value to four digits and validates that
 each digit is octal. It is not BCD-decoded unless the requested unit is changed to `Bco16`.
+
+Initial radio tuning uses the documented `COM_RADIO_SET_HZ` event and then selects COM1 as the
+transmit radio. ATIS is receive-only. Once the pilot selects Delivery, later controller handoffs
+are not auto-tuned: the active transmit frequency must match the assigned frequency or StormATC
+discards the transmission before speech recognition or any model request.
 
 The marshalled data structure uses the SDK's documented managed-code layout:
 `Sequential`, ANSI, and `Pack = 1`.
@@ -169,10 +210,10 @@ dotnet test StormATC.sln -c Release --no-build
 ```
 
 A live verification additionally requires a running copy of MSFS. The application log should
-contain `SimConnect connected` followed by `Received live MSFS aircraft data` with plausible
-position, altitude, COM1 frequency, and squawk values. Do not claim a live integration test from
-mock-only evidence.
+contain `SimConnect connected`, `Received live MSFS aircraft data`, and `Loaded {ICAO} from MSFS`
+with plausible aircraft values and non-zero taxi nodes and paths. Do not claim a live integration
+test from mock-only evidence.
 
-The connector was live-tested on 2026-07-27 with MSFS 2020 `1.39.12.0` and Core SDK `0.24.5`.
-On runway 19R at Oslo Gardermoen it reported position `60.21399, 11.09046`, altitude `683 ft`,
-COM1 `118.705 MHz`, and squawk `7000`.
+The connector was live-tested on 2026-07-28 with MSFS 2020 `1.39.12.0` and Core SDK `0.24.5`.
+At LEAL, Facility Data returned 2 runway directions, 148 parking positions, 510 taxi nodes, and
+517 taxi paths; a route to runway 10 was computed over the live graph.

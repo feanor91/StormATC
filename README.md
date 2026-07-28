@@ -75,7 +75,21 @@ See [docs/architecture.md](docs/architecture.md).
 - **Typed fallback**: use the complete ATC pipeline without a microphone or cloud account
 - **Deterministic ATC engine**: clearance delivery, ground, tower, departure, centre, approach
 - **Real readback checking**: item by item, with targeted corrections naming the value you got wrong
-- **Taxi routing**: shortest-path over an aerodrome graph, avoiding runway crossings where it can
+- **Live MSFS taxi routing**: airport parking, taxi points, names, paths, runways, and frequencies
+  come from the simulator's Facility Data API; routes begin at the aircraft's live surface
+  position and avoid runway crossings where they can
+- **VATSIM-style surface training**: the dashboard shows the current stand/taxiway, clearance
+  limit, remaining route, next turn, and expected junction sign cues while keeping radio
+  phraseology concise
+- **Departure ATIS before first contact**: COM1 starts on the published ATIS and StormATC speaks
+  the current airport, information code, Zulu time, observed weather, runway, and QNH; the Radio
+  page shows the same facts and continuously loops named cached audio without another synthesis
+  request. Local deterministic comparisons create a new edition only after operational values
+  change; no language model generates or checks ATIS
+- **Opt-in FSLTL traffic awareness**: read moving simulator traffic through SimConnect, identify
+  FSLTL models, and show nearby contacts without controlling or duplicating the traffic injector
+- **Optional simulated traffic radio**: display occasional ATC/pilot exchanges using free local
+  wording, or separately opt in to AI wording and speech with an hourly usage ceiling
 - **MSFS via SimConnect**, connected automatically when the simulator is running, and switched to
   on its own if you start it later — with a scripted mock aircraft standing in until then
 - **SimBrief import from inside the app**: enter your user ID once and StormATC fetches your
@@ -93,7 +107,9 @@ See [docs/architecture.md](docs/architecture.md).
 - Windows 10 or 11
 - [.NET 10 SDK](https://dotnet.microsoft.com/download) to build, or the .NET 10 Desktop Runtime to run
 - Optional: Microsoft Flight Simulator with the SimConnect SDK
-- Optional: an [OpenRouter](https://openrouter.ai) account for natural phrasing
+- Optional: FSLTL for injected live traffic; FlyByWire SimBridge is not required
+- Optional: an OpenRouter, OpenAI API, Groq, DeepSeek, or Anthropic account for model-assisted
+  intent interpretation and phraseology
 - Optional: a [Deepgram](https://deepgram.com) account for speech recognition and the controller voice
 
 ---
@@ -150,7 +166,7 @@ Nothing has to be configured. Each part decides for itself, and says what it dec
 | **Simulator** | A scripted aircraft flies the bundled fictional route STMR → STMD | MSFS is connected automatically when it is running. Start it later and StormATC switches over on its own |
 | **Flight plan** | The bundled fictional sample flight | Enter your SimBrief user ID on the Flight Plan page and press import |
 | **Speaking** | Use Typed transmission on the Dashboard | Add a Deepgram key and hold push-to-talk |
-| **Phrasing** | Deterministic phraseology, always available | Add an OpenRouter key and model for natural wording |
+| **Phrasing** | Deterministic phraseology, always available | Choose OpenRouter, OpenAI, Groq, DeepSeek, or Anthropic and add that provider's key and model |
 
 Every one of those is independent. Adding a SimBrief ID does not enable any cloud service, and
 connecting a simulator does not require a key. Nothing contacts anything until you configure it,
@@ -162,26 +178,22 @@ and there is an **Offline mode** in Settings that guarantees that regardless of 
 
 **StormATC is free and open source.** It has no accounts, no telemetry, and no subscription.
 
-**OpenRouter and Deepgram are independent third-party services.** They bill you according to their
-own pricing, which is theirs to set and change. StormATC does not resell them, does not have a
-free tier to offer on their behalf, and makes no claim about what they cost. Check their current
-rates before enabling them.
+**Every optional cloud provider is an independent third-party service.** OpenRouter, OpenAI,
+Groq, DeepSeek, Anthropic, and Deepgram bill their own API accounts according to their current
+pricing. StormATC does not resell them or make claims about their rates. A ChatGPT subscription
+does not include OpenAI API usage.
 
 ### Provider roadmap
 
-OpenRouter and Deepgram are the first supported cloud integrations, not a permanent limit or an
-exclusive partnership. StormATC's provider abstractions are intended to support more user-selected
-options over time. Areas being considered include:
+StormATC v0.2 directly supports OpenRouter, OpenAI, Groq, DeepSeek, and Anthropic for language
+models, plus Deepgram for speech. The provider abstractions remain open to:
 
-- direct model integrations such as OpenAI, Anthropic, DeepSeek, and other compatible providers;
 - additional cloud speech-to-text and text-to-speech services; and
 - local or fully offline speech recognition and text-to-speech, including voices that do not
   require a Deepgram account.
 
-These are roadmap directions, not claims that the integrations already exist or promises of
-specific release dates. Every cloud integration will remain optional. Users and contributors must
-use their own provider accounts and API keys; StormATC will not issue, bundle, or share credentials.
-Local and offline options should require no cloud key.
+Every cloud integration remains optional. Users and contributors supply their own provider
+accounts and API keys; StormATC does not issue, bundle, or share credentials.
 
 ---
 
@@ -196,7 +208,7 @@ Keys are stored by the operating system under your user account, via DPAPI. Stor
 - never displays a stored key back to you
 - stores a key only when you explicitly click Save
 - requires explicit cloud-services consent before using a key
-- refuses to send a key anywhere except the official OpenRouter or Deepgram HTTPS endpoint
+- refuses to send a key anywhere except the selected provider's official HTTPS endpoint
 - disables automatic HTTP redirects on credential-bearing requests
 
 Enter, test, and remove keys on the Settings page. See
@@ -213,8 +225,8 @@ Enter, test, and remove keys on the Settings page. See
 - With no keys configured, **nothing leaves your machine at all**.
 - With Deepgram enabled, held-PTT audio goes to Deepgram for transcription and controller text
   goes there to be spoken.
-- With OpenRouter enabled, transcripts and the facts a controller has approved go to the model
-  you chose.
+- With a language-model provider enabled, transcripts and the facts a controller has approved go
+  only to the selected provider.
 
 ---
 
@@ -245,7 +257,7 @@ SimConnect licence files supplied with your exact MSFS SDK, and run:
 
 ```powershell
 winget install --id JRSoftware.InnoSetup --exact
-.\scripts\New-StormATCInstaller.ps1 -Version 0.1.0 -AcknowledgeSimConnectLicenseReview
+.\scripts\New-StormATCInstaller.ps1 -Version 0.1.2 -AcknowledgeSimConnectLicenseReview
 ```
 
 The publisher runs the secret scan and full Release tests, requires both SimConnect runtime

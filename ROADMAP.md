@@ -14,9 +14,9 @@ promise of dates or a claim that an item is already assigned.
 
 ### Provider choice and local AI
 
-- Keep OpenRouter and Deepgram as optional integrations rather than hard dependencies.
-- Explore direct model adapters for providers such as OpenAI, Anthropic, DeepSeek, and other
-  compatible APIs.
+- Keep OpenRouter, OpenAI, Groq, DeepSeek, Anthropic, and Deepgram optional rather than hard
+  dependencies.
+- Expand provider-specific structured-output compatibility as model capabilities evolve.
 - Add more speech-to-text and text-to-speech provider choices behind the existing interfaces.
 - Investigate local and fully offline speech recognition and text-to-speech, including controller
   voices that do not require a Deepgram account.

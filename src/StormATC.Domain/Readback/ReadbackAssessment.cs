@@ -1,3 +1,4 @@
+using StormATC.Domain.Atc;
 using StormATC.Domain.Intents;
 using StormATC.Domain.Sessions;
 
@@ -21,11 +22,13 @@ public interface IReadbackEvaluator
     /// <param name="intent">The parsed pilot intent.</param>
     /// <param name="transcript">The raw transcript, used as a fallback extraction source.</param>
     /// <param name="session">The current session, used for callsign verification.</param>
+    /// <param name="realism">The active transcript/readback tolerance policy.</param>
     ReadbackAssessment Evaluate(
         PendingReadback pending,
         PilotIntent intent,
         string transcript,
-        AtcSession session);
+        AtcSession session,
+        RealismProfile realism);
 }
 
 /// <summary>The outcome of comparing a pilot readback against the issued clearance.</summary>

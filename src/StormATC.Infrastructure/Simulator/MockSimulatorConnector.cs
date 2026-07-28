@@ -250,6 +250,16 @@ public sealed class MockSimulatorConnector(
         PublishState();
     }
 
+    /// <inheritdoc />
+    public Task<bool> TuneCom1Async(
+        Frequency frequency,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        SetCom1Active(frequency);
+        return Task.FromResult(true);
+    }
+
     /// <summary>
     /// Moves the aircraft onto the runway surface without a clearance, to exercise the
     /// hold-short violation path.

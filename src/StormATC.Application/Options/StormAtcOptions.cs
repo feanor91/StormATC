@@ -47,7 +47,44 @@ public sealed class ApplicationOptions
     public string RealismProfile { get; init; } = "Standard";
 }
 
-/// <summary>OpenRouter connection and generation settings.</summary>
+/// <summary>Language-model selection and generation settings shared by every provider.</summary>
+public sealed class LanguageModelOptions
+{
+    public const string SectionName = "LanguageModel";
+
+    /// <summary>Selected provider: OpenRouter, OpenAI, Groq, DeepSeek, or Anthropic.</summary>
+    public string Provider { get; init; } = LanguageModelProviders.OpenRouter;
+
+    /// <summary>Temperature for intent parsing. Zero, because parsing must be reproducible.</summary>
+    [Range(0.0, 2.0)]
+    public double IntentParserTemperature { get; init; }
+
+    /// <summary>
+    /// Temperature for phraseology. Zero keeps standard phraseology stable; users can opt into
+    /// a small amount of variation without changing the approved facts.
+    /// </summary>
+    [Range(0.0, 2.0)]
+    public double PhraseologyTemperature { get; init; }
+}
+
+/// <summary>Stable language-model provider identifiers used by configuration and the UI.</summary>
+public static class LanguageModelProviders
+{
+    public const string OpenRouter = "OpenRouter";
+    public const string OpenAI = "OpenAI";
+    public const string Groq = "Groq";
+    public const string DeepSeek = "DeepSeek";
+    public const string Anthropic = "Anthropic";
+
+    public static IReadOnlyList<string> All { get; } =
+        [OpenRouter, OpenAI, Groq, DeepSeek, Anthropic];
+
+    public static string Normalize(string? provider) =>
+        All.FirstOrDefault(item => item.Equals(provider, StringComparison.OrdinalIgnoreCase))
+        ?? OpenRouter;
+}
+
+/// <summary>OpenRouter connection settings.</summary>
 /// <remarks>
 /// The API key is deliberately absent. It is held in <see cref="Abstractions.ISecretStore"/>
 /// so that it cannot be serialised into a settings file, written to a log, or included in a
@@ -74,14 +111,6 @@ public sealed class OpenRouterOptions
     [Range(0, 5)]
     public int MaximumRetries { get; init; } = 2;
 
-    /// <summary>Temperature for intent parsing. Zero, because parsing must be reproducible.</summary>
-    [Range(0.0, 2.0)]
-    public double IntentParserTemperature { get; init; }
-
-    /// <summary>Temperature for phraseology. Small, so repeated instructions vary a little.</summary>
-    [Range(0.0, 2.0)]
-    public double PhraseologyTemperature { get; init; } = 0.2;
-
     /// <summary>Maximum response bytes accepted, as a defence against a runaway response.</summary>
     [Range(1024, 10 * 1024 * 1024)]
     public int MaximumResponseBytes { get; init; } = 256 * 1024;
@@ -93,6 +122,86 @@ public sealed class OpenRouterOptions
     public string? ApplicationTitle { get; init; } = "StormATC";
 
     /// <summary>True when enough is configured to attempt a request.</summary>
+    public bool IsConfigured => !string.IsNullOrWhiteSpace(Model);
+}
+
+/// <summary>OpenAI API connection settings. A ChatGPT subscription is not an API credential.</summary>
+public sealed class OpenAIOptions
+{
+    public const string SectionName = "OpenAI";
+
+    [Url]
+    public string BaseUrl { get; init; } = "https://api.openai.com/v1";
+
+    public string Model { get; init; } = string.Empty;
+    public TimeSpan Timeout { get; init; } = TimeSpan.FromSeconds(20);
+
+    [Range(0, 5)]
+    public int MaximumRetries { get; init; } = 2;
+
+    [Range(1024, 10 * 1024 * 1024)]
+    public int MaximumResponseBytes { get; init; } = 256 * 1024;
+
+    public bool IsConfigured => !string.IsNullOrWhiteSpace(Model);
+}
+
+/// <summary>Groq API connection settings.</summary>
+public sealed class GroqOptions
+{
+    public const string SectionName = "Groq";
+
+    [Url]
+    public string BaseUrl { get; init; } = "https://api.groq.com/openai/v1";
+
+    public string Model { get; init; } = string.Empty;
+    public TimeSpan Timeout { get; init; } = TimeSpan.FromSeconds(20);
+
+    [Range(0, 5)]
+    public int MaximumRetries { get; init; } = 2;
+
+    [Range(1024, 10 * 1024 * 1024)]
+    public int MaximumResponseBytes { get; init; } = 256 * 1024;
+
+    public bool IsConfigured => !string.IsNullOrWhiteSpace(Model);
+}
+
+/// <summary>DeepSeek API connection settings.</summary>
+public sealed class DeepSeekOptions
+{
+    public const string SectionName = "DeepSeek";
+
+    [Url]
+    public string BaseUrl { get; init; } = "https://api.deepseek.com";
+
+    public string Model { get; init; } = string.Empty;
+    public TimeSpan Timeout { get; init; } = TimeSpan.FromSeconds(20);
+
+    [Range(0, 5)]
+    public int MaximumRetries { get; init; } = 2;
+
+    [Range(1024, 10 * 1024 * 1024)]
+    public int MaximumResponseBytes { get; init; } = 256 * 1024;
+
+    public bool IsConfigured => !string.IsNullOrWhiteSpace(Model);
+}
+
+/// <summary>Anthropic Messages API connection settings.</summary>
+public sealed class AnthropicOptions
+{
+    public const string SectionName = "Anthropic";
+
+    [Url]
+    public string BaseUrl { get; init; } = "https://api.anthropic.com";
+
+    public string Model { get; init; } = string.Empty;
+    public TimeSpan Timeout { get; init; } = TimeSpan.FromSeconds(20);
+
+    [Range(0, 5)]
+    public int MaximumRetries { get; init; } = 2;
+
+    [Range(1024, 10 * 1024 * 1024)]
+    public int MaximumResponseBytes { get; init; } = 256 * 1024;
+
     public bool IsConfigured => !string.IsNullOrWhiteSpace(Model);
 }
 
@@ -203,6 +312,49 @@ public sealed class SimulatorOptions
     public bool AutoReconnect { get; init; } = true;
 }
 
+/// <summary>Optional live-traffic awareness and background radio simulation.</summary>
+/// <remarks>
+/// Every feature in this section defaults off. Reading SimConnect traffic is local and free,
+/// but language-model wording and synthesized voices can consume third-party API credits.
+/// Requiring separate opt-ins prevents adding an API key from silently enabling recurring calls.
+/// </remarks>
+public sealed class TrafficOptions
+{
+    public const string SectionName = "Traffic";
+
+    /// <summary>
+    /// Reads nearby simulator-managed aircraft, including FSLTL and VATSIM model-matched traffic.
+    /// </summary>
+    public bool EnableLiveTraffic { get; init; }
+
+    /// <summary>Produces occasional controller-and-pilot exchanges for observed traffic.</summary>
+    public bool EnableRadioChatter { get; init; }
+
+    /// <summary>
+    /// Allows one constrained language-model request per generated exchange for natural wording.
+    /// When false, the local deterministic phrase set is used and no model credits are consumed.
+    /// </summary>
+    public bool UseLanguageModelForChatter { get; init; }
+
+    /// <summary>
+    /// Synthesizes both sides of a generated exchange through the configured TTS provider.
+    /// When false, exchanges remain text-only and consume no speech credits.
+    /// </summary>
+    public bool SpeakChatter { get; init; }
+
+    /// <summary>
+    /// Suppresses generated radio while a common online-ATC client is running.
+    /// </summary>
+    public bool PauseChatterWhenOnlineAtcClientDetected { get; init; } = true;
+
+    /// <summary>Hard hourly ceiling for generated exchanges and their associated API calls.</summary>
+    [Range(1, 30)]
+    public int MaximumExchangesPerHour { get; init; } = 6;
+
+    /// <summary>Minimum quiet time between background exchanges.</summary>
+    public TimeSpan MinimumInterval { get; init; } = TimeSpan.FromMinutes(2);
+}
+
 /// <summary>Audio capture, playback, and radio-effect settings.</summary>
 public sealed class AudioOptions
 {
@@ -274,6 +426,11 @@ public sealed class PersistenceOptions
 public sealed class AtcRealismOptions
 {
     public const string SectionName = "AtcRealism";
+
+    /// <summary>
+    /// Relative GSX-style tail direction used when the pilot did not request one explicitly.
+    /// </summary>
+    public string DefaultPushbackDirection { get; init; } = "tail left";
 
     /// <summary>When true, an outstanding mandatory readback blocks further clearances.</summary>
     public bool RequireReadbackBeforeProgressing { get; init; } = true;

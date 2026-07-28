@@ -143,8 +143,17 @@ public sealed class EndToEndMockSessionTests : IAsyncLifetime, IDisposable
         AtcSession session = _context.CurrentSession;
 
         Assert.Equal("STORM123", session.Callsign?.Normalized);
-        Assert.Equal(ControllerPosition.ClearanceDelivery, session.CurrentController);
-        Assert.Equal(Frequency.FromMegahertz(121.800m), session.CurrentFrequency);
+        Assert.Equal(ControllerPosition.Atis, session.CurrentController);
+        Assert.Equal(Frequency.FromMegahertz(132.150m), session.CurrentFrequency);
+
+        TransmissionProcessingResult atisAttempt = await SayAsync(
+            "storm one two three request IFR clearance");
+        Assert.False(atisAttempt.Processed);
+        Assert.True(atisAttempt.WasIgnoredOnAtis);
+
+        await TuneAsync(Frequency.FromMegahertz(132.150m));
+        await TuneAsync(Frequency.FromMegahertz(121.800m));
+        Assert.Equal(ControllerPosition.ClearanceDelivery, _context.CurrentSession.CurrentController);
 
         // --- 1. IFR clearance ------------------------------------------------------------
         TransmissionProcessingResult clearance = await SayAsync("storm one two three request ifr clearance");
@@ -169,6 +178,7 @@ public sealed class EndToEndMockSessionTests : IAsyncLifetime, IDisposable
         // Delivery hands the aircraft to Ground on the published frequency.
         Assert.Equal(ControllerPosition.Ground, _context.CurrentSession.CurrentController);
         Assert.Equal(Frequency.FromMegahertz(121.700m), _context.CurrentSession.CurrentFrequency);
+        await TuneAsync(Frequency.FromMegahertz(121.700m));
 
         // --- 3. Pushback -------------------------------------------------------------------
         TransmissionProcessingResult pushback = await SayAsync("storm one two three request pushback");
@@ -203,6 +213,7 @@ public sealed class EndToEndMockSessionTests : IAsyncLifetime, IDisposable
 
         Assert.Equal(ControllerPosition.Tower, _context.CurrentSession.CurrentController);
         Assert.Equal(Frequency.FromMegahertz(118.300m), _context.CurrentSession.CurrentFrequency);
+        await TuneAsync(Frequency.FromMegahertz(118.300m));
 
         // --- 6. Traffic on the runway blocks the takeoff clearance -----------------------------
         _traffic.OccupyRunway(
@@ -239,6 +250,7 @@ public sealed class EndToEndMockSessionTests : IAsyncLifetime, IDisposable
 
         Assert.Equal(ControllerPosition.Departure, _context.CurrentSession.CurrentController);
         Assert.Equal(Frequency.FromMegahertz(119.100m), _context.CurrentSession.CurrentFrequency);
+        await TuneAsync(Frequency.FromMegahertz(119.100m));
 
         // --- 9. Check in, and read back the climb that comes with it -----------------------------
         TransmissionProcessingResult checkIn = await SayAsync(
@@ -281,6 +293,7 @@ public sealed class EndToEndMockSessionTests : IAsyncLifetime, IDisposable
 
         Assert.Equal(ControllerPosition.Approach, _context.CurrentSession.CurrentController);
         Assert.Equal(Frequency.FromMegahertz(120.900m), _context.CurrentSession.CurrentFrequency);
+        await TuneAsync(Frequency.FromMegahertz(120.900m));
 
         // --- 12. Approach clearance, which is not a landing clearance -------------------------------------
         TransmissionProcessingResult approach = await SayAsync("storm one two three request approach");
@@ -304,6 +317,7 @@ public sealed class EndToEndMockSessionTests : IAsyncLifetime, IDisposable
         Assert.Equal(ControllerPosition.Tower, _context.CurrentSession.CurrentController);
         Assert.Equal(Frequency.FromMegahertz(118.700m), _context.CurrentSession.CurrentFrequency);
         Assert.Equal(FlightPhase.Final, _context.CurrentSession.Phase);
+        await TuneAsync(Frequency.FromMegahertz(118.700m));
 
         TransmissionProcessingResult landing = await SayAsync(
             "storm one two three established on the localizer");
@@ -321,7 +335,16 @@ public sealed class EndToEndMockSessionTests : IAsyncLifetime, IDisposable
         Assert.Equal(FlightPhase.Landed, _context.CurrentSession.Phase);
 
         await SayAsync("storm one two three runway vacated");
-        await SayAsync("storm one two three request taxi to stand");
+        Assert.Equal(ControllerPosition.Ground, _context.CurrentSession.CurrentController);
+        Assert.Equal(Frequency.FromMegahertz(121.600m), _context.CurrentSession.CurrentFrequency);
+        await TuneAsync(Frequency.FromMegahertz(121.600m));
+        TransmissionProcessingResult taxiIn = await SayAsync(
+            "storm one two three request taxi to stand");
+        Assert.True(taxiIn.Processed);
+        Assert.True(
+            taxiIn.Decision?.Accepted,
+            taxiIn.Decision?.RejectionReason ?? "No taxi-to-stand decision was produced.");
+        Assert.Equal(FlightPhase.TaxiIn, _context.CurrentSession.Phase);
 
         await AdvanceSimulatorToAsync(MockFlightStage.TaxiingIn);
         await AdvanceSimulatorToAsync(MockFlightStage.Parked);
@@ -381,10 +404,16 @@ public sealed class EndToEndMockSessionTests : IAsyncLifetime, IDisposable
         List<ControllerPosition> distinct = [.. _controllerHistory.Distinct()];
 
         Assert.Contains(ControllerPosition.ClearanceDelivery, distinct);
+        Assert.Contains(ControllerPosition.Atis, distinct);
         Assert.Contains(ControllerPosition.Ground, distinct);
         Assert.Contains(ControllerPosition.Tower, distinct);
         Assert.Contains(ControllerPosition.Departure, distinct);
         Assert.Contains(ControllerPosition.Approach, distinct);
+
+        Assert.True(
+            _controllerHistory.IndexOf(ControllerPosition.Atis)
+                < _controllerHistory.IndexOf(ControllerPosition.ClearanceDelivery),
+            "ATIS must come before Delivery.");
 
         Assert.True(
             _controllerHistory.IndexOf(ControllerPosition.ClearanceDelivery)
@@ -471,6 +500,12 @@ public sealed class EndToEndMockSessionTests : IAsyncLifetime, IDisposable
             PilotTransmission.Create(
                 _context.CurrentSession.SessionId, text, TransmissionSource.ManualText, _clock.UtcNow),
             CancellationToken.None);
+    }
+
+    private async Task TuneAsync(Frequency frequency)
+    {
+        Assert.True(await _simulator.TuneCom1Async(frequency, CancellationToken.None));
+        _context.UpdateAircraftState(_simulator.GetCurrentState());
     }
 
     /// <summary>

@@ -41,7 +41,12 @@ public sealed partial class DiagnosticsViewModel : ObservableObject, IRefreshabl
     private readonly ApplicationStartupService _startupService;
     private readonly ProviderStatusService _providerStatus;
     private readonly DiagnosticsOptions _diagnosticsOptions;
-    private readonly OpenRouterOptions _openRouterOptions;
+    private readonly IOptionsMonitor<LanguageModelOptions> _languageModelOptions;
+    private readonly IOptionsMonitor<OpenRouterOptions> _openRouterOptions;
+    private readonly IOptionsMonitor<OpenAIOptions> _openAIOptions;
+    private readonly IOptionsMonitor<GroqOptions> _groqOptions;
+    private readonly IOptionsMonitor<DeepSeekOptions> _deepSeekOptions;
+    private readonly IOptionsMonitor<AnthropicOptions> _anthropicOptions;
     private readonly ILogger<DiagnosticsViewModel> _logger;
 
     private bool _disposed;
@@ -77,7 +82,10 @@ public sealed partial class DiagnosticsViewModel : ObservableObject, IRefreshabl
     private string _statusMessage = string.Empty;
 
     [ObservableProperty]
-    private string _openRouterKeyPresence = "Unknown";
+    private string _languageModelKeyPresence = "Unknown";
+
+    [ObservableProperty]
+    private string _languageModelProvider = LanguageModelProviders.OpenRouter;
 
     [ObservableProperty]
     private string _deepgramKeyPresence = "Unknown";
@@ -95,7 +103,12 @@ public sealed partial class DiagnosticsViewModel : ObservableObject, IRefreshabl
         ApplicationStartupService startupService,
         ProviderStatusService providerStatus,
         IOptions<DiagnosticsOptions> diagnosticsOptions,
-        IOptions<OpenRouterOptions> openRouterOptions,
+        IOptionsMonitor<LanguageModelOptions> languageModelOptions,
+        IOptionsMonitor<OpenRouterOptions> openRouterOptions,
+        IOptionsMonitor<OpenAIOptions> openAIOptions,
+        IOptionsMonitor<GroqOptions> groqOptions,
+        IOptionsMonitor<DeepSeekOptions> deepSeekOptions,
+        IOptionsMonitor<AnthropicOptions> anthropicOptions,
         ILogger<DiagnosticsViewModel> logger)
     {
         _coordinator = coordinator ?? throw new ArgumentNullException(nameof(coordinator));
@@ -109,7 +122,16 @@ public sealed partial class DiagnosticsViewModel : ObservableObject, IRefreshabl
         _startupService = startupService ?? throw new ArgumentNullException(nameof(startupService));
         _providerStatus = providerStatus ?? throw new ArgumentNullException(nameof(providerStatus));
         _diagnosticsOptions = diagnosticsOptions?.Value ?? throw new ArgumentNullException(nameof(diagnosticsOptions));
-        _openRouterOptions = openRouterOptions?.Value ?? throw new ArgumentNullException(nameof(openRouterOptions));
+        _languageModelOptions =
+            languageModelOptions ?? throw new ArgumentNullException(nameof(languageModelOptions));
+        _openRouterOptions =
+            openRouterOptions ?? throw new ArgumentNullException(nameof(openRouterOptions));
+        _openAIOptions = openAIOptions ?? throw new ArgumentNullException(nameof(openAIOptions));
+        _groqOptions = groqOptions ?? throw new ArgumentNullException(nameof(groqOptions));
+        _deepSeekOptions =
+            deepSeekOptions ?? throw new ArgumentNullException(nameof(deepSeekOptions));
+        _anthropicOptions =
+            anthropicOptions ?? throw new ArgumentNullException(nameof(anthropicOptions));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         LatencySamples = [];
@@ -148,7 +170,17 @@ public sealed partial class DiagnosticsViewModel : ObservableObject, IRefreshabl
         SimulatorDetail = _simulatorConnector.StatusMessage;
         FlightPlanSource = _flightPlanProvider.LastProviderUsed;
 
-        ConfiguredModel = _openRouterOptions.Model is { Length: > 0 } model
+        LanguageModelProvider = LanguageModelProviders.Normalize(
+            _languageModelOptions.CurrentValue.Provider);
+        string configuredModel = LanguageModelProvider switch
+        {
+            LanguageModelProviders.OpenAI => _openAIOptions.CurrentValue.Model,
+            LanguageModelProviders.Groq => _groqOptions.CurrentValue.Model,
+            LanguageModelProviders.DeepSeek => _deepSeekOptions.CurrentValue.Model,
+            LanguageModelProviders.Anthropic => _anthropicOptions.CurrentValue.Model,
+            _ => _openRouterOptions.CurrentValue.Model,
+        };
+        ConfiguredModel = configuredModel is { Length: > 0 } model
             ? model
             : "Not configured — deterministic phraseology only";
 
@@ -212,8 +244,16 @@ public sealed partial class DiagnosticsViewModel : ObservableObject, IRefreshabl
     {
         try
         {
-            OpenRouterKeyPresence = await _secretStore
-                .HasSecretAsync(SecretKeys.OpenRouterApiKey, CancellationToken.None).ConfigureAwait(true)
+            string secretKey = LanguageModelProvider switch
+            {
+                LanguageModelProviders.OpenAI => SecretKeys.OpenAIApiKey,
+                LanguageModelProviders.Groq => SecretKeys.GroqApiKey,
+                LanguageModelProviders.DeepSeek => SecretKeys.DeepSeekApiKey,
+                LanguageModelProviders.Anthropic => SecretKeys.AnthropicApiKey,
+                _ => SecretKeys.OpenRouterApiKey,
+            };
+            LanguageModelKeyPresence = await _secretStore
+                .HasSecretAsync(secretKey, CancellationToken.None).ConfigureAwait(true)
                 ? "Stored"
                 : "Not stored";
 
@@ -225,7 +265,7 @@ public sealed partial class DiagnosticsViewModel : ObservableObject, IRefreshabl
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "The secret store could not be queried.");
-            OpenRouterKeyPresence = "Unknown";
+            LanguageModelKeyPresence = "Unknown";
             DeepgramKeyPresence = "Unknown";
         }
     }
@@ -332,7 +372,9 @@ public sealed partial class DiagnosticsViewModel : ObservableObject, IRefreshabl
         builder.AppendLine();
 
         builder.AppendLine("Credentials (presence only — values are never exported)");
-        builder.AppendLine(CultureInfo.InvariantCulture, $"  OpenRouter key: {OpenRouterKeyPresence}");
+        builder.AppendLine(
+            CultureInfo.InvariantCulture,
+            $"  {LanguageModelProvider} key: {LanguageModelKeyPresence}");
         builder.AppendLine(CultureInfo.InvariantCulture, $"  Deepgram key: {DeepgramKeyPresence}");
         builder.AppendLine();
 

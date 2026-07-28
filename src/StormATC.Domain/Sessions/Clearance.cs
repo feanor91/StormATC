@@ -66,6 +66,22 @@ public sealed record Clearance
     /// <summary>Taxiways to follow, in order.</summary>
     public IReadOnlyList<string> TaxiRoute { get; init; } = [];
 
+    /// <summary>
+    /// Exact taxi-graph nodes traversed by this clearance, in order. This is retained separately
+    /// from <see cref="TaxiRoute"/> so the learning UI can show progress and junction guidance
+    /// without asking a language model to reconstruct the route.
+    /// </summary>
+    public IReadOnlyList<string> TaxiPathNodes { get; init; } = [];
+
+    /// <summary>
+    /// Taxiway name for each edge in <see cref="TaxiPathNodes"/>. This preserves the exact
+    /// choice where scenery contains parallel graph links between the same two points.
+    /// </summary>
+    public IReadOnlyList<string> TaxiPathTaxiways { get; init; } = [];
+
+    /// <summary>Total planned taxi distance in metres, when a graph route was available.</summary>
+    public double? TaxiRouteLengthMeters { get; init; }
+
     /// <summary>Destination of a taxi clearance — a holding point or a stand name.</summary>
     public string? TaxiDestination { get; init; }
 

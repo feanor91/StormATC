@@ -40,7 +40,7 @@ will supply SimConnect. When that review is complete:
 
 ```powershell
 .\scripts\New-StormATCInstaller.ps1 `
-  -Version 0.1.0 `
+  -Version 0.1.2 `
   -AcknowledgeSimConnectLicenseReview
 ```
 
@@ -49,9 +49,9 @@ This performs the repository safety scan, locked restore, full Release tests, se
 generation. Normal builds and the `win-x64` publish use separate checked-in NuGet lock graphs so
 both paths remain reproducible. The output is placed in `artifacts\release\`:
 
-- `StormATC-Setup-v0.1.0-win-x64.exe` — normal Windows installer
-- `StormATC-v0.1.0-win-x64.zip` — portable package
-- `SHA256SUMS-v0.1.0.txt` — hashes for both downloads
+- `StormATC-Setup-v0.1.2-win-x64.exe` — normal Windows installer
+- `StormATC-v0.1.2-win-x64.zip` — portable package
+- `SHA256SUMS-v0.1.2.txt` — hashes for both downloads
 
 Do not rename or edit those files after the checksum file is generated.
 
@@ -62,24 +62,24 @@ and push both:
 
 ```powershell
 git add .
-git commit -m "Release StormATC 0.1.0"
+git commit -m "Release StormATC 0.1.2"
 git push
-git tag -a v0.1.0 -m "StormATC v0.1.0"
-git push origin v0.1.0
+git tag -a v0.1.2 -m "StormATC v0.1.2"
+git push origin v0.1.2
 ```
 
 The tag workflow validates that source and creates a draft GitHub Release. Upload the locally
 built, licence-reviewed artifacts and keep the release as a draft:
 
 ```powershell
-.\scripts\Publish-GitHubRelease.ps1 -Version 0.1.0
+.\scripts\Publish-GitHubRelease.ps1 -Version 0.1.2
 ```
 
 Open the draft on GitHub, test its downloaded installer on another Windows PC, review the
 generated release notes, and publish it with:
 
 ```powershell
-.\scripts\Publish-GitHubRelease.ps1 -Version 0.1.0 -Publish
+.\scripts\Publish-GitHubRelease.ps1 -Version 0.1.2 -Publish
 ```
 
 The upload script verifies both SHA-256 hashes and requires the matching tag at `HEAD` before it
@@ -96,7 +96,7 @@ certificate store, build with its SHA-1 thumbprint:
 
 ```powershell
 .\scripts\New-StormATCInstaller.ps1 `
-  -Version 0.1.0 `
+  -Version 0.1.2 `
   -SigningCertificateThumbprint YOUR_CERTIFICATE_THUMBPRINT `
   -AcknowledgeSimConnectLicenseReview
 ```

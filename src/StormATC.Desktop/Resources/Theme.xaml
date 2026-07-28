@@ -29,6 +29,12 @@
   <Color x:Key="TextTertiaryColor">#6B7C8F</Color>
   <Color x:Key="TextDisabledColor">#4A5866</Color>
 
+  <!-- Native WPF selectors consult the Windows highlight resources directly, bypassing
+       ComboBoxItem.Foreground for the selected row. Override those two brushes so selected
+       provider names remain readable in the dark theme. -->
+  <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#36C5D8" />
+  <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#0B0F14" />
+
   <Color x:Key="AccentColor">#3DD6E8</Color>
   <Color x:Key="AccentDimColor">#1F8B99</Color>
   <Color x:Key="AccentSubtleColor">#12313A</Color>
@@ -352,7 +358,10 @@
   <Style TargetType="ComboBox">
     <Setter Property="FontFamily" Value="{StaticResource UiFontFamily}" />
     <Setter Property="FontSize" Value="13" />
-    <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+    <!-- The native WPF closed-state chrome uses the Windows light control surface even inside
+         a dark application. A dark foreground keeps the selected provider visible; dropdown
+         items retain their own dark-theme foreground below. -->
+    <Setter Property="Foreground" Value="{StaticResource SurfaceBackgroundBrush}" />
     <Setter Property="Background" Value="{StaticResource SurfaceElevatedBrush}" />
     <Setter Property="BorderBrush" Value="{StaticResource BorderStrongBrush}" />
     <Setter Property="BorderThickness" Value="1" />
@@ -364,6 +373,16 @@
     <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
     <Setter Property="Background" Value="{StaticResource SurfaceElevatedBrush}" />
     <Setter Property="Padding" Value="10,7" />
+    <Style.Triggers>
+      <Trigger Property="IsHighlighted" Value="True">
+        <Setter Property="Foreground" Value="{StaticResource SurfaceBackgroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+      </Trigger>
+      <Trigger Property="IsSelected" Value="True">
+        <Setter Property="Foreground" Value="{StaticResource SurfaceBackgroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+      </Trigger>
+    </Style.Triggers>
   </Style>
 
   <Style TargetType="Slider">
@@ -456,7 +475,8 @@
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="BorderBrush" Value="Transparent" />
     <Setter Property="Padding" Value="16,10" />
-    <Setter Property="Margin" Value="0,0,4,0" />
+    <Setter Property="Margin" Value="0,0,6,6" />
+    <Setter Property="MinHeight" Value="40" />
     <Setter Property="Cursor" Value="Hand" />
     <Setter Property="Template">
       <Setter.Value>
@@ -514,10 +534,12 @@
                     BorderBrush="{StaticResource BorderBrush}"
                     BorderThickness="1"
                     CornerRadius="10"
-                    Padding="5"
-                    HorizontalAlignment="Left"
+                    Padding="6,6,0,0"
+                    HorizontalAlignment="Stretch"
                     Margin="0,0,0,14">
-              <TabPanel IsItemsHost="True" />
+              <WrapPanel IsItemsHost="True"
+                         Orientation="Horizontal"
+                         KeyboardNavigation.TabNavigation="Local" />
             </Border>
             <ContentPresenter Grid.Row="1"
                               ContentSource="SelectedContent"

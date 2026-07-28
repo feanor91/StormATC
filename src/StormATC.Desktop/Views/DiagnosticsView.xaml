@@ -82,8 +82,9 @@
                 <TextBlock Text="{Binding SchemaVersion}" Style="{StaticResource ValueTextStyle}" />
               </StackPanel>
               <StackPanel Margin="0,0,0,10">
-                <TextBlock Text="OPENROUTER KEY" Style="{StaticResource LabelTextStyle}" />
-                <TextBlock Text="{Binding OpenRouterKeyPresence}" Style="{StaticResource ValueTextStyle}" />
+                <TextBlock Text="ACTIVE MODEL PROVIDER" Style="{StaticResource LabelTextStyle}" />
+                <TextBlock Text="{Binding LanguageModelProvider}" Style="{StaticResource ValueTextStyle}" />
+                <TextBlock Text="{Binding LanguageModelKeyPresence}" Style="{StaticResource SecondaryTextStyle}" />
               </StackPanel>
               <StackPanel Margin="0,0,0,10">
                 <TextBlock Text="DEEPGRAM KEY" Style="{StaticResource LabelTextStyle}" />

@@ -23,6 +23,15 @@ Elements:
 3. "via" plus the taxiways, spelled phonetically
 4. "hold short" plus the runway, when a hold-short instruction is in the facts
 
+The radio call is intentionally concise, as it would be on VATSIM. Do not add unapproved
+left/right turns, distances, sign locations, or a moving-map narration. StormATC's surface
+training panel derives those details from the exact graph path and the aircraft's live position.
+
+When the pilot explicitly requests progressive taxi, the approved facts contain one
+deterministic step derived from that path: continue on the current taxiway and take the next
+left/right/straight junction. Speak only that step. If the aircraft is off the cleared path,
+instruct it to hold position and confirm its position.
+
 ## Hold-short instructions
 
 A hold-short instruction is mandatory and must be read back. Never omit one that appears in the
@@ -36,7 +45,10 @@ A taxi route that happens to pass a runway is not permission to cross it.
 
 ## Pushback
 
-`STORM123, pushback approved.` Add a facing direction only if the facts supply one.
+Use `STORM123, pushback approved, tail left.` The supplied `pushbackDirection` is relative to
+the aircraft and is mandatory, so a simulator pilot can choose the matching GSX pushback. Say
+exactly `tail left` or `tail right`; never convert it to north, east, south, west, or an aircraft
+heading.
 
 ## Never
 

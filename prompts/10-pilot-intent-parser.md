@@ -43,6 +43,26 @@ contains. Report honest confidence.
    frequency?", or "Ground frequency please" are `RequestFrequency`. Do not classify a
    question as `FrequencyReadback`; that type is only for a pilot repeating a frequency that
    was already issued.
+9. **Pushback direction.** Extract `pushbackDirection` only when the pilot explicitly says
+   "tail left", "tail to the left", "tail right", or "tail to the right". Return exactly
+   `tail left` or `tail right`. This is relative to the aircraft, matching simulator pushback
+   tools such as GSX. Do not convert it to north, east, south, or west.
+10. **Understand speech-to-text formatting.** Case, punctuation, filler, missing spaces, and
+    common provider formatting do not change the pilot's meaning. For example,
+    `Runway10Climb7000Squawk2555` contains runway 10, altitude 7000, and squawk 2555.
+    Treat ICAO spelling variants such as Alfa/Alpha and Juliett/Juliet as equivalent.
+11. **Keep numeric fields in their announced scope.** Callsign digits are not an altitude,
+    runway, heading, frequency, or squawk. A four-digit altitude after "climb" is not a
+    squawk unless the pilot says "squawk" or gives the code alone as a correction.
+12. **Preserve complete taxiway identifiers.** `Alfa six`, `A6`, and `alpha 6` all mean
+    taxiway `A6`; named segments such as `apron` and `ramp` remain part of the route. Stop the
+    taxi-route value before a hold-short instruction.
+13. **Progressive taxi is a distinct request.** "Request progressive taxi", "progressive
+    instructions", or a pilot saying they are lost/unsure while taxiing is
+    `RequestProgressiveTaxi`, not a new `RequestTaxi`.
+13. **Partial corrections are valid transmissions.** When a readback is outstanding, a pilot
+    may repeat only the item ATC just corrected. Classify the actual value that was spoken;
+    do not require the entire original clearance to be repeated.
 
 ## Values you must not produce
 

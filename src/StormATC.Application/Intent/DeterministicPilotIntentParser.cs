@@ -63,6 +63,9 @@ public sealed class DeterministicPilotIntentParser : IPilotIntentParser
             ["request pushback", "ready for pushback", "request push", "ready for push", "pushback request"]),
         new(PilotIntentType.RequestTaxiToStand, 0.94,
             ["taxi to stand", "taxi to gate", "request stand", "request gate", "taxi to the stand"]),
+        new(PilotIntentType.RequestProgressiveTaxi, 0.97,
+            ["request progressive taxi", "progressive taxi", "progressive instructions",
+             "unsure of the taxi route", "lost while taxiing", "where do i taxi"]),
         new(PilotIntentType.RequestTaxi, 0.95,
             ["request taxi", "ready for taxi", "ready to taxi", "taxi request"]),
 
@@ -271,10 +274,19 @@ public sealed class DeterministicPilotIntentParser : IPilotIntentParser
             return (type, Math.Min(1.0, confidence + (coverage * 0.2)));
         }
 
-        // Unclassified, or classified as a different weak readback, but the values line up
-        // with what is outstanding. Reclassify.
-        bool weakOrUnknown = type == PilotIntentType.Unknown || confidence < 0.8;
-        if (weakOrUnknown && coverage >= 0.5)
+        // A taxi readback may naturally begin with "holding short", which the phrase-only
+        // rules classify as a position report with high confidence. While a taxi clearance
+        // is awaiting readback, route/runway values that match the outstanding clearance
+        // are stronger evidence than that opening phrase. Reclassifying here lets the
+        // readback evaluator accept the complete clearance or name only a genuinely
+        // missing item (for example, "Alfa" when "Alfa six" was assigned).
+        bool contextCanResolveIntent =
+            type == PilotIntentType.Unknown
+            || confidence < 0.8
+            || (expectedReadbackType == PilotIntentType.TaxiReadback
+                && type == PilotIntentType.ReportHoldingShort);
+
+        if (contextCanResolveIntent && coverage >= 0.5)
         {
             return (expectedReadbackType, Math.Min(0.95, 0.65 + (coverage * 0.3)));
         }
@@ -345,9 +357,64 @@ public sealed class DeterministicPilotIntentParser : IPilotIntentParser
             Waypoint = ExtractWaypoint(transcript),
             ApproachName = ExtractApproachName(transcript),
             Stand = ExtractStand(transcript),
+            PushbackDirection = ExtractPushbackDirection(transcript),
             MentionsHoldShort = mentionsHoldShort,
             HoldShortRunway = mentionsHoldShort ? runway : null,
         };
+    }
+
+    /// <summary>Extracts an explicitly spoken relative tail direction for pushback.</summary>
+    private static string? ExtractPushbackDirection(string transcript)
+    {
+        bool mentionsPushback =
+            transcript.Contains("pushback", StringComparison.Ordinal)
+            || transcript.Contains("push back", StringComparison.Ordinal)
+            || transcript.Contains("push and start", StringComparison.Ordinal);
+        if (!mentionsPushback)
+        {
+            return null;
+        }
+
+        if (transcript.Contains("tail to the left", StringComparison.Ordinal)
+            || transcript.Contains("tail left", StringComparison.Ordinal))
+        {
+            return PushbackDirections.TailLeft;
+        }
+
+        if (transcript.Contains("tail to the right", StringComparison.Ordinal)
+            || transcript.Contains("tail right", StringComparison.Ordinal))
+        {
+            return PushbackDirections.TailRight;
+        }
+
+        string[] anchors = ["pushback ", "push back ", "push and start ", "facing ", "face "];
+        foreach (string anchor in anchors)
+        {
+            int index = transcript.IndexOf(anchor, StringComparison.Ordinal);
+            if (index < 0)
+            {
+                continue;
+            }
+
+            string remainder = transcript[(index + anchor.Length)..];
+            string candidate = string.Join(
+                ' ',
+                remainder.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(4));
+            string? direction = PushbackDirections.Normalize(candidate);
+            if (direction is not null)
+            {
+                return direction;
+            }
+
+            direction = PushbackDirections.Normalize(
+                remainder.Split(' ', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault());
+            if (direction is not null)
+            {
+                return direction;
+            }
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -380,8 +447,7 @@ public sealed class DeterministicPilotIntentParser : IPilotIntentParser
             scope = scope[..stopIndex];
         }
 
-        string letters = PhoneticAlphabet.ExtractLetters(scope);
-        return letters.Length == 0 ? [] : [.. letters.Select(c => c.ToString())];
+        return PhoneticAlphabet.ExtractTaxiwayIdentifiers(scope);
     }
 
     /// <summary>Extracts a waypoint name following "direct".</summary>

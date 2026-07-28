@@ -21,6 +21,15 @@ namespace StormATC.Infrastructure.Tests;
 /// </remarks>
 public class SimulatorConnectorRoutingTests
 {
+    private sealed class StaticOptionsMonitor<T>(T value) : IOptionsMonitor<T>
+    {
+        public T CurrentValue => value;
+
+        public T Get(string? name) => value;
+
+        public IDisposable? OnChange(Action<T, string?> listener) => null;
+    }
+
     private static SimulatorConnectorRouter CreateRouter(string preferredConnector)
     {
         var clock = new SystemClock();
@@ -35,7 +44,11 @@ public class SimulatorConnectorRoutingTests
             AutoReconnect = false,
         });
 
-        var msfs = new MsfsSimConnectConnector(options, NullLogger<MsfsSimConnectConnector>.Instance);
+        var trafficOptions = new StaticOptionsMonitor<TrafficOptions>(new TrafficOptions());
+        var msfs = new MsfsSimConnectConnector(
+            options,
+            trafficOptions,
+            NullLogger<MsfsSimConnectConnector>.Instance);
 
         return new SimulatorConnectorRouter(
             mock, msfs, options, NullLogger<SimulatorConnectorRouter>.Instance);

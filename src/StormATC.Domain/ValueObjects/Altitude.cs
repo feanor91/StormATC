@@ -124,13 +124,47 @@ public readonly record struct Altitude : IComparable<Altitude>
             }
         }
 
-        int? feet = SpokenNumbers.ParseSpokenAltitude(text);
+        // A written callsign can contain a three-digit literal before the actual altitude:
+        // "Sierra Tango 123, climb 7000". Scope to the altitude instruction when one is
+        // present so the flight number cannot be mistaken for the cleared level.
+        string altitudeScope = ScopeAfterAltitudeMarker(text) ?? text;
+        int? feet = SpokenNumbers.ParseSpokenAltitude(altitudeScope);
         if (feet is int value && value is >= MinimumFeet and <= MaximumFeet)
         {
             return FromFeet(value);
         }
 
         return null;
+    }
+
+    private static string? ScopeAfterAltitudeMarker(string text)
+    {
+        string[] markers =
+        [
+            "climb",
+            "descend",
+            "maintain",
+            "initially",
+            "initial",
+            "altitude",
+            "passing",
+            "leaving",
+        ];
+
+        int bestIndex = -1;
+        int bestLength = 0;
+
+        foreach (string marker in markers)
+        {
+            int index = text.IndexOf(marker, StringComparison.OrdinalIgnoreCase);
+            if (index >= 0 && (bestIndex < 0 || index < bestIndex))
+            {
+                bestIndex = index;
+                bestLength = marker.Length;
+            }
+        }
+
+        return bestIndex < 0 ? null : text[(bestIndex + bestLength)..];
     }
 
     /// <summary>

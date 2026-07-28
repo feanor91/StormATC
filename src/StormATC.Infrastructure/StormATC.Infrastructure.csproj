@@ -10,7 +10,7 @@
     <UseWindowsForms>false</UseWindowsForms>
     <PlatformTarget>x64</PlatformTarget>
     <Description>
-      Concrete provider implementations: OpenRouter, Deepgram STT/TTS, SimBrief, SimConnect,
+      Concrete provider implementations: language-model APIs, Deepgram STT/TTS, SimBrief, SimConnect,
       SQLite persistence, DPAPI secret storage, NAudio audio, JSON airport data, and the full
       set of mock providers that let the application run with no credentials at all.
     </Description>

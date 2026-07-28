@@ -71,11 +71,18 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IAtcStateEngine, StormAtcStateEngine>();
 
         // --- Data providers -----------------------------------------------------------------
-        services.AddSingleton<IAirportDataProvider, JsonAirportDataProvider>();
+        services.AddSingleton<JsonAirportDataProvider>();
+        services.AddSingleton<IAirportDataProvider, MsfsAirportDataProvider>();
         services.AddSingleton<IAirspaceDataProvider, JsonAirspaceDataProvider>();
         services.AddSingleton<MockTrafficProvider>();
-        services.AddSingleton<ITrafficProvider>(sp => sp.GetRequiredService<MockTrafficProvider>());
-        services.AddSingleton<IWeatherProvider, MockWeatherProvider>();
+        services.AddSingleton<MsfsTrafficProvider>();
+        services.AddSingleton<ITrafficProvider>(sp => sp.GetRequiredService<MsfsTrafficProvider>());
+        services.AddSingleton<MockWeatherProvider>();
+        services.AddSingleton<MsfsWeatherProvider>();
+        services.AddSingleton<IWeatherProvider>(sp => sp.GetRequiredService<MsfsWeatherProvider>());
+        services.AddSingleton<TrafficRadioService>();
+        services.AddSingleton<IHostedService>(
+            sp => sp.GetRequiredService<TrafficRadioService>());
 
         // --- Persistence ---------------------------------------------------------------------
         services.AddSingleton<ISessionRepository, SqliteSessionRepository>();
@@ -93,7 +100,7 @@ public static class ServiceCollectionExtensions
             return new EscalatingPilotIntentParser(
                 sp.GetRequiredService<DeterministicPilotIntentParser>(),
 
-                // Null until an OpenRouter-backed parser is configured. The escalating parser
+                // Null until a cloud-backed parser is configured. The escalating parser
                 // handles that by returning its deterministic result, which is the correct
                 // degraded behaviour rather than a failure.
                 sp.GetService<ILanguageModelIntentParser>(),
@@ -101,6 +108,7 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddSingleton<PilotTransmissionCoordinator>();
+        services.AddSingleton<RadioActivityState>();
 
         AddProviders(services, configuration);
 
@@ -120,6 +128,47 @@ public static class ServiceCollectionExtensions
             .Validate(
                 options => Security.ProviderEndpointPolicy.IsAllowedOpenRouter(options.BaseUrl),
                 "OpenRouter:BaseUrl must be the official https://openrouter.ai/api/v1 endpoint.")
+            .ValidateOnStart();
+
+        services.AddOptions<LanguageModelOptions>()
+            .Bind(configuration.GetSection(LanguageModelOptions.SectionName))
+            .ValidateDataAnnotations()
+            .Validate(
+                options => LanguageModelProviders.All.Any(provider =>
+                    provider.Equals(options.Provider, StringComparison.OrdinalIgnoreCase)),
+                "LanguageModel:Provider must name a supported provider.")
+            .ValidateOnStart();
+
+        services.AddOptions<OpenAIOptions>()
+            .Bind(configuration.GetSection(OpenAIOptions.SectionName))
+            .ValidateDataAnnotations()
+            .Validate(
+                options => Security.ProviderEndpointPolicy.IsAllowedOpenAI(options.BaseUrl),
+                "OpenAI:BaseUrl must be the official https://api.openai.com/v1 endpoint.")
+            .ValidateOnStart();
+
+        services.AddOptions<GroqOptions>()
+            .Bind(configuration.GetSection(GroqOptions.SectionName))
+            .ValidateDataAnnotations()
+            .Validate(
+                options => Security.ProviderEndpointPolicy.IsAllowedGroq(options.BaseUrl),
+                "Groq:BaseUrl must be the official https://api.groq.com/openai/v1 endpoint.")
+            .ValidateOnStart();
+
+        services.AddOptions<DeepSeekOptions>()
+            .Bind(configuration.GetSection(DeepSeekOptions.SectionName))
+            .ValidateDataAnnotations()
+            .Validate(
+                options => Security.ProviderEndpointPolicy.IsAllowedDeepSeek(options.BaseUrl),
+                "DeepSeek:BaseUrl must be the official https://api.deepseek.com endpoint.")
+            .ValidateOnStart();
+
+        services.AddOptions<AnthropicOptions>()
+            .Bind(configuration.GetSection(AnthropicOptions.SectionName))
+            .ValidateDataAnnotations()
+            .Validate(
+                options => Security.ProviderEndpointPolicy.IsAllowedAnthropic(options.BaseUrl),
+                "Anthropic:BaseUrl must be the official https://api.anthropic.com endpoint.")
             .ValidateOnStart();
 
         services.AddOptions<DeepgramOptions>()
@@ -145,6 +194,15 @@ public static class ServiceCollectionExtensions
         services.AddOptions<SimulatorOptions>()
             .Bind(configuration.GetSection(SimulatorOptions.SectionName))
             .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        services.AddOptions<TrafficOptions>()
+            .Bind(configuration.GetSection(TrafficOptions.SectionName))
+            .ValidateDataAnnotations()
+            .Validate(
+                options => options.MinimumInterval >= TimeSpan.FromSeconds(30)
+                    && options.MinimumInterval <= TimeSpan.FromHours(1),
+                "Traffic:MinimumInterval must be between 30 seconds and one hour.")
             .ValidateOnStart();
 
         services.AddOptions<AudioOptions>()

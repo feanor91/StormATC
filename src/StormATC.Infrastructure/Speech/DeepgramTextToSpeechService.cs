@@ -36,6 +36,7 @@ public sealed class DeepgramTextToSpeechService(
 {
     /// <summary>Deepgram returns 24 kHz mono PCM for the linear16 container.</summary>
     private const int SynthesisSampleRate = 24000;
+    private const int MaximumNamedCacheEntries = 8;
 
     private readonly HttpClient _httpClient =
         httpClient ?? throw new ArgumentNullException(nameof(httpClient));
@@ -56,6 +57,11 @@ public sealed class DeepgramTextToSpeechService(
         logger ?? throw new ArgumentNullException(nameof(logger));
 
     private readonly SemaphoreSlim _playbackLock = new(1, 1);
+    private readonly SemaphoreSlim _namedSynthesisLock = new(1, 1);
+    private readonly Lock _namedCacheLock = new();
+    private readonly Dictionary<string, NamedAudioCacheEntry> _namedAudioCache =
+        new(StringComparer.Ordinal);
+    private readonly Queue<string> _namedCacheOrder = new();
 
     private WaveOutEvent? _output;
     private CancellationTokenSource? _playbackCancellation;
@@ -123,6 +129,74 @@ public sealed class DeepgramTextToSpeechService(
         await PlayAsync(audio, voice, cancellationToken).ConfigureAwait(false);
     }
 
+    /// <inheritdoc />
+    public async Task<bool> SpeakCachedAsync(
+        string cacheKey,
+        string text,
+        VoiceConfiguration voice,
+        CancellationToken cancellationToken)
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        ArgumentException.ThrowIfNullOrWhiteSpace(cacheKey);
+        ArgumentNullException.ThrowIfNull(voice);
+
+        if (string.IsNullOrWhiteSpace(text) || _audioOptions.CurrentValue.Muted)
+        {
+            return false;
+        }
+
+        string voiceId = ResolveVoiceId(voice);
+        byte[]? audio = FindNamedAudio(cacheKey, text, voiceId);
+        if (audio is null)
+        {
+            await _namedSynthesisLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+            try
+            {
+                // Another caller may have filled this named entry while we were waiting.
+                audio = FindNamedAudio(cacheKey, text, voiceId);
+                if (audio is null)
+                {
+                    if (!_applicationOptions.CurrentValue.CloudServicesConsentGiven
+                        || !ProviderEndpointPolicy.IsAllowedDeepgramRest(
+                            _deepgramOptions.CurrentValue.BaseUrl))
+                    {
+                        IsConfigured = false;
+                        return false;
+                    }
+
+                    string? apiKey = await _secretStore
+                        .GetSecretAsync(SecretKeys.DeepgramApiKey, cancellationToken)
+                        .ConfigureAwait(false);
+
+                    if (string.IsNullOrWhiteSpace(apiKey))
+                    {
+                        IsConfigured = false;
+                        return false;
+                    }
+
+                    IsConfigured = true;
+                    audio = await SynthesizeAsync(text, voice, apiKey, cancellationToken)
+                        .ConfigureAwait(false);
+                    if (audio is null)
+                    {
+                        return false;
+                    }
+
+                    StoreNamedAudio(cacheKey, text, voiceId, audio);
+                }
+            }
+            finally
+            {
+                _namedSynthesisLock.Release();
+            }
+        }
+
+        _lastAudio = audio;
+        _lastVoice = voice;
+        await PlayAsync(audio, voice, cancellationToken).ConfigureAwait(false);
+        return true;
+    }
+
     private async Task<byte[]?> SynthesizeAsync(
         string text,
         VoiceConfiguration voice,
@@ -135,9 +209,7 @@ public sealed class DeepgramTextToSpeechService(
             return null;
         }
 
-        string voiceId = voice.VoiceId is { Length: > 0 } configured
-            ? configured
-            : _deepgramOptions.CurrentValue.Voice;
+        string voiceId = ResolveVoiceId(voice);
 
         var uri = new Uri(
             $"{_deepgramOptions.CurrentValue.BaseUrl.TrimEnd('/')}/v1/speak" +
@@ -174,6 +246,46 @@ public sealed class DeepgramTextToSpeechService(
         {
             _logger.LogWarning(ex, "Deepgram speech synthesis failed. The response is text only.");
             return null;
+        }
+    }
+
+    private string ResolveVoiceId(VoiceConfiguration voice) =>
+        voice.VoiceId is { Length: > 0 } configured
+            ? configured
+            : _deepgramOptions.CurrentValue.Voice;
+
+    private byte[]? FindNamedAudio(string cacheKey, string text, string voiceId)
+    {
+        lock (_namedCacheLock)
+        {
+            return _namedAudioCache.TryGetValue(cacheKey, out NamedAudioCacheEntry? entry)
+                && string.Equals(entry.Text, text, StringComparison.Ordinal)
+                && string.Equals(entry.VoiceId, voiceId, StringComparison.Ordinal)
+                ? entry.Audio
+                : null;
+        }
+    }
+
+    private void StoreNamedAudio(
+        string cacheKey,
+        string text,
+        string voiceId,
+        byte[] audio)
+    {
+        lock (_namedCacheLock)
+        {
+            if (!_namedAudioCache.ContainsKey(cacheKey))
+            {
+                _namedCacheOrder.Enqueue(cacheKey);
+            }
+
+            _namedAudioCache[cacheKey] = new NamedAudioCacheEntry(text, voiceId, audio);
+
+            while (_namedAudioCache.Count > MaximumNamedCacheEntries
+                && _namedCacheOrder.TryDequeue(out string? oldest))
+            {
+                _namedAudioCache.Remove(oldest);
+            }
         }
     }
 
@@ -390,6 +502,14 @@ public sealed class DeepgramTextToSpeechService(
 
         _disposed = true;
         await StopInternalAsync().ConfigureAwait(false);
+        lock (_namedCacheLock)
+        {
+            _namedAudioCache.Clear();
+            _namedCacheOrder.Clear();
+        }
         _playbackLock.Dispose();
+        _namedSynthesisLock.Dispose();
     }
+
+    private sealed record NamedAudioCacheEntry(string Text, string VoiceId, byte[] Audio);
 }

@@ -149,6 +149,18 @@ public sealed class MockTextToSpeechService(
     }
 
     /// <inheritdoc />
+    public async Task<bool> SpeakCachedAsync(
+        string cacheKey,
+        string text,
+        VoiceConfiguration voice,
+        CancellationToken cancellationToken)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(cacheKey);
+        await SpeakAsync(text, voice, cancellationToken).ConfigureAwait(false);
+        return false;
+    }
+
+    /// <inheritdoc />
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
     /// <inheritdoc />

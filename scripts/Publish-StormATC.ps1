@@ -2,7 +2,7 @@
 param(
     [Parameter()]
     [ValidatePattern("^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$")]
-    [string] $Version = "0.1.0",
+    [string] $Version = "0.1.2",
 
     [Parameter()]
     [string] $OutputDirectory = "artifacts\release",
@@ -94,6 +94,19 @@ try {
         Remove-Item -LiteralPath $resolvedStaging -Recurse -Force
     }
 
+    # The test build above produces symbol-bearing Release assemblies. Clean before publishing
+    # so MSBuild cannot reuse those incremental outputs when the final package disables symbols.
+    dotnet clean src\StormATC.Desktop\StormATC.Desktop.csproj `
+        -c Release `
+        -r win-x64 `
+        --nologo `
+        -p:MsfsSimConnectPath="$managedSimConnect" `
+        -p:MsfsSimConnectNativePath="$nativeSimConnect"
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "Release clean failed."
+    }
+
     dotnet publish src\StormATC.Desktop\StormATC.Desktop.csproj `
         -c Release `
         -r win-x64 `
@@ -101,6 +114,9 @@ try {
         --no-restore `
         --nologo `
         -p:Version=$Version `
+        -p:ContinuousIntegrationBuild=true `
+        -p:DebugSymbols=false `
+        -p:DebugType=None `
         -p:MsfsSimConnectPath="$managedSimConnect" `
         -p:MsfsSimConnectNativePath="$nativeSimConnect" `
         -o "$staging"
@@ -130,6 +146,37 @@ try {
         if (Get-ChildItem -LiteralPath $staging -Recurse -File |
             Where-Object { $_.Name.Equals($file, [System.StringComparison]::OrdinalIgnoreCase) }) {
             throw "Release validation failed: local state '$file' entered the package."
+        }
+    }
+
+    $publishedSymbols = @(
+        Get-ChildItem -LiteralPath $staging -Recurse -File -Filter "*.pdb")
+    if ($publishedSymbols.Count -gt 0) {
+        throw "Release validation failed: debug symbol files entered the package."
+    }
+
+    $stormAtcAssemblies = @(
+        "StormATC.exe",
+        "StormATC.dll",
+        "StormATC.Application.dll",
+        "StormATC.Domain.dll",
+        "StormATC.Infrastructure.dll")
+
+    foreach ($assembly in $stormAtcAssemblies) {
+        $assemblyPath = Join-Path $staging $assembly
+        if (-not (Test-Path -LiteralPath $assemblyPath -PathType Leaf)) {
+            continue
+        }
+
+        # Release binaries must not disclose the developer's local workspace. Decode only for
+        # this check and never print the matched path.
+        $assemblyText = [System.Text.Encoding]::UTF8.GetString(
+            [System.IO.File]::ReadAllBytes($assemblyPath))
+
+        if ($assemblyText.IndexOf(
+                $repositoryRoot,
+                [System.StringComparison]::OrdinalIgnoreCase) -ge 0) {
+            throw "Release validation failed: a StormATC binary contains the local repository path."
         }
     }
 

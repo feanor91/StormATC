@@ -3,6 +3,7 @@ using StormATC.Domain.Atc;
 using StormATC.Domain.Intents;
 using StormATC.Domain.Readback;
 using StormATC.Domain.Sessions;
+using StormATC.Domain.ValueObjects;
 
 namespace StormATC.Application.Transmissions;
 
@@ -69,6 +70,18 @@ public sealed record TransmissionProcessingResult
     /// <summary>True when this transmission had already been processed and was ignored.</summary>
     public bool WasDuplicate { get; init; }
 
+    /// <summary>True when the selected transmit radio was not on the controller frequency.</summary>
+    public bool WasIgnoredOffFrequency { get; init; }
+
+    /// <summary>True when the pilot attempted to transmit while monitoring receive-only ATIS.</summary>
+    public bool WasIgnoredOnAtis { get; init; }
+
+    /// <summary>The frequency StormATC expected for a radio-gated transmission.</summary>
+    public Frequency? ExpectedFrequency { get; init; }
+
+    /// <summary>The aircraft's selected transmit frequency when the transmission was gated.</summary>
+    public Frequency? TunedFrequency { get; init; }
+
     /// <summary>The session after any approved state changes were applied.</summary>
     public AtcSession? UpdatedSession { get; init; }
 
@@ -113,6 +126,21 @@ public sealed record TransmissionProcessingResult
         Processed = false,
         CorrelationId = correlationId,
         ErrorMessage = error,
+    };
+
+    /// <summary>Builds a silent result for a transmission no controller could hear.</summary>
+    public static TransmissionProcessingResult IgnoredByRadio(
+        string correlationId,
+        AtcSession session,
+        bool onAtis) => new()
+    {
+        Processed = false,
+        WasIgnoredOffFrequency = !onAtis,
+        WasIgnoredOnAtis = onAtis,
+        ExpectedFrequency = session.CurrentFrequency,
+        TunedFrequency = session.AircraftState.Radio.ActiveTransmitFrequency,
+        UpdatedSession = session,
+        CorrelationId = correlationId,
     };
 }
 

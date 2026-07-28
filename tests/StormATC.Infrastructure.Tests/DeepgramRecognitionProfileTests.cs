@@ -11,6 +11,30 @@ namespace StormATC.Infrastructure.Tests;
 public class DeepgramRecognitionProfileTests
 {
     [Fact]
+    public void Full_core_audio_microphone_names_replace_truncated_winmm_labels()
+    {
+        IReadOnlyList<string> names =
+            DeepgramSpeechRecognitionService.PreferFullInputDeviceNames(
+                ["Microphone (Razer USB Sound Car", "Line In (Legacy Device)"],
+                ["Microphone (Razer USB Sound Card)"]);
+
+        Assert.Equal(
+            ["Microphone (Razer USB Sound Card)", "Line In (Legacy Device)"],
+            names);
+    }
+
+    [Fact]
+    public void Unrelated_core_audio_endpoints_are_not_offered_as_winmm_capture_devices()
+    {
+        IReadOnlyList<string> names =
+            DeepgramSpeechRecognitionService.PreferFullInputDeviceNames(
+                ["Microphone (USB Audio)"],
+                ["Headset Earphone (Different Device)"]);
+
+        Assert.Equal(["Microphone (USB Audio)"], names);
+    }
+
+    [Fact]
     public void Dynamic_keyterms_include_the_personal_phrase_and_current_flight()
     {
         var profile = new SpeechRecognitionProfile

@@ -52,6 +52,16 @@ public static class PhoneticAlphabet
             ["zulu"] = 'Z',
         };
 
+    private static readonly Dictionary<string, string> NamedTaxiwaySegments =
+        new(StringComparer.OrdinalIgnoreCase)
+        {
+            ["apron"] = "apron",
+            ["ramp"] = "ramp",
+            ["taxilane"] = "taxilane",
+            ["inner"] = "inner",
+            ["outer"] = "outer",
+        };
+
     /// <summary>Returns the phonetic word for a letter, or the character itself if not A–Z.</summary>
     public static string ForLetter(char letter)
     {
@@ -112,6 +122,90 @@ public static class PhoneticAlphabet
         }
 
         return builder.ToString();
+    }
+
+    /// <summary>
+    /// Extracts complete taxiway identifiers and named movement-area segments in spoken order.
+    /// </summary>
+    /// <remarks>
+    /// Unlike <see cref="ExtractLetters"/>, this preserves suffix digits and recognised named
+    /// segments: <c>"apron, Alfa six"</c> becomes <c>["apron", "A6"]</c>. This is the form used
+    /// by taxi-clearance readback comparison.
+    /// </remarks>
+    public static IReadOnlyList<string> ExtractTaxiwayIdentifiers(string text)
+    {
+        ArgumentNullException.ThrowIfNull(text);
+
+        string[] tokens = SpokenNumbers.Tokenize(text);
+        var identifiers = new List<string>();
+
+        for (int index = 0; index < tokens.Length; index++)
+        {
+            string token = tokens[index];
+
+            if (NamedTaxiwaySegments.TryGetValue(token, out string? namedSegment))
+            {
+                identifiers.Add(namedSegment);
+                continue;
+            }
+
+            if (IsCompactTaxiwayIdentifier(token))
+            {
+                identifiers.Add(token.ToUpperInvariant());
+                continue;
+            }
+
+            bool isLetter =
+                WordToLetter.TryGetValue(token, out char letter)
+                || (token.Length == 1
+                    && char.IsLetter(token[0])
+                    && AssignUppercase(token[0], out letter));
+
+            if (!isLetter)
+            {
+                continue;
+            }
+
+            var identifier = new StringBuilder().Append(letter);
+            int digitIndex = index + 1;
+            while (digitIndex < tokens.Length
+                && identifier.Length <= 2
+                && TryGetDigit(tokens[digitIndex], out char digit))
+            {
+                identifier.Append(digit);
+                digitIndex++;
+            }
+
+            identifiers.Add(identifier.ToString());
+            index = digitIndex - 1;
+        }
+
+        return identifiers;
+
+        static bool AssignUppercase(char value, out char upper)
+        {
+            upper = char.ToUpperInvariant(value);
+            return true;
+        }
+
+        static bool TryGetDigit(string token, out char digit)
+        {
+            string folded = SpokenNumbers.FoldDigitWords(token);
+            if (folded.Length == 1 && char.IsDigit(folded[0]))
+            {
+                digit = folded[0];
+                return true;
+            }
+
+            digit = default;
+            return false;
+        }
+
+        static bool IsCompactTaxiwayIdentifier(string token) =>
+            token.Length is >= 2 and <= 4
+            && token.All(char.IsLetterOrDigit)
+            && token.Any(char.IsLetter)
+            && token.Any(char.IsDigit);
     }
 
     /// <summary>Attempts to resolve a single phonetic word to its letter.</summary>

@@ -88,6 +88,15 @@ public readonly record struct SquawkCode
         // simply because it is the first four-digit run. When the marker is present, only the
         // text after "squawk" can be the transponder code.
         int marker = text.IndexOf("squawk", StringComparison.OrdinalIgnoreCase);
+
+        // Without an explicit squawk marker, a four-digit altitude is indistinguishable from
+        // a transponder code by shape alone. Accept a genuinely bare "2555" correction, but
+        // never reinterpret "climb 7000" as a new squawk that contradicts an earlier readback.
+        if (marker < 0 && ContainsAltitudeMarker(text))
+        {
+            return false;
+        }
+
         string scope = marker >= 0 ? text[(marker + "squawk".Length)..] : text;
 
         // Deepgram can hear the ICAO digit "one" as "point" inside a digit-by-digit code
@@ -105,6 +114,14 @@ public readonly record struct SquawkCode
 
         return false;
     }
+
+    private static bool ContainsAltitudeMarker(string text) =>
+        text.Contains("climb", StringComparison.OrdinalIgnoreCase)
+        || text.Contains("descend", StringComparison.OrdinalIgnoreCase)
+        || text.Contains("altitude", StringComparison.OrdinalIgnoreCase)
+        || text.Contains("initial", StringComparison.OrdinalIgnoreCase)
+        || text.Contains("maintain", StringComparison.OrdinalIgnoreCase)
+        || text.Contains("flight level", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>Renders the code as spoken: <c>"four two seven one"</c>.</summary>
     public string ToSpoken() => SpokenNumbers.DigitsIndividually(Digits);

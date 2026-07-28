@@ -27,7 +27,9 @@ internal sealed class FixedClock(DateTimeOffset now) : IClock
 }
 
 /// <summary>Serves a single in-memory aerodrome pair.</summary>
-internal sealed class StubAirportDataProvider(bool shouldThrow = false) : IAirportDataProvider
+internal sealed class StubAirportDataProvider(
+    bool shouldThrow = false,
+    AirportData? departureOverride = null) : IAirportDataProvider
 {
     public int CallCount { get; private set; }
 
@@ -42,7 +44,7 @@ internal sealed class StubAirportDataProvider(bool shouldThrow = false) : IAirpo
 
         return Task.FromResult<AirportData?>(icao.ToUpperInvariant() switch
         {
-            "STMR" => TestAerodromes.Departure,
+            "STMR" => departureOverride ?? TestAerodromes.Departure,
             "STMD" => TestAerodromes.Destination,
             _ => null,
         });
@@ -232,6 +234,7 @@ internal static class TestAerodromes
             Departure = Frequency.FromMegahertz(119.100m),
             Approach = Frequency.FromMegahertz(120.400m),
             Center = Frequency.FromMegahertz(128.500m),
+            Atis = Frequency.FromMegahertz(132.150m),
         },
         Runways =
         [

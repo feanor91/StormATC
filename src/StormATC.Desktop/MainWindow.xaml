@@ -6,10 +6,10 @@
         xmlns:conv="clr-namespace:StormATC.Desktop.Converters"
         Title="StormATC — flight simulation only"
         Icon="pack://application:,,,/Assets/StormATC.ico"
-        Height="900"
-        Width="1440"
-        MinHeight="640"
-        MinWidth="1000"
+        Height="920"
+        Width="1500"
+        MinHeight="700"
+        MinWidth="1120"
         Background="{StaticResource SurfaceBackgroundBrush}"
         TextElement.Foreground="{StaticResource TextPrimaryBrush}"
         FontFamily="{StaticResource UiFontFamily}"
@@ -45,7 +45,7 @@
 
   <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="232" />
+      <ColumnDefinition Width="256" />
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
 

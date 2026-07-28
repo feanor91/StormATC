@@ -140,6 +140,7 @@ internal static class TestScenario
         IReadOnlyList<TrafficContact>? traffic = null,
         WeatherSnapshot? weather = null,
         RealismProfile? realism = null,
+        string defaultPushbackDirection = PushbackDirections.TailLeft,
         SquawkCode? preassignedSquawk = null) => new()
     {
         Session = session,
@@ -153,6 +154,7 @@ internal static class TestScenario
         Weather = weather,
         CurrentTime = Now,
         Realism = realism ?? RealismProfile.Standard,
+        DefaultPushbackDirection = defaultPushbackDirection,
         PreassignedSquawk = preassignedSquawk,
     };
 

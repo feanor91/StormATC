@@ -78,6 +78,11 @@ public sealed record AtcEvaluationContext
     public RealismProfile Realism { get; init; } = RealismProfile.Standard;
 
     /// <summary>
+    /// Relative tail direction used when the pilot does not request one explicitly.
+    /// </summary>
+    public string DefaultPushbackDirection { get; init; } = PushbackDirections.TailLeft;
+
+    /// <summary>
     /// The aerodrome relevant to the current phase — departure while outbound, destination
     /// once the aircraft is arriving.
     /// </summary>
@@ -102,6 +107,7 @@ public sealed record RealismProfile
         RequireReadbackBeforeProgressing = false,
         RequireCorrectCallsign = false,
         EnforceHoldShort = false,
+        TranscriptTolerance = TranscriptToleranceMode.Relaxed,
     };
 
     /// <summary>A strict profile for realism-focused pilots.</summary>
@@ -112,6 +118,7 @@ public sealed record RealismProfile
         EnforceHoldShort = true,
         RequireCheckInOnFrequencyChange = true,
         MinimumIntentConfidence = 0.75,
+        TranscriptTolerance = TranscriptToleranceMode.Strict,
     };
 
     /// <summary>
@@ -153,6 +160,36 @@ public sealed record RealismProfile
     /// safety-critical intent.
     /// </summary>
     public double MinimumIntentConfidence { get; init; } = 0.6;
+
+    /// <summary>
+    /// How ambiguous speech-to-text values are handled during readback comparison. Every mode
+    /// accepts equivalent written/spoken aviation values; the difference is whether an
+    /// unanchored parser guess is treated as a contradiction or as an item to ask for again.
+    /// </summary>
+    public TranscriptToleranceMode TranscriptTolerance { get; init; } =
+        TranscriptToleranceMode.Standard;
+}
+
+/// <summary>How forgiving readback interpretation is of ambiguous speech-recognition output.</summary>
+public enum TranscriptToleranceMode
+{
+    /// <summary>
+    /// Accept common transcript variants, make the callsign optional, and avoid treating
+    /// unannounced parser guesses as explicit contradictions.
+    /// </summary>
+    Relaxed = 0,
+
+    /// <summary>
+    /// Recommended: accept safe aviation equivalents and partial corrections, while reserving
+    /// “negative” for values the pilot clearly announced.
+    /// </summary>
+    Standard,
+
+    /// <summary>
+    /// Treat every structured value returned by the parser as intentional and require the
+    /// configured callsign/readback rules exactly.
+    /// </summary>
+    Strict,
 }
 
 /// <summary>A simulated aircraft near ours.</summary>
@@ -194,6 +231,9 @@ public sealed record WeatherSnapshot
 
     /// <summary>Visibility in metres.</summary>
     public int? VisibilityMeters { get; init; }
+
+    /// <summary>Ambient temperature in degrees Celsius.</summary>
+    public int? TemperatureCelsius { get; init; }
 
     /// <summary>Where this observation came from, for the diagnostics page.</summary>
     public string? Source { get; init; }

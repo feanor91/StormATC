@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Atis;
 using StormATC.Application.Options;
 using StormATC.Application.Sessions;
 using StormATC.Desktop.Services;
@@ -22,9 +23,10 @@ namespace StormATC.Desktop.ViewModels;
 /// <remarks>
 /// <para>
 /// The frequency the aircraft has tuned comes from the simulator and is authoritative. The
-/// frequency the session expects comes from the last handoff the engine issued. When they
-/// disagree, this page says so — it does not silently retune the radio or pretend the pilot is
-/// on the right frequency.
+/// frequency the session expects comes from the initial ATIS selection or the last handoff the
+/// engine issued. Startup may tune COM1 to ATIS once; subsequent frequency changes remain pilot
+/// actions. When the selected transmitter and assigned frequency disagree, the controller
+/// cannot hear the pilot.
 /// </para>
 /// </remarks>
 public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage, IDisposable
@@ -33,6 +35,7 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
     private readonly MockSimulatorConnector _mockSimulator;
     private readonly SimulatorConnectorRouter _simulatorRouter;
     private readonly ITextToSpeechService _textToSpeech;
+    private readonly AtisBroadcastService _atisBroadcastService;
     private readonly UserSettingsService _userSettings;
     private readonly AudioOptions _audioOptions;
 
@@ -55,6 +58,18 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
 
     [ObservableProperty]
     private string _handoffStatus = "No handoff in progress";
+
+    [ObservableProperty]
+    private string _atisInformation = "—";
+
+    [ObservableProperty]
+    private string _atisText = "Tune the published departure ATIS after loading a flight plan.";
+
+    [ObservableProperty]
+    private string _atisStatus = "Waiting for departure ATIS.";
+
+    [ObservableProperty]
+    private string _atisWeatherSource = string.Empty;
 
     [ObservableProperty]
     private bool _hasPublishedFrequencies;
@@ -93,6 +108,7 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
         MockSimulatorConnector mockSimulator,
         SimulatorConnectorRouter simulatorRouter,
         ITextToSpeechService textToSpeech,
+        AtisBroadcastService atisBroadcastService,
         UserSettingsService userSettings,
         IOptions<AudioOptions> audioOptions)
     {
@@ -100,6 +116,8 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
         _mockSimulator = mockSimulator ?? throw new ArgumentNullException(nameof(mockSimulator));
         _simulatorRouter = simulatorRouter ?? throw new ArgumentNullException(nameof(simulatorRouter));
         _textToSpeech = textToSpeech ?? throw new ArgumentNullException(nameof(textToSpeech));
+        _atisBroadcastService = atisBroadcastService
+            ?? throw new ArgumentNullException(nameof(atisBroadcastService));
         _userSettings = userSettings ?? throw new ArgumentNullException(nameof(userSettings));
         _audioOptions = audioOptions?.Value ?? throw new ArgumentNullException(nameof(audioOptions));
 
@@ -114,7 +132,9 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
         AvailableFrequencies = [];
 
         _sessionContext.SessionChanged += OnSessionChanged;
+        _atisBroadcastService.BroadcastChanged += OnAtisBroadcastChanged;
         UpdateFromSession(_sessionContext.CurrentSession);
+        UpdateAtisBroadcast();
     }
 
     /// <summary>Every published frequency at the departure aerodrome.</summary>
@@ -127,8 +147,8 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
     /// True when the mock simulator can be retuned from here.
     /// </summary>
     /// <remarks>
-    /// Only the scripted aircraft's radio can be changed from StormATC. A real simulator's radio
-    /// belongs to the pilot: StormATC reads SimConnect and never writes to it.
+    /// The published-frequency buttons remain mock-only. The real simulator receives only the
+    /// automatic initial ATIS tune; subsequent changes are made in the aircraft.
     /// </remarks>
     public bool CanTuneRadio => _simulatorRouter.IsMockActive;
 
@@ -157,6 +177,11 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
     [RelayCommand]
     private async Task ReplayLastAsync() =>
         await _textToSpeech.ReplayLastAsync(CancellationToken.None).ConfigureAwait(true);
+
+    /// <summary>Replays the current ATIS from the speech service's in-memory audio cache.</summary>
+    [RelayCommand]
+    private async Task ReplayAtisAsync() =>
+        await _atisBroadcastService.ReplayAsync(CancellationToken.None).ConfigureAwait(true);
 
     /// <summary>Persists the audio settings to the user settings file.</summary>
     [RelayCommand]
@@ -225,6 +250,21 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
     private void OnSessionChanged(object? sender, AtcSession session) =>
         RunOnUiThread(() => UpdateFromSession(session));
 
+    private void OnAtisBroadcastChanged(object? sender, EventArgs eventArgs) =>
+        RunOnUiThread(UpdateAtisBroadcast);
+
+    private void UpdateAtisBroadcast()
+    {
+        AtisBroadcast? broadcast = _atisBroadcastService.CurrentBroadcast;
+        AtisInformation = broadcast is null ? "—" : broadcast.InformationCode;
+        AtisText = broadcast?.DisplayText
+            ?? "Tune the published departure ATIS after loading a flight plan.";
+        AtisStatus = _atisBroadcastService.StatusMessage;
+        AtisWeatherSource = broadcast?.WeatherSource is { Length: > 0 } source
+            ? $"Weather source: {source}"
+            : string.Empty;
+    }
+
     private void UpdateFromSession(AtcSession session)
     {
         Frequency tuned = session.AircraftState.Radio.ActiveTransmitFrequency;
@@ -284,6 +324,7 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
 
         _disposed = true;
         _sessionContext.SessionChanged -= OnSessionChanged;
+        _atisBroadcastService.BroadcastChanged -= OnAtisBroadcastChanged;
     }
 }
 

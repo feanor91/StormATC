@@ -60,6 +60,6 @@ public sealed class MockLanguageModelClient : ILanguageModelClient
 
         return Task.FromResult(ProviderTestResult.Fail(
             "Offline mode is on, so no language model is available. Turn it off in Settings and "
-            + "add an OpenRouter API key and model to enable it."));
+            + "choose a language-model provider and add its API key and model to enable it."));
     }
 }

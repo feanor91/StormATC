@@ -64,7 +64,7 @@
                        Style="{StaticResource BodyTextStyle}"
                        TextWrapping="Wrap"
                        Margin="0,0,0,8" />
-            <TextBlock Text="Speech recognition, the controller voice, and natural phrasing are optional and use external services — Deepgram and OpenRouter — under your own API keys. Those services are independent of StormATC and bill you according to their own pricing, which can change. Check their current rates before enabling them."
+            <TextBlock Text="Speech recognition, the controller voice, and model-assisted phrasing are optional and use external services — Deepgram plus your selected OpenRouter, OpenAI, Groq, DeepSeek, or Anthropic API — under your own keys. Those services are independent of StormATC and bill their own API accounts. A ChatGPT subscription does not include OpenAI API usage."
                        Style="{StaticResource BodyTextStyle}"
                        TextWrapping="Wrap" />
           </StackPanel>
@@ -78,7 +78,7 @@
               <LineBreak />
               <Run Text="• With Deepgram enabled, audio captured while you hold push-to-talk is streamed to Deepgram for transcription, and controller text is sent there to be spoken." />
               <LineBreak />
-              <Run Text="• With OpenRouter enabled, transcripts and the facts a controller has approved are sent to the model you choose so it can phrase the reply." />
+              <Run Text="• With a model provider enabled, transcripts and approved controller facts are sent only to the provider you select so it can interpret or phrase the reply." />
               <LineBreak />
               <Run Text="• Transcripts and session history are stored on this computer only. You can clear them at any time from Settings." />
               <LineBreak />
@@ -109,7 +109,7 @@
 
         <CheckBox x:Name="ScopeAcknowledged"
                   Margin="4,8,0,0"
-                  Content="I understand StormATC is for flight simulation only, and that OpenRouter and Deepgram are paid third-party services billed to my own accounts." />
+                  Content="I understand StormATC is for flight simulation only, and that configured cloud APIs are third-party services billed to my own accounts." />
       </StackPanel>
     </ScrollViewer>
   </DockPanel>

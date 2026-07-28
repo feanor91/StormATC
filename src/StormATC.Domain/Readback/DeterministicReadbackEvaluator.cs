@@ -1,4 +1,5 @@
 using System.Text;
+using StormATC.Domain.Atc;
 using StormATC.Domain.Intents;
 using StormATC.Domain.Phraseology;
 using StormATC.Domain.Sessions;
@@ -31,18 +32,20 @@ public sealed class DeterministicReadbackEvaluator : IReadbackEvaluator
         PendingReadback pending,
         PilotIntent intent,
         string transcript,
-        AtcSession session)
+        AtcSession session,
+        RealismProfile realism)
     {
         ArgumentNullException.ThrowIfNull(pending);
         ArgumentNullException.ThrowIfNull(intent);
         ArgumentNullException.ThrowIfNull(transcript);
         ArgumentNullException.ThrowIfNull(session);
+        ArgumentNullException.ThrowIfNull(realism);
 
         CallsignStatus callsignStatus = EvaluateCallsign(intent, transcript, session);
 
         // A transmission using another aircraft's callsign is not this aircraft's readback,
         // whatever else it contains.
-        if (callsignStatus == CallsignStatus.Incorrect)
+        if (callsignStatus == CallsignStatus.Incorrect && realism.RequireCorrectCallsign)
         {
             return new ReadbackAssessment
             {
@@ -71,7 +74,8 @@ public sealed class DeterministicReadbackEvaluator : IReadbackEvaluator
             if (expected.Type == ReadbackItemType.Callsign)
             {
                 // Handled separately above — the callsign is not an ordinary value comparison.
-                if (callsignStatus == CallsignStatus.Correct)
+                if (callsignStatus == CallsignStatus.Correct
+                    || !realism.RequireCorrectCallsign)
                 {
                     correct.Add(ReadbackItemType.Callsign);
                 }
@@ -89,9 +93,22 @@ public sealed class DeterministicReadbackEvaluator : IReadbackEvaluator
                 continue;
             }
 
-            string? actual = parsed.TryGetValue(expected.Type, out ParsedReadbackItem? item)
-                ? item.NormalizedValue
-                : ExtractFromTranscript(expected.Type, transcript);
+            string? parsedActual =
+                parsed.TryGetValue(expected.Type, out ParsedReadbackItem? item)
+                    ? item.NormalizedValue
+                    : null;
+            string? rescannedActual = ExtractFromTranscript(expected.Type, transcript);
+
+            // In Standard and Relaxed modes, prefer the expectation-aware targeted extraction
+            // when it found the correct value. This lets a reliable runway/squawk/taxi parser
+            // override a noisy general or model-assisted intent parse, without ever changing
+            // one wrong value into the expected one.
+            string? actual =
+                realism.TranscriptTolerance != TranscriptToleranceMode.Strict
+                && rescannedActual is not null
+                && ValuesMatch(expected.Type, expected.ExpectedValue, rescannedActual)
+                    ? rescannedActual
+                    : parsedActual ?? rescannedActual;
 
             if (actual is null)
             {
@@ -110,6 +127,22 @@ public sealed class DeterministicReadbackEvaluator : IReadbackEvaluator
             if (ValuesMatch(expected.Type, expected.ExpectedValue, actual))
             {
                 correct.Add(expected.Type);
+            }
+            else if (realism.TranscriptTolerance != TranscriptToleranceMode.Strict
+                && !WasValueExplicitlyAnnounced(expected.Type, transcript))
+            {
+                // A general parser can mistake a callsign digit run for a heading, runway,
+                // altitude, or squawk. In correction-smart modes, an unannounced mismatch is
+                // not something the pilot explicitly said; retain an earlier confirmation or
+                // ask for the item without the accusatory "negative".
+                if (previouslySatisfied.Contains(expected.Type))
+                {
+                    correct.Add(expected.Type);
+                }
+                else
+                {
+                    missing.Add(expected.Type);
+                }
             }
             else
             {
@@ -258,7 +291,8 @@ public sealed class DeterministicReadbackEvaluator : IReadbackEvaluator
     };
 
     /// <summary>
-    /// Pulls the taxiway letters out of a transcript. "via alpha and charlie" yields "A,C".
+    /// Pulls complete taxiway identifiers out of a transcript. "via apron, Alfa six" yields
+    /// "apron,A6".
     /// </summary>
     private static string? ExtractTaxiRoute(string transcript)
     {
@@ -271,13 +305,20 @@ public sealed class DeterministicReadbackEvaluator : IReadbackEvaluator
             scope = transcript[(viaIndex + 3)..];
         }
 
-        string letters = PhoneticAlphabet.ExtractLetters(scope);
-        if (letters.Length == 0)
+        int holdIndex = scope.IndexOf("hold", StringComparison.OrdinalIgnoreCase);
+        if (holdIndex >= 0)
+        {
+            scope = scope[..holdIndex];
+        }
+
+        IReadOnlyList<string> identifiers =
+            PhoneticAlphabet.ExtractTaxiwayIdentifiers(scope);
+        if (identifiers.Count == 0)
         {
             return null;
         }
 
-        return string.Join(",", letters.Select(c => c.ToString()));
+        return string.Join(",", identifiers);
     }
 
     /// <summary>
@@ -328,6 +369,82 @@ public sealed class DeterministicReadbackEvaluator : IReadbackEvaluator
         }
 
         return false;
+    }
+
+    private static bool WasValueExplicitlyAnnounced(
+        ReadbackItemType type,
+        string transcript)
+    {
+        bool bareNumeric = IsBareNumericTransmission(transcript);
+
+        return type switch
+        {
+            ReadbackItemType.Runway or ReadbackItemType.HoldShortRunway =>
+                ContainsAny(transcript, "runway", "holding short", "hold short")
+                || bareNumeric,
+
+            ReadbackItemType.InitialAltitude or ReadbackItemType.CruiseAltitude =>
+                ContainsAny(
+                    transcript,
+                    "climb",
+                    "descend",
+                    "maintain",
+                    "initial",
+                    "altitude",
+                    "flight level",
+                    "passing",
+                    "leaving")
+                || bareNumeric,
+
+            ReadbackItemType.Squawk =>
+                transcript.Contains("squawk", StringComparison.OrdinalIgnoreCase)
+                || bareNumeric,
+
+            ReadbackItemType.Frequency =>
+                ContainsAny(transcript, "frequency", "contact", "monitor", "decimal", "point")
+                || bareNumeric,
+
+            ReadbackItemType.Heading =>
+                ContainsAny(transcript, "heading", "turn left", "turn right")
+                || bareNumeric,
+
+            ReadbackItemType.TaxiRoute =>
+                ContainsAny(transcript, "via", "taxi", "apron", "ramp"),
+
+            ReadbackItemType.ApproachName =>
+                ContainsAny(transcript, "approach", "ils", "rnav", "visual"),
+
+            _ => true,
+        };
+
+        static bool ContainsAny(string value, params string[] markers) =>
+            markers.Any(marker => value.Contains(marker, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool IsBareNumericTransmission(string transcript)
+    {
+        string folded = SpokenNumbers.FoldDigitWords(transcript);
+        bool sawDigit = false;
+
+        foreach (char character in folded)
+        {
+            if (char.IsDigit(character))
+            {
+                sawDigit = true;
+                continue;
+            }
+
+            if (char.IsWhiteSpace(character)
+                || char.IsPunctuation(character)
+                || char.IsSymbol(character))
+            {
+                continue;
+            }
+
+            return false;
+        }
+
+        return sawDigit;
     }
 
     private static double CalculateConfidence(
@@ -391,7 +508,9 @@ public sealed class DeterministicReadbackEvaluator : IReadbackEvaluator
 
         // "negative" for a wrong value, "readback correct except" for an omission — the
         // distinction real controllers make.
-        string lead = incorrect.Count > 0 ? "negative" : "readback incomplete";
+        bool hasCriticalIncorrect =
+            incorrect.Any(item => IsCritical(pending, item.Type));
+        string lead = hasCriticalIncorrect ? "negative" : "readback incomplete";
         return $"{callsign}, {lead}, {string.Join(", ", parts)}.";
     }
 

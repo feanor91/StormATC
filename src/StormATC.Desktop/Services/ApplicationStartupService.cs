@@ -2,12 +2,16 @@ using System.IO;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Atis;
 using StormATC.Application.Options;
 using StormATC.Application.Sessions;
 using StormATC.Domain;
 using StormATC.Domain.Aircraft;
 using StormATC.Domain.Atc;
 using StormATC.Domain.FlightPlanning;
+using StormATC.Domain.Intents;
+using StormATC.Domain.Sessions;
+using StormATC.Domain.ValueObjects;
 using StormATC.Infrastructure.FlightPlanning;
 using StormATC.Infrastructure.Simulator;
 
@@ -33,8 +37,10 @@ public sealed class ApplicationStartupService(
     ISessionRepository sessionRepository,
     IStoragePaths storagePaths,
     IPromptCatalog promptCatalog,
+    AtisBroadcastService atisBroadcastService,
     ProviderStatusService providerStatus,
     IOptions<ApplicationOptions> applicationOptions,
+    IOptions<AtcRealismOptions> realismOptions,
     IOptions<SimBriefOptions> simBriefOptions,
     ILogger<ApplicationStartupService> logger)
 {
@@ -56,11 +62,17 @@ public sealed class ApplicationStartupService(
     private readonly IPromptCatalog _promptCatalog =
         promptCatalog ?? throw new ArgumentNullException(nameof(promptCatalog));
 
+    private readonly AtisBroadcastService _atisBroadcastService =
+        atisBroadcastService ?? throw new ArgumentNullException(nameof(atisBroadcastService));
+
     private readonly ProviderStatusService _providerStatus =
         providerStatus ?? throw new ArgumentNullException(nameof(providerStatus));
 
     private readonly ApplicationOptions _applicationOptions = applicationOptions?.Value
         ?? throw new ArgumentNullException(nameof(applicationOptions));
+
+    private readonly AtcRealismOptions _realismOptions = realismOptions?.Value
+        ?? throw new ArgumentNullException(nameof(realismOptions));
 
     private readonly SimBriefOptions _simBriefOptions = simBriefOptions?.Value
         ?? throw new ArgumentNullException(nameof(simBriefOptions));
@@ -77,6 +89,7 @@ public sealed class ApplicationStartupService(
     public async Task InitializeAsync(CancellationToken cancellationToken)
     {
         _warnings.Clear();
+        _atisBroadcastService.Start();
 
         EnsureStorage();
         await InitializeDatabaseAsync(cancellationToken).ConfigureAwait(false);
@@ -150,6 +163,9 @@ public sealed class ApplicationStartupService(
         SessionMode mode = _simulatorConnector.IsMockActive ? SessionMode.Mock : SessionMode.Live;
 
         _sessionContext.Realism = ParseRealism(_applicationOptions.RealismProfile);
+        _sessionContext.DefaultPushbackDirection =
+            PushbackDirections.Normalize(_realismOptions.DefaultPushbackDirection)
+            ?? PushbackDirections.TailLeft;
         _sessionContext.StartNewSession(mode, AircraftState.Unknown(DateTimeOffset.UtcNow));
 
         // The profile is logged by name, not as the record: the expanded record is four lines of
@@ -168,7 +184,16 @@ public sealed class ApplicationStartupService(
             _warnings.Add($"Realism profile '{name}' is not recognised. Using Standard.");
         }
 
-        return RealismProfile.FromName(name);
+        return RealismProfile.FromName(name) with
+        {
+            RequireReadbackBeforeProgressing =
+                _realismOptions.RequireReadbackBeforeProgressing,
+            RequireCorrectCallsign = _realismOptions.RequireCorrectCallsign,
+            EnforceHoldShort = _realismOptions.EnforceHoldShort,
+            RequireCheckInOnFrequencyChange =
+                _realismOptions.RequireCheckInOnFrequencyChange,
+            MinimumIntentConfidence = _realismOptions.MinimumIntentConfidence,
+        };
     }
 
     private async Task ConnectSimulatorAsync(CancellationToken cancellationToken)
@@ -233,7 +258,23 @@ public sealed class ApplicationStartupService(
             // Nothing else pins one, and the engine assigns its own when this is null.
             _sessionContext.PreassignedSquawk = _flightPlanProvider.PreassignedSquawk;
 
-            await _sessionContext.LoadFlightPlanAsync(plan, cancellationToken).ConfigureAwait(false);
+            AtcSession session = await _sessionContext
+                .LoadFlightPlanAsync(plan, cancellationToken)
+                .ConfigureAwait(false);
+
+            if (session.CurrentFrequency is Frequency initialFrequency)
+            {
+                bool tuned = await _simulatorConnector
+                    .TuneCom1Async(initialFrequency, cancellationToken)
+                    .ConfigureAwait(false);
+
+                if (!tuned)
+                {
+                    _warnings.Add(
+                        $"COM1 could not be tuned automatically to "
+                        + $"{initialFrequency.ToDisplay()}. Tune it in the aircraft before transmitting.");
+                }
+            }
 
             // Only a real import's warnings are worth recording. The sample's own note that it is
             // fictional is true of every run and would sit on the Diagnostics page for ever,

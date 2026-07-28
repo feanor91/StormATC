@@ -148,6 +148,16 @@ public class AltitudeTests
     }
 
     [Fact]
+    public void A_numeric_callsign_before_a_climb_is_not_parsed_as_the_altitude()
+    {
+        Altitude? parsed = Altitude.Parse(
+            "sierra tango 123 runway 26 left climb initially 7000 squawk 5217");
+
+        Assert.NotNull(parsed);
+        Assert.Equal(7_000, parsed.Value.Feet);
+    }
+
+    [Fact]
     public void A_callsign_number_is_not_mistaken_for_an_altitude()
     {
         Assert.Null(Altitude.Parse("ST123 request taxi"));
@@ -309,6 +319,24 @@ public class SquawkCodeTests
                 "squawk five two point seven",
                 out SquawkCode? parsed));
         Assert.Equal(SquawkCode.Create("5217"), parsed);
+    }
+
+    [Fact]
+    public void Parse_does_not_treat_an_altitude_as_a_bare_squawk()
+    {
+        Assert.False(
+            SquawkCode.TryParse(
+                "runway 10 climb initial at 7000 alpha 21",
+                out _));
+    }
+
+    [Theory]
+    [InlineData("2555")]
+    [InlineData("two five five five")]
+    public void Parse_accepts_a_bare_squawk_correction(string transcript)
+    {
+        Assert.True(SquawkCode.TryParse(transcript, out SquawkCode? parsed));
+        Assert.Equal(SquawkCode.Create("2555"), parsed);
     }
 
     [Theory]

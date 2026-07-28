@@ -162,6 +162,22 @@ public interface ITextToSpeechService : IAsyncDisposable
     /// </remarks>
     Task SpeakAsync(string text, VoiceConfiguration voice, CancellationToken cancellationToken);
 
+    /// <summary>
+    /// Plays a named transmission, reusing its in-memory synthesized audio while the text and
+    /// provider voice remain unchanged.
+    /// </summary>
+    /// <remarks>
+    /// This is intended for repeating broadcasts such as ATIS. Implementations return false when
+    /// no audio could be synthesized or played. A changed text value invalidates only the named
+    /// entry and may require one new provider request; an unchanged value must not make another
+    /// synthesis request.
+    /// </remarks>
+    Task<bool> SpeakCachedAsync(
+        string cacheKey,
+        string text,
+        VoiceConfiguration voice,
+        CancellationToken cancellationToken);
+
     /// <summary>Stops playback immediately.</summary>
     Task StopAsync(CancellationToken cancellationToken);
 
