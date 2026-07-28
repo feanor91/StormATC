@@ -1,10 +1,21 @@
 # StormATC
 
-A free, open-source, voice-first air traffic control companion for flight simulation.
+A free, open-source, voice-first ATC companion for Microsoft Flight Simulator.
+
+[![CI](https://github.com/stormairfly/StormATC/actions/workflows/ci.yml/badge.svg)](https://github.com/stormairfly/StormATC/actions/workflows/ci.yml)
+[![Latest release](https://img.shields.io/github/v/release/stormairfly/StormATC?label=release)](https://github.com/stormairfly/StormATC/releases/latest)
+[![Licence: MIT](https://img.shields.io/badge/licence-MIT-42d392.svg)](LICENSE)
+[![Good first issues](https://img.shields.io/github/issues/stormairfly/StormATC/good%20first%20issue?label=good%20first%20issues)](https://github.com/stormairfly/StormATC/labels/good%20first%20issue)
 
 [Project website](https://stormairfly.github.io/StormATC/) ·
 [Latest release](https://github.com/stormairfly/StormATC/releases/latest) ·
 [Contribute](CONTRIBUTING.md)
+
+![StormATC dashboard showing a mock flight, controller guidance, radio, typed transmission and push-to-talk](docs/images/stormatc-dashboard.png)
+
+**Want to fly it?** [Download the Windows installer or portable ZIP](https://github.com/stormairfly/StormATC/releases/latest).
+**Want to improve it?** Pick a [`good first issue`](https://github.com/stormairfly/StormATC/labels/good%20first%20issue)
+or read the [contributor quickstart](docs/contributor-quickstart.md).
 
 > **StormATC is an entertainment product for flight simulation only. It must not be used for
 > real-world aviation, navigation, flight planning, or air traffic control.**
@@ -90,11 +101,11 @@ See [docs/architecture.md](docs/architecture.md).
 ## Build and run
 
 ```bash
-git clone https://github.com/stormatc/stormatc.git
+git clone https://github.com/stormairfly/StormATC.git
 ```
 
 ```bash
-cd stormatc && dotnet restore --locked-mode
+cd StormATC && dotnet restore --locked-mode
 ```
 
 ```bash
