@@ -97,14 +97,20 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
     /// <summary>A specific, user-facing description of the current connection state.</summary>
     public string StatusMessage { get; private set; } = "SimConnect has not been started.";
 
+#if MSFS_SDK_AVAILABLE
     private WeatherSnapshot? _latestWeather;
+#endif
     private IReadOnlyList<MsfsTrafficSnapshot> _nearbyTraffic = [];
     private readonly Lock _airportCacheLock = new();
     private readonly Dictionary<string, AirportData> _airportCache =
         new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>The latest ambient conditions at the user aircraft.</summary>
+#if MSFS_SDK_AVAILABLE
     public WeatherSnapshot? LatestWeather => Volatile.Read(ref _latestWeather);
+#else
+    public WeatherSnapshot? LatestWeather { get; private set; }
+#endif
 
     /// <summary>Nearby simulator-managed aircraft from the latest traffic scan.</summary>
     public IReadOnlyList<MsfsTrafficSnapshot> NearbyTraffic =>
@@ -194,7 +200,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
 
 #if !MSFS_SDK_AVAILABLE
         cancellationToken.ThrowIfCancellationRequested();
-        return Task.FromResult<AirportData?>(null);
+        return Task.FromResult(GetCachedAirport(icao));
 #else
         return RequestAirportDataAsync(icao.Trim().ToUpperInvariant(), cancellationToken);
 #endif
