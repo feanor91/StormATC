@@ -51,6 +51,27 @@ jobs:
           --logger "trx;LogFilePrefix=results"
           --results-directory TestResults
 
+      - name: Report failed tests
+        if: ${{ failure() }}
+        shell: pwsh
+        run: |
+          # Turn each failed test into an annotation, so failures are readable from the run
+          # summary (and the API) without downloading the log or the trx artifact.
+          Get-ChildItem TestResults -Recurse -Filter *.trx -ErrorAction SilentlyContinue | ForEach-Object {
+            [xml]$trx = Get-Content $_.FullName
+            $ns = New-Object Xml.XmlNamespaceManager($trx.NameTable)
+            $ns.AddNamespace('t', 'http://microsoft.com/schemas/VisualStudio/TeamTest/2010')
+            foreach ($result in $trx.SelectNodes('//t:UnitTestResult[@outcome="Failed"]', $ns)) {
+              $node = $result.SelectSingleNode('t:Output/t:ErrorInfo/t:Message', $ns)
+              $message = if ($node) { $node.InnerText } else { 'No message.' }
+              $message = ($message -replace '\r?\n', ' ').Trim()
+              if ($message.Length -gt 900) { $message = $message.Substring(0, 900) + '...' }
+              $message = $message -replace '%', '%25'
+              $title = "Test failed $($result.testName)" -replace '%', '%25' -replace ',', '%2C' -replace ':', '%3A'
+              Write-Output "::error title=$title::$message"
+            }
+          }
+
       - name: Upload test results
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4

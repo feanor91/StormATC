@@ -91,8 +91,25 @@ public partial class InterfaceTranslationTests
 
     // =====================================================================================
 
-    private static string RepositoryRoot([CallerFilePath] string thisFile = "") =>
-        Path.GetFullPath(Path.Combine(Path.GetDirectoryName(thisFile)!, "..", ".."));
+    /// <summary>
+    /// The repository root: the folder holding <c>StormATC.sln</c> above the test binaries. A CI
+    /// build maps source paths (<c>ContinuousIntegrationBuild</c>), so the compile-time path of
+    /// this file is only a fallback for runs from elsewhere.
+    /// </summary>
+    private static string RepositoryRoot([CallerFilePath] string thisFile = "")
+    {
+        for (DirectoryInfo? directory = new(AppContext.BaseDirectory);
+             directory is not null;
+             directory = directory.Parent)
+        {
+            if (File.Exists(Path.Combine(directory.FullName, "StormATC.sln")))
+            {
+                return directory.FullName;
+            }
+        }
+
+        return Path.GetFullPath(Path.Combine(Path.GetDirectoryName(thisFile)!, "..", ".."));
+    }
 
     private static IEnumerable<string> SourceFiles(string relativeDirectory, string pattern) =>
         Directory
