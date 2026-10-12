@@ -822,7 +822,20 @@
           <StackPanel MaxWidth="1040" HorizontalAlignment="Left">
             <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
               <StackPanel>
-                <TextBlock Text="Radio language" Style="{StaticResource SectionHeaderStyle}" />
+                <TextBlock Text="Languages" Style="{StaticResource SectionHeaderStyle}" />
+                <TextBlock Text="INTERFACE" Style="{StaticResource LabelTextStyle}" />
+                <ComboBox ItemsSource="{Binding InterfaceLanguages}"
+                          SelectedItem="{Binding InterfaceLanguage}"
+                          Width="240"
+                          HorizontalAlignment="Left"
+                          Margin="0,0,0,6" />
+                <TextBlock Text="Menus, labels and messages. Takes effect at the next start."
+                           Style="{StaticResource SecondaryTextStyle}"
+                           TextWrapping="Wrap"
+                           MaxWidth="760"
+                           HorizontalAlignment="Left"
+                           Margin="0,0,0,14" />
+                <TextBlock Text="RADIO" Style="{StaticResource LabelTextStyle}" />
                 <ComboBox ItemsSource="{Binding AtcLanguages}"
                           SelectedItem="{Binding AtcLanguage}"
                           Width="240"

@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
 using StormATC.Application.Atis;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Application.Sessions;
 using StormATC.Desktop.Services;
@@ -57,16 +58,16 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
     private string _mismatchMessage = string.Empty;
 
     [ObservableProperty]
-    private string _handoffStatus = "No handoff in progress";
+    private string _handoffStatus = UiText.T("No handoff in progress");
 
     [ObservableProperty]
     private string _atisInformation = "—";
 
     [ObservableProperty]
-    private string _atisText = "Tune the published departure ATIS after loading a flight plan.";
+    private string _atisText = UiText.T("Tune the published departure ATIS after loading a flight plan.");
 
     [ObservableProperty]
-    private string _atisStatus = "Waiting for departure ATIS.";
+    private string _atisStatus = UiText.T("Waiting for departure ATIS.");
 
     [ObservableProperty]
     private string _atisWeatherSource = string.Empty;
@@ -76,7 +77,7 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
 
     [ObservableProperty]
     private string _frequencyDataMessage =
-        "No local airport frequency data is available for this flight.";
+        UiText.T("No local airport frequency data is available for this flight.");
 
     [ObservableProperty]
     private double _controllerVolume;
@@ -169,7 +170,7 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
         }
 
         _mockSimulator.SetCom1Active(entry.Frequency);
-        StatusMessage = $"COM1 tuned to {entry.Frequency.ToDisplay()}.";
+        StatusMessage = UiText.T($"COM1 tuned to {entry.Frequency.ToDisplay()}.");
         UpdateFromSession(_sessionContext.CurrentSession);
     }
 
@@ -199,7 +200,7 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
             ],
             CancellationToken.None).ConfigureAwait(true);
 
-        StatusMessage = "Audio settings saved. They take effect on the next transmission.";
+        StatusMessage = UiText.T("Audio settings saved. They take effect on the next transmission.");
     }
 
     private async Task LoadFrequenciesAsync()
@@ -210,7 +211,7 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
 
         if (session.FlightPlan?.DepartureIcao is not { Length: > 0 } icao)
         {
-            FrequencyDataMessage = "Import a flight plan to load its airport frequencies.";
+            FrequencyDataMessage = UiText.T("Import a flight plan to load its airport frequencies.");
             return;
         }
 
@@ -221,22 +222,22 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
         if (airport is null)
         {
             FrequencyDataMessage =
-                $"StormATC has no bundled frequency data for {icao}. "
-                + "It will keep local positions combined and never invent a frequency.";
+                UiText.T($"StormATC has no bundled frequency data for {icao}. ")
+                + UiText.T("It will keep local positions combined and never invent a frequency.");
             return;
         }
 
-        AddFrequency("Clearance delivery", airport.Frequencies.ClearanceDelivery);
-        AddFrequency("Ground", airport.Frequencies.Ground);
-        AddFrequency("Tower", airport.Frequencies.Tower);
-        AddFrequency("Departure", airport.Frequencies.Departure);
-        AddFrequency("Approach", airport.Frequencies.Approach);
-        AddFrequency("Center", airport.Frequencies.Center);
+        AddFrequency(UiText.T("Clearance delivery"), airport.Frequencies.ClearanceDelivery);
+        AddFrequency(UiText.T("Ground"), airport.Frequencies.Ground);
+        AddFrequency(UiText.T("Tower"), airport.Frequencies.Tower);
+        AddFrequency(UiText.T("Departure"), airport.Frequencies.Departure);
+        AddFrequency(UiText.T("Approach"), airport.Frequencies.Approach);
+        AddFrequency(UiText.T("Center"), airport.Frequencies.Center);
         AddFrequency("ATIS", airport.Frequencies.Atis);
         HasPublishedFrequencies = AvailableFrequencies.Count > 0;
         FrequencyDataMessage = HasPublishedFrequencies
             ? string.Empty
-            : $"The bundled {icao} airport file does not publish radio frequencies.";
+            : UiText.T($"The bundled {icao} airport file does not publish radio frequencies.");
 
         void AddFrequency(string label, Frequency? frequency)
         {
@@ -258,10 +259,10 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
         AtisBroadcast? broadcast = _atisBroadcastService.CurrentBroadcast;
         AtisInformation = broadcast is null ? "—" : broadcast.InformationCode;
         AtisText = broadcast?.DisplayText
-            ?? "Tune the published departure ATIS after loading a flight plan.";
+            ?? UiText.T("Tune the published departure ATIS after loading a flight plan.");
         AtisStatus = _atisBroadcastService.StatusMessage;
         AtisWeatherSource = broadcast?.WeatherSource is { Length: > 0 } source
-            ? $"Weather source: {source}"
+            ? UiText.T($"Weather source: {source}")
             : string.Empty;
     }
 
@@ -281,24 +282,26 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
         FrequencyMismatch = session.CurrentFrequency is Frequency expected && expected != tuned;
 
         MismatchMessage = FrequencyMismatch
-            ? $"The aircraft is tuned to {tuned.ToDisplay()} but the session is on "
-              + $"{session.CurrentFrequency?.ToDisplay()}. Retune COM1 to be heard."
+            ? UiText.T(
+                $"The aircraft is tuned to {tuned.ToDisplay()} but the session is on "
+                + $"{session.CurrentFrequency?.ToDisplay()}. Retune COM1 to be heard.")
             : string.Empty;
 
         HandoffStatus = session.HandoffState switch
         {
             HandoffState.Instructed => session.HandoffHistory.Count > 0
-                ? $"Instructed to contact {DescribeHandoff(session.HandoffHistory[^1])} — check in when ready."
-                : "A frequency change has been issued.",
-            HandoffState.Acknowledged => "Frequency change read back. Check in on the new frequency.",
-            HandoffState.CheckedIn => "Checked in with the new controller.",
-            _ => "No handoff in progress",
+                ? UiText.T($"Instructed to contact {DescribeHandoff(session.HandoffHistory[^1])} — check in when ready.")
+                : UiText.T("A frequency change has been issued."),
+            HandoffState.Acknowledged => UiText.T("Frequency change read back. Check in on the new frequency."),
+            HandoffState.CheckedIn => UiText.T("Checked in with the new controller."),
+            _ => UiText.T("No handoff in progress"),
         };
     }
 
     private static string DescribeHandoff(ControllerHandoff handoff) =>
-        $"{Domain.Phraseology.DeterministicPhraseology.SpokenControllerName(handoff.ToController)} "
-        + $"on {handoff.ToFrequency.ToDisplay()}";
+        UiText.T(
+            $"{UiText.T(Domain.Phraseology.DeterministicPhraseology.SpokenControllerName(handoff.ToController))} "
+            + $"on {handoff.ToFrequency.ToDisplay()}");
 
     private static void RunOnUiThread(Action action)
     {

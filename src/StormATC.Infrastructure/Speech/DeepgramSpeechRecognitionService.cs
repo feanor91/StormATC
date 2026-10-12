@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using NAudio.Wave;
 using StormATC.Application.Abstractions;
 using StormATC.Application.Intent;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Application.Sessions;
 using StormATC.Infrastructure.Audio;
@@ -130,7 +131,7 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
         {
             return new SpeechTrainingSample
             {
-                Message = _lastError ?? "The training sample could not be started.",
+                Message = _lastError ?? UiText.T("The training sample could not be started."),
             };
         }
 
@@ -211,8 +212,8 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
             {
                 IsConfigured = false;
                 RaiseError(
-                    "Cloud speech services are disabled.",
-                    "Enable cloud-services consent in Settings, or use typed transmissions.");
+                    UiText.T("Cloud speech services are disabled."),
+                    UiText.T("Enable cloud-services consent in Settings, or use typed transmissions."));
                 return false;
             }
 
@@ -221,8 +222,8 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
             {
                 IsConfigured = false;
                 RaiseError(
-                    "The configured Deepgram endpoint was blocked for security.",
-                    "Restore the official Deepgram endpoint in appsettings.json.");
+                    UiText.T("The configured Deepgram endpoint was blocked for security."),
+                    UiText.T("Restore the official Deepgram endpoint in appsettings.json."));
                 return false;
             }
 
@@ -234,8 +235,8 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
             {
                 IsConfigured = false;
                 RaiseError(
-                    "No Deepgram API key is configured.",
-                    "Add a Deepgram API key in Settings, or use typed transmissions.");
+                    UiText.T("No Deepgram API key is configured."),
+                    UiText.T("Add a Deepgram API key in Settings, or use typed transmissions."));
                 return false;
             }
 
@@ -264,8 +265,8 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
             RaiseError(
-                "Deepgram did not respond before the connection timeout.",
-                "Check the internet connection and try again.");
+                UiText.T("Deepgram did not respond before the connection timeout."),
+                UiText.T("Check the internet connection and try again."));
             await CleanUpAsync().ConfigureAwait(false);
             return false;
         }
@@ -278,8 +279,8 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
         {
             _logger.LogError(ex, "Failed to start a Deepgram transmission.");
             RaiseError(
-                "Speech recognition could not be started.",
-                "Check the selected microphone and internet connection, then try again.");
+                UiText.T("Speech recognition could not be started."),
+                UiText.T("Check the selected microphone and internet connection, then try again."));
             await CleanUpAsync().ConfigureAwait(false);
             return false;
         }
@@ -299,7 +300,7 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
             {
                 return new SpeechTrainingSample
                 {
-                    Message = _lastError ?? "No microphone capture is active.",
+                    Message = _lastError ?? UiText.T("No microphone capture is active."),
                 };
             }
 
@@ -351,8 +352,8 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
                 else
                 {
                     RaiseError(
-                        "Nothing was transcribed from that transmission.",
-                        "Check the microphone level and speak after pressing push-to-talk.");
+                        UiText.T("Nothing was transcribed from that transmission."),
+                        UiText.T("Check the microphone level and speak after pressing push-to-talk."));
                 }
             }
 
@@ -466,8 +467,8 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
             {
                 _logger.LogWarning(args.Exception, "Microphone capture stopped unexpectedly.");
                 RaiseError(
-                    "The microphone stopped unexpectedly.",
-                    "Check that the selected input device is still connected.");
+                    UiText.T("The microphone stopped unexpectedly."),
+                    UiText.T("Check that the selected input device is still connected."));
             }
         };
 
@@ -538,8 +539,8 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
         {
             _logger.LogWarning(ex, "The Deepgram websocket closed unexpectedly.");
             RaiseError(
-                "The connection to Deepgram was lost.",
-                "Check the internet connection, then press push-to-talk again.");
+                UiText.T("The connection to Deepgram was lost."),
+                UiText.T("Check the internet connection, then press push-to-talk again."));
         }
     }
 
@@ -605,7 +606,7 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
         {
             return new SpeechTrainingSample
             {
-                Message = "Nothing was transcribed. Check the selected microphone and its level.",
+                Message = UiText.T("Nothing was transcribed. Check the selected microphone and its level."),
             };
         }
 
@@ -627,7 +628,7 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
             Success = true,
             Transcript = text,
             Confidence = confidence,
-            Message = $"Heard with {confidence:P0} confidence.",
+            Message = UiText.T($"Heard with {confidence:P0} confidence."),
         };
     }
 
@@ -649,14 +650,14 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
         if (!_applicationOptions.CurrentValue.CloudServicesConsentGiven)
         {
             return ProviderTestResult.Fail(
-                "Cloud services are disabled. Enable consent in Settings before testing.");
+                UiText.T("Cloud services are disabled. Enable consent in Settings before testing."));
         }
 
         if (!ProviderEndpointPolicy.IsAllowedDeepgramStreaming(
                 _options.CurrentValue.StreamingUrl))
         {
             return ProviderTestResult.Fail(
-                "The configured Deepgram endpoint was blocked. Restore the official endpoint.");
+                UiText.T("The configured Deepgram endpoint was blocked. Restore the official endpoint."));
         }
 
         string? apiKey = await _secretStore
@@ -666,7 +667,7 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
         if (string.IsNullOrWhiteSpace(apiKey))
         {
             return ProviderTestResult.Fail(
-                "No Deepgram API key is stored. Enter one and save first.");
+                UiText.T("No Deepgram API key is stored. Enter one and save first."));
         }
 
         var stopwatch = Stopwatch.StartNew();
@@ -677,7 +678,7 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
                     _options.CurrentValue.StreamingUrl))
             {
                 return ProviderTestResult.Fail(
-                    "The configured Deepgram endpoint was blocked. Restore the official endpoint.");
+                    UiText.T("The configured Deepgram endpoint was blocked. Restore the official endpoint."));
             }
 
             using var socket = new ClientWebSocket();
@@ -702,20 +703,20 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
                 CancellationToken.None).ConfigureAwait(false);
 
             return ProviderTestResult.Ok(
-                $"Connected. Model '{_options.CurrentValue.SpeechToTextModel}', language '{profile.Language}'.",
+                UiText.T($"Connected. Model '{_options.CurrentValue.SpeechToTextModel}', language '{profile.Language}'."),
                 stopwatch.Elapsed);
         }
         catch (WebSocketException ex)
         {
             return ProviderTestResult.Fail(
                 ex.Message.Contains("401", StringComparison.Ordinal)
-                    ? "Deepgram rejected the API key."
-                    : "Could not connect to Deepgram. Check the internet connection.");
+                    ? UiText.T("Deepgram rejected the API key.")
+                    : UiText.T("Could not connect to Deepgram. Check the internet connection."));
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
             return ProviderTestResult.Fail(
-                "Deepgram did not respond before the timeout elapsed.");
+                UiText.T("Deepgram did not respond before the timeout elapsed."));
         }
     }
 

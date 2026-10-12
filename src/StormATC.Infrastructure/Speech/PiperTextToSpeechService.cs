@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Domain.Phraseology;
 using StormATC.Infrastructure.Audio;
@@ -152,7 +153,7 @@ public sealed partial class PiperTextToSpeechService : ITextToSpeechService
         if (!File.Exists(options.PiperExecutablePath))
         {
             return ProviderTestResult.Fail(
-                "piper.exe was not found. Set its path in Settings (Local voice).");
+                UiText.T("piper.exe was not found. Set its path in Settings (Local voice)."));
         }
 
         PhraseologyLanguage language = File.Exists(options.PiperFrenchVoicePath)
@@ -162,7 +163,7 @@ public sealed partial class PiperTextToSpeechService : ITextToSpeechService
         if (!File.Exists(ResolveVoicePath(language)))
         {
             return ProviderTestResult.Fail(
-                "No Piper voice (.onnx) was found. Set the English or French voice path in Settings.");
+                UiText.T("No Piper voice (.onnx) was found. Set the English or French voice path in Settings."));
         }
 
         var stopwatch = Stopwatch.StartNew();
@@ -174,10 +175,10 @@ public sealed partial class PiperTextToSpeechService : ITextToSpeechService
 
         return audio is { Length: > 44 }
             ? ProviderTestResult.Ok(
-                $"Piper ready. Voice '{Path.GetFileNameWithoutExtension(ResolveVoicePath(language))}'.",
+                UiText.T($"Piper ready. Voice '{Path.GetFileNameWithoutExtension(ResolveVoicePath(language))}'."),
                 stopwatch.Elapsed)
             : ProviderTestResult.Fail(
-                "Piper produced no audio. Check that the voice's .onnx.json file sits next to the .onnx model.");
+                UiText.T("Piper produced no audio. Check that the voice's .onnx.json file sits next to the .onnx model."));
     }
 
     /// <summary>

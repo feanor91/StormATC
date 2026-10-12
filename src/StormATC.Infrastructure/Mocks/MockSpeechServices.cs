@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Localization;
 
 namespace StormATC.Infrastructure.Mocks;
 
@@ -23,7 +24,7 @@ public sealed class MockSpeechRecognitionService(
         logger ?? throw new ArgumentNullException(nameof(logger));
 
     /// <inheritdoc />
-    public string ProviderName => "Mock (no speech recognition)";
+    public string ProviderName => UiText.T("Mock (no speech recognition)");
 
     /// <inheritdoc />
     public bool IsConfigured => false;
@@ -51,8 +52,8 @@ public sealed class MockSpeechRecognitionService(
         _logger.LogInformation("Push-to-talk pressed, but no speech provider is configured.");
 
         ErrorOccurred?.Invoke(this, new SpeechErrorEventArgs(
-            "Speech recognition is not configured.",
-            "Add a Deepgram API key in Settings, or use the text input on the Dashboard in developer mode."));
+            UiText.T("Speech recognition is not configured."),
+            UiText.T("Add a Deepgram API key in Settings, or use the text input on the Dashboard in developer mode.")));
 
         return Task.CompletedTask;
     }
@@ -73,7 +74,7 @@ public sealed class MockSpeechRecognitionService(
         cancellationToken.ThrowIfCancellationRequested();
         return Task.FromResult(new SpeechTrainingSample
         {
-            Message = "Voice training is unavailable while Offline mode is enabled.",
+            Message = UiText.T("Voice training is unavailable while Offline mode is enabled."),
         });
     }
 
@@ -87,8 +88,8 @@ public sealed class MockSpeechRecognitionService(
         cancellationToken.ThrowIfCancellationRequested();
 
         return Task.FromResult(ProviderTestResult.Fail(
-            "Offline mode is on, so no speech service is available. Turn it off in Settings and "
-            + "add a Deepgram API key to enable speech recognition."));
+            UiText.T("Offline mode is on, so no speech service is available. Turn it off in Settings and "
+            + "add a Deepgram API key to enable speech recognition.")));
     }
 
     /// <summary>
@@ -125,7 +126,7 @@ public sealed class MockTextToSpeechService(
     private string? _lastSpokenText;
 
     /// <inheritdoc />
-    public string ProviderName => "Mock (no speech synthesis)";
+    public string ProviderName => UiText.T("Mock (no speech synthesis)");
 
     /// <inheritdoc />
     public bool IsConfigured => false;
@@ -180,8 +181,8 @@ public sealed class MockTextToSpeechService(
         cancellationToken.ThrowIfCancellationRequested();
 
         return Task.FromResult(ProviderTestResult.Fail(
-            "Offline mode is on, so no controller voice is available. Turn it off in Settings and "
-            + "add a Deepgram API key to enable it."));
+            UiText.T("Offline mode is on, so no controller voice is available. Turn it off in Settings and "
+            + "add a Deepgram API key to enable it.")));
     }
 
     /// <inheritdoc />

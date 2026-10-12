@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Localization;
 
 namespace StormATC.Infrastructure.Mocks;
 
@@ -22,7 +23,7 @@ namespace StormATC.Infrastructure.Mocks;
 public sealed class MockLanguageModelClient : ILanguageModelClient
 {
     /// <inheritdoc />
-    public string ProviderName => "Mock (no language model)";
+    public string ProviderName => UiText.T("Mock (no language model)");
 
     /// <inheritdoc />
     public bool IsConfigured => false;
@@ -36,7 +37,7 @@ public sealed class MockLanguageModelClient : ILanguageModelClient
         cancellationToken.ThrowIfCancellationRequested();
 
         return Task.FromResult(StructuredModelResponse.Fail<T>(
-            "No language model is configured. StormATC is using deterministic parsing and phraseology.",
+            UiText.T("No language model is configured. StormATC is using deterministic parsing and phraseology."),
             ModelErrorCategory.NotConfigured,
             TimeSpan.Zero));
     }
@@ -59,7 +60,7 @@ public sealed class MockLanguageModelClient : ILanguageModelClient
         cancellationToken.ThrowIfCancellationRequested();
 
         return Task.FromResult(ProviderTestResult.Fail(
-            "Offline mode is on, so no language model is available. Turn it off in Settings and "
-            + "choose a language-model provider and add its API key and model to enable it."));
+            UiText.T("Offline mode is on, so no language model is available. Turn it off in Settings and "
+            + "choose a language-model provider and add its API key and model to enable it.")));
     }
 }

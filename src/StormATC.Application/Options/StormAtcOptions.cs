@@ -55,6 +55,12 @@ public sealed class ApplicationOptions
     /// clearance decision is made by the same deterministic engine in either language.
     /// </remarks>
     public string AtcLanguage { get; init; } = "en";
+
+    /// <summary>
+    /// The interface language: <c>en</c>, <c>fr</c>, or empty to follow the Windows display
+    /// language. Applied at startup.
+    /// </summary>
+    public string InterfaceLanguage { get; init; } = string.Empty;
 }
 
 /// <summary>Language-model selection and generation settings shared by every provider.</summary>

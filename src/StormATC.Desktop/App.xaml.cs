@@ -88,8 +88,8 @@ public partial class App : System.Windows.Application
         catch (Exception ex)
         {
             MessageBox.Show(
-                $"StormATC could not start.\n\n{ex.Message}",
-                "StormATC — startup failure",
+                StormATC.Application.Localization.UiText.T($"StormATC could not start.\n\n{ex.Message}"),
+                StormATC.Application.Localization.UiText.T("StormATC — startup failure"),
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
 
@@ -178,6 +178,14 @@ public partial class App : System.Windows.Application
         builder.Configuration.AddEnvironmentVariables(prefix: "STORMATC_");
         builder.Configuration.AddCommandLine(args);
 
+        // The interface language is fixed for the life of the process: it is chosen before the
+        // first window exists, and changing it in Settings takes effect at the next start.
+        StormATC.Application.Localization.UiText.SetLanguage(
+            StormATC.Application.Localization.UiLanguages.Resolve(
+                builder.Configuration[
+                    $"{StormATC.Application.Options.ApplicationOptions.SectionName}:InterfaceLanguage"]));
+        StormATC.Desktop.Localization.XamlTextTranslator.Register();
+
         builder.Logging.ClearProviders();
         builder.Logging.AddDebug();
         builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
@@ -208,8 +216,9 @@ public partial class App : System.Windows.Application
         logger?.LogError(e.Exception, "An unhandled exception reached the dispatcher.");
 
         MessageBox.Show(
-            $"Something went wrong.\n\n{e.Exception.Message}\n\nStormATC will try to continue. See the Diagnostics page for details.",
-            "StormATC — unexpected error",
+            StormATC.Application.Localization.UiText.T(
+                $"Something went wrong.\n\n{e.Exception.Message}\n\nStormATC will try to continue. See the Diagnostics page for details."),
+            StormATC.Application.Localization.UiText.T("StormATC — unexpected error"),
             MessageBoxButton.OK,
             MessageBoxImage.Warning);
 

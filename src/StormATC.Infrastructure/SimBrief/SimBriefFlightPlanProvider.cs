@@ -3,6 +3,7 @@ using System.Xml.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Domain.FlightPlanning;
 using StormATC.Domain.ValueObjects;
@@ -59,15 +60,15 @@ public sealed class SimBriefFlightPlanProvider(
         if (!IsValidUserId(userId))
         {
             return FlightPlanImportResult.Fail(
-                "No valid SimBrief user ID is configured.",
-                "Enter your numeric SimBrief user ID (or your SimBrief username) on the Flight Plan page.");
+                UiText.T("No valid SimBrief user ID is configured."),
+                UiText.T("Enter your numeric SimBrief user ID (or your SimBrief username) on the Flight Plan page."));
         }
 
         if (!ProviderEndpointPolicy.IsAllowedSimBrief(_options.BaseUrl))
         {
             return FlightPlanImportResult.Fail(
-                "The configured SimBrief endpoint was blocked.",
-                "Restore the official SimBrief endpoint in appsettings.json.");
+                UiText.T("The configured SimBrief endpoint was blocked."),
+                UiText.T("Restore the official SimBrief endpoint in appsettings.json."));
         }
 
         var uri = new Uri(
@@ -98,15 +99,15 @@ public sealed class SimBriefFlightPlanProvider(
         catch (OperationCanceledException)
         {
             return FlightPlanImportResult.Fail(
-                $"SimBrief did not respond within {_options.Timeout.TotalSeconds:F0} seconds.",
-                "Check your internet connection and try importing again.");
+                UiText.T($"SimBrief did not respond within {_options.Timeout.TotalSeconds:F0} seconds."),
+                UiText.T("Check your internet connection and try importing again."));
         }
         catch (HttpRequestException ex)
         {
             _logger.LogWarning(ex, "The SimBrief request failed.");
             return FlightPlanImportResult.Fail(
-                "SimBrief could not be reached.",
-                "Check your internet connection, then use Re-import on the Flight Plan page.");
+                UiText.T("SimBrief could not be reached."),
+                UiText.T("Check your internet connection, then use Re-import on the Flight Plan page."));
         }
 
         string? cachePath = null;
@@ -137,16 +138,16 @@ public sealed class SimBriefFlightPlanProvider(
         catch (System.Xml.XmlException)
         {
             return FlightPlanImportResult.Fail(
-                "SimBrief returned a response that is not valid XML.",
-                "Regenerate the flight plan on simbrief.com, then import again.");
+                UiText.T("SimBrief returned a response that is not valid XML."),
+                UiText.T("Regenerate the flight plan on simbrief.com, then import again."));
         }
 
         XElement? root = document.Root;
         if (root is null)
         {
             return FlightPlanImportResult.Fail(
-                "The SimBrief response was empty.",
-                "Generate a flight plan on simbrief.com, then import again.");
+                UiText.T("The SimBrief response was empty."),
+                UiText.T("Generate a flight plan on simbrief.com, then import again."));
         }
 
         // SimBrief signals a failed fetch with a <fetch><status> element rather than an HTTP error.
@@ -155,8 +156,8 @@ public sealed class SimBriefFlightPlanProvider(
             && !fetchStatus.Equals("Success", StringComparison.OrdinalIgnoreCase))
         {
             return FlightPlanImportResult.Fail(
-                $"SimBrief reported: {fetchStatus}",
-                "Verify your SimBrief user ID and that you have generated at least one flight plan.");
+                UiText.T($"SimBrief reported: {fetchStatus}"),
+                UiText.T("Verify your SimBrief user ID and that you have generated at least one flight plan."));
         }
 
         var warnings = new List<string>();
@@ -175,8 +176,8 @@ public sealed class SimBriefFlightPlanProvider(
         if (originIcao is null || destinationIcao is null)
         {
             return FlightPlanImportResult.Fail(
-                "The SimBrief plan is missing its origin or destination aerodrome.",
-                "Regenerate the flight plan on simbrief.com, then import again.");
+                UiText.T("The SimBrief plan is missing its origin or destination aerodrome."),
+                UiText.T("Regenerate the flight plan on simbrief.com, then import again."));
         }
 
         // Callsign: SimBrief supplies ATC callsign, airline ICAO, and flight number separately,
@@ -195,8 +196,8 @@ public sealed class SimBriefFlightPlanProvider(
         if (!Callsign.TryCreate(callsignText, out Callsign? callsign))
         {
             return FlightPlanImportResult.Fail(
-                $"The SimBrief plan contains an unusable callsign ('{callsignText}').",
-                "Set an ATC callsign in your SimBrief airline profile, then regenerate the plan.");
+                UiText.T($"The SimBrief plan contains an unusable callsign ('{callsignText}')."),
+                UiText.T("Set an ATC callsign in your SimBrief airline profile, then regenerate the plan."));
         }
 
         RunwayIdentifier? departureRunway = ParseRunway(Read(origin, "plan_rwy"), warnings, "departure");
@@ -212,7 +213,7 @@ public sealed class SimBriefFlightPlanProvider(
         }
         else
         {
-            warnings.Add("The plan does not specify a cruise altitude.");
+            warnings.Add(UiText.T("The plan does not specify a cruise altitude."));
         }
 
         var alternates = new List<string>();
@@ -262,7 +263,7 @@ public sealed class SimBriefFlightPlanProvider(
         XElement? navlog = root.Element("navlog");
         if (navlog is null)
         {
-            warnings.Add("The plan contains no navlog, so route legs are unavailable.");
+            warnings.Add(UiText.T("The plan contains no navlog, so route legs are unavailable."));
             return legs;
         }
 
@@ -342,16 +343,16 @@ public sealed class SimBriefFlightPlanProvider(
         statusCode switch
         {
             System.Net.HttpStatusCode.NotFound => FlightPlanImportResult.Fail(
-                "SimBrief has no flight plan for that user ID.",
-                "Generate a flight plan on simbrief.com, then import again."),
+                UiText.T("SimBrief has no flight plan for that user ID."),
+                UiText.T("Generate a flight plan on simbrief.com, then import again.")),
 
             System.Net.HttpStatusCode.TooManyRequests => FlightPlanImportResult.Fail(
-                "SimBrief is rate-limiting requests.",
-                "Wait a minute, then use Re-import on the Flight Plan page."),
+                UiText.T("SimBrief is rate-limiting requests."),
+                UiText.T("Wait a minute, then use Re-import on the Flight Plan page.")),
 
             _ => FlightPlanImportResult.Fail(
-                $"SimBrief returned HTTP {(int)statusCode}.",
-                "Try importing again shortly. If it persists, check simbrief.com is reachable."),
+                UiText.T($"SimBrief returned HTTP {(int)statusCode}."),
+                UiText.T("Try importing again shortly. If it persists, check simbrief.com is reachable.")),
         };
 
     /// <summary>
@@ -403,7 +404,7 @@ public sealed class SimBriefFlightPlanProvider(
             return runway;
         }
 
-        warnings.Add($"The planned {role} runway '{value}' could not be interpreted and was ignored.");
+        warnings.Add(UiText.T($"The planned {role} runway '{value}' could not be interpreted and was ignored."));
         return null;
     }
 

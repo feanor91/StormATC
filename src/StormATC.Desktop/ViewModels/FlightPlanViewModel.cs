@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Application.Sessions;
 using StormATC.Desktop.Services;
@@ -66,7 +67,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
     private string _arrivalProcedure = "—";
 
     [ObservableProperty]
-    private string _route = "No route filed";
+    private string _route = UiText.T("No route filed");
 
     [ObservableProperty]
     private string _blockTime = "—";
@@ -149,7 +150,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
 
     /// <summary>The label on the import button.</summary>
     public string ImportButtonText =>
-        UsesSimBrief ? "Import latest SimBrief plan" : "Load the bundled sample flight";
+        UsesSimBrief ? UiText.T("Import latest SimBrief plan") : UiText.T("Load the bundled sample flight");
 
     /// <inheritdoc />
     public Task RefreshAsync()
@@ -172,8 +173,8 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
         IsImporting = true;
         StatusIsError = false;
         StatusMessage = UsesSimBrief
-            ? "Fetching your latest flight plan from SimBrief…"
-            : "Loading the bundled sample flight…";
+            ? UiText.T("Fetching your latest flight plan from SimBrief…")
+            : UiText.T("Loading the bundled sample flight…");
 
         try
         {
@@ -212,9 +213,9 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
                 StatusIsError = true;
                 StatusMessage = result.SuggestedAction is { Length: > 0 } action
                     ? $"{result.ErrorMessage} {action}"
-                    : result.ErrorMessage ?? "The import failed.";
+                    : result.ErrorMessage ?? UiText.T("The import failed.");
 
-                _providerStatus.SetFlightPlanStatus(false, "Import failed");
+                _providerStatus.SetFlightPlanStatus(false, UiText.T("Import failed"));
                 return;
             }
 
@@ -236,16 +237,16 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
                 $"{plan.ToSummary()} · {_flightPlanProvider.LastProviderUsed}");
 
             StatusMessage = tuned
-                ? $"Imported {plan.ToSummary()} from {_flightPlanProvider.LastProviderUsed}. "
-                    + $"COM1 is tuned to {session.CurrentFrequency?.ToDisplay()}."
-                : $"Imported {plan.ToSummary()} from {_flightPlanProvider.LastProviderUsed}. "
-                    + $"Tune COM1 to {session.CurrentFrequency?.ToDisplay()} before transmitting.";
+                ? UiText.T($"Imported {plan.ToSummary()} from {_flightPlanProvider.LastProviderUsed}. ")
+                    + UiText.T($"COM1 is tuned to {session.CurrentFrequency?.ToDisplay()}.")
+                : UiText.T($"Imported {plan.ToSummary()} from {_flightPlanProvider.LastProviderUsed}. ")
+                    + UiText.T($"Tune COM1 to {session.CurrentFrequency?.ToDisplay()} before transmitting.");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "The flight plan import failed.");
             StatusIsError = true;
-            StatusMessage = "The import failed. See the Diagnostics page for details.";
+            StatusMessage = UiText.T("The import failed. See the Diagnostics page for details.");
         }
         finally
         {
@@ -271,13 +272,13 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
         AircraftType = plan.AircraftIcaoType ?? "—";
         Departure = plan.DepartureIcao;
         Destination = plan.DestinationIcao;
-        Alternates = plan.AlternateIcaos.Count > 0 ? string.Join(", ", plan.AlternateIcaos) : "None filed";
+        Alternates = plan.AlternateIcaos.Count > 0 ? string.Join(", ", plan.AlternateIcaos) : UiText.T("None filed");
         CruiseAltitude = plan.CruiseAltitude?.ToDisplay() ?? "—";
         DepartureRunway = plan.DepartureRunway?.ToDisplay() ?? "—";
         ArrivalRunway = plan.ArrivalRunway?.ToDisplay() ?? "—";
         DepartureProcedure = plan.StandardInstrumentDeparture ?? "—";
         ArrivalProcedure = plan.StandardTerminalArrival ?? plan.Approach ?? "—";
-        Route = plan.Route is { Length: > 0 } route ? route : "No route filed";
+        Route = plan.Route is { Length: > 0 } route ? route : UiText.T("No route filed");
         Source = plan.SourceIdentifier ?? "—";
 
         BlockTime = plan.EstimatedBlockTime is TimeSpan block
@@ -294,7 +295,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
             TimeSpan age = _clock.UtcNow - when;
             IsStale = age > _simBriefOptions.StaleThreshold;
             StaleMessage = IsStale
-                ? $"This plan was generated {(int)age.TotalHours} hours ago and may not reflect current conditions."
+                ? UiText.T($"This plan was generated {(int)age.TotalHours} hours ago and may not reflect current conditions.")
                 : string.Empty;
         }
         else

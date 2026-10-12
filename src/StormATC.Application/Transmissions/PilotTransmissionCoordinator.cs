@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 using StormATC.Application.Abstractions;
 using StormATC.Application.Intent;
+using StormATC.Application.Localization;
 using StormATC.Application.Phraseology;
 using StormATC.Application.Sessions;
 using StormATC.Domain;
@@ -126,7 +127,7 @@ public sealed class PilotTransmissionCoordinator(
 
             return TransmissionProcessingResult.Failed(
                 transmission.CorrelationId,
-                "The transmission could not be processed. See the Diagnostics page for details.");
+                UiText.T("The transmission could not be processed. See the Diagnostics page for details."));
         }
         finally
         {

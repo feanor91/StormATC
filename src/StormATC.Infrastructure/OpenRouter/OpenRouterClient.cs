@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Infrastructure.Security;
 
@@ -92,7 +93,7 @@ public sealed class OpenRouterClient(
         if (!_applicationOptions.CurrentValue.CloudServicesConsentGiven)
         {
             return StructuredModelResponse.Fail<T>(
-                "Cloud services are disabled until consent is enabled in Settings.",
+                UiText.T("Cloud services are disabled until consent is enabled in Settings."),
                 ModelErrorCategory.NotConfigured,
                 stopwatch.Elapsed);
         }
@@ -100,7 +101,7 @@ public sealed class OpenRouterClient(
         if (!provider.EndpointAllowed)
         {
             return StructuredModelResponse.Fail<T>(
-                $"The configured {provider.Name} endpoint was blocked for security.",
+                UiText.T($"The configured {provider.Name} endpoint was blocked for security."),
                 ModelErrorCategory.NotConfigured,
                 stopwatch.Elapsed);
         }
@@ -112,7 +113,7 @@ public sealed class OpenRouterClient(
         if (string.IsNullOrWhiteSpace(apiKey))
         {
             return StructuredModelResponse.Fail<T>(
-                $"No {provider.Name} API key is configured.",
+                UiText.T($"No {provider.Name} API key is configured."),
                 ModelErrorCategory.NotConfigured,
                 stopwatch.Elapsed);
         }
@@ -121,7 +122,7 @@ public sealed class OpenRouterClient(
         if (string.IsNullOrWhiteSpace(model))
         {
             return StructuredModelResponse.Fail<T>(
-                $"No {provider.Name} model is configured.",
+                UiText.T($"No {provider.Name} model is configured."),
                 ModelErrorCategory.NotConfigured,
                 stopwatch.Elapsed);
         }
@@ -151,7 +152,7 @@ public sealed class OpenRouterClient(
         }
 
         return StructuredModelResponse.Fail<T>(
-            $"{provider.Name} failed after all retries.",
+            UiText.T($"{provider.Name} failed after all retries."),
             ModelErrorCategory.Transient,
             stopwatch.Elapsed);
     }
@@ -168,7 +169,7 @@ public sealed class OpenRouterClient(
         {
             return (
                 StructuredModelResponse.Fail<T>(
-                    $"The configured {provider.Name} endpoint was blocked for security.",
+                    UiText.T($"The configured {provider.Name} endpoint was blocked for security."),
                     ModelErrorCategory.NotConfigured,
                     stopwatch.Elapsed),
                 false);
@@ -206,7 +207,7 @@ public sealed class OpenRouterClient(
             {
                 return (
                     StructuredModelResponse.Fail<T>(
-                        $"{provider.Name} returned an oversized response.",
+                        UiText.T($"{provider.Name} returned an oversized response."),
                         ModelErrorCategory.MalformedResponse,
                         stopwatch.Elapsed),
                     false);
@@ -219,7 +220,7 @@ public sealed class OpenRouterClient(
             {
                 return (
                     StructuredModelResponse.Fail<T>(
-                        $"{provider.Name} returned an oversized response.",
+                        UiText.T($"{provider.Name} returned an oversized response."),
                         ModelErrorCategory.MalformedResponse,
                         stopwatch.Elapsed),
                     false);
@@ -231,7 +232,7 @@ public sealed class OpenRouterClient(
         {
             return (
                 StructuredModelResponse.Fail<T>(
-                    "The request was cancelled.",
+                    UiText.T("The request was cancelled."),
                     ModelErrorCategory.Cancelled,
                     stopwatch.Elapsed),
                 false);
@@ -240,7 +241,7 @@ public sealed class OpenRouterClient(
         {
             return (
                 StructuredModelResponse.Fail<T>(
-                    $"{provider.Name} did not respond within {provider.Timeout.TotalSeconds:F0} seconds.",
+                    UiText.T($"{provider.Name} did not respond within {provider.Timeout.TotalSeconds:F0} seconds."),
                     ModelErrorCategory.Timeout,
                     stopwatch.Elapsed),
                 true);
@@ -250,7 +251,7 @@ public sealed class OpenRouterClient(
             _logger.LogWarning(ex, "{Provider} failed at the transport layer.", provider.Name);
             return (
                 StructuredModelResponse.Fail<T>(
-                    $"{provider.Name} could not be reached.",
+                    UiText.T($"{provider.Name} could not be reached."),
                     ModelErrorCategory.Transient,
                     stopwatch.Elapsed),
                 true);
@@ -286,7 +287,7 @@ public sealed class OpenRouterClient(
             if (string.IsNullOrWhiteSpace(content))
             {
                 return StructuredModelResponse.Fail<T>(
-                    $"{provider.Name} returned no completion content.",
+                    UiText.T($"{provider.Name} returned no completion content."),
                     ModelErrorCategory.MalformedResponse,
                     stopwatch.Elapsed,
                     Truncate(body));
@@ -296,7 +297,7 @@ public sealed class OpenRouterClient(
             T? value = JsonSerializer.Deserialize<T>(cleaned, SerializerOptions);
             return value is null
                 ? StructuredModelResponse.Fail<T>(
-                    "The model's JSON did not match the expected schema.",
+                    UiText.T("The model's JSON did not match the expected schema."),
                     ModelErrorCategory.SchemaViolation,
                     stopwatch.Elapsed,
                     Truncate(cleaned))
@@ -310,7 +311,7 @@ public sealed class OpenRouterClient(
                 ex.Message);
 
             return StructuredModelResponse.Fail<T>(
-                "The model returned output that is not valid JSON.",
+                UiText.T("The model returned output that is not valid JSON."),
                 ModelErrorCategory.MalformedResponse,
                 stopwatch.Elapsed,
                 Truncate(body));
@@ -399,13 +400,13 @@ public sealed class OpenRouterClient(
         if (!_applicationOptions.CurrentValue.CloudServicesConsentGiven)
         {
             return ProviderTestResult.Fail(
-                "Cloud services are disabled. Enable consent in Settings before testing.");
+                UiText.T("Cloud services are disabled. Enable consent in Settings before testing."));
         }
 
         if (!provider.EndpointAllowed)
         {
             return ProviderTestResult.Fail(
-                $"The configured {provider.Name} endpoint was blocked. Restore the official endpoint.");
+                UiText.T($"The configured {provider.Name} endpoint was blocked. Restore the official endpoint."));
         }
 
         string? apiKey = await _secretStore
@@ -414,13 +415,13 @@ public sealed class OpenRouterClient(
         if (string.IsNullOrWhiteSpace(apiKey))
         {
             return ProviderTestResult.Fail(
-                $"No {provider.Name} API key is stored. Enter one and save first.");
+                UiText.T($"No {provider.Name} API key is stored. Enter one and save first."));
         }
 
         if (string.IsNullOrWhiteSpace(provider.Model))
         {
             return ProviderTestResult.Fail(
-                $"No {provider.Name} model is configured. Enter a model ID and save settings.");
+                UiText.T($"No {provider.Name} model is configured. Enter a model ID and save settings."));
         }
 
         using var timeoutSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
@@ -444,7 +445,7 @@ public sealed class OpenRouterClient(
             if (response.IsSuccessStatusCode)
             {
                 return ProviderTestResult.Ok(
-                    $"Connected to {provider.Name}. Model set to '{provider.Model}'.",
+                    UiText.T($"Connected to {provider.Name}. Model set to '{provider.Model}'."),
                     stopwatch.Elapsed);
             }
 
@@ -454,12 +455,12 @@ public sealed class OpenRouterClient(
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
             return ProviderTestResult.Fail(
-                $"{provider.Name} did not respond before the timeout elapsed.");
+                UiText.T($"{provider.Name} did not respond before the timeout elapsed."));
         }
         catch (HttpRequestException)
         {
             return ProviderTestResult.Fail(
-                $"{provider.Name} could not be reached. Check your connection.");
+                UiText.T($"{provider.Name} could not be reached. Check your connection."));
         }
     }
 
@@ -760,27 +761,27 @@ public sealed class OpenRouterClient(
             HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden => (
                 ModelErrorCategory.Authentication,
                 false,
-                $"{providerName} rejected the API key. Check it in Settings."),
+                UiText.T($"{providerName} rejected the API key. Check it in Settings.")),
             HttpStatusCode.TooManyRequests => (
                 ModelErrorCategory.RateLimited,
                 true,
-                $"{providerName} is rate-limiting requests. StormATC will use deterministic phraseology."),
+                UiText.T($"{providerName} is rate-limiting requests. StormATC will use deterministic phraseology.")),
             HttpStatusCode.NotFound or HttpStatusCode.BadRequest => (
                 ModelErrorCategory.InvalidModel,
                 false,
-                $"{providerName} rejected the model or structured-output request. Check the model ID and its structured-output support."),
+                UiText.T($"{providerName} rejected the model or structured-output request. Check the model ID and its structured-output support.")),
             HttpStatusCode.RequestTimeout or HttpStatusCode.GatewayTimeout => (
                 ModelErrorCategory.Timeout,
                 true,
-                $"{providerName} timed out."),
+                UiText.T($"{providerName} timed out.")),
             >= HttpStatusCode.InternalServerError => (
                 ModelErrorCategory.Transient,
                 true,
-                $"{providerName} reported a server error."),
+                UiText.T($"{providerName} reported a server error.")),
             _ => (
                 ModelErrorCategory.Unknown,
                 false,
-                $"{providerName} returned HTTP {(int)statusCode}."),
+                UiText.T($"{providerName} returned HTTP {(int)statusCode}.")),
         };
 
     private async Task DelayBeforeRetryAsync(int attempt, CancellationToken cancellationToken)

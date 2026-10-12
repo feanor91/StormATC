@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Infrastructure.Audio;
 using StormATC.Infrastructure.Security;
@@ -461,14 +462,14 @@ public sealed class DeepgramTextToSpeechService(
         if (!_applicationOptions.CurrentValue.CloudServicesConsentGiven)
         {
             return ProviderTestResult.Fail(
-                "Cloud services are disabled. Enable consent in Settings before testing.");
+                UiText.T("Cloud services are disabled. Enable consent in Settings before testing."));
         }
 
         if (!ProviderEndpointPolicy.IsAllowedDeepgramRest(
                 _deepgramOptions.CurrentValue.BaseUrl))
         {
             return ProviderTestResult.Fail(
-                "The configured Deepgram endpoint was blocked. Restore the official endpoint.");
+                UiText.T("The configured Deepgram endpoint was blocked. Restore the official endpoint."));
         }
 
         string? apiKey = await _secretStore
@@ -477,7 +478,7 @@ public sealed class DeepgramTextToSpeechService(
 
         if (string.IsNullOrWhiteSpace(apiKey))
         {
-            return ProviderTestResult.Fail("No Deepgram API key is stored. Enter one and save first.");
+            return ProviderTestResult.Fail(UiText.T("No Deepgram API key is stored. Enter one and save first."));
         }
 
         var stopwatch = System.Diagnostics.Stopwatch.StartNew();
@@ -490,9 +491,9 @@ public sealed class DeepgramTextToSpeechService(
 
         return audio is { Length: > 0 }
             ? ProviderTestResult.Ok(
-                $"Connected. Voice '{_deepgramOptions.CurrentValue.Voice}'.",
+                UiText.T($"Connected. Voice '{_deepgramOptions.CurrentValue.Voice}'."),
                 stopwatch.Elapsed)
-            : ProviderTestResult.Fail("Deepgram did not return audio. Check the key and the voice name.");
+            : ProviderTestResult.Fail(UiText.T("Deepgram did not return audio. Check the key and the voice name."));
     }
 
     /// <inheritdoc />

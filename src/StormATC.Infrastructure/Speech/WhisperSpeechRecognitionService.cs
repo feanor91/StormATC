@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using NAudio.Wave;
 using StormATC.Application.Abstractions;
 using StormATC.Application.Intent;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Application.Sessions;
 using StormATC.Domain.Phraseology;
@@ -148,7 +149,7 @@ public sealed partial class WhisperSpeechRecognitionService : ISpeechRecognition
         {
             return new SpeechTrainingSample
             {
-                Message = "The training sample could not be started. Check the Whisper paths in Settings.",
+                Message = UiText.T("The training sample could not be started. Check the Whisper paths in Settings."),
             };
         }
 
@@ -198,13 +199,13 @@ public sealed partial class WhisperSpeechRecognitionService : ISpeechRecognition
         if (!File.Exists(options.WhisperExecutablePath))
         {
             return ProviderTestResult.Fail(
-                "whisper-cli.exe was not found. Set its path in Settings (Local voice).");
+                UiText.T("whisper-cli.exe was not found. Set its path in Settings (Local voice)."));
         }
 
         if (!File.Exists(options.WhisperModelPath))
         {
             return ProviderTestResult.Fail(
-                "The Whisper model (.bin) was not found. Set its path in Settings (Local voice).");
+                UiText.T("The Whisper model (.bin) was not found. Set its path in Settings (Local voice)."));
         }
 
         // One second of silence measures model loading, which dominates the delay per call.
@@ -218,10 +219,10 @@ public sealed partial class WhisperSpeechRecognitionService : ISpeechRecognition
 
         return run.Succeeded
             ? ProviderTestResult.Ok(
-                $"Whisper ready. Model '{Path.GetFileName(options.WhisperModelPath)}', "
-                + $"language '{_sessionContext.CurrentSession.Language.ToCode()}'.",
+                UiText.T($"Whisper ready. Model '{Path.GetFileName(options.WhisperModelPath)}', "
+                + $"language '{_sessionContext.CurrentSession.Language.ToCode()}'."),
                 stopwatch.Elapsed)
-            : ProviderTestResult.Fail(run.Error ?? "Whisper did not run.");
+            : ProviderTestResult.Fail(run.Error ?? UiText.T("Whisper did not run."));
     }
 
     /// <summary>
@@ -340,8 +341,8 @@ public sealed partial class WhisperSpeechRecognitionService : ISpeechRecognition
             if (!IsConfigured)
             {
                 RaiseError(
-                    "Whisper is not set up.",
-                    "Set the whisper-cli.exe and model paths in Settings, or use typed transmissions.");
+                    UiText.T("Whisper is not set up."),
+                    UiText.T("Set the whisper-cli.exe and model paths in Settings, or use typed transmissions."));
                 return false;
             }
 
@@ -370,8 +371,8 @@ public sealed partial class WhisperSpeechRecognitionService : ISpeechRecognition
                 {
                     _logger.LogWarning(args.Exception, "Microphone capture stopped unexpectedly.");
                     RaiseError(
-                        "The microphone stopped unexpectedly.",
-                        "Check that the selected input device is still connected.");
+                        UiText.T("The microphone stopped unexpectedly."),
+                        UiText.T("Check that the selected input device is still connected."));
                 }
 
                 stopped.TrySetResult();
@@ -401,8 +402,8 @@ public sealed partial class WhisperSpeechRecognitionService : ISpeechRecognition
         {
             _logger.LogError(ex, "Failed to start a Whisper transmission.");
             RaiseError(
-                "The microphone could not be opened.",
-                "Check the selected microphone in Settings, then try again.");
+                UiText.T("The microphone could not be opened."),
+                UiText.T("Check the selected microphone in Settings, then try again."));
             CleanUpCapture();
             return false;
         }
@@ -442,7 +443,7 @@ public sealed partial class WhisperSpeechRecognitionService : ISpeechRecognition
         {
             if (_waveIn is null)
             {
-                return new SpeechTrainingSample { Message = "No microphone capture is active." };
+                return new SpeechTrainingSample { Message = UiText.T("No microphone capture is active.") };
             }
 
             bool publish = _publishFinalTranscript;
@@ -488,7 +489,7 @@ public sealed partial class WhisperSpeechRecognitionService : ISpeechRecognition
                 }
                 else
                 {
-                    RaiseError(sample.Message, "Check the microphone level and speak after pressing push-to-talk.");
+                    RaiseError(sample.Message, UiText.T("Check the microphone level and speak after pressing push-to-talk."));
                 }
             }
 
@@ -511,7 +512,7 @@ public sealed partial class WhisperSpeechRecognitionService : ISpeechRecognition
         {
             return new SpeechTrainingSample
             {
-                Message = "The transmission was too short to transcribe.",
+                Message = UiText.T("The transmission was too short to transcribe."),
             };
         }
 
@@ -519,7 +520,7 @@ public sealed partial class WhisperSpeechRecognitionService : ISpeechRecognition
         {
             return new SpeechTrainingSample
             {
-                Message = "Nothing was heard. Check the selected microphone and its level.",
+                Message = UiText.T("Nothing was heard. Check the selected microphone and its level."),
             };
         }
 
@@ -530,7 +531,7 @@ public sealed partial class WhisperSpeechRecognitionService : ISpeechRecognition
 
         if (!run.Succeeded)
         {
-            return new SpeechTrainingSample { Message = run.Error ?? "Whisper did not run." };
+            return new SpeechTrainingSample { Message = run.Error ?? UiText.T("Whisper did not run.") };
         }
 
         string text = run.Text;
@@ -538,7 +539,7 @@ public sealed partial class WhisperSpeechRecognitionService : ISpeechRecognition
         {
             return new SpeechTrainingSample
             {
-                Message = "Nothing was transcribed. Check the selected microphone and its level.",
+                Message = UiText.T("Nothing was transcribed. Check the selected microphone and its level."),
             };
         }
 
@@ -556,7 +557,7 @@ public sealed partial class WhisperSpeechRecognitionService : ISpeechRecognition
 
             // whisper-cli does not report a calibrated confidence for the whole utterance.
             Confidence = 1.0,
-            Message = $"Heard in {run.Elapsed.TotalSeconds.ToString("0.0", CultureInfo.InvariantCulture)} s.",
+            Message = UiText.T($"Heard in {run.Elapsed.TotalSeconds.ToString("0.0", CultureInfo.InvariantCulture)} s."),
         };
     }
 
@@ -630,8 +631,8 @@ public sealed partial class WhisperSpeechRecognitionService : ISpeechRecognition
                 }
 
                 return WhisperRun.Failed(
-                    $"Whisper took longer than {options.WhisperTimeout.TotalSeconds:0} s. "
-                    + "Use a smaller model or the GPU build of whisper.cpp.");
+                    UiText.T($"Whisper took longer than {options.WhisperTimeout.TotalSeconds:0} s. "
+                    + $"Use a smaller model or the GPU build of whisper.cpp."));
             }
 
             stopwatch.Stop();
@@ -642,7 +643,7 @@ public sealed partial class WhisperSpeechRecognitionService : ISpeechRecognition
                     "whisper-cli failed with exit code {ExitCode}: {Error}",
                     process.ExitCode,
                     Truncate(stderr.Result));
-                return WhisperRun.Failed("Whisper could not transcribe the transmission. See Diagnostics.");
+                return WhisperRun.Failed(UiText.T("Whisper could not transcribe the transmission. See Diagnostics."));
             }
 
             string text = CleanTranscript(stdout.Result);
@@ -663,7 +664,7 @@ public sealed partial class WhisperSpeechRecognitionService : ISpeechRecognition
             or UnauthorizedAccessException)
         {
             _logger.LogWarning(ex, "Whisper transcription failed.");
-            return WhisperRun.Failed("Whisper could not be started. Check its path in Settings.");
+            return WhisperRun.Failed(UiText.T("Whisper could not be started. Check its path in Settings."));
         }
         finally
         {

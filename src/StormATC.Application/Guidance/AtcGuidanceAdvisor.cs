@@ -1,3 +1,4 @@
+using StormATC.Application.Localization;
 using StormATC.Domain;
 using StormATC.Domain.Phraseology;
 using StormATC.Domain.Sessions;
@@ -23,8 +24,8 @@ public static class AtcGuidanceAdvisor
         if (session.FlightPlan is null || session.Callsign is not Callsign callsign)
         {
             return new AtcGuidance(
-                "Import a flight plan",
-                "Open Flight Plan and import your latest SimBrief OFP before calling ATC.",
+                UiText.T("Import a flight plan"),
+                UiText.T("Open Flight Plan and import your latest SimBrief OFP before calling ATC."),
                 string.Empty);
         }
 
@@ -41,9 +42,9 @@ public static class AtcGuidanceAdvisor
         if (session.CurrentController == ControllerPosition.Atis)
         {
             return new AtcGuidance(
-                "Listen to departure ATIS",
-                "Copy the airport information, then tune the published Delivery frequency. "
-                    + "ATIS is receive-only, so no pilot call is required.",
+                UiText.T("Listen to departure ATIS"),
+                UiText.T("Copy the airport information, then tune the published Delivery frequency. "
+                    + "ATIS is receive-only, so no pilot call is required."),
                 string.Empty);
         }
 
@@ -56,8 +57,8 @@ public static class AtcGuidanceAdvisor
             ];
 
             string required = remaining.Length == 0
-                ? "Repeat the outstanding instruction."
-                : "Still required: " + string.Join(
+                ? UiText.T("Repeat the outstanding instruction.")
+                : UiText.T("Still required: ") + string.Join(
                     ", ",
                     remaining.Select(item => FriendlyName(item.Type))) + ".";
 
@@ -68,7 +69,7 @@ public static class AtcGuidanceAdvisor
                     .Select(item => item.SpokenValue));
 
             return new AtcGuidance(
-                pending.AttemptCount > 0 ? "Correct the readback" : "Read back the clearance",
+                pending.AttemptCount > 0 ? UiText.T("Correct the readback") : UiText.T("Read back the clearance"),
                 required,
                 example);
         }
@@ -76,64 +77,64 @@ public static class AtcGuidanceAdvisor
         return session.Phase switch
         {
             FlightPhase.Disconnected =>
-                new("Wait for the simulator", "StormATC needs a live or mock aircraft state.", string.Empty),
+                new(UiText.T("Wait for the simulator"), UiText.T("StormATC needs a live or mock aircraft state."), string.Empty),
 
             FlightPhase.Preflight or FlightPhase.ClearanceRequested when session.IfrClearance is null =>
                 new(
-                    "Request IFR clearance",
-                    "Call Delivery when you are ready to copy.",
+                    UiText.T("Request IFR clearance"),
+                    UiText.T("Call Delivery when you are ready to copy."),
                     Example(
                         $"{spokenCallsign}, request IFR clearance",
                         $"{spokenCallsign}, bonjour, demandons la clairance IFR")),
 
             FlightPhase.IFRClearanceIssued =>
                 new(
-                    "Request pushback and start",
-                    "Your IFR clearance is acknowledged. Remain on this frequency unless handed off.",
+                    UiText.T("Request pushback and start"),
+                    UiText.T("Your IFR clearance is acknowledged. Remain on this frequency unless handed off."),
                     Example(
                         $"{spokenCallsign}, request pushback and start",
                         $"{spokenCallsign}, demandons repoussage et mise en route")),
 
             FlightPhase.Pushback =>
                 new(
-                    "Request taxi",
-                    "Call when pushback is complete and you are ready to taxi.",
+                    UiText.T("Request taxi"),
+                    UiText.T("Call when pushback is complete and you are ready to taxi."),
                     Example(
                         $"{spokenCallsign}, ready for taxi",
                         $"{spokenCallsign}, prêts à rouler")),
 
             FlightPhase.TaxiOut =>
                 new(
-                    "Continue to the holding point",
-                    "Report holding short when you reach the assigned departure runway.",
+                    UiText.T("Continue to the holding point"),
+                    UiText.T("Report holding short when you reach the assigned departure runway."),
                     Example(
                         $"{spokenCallsign}, holding short {departureRunway}",
                         $"{spokenCallsign}, au point d'attente {departureRunway}")),
 
             FlightPhase.HoldingShort =>
                 new(
-                    "Report ready for departure",
-                    "Tower will decide whether to line up, hold, or clear you for takeoff.",
+                    UiText.T("Report ready for departure"),
+                    UiText.T("Tower will decide whether to line up, hold, or clear you for takeoff."),
                     Example(
                         $"{spokenCallsign}, holding short {departureRunway}, ready for departure",
                         $"{spokenCallsign}, au point d'attente {departureRunway}, prêts au départ")),
 
             FlightPhase.LineUp =>
                 new(
-                    "Monitor Tower",
-                    "You are lined up. Wait for takeoff clearance.",
+                    UiText.T("Monitor Tower"),
+                    UiText.T("You are lined up. Wait for takeoff clearance."),
                     string.Empty),
 
             FlightPhase.Takeoff =>
                 new(
-                    "Fly the takeoff clearance",
-                    "Report airborne after liftoff if Tower has not already handed you off.",
+                    UiText.T("Fly the takeoff clearance"),
+                    UiText.T("Report airborne after liftoff if Tower has not already handed you off."),
                     Example($"{spokenCallsign}, airborne", $"{spokenCallsign}, en l'air")),
 
             FlightPhase.InitialClimb =>
                 new(
-                    "Check in with Departure",
-                    "Use your current altitude and the altitude you are climbing to.",
+                    UiText.T("Check in with Departure"),
+                    UiText.T("Use your current altitude and the altitude you are climbing to."),
                     Example(
                         $"Departure, {spokenCallsign}, passing "
                             + SpokenNumbers.Altitude(session.AircraftState.IndicatedAltitudeRounded)
@@ -148,90 +149,90 @@ public static class AtcGuidanceAdvisor
 
             FlightPhase.Departure =>
                 new(
-                    "Continue the departure",
-                    "Request higher only when you need another level.",
+                    UiText.T("Continue the departure"),
+                    UiText.T("Request higher only when you need another level."),
                     Example($"{spokenCallsign}, request climb", $"{spokenCallsign}, demandons à monter")),
 
             FlightPhase.Enroute =>
                 new(
-                    "Monitor Center",
-                    "No call is required unless you need a change or receive a handoff.",
+                    UiText.T("Monitor Center"),
+                    UiText.T("No call is required unless you need a change or receive a handoff."),
                     string.Empty),
 
             FlightPhase.Descent =>
                 new(
-                    "Continue the descent",
-                    "Call Approach after the handoff or request the filed approach.",
+                    UiText.T("Continue the descent"),
+                    UiText.T("Call Approach after the handoff or request the filed approach."),
                     Example($"{spokenCallsign}, request approach", $"{spokenCallsign}, demandons l'approche")),
 
             FlightPhase.Arrival =>
                 new(
-                    "Prepare for the approach",
-                    "Check the arrival and request the approach you intend to fly.",
+                    UiText.T("Prepare for the approach"),
+                    UiText.T("Check the arrival and request the approach you intend to fly."),
                     Example($"{spokenCallsign}, request approach", $"{spokenCallsign}, demandons l'approche")),
 
             FlightPhase.Approach =>
                 new(
-                    "Report established",
-                    "Report when established on the cleared approach.",
+                    UiText.T("Report established"),
+                    UiText.T("Report when established on the cleared approach."),
                     Example($"{spokenCallsign}, established", $"{spokenCallsign}, établis")),
 
             FlightPhase.Final =>
                 new(
-                    "Continue final",
-                    "Wait for landing clearance and report only if instructed.",
+                    UiText.T("Continue final"),
+                    UiText.T("Wait for landing clearance and report only if instructed."),
                     string.Empty),
 
             FlightPhase.Landed =>
                 new(
-                    "Report runway vacated",
-                    "Call Ground only after you are clear of the runway.",
+                    UiText.T("Report runway vacated"),
+                    UiText.T("Call Ground only after you are clear of the runway."),
                     Example($"{spokenCallsign}, runway vacated", $"{spokenCallsign}, piste dégagée")),
 
             FlightPhase.TaxiIn =>
                 new(
-                    "Taxi to stand",
-                    "Follow the issued route and report parked at your stand.",
+                    UiText.T("Taxi to stand"),
+                    UiText.T("Follow the issued route and report parked at your stand."),
                     string.Empty),
 
             FlightPhase.Parked =>
-                new("Flight complete", "The aircraft is parked at the assigned stand.", string.Empty),
+                new(UiText.T("Flight complete"), UiText.T("The aircraft is parked at the assigned stand."), string.Empty),
 
             FlightPhase.GoAround =>
                 new(
-                    "Fly the missed approach",
-                    "State your altitude when Approach asks or after the handoff.",
+                    UiText.T("Fly the missed approach"),
+                    UiText.T("State your altitude when Approach asks or after the handoff."),
                     Example(
                         $"Approach, {spokenCallsign}, going around",
                         $"Approche, {spokenCallsign}, remise de gaz")),
 
             FlightPhase.Abnormal =>
                 new(
-                    "State your intentions",
-                    "Continue using MAYDAY or PAN PAN as appropriate for the simulated situation.",
+                    UiText.T("State your intentions"),
+                    UiText.T("Continue using MAYDAY or PAN PAN as appropriate for the simulated situation."),
                     Example($"{spokenCallsign}, request", $"{spokenCallsign}, demandons")),
 
             _ =>
                 new(
-                    "Call the current controller",
-                    "Use standard phraseology and include your callsign.",
+                    UiText.T("Call the current controller"),
+                    UiText.T("Use standard phraseology and include your callsign."),
                     spokenCallsign),
         };
     }
 
     private static string FriendlyName(ReadbackItemType type) => type switch
     {
-        ReadbackItemType.Callsign => "callsign",
-        ReadbackItemType.Runway => "runway",
-        ReadbackItemType.InitialAltitude => "initial altitude",
-        ReadbackItemType.CruiseAltitude => "cleared level",
-        ReadbackItemType.Squawk => "squawk",
-        ReadbackItemType.Frequency => "frequency",
-        ReadbackItemType.Heading => "heading",
-        ReadbackItemType.HoldShortRunway => "hold-short runway",
-        ReadbackItemType.TaxiRoute => "taxi route",
-        ReadbackItemType.DepartureProcedure => "departure",
-        ReadbackItemType.ApproachName => "approach",
+        ReadbackItemType.Callsign => UiText.T("callsign"),
+        ReadbackItemType.Runway => UiText.T("runway"),
+        ReadbackItemType.InitialAltitude => UiText.T("initial altitude"),
+        ReadbackItemType.CruiseAltitude => UiText.T("cleared level"),
+        ReadbackItemType.Squawk => UiText.T("squawk"),
+        ReadbackItemType.Frequency => UiText.T("frequency"),
+        ReadbackItemType.Heading => UiText.T("heading"),
+        ReadbackItemType.HoldShortRunway => UiText.T("hold-short runway"),
+        ReadbackItemType.TaxiRoute => UiText.T("taxi route"),
+        ReadbackItemType.DepartureProcedure => UiText.T("departure"),
+        ReadbackItemType.ApproachName => UiText.T("approach"),
         _ => type.ToString(),
     };
 }

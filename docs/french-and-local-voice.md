@@ -4,9 +4,24 @@ StormATC peut parler et comprendre la radio **en français**, selon la phraséol
 faire tourner la reconnaissance vocale et la voix du contrôleur **sur votre PC**, sans compte
 ni connexion réseau.
 
+## Interface en français
+
+Réglage : **Settings › ATC behaviour › Languages › Interface** → `Français`, puis **Save
+settings** et redémarrez StormATC. Par défaut (`Windows language`), l'interface suit la langue
+d'affichage de Windows.
+
+La langue de l'interface et la langue radio sont indépendantes : on peut avoir l'interface en
+français et la radio en anglais, ou l'inverse.
+
+Les traductions sont dans `src/StormATC.Application/Localization/fr.json`, indexées par le
+texte anglais. Un texte absent du fichier reste simplement en anglais, et le test
+`InterfaceTranslationTests` liste tout texte d'interface qui n'a pas encore de traduction (utile
+après une mise à jour depuis le projet d'origine).
+
 ## Ce qui change avec la langue radio
 
-Réglage : **Settings › ATC behaviour › Radio language** → `Français (DSNA)`, puis **Save**.
+Réglage : **Settings › ATC behaviour › Languages › Radio** → `Français (DSNA)`, puis **Save
+settings**.
 Le changement s'applique à la session en cours.
 
 | Élément | Français |
@@ -117,7 +132,8 @@ dotnet test StormATC.sln -c Release
 ```
 
 Les tests de la radio française sont dans `FrenchPhraseologyTests` (Domain),
-`FrenchRadioTests` (Application) et `LocalVoiceTests` (Infrastructure).
+`FrenchRadioTests` (Application) et `LocalVoiceTests` (Infrastructure) ; ceux de l'interface
+dans `InterfaceTranslationTests` (Application).
 
 Le premier `dotnet restore` met à jour les fichiers `packages.lock.json` si besoin ; aucun
 nouveau paquet NuGet n'est requis.

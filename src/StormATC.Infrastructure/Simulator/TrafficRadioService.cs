@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Application.Sessions;
 using StormATC.Application.Transmissions;
@@ -75,7 +76,7 @@ public sealed class TrafficRadioService(
     public event EventHandler<TrafficRadioExchangeEventArgs>? ExchangeGenerated;
 
     /// <summary>Current integration state for Settings and Diagnostics.</summary>
-    public string Status { get; private set; } = "Traffic radio is disabled.";
+    public string Status { get; private set; } = UiText.T("Traffic radio is disabled.");
 
     /// <inheritdoc />
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -93,7 +94,7 @@ public sealed class TrafficRadioService(
             }
             catch (Exception ex)
             {
-                Status = "Traffic radio encountered an error; see Diagnostics.";
+                Status = UiText.T("Traffic radio encountered an error; see Diagnostics.");
                 logger.LogWarning(ex, "Background traffic radio generation failed.");
             }
         }
@@ -107,8 +108,8 @@ public sealed class TrafficRadioService(
         {
             _wasEnabled = false;
             Status = options.EnableLiveTraffic
-                ? "Live traffic is enabled; radio chatter is off."
-                : "Traffic integration is disabled.";
+                ? UiText.T("Live traffic is enabled; radio chatter is off.")
+                : UiText.T("Traffic integration is disabled.");
             return;
         }
 
@@ -117,7 +118,7 @@ public sealed class TrafficRadioService(
         {
             _wasEnabled = true;
             _nextAllowedAt = now.AddSeconds(15);
-            Status = "Traffic radio is armed and waiting for nearby aircraft.";
+            Status = UiText.T("Traffic radio is armed and waiting for nearby aircraft.");
             return;
         }
 
@@ -130,7 +131,7 @@ public sealed class TrafficRadioService(
 
         if (options.PauseChatterWhenOnlineAtcClientDetected && IsOnlineAtcClientRunning())
         {
-            Status = "Traffic chatter is paused while an online ATC client is running.";
+            Status = UiText.T("Traffic chatter is paused while an online ATC client is running.");
             _nextAllowedAt = now.AddMinutes(1);
             return;
         }
@@ -138,7 +139,7 @@ public sealed class TrafficRadioService(
         PruneHourlyBudget(now);
         if (_exchangeTimes.Count >= options.MaximumExchangesPerHour)
         {
-            Status = $"Hourly traffic-radio limit reached ({options.MaximumExchangesPerHour}).";
+            Status = UiText.T($"Hourly traffic-radio limit reached ({options.MaximumExchangesPerHour}).");
             _nextAllowedAt = _exchangeTimes.Peek().AddHours(1);
             return;
         }
@@ -146,7 +147,7 @@ public sealed class TrafficRadioService(
         MsfsTrafficSnapshot? traffic = SelectTraffic();
         if (traffic is null)
         {
-            Status = "Traffic radio is armed; no suitable nearby aircraft are visible.";
+            Status = UiText.T("Traffic radio is armed; no suitable nearby aircraft are visible.");
             _nextAllowedAt = now.AddSeconds(30);
             return;
         }
@@ -169,8 +170,8 @@ public sealed class TrafficRadioService(
         _lastCallsign = callsign;
         _nextAllowedAt = now.Add(options.MinimumInterval);
         Status = traffic.IsFslTlModel
-            ? $"Last exchange used FSLTL traffic {callsign}."
-            : $"Last exchange used simulator traffic {callsign}.";
+            ? UiText.T($"Last exchange used FSLTL traffic {callsign}.")
+            : UiText.T($"Last exchange used simulator traffic {callsign}.");
 
         ExchangeGenerated?.Invoke(
             this,
