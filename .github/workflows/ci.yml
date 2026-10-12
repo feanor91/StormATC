@@ -1,8 +1,10 @@
 name: CI
 
 on:
+  # Every pushed branch is compiled and tested, so a feature branch is checked on Windows
+  # (WPF included) before it is merged.
   push:
-    branches: ["main", "master"]
+    branches: ["**"]
   pull_request:
   workflow_dispatch:
 
@@ -44,7 +46,19 @@ jobs:
         run: dotnet build StormATC.sln -c Release --no-restore --nologo
 
       - name: Test
-        run: dotnet test StormATC.sln -c Release --no-build --no-restore --nologo
+        run: >-
+          dotnet test StormATC.sln -c Release --no-build --no-restore --nologo
+          --logger "trx;LogFilePrefix=results"
+          --results-directory TestResults
+
+      - name: Upload test results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults/**/*.trx
+          if-no-files-found: ignore
+          retention-days: 14
 
       - name: List vulnerable dependencies
         run: dotnet list StormATC.sln package --vulnerable --include-transitive
