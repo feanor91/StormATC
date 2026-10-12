@@ -1,5 +1,6 @@
 using StormATC.Domain.Aircraft;
 using StormATC.Domain.FlightPlanning;
+using StormATC.Domain.Phraseology;
 using StormATC.Domain.ValueObjects;
 
 namespace StormATC.Domain.Sessions;
@@ -95,6 +96,12 @@ public sealed record AtcSession
 
     /// <summary>When the session was completed. Null while it is still running.</summary>
     public DateTimeOffset? CompletedAt { get; init; }
+
+    /// <summary>
+    /// The language spoken on the radio. Every controller transmission in this session is worded
+    /// with the matching profile from <see cref="AtcPhraseologies"/>.
+    /// </summary>
+    public PhraseologyLanguage Language { get; init; } = PhraseologyLanguage.English;
 
     /// <summary>The callsign in use, taken from the flight plan.</summary>
     public Callsign? Callsign => FlightPlan?.Callsign;

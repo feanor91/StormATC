@@ -566,7 +566,10 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
                 SetSpeechState(SpeechState.PlayingAudio, "Controller responding…", "PUSH TO TALK");
 
                 await _textToSpeech
-                    .SpeakAsync(spoken, VoiceConfiguration.Default, CancellationToken.None)
+                    .SpeakAsync(
+                        spoken,
+                        VoiceConfiguration.For(_sessionContext.CurrentSession.Language),
+                        CancellationToken.None)
                     .ConfigureAwait(true);
             }
 

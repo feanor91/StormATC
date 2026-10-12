@@ -183,6 +183,11 @@ public static class ServiceCollectionExtensions
                 "Deepgram:StreamingUrl must be the official wss://api.deepgram.com/v1/listen endpoint.")
             .ValidateOnStart();
 
+        services.AddOptions<LocalVoiceOptions>()
+            .Bind(configuration.GetSection(LocalVoiceOptions.SectionName))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
         services.AddOptions<SimBriefOptions>()
             .Bind(configuration.GetSection(SimBriefOptions.SectionName))
             .ValidateDataAnnotations()
@@ -297,28 +302,43 @@ public static class ServiceCollectionExtensions
         }
 
         // --- Speech ------------------------------------------------------------------------------
+        // The local engines (Whisper, Piper) never use the network, so they are available in
+        // every mode. The routers pick local or cloud from Settings at run time; offline mode
+        // only replaces the cloud side with the mocks.
+        services.AddSingleton<Speech.WhisperSpeechRecognitionService>();
+        services.AddSingleton<Speech.PiperTextToSpeechService>();
+
         if (offlineMode)
         {
             services.AddSingleton<MockSpeechRecognitionService>();
-            services.AddSingleton<ISpeechRecognitionService>(sp =>
-                sp.GetRequiredService<MockSpeechRecognitionService>());
-
             services.AddSingleton<MockTextToSpeechService>();
-            services.AddSingleton<ITextToSpeechService>(sp =>
-                sp.GetRequiredService<MockTextToSpeechService>());
+            services.AddSingleton<ISpeechRecognitionService>(sp => new Speech.SpeechRecognitionRouter(
+                sp.GetRequiredService<MockSpeechRecognitionService>(),
+                sp.GetRequiredService<Speech.WhisperSpeechRecognitionService>(),
+                sp.GetRequiredService<IOptionsMonitor<LocalVoiceOptions>>()));
+            services.AddSingleton<ITextToSpeechService>(sp => new Speech.TextToSpeechRouter(
+                sp.GetRequiredService<MockTextToSpeechService>(),
+                sp.GetRequiredService<Speech.PiperTextToSpeechService>(),
+                sp.GetRequiredService<IOptionsMonitor<LocalVoiceOptions>>()));
         }
         else
         {
             // Both open a connection only when a key is present, and report an actionable error
             // when it is not — so push-to-talk never looks like it worked when it did not.
-            services.AddSingleton<ISpeechRecognitionService, Speech.DeepgramSpeechRecognitionService>();
+            services.AddSingleton<Speech.DeepgramSpeechRecognitionService>();
             services.AddHttpClient<Speech.DeepgramTextToSpeechService>()
                 .ConfigurePrimaryHttpMessageHandler(static () => new HttpClientHandler
                 {
                     AllowAutoRedirect = false,
                 });
-            services.AddSingleton<ITextToSpeechService>(sp =>
-                sp.GetRequiredService<Speech.DeepgramTextToSpeechService>());
+            services.AddSingleton<ISpeechRecognitionService>(sp => new Speech.SpeechRecognitionRouter(
+                sp.GetRequiredService<Speech.DeepgramSpeechRecognitionService>(),
+                sp.GetRequiredService<Speech.WhisperSpeechRecognitionService>(),
+                sp.GetRequiredService<IOptionsMonitor<LocalVoiceOptions>>()));
+            services.AddSingleton<ITextToSpeechService>(sp => new Speech.TextToSpeechRouter(
+                sp.GetRequiredService<Speech.DeepgramTextToSpeechService>(),
+                sp.GetRequiredService<Speech.PiperTextToSpeechService>(),
+                sp.GetRequiredService<IOptionsMonitor<LocalVoiceOptions>>()));
         }
     }
 }

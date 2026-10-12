@@ -129,7 +129,7 @@ public sealed class AtisBroadcastService : IDisposable
             .SpeakCachedAsync(
                 CacheKey(_sessionContext.CurrentSession.SessionId),
                 CurrentBroadcast.SpokenText,
-                VoiceConfiguration.Default,
+                VoiceConfiguration.For(CurrentBroadcast.Language),
                 cancellationToken)
             .ConfigureAwait(false);
         SetStatus(played
@@ -262,7 +262,7 @@ public sealed class AtisBroadcastService : IDisposable
                     .SpeakCachedAsync(
                         CacheKey(key.SessionId),
                         broadcast.SpokenText,
-                        VoiceConfiguration.Default,
+                        VoiceConfiguration.For(broadcast.Language),
                         cancellationToken)
                     .ConfigureAwait(false);
 
@@ -327,7 +327,21 @@ public sealed class AtisBroadcastService : IDisposable
                     candidate.OperationalSignature,
                     StringComparison.Ordinal))
             {
-                return (current, false);
+                if (current.Language == candidate.Language)
+                {
+                    return (current, false);
+                }
+
+                // Same facts, new language: reword the current edition without moving to the
+                // next information letter, since nothing operational changed.
+                AtisBroadcast reworded = AtisBroadcastBuilder.Build(
+                    session,
+                    airport,
+                    weather,
+                    now,
+                    _informationSequence)!;
+                _currentBroadcast = reworded;
+                return (reworded, true);
             }
 
             _informationSequence = _broadcastSessionId == session.SessionId

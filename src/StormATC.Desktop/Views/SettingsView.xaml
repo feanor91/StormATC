@@ -592,6 +592,78 @@
           <StackPanel MaxWidth="1040" HorizontalAlignment="Left">
             <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
               <StackPanel>
+                <TextBlock Text="Speech engines"
+                           Style="{StaticResource SectionHeaderStyle}" />
+                <TextBlock Text="Deepgram runs in the cloud and needs a key. Whisper (recognition) and Piper (controller voice) run on this computer: no account, no network. See docs/french-and-local-voice.md to download them. Save, then test."
+                           Style="{StaticResource SecondaryTextStyle}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,14" />
+
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="22" />
+                    <ColumnDefinition Width="1*" />
+                  </Grid.ColumnDefinitions>
+
+                  <StackPanel Grid.Column="0">
+                    <TextBlock Text="SPEECH TO TEXT" Style="{StaticResource LabelTextStyle}" />
+                    <ComboBox ItemsSource="{Binding RecognitionEngines}"
+                              SelectedItem="{Binding SpeechToTextProvider}"
+                              Width="180"
+                              HorizontalAlignment="Left"
+                              Margin="0,0,0,12" />
+
+                    <TextBlock Text="WHISPER-CLI.EXE PATH" Style="{StaticResource LabelTextStyle}" />
+                    <TextBox Text="{Binding WhisperExecutablePath, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,12" />
+
+                    <TextBlock Text="WHISPER MODEL (.BIN, MULTILINGUAL)" Style="{StaticResource LabelTextStyle}" />
+                    <TextBox Text="{Binding WhisperModelPath, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,12" />
+                  </StackPanel>
+
+                  <StackPanel Grid.Column="2">
+                    <TextBlock Text="CONTROLLER VOICE" Style="{StaticResource LabelTextStyle}" />
+                    <ComboBox ItemsSource="{Binding VoiceEngines}"
+                              SelectedItem="{Binding TextToSpeechProvider}"
+                              Width="180"
+                              HorizontalAlignment="Left"
+                              Margin="0,0,0,12" />
+
+                    <TextBlock Text="PIPER.EXE PATH" Style="{StaticResource LabelTextStyle}" />
+                    <TextBox Text="{Binding PiperExecutablePath, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,12" />
+
+                    <TextBlock Text="PIPER FRENCH VOICE (.ONNX)" Style="{StaticResource LabelTextStyle}" />
+                    <TextBox Text="{Binding PiperFrenchVoicePath, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,12" />
+
+                    <TextBlock Text="PIPER ENGLISH VOICE (.ONNX)" Style="{StaticResource LabelTextStyle}" />
+                    <TextBox Text="{Binding PiperEnglishVoicePath, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,12" />
+                  </StackPanel>
+                </Grid>
+
+                <WrapPanel>
+                  <Button Content="Save settings"
+                          Command="{Binding SaveSettingsCommand}"
+                          Style="{StaticResource PrimaryButtonStyle}"
+                          Margin="0,0,8,0" />
+                  <Button Content="Test speech engines"
+                          Command="{Binding TestLocalVoiceCommand}" />
+                </WrapPanel>
+                <TextBlock Text="{Binding LocalVoiceTestResult}"
+                           Style="{StaticResource SecondaryTextStyle}"
+                           TextWrapping="Wrap"
+                           Margin="0,8,0,0"
+                           Visibility="{Binding LocalVoiceTestResult,
+                                                Converter={StaticResource StringToVisibility}}" />
+              </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
+              <StackPanel>
                 <TextBlock Text="Voice recognition trainer"
                            Style="{StaticResource SectionHeaderStyle}" />
                 <TextBlock Text="Record a few phrases in your normal accent. StormATC stores only recognition hints and explicit text corrections—not the training audio."
@@ -748,6 +820,22 @@
                       HorizontalScrollBarVisibility="Disabled"
                       Padding="0,0,8,18">
           <StackPanel MaxWidth="1040" HorizontalAlignment="Left">
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
+              <StackPanel>
+                <TextBlock Text="Radio language" Style="{StaticResource SectionHeaderStyle}" />
+                <ComboBox ItemsSource="{Binding AtcLanguages}"
+                          SelectedItem="{Binding AtcLanguage}"
+                          Width="240"
+                          HorizontalAlignment="Left"
+                          Margin="0,0,0,6" />
+                <TextBlock Text="Controllers, the ATIS and speech recognition use this language. French follows the DSNA phraseology (« roulez point d'attente piste 27 », « transpondeur trente-deux cinquante-quatre »). Clearances and readback checks are decided by the same engine in both languages. Applies to the running session when saved."
+                           Style="{StaticResource SecondaryTextStyle}"
+                           TextWrapping="Wrap"
+                           MaxWidth="760"
+                           HorizontalAlignment="Left" />
+              </StackPanel>
+            </Border>
+
             <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
               <StackPanel>
                 <TextBlock Text="Realism profile" Style="{StaticResource SectionHeaderStyle}" />

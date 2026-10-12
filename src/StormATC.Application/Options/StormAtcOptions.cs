@@ -45,6 +45,16 @@ public sealed class ApplicationOptions
     /// Realism profile name: <c>Relaxed</c>, <c>Standard</c>, or <c>Strict</c>.
     /// </summary>
     public string RealismProfile { get; init; } = "Standard";
+
+    /// <summary>
+    /// The language controllers speak and pilots are expected to use: <c>en</c> (ICAO English,
+    /// the default) or <c>fr</c> (French, DSNA phraseology).
+    /// </summary>
+    /// <remarks>
+    /// The language changes wording, speech recognition and the controller voice only. Every
+    /// clearance decision is made by the same deterministic engine in either language.
+    /// </remarks>
+    public string AtcLanguage { get; init; } = "en";
 }
 
 /// <summary>Language-model selection and generation settings shared by every provider.</summary>
@@ -205,6 +215,84 @@ public sealed class AnthropicOptions
     public bool IsConfigured => !string.IsNullOrWhiteSpace(Model);
 }
 
+/// <summary>
+/// Local speech engines that run on the user's computer: Whisper (whisper.cpp) for recognition
+/// and Piper for the controller voice. Neither needs an account or a network connection.
+/// </summary>
+/// <remarks>
+/// Both engines are external programs the user downloads once (see
+/// <c>docs/french-and-local-voice.md</c>). StormATC starts them per transmission and never
+/// writes microphone audio anywhere except a temporary file deleted after transcription.
+/// </remarks>
+public sealed class LocalVoiceOptions
+{
+    public const string SectionName = "LocalVoice";
+
+    /// <summary>Speech-to-text engine: <c>Deepgram</c> (cloud) or <c>Whisper</c> (local).</summary>
+    public string SpeechToTextProvider { get; init; } = SpeechProviders.Deepgram;
+
+    /// <summary>Controller voice engine: <c>Deepgram</c> (cloud) or <c>Piper</c> (local).</summary>
+    public string TextToSpeechProvider { get; init; } = SpeechProviders.Deepgram;
+
+    /// <summary>Path to whisper.cpp's <c>whisper-cli.exe</c>.</summary>
+    public string WhisperExecutablePath { get; init; } = string.Empty;
+
+    /// <summary>
+    /// Path to a multilingual ggml Whisper model, for example <c>ggml-large-v3-turbo-q5_0.bin</c>
+    /// or <c>ggml-small.bin</c>. English-only models (<c>*.en.bin</c>) cannot recognise French.
+    /// </summary>
+    public string WhisperModelPath { get; init; } = string.Empty;
+
+    /// <summary>CPU threads given to Whisper.</summary>
+    [Range(1, 64)]
+    public int WhisperThreads { get; init; } = 4;
+
+    /// <summary>Longest time allowed for one transcription before it is abandoned.</summary>
+    public TimeSpan WhisperTimeout { get; init; } = TimeSpan.FromSeconds(30);
+
+    /// <summary>Path to Piper's <c>piper.exe</c>.</summary>
+    public string PiperExecutablePath { get; init; } = string.Empty;
+
+    /// <summary>Piper voice model (<c>.onnx</c>) used for English, for example <c>en_GB-alan-medium.onnx</c>.</summary>
+    public string PiperEnglishVoicePath { get; init; } = string.Empty;
+
+    /// <summary>Piper voice model (<c>.onnx</c>) used for French, for example <c>fr_FR-tom-medium.onnx</c>.</summary>
+    public string PiperFrenchVoicePath { get; init; } = string.Empty;
+
+    /// <summary>
+    /// Piper speaking rate: below 1 is faster, above 1 slower. Controllers speak briskly, so the
+    /// default is slightly faster than the voice's natural pace.
+    /// </summary>
+    [Range(0.5, 2.0)]
+    public double PiperLengthScale { get; init; } = 0.9;
+
+    /// <summary>Longest time allowed for one synthesis before it is abandoned.</summary>
+    public TimeSpan PiperTimeout { get; init; } = TimeSpan.FromSeconds(20);
+}
+
+/// <summary>Stable speech engine identifiers used by configuration and the UI.</summary>
+public static class SpeechProviders
+{
+    /// <summary>Deepgram cloud speech (recognition and voice).</summary>
+    public const string Deepgram = "Deepgram";
+
+    /// <summary>whisper.cpp local recognition.</summary>
+    public const string Whisper = "Whisper";
+
+    /// <summary>Piper local voice.</summary>
+    public const string Piper = "Piper";
+
+    /// <summary>Recognition engines offered in Settings.</summary>
+    public static IReadOnlyList<string> RecognitionEngines { get; } = [Deepgram, Whisper];
+
+    /// <summary>Voice engines offered in Settings.</summary>
+    public static IReadOnlyList<string> VoiceEngines { get; } = [Deepgram, Piper];
+
+    /// <summary>True when <paramref name="value"/> names <paramref name="provider"/>, ignoring case.</summary>
+    public static bool Is(string? value, string provider) =>
+        string.Equals(value?.Trim(), provider, StringComparison.OrdinalIgnoreCase);
+}
+
 /// <summary>Deepgram speech settings.</summary>
 public sealed class DeepgramOptions
 {
@@ -222,6 +310,9 @@ public sealed class DeepgramOptions
 
     /// <summary>Text-to-speech voice identifier.</summary>
     public string Voice { get; init; } = "aura-2-thalia-en";
+
+    /// <summary>Text-to-speech voice used when the ATC language is French.</summary>
+    public string FrenchVoice { get; init; } = "aura-2-hector-fr";
 
     /// <summary>Recognition language.</summary>
     public string Language { get; init; } = "en";

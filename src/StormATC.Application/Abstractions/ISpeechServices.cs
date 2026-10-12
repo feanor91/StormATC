@@ -1,3 +1,5 @@
+using StormATC.Domain.Phraseology;
+
 namespace StormATC.Application.Abstractions;
 
 /// <summary>
@@ -193,6 +195,16 @@ public sealed record VoiceConfiguration
 {
     /// <summary>A neutral default used when no per-controller voice is configured.</summary>
     public static VoiceConfiguration Default { get; } = new();
+
+    /// <summary>The default voice for a controller speaking <paramref name="language"/>.</summary>
+    public static VoiceConfiguration For(PhraseologyLanguage language) =>
+        language == PhraseologyLanguage.English ? Default : new() { Language = language };
+
+    /// <summary>
+    /// The language of the text. Providers pick a voice that speaks it when
+    /// <see cref="VoiceId"/> is empty.
+    /// </summary>
+    public PhraseologyLanguage Language { get; init; } = PhraseologyLanguage.English;
 
     /// <summary>The provider voice identifier.</summary>
     public string VoiceId { get; init; } = string.Empty;

@@ -163,6 +163,8 @@ public sealed class ApplicationStartupService(
         SessionMode mode = _simulatorConnector.IsMockActive ? SessionMode.Mock : SessionMode.Live;
 
         _sessionContext.Realism = ParseRealism(_applicationOptions.RealismProfile);
+        _sessionContext.SetLanguage(
+            Domain.Phraseology.PhraseologyLanguages.Parse(_applicationOptions.AtcLanguage));
         _sessionContext.DefaultPushbackDirection =
             PushbackDirections.Normalize(_realismOptions.DefaultPushbackDirection)
             ?? PushbackDirections.TailLeft;

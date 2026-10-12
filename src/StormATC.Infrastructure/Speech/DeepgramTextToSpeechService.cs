@@ -252,7 +252,10 @@ public sealed class DeepgramTextToSpeechService(
     private string ResolveVoiceId(VoiceConfiguration voice) =>
         voice.VoiceId is { Length: > 0 } configured
             ? configured
-            : _deepgramOptions.CurrentValue.Voice;
+            : voice.Language == Domain.Phraseology.PhraseologyLanguage.French
+                && _deepgramOptions.CurrentValue.FrenchVoice is { Length: > 0 } frenchVoice
+                ? frenchVoice
+                : _deepgramOptions.CurrentValue.Voice;
 
     private byte[]? FindNamedAudio(string cacheKey, string text, string voiceId)
     {

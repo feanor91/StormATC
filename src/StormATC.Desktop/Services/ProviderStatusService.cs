@@ -204,31 +204,46 @@ public sealed class ProviderStatusService
     }
 
     /// <summary>Writes the two speech badges.</summary>
-    /// <param name="hasKey">Whether a key is stored, or null when that has not been read.</param>
+    /// <param name="hasKey">Whether a Deepgram key is stored, or null when that has not been read.</param>
+    /// <remarks>
+    /// A local engine (Whisper, Piper) needs no key and works offline, so its badge reflects
+    /// only whether its files are configured.
+    /// </remarks>
     private void UpdateSpeechBadges(bool? hasKey)
     {
-        if (_offlineMode)
-        {
-            _speechToText.Update(ProviderConnectionState.NotConfigured, OfflineDetail);
-            _textToSpeechStatus.Update(ProviderConnectionState.NotConfigured, OfflineDetail);
-            return;
-        }
+        bool localRecognition = IsLocalEngine(_speechRecognition.ProviderName);
+        bool localVoice = IsLocalEngine(_textToSpeech.ProviderName);
 
-        bool recognitionReady = hasKey ?? _speechRecognition.IsConfigured;
-        bool voiceReady = hasKey ?? _textToSpeech.IsConfigured;
+        bool recognitionReady = localRecognition
+            ? _speechRecognition.IsConfigured
+            : !_offlineMode && (hasKey ?? _speechRecognition.IsConfigured);
+        bool voiceReady = localVoice
+            ? _textToSpeech.IsConfigured
+            : !_offlineMode && (hasKey ?? _textToSpeech.IsConfigured);
 
         _speechToText.Update(
             recognitionReady ? ProviderConnectionState.Configured : ProviderConnectionState.NotConfigured,
             recognitionReady
                 ? _speechRecognition.ProviderName
-                : "No API key — use typed transmissions");
+                : localRecognition
+                    ? "Whisper is not set up — see Settings, Voice & PTT"
+                    : _offlineMode
+                        ? OfflineDetail
+                        : "No API key — use typed transmissions");
 
         _textToSpeechStatus.Update(
             voiceReady ? ProviderConnectionState.Configured : ProviderConnectionState.NotConfigured,
             voiceReady
                 ? _textToSpeech.ProviderName
-                : "No API key — responses are text only");
+                : localVoice
+                    ? "Piper is not set up — see Settings, Voice & PTT"
+                    : _offlineMode
+                        ? OfflineDetail
+                        : "No API key — responses are text only");
     }
+
+    private static bool IsLocalEngine(string providerName) =>
+        providerName.EndsWith("(local)", StringComparison.Ordinal);
 
     private static ProviderConnectionState MapSimulatorState(SimulatorConnectionState state) => state switch
     {

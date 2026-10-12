@@ -40,6 +40,9 @@ public sealed record AtisBroadcast
 
     /// <summary>The weather source, where the provider supplied one.</summary>
     public string? WeatherSource { get; init; }
+
+    /// <summary>The language the edition is worded in.</summary>
+    public PhraseologyLanguage Language { get; init; } = PhraseologyLanguage.English;
 }
 
 /// <summary>Builds an ATIS only from airport, flight-plan, and observed-weather facts.</summary>
@@ -101,17 +104,69 @@ public static class AtisBroadcastBuilder
             ?? plan.DepartureRunway
             ?? airport?.SelectActiveRunway(atisWeather?.WindDirection)?.Identifier;
 
-        var spoken = new List<string>
-        {
-            $"{airportName} departure information {information}.",
-            $"{SpokenNumbers.DigitsIndividually(timeDigits)} Zulu.",
-        };
+        var spoken = new List<string>();
+        var display = new List<string>();
 
-        var display = new List<string>
+        if (session.Language == PhraseologyLanguage.French)
         {
-            $"{airportDisplayName} information {information}.",
-            $"{timeDigits}Z.",
+            FrenchAtis.Compose(
+                airport?.Name is { Length: > 0 } ? airport.Name : FrenchSpokenNumbers.SpellOut(plan.DepartureIcao),
+                airportDisplayName,
+                information,
+                utc,
+                timeDigits,
+                atisWeather,
+                runway,
+                spoken,
+                display);
+        }
+        else
+        {
+            ComposeEnglish(
+                airportName,
+                airportDisplayName,
+                information,
+                timeDigits,
+                atisWeather,
+                runway,
+                spoken,
+                display);
+        }
+
+        return new AtisBroadcast
+        {
+            AirportIcao = plan.DepartureIcao,
+            InformationCode = information,
+            EditionNumber = edition,
+            OperationalSignature = BuildOperationalSignature(
+                plan,
+                airport,
+                frequency,
+                runway,
+                atisWeather),
+            Frequency = frequency,
+            SpokenText = string.Join(' ', spoken),
+            DisplayText = string.Join(' ', display),
+            WeatherSource = weather?.Source,
+            Language = session.Language,
         };
+    }
+
+    private static void ComposeEnglish(
+        string airportName,
+        string airportDisplayName,
+        string information,
+        string timeDigits,
+        WeatherSnapshot? atisWeather,
+        RunwayIdentifier? runway,
+        List<string> spoken,
+        List<string> display)
+    {
+        spoken.Add($"{airportName} departure information {information}.");
+        spoken.Add($"{SpokenNumbers.DigitsIndividually(timeDigits)} Zulu.");
+
+        display.Add($"{airportDisplayName} information {information}.");
+        display.Add($"{timeDigits}Z.");
 
         AddWind(atisWeather, spoken, display);
         AddVisibility(atisWeather, spoken, display);
@@ -132,23 +187,6 @@ public static class AtisBroadcastBuilder
 
         spoken.Add($"On first contact, advise you have information {information}.");
         display.Add($"On first contact, report information {information}.");
-
-        return new AtisBroadcast
-        {
-            AirportIcao = plan.DepartureIcao,
-            InformationCode = information,
-            EditionNumber = edition,
-            OperationalSignature = BuildOperationalSignature(
-                plan,
-                airport,
-                frequency,
-                runway,
-                atisWeather),
-            Frequency = frequency,
-            SpokenText = string.Join(' ', spoken),
-            DisplayText = string.Join(' ', display),
-            WeatherSource = weather?.Source,
-        };
     }
 
     /// <summary>Returns the current edition number for playback de-duplication.</summary>

@@ -183,7 +183,12 @@ public sealed class PilotTransmissionCoordinator(
         var normalizationStopwatch = Stopwatch.StartNew();
         string displayTranscript =
             TranscriptNormalizer.FormatForDisplay(transmission.RawTranscript);
-        string normalized = TranscriptNormalizer.Normalize(displayTranscript);
+        // A French transmission is rewritten into the parser's canonical English keywords and
+        // digit runs first. Only interpretation changes: the conversation keeps the French text.
+        string interpreted = session.Language == Domain.Phraseology.PhraseologyLanguage.French
+            ? FrenchTranscriptCanonicalizer.Canonicalize(displayTranscript)
+            : displayTranscript;
+        string normalized = TranscriptNormalizer.Normalize(interpreted);
         normalizationStopwatch.Stop();
 
         var pilotTurn = new ConversationTurn

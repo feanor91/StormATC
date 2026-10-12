@@ -150,6 +150,33 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     private string _realismProfile = "Standard";
 
     [ObservableProperty]
+    private string _atcLanguage = EnglishLanguageName;
+
+    [ObservableProperty]
+    private string _speechToTextProvider = SpeechProviders.Deepgram;
+
+    [ObservableProperty]
+    private string _textToSpeechProvider = SpeechProviders.Deepgram;
+
+    [ObservableProperty]
+    private string _whisperExecutablePath = string.Empty;
+
+    [ObservableProperty]
+    private string _whisperModelPath = string.Empty;
+
+    [ObservableProperty]
+    private string _piperExecutablePath = string.Empty;
+
+    [ObservableProperty]
+    private string _piperEnglishVoicePath = string.Empty;
+
+    [ObservableProperty]
+    private string _piperFrenchVoicePath = string.Empty;
+
+    [ObservableProperty]
+    private string _localVoiceTestResult = string.Empty;
+
+    [ObservableProperty]
     private string _defaultPushbackDirection = PushbackDirections.TailLeft;
 
     [ObservableProperty]
@@ -258,6 +285,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         IOptions<AtcRealismOptions> realismOptions,
         IOptions<PersistenceOptions> persistenceOptions,
         IOptions<AudioOptions> audioOptions,
+        IOptions<LocalVoiceOptions> localVoiceOptions,
         ILogger<SettingsViewModel> logger)
     {
         _secretStore = secretStore ?? throw new ArgumentNullException(nameof(secretStore));
@@ -288,6 +316,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         ArgumentNullException.ThrowIfNull(realismOptions);
         ArgumentNullException.ThrowIfNull(persistenceOptions);
         ArgumentNullException.ThrowIfNull(audioOptions);
+        ArgumentNullException.ThrowIfNull(localVoiceOptions);
 
         _openRouterModel = openRouterOptions.Value.Model;
         _openAIModel = openAIOptions.Value.Model;
@@ -314,6 +343,25 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         _trainingCorrectionCount = _transcriptCorrections.Count;
         _simBriefUserId = simBriefOptions.Value.UserId ?? string.Empty;
         _realismProfile = applicationOptions.Value.RealismProfile;
+        _atcLanguage = Domain.Phraseology.PhraseologyLanguages.Parse(applicationOptions.Value.AtcLanguage)
+            == Domain.Phraseology.PhraseologyLanguage.French
+                ? FrenchLanguageName
+                : EnglishLanguageName;
+        _speechToTextProvider = SpeechProviders.Is(
+            localVoiceOptions.Value.SpeechToTextProvider,
+            SpeechProviders.Whisper)
+                ? SpeechProviders.Whisper
+                : SpeechProviders.Deepgram;
+        _textToSpeechProvider = SpeechProviders.Is(
+            localVoiceOptions.Value.TextToSpeechProvider,
+            SpeechProviders.Piper)
+                ? SpeechProviders.Piper
+                : SpeechProviders.Deepgram;
+        _whisperExecutablePath = localVoiceOptions.Value.WhisperExecutablePath;
+        _whisperModelPath = localVoiceOptions.Value.WhisperModelPath;
+        _piperExecutablePath = localVoiceOptions.Value.PiperExecutablePath;
+        _piperEnglishVoicePath = localVoiceOptions.Value.PiperEnglishVoicePath;
+        _piperFrenchVoicePath = localVoiceOptions.Value.PiperFrenchVoicePath;
         _defaultPushbackDirection =
             PushbackDirections.Normalize(realismOptions.Value.DefaultPushbackDirection)
             ?? PushbackDirections.TailLeft;
@@ -340,6 +388,9 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         _joystickButtonIndex = audioOptions.Value.JoystickButtonIndex;
 
         RealismProfiles = ["Relaxed", "Standard", "Strict"];
+        AtcLanguages = [EnglishLanguageName, FrenchLanguageName];
+        RecognitionEngines = [.. SpeechProviders.RecognitionEngines];
+        VoiceEngines = [.. SpeechProviders.VoiceEngines];
         PushbackDirectionChoices = [.. PushbackDirections.All];
         LanguageModelProviderNames = [.. LanguageModelProviders.All];
         Connectors = [.. SimulatorConnectorNames.All];
@@ -374,6 +425,61 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
 
     /// <summary>The selectable realism profiles.</summary>
     public ObservableCollection<string> RealismProfiles { get; }
+
+    /// <summary>Display name of the English radio language.</summary>
+    public const string EnglishLanguageName = "English (ICAO)";
+
+    /// <summary>Display name of the French radio language.</summary>
+    public const string FrenchLanguageName = "Français (DSNA)";
+
+    /// <summary>The selectable radio languages.</summary>
+    public ObservableCollection<string> AtcLanguages { get; }
+
+    /// <summary>Speech-to-text engines: Deepgram (cloud) or Whisper (local).</summary>
+    public ObservableCollection<string> RecognitionEngines { get; }
+
+    /// <summary>Controller voice engines: Deepgram (cloud) or Piper (local).</summary>
+    public ObservableCollection<string> VoiceEngines { get; }
+
+    /// <summary>The configuration code of the selected radio language.</summary>
+    private string AtcLanguageCode =>
+        AtcLanguage == FrenchLanguageName ? "fr" : "en";
+
+    /// <summary>
+    /// Tests the selected recognition and voice engines with the saved settings, whichever
+    /// they are. Save first after changing a path or an engine.
+    /// </summary>
+    [RelayCommand]
+    private async Task TestLocalVoiceAsync()
+    {
+        IsTesting = true;
+        LocalVoiceTestResult = "Testing…";
+
+        try
+        {
+            ProviderTestResult recognition = await _speechRecognition
+                .TestConnectionAsync(CancellationToken.None)
+                .ConfigureAwait(true);
+
+            ProviderTestResult synthesis = await _textToSpeech
+                .TestConnectionAsync(CancellationToken.None)
+                .ConfigureAwait(true);
+
+            LocalVoiceTestResult =
+                $"{_speechRecognition.ProviderName}: {Describe(recognition)}  ·  "
+                + $"{_textToSpeech.ProviderName}: {Describe(synthesis)}";
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "The speech engine test failed.");
+            LocalVoiceTestResult = "The test failed. See the Diagnostics page.";
+        }
+        finally
+        {
+            IsTesting = false;
+            await _providerStatus.RefreshAsync(CancellationToken.None).ConfigureAwait(true);
+        }
+    }
 
     /// <summary>Explains the transcript/readback behaviour of the selected profile.</summary>
     public string RealismProfileDescription => RealismProfile.Trim().ToUpperInvariant() switch
@@ -1102,6 +1208,15 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
                 [
                     (ApplicationOptions.SectionName, "OfflineMode", JsonValue.Create(OfflineMode)),
                     (ApplicationOptions.SectionName, "RealismProfile", JsonValue.Create(RealismProfile)),
+                    (ApplicationOptions.SectionName, "AtcLanguage", JsonValue.Create(AtcLanguageCode)),
+
+                    (LocalVoiceOptions.SectionName, "SpeechToTextProvider", JsonValue.Create(SpeechToTextProvider)),
+                    (LocalVoiceOptions.SectionName, "TextToSpeechProvider", JsonValue.Create(TextToSpeechProvider)),
+                    (LocalVoiceOptions.SectionName, "WhisperExecutablePath", JsonValue.Create(WhisperExecutablePath.Trim().Trim('"'))),
+                    (LocalVoiceOptions.SectionName, "WhisperModelPath", JsonValue.Create(WhisperModelPath.Trim().Trim('"'))),
+                    (LocalVoiceOptions.SectionName, "PiperExecutablePath", JsonValue.Create(PiperExecutablePath.Trim().Trim('"'))),
+                    (LocalVoiceOptions.SectionName, "PiperEnglishVoicePath", JsonValue.Create(PiperEnglishVoicePath.Trim().Trim('"'))),
+                    (LocalVoiceOptions.SectionName, "PiperFrenchVoicePath", JsonValue.Create(PiperFrenchVoicePath.Trim().Trim('"'))),
                     (ApplicationOptions.SectionName, "CloudServicesConsentGiven", JsonValue.Create(CloudServicesConsentGiven)),
                     (ApplicationOptions.SectionName, "FirstRunCompleted", JsonValue.Create(true)),
 
@@ -1182,6 +1297,11 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
                 PushbackDirections.Normalize(DefaultPushbackDirection)
                 ?? PushbackDirections.TailLeft;
             _speechRecognition.ApplyRecognitionProfile(BuildSpeechProfile());
+
+            // The radio language switches the running session too: the next controller
+            // transmission, the ATIS and speech recognition all follow it.
+            _sessionContext.SetLanguage(
+                Domain.Phraseology.PhraseologyLanguages.Parse(AtcLanguageCode));
             _joystickInput.Configure(
                 joystickBinding,
                 JoystickPushToTalkEnabled && joystickBinding is not null);

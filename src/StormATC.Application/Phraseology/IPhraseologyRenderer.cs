@@ -81,7 +81,7 @@ public sealed class DeterministicPhraseologyRenderer : IPhraseologyRenderer
 
         string spoken = decision.FallbackPhraseology;
         string display = session.Callsign is Callsign callsign
-            ? Domain.Phraseology.DeterministicPhraseology.ToDisplayForm(spoken, callsign)
+            ? Domain.Phraseology.AtcPhraseologies.For(session.Language).ToDisplayForm(spoken, callsign)
             : spoken;
 
         return new RenderedPhraseology

@@ -7,6 +7,7 @@ using StormATC.Domain.Airports;
 using StormATC.Domain.Atc;
 using StormATC.Domain.FlightPlanning;
 using StormATC.Domain.Intents;
+using StormATC.Domain.Phraseology;
 using StormATC.Domain.Sessions;
 using StormATC.Domain.ValueObjects;
 
@@ -81,6 +82,29 @@ public sealed class AtcSessionContext(
     public RealismProfile Realism { get; set; } = RealismProfile.Standard;
 
     /// <summary>
+    /// The radio language for new sessions. Change it with <see cref="SetLanguage"/> so the
+    /// running session switches too.
+    /// </summary>
+    public PhraseologyLanguage Language { get; private set; } = PhraseologyLanguage.English;
+
+    /// <summary>
+    /// Switches the radio language now: the current session, and every session started after
+    /// it. Only wording, recognition and voice change; the session's state is untouched.
+    /// </summary>
+    public void SetLanguage(PhraseologyLanguage language)
+    {
+        lock (_stateLock)
+        {
+            Language = language;
+        }
+
+        if (CurrentSession.Language != language)
+        {
+            Mutate(session => session with { Language = language });
+        }
+    }
+
+    /// <summary>
     /// Relative tail direction used for pushback when the pilot does not request one.
     /// </summary>
     public string DefaultPushbackDirection { get; set; } = PushbackDirections.TailLeft;
@@ -129,7 +153,10 @@ public sealed class AtcSessionContext(
             Guid.CreateVersion7(),
             now,
             mode,
-            initialState ?? AircraftState.Unknown(now));
+            initialState ?? AircraftState.Unknown(now)) with
+        {
+            Language = Language,
+        };
 
         lock (_stateLock)
         {

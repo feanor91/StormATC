@@ -28,7 +28,15 @@ public static class AtcGuidanceAdvisor
                 string.Empty);
         }
 
-        string spokenCallsign = callsign.ToSpoken();
+        // Titles and explanations are interface text; the example is what to say on the
+        // radio, so it follows the radio language.
+        bool french = session.Language == PhraseologyLanguage.French;
+        IAtcPhraseology say = AtcPhraseologies.For(session.Language);
+        string spokenCallsign = say.SpeakCallsign(callsign);
+        string departureRunway = session.AssignedDepartureRunway is RunwayIdentifier runway
+            ? say.SpeakRunway(runway)
+            : french ? "piste assignée" : "runway assigned runway";
+        string Example(string english, string inFrench) => french ? inFrench : english;
 
         if (session.CurrentController == ControllerPosition.Atis)
         {
@@ -74,34 +82,41 @@ public static class AtcGuidanceAdvisor
                 new(
                     "Request IFR clearance",
                     "Call Delivery when you are ready to copy.",
-                    $"{spokenCallsign}, request IFR clearance"),
+                    Example(
+                        $"{spokenCallsign}, request IFR clearance",
+                        $"{spokenCallsign}, bonjour, demandons la clairance IFR")),
 
             FlightPhase.IFRClearanceIssued =>
                 new(
                     "Request pushback and start",
                     "Your IFR clearance is acknowledged. Remain on this frequency unless handed off.",
-                    $"{spokenCallsign}, request pushback and start"),
+                    Example(
+                        $"{spokenCallsign}, request pushback and start",
+                        $"{spokenCallsign}, demandons repoussage et mise en route")),
 
             FlightPhase.Pushback =>
                 new(
                     "Request taxi",
                     "Call when pushback is complete and you are ready to taxi.",
-                    $"{spokenCallsign}, ready for taxi"),
+                    Example(
+                        $"{spokenCallsign}, ready for taxi",
+                        $"{spokenCallsign}, prêts à rouler")),
 
             FlightPhase.TaxiOut =>
                 new(
                     "Continue to the holding point",
                     "Report holding short when you reach the assigned departure runway.",
-                    $"{spokenCallsign}, holding short runway "
-                        + (session.AssignedDepartureRunway?.ToSpokenDesignator() ?? "assigned runway")),
+                    Example(
+                        $"{spokenCallsign}, holding short {departureRunway}",
+                        $"{spokenCallsign}, au point d'attente {departureRunway}")),
 
             FlightPhase.HoldingShort =>
                 new(
                     "Report ready for departure",
                     "Tower will decide whether to line up, hold, or clear you for takeoff.",
-                    $"{spokenCallsign}, holding short runway "
-                        + (session.AssignedDepartureRunway?.ToSpokenDesignator() ?? "assigned runway")
-                        + ", ready for departure"),
+                    Example(
+                        $"{spokenCallsign}, holding short {departureRunway}, ready for departure",
+                        $"{spokenCallsign}, au point d'attente {departureRunway}, prêts au départ")),
 
             FlightPhase.LineUp =>
                 new(
@@ -113,22 +128,29 @@ public static class AtcGuidanceAdvisor
                 new(
                     "Fly the takeoff clearance",
                     "Report airborne after liftoff if Tower has not already handed you off.",
-                    $"{spokenCallsign}, airborne"),
+                    Example($"{spokenCallsign}, airborne", $"{spokenCallsign}, en l'air")),
 
             FlightPhase.InitialClimb =>
                 new(
                     "Check in with Departure",
                     "Use your current altitude and the altitude you are climbing to.",
-                    $"Departure, {spokenCallsign}, passing "
-                        + SpokenNumbers.Altitude(session.AircraftState.IndicatedAltitudeRounded)
-                        + ", climbing "
-                        + (session.ClearedAltitude?.ToSpoken() ?? "as cleared")),
+                    Example(
+                        $"Departure, {spokenCallsign}, passing "
+                            + SpokenNumbers.Altitude(session.AircraftState.IndicatedAltitudeRounded)
+                            + ", climbing "
+                            + (session.ClearedAltitude?.ToSpoken() ?? "as cleared"),
+                        $"Départ, bonjour, {spokenCallsign}, passant "
+                            + FrenchSpokenNumbers.Cardinal(session.AircraftState.IndicatedAltitudeRounded)
+                            + " pieds, en montée vers "
+                            + (session.ClearedAltitude is Altitude cleared
+                                ? say.SpeakAltitude(cleared)
+                                : "le niveau autorisé"))),
 
             FlightPhase.Departure =>
                 new(
                     "Continue the departure",
                     "Request higher only when you need another level.",
-                    $"{spokenCallsign}, request climb"),
+                    Example($"{spokenCallsign}, request climb", $"{spokenCallsign}, demandons à monter")),
 
             FlightPhase.Enroute =>
                 new(
@@ -140,19 +162,19 @@ public static class AtcGuidanceAdvisor
                 new(
                     "Continue the descent",
                     "Call Approach after the handoff or request the filed approach.",
-                    $"{spokenCallsign}, request approach"),
+                    Example($"{spokenCallsign}, request approach", $"{spokenCallsign}, demandons l'approche")),
 
             FlightPhase.Arrival =>
                 new(
                     "Prepare for the approach",
                     "Check the arrival and request the approach you intend to fly.",
-                    $"{spokenCallsign}, request approach"),
+                    Example($"{spokenCallsign}, request approach", $"{spokenCallsign}, demandons l'approche")),
 
             FlightPhase.Approach =>
                 new(
                     "Report established",
                     "Report when established on the cleared approach.",
-                    $"{spokenCallsign}, established"),
+                    Example($"{spokenCallsign}, established", $"{spokenCallsign}, établis")),
 
             FlightPhase.Final =>
                 new(
@@ -164,7 +186,7 @@ public static class AtcGuidanceAdvisor
                 new(
                     "Report runway vacated",
                     "Call Ground only after you are clear of the runway.",
-                    $"{spokenCallsign}, runway vacated"),
+                    Example($"{spokenCallsign}, runway vacated", $"{spokenCallsign}, piste dégagée")),
 
             FlightPhase.TaxiIn =>
                 new(
@@ -179,13 +201,15 @@ public static class AtcGuidanceAdvisor
                 new(
                     "Fly the missed approach",
                     "State your altitude when Approach asks or after the handoff.",
-                    $"Approach, {spokenCallsign}, going around"),
+                    Example(
+                        $"Approach, {spokenCallsign}, going around",
+                        $"Approche, {spokenCallsign}, remise de gaz")),
 
             FlightPhase.Abnormal =>
                 new(
                     "State your intentions",
                     "Continue using MAYDAY or PAN PAN as appropriate for the simulated situation.",
-                    $"{spokenCallsign}, request"),
+                    Example($"{spokenCallsign}, request", $"{spokenCallsign}, demandons")),
 
             _ =>
                 new(

@@ -78,7 +78,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 $"Intent confidence {intent.Confidence:F2} is below the {context.Realism.MinimumIntentConfidence:F2} threshold for a safety-critical request.",
-                DeterministicPhraseology.SayAgain(context.Session.Callsign));
+                Say(context).SayAgain(context.Session.Callsign));
         }
 
         // --- Guard 4: is this transmission from our aircraft? -------------------------------
@@ -89,7 +89,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 $"Transmission used callsign {spoken} but the session aircraft is {expected}.",
-                DeterministicPhraseology.SayAgain(expected));
+                Say(context).SayAgain(expected));
         }
 
         // --- Guard 5: is the pilot talking to the right controller? -------------------------
@@ -193,7 +193,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                     frequency,
                     FlightPhase.Departure,
                     "Established in the climb after departure.",
-                    DeterministicPhraseology.Handoff(callsign, ControllerPosition.Departure, frequency));
+                    Say(context).Handoff(callsign, ControllerPosition.Departure, frequency));
             }
         }
 
@@ -216,7 +216,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                     frequency,
                     newPhase: null,
                     "Descending into the terminal area.",
-                    DeterministicPhraseology.Handoff(arriving, ControllerPosition.Approach, frequency));
+                    Say(context).Handoff(arriving, ControllerPosition.Approach, frequency));
             }
         }
 
@@ -268,7 +268,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "No flight plan is loaded, so the aircraft has no callsign.",
-                "Station calling, no flight plan is loaded. Import a flight plan to begin.");
+                Say(context).NoFlightPlanToBegin);
         }
 
         ControllerPosition controller = context.Session.CurrentController == ControllerPosition.None
@@ -279,10 +279,10 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             Accepted = true,
             ResponseType = AtcResponseType.Acknowledgement,
-            FallbackPhraseology = $"{callsign.ToSpoken()}, {DeterministicPhraseology.SpokenControllerName(controller)}, go ahead.",
+            FallbackPhraseology = Say(context).GoAhead(callsign, controller),
             ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                ["controller"] = DeterministicPhraseology.SpokenControllerName(controller),
+                ["controller"] = Say(context).ControllerName(controller),
             },
             ProhibitedFacts = ["any clearance"],
         };
@@ -303,7 +303,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             Accepted = true,
             ResponseType = AtcResponseType.RadioCheckReply,
-            FallbackPhraseology = DeterministicPhraseology.RadioCheckReply(callsign, controller),
+            FallbackPhraseology = Say(context).RadioCheckReply(callsign, controller),
             ProhibitedFacts = ["any clearance"],
         };
     }
@@ -328,7 +328,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             Accepted = true,
             ResponseType = AtcResponseType.SayAgain,
             FallbackPhraseology = lastControllerText
-                ?? DeterministicPhraseology.SayAgain(context.Session.Callsign),
+                ?? Say(context).SayAgain(context.Session.Callsign),
             AllowLanguageModelPhraseology = false,
         };
     }
@@ -342,7 +342,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             Accepted = false,
             ResponseType = AtcResponseType.SayAgain,
             RejectionReason = reason,
-            FallbackPhraseology = DeterministicPhraseology.SayAgain(context.Session.Callsign),
+            FallbackPhraseology = Say(context).SayAgain(context.Session.Callsign),
             AllowLanguageModelPhraseology = false,
         };
     }
@@ -360,7 +360,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             Accepted = true,
             ResponseType = AtcResponseType.Acknowledgement,
-            FallbackPhraseology = $"{callsign.ToSpoken()}, roger, say intentions.",
+            FallbackPhraseology = Say(context).RogerSayIntentions(callsign),
             ProhibitedFacts = ["new clearance"],
         };
     }
@@ -389,7 +389,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             Accepted = true,
             ResponseType = AtcResponseType.EmergencyAcknowledgement,
             NewPhase = FlightPhase.Abnormal,
-            FallbackPhraseology = DeterministicPhraseology.EmergencyAcknowledgement(callsign, isMayday),
+            FallbackPhraseology = Say(context).EmergencyAcknowledgement(callsign, isMayday),
             Warnings = [warning],
             ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
             {
@@ -417,21 +417,21 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "No flight plan is loaded.",
-                "Station calling, no flight plan is loaded. Import a flight plan first.");
+                Say(context).NoFlightPlanFirst);
         }
 
         if (!context.AircraftState.IsOnGround)
         {
             return AtcDecision.Reject(
                 "IFR clearance may only be requested on the ground before departure.",
-                DeterministicPhraseology.Unable(callsign, "you are already airborne"));
+                Say(context).Unable(callsign, UnableReason.AlreadyAirborne));
         }
 
         if (session.Phase is not (FlightPhase.Preflight or FlightPhase.ClearanceRequested or FlightPhase.Disconnected))
         {
             return AtcDecision.Reject(
                 $"Clearance cannot be issued in the {session.Phase} phase.",
-                DeterministicPhraseology.Unable(callsign, "clearance has already been issued"));
+                Say(context).Unable(callsign, UnableReason.ClearanceAlreadyIssued));
         }
 
         // A SimBrief plan can name the runway even when StormATC has no detailed ground-layout
@@ -447,7 +447,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 context.DepartureAirport is null
                     ? "No airport data or filed departure runway is available."
                     : "The departure aerodrome publishes no usable runway.",
-                DeterministicPhraseology.Unable(callsign, "no departure runway is available"));
+                Say(context).Unable(callsign, UnableReason.NoDepartureRunwayAvailable));
         }
 
         Altitude initialAltitude = ResolveInitialAltitude(context, plan);
@@ -480,28 +480,28 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             {
                 Type = ReadbackItemType.Callsign,
                 ExpectedValue = callsign.Normalized,
-                SpokenValue = callsign.ToSpoken(),
+                SpokenValue = Say(context).SpeakCallsign(callsign),
                 IsCritical = true,
             },
             new()
             {
                 Type = ReadbackItemType.Runway,
                 ExpectedValue = departureRunway.ToComparisonValue(),
-                SpokenValue = departureRunway.ToSpoken(),
+                SpokenValue = Say(context).SpeakRunway(departureRunway),
                 IsCritical = true,
             },
             new()
             {
                 Type = ReadbackItemType.InitialAltitude,
                 ExpectedValue = initialAltitude.ToComparisonValue(),
-                SpokenValue = $"climb initially {initialAltitude.ToSpoken()}",
+                SpokenValue = Say(context).ReadbackItemInitialAltitude(initialAltitude),
                 IsCritical = true,
             },
             new()
             {
                 Type = ReadbackItemType.Squawk,
                 ExpectedValue = squawk.ToComparisonValue(),
-                SpokenValue = $"squawk {squawk.ToSpoken()}",
+                SpokenValue = Say(context).ReadbackItemSquawk(squawk),
                 IsCritical = true,
             },
         };
@@ -512,7 +512,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             {
                 Type = ReadbackItemType.Frequency,
                 ExpectedValue = frequency.ToComparisonValue(),
-                SpokenValue = $"departure frequency {frequency.ToSpoken()}",
+                SpokenValue = Say(context).ReadbackItemDepartureFrequency(frequency),
 
                 // The departure frequency is read back in practice but a missing readback is a
                 // phraseology slip, not a safety issue — the pilot is told again at handoff.
@@ -543,9 +543,9 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 "any altitude other than the approved initial altitude",
             ],
             FallbackPhraseology = alsoRequestedPushback
-                ? DeterministicPhraseology.IfrClearance(callsign, clearance)
-                    + " Read back the clearance, then request pushback."
-                : DeterministicPhraseology.IfrClearance(callsign, clearance),
+                ? Say(context).IfrClearance(callsign, clearance)
+                    + Say(context).ClearanceThenPushbackNote
+                : Say(context).IfrClearance(callsign, clearance),
 
             // A compound clearance-and-pushback request needs the explicit sequencing sentence
             // above. Do not let a style model omit it and silently ignore half the request.
@@ -566,8 +566,8 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 Accepted = true,
                 ResponseType = AtcResponseType.Acknowledgement,
                 FallbackPhraseology = session.Callsign is Callsign cs
-                    ? DeterministicPhraseology.Acknowledgement(cs)
-                    : "Roger.",
+                    ? Say(context).Acknowledgement(cs)
+                    : Say(context).RogerPlain,
                 ProhibitedFacts = ["any new clearance"],
             };
         }
@@ -590,7 +590,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 ReadbackAssessment = assessment,
                 RequiredReadback = pending.WithAttempt(satisfiedItems),
                 FallbackPhraseology = assessment.RequiredCorrection
-                    ?? DeterministicPhraseology.SayAgain(session.Callsign),
+                    ?? Say(context).SayAgain(session.Callsign),
 
                 // Corrections are spoken exactly as generated. Letting a model rephrase a
                 // correction risks it restating the wrong value the pilot just used.
@@ -639,11 +639,11 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                     ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
                     {
                         ["readback"] = "correct",
-                        ["nextController"] = "Ground",
+                        ["nextController"] = Say(context).ControllerName(ControllerPosition.Ground),
                         ["frequency"] = ground.ToComparisonValue(),
                     },
                     ProhibitedFacts = ["taxi clearance", "pushback approval"],
-                    FallbackPhraseology = DeterministicPhraseology.ReadbackCorrect(
+                    FallbackPhraseology = Say(context).ReadbackCorrect(
                         cs, ground, ControllerPosition.Ground),
                 };
             }
@@ -661,9 +661,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 ["readback"] = "correct",
             },
             ProhibitedFacts = ["any new clearance"],
-            FallbackPhraseology = callsign is Callsign c
-                ? $"{c.ToSpoken()}, readback correct."
-                : "Readback correct.",
+            FallbackPhraseology = Say(context).ReadbackCorrectPlain(callsign),
         };
     }
 
@@ -699,7 +697,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "Pushback cannot be approved for an airborne aircraft.",
-                DeterministicPhraseology.Unable(callsign, "you are airborne"));
+                Say(context).Unable(callsign, UnableReason.Airborne));
         }
 
         // Moving faster than a walking pace means the aircraft is already taxiing.
@@ -707,14 +705,14 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "The aircraft is already moving; pushback is not applicable.",
-                DeterministicPhraseology.Unable(callsign, "you are already moving"));
+                Say(context).Unable(callsign, UnableReason.AlreadyMoving));
         }
 
         if (session.Phase is not (FlightPhase.Preflight or FlightPhase.IFRClearanceIssued or FlightPhase.ClearanceRequested))
         {
             return AtcDecision.Reject(
                 $"Pushback is not available in the {session.Phase} phase.",
-                DeterministicPhraseology.Unable(callsign, "not at this stage of flight"));
+                Say(context).Unable(callsign, UnableReason.NotAtThisStageOfFlight));
         }
 
         // Realism setting decides whether an unread-back clearance blocks pushback. Guard 6
@@ -724,7 +722,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "The IFR clearance has not been read back.",
-                DeterministicPhraseology.Unable(callsign, "read back your clearance first"));
+                Say(context).Unable(callsign, UnableReason.ReadBackClearanceFirst));
         }
 
         var clearance = new Clearance
@@ -756,7 +754,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             ApprovedFacts = approvedFacts,
             ProhibitedFacts = ["taxi clearance", "takeoff clearance", "runway assignment"],
             FallbackPhraseology =
-                DeterministicPhraseology.PushbackApproval(callsign, pushbackDirection),
+                Say(context).PushbackApproval(callsign, pushbackDirection),
         };
     }
 
@@ -773,7 +771,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "Taxi cannot be issued to an airborne aircraft.",
-                DeterministicPhraseology.Unable(callsign, "you are airborne"));
+                Say(context).Unable(callsign, UnableReason.Airborne));
         }
 
         if (session.Phase is not (FlightPhase.Preflight or FlightPhase.IFRClearanceIssued
@@ -781,7 +779,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 $"Taxi is not available in the {session.Phase} phase.",
-                DeterministicPhraseology.Unable(callsign, "not at this stage of flight"));
+                Say(context).Unable(callsign, UnableReason.NotAtThisStageOfFlight));
         }
 
         RunwayIdentifier? runway = session.AssignedDepartureRunway
@@ -794,7 +792,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "No departure runway has been assigned.",
-                DeterministicPhraseology.Unable(callsign, "no departure runway is assigned"));
+                Say(context).Unable(callsign, UnableReason.NoDepartureRunwayAssigned));
         }
 
         // Most imported SimBrief aerodromes do not yet have a bundled StormATC taxi graph. The
@@ -855,7 +853,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             {
                 Type = ReadbackItemType.TaxiRoute,
                 ExpectedValue = string.Join(",", route.TaxiwayNames),
-                SpokenValue = $"via {DeterministicPhraseology.SpellTaxiways(route.TaxiwayNames)}",
+                SpokenValue = Say(context).ReadbackItemTaxiRoute(route.TaxiwayNames),
 
                 // A misheard taxi route sends the aircraft the wrong way on the manoeuvring
                 // area, so it is treated as critical.
@@ -865,7 +863,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             {
                 Type = ReadbackItemType.HoldShortRunway,
                 ExpectedValue = departureRunway.ToComparisonValue(),
-                SpokenValue = $"hold short {departureRunway.ToSpoken()}",
+                SpokenValue = Say(context).ReadbackItemHoldShort(departureRunway),
                 IsCritical = true,
             },
         };
@@ -892,7 +890,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 $"cross runway {departureRunway.ToDisplay()}",
                 "any taxiway not listed in the approved taxi route",
             ],
-            FallbackPhraseology = DeterministicPhraseology.TaxiClearance(callsign, clearance),
+            FallbackPhraseology = Say(context).TaxiClearance(callsign, clearance),
         };
     }
 
@@ -917,7 +915,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "Progressive taxi is only available on the ground.",
-                DeterministicPhraseology.Unable(callsign, "progressive taxi is only available on the ground"));
+                Say(context).Unable(callsign, UnableReason.ProgressiveTaxiGroundOnly));
         }
 
         if (session.TaxiClearance is not Clearance clearance
@@ -926,7 +924,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "There is no active taxi path to guide.",
-                DeterministicPhraseology.Unable(callsign, "no active taxi route is available"));
+                Say(context).Unable(callsign, UnableReason.NoActiveTaxiRoute));
         }
 
         TaxiRoute route = TaxiPathfinder.FromNodeSequence(
@@ -950,42 +948,50 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 },
                 ProhibitedFacts = ["taxi route guess", "runway crossing"],
                 AllowLanguageModelPhraseology = false,
-                FallbackPhraseology =
-                    $"{callsign.ToSpoken()}, hold position, confirm your position.",
+                FallbackPhraseology = Say(context).HoldPositionConfirm(callsign),
             };
         }
 
-        string currentTaxiway = progress.CurrentTaxiway is { Length: > 0 } current
-            ? DeterministicPhraseology.SpellTaxiways([current])
-            : "the cleared route";
-        string instruction;
+        ProgressiveTaxiGuidance guidance;
 
         if (progress.IsAtDestination || progress.IsApproachingHoldShort)
         {
-            instruction = clearance.Runway is RunwayIdentifier runway
-                ? $"continue on {currentTaxiway} to holding point {runway.ToSpoken()}, "
-                    + $"hold short {runway.ToSpoken()}"
-                : $"continue on {currentTaxiway} to {clearance.TaxiDestination ?? "the clearance limit"}";
+            guidance = new ProgressiveTaxiGuidance
+            {
+                Step = clearance.Runway is not null
+                    ? ProgressiveTaxiStep.ToHoldingPoint
+                    : ProgressiveTaxiStep.ToDestination,
+                CurrentTaxiway = progress.CurrentTaxiway,
+                Runway = clearance.Runway,
+                Destination = clearance.TaxiDestination,
+            };
         }
         else if (progress.NextTaxiway is { Length: > 0 } next
             && progress.NextTurn is TaxiTurnDirection turn)
         {
-            string nextSpoken = DeterministicPhraseology.SpellTaxiways([next]);
-            instruction = turn switch
+            guidance = new ProgressiveTaxiGuidance
             {
-                TaxiTurnDirection.Left =>
-                    $"continue on {currentTaxiway}, at the next junction turn left onto {nextSpoken}",
-                TaxiTurnDirection.Right =>
-                    $"continue on {currentTaxiway}, at the next junction turn right onto {nextSpoken}",
-                _ =>
-                    $"continue on {currentTaxiway}, then continue straight onto {nextSpoken}",
+                Step = turn switch
+                {
+                    TaxiTurnDirection.Left => ProgressiveTaxiStep.TurnLeft,
+                    TaxiTurnDirection.Right => ProgressiveTaxiStep.TurnRight,
+                    _ => ProgressiveTaxiStep.Straight,
+                },
+                CurrentTaxiway = progress.CurrentTaxiway,
+                NextTaxiway = next,
             };
         }
         else
         {
-            instruction =
-                $"continue on {currentTaxiway} to {clearance.TaxiDestination ?? "the clearance limit"}";
+            guidance = new ProgressiveTaxiGuidance
+            {
+                Step = ProgressiveTaxiStep.ToDestination,
+                CurrentTaxiway = progress.CurrentTaxiway,
+                Destination = clearance.TaxiDestination,
+            };
         }
+
+        string instruction = Say(context).ProgressiveTaxiInstruction(guidance);
 
         return new AtcDecision
         {
@@ -997,7 +1003,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             },
             ProhibitedFacts = ["new taxiway", "runway crossing", "takeoff clearance"],
             AllowLanguageModelPhraseology = false,
-            FallbackPhraseology = $"{callsign.ToSpoken()}, {instruction}.",
+            FallbackPhraseology = $"{Say(context).SpeakCallsign(callsign)}, {instruction}.",
         };
     }
 
@@ -1021,13 +1027,11 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 ResponseType = AtcResponseType.Acknowledgement,
                 ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
                 {
-                    ["controller"] = DeterministicPhraseology.SpokenControllerName(target),
+                    ["controller"] = Say(context).ControllerName(target),
                     ["frequency"] = frequency.ToComparisonValue(),
                 },
                 ProhibitedFacts = ["any clearance"],
-                FallbackPhraseology =
-                    $"{callsign.ToSpoken()}, {DeterministicPhraseology.SpokenControllerName(target)} "
-                    + $"frequency {frequency.ToSpoken()}.",
+                FallbackPhraseology = Say(context).FrequencyInformation(callsign, target, frequency),
                 AllowLanguageModelPhraseology = false,
             };
         }
@@ -1043,10 +1047,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 Accepted = true,
                 ResponseType = AtcResponseType.Acknowledgement,
                 ProhibitedFacts = ["any frequency not present in airport data", "any clearance"],
-                FallbackPhraseology =
-                    $"{callsign.ToSpoken()}, no separate "
-                    + $"{DeterministicPhraseology.SpokenControllerName(target)} frequency is available, "
-                    + "remain this frequency.",
+                FallbackPhraseology = Say(context).NoSeparateFrequency(callsign, target),
                 AllowLanguageModelPhraseology = false,
             };
         }
@@ -1059,19 +1060,16 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 ResponseType = AtcResponseType.Acknowledgement,
                 ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
                 {
-                    ["controller"] = DeterministicPhraseology.SpokenControllerName(target),
+                    ["controller"] = Say(context).ControllerName(target),
                     ["frequency"] = resolved.ToComparisonValue(),
                 },
                 ProhibitedFacts = ["any clearance"],
-                FallbackPhraseology =
-                    $"{callsign.ToSpoken()}, {DeterministicPhraseology.SpokenControllerName(target)} "
-                    + $"frequency {resolved.ToSpoken()}.",
+                FallbackPhraseology = Say(context).FrequencyInformation(callsign, target, resolved),
                 AllowLanguageModelPhraseology = false,
             }
             : AtcDecision.Reject(
                 $"No frequency data is available for {target}.",
-                $"{callsign.ToSpoken()}, {DeterministicPhraseology.SpokenControllerName(target)} "
-                + "frequency unavailable, remain this frequency.");
+                Say(context).FrequencyUnavailable(callsign, target));
     }
 
     private static ControllerPosition InferFrequencyTarget(AtcEvaluationContext context)
@@ -1106,24 +1104,19 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             }
 
             string text = turn.Text;
-            if (text.Contains("contact Ground", StringComparison.OrdinalIgnoreCase))
+            IAtcPhraseology say = Say(context);
+            foreach (ControllerPosition position in new[]
             {
-                return ControllerPosition.Ground;
-            }
-
-            if (text.Contains("contact Tower", StringComparison.OrdinalIgnoreCase))
+                ControllerPosition.Ground,
+                ControllerPosition.Tower,
+                ControllerPosition.Departure,
+                ControllerPosition.Approach,
+            })
             {
-                return ControllerPosition.Tower;
-            }
-
-            if (text.Contains("contact Departure", StringComparison.OrdinalIgnoreCase))
-            {
-                return ControllerPosition.Departure;
-            }
-
-            if (text.Contains("contact Approach", StringComparison.OrdinalIgnoreCase))
-            {
-                return ControllerPosition.Approach;
+                if (say.MentionsContact(text, position))
+                {
+                    return position;
+                }
             }
 
             break;
@@ -1176,7 +1169,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                     {
                         Type = ReadbackItemType.HoldShortRunway,
                         ExpectedValue = departureRunway.ToComparisonValue(),
-                        SpokenValue = $"hold short {departureRunway.ToSpoken()}",
+                        SpokenValue = Say(context).ReadbackItemHoldShort(departureRunway),
                         IsCritical = true,
                     },
                 ],
@@ -1191,10 +1184,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 $"cross runway {departureRunway.ToDisplay()}",
                 "any named taxiway",
             ],
-            FallbackPhraseology =
-                $"{callsign.ToSpoken()}, taxi to holding point runway "
-                + $"{departureRunway.ToSpokenDesignator()}, detailed taxi routing unavailable, "
-                + $"hold short runway {departureRunway.ToSpokenDesignator()}.",
+            FallbackPhraseology = Say(context).UnroutedTaxiClearance(callsign, departureRunway),
         };
     }
 
@@ -1218,7 +1208,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 $"Pilot reported holding short of {reportedRunway} but the assigned departure runway is {assignedRunway}.",
-                $"{callsign.ToSpoken()}, negative, your departure runway is {assignedRunway.ToSpokenDesignator()}, confirm position.");
+                Say(context).WrongHoldingPoint(callsign, assignedRunway));
         }
 
         Frequency? towerFrequency = ResolveFrequency(context, ControllerPosition.Tower);
@@ -1232,7 +1222,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 tower,
                 FlightPhase.HoldingShort,
                 "Reported holding short of the departure runway.",
-                DeterministicPhraseology.Handoff(callsign, ControllerPosition.Tower, tower));
+                Say(context).Handoff(callsign, ControllerPosition.Tower, tower));
         }
 
         return new AtcDecision
@@ -1245,7 +1235,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 ["acknowledgement"] = "holding short acknowledged",
             },
             ProhibitedFacts = ["takeoff clearance", "line up clearance"],
-            FallbackPhraseology = $"{callsign.ToSpoken()}, roger, hold short.",
+            FallbackPhraseology = Say(context).RogerHoldShort(callsign),
         };
     }
 
@@ -1264,28 +1254,28 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "The aircraft is already airborne.",
-                DeterministicPhraseology.Unable(callsign, "you are already airborne"));
+                Say(context).Unable(callsign, UnableReason.AlreadyAirborne));
         }
 
         if (session.CurrentController != ControllerPosition.Tower)
         {
             return AtcDecision.Reject(
                 $"Takeoff clearance requires Tower; the aircraft is with {session.CurrentController}.",
-                DeterministicPhraseology.Unable(callsign, "contact Tower for departure"));
+                Say(context).Unable(callsign, UnableReason.ContactTowerForDeparture));
         }
 
         if (session.Phase is not (FlightPhase.HoldingShort or FlightPhase.LineUp or FlightPhase.TaxiOut))
         {
             return AtcDecision.Reject(
                 $"Takeoff clearance is not available in the {session.Phase} phase.",
-                DeterministicPhraseology.Unable(callsign, "you are not at the holding point"));
+                Say(context).Unable(callsign, UnableReason.NotAtHoldingPoint));
         }
 
         if (session.AssignedDepartureRunway is not RunwayIdentifier runway)
         {
             return AtcDecision.Reject(
                 "No departure runway has been assigned.",
-                DeterministicPhraseology.Unable(callsign, "no departure runway is assigned"));
+                Say(context).Unable(callsign, UnableReason.NoDepartureRunwayAssigned));
         }
 
         // The mock runway-occupancy model: any traffic reported on this runway blocks it.
@@ -1293,7 +1283,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 $"Runway {runway} is occupied.",
-                $"{callsign.ToSpoken()}, hold short {runway.ToSpokenDesignator()}, traffic on the runway.");
+                Say(context).HoldShortTrafficOnRunway(callsign, runway));
         }
 
         var clearance = new Clearance
@@ -1313,7 +1303,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             {
                 Type = ReadbackItemType.Runway,
                 ExpectedValue = runway.ToComparisonValue(),
-                SpokenValue = runway.ToSpoken(),
+                SpokenValue = Say(context).SpeakRunway(runway),
                 IsCritical = true,
             },
         };
@@ -1339,7 +1329,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 "landing clearance",
                 "wind information unless supplied in approved facts",
             ],
-            FallbackPhraseology = DeterministicPhraseology.TakeoffClearance(
+            FallbackPhraseology = Say(context).TakeoffClearance(
                 callsign,
                 runway,
                 context.Weather?.WindDirection,
@@ -1365,7 +1355,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 ["acknowledgement"] = "roger",
             },
             ProhibitedFacts = ["any new clearance"],
-            FallbackPhraseology = DeterministicPhraseology.Acknowledgement(callsign),
+            FallbackPhraseology = Say(context).Acknowledgement(callsign),
         };
     }
 
@@ -1403,7 +1393,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
 
         var facts = new Dictionary<string, string>(StringComparer.Ordinal)
         {
-            ["controller"] = DeterministicPhraseology.SpokenControllerName(controller),
+            ["controller"] = Say(context).ControllerName(controller),
             ["radarContact"] = "true",
         };
 
@@ -1422,7 +1412,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 {
                     Type = ReadbackItemType.CruiseAltitude,
                     ExpectedValue = climbTo!.Value.ToComparisonValue(),
-                    SpokenValue = $"climb {climbTo.Value.ToSpoken()}",
+                    SpokenValue = Say(context).ReadbackItemAltitudeChange(climbTo.Value, isClimb: true),
                     IsCritical = true,
                 },
             ],
@@ -1439,7 +1429,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             RequiredReadback = readback,
             ApprovedFacts = facts,
             ProhibitedFacts = ["any altitude other than the approved climb altitude", "traffic information"],
-            FallbackPhraseology = DeterministicPhraseology.CheckInAcknowledgement(
+            FallbackPhraseology = Say(context).CheckInAcknowledgement(
                 callsign, controller, climbTo, radarContact: true),
         };
     }
@@ -1458,7 +1448,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "Climb requests are handled by a radar controller.",
-                DeterministicPhraseology.Unable(callsign, "not with this controller"));
+                Say(context).Unable(callsign, UnableReason.NotWithThisController));
         }
 
         // The requested level, or the filed cruise level when the pilot did not name one.
@@ -1468,7 +1458,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "No climb level was specified and no cruise level is filed.",
-                $"{callsign.ToSpoken()}, say requested level.");
+                Say(context).SayRequestedLevel(callsign));
         }
 
         // Never approve a climb above the filed cruise level: the engine has no traffic picture
@@ -1477,7 +1467,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 $"Requested level {target} is above the filed cruise level {filedCruise}.",
-                DeterministicPhraseology.Unable(callsign, $"maintain {filedCruise.ToSpoken()}"));
+                Say(context).UnableMaintain(callsign, filedCruise));
         }
 
         var clearance = new Clearance
@@ -1495,13 +1485,13 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             Accepted = true,
             ResponseType = AtcResponseType.ClimbInstruction,
             IssuedClearance = clearance,
-            RequiredReadback = BuildAltitudeReadback(clearance, target, context.CurrentTime, isClimb: true),
+            RequiredReadback = BuildAltitudeReadback(context, clearance, target, isClimb: true),
             ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
             {
                 ["climbAltitude"] = target.ToComparisonValue(),
             },
             ProhibitedFacts = ["any altitude other than the approved climb altitude"],
-            FallbackPhraseology = DeterministicPhraseology.ClimbInstruction(callsign, target),
+            FallbackPhraseology = Say(context).ClimbInstruction(callsign, target),
         };
     }
 
@@ -1519,7 +1509,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "Descent requests are handled by a radar controller.",
-                DeterministicPhraseology.Unable(callsign, "not with this controller"));
+                Say(context).Unable(callsign, UnableReason.NotWithThisController));
         }
 
         // Default to a plausible initial descent level when the pilot simply requests descent.
@@ -1541,13 +1531,13 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             ResponseType = AtcResponseType.DescentInstruction,
             NewPhase = FlightPhase.Descent,
             IssuedClearance = clearance,
-            RequiredReadback = BuildAltitudeReadback(clearance, target, context.CurrentTime, isClimb: false),
+            RequiredReadback = BuildAltitudeReadback(context, clearance, target, isClimb: false),
             ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
             {
                 ["descentAltitude"] = target.ToComparisonValue(),
             },
             ProhibitedFacts = ["any altitude other than the approved descent altitude", "approach clearance"],
-            FallbackPhraseology = DeterministicPhraseology.DescentInstruction(callsign, target),
+            FallbackPhraseology = Say(context).DescentInstruction(callsign, target),
         };
     }
 
@@ -1564,7 +1554,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "No waypoint was identified in the direct-to request.",
-                $"{callsign.ToSpoken()}, say again the requested waypoint.");
+                Say(context).SayAgainWaypoint(callsign));
         }
 
         // The waypoint must exist on the filed route. Clearing an aircraft direct to a fix the
@@ -1576,7 +1566,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 $"Waypoint {waypoint} is not on the filed route.",
-                DeterministicPhraseology.Unable(callsign, "that waypoint is not on your route"));
+                Say(context).Unable(callsign, UnableReason.WaypointNotOnRoute));
         }
 
         var clearance = new Clearance
@@ -1598,7 +1588,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 ["directTo"] = waypoint,
             },
             ProhibitedFacts = ["any waypoint other than the approved one", "altitude change"],
-            FallbackPhraseology = DeterministicPhraseology.DirectToApproval(callsign, waypoint),
+            FallbackPhraseology = Say(context).DirectToApproval(callsign, waypoint),
         };
     }
 
@@ -1630,8 +1620,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 ["condition"] = "advise when able to resume own navigation",
             },
             ProhibitedFacts = ["specific weather information", "traffic information", "altitude change"],
-            FallbackPhraseology =
-                $"{callsign.ToSpoken()}, deviation approved, advise when able to resume own navigation.",
+            FallbackPhraseology = Say(context).DeviationApproved(callsign),
         };
     }
 
@@ -1648,14 +1637,14 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "Approach clearance requires Approach control.",
-                DeterministicPhraseology.Unable(callsign, "contact Approach"));
+                Say(context).Unable(callsign, UnableReason.ContactApproach));
         }
 
         if (context.DestinationAirport is not AirportData airport)
         {
             return AtcDecision.Reject(
                 "No airport data is available for the destination.",
-                DeterministicPhraseology.Unable(callsign, "destination aerodrome data is unavailable"));
+                Say(context).Unable(callsign, UnableReason.DestinationDataUnavailable));
         }
 
         RunwayIdentifier? runway = intent.Entities.Runway
@@ -1666,7 +1655,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "No arrival runway is available.",
-                DeterministicPhraseology.Unable(callsign, "no arrival runway is available"));
+                Say(context).Unable(callsign, UnableReason.NoArrivalRunwayAvailable));
         }
 
         RunwayData? runwayData = airport.FindRunway(arrivalRunway);
@@ -1674,7 +1663,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 $"Runway {arrivalRunway} does not exist at {airport.Icao}.",
-                DeterministicPhraseology.Unable(callsign, "that runway is not available"));
+                Say(context).Unable(callsign, UnableReason.RunwayNotAvailable));
         }
 
         // The approach name comes from published data, never from the pilot's request alone.
@@ -1710,14 +1699,14 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                     {
                         Type = ReadbackItemType.Runway,
                         ExpectedValue = arrivalRunway.ToComparisonValue(),
-                        SpokenValue = arrivalRunway.ToSpoken(),
+                        SpokenValue = Say(context).SpeakRunway(arrivalRunway),
                         IsCritical = true,
                     },
                     new ExpectedReadbackItem
                     {
                         Type = ReadbackItemType.ApproachName,
                         ExpectedValue = approachName,
-                        SpokenValue = $"{approachName} approach",
+                        SpokenValue = Say(context).ReadbackItemApproach(approachName),
                         IsCritical = false,
                     },
                 ],
@@ -1734,7 +1723,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 "cleared to land",
                 "any runway other than the approved runway",
             ],
-            FallbackPhraseology = DeterministicPhraseology.ApproachClearance(
+            FallbackPhraseology = Say(context).ApproachClearance(
                 callsign, approachName, arrivalRunway),
         };
     }
@@ -1752,7 +1741,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "The aircraft has not been cleared for an approach.",
-                DeterministicPhraseology.Unable(callsign, "you are not cleared for the approach"));
+                Say(context).Unable(callsign, UnableReason.NotClearedForApproach));
         }
 
         // Reporting established on a runway other than the cleared one means the aircraft is
@@ -1763,7 +1752,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 $"Pilot reported established on runway {reported} but is cleared for runway {cleared}.",
-                $"{callsign.ToSpoken()}, negative, you are cleared for the approach {cleared.ToSpoken()}, confirm.");
+                Say(context).WrongApproachRunway(callsign, cleared));
         }
 
         Frequency? towerFrequency = ResolveFrequency(context, ControllerPosition.Tower);
@@ -1776,7 +1765,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 tower,
                 FlightPhase.Final,
                 "Established on the approach.",
-                DeterministicPhraseology.Handoff(callsign, ControllerPosition.Tower, tower));
+                Say(context).Handoff(callsign, ControllerPosition.Tower, tower));
         }
 
         return HandleLandingClearance(context, callsign);
@@ -1793,7 +1782,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "Landing clearance requires Tower.",
-                DeterministicPhraseology.Unable(callsign, "contact Tower"));
+                Say(context).Unable(callsign, UnableReason.ContactTower));
         }
 
         RunwayIdentifier? runway = session.ArrivalClearance?.Runway ?? session.AssignedArrivalRunway;
@@ -1802,14 +1791,14 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "No arrival runway has been assigned.",
-                DeterministicPhraseology.Unable(callsign, "no landing runway is assigned"));
+                Say(context).Unable(callsign, UnableReason.NoLandingRunwayAssigned));
         }
 
         if (IsRunwayOccupied(context, landingRunway))
         {
             return AtcDecision.Reject(
                 $"Runway {landingRunway} is occupied.",
-                $"{callsign.ToSpoken()}, continue approach, traffic on the runway.");
+                Say(context).ContinueApproachTrafficOnRunway(callsign));
         }
 
         var clearance = new Clearance
@@ -1838,7 +1827,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                     {
                         Type = ReadbackItemType.Runway,
                         ExpectedValue = landingRunway.ToComparisonValue(),
-                        SpokenValue = landingRunway.ToSpoken(),
+                        SpokenValue = Say(context).SpeakRunway(landingRunway),
                         IsCritical = true,
                     },
                 ],
@@ -1847,7 +1836,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             },
             ApprovedFacts = BuildLandingFacts(context, landingRunway),
             ProhibitedFacts = ["takeoff clearance", "any runway other than the assigned runway"],
-            FallbackPhraseology = DeterministicPhraseology.LandingClearance(
+            FallbackPhraseology = Say(context).LandingClearance(
                 callsign,
                 landingRunway,
                 context.Weather?.WindDirection,
@@ -1889,7 +1878,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 ["climbAltitude"] = climbTo.ToComparisonValue(),
             },
             ProhibitedFacts = ["landing clearance", "traffic information"],
-            FallbackPhraseology = DeterministicPhraseology.GoAroundInstruction(callsign, climbTo, heading: null),
+            FallbackPhraseology = Say(context).GoAroundInstruction(callsign, climbTo, heading: null),
         };
     }
 
@@ -1912,7 +1901,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 ground,
                 FlightPhase.Landed,
                 "Runway vacated after landing.",
-                DeterministicPhraseology.Handoff(callsign, ControllerPosition.Ground, ground));
+                Say(context).Handoff(callsign, ControllerPosition.Ground, ground));
         }
 
         return new AtcDecision
@@ -1925,7 +1914,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 ["acknowledgement"] = "roger",
             },
             ProhibitedFacts = ["taxi clearance"],
-            FallbackPhraseology = DeterministicPhraseology.Acknowledgement(callsign),
+            FallbackPhraseology = Say(context).Acknowledgement(callsign),
         };
     }
 
@@ -1942,14 +1931,14 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 $"Taxi to stand is not available in the {session.Phase} phase.",
-                DeterministicPhraseology.Unable(callsign, "you have not landed"));
+                Say(context).Unable(callsign, UnableReason.NotLanded));
         }
 
         if (context.DestinationAirport is not AirportData airport)
         {
             return AtcDecision.Reject(
                 "No airport data is available for the destination.",
-                DeterministicPhraseology.Unable(callsign, "aerodrome data is unavailable"));
+                Say(context).Unable(callsign, UnableReason.AerodromeDataUnavailable));
         }
 
         RunwayIdentifier? landingRunway = session.AssignedArrivalRunway
@@ -1967,14 +1956,14 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 "No stand or landing runway is known.",
-                DeterministicPhraseology.Unable(callsign, "no stand is available"));
+                Say(context).Unable(callsign, UnableReason.NoStandAvailable));
         }
 
         if (!airport.SupportsTaxiRouting)
         {
             return AtcDecision.Reject(
                 "The aerodrome has no taxi graph.",
-                $"{callsign.ToSpoken()}, taxi to stand {PhoneticAlphabet.SpellOut(standName)}, no published route available.");
+                Say(context).TaxiToStandNoRoute(callsign, standName));
         }
 
         TaxiRoute route = TaxiPathfinder.FindRouteFromPositionToStand(
@@ -1991,7 +1980,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         {
             return AtcDecision.Reject(
                 $"No taxi route exists from runway {runway} to stand {standName}.",
-                $"{callsign.ToSpoken()}, taxi to stand {PhoneticAlphabet.SpellOut(standName)}, no published route available.");
+                Say(context).TaxiToStandNoRoute(callsign, standName));
         }
 
         var clearance = new Clearance
@@ -2025,7 +2014,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                     {
                         Type = ReadbackItemType.TaxiRoute,
                         ExpectedValue = string.Join(",", route.TaxiwayNames),
-                        SpokenValue = $"via {DeterministicPhraseology.SpellTaxiways(route.TaxiwayNames)}",
+                        SpokenValue = Say(context).ReadbackItemTaxiRoute(route.TaxiwayNames),
                         IsCritical = true,
                     },
                 ],
@@ -2034,7 +2023,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             },
             ApprovedFacts = clearance.ToRequiredFacts(),
             ProhibitedFacts = ["any taxiway not listed in the approved taxi route", "runway crossing not listed"],
-            FallbackPhraseology = DeterministicPhraseology.TaxiToStandClearance(callsign, clearance),
+            FallbackPhraseology = Say(context).TaxiToStandClearance(callsign, clearance),
         };
     }
 
@@ -2069,11 +2058,9 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             return null;
         }
 
-        string callsignText = session.Callsign?.ToSpoken() ?? "Station calling";
-
         return AtcDecision.Reject(
             $"{intent.Type} is handled by {needed}, but the aircraft is with {current}.",
-            $"{callsignText}, contact {DeterministicPhraseology.SpokenControllerName(needed)}.");
+            Say(context).ContactController(session.Callsign, needed));
     }
 
     private static ControllerPosition? RequiredControllerFor(PilotIntentType intent) => intent switch
@@ -2134,8 +2121,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
 
     private static string BuildReadbackReminder(AtcEvaluationContext context)
     {
-        string callsign = context.Session.Callsign?.ToSpoken() ?? "Station calling";
-        return $"{callsign}, standby, read back your clearance.";
+        return Say(context).ReadbackReminder(context.Session.Callsign);
     }
 
     /// <summary>
@@ -2195,8 +2181,6 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             return null;
         }
 
-        string callsign = session.Callsign?.ToSpoken() ?? "Aircraft";
-
         return new AtcDecision
         {
             Accepted = false,
@@ -2212,8 +2196,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                     RaisedAt = context.CurrentTime,
                 },
             ],
-            FallbackPhraseology =
-                $"{callsign}, you were instructed to hold short {holdShort.ToSpokenDesignator()}, vacate the runway immediately.",
+            FallbackPhraseology = Say(context).HoldShortViolation(session.Callsign, holdShort),
             AllowLanguageModelPhraseology = false,
         };
     }
@@ -2324,7 +2307,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         Callsign? callsign = context.Session.Callsign;
         if (callsign is null)
         {
-            return "Vacate the runway when able.";
+            return Say(context).VacateWhenAbleNoCallsign;
         }
 
         RunwayIdentifier? runway = context.Session.AssignedArrivalRunway;
@@ -2345,7 +2328,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 ?.TaxiwayName;
         }
 
-        return DeterministicPhraseology.VacateInstruction(callsign, exit);
+        return Say(context).VacateInstruction(callsign, exit);
     }
 
     private static AtcDecision BuildHandoff(
@@ -2374,7 +2357,7 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             Handoff = handoff,
             ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                ["nextController"] = DeterministicPhraseology.SpokenControllerName(toController),
+                ["nextController"] = Say(context).ControllerName(toController),
                 ["frequency"] = frequency.ToComparisonValue(),
             },
             ProhibitedFacts = ["any clearance", "any altitude change"],
@@ -2383,9 +2366,9 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
     }
 
     private static PendingReadback BuildAltitudeReadback(
+        AtcEvaluationContext context,
         Clearance clearance,
         Altitude altitude,
-        DateTimeOffset now,
         bool isClimb) => new()
         {
             ClearanceId = clearance.ClearanceId,
@@ -2396,11 +2379,11 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 {
                     Type = ReadbackItemType.CruiseAltitude,
                     ExpectedValue = altitude.ToComparisonValue(),
-                    SpokenValue = $"{(isClimb ? "climb" : "descend")} {altitude.ToSpoken()}",
+                    SpokenValue = Say(context).ReadbackItemAltitudeChange(altitude, isClimb),
                     IsCritical = true,
                 },
             ],
-            IssuedAt = now,
+            IssuedAt = context.CurrentTime,
             IsMandatory = true,
         };
 
@@ -2519,4 +2502,8 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
 
     private static Frequency? ResolveFrequency(AtcEvaluationContext context, ControllerPosition position) =>
         context.RelevantAirport?.Frequencies.ResolveWithFallback(position);
+
+    /// <summary>The phraseology profile for the session's radio language.</summary>
+    private static IAtcPhraseology Say(AtcEvaluationContext context) =>
+        AtcPhraseologies.For(context.Session.Language);
 }
