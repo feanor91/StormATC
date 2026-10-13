@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Threading;
 using StormATC.Application.Localization;
 
 namespace StormATC.Desktop.Localization;
@@ -63,7 +64,24 @@ internal static class XamlTextTranslator
         if (sender is DependencyObject element && !Translated.TryGetValue(element, out _))
         {
             Translated.AddOrUpdate(element, Marker);
-            Translate(element);
+
+            // Never translate from inside the layout pass that raised the event: reading a
+            // TextBlock's Inlines forces a nested layout, which raises the event again and
+            // overflows the stack. Run after layout and render instead.
+            element.Dispatcher.BeginInvoke(
+                DispatcherPriority.Loaded,
+                () =>
+                {
+                    // Translation is cosmetic: whatever goes wrong, the English text must stay
+                    // on screen rather than raise an error that repeats on every layout.
+                    try
+                    {
+                        Translate(element);
+                    }
+                    catch (InvalidOperationException)
+                    {
+                    }
+                });
         }
     }
 
@@ -179,7 +197,9 @@ internal static class XamlTextTranslator
 
     private static void TranslateInlines(InlineCollection inlines)
     {
-        foreach (Inline inline in inlines)
+        // Translating a Run rewrites the text container, which invalidates a live enumerator of
+        // the collection, so walk a copy.
+        foreach (Inline inline in inlines.ToList())
         {
             switch (inline)
             {
