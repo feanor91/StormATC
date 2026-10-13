@@ -39,12 +39,24 @@ internal static class XamlTextTranslator
         }
 
         _registered = true;
+
+        // Loaded alone is not enough: WPF only broadcasts it into subtrees that have an instance
+        // handler, so a class handler sees the window root but almost none of the elements below
+        // it. SizeChanged is raised for every element that is laid out, so it reaches them all,
+        // and only when they are first shown.
         EventManager.RegisterClassHandler(
             typeof(FrameworkElement),
             FrameworkElement.LoadedEvent,
             new RoutedEventHandler(OnLoaded),
             handledEventsToo: true);
+        EventManager.RegisterClassHandler(
+            typeof(FrameworkElement),
+            FrameworkElement.SizeChangedEvent,
+            new SizeChangedEventHandler(OnSizeChanged),
+            handledEventsToo: true);
     }
+
+    private static void OnSizeChanged(object sender, SizeChangedEventArgs e) => OnLoaded(sender, e);
 
     private static void OnLoaded(object sender, RoutedEventArgs e)
     {

@@ -414,6 +414,8 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
             "en-GB",
             "en-AU",
             "en-IN",
+            "fr",
+            "fr-CA",
             "multi",
         ];
         InputDevices = [SystemDefaultDevice];
