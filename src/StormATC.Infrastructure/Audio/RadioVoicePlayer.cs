@@ -49,7 +49,15 @@ internal sealed class RadioVoicePlayer : IAsyncDisposable
         ArgumentNullException.ThrowIfNull(wav);
         ArgumentNullException.ThrowIfNull(voice);
 
+        var waited = System.Diagnostics.Stopwatch.StartNew();
         await _playbackLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        if (waited.Elapsed > TimeSpan.FromSeconds(1))
+        {
+            _logger.LogInformation(
+                "Controller audio waited {Seconds:F1} s for the previous playback to finish.",
+                waited.Elapsed.TotalSeconds);
+        }
+
         WaveFileReader? reader = null;
         try
         {

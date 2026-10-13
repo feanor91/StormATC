@@ -36,6 +36,7 @@ namespace StormATC.Desktop;
 public partial class App : System.Windows.Application
 {
     private IHost? _host;
+    private StormATC.Desktop.Services.UiResponsivenessWatchdog? _watchdog;
 
     /// <summary>The service provider, for the few places that need it after startup.</summary>
     public IServiceProvider Services =>
@@ -65,6 +66,10 @@ public partial class App : System.Windows.Application
             _host.Services.GetRequiredService<ILogger<App>>().LogInformation(
                 "StormATC {Version} starting. Flight simulation only.",
                 MainWindowViewModel.VersionText);
+
+            _watchdog = new StormATC.Desktop.Services.UiResponsivenessWatchdog(
+                Dispatcher,
+                _host.Services.GetRequiredService<ILogger<App>>());
 
             // The scope statement and the cloud-services cost notice are shown before anything
             // else the first time StormATC runs. Declining is a valid outcome: the application
@@ -100,6 +105,8 @@ public partial class App : System.Windows.Application
     /// <inheritdoc />
     protected override async void OnExit(ExitEventArgs e)
     {
+        _watchdog?.Dispose();
+
         if (_host is not null)
         {
             try
