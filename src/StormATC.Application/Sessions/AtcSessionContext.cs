@@ -33,8 +33,14 @@ public sealed class AtcSessionContext(
     ITrafficProvider trafficProvider,
     IWeatherProvider weatherProvider,
     IClock clock,
-    ILogger<AtcSessionContext> logger)
+    ILogger<AtcSessionContext> logger,
+    IVfrProfileProvider? vfrProfileProvider = null)
 {
+    private readonly IVfrProfileProvider? _vfrProfileProvider = vfrProfileProvider;
+
+    private readonly Dictionary<string, VfrAerodromeProfile?> _vfrProfileCache =
+        new(StringComparer.OrdinalIgnoreCase);
+
     private readonly IAirportDataProvider _airportDataProvider =
         airportDataProvider ?? throw new ArgumentNullException(nameof(airportDataProvider));
 
@@ -327,6 +333,12 @@ public sealed class AtcSessionContext(
             Transcript = transcript,
             DepartureAirport = departure,
             DestinationAirport = destination,
+            VfrProfile = await GetVfrProfileAsync(
+                    session.FlightPlan is FlightPlan filed
+                        ? (IsArrivalPhase(session.Phase) ? filed.DestinationIcao : filed.DepartureIcao)
+                        : null,
+                    cancellationToken)
+                .ConfigureAwait(false),
             Traffic = traffic,
             Weather = weather,
             CurrentTime = now,
@@ -334,6 +346,41 @@ public sealed class AtcSessionContext(
             DefaultPushbackDirection = DefaultPushbackDirection,
             PreassignedSquawk = PreassignedSquawk,
         };
+    }
+
+    private static bool IsArrivalPhase(FlightPhase phase) => phase is FlightPhase.Descent
+        or FlightPhase.Arrival or FlightPhase.Approach or FlightPhase.Final or FlightPhase.Landed
+        or FlightPhase.TaxiIn or FlightPhase.Parked or FlightPhase.GoAround or FlightPhase.Circuit;
+
+    /// <summary>Loads an aerodrome's VFR profile, caching the result (including "none").</summary>
+    private async Task<VfrAerodromeProfile?> GetVfrProfileAsync(string? icao, CancellationToken cancellationToken)
+    {
+        if (_vfrProfileProvider is null || string.IsNullOrWhiteSpace(icao))
+        {
+            return null;
+        }
+
+        if (_vfrProfileCache.TryGetValue(icao, out VfrAerodromeProfile? cached))
+        {
+            return cached;
+        }
+
+        VfrAerodromeProfile? profile = null;
+        try
+        {
+            profile = await _vfrProfileProvider.GetProfileAsync(icao, cancellationToken).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "The VFR profile of {Icao} could not be loaded.", icao);
+        }
+
+        _vfrProfileCache[icao] = profile;
+        return profile;
     }
 
     /// <summary>Loads an aerodrome, caching the result for the life of the session.</summary>

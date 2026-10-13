@@ -54,3 +54,6 @@ stormatc-diagnostics-*.txt
 publish/
 *.zip
 *.sha256
+
+## SIA charts kept locally (copyright SIA, not redistributed)
+Cartes VAC/

@@ -351,6 +351,21 @@ public sealed class PilotTransmissionCoordinator(
             session = session.WithPhase(phase);
         }
 
+        if (decision.NewFlightRules is FlightRules rules)
+        {
+            session = session.WithFlightRules(rules);
+        }
+
+        if (decision.NewCircuitLeg is CircuitLeg leg)
+        {
+            session = session.WithCircuitLeg(leg);
+        }
+
+        if (decision.NewTouchAndGoRequested is bool touchAndGo)
+        {
+            session = session.WithTouchAndGoRequested(touchAndGo);
+        }
+
         foreach (AtcWarning warning in decision.Warnings)
         {
             session = session.WithWarning(warning);

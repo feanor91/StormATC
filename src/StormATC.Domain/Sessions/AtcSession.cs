@@ -103,6 +103,18 @@ public sealed record AtcSession
     /// </summary>
     public PhraseologyLanguage Language { get; init; } = PhraseologyLanguage.English;
 
+    /// <summary>
+    /// The rules the flight is operated under. IFR until the pilot declares VFR; a VFR flight
+    /// has no IFR clearance and stays with Tower while it flies the circuit.
+    /// </summary>
+    public FlightRules FlightRules { get; init; } = FlightRules.Ifr;
+
+    /// <summary>The leg of the aerodrome circuit the aircraft last reported.</summary>
+    public CircuitLeg CircuitLeg { get; init; } = CircuitLeg.None;
+
+    /// <summary>True when the pilot asked for a touch and go rather than a full-stop landing.</summary>
+    public bool TouchAndGoRequested { get; init; }
+
     /// <summary>The callsign in use, taken from the flight plan.</summary>
     public Callsign? Callsign => FlightPlan?.Callsign;
 
@@ -138,6 +150,12 @@ public sealed record AtcSession
 
     /// <summary>Returns a session in a new flight phase.</summary>
     public AtcSession WithPhase(FlightPhase phase) => this with { Phase = phase };
+
+    public AtcSession WithFlightRules(FlightRules rules) => this with { FlightRules = rules };
+
+    public AtcSession WithCircuitLeg(CircuitLeg leg) => this with { CircuitLeg = leg };
+
+    public AtcSession WithTouchAndGoRequested(bool requested) => this with { TouchAndGoRequested = requested };
 
     /// <summary>Returns a session with the flight plan attached.</summary>
     public AtcSession WithFlightPlan(FlightPlan plan) => this with { FlightPlan = plan };
