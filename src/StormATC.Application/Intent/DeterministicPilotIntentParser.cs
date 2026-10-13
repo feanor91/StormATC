@@ -23,7 +23,7 @@ namespace StormATC.Application.Intent;
 /// being slow.
 /// </para>
 /// </remarks>
-public sealed class DeterministicPilotIntentParser : IPilotIntentParser
+public sealed partial class DeterministicPilotIntentParser : IPilotIntentParser
 {
     /// <summary>
     /// Intent patterns in priority order. The first matching rule wins, so more specific
@@ -133,9 +133,11 @@ public sealed class DeterministicPilotIntentParser : IPilotIntentParser
         }
 
         Callsign? callsign = ExtractCallsign(normalizedTranscript, session);
-        IntentEntities entities = ExtractEntities(normalizedTranscript);
+        IntentEntities entities = VfrIntentRules.Enrich(
+            ExtractEntities(normalizedTranscript),
+            normalizedTranscript);
 
-        (PilotIntentType type, double confidence) = MatchRule(normalizedTranscript);
+        (PilotIntentType type, double confidence) = MatchRule(normalizedTranscript, session);
 
         // Context refinement: a bare readback of numbers is ambiguous on its own, but if the
         // session is waiting for a specific readback, that is almost certainly what it is.
@@ -180,11 +182,18 @@ public sealed class DeterministicPilotIntentParser : IPilotIntentParser
     }
 
     /// <summary>Finds the first matching rule.</summary>
-    private static (PilotIntentType Type, double Confidence) MatchRule(string transcript)
+    private static (PilotIntentType Type, double Confidence) MatchRule(string transcript, AtcSession session)
     {
         if (IsBriefAcknowledgement(transcript))
         {
             return (PilotIntentType.PilotAcknowledgement, 0.95);
+        }
+
+        // VFR circuit and arrival calls are tested before the general rules: "passing e" would
+        // otherwise be read as a check-in, and "downwind" has no general rule at all.
+        if (VfrIntentRules.TryMatch(transcript, session) is (PilotIntentType vfrType, double vfrConfidence))
+        {
+            return (vfrType, vfrConfidence);
         }
 
         foreach (IntentRule rule in Rules)
@@ -344,7 +353,9 @@ public sealed class DeterministicPilotIntentParser : IPilotIntentParser
             transcript.Contains("hold short", StringComparison.Ordinal)
             || transcript.Contains("holding short", StringComparison.Ordinal);
 
-        RunwayIdentifier? runway = RunwayIdentifier.Parse(transcript);
+        // "left hand" and "right hand" name the direction of the circuit, not a runway side: left
+        // in the text would otherwise turn "downwind left hand runway 08" into runway 08L.
+        RunwayIdentifier? runway = RunwayIdentifier.Parse(CircuitHand().Replace(transcript, " "));
 
         return new IntentEntities
         {
@@ -653,6 +664,9 @@ public sealed class DeterministicPilotIntentParser : IPilotIntentParser
 
         return items;
     }
+
+    [System.Text.RegularExpressions.GeneratedRegex(@"\b(left|right) ?hand\b")]
+    private static partial System.Text.RegularExpressions.Regex CircuitHand();
 
     /// <summary>One phrase-matching rule.</summary>
     private sealed record IntentRule(PilotIntentType Type, double Confidence, string[] Phrases);

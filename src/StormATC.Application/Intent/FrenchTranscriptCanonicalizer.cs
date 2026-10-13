@@ -96,6 +96,24 @@ public static class FrenchTranscriptCanonicalizer
 
         // --- Tower. ---------------------------------------------------------------------------
         ("(?:alignons nous|on s aligne|alignons|aligne|alignement|alignez vous) et (?:on )?(?:attendons|attend|attente|attendre|attendez)", "line up and wait"),
+        // --- VFR circuit and arrival (aerodrome circuit phraseology). ----------------------------
+        ("main gauche", "left hand"),
+        ("main droite", "right hand"),
+        ("(?:je |on |nous )?(?:rappelle|rappelons)", "reporting"),
+        ("(?:j |je |on |nous )?(?:entre|entrons)", "joining"),
+        ("fin de vent arriere", "end of downwind"),
+        ("vent arriere", "downwind"),
+        ("vent traversier", "crosswind"),
+        ("(?:dernier virage|courte finale|longue finale|en finale|finale)", "final leg"),
+        ("(?:en )?base", "base leg"),
+        ("atterrissage complet|arret complet", "full stop"),
+        ("(?:pour )?(?:un |le )?(?:toucher|pose decolle|pose decoller|touch and go)", "touch and go"),
+        ("sortie de circuit|quittant le circuit|quitte le circuit", "leaving circuit"),
+        ("vol local", "local flight"),
+        ("(?:consignes?|instructions?) d (?:integration|arrivee)", "joining instructions"),
+        ("(?:estime|estimee|estimes)", "estimate"),
+        ("(?:a la )?verticale(?: de| du| d)?", "overhead"),
+
         ("tour de piste", "circuit"),
         ("(?:autorises|autorisees|autorisee|autorise) (?:au |a l |pour le |pour l |a )?decollage", "cleared for takeoff"),
         ("(?:autorises|autorisees|autorisee|autorise) (?:a l |pour l |a )?(?:atterrissage|atterrir|poser|se poser)", "cleared to land"),
@@ -118,6 +136,7 @@ public static class FrenchTranscriptCanonicalizer
         ("a droite|droite", "right"),
         ("(?:on |nous |je )?(?:contactons|contacte|contacter|passons avec|passe avec|passons sur|passe sur)", "contact"),
         ("avec (?:l )?information|information", "information"),
+        ("(?:on |nous |je )?(?:passons|passe)", "passing"),
 
         // --- Acknowledgements. ----------------------------------------------------------------
         ("bien recu|c est note|recu|note|compris", "roger"),
