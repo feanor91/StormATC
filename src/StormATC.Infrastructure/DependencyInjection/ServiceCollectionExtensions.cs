@@ -284,9 +284,18 @@ public static class ServiceCollectionExtensions
             // Not a stub that fakes intelligent answers: it reports NotConfigured, which drives
             // the pipeline down the same deterministic path a real outage produces.
             services.AddSingleton<ILanguageModelClient, MockLanguageModelClient>();
+            services.AddSingleton<IModelCatalog, OfflineModelCatalog>();
         }
         else
         {
+            services.AddHttpClient<OpenRouter.ModelCatalogClient>()
+                .ConfigurePrimaryHttpMessageHandler(static () => new HttpClientHandler
+                {
+                    AllowAutoRedirect = false,
+                });
+            services.AddSingleton<IModelCatalog>(sp =>
+                sp.GetRequiredService<OpenRouter.ModelCatalogClient>());
+
             services.AddHttpClient<OpenRouter.OpenRouterClient>()
                 .ConfigurePrimaryHttpMessageHandler(static () => new HttpClientHandler
                 {

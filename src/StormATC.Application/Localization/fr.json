@@ -820,5 +820,15 @@
   "• Transcripts and session history are stored on this computer only. You can clear them at any time from Settings.": "• Les transcriptions et l'historique des sessions sont stockés uniquement sur ce PC. Vous pouvez les effacer à tout moment depuis les Paramètres.",
   "• With Deepgram enabled, audio captured while you hold push-to-talk is streamed to Deepgram for transcription, and controller text is sent there to be spoken.": "• Avec Deepgram activé, l'audio capté pendant l'alternat est envoyé en continu à Deepgram pour la transcription, et le texte du contrôleur y est envoyé pour être prononcé.",
   "• With a model provider enabled, transcripts and approved controller facts are sent only to the provider you select so it can interpret or phrase the reply.": "• Avec un fournisseur de modèle activé, les transcriptions et les faits approuvés du contrôleur sont envoyés uniquement au fournisseur choisi pour interpréter ou formuler la réponse.",
-  "• With no keys configured, nothing does. StormATC runs entirely offline with deterministic phraseology and typed transmissions.": "• Sans clé configurée, rien ne sort. StormATC fonctionne entièrement hors ligne avec la phraséologie déterministe et les messages tapés."
+  "• With no keys configured, nothing does. StormATC runs entirely offline with deterministic phraseology and typed transmissions.": "• Sans clé configurée, rien ne sort. StormATC fonctionne entièrement hors ligne avec la phraséologie déterministe et les messages tapés.",
+  "Free": "Gratuit",
+  "Refresh model lists": "Actualiser les listes de modèles",
+  "Offline mode is on: model lists are not fetched.": "Le mode hors ligne est activé : les listes de modèles ne sont pas récupérées.",
+  "Save a {0} API key to list its models.": "Enregistrez une clé API {0} pour lister ses modèles.",
+  "{0} refused the request (HTTP {1}).": "{0} a refusé la demande (HTTP {1}).",
+  "{0} returned no models.": "{0} n'a renvoyé aucun modèle.",
+  "{0} did not respond in time.": "{0} n'a pas répondu à temps.",
+  "Loading model lists…": "Chargement des listes de modèles…",
+  "{0} OpenRouter models listed, {1} free. Other providers appear once an API key is saved.": "{0} modèles OpenRouter listés, dont {1} gratuits. Les autres fournisseurs apparaissent une fois une clé API enregistrée.",
+  "The model lists could not be loaded.": "Les listes de modèles n'ont pas pu être chargées."
 }

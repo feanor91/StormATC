@@ -11,6 +11,24 @@
   <UserControl.Resources>
     <conv:BooleanToVisibilityConverter x:Key="BoolToVisibility" />
     <conv:StringToVisibilityConverter x:Key="StringToVisibility" />
+
+    <!-- A model in a picker: its identifier, with a badge for models offered at no cost. -->
+    <DataTemplate x:Key="ModelChoiceTemplate">
+      <DockPanel LastChildFill="True">
+        <Border DockPanel.Dock="Right"
+                Margin="12,0,0,0"
+                Padding="6,1"
+                CornerRadius="4"
+                BorderThickness="1"
+                BorderBrush="{StaticResource StatusOkBrush}"
+                Visibility="{Binding IsFree, Converter={StaticResource BoolToVisibility}}">
+          <TextBlock Text="Free"
+                     FontSize="10"
+                     Foreground="{StaticResource StatusOkBrush}" />
+        </Border>
+        <TextBlock Text="{Binding Id}" ToolTip="{Binding Name}" />
+      </DockPanel>
+    </DataTemplate>
   </UserControl.Resources>
 
   <Grid Background="{StaticResource SurfaceBackgroundBrush}">
@@ -336,24 +354,56 @@
                                                       Converter={StaticResource StringToVisibility}}" />
                     </WrapPanel>
 
+                    <WrapPanel Margin="0,0,0,12">
+                      <Button Content="Refresh model lists"
+                              Command="{Binding RefreshModelListsCommand}"
+                              Style="{StaticResource BaseButtonStyle}" />
+                      <TextBlock Text="{Binding ModelListStatus}"
+                                 Style="{StaticResource SecondaryTextStyle}"
+                                 Margin="10,7,0,0"
+                                 TextWrapping="Wrap"
+                                 Visibility="{Binding ModelListStatus,
+                                                      Converter={StaticResource StringToVisibility}}" />
+                    </WrapPanel>
+
                     <TextBlock Text="OPENROUTER MODEL" Style="{StaticResource LabelTextStyle}" />
-                    <TextBox Text="{Binding OpenRouterModel, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="0,0,0,12" />
+                    <ComboBox IsEditable="True"
+                              ItemsSource="{Binding OpenRouterModels}"
+                              ItemTemplate="{StaticResource ModelChoiceTemplate}"
+                              TextSearch.TextPath="Id"
+                              Text="{Binding OpenRouterModel, UpdateSourceTrigger=PropertyChanged}"
+                              Margin="0,0,0,12" />
 
                     <TextBlock Text="OPENAI MODEL" Style="{StaticResource LabelTextStyle}" />
-                    <TextBox Text="{Binding OpenAIModel, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="0,0,0,12" />
+                    <ComboBox IsEditable="True"
+                              ItemsSource="{Binding OpenAIModels}"
+                              ItemTemplate="{StaticResource ModelChoiceTemplate}"
+                              TextSearch.TextPath="Id"
+                              Text="{Binding OpenAIModel, UpdateSourceTrigger=PropertyChanged}"
+                              Margin="0,0,0,12" />
 
                     <TextBlock Text="GROQ MODEL" Style="{StaticResource LabelTextStyle}" />
-                    <TextBox Text="{Binding GroqModel, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="0,0,0,12" />
+                    <ComboBox IsEditable="True"
+                              ItemsSource="{Binding GroqModels}"
+                              ItemTemplate="{StaticResource ModelChoiceTemplate}"
+                              TextSearch.TextPath="Id"
+                              Text="{Binding GroqModel, UpdateSourceTrigger=PropertyChanged}"
+                              Margin="0,0,0,12" />
 
                     <TextBlock Text="DEEPSEEK MODEL" Style="{StaticResource LabelTextStyle}" />
-                    <TextBox Text="{Binding DeepSeekModel, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="0,0,0,12" />
+                    <ComboBox IsEditable="True"
+                              ItemsSource="{Binding DeepSeekModels}"
+                              ItemTemplate="{StaticResource ModelChoiceTemplate}"
+                              TextSearch.TextPath="Id"
+                              Text="{Binding DeepSeekModel, UpdateSourceTrigger=PropertyChanged}"
+                              Margin="0,0,0,12" />
 
                     <TextBlock Text="ANTHROPIC MODEL" Style="{StaticResource LabelTextStyle}" />
-                    <TextBox Text="{Binding AnthropicModel, UpdateSourceTrigger=PropertyChanged}" />
+                    <ComboBox IsEditable="True"
+                              ItemsSource="{Binding AnthropicModels}"
+                              ItemTemplate="{StaticResource ModelChoiceTemplate}"
+                              TextSearch.TextPath="Id"
+                              Text="{Binding AnthropicModel, UpdateSourceTrigger=PropertyChanged}" />
                   </StackPanel>
 
                   <StackPanel Grid.Column="2">

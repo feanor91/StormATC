@@ -36,6 +36,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
 {
     private readonly ISecretStore _secretStore;
     private readonly ILanguageModelClient _languageModel;
+    private readonly IModelCatalog _modelCatalog;
     private readonly ISpeechRecognitionService _speechRecognition;
     private readonly ITextToSpeechService _textToSpeech;
     private readonly ISessionRepository _sessionRepository;
@@ -117,6 +118,12 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
 
     [ObservableProperty]
     private string _selectedLanguageModelProvider = LanguageModelProviders.OpenRouter;
+
+    [ObservableProperty]
+    private string _modelListStatus = string.Empty;
+
+    [ObservableProperty]
+    private bool _isLoadingModels;
 
     [ObservableProperty]
     private string _deepgramVoice = string.Empty;
@@ -266,6 +273,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     public SettingsViewModel(
         ISecretStore secretStore,
         ILanguageModelClient languageModel,
+        IModelCatalog modelCatalog,
         ISpeechRecognitionService speechRecognition,
         ITextToSpeechService textToSpeech,
         ISessionRepository sessionRepository,
@@ -295,6 +303,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     {
         _secretStore = secretStore ?? throw new ArgumentNullException(nameof(secretStore));
         _languageModel = languageModel ?? throw new ArgumentNullException(nameof(languageModel));
+        _modelCatalog = modelCatalog ?? throw new ArgumentNullException(nameof(modelCatalog));
         _speechRecognition = speechRecognition ?? throw new ArgumentNullException(nameof(speechRecognition));
         _textToSpeech = textToSpeech ?? throw new ArgumentNullException(nameof(textToSpeech));
         _sessionRepository = sessionRepository ?? throw new ArgumentNullException(nameof(sessionRepository));
@@ -545,6 +554,21 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     /// <summary>Language-model providers supported directly by StormATC.</summary>
     public ObservableCollection<string> LanguageModelProviderNames { get; }
 
+    /// <summary>OpenRouter models, free ones first.</summary>
+    public ObservableCollection<ModelChoice> OpenRouterModels { get; } = [];
+
+    /// <summary>OpenAI models, listed once an API key is saved.</summary>
+    public ObservableCollection<ModelChoice> OpenAIModels { get; } = [];
+
+    /// <summary>Groq models, listed once an API key is saved.</summary>
+    public ObservableCollection<ModelChoice> GroqModels { get; } = [];
+
+    /// <summary>DeepSeek models, listed once an API key is saved.</summary>
+    public ObservableCollection<ModelChoice> DeepSeekModels { get; } = [];
+
+    /// <summary>Anthropic models, listed once an API key is saved.</summary>
+    public ObservableCollection<ModelChoice> AnthropicModels { get; } = [];
+
     /// <summary>The selectable simulator connectors.</summary>
     public ObservableCollection<string> Connectors { get; }
 
@@ -633,6 +657,80 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         RefreshTrainingPhrases();
         RefreshJoysticks();
         await RefreshKeyStatusAsync().ConfigureAwait(true);
+
+        if (!_modelListsRequested)
+        {
+            _modelListsRequested = true;
+            await LoadModelListsAsync().ConfigureAwait(true);
+        }
+    }
+
+    private bool _modelListsRequested;
+
+    /// <summary>Fetches the model list of every provider that can be reached.</summary>
+    [RelayCommand]
+    private Task RefreshModelListsAsync() => LoadModelListsAsync();
+
+    private async Task LoadModelListsAsync()
+    {
+        if (IsLoadingModels)
+        {
+            return;
+        }
+
+        IsLoadingModels = true;
+        ModelListStatus = UiText.T("Loading model lists…");
+
+        try
+        {
+            (string Provider, ObservableCollection<ModelChoice> Target)[] providers =
+            [
+                (LanguageModelProviders.OpenRouter, OpenRouterModels),
+                (LanguageModelProviders.OpenAI, OpenAIModels),
+                (LanguageModelProviders.Groq, GroqModels),
+                (LanguageModelProviders.DeepSeek, DeepSeekModels),
+                (LanguageModelProviders.Anthropic, AnthropicModels),
+            ];
+
+            ModelCatalogResult[] results = await Task.WhenAll(providers.Select(entry =>
+                _modelCatalog.ListModelsAsync(entry.Provider, CancellationToken.None))).ConfigureAwait(true);
+
+            var notes = new List<string>();
+            for (int index = 0; index < providers.Length; index++)
+            {
+                ModelCatalogResult result = results[index];
+                if (!result.Success)
+                {
+                    if (providers[index].Provider == LanguageModelProviders.OpenRouter
+                        || providers[index].Provider == SelectedLanguageModelProvider)
+                    {
+                        notes.Add(result.Message);
+                    }
+
+                    continue;
+                }
+
+                providers[index].Target.Clear();
+                foreach (ModelChoice model in result.Models)
+                {
+                    providers[index].Target.Add(model);
+                }
+            }
+
+            int free = OpenRouterModels.Count(model => model.IsFree);
+            ModelListStatus = notes.Count > 0
+                ? string.Join(' ', notes.Distinct())
+                : UiText.T($"{OpenRouterModels.Count} OpenRouter models listed, {free} free. Other providers appear once an API key is saved.");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Loading the model lists failed.");
+            ModelListStatus = UiText.T("The model lists could not be loaded.");
+        }
+        finally
+        {
+            IsLoadingModels = false;
+        }
     }
 
     private void RefreshTrafficIntegrationStatus()
