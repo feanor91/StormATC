@@ -41,7 +41,7 @@ public sealed partial class StormAtcStateEngine
         // When the aerodrome publishes a reporting point, ask for a report there; the circuit
         // instruction follows. Without one, join the circuit straight away.
         VfrReportingPoint? point = context.VfrProfile?.FindPoint(intent.Entities.Waypoint)
-            ?? context.VfrProfile?.ReportingPoints.FirstOrDefault();
+            ?? (context.VfrProfile is { ReportingPoints.Count: > 0 } profile ? profile.ReportingPoints[0] : null);
 
         if (point is not null)
         {
