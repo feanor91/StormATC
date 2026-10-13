@@ -186,6 +186,12 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     private string _piperFrenchVoicePath = string.Empty;
 
     [ObservableProperty]
+    private string _piperVoicesFolder = string.Empty;
+
+    [ObservableProperty]
+    private bool _varyControllerVoices = true;
+
+    [ObservableProperty]
     private string _localVoiceTestResult = string.Empty;
 
     [ObservableProperty]
@@ -383,6 +389,8 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         _piperExecutablePath = localVoiceOptions.Value.PiperExecutablePath;
         _piperEnglishVoicePath = localVoiceOptions.Value.PiperEnglishVoicePath;
         _piperFrenchVoicePath = localVoiceOptions.Value.PiperFrenchVoicePath;
+        _piperVoicesFolder = localVoiceOptions.Value.PiperVoicesFolder;
+        _varyControllerVoices = localVoiceOptions.Value.VaryControllerVoices;
         _defaultPushbackDirection =
             PushbackDirections.Normalize(realismOptions.Value.DefaultPushbackDirection)
             ?? PushbackDirections.TailLeft;
@@ -1352,6 +1360,8 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
                     (LocalVoiceOptions.SectionName, "PiperExecutablePath", JsonValue.Create(PiperExecutablePath.Trim().Trim('"'))),
                     (LocalVoiceOptions.SectionName, "PiperEnglishVoicePath", JsonValue.Create(PiperEnglishVoicePath.Trim().Trim('"'))),
                     (LocalVoiceOptions.SectionName, "PiperFrenchVoicePath", JsonValue.Create(PiperFrenchVoicePath.Trim().Trim('"'))),
+                    (LocalVoiceOptions.SectionName, "PiperVoicesFolder", JsonValue.Create(PiperVoicesFolder.Trim().Trim('"'))),
+                    (LocalVoiceOptions.SectionName, "VaryControllerVoices", JsonValue.Create(VaryControllerVoices)),
                     (ApplicationOptions.SectionName, "CloudServicesConsentGiven", JsonValue.Create(CloudServicesConsentGiven)),
                     (ApplicationOptions.SectionName, "FirstRunCompleted", JsonValue.Create(true)),
 

@@ -180,13 +180,19 @@ public sealed class TrafficRadioService(
         if (options.SpeakChatter)
         {
             await textToSpeech
-                .SpeakAsync(exchange.ControllerLine, VoiceConfiguration.Default, cancellationToken)
+                .SpeakAsync(
+                    exchange.ControllerLine,
+                    VoiceConfiguration.Default with { VoiceKey = $"chatter-atc:{Guid.NewGuid():N}" },
+                    cancellationToken)
                 .ConfigureAwait(false);
 
             if (!radioActivity.UserIsTransmitting)
             {
                 await textToSpeech
-                    .SpeakAsync(exchange.PilotLine, VoiceConfiguration.Default, cancellationToken)
+                    .SpeakAsync(
+                        exchange.PilotLine,
+                        VoiceConfiguration.Default with { VoiceKey = $"chatter-pilot:{Guid.NewGuid():N}" },
+                        cancellationToken)
                     .ConfigureAwait(false);
             }
         }

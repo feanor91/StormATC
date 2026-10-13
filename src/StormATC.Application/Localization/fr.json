@@ -830,5 +830,8 @@
   "{0} did not respond in time.": "{0} n'a pas répondu à temps.",
   "Loading model lists…": "Chargement des listes de modèles…",
   "{0} OpenRouter models listed, {1} free. Other providers appear once an API key is saved.": "{0} modèles OpenRouter listés, dont {1} gratuits. Les autres fournisseurs apparaissent une fois une clé API enregistrée.",
-  "The model lists could not be loaded.": "Les listes de modèles n'ont pas pu être chargées."
+  "The model lists could not be loaded.": "Les listes de modèles n'ont pas pu être chargées.",
+  "EXTRA PIPER VOICES FOLDER": "DOSSIER DE VOIX PIPER SUPPLÉMENTAIRES",
+  "Voices named fr_* or en_* in this folder join the cast. Each controller gets its own voice and speaking rate.": "Les voix nommées fr_* ou en_* de ce dossier rejoignent la distribution. Chaque contrôleur reçoit sa propre voix et son propre débit.",
+  "Give each controller a different voice": "Donner une voix différente à chaque contrôleur"
 }

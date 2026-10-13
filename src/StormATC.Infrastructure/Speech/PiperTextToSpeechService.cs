@@ -6,7 +6,9 @@ using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
 using StormATC.Application.Localization;
 using StormATC.Application.Options;
+using StormATC.Application.Sessions;
 using StormATC.Domain.Phraseology;
+using StormATC.Domain.Sessions;
 using StormATC.Infrastructure.Audio;
 
 namespace StormATC.Infrastructure.Speech;
@@ -33,6 +35,8 @@ public sealed partial class PiperTextToSpeechService : ITextToSpeechService
     private readonly IOptionsMonitor<LocalVoiceOptions> _options;
     private readonly IOptionsMonitor<AudioOptions> _audioOptions;
     private readonly ILogger<PiperTextToSpeechService> _logger;
+    private readonly AtcSessionContext _sessionContext;
+    private readonly PiperVoiceCast _cast = new();
     private readonly RadioVoicePlayer _player;
     private readonly SemaphoreSlim _synthesisLock = new(1, 1);
     private readonly Lock _cacheLock = new();
@@ -48,8 +52,10 @@ public sealed partial class PiperTextToSpeechService : ITextToSpeechService
         IOptionsMonitor<LocalVoiceOptions> options,
         IOptionsMonitor<AudioOptions> audioOptions,
         IOptionsMonitor<DeepgramOptions> deviceOptions,
+        AtcSessionContext sessionContext,
         ILogger<PiperTextToSpeechService> logger)
     {
+        _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
         _options = options ?? throw new ArgumentNullException(nameof(options));
         _audioOptions = audioOptions ?? throw new ArgumentNullException(nameof(audioOptions));
         ArgumentNullException.ThrowIfNull(deviceOptions);
@@ -88,7 +94,8 @@ public sealed partial class PiperTextToSpeechService : ITextToSpeechService
             return;
         }
 
-        byte[]? audio = await SynthesizeAsync(text, voice, cancellationToken).ConfigureAwait(false);
+        byte[]? audio = await SynthesizeAsync(text, voice, ChooseVoice(voice, voice.VoiceKey), cancellationToken)
+            .ConfigureAwait(false);
         if (audio is null)
         {
             return;
@@ -115,11 +122,13 @@ public sealed partial class PiperTextToSpeechService : ITextToSpeechService
             return false;
         }
 
-        string voicePath = ResolveVoicePath(voice.Language);
+        // A named broadcast such as the ATIS is its own speaker, whoever is tuned at the moment.
+        ChosenVoice chosen = ChooseVoice(voice, $"named:{cacheKey}");
+        string voicePath = $"{chosen.VoicePath}|{chosen.LengthScale:0.00}|{chosen.SpeakerId}";
         byte[]? audio = FindNamedAudio(cacheKey, text, voicePath);
         if (audio is null)
         {
-            audio = await SynthesizeAsync(text, voice, cancellationToken).ConfigureAwait(false);
+            audio = await SynthesizeAsync(text, voice, chosen, cancellationToken).ConfigureAwait(false);
             if (audio is null)
             {
                 return false;
@@ -170,6 +179,7 @@ public sealed partial class PiperTextToSpeechService : ITextToSpeechService
         byte[]? audio = await SynthesizeAsync(
             language == PhraseologyLanguage.French ? "Essai radio." : "Radio check.",
             VoiceConfiguration.For(language),
+            new ChosenVoice(ResolveVoicePath(language), _options.CurrentValue.PiperLengthScale),
             cancellationToken).ConfigureAwait(false);
         stopwatch.Stop();
 
@@ -203,13 +213,48 @@ public sealed partial class PiperTextToSpeechService : ITextToSpeechService
             ? _options.CurrentValue.PiperFrenchVoicePath
             : _options.CurrentValue.PiperEnglishVoicePath;
 
+    /// <summary>
+    /// Picks the voice and speaking rate for a speaker. With variation off, or only one voice
+    /// available, it is the configured voice at the configured rate.
+    /// </summary>
+    private ChosenVoice ChooseVoice(VoiceConfiguration voice, string key)
+    {
+        LocalVoiceOptions options = _options.CurrentValue;
+        string primary = ResolveVoicePath(voice.Language);
+        var fallback = new ChosenVoice(primary, options.PiperLengthScale);
+
+        if (!options.VaryControllerVoices)
+        {
+            return fallback;
+        }
+
+        IReadOnlyList<string> pool = PiperVoiceCast.Discover(options.PiperVoicesFolder, voice.Language, primary);
+        if (pool.Count == 0)
+        {
+            return fallback;
+        }
+
+        if (string.IsNullOrEmpty(key))
+        {
+            AtcSession session = _sessionContext.CurrentSession;
+            key = $"{session.CurrentController}@{session.CurrentFrequency?.ToDisplay()}";
+        }
+
+        return _cast.Assign(
+            $"{voice.Language}:{key}",
+            pool,
+            options.PiperLengthScale,
+            options.PiperLengthScaleSpread);
+    }
+
     private async Task<byte[]?> SynthesizeAsync(
         string text,
         VoiceConfiguration voice,
+        ChosenVoice chosen,
         CancellationToken cancellationToken)
     {
         LocalVoiceOptions options = _options.CurrentValue;
-        string voicePath = ResolveVoicePath(voice.Language);
+        string voicePath = chosen.VoicePath;
 
         if (!File.Exists(options.PiperExecutablePath) || !File.Exists(voicePath))
         {
@@ -244,9 +289,15 @@ public sealed partial class PiperTextToSpeechService : ITextToSpeechService
             startInfo.ArgumentList.Add(voicePath);
             startInfo.ArgumentList.Add("--output_file");
             startInfo.ArgumentList.Add(outputPath);
+            if (chosen.SpeakerId is int speaker)
+            {
+                startInfo.ArgumentList.Add("--speaker");
+                startInfo.ArgumentList.Add(speaker.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            }
+
             startInfo.ArgumentList.Add("--length_scale");
             startInfo.ArgumentList.Add(
-                options.PiperLengthScale.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture));
+                chosen.LengthScale.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture));
 
             using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             timeout.CancelAfter(options.PiperTimeout);

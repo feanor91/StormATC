@@ -206,6 +206,12 @@ public sealed record VoiceConfiguration
     /// </summary>
     public PhraseologyLanguage Language { get; init; } = PhraseologyLanguage.English;
 
+    /// <summary>
+    /// Identifies who is speaking, such as <c>Tower@118.700</c>. A local voice engine with several
+    /// voices gives each key its own voice and keeps it. Empty means "use the current controller".
+    /// </summary>
+    public string VoiceKey { get; init; } = string.Empty;
+
     /// <summary>The provider voice identifier.</summary>
     public string VoiceId { get; init; } = string.Empty;
 

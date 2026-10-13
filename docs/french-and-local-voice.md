@@ -93,6 +93,31 @@ Deux programmes gratuits, à télécharger une fois.
    Téléchargez **les deux fichiers** de chaque voix : le `.onnx` et le `.onnx.json`, dans le même
    dossier.
 
+### Plusieurs voix de contrôleurs
+
+Avec Piper, chaque contrôleur (position et fréquence, par exemple Tour 118,700) reçoit sa propre
+voix et un débit un peu différent. Un même contrôleur garde sa voix pendant toute la session ;
+quand vous changez de fréquence, une nouvelle voix est tirée au hasard dans la distribution (ce
+peut être la même). Le trafic d'ambiance tire une voix différente à chaque échange.
+
+1. Mettez plusieurs voix dans un même dossier, par exemple `C:\StormATC\voices\` : le `.onnx` et
+   son `.onnx.json`. Les voix dont le nom commence par `fr_` forment la distribution française,
+   celles en `en_` la distribution anglaise. Mélangez voix masculines et féminines
+   (`fr_FR-siwis-medium` est féminine, `fr_FR-tom-medium` masculine).
+2. Dans **Settings › Voice & PTT**, renseignez **Dossier de voix Piper supplémentaires**, puis
+   **Save settings**. La case **Donner une voix différente à chaque contrôleur** l'active.
+
+Les modèles à plusieurs locuteurs (`fr_FR-mls-medium` : 125 voix, `fr_FR-upmc-medium` : 2,
+`en_GB-vctk-medium` : 109, `en_US-libritts_r-medium` : 904) sont gérés : un tel modèle compte pour
+une seule voix dans la distribution, puis un locuteur est tiré au hasard dans le modèle (option
+`--speaker` de Piper). Ainsi un modèle à 125 voix n'écrase pas les voix à locuteur unique. Les
+locuteurs de ces corpus sont de qualité inégale : si l'un d'eux vous déplaît, retirez simplement le
+modèle du dossier.
+
+Le débit de chaque contrôleur s'écarte du débit configuré (`PiperLengthScale`, 0,9 par défaut) de
+plus ou moins `PiperLengthScaleSpread` (0,12 par défaut, section `LocalVoice` de
+`appsettings.json`) : 0 supprime la variation de débit.
+
 ### Réglages
 
 **Settings › Voice & PTT › Speech engines** :
@@ -112,6 +137,19 @@ Réglages avancés dans `appsettings.json`, section `LocalVoice` : `WhisperThrea
 
 L'audio du micro n'est enregistré que pendant l'alternat. À la fin de la transmission, il est
 écrit dans un fichier WAV temporaire, transcrit par Whisper puis supprimé. Rien ne quitte le PC.
+
+## Variantes de formulation
+
+Pour qu'une longue session ne sonne pas répétitive, les mots de politesse et de cadence varient
+d'une transmission à l'autre : « reçu » ou « bien reçu », « transmettez » ou « je vous écoute »,
+« je vous reçois cinq sur cinq » ou « je vous reçois très bien », « correct » ou « collationnement
+correct », « au revoir », « bonne journée » ou rien à la fin d'un transfert.
+
+Les instructions ne varient jamais : pistes, valeurs, fréquences, autorisations et ordre des
+éléments viennent du moteur et restent identiques. Les variantes sont définies dans
+`FrenchAtcPhraseology` (`OneOf(...)`, la première est la formulation de référence) ; l'application
+choisit au hasard (`RandomVariantPicker`), les tests utilisent toujours la première
+(`FirstVariantPicker`).
 
 ## Limites connues
 

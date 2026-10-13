@@ -272,6 +272,22 @@ public sealed class LocalVoiceOptions
     [Range(0.5, 2.0)]
     public double PiperLengthScale { get; init; } = 0.9;
 
+    /// <summary>
+    /// A folder of extra Piper voices (<c>.onnx</c> with its <c>.onnx.json</c>). Voices named
+    /// <c>fr_*</c> join the French cast and <c>en_*</c> the English one.
+    /// </summary>
+    public string PiperVoicesFolder { get; init; } = string.Empty;
+
+    /// <summary>
+    /// When true, each controller (position and frequency) is given its own voice from the cast,
+    /// and a speaking rate that differs a little from <see cref="PiperLengthScale"/>.
+    /// </summary>
+    public bool VaryControllerVoices { get; init; } = true;
+
+    /// <summary>How far a controller's speaking rate may drift from <see cref="PiperLengthScale"/>.</summary>
+    [Range(0.0, 0.4)]
+    public double PiperLengthScaleSpread { get; init; } = 0.12;
+
     /// <summary>Longest time allowed for one synthesis before it is abandoned.</summary>
     public TimeSpan PiperTimeout { get; init; } = TimeSpan.FromSeconds(20);
 }

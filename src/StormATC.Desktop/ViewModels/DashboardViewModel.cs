@@ -532,6 +532,11 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
 
         try
         {
+            // The controller who answers is the one tuned when the pilot speaks, even if the
+            // reply hands the aircraft on, so the voice is chosen before the session moves.
+            AtcSession speakingSession = _sessionContext.CurrentSession;
+            string voiceKey = $"{speakingSession.CurrentController}@{speakingSession.CurrentFrequency?.ToDisplay()}";
+
             var transmission = PilotTransmission.Create(
                 _sessionContext.CurrentSession.SessionId, text, source, _clock.UtcNow);
 
@@ -570,7 +575,7 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
                 await _textToSpeech
                     .SpeakAsync(
                         spoken,
-                        VoiceConfiguration.For(_sessionContext.CurrentSession.Language),
+                        VoiceConfiguration.For(_sessionContext.CurrentSession.Language) with { VoiceKey = voiceKey },
                         CancellationToken.None)
                     .ConfigureAwait(true);
             }

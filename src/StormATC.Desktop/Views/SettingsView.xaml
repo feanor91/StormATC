@@ -692,6 +692,17 @@
                     <TextBlock Text="PIPER ENGLISH VOICE (.ONNX)" Style="{StaticResource LabelTextStyle}" />
                     <TextBox Text="{Binding PiperEnglishVoicePath, UpdateSourceTrigger=PropertyChanged}"
                              Margin="0,0,0,12" />
+
+                    <TextBlock Text="EXTRA PIPER VOICES FOLDER" Style="{StaticResource LabelTextStyle}" />
+                    <TextBox Text="{Binding PiperVoicesFolder, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,6" />
+                    <TextBlock Text="Voices named fr_* or en_* in this folder join the cast. Each controller gets its own voice and speaking rate."
+                               Style="{StaticResource SecondaryTextStyle}"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,8" />
+                    <CheckBox Content="Give each controller a different voice"
+                              IsChecked="{Binding VaryControllerVoices}"
+                              Margin="0,0,0,12" />
                   </StackPanel>
                 </Grid>
 
