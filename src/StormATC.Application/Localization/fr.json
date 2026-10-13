@@ -847,5 +847,15 @@
   "Report base": "Annoncez base",
   "Report when you turn onto the base leg.": "Annoncez quand vous tournez en base.",
   "Report final": "Annoncez finale",
-  "Report when you are on final. Landing or touch-and-go clearance follows.": "Annoncez quand vous êtes en finale. L'autorisation d'atterrir ou de faire un toucher suit."
+  "Report when you are on final. Landing or touch-and-go clearance follows.": "Annoncez quand vous êtes en finale. L'autorisation d'atterrir ou de faire un toucher suit.",
+  "Local VFR flight": "Vol VFR local",
+  "No flight plan needed: give the aerodrome you are on and your callsign, and fly the circuit with its tower.": "Aucun plan de vol n'est nécessaire : indiquez l'aérodrome où vous êtes et votre indicatif, et volez le circuit avec sa Tour.",
+  "AERODROME (ICAO)": "AÉRODROME (OACI)",
+  "CALLSIGN OR REGISTRATION": "INDICATIF OU IMMATRICULATION",
+  "Start a local VFR flight": "Démarrer un vol VFR local",
+  "Enter the four-letter ICAO code of the aerodrome, such as LFPL.": "Saisissez le code OACI à quatre lettres de l'aérodrome, par exemple LFPL.",
+  "Enter the callsign or registration of your aircraft, such as F-GABC.": "Saisissez l'indicatif ou l'immatriculation de votre avion, par exemple F-GABC.",
+  "Local VFR flight at {0}. ": "Vol VFR local à {0}. ",
+  "Local VFR flight at {0}. No frequencies were found for this aerodrome: connect the simulator so StormATC can read them.": "Vol VFR local à {0}. Aucune fréquence trouvée pour cet aérodrome : connectez le simulateur pour que StormATC puisse les lire.",
+  "The local VFR flight could not be started. See the Diagnostics page for details.": "Le vol VFR local n'a pas pu démarrer. Voir la page Diagnostic pour les détails."
 }

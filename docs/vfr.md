@@ -13,6 +13,14 @@ AD 2 LFPL (AMDT 03/26, du 19 février 2026).
 | Après le décollage | transfert au Départ | on reste avec la Tour |
 | Arrivée | approche aux instruments puis Tour | appel direct à la Tour, point de report, circuit |
 
+## Démarrer un vol VFR local
+
+Sur la page **Plan de vol**, la carte « Vol VFR local » ne demande ni plan SimBrief ni plan de vol :
+indiquez le code OACI de l'aérodrome où vous êtes (par exemple LFPL) et votre indicatif ou
+immatriculation (proposé d'après l'identifiant de l'avion dans MSFS), puis **Démarrer un vol VFR
+local**. StormATC lit les fréquences et les pistes du terrain dans le simulateur, passe le vol en
+VFR et règle la COM1 : l'ATIS d'abord s'il en existe un, puis Sol (ou la Tour).
+
 Les règles de vol sont un attribut du vol. Elles se règlent de deux façons :
 
 - sur la page **Plan de vol**, liste « Règles de vol » (IFR ou VFR) ;

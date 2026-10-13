@@ -39,6 +39,83 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
 
     private bool _syncingFlightRules;
 
+    /// <summary>The aerodrome of a local VFR flight, as an ICAO code such as LFPL.</summary>
+    [ObservableProperty]
+    private string _vfrAerodrome = string.Empty;
+
+    /// <summary>The callsign of a local VFR flight; offered from the simulator's aircraft identifier.</summary>
+    [ObservableProperty]
+    private string _vfrCallsign = string.Empty;
+
+    /// <summary>
+    /// Starts a local VFR flight at the aerodrome the pilot is on, with no flight plan: the plan
+    /// is only the aerodrome and the callsign, and the flight is VFR from the first call.
+    /// </summary>
+    [RelayCommand]
+    private async Task StartVfrLocalFlightAsync()
+    {
+        string icao = VfrAerodrome.Trim().ToUpperInvariant();
+        if (icao.Length != 4 || !icao.All(char.IsLetterOrDigit))
+        {
+            StatusIsError = true;
+            StatusMessage = UiText.T("Enter the four-letter ICAO code of the aerodrome, such as LFPL.");
+            return;
+        }
+
+        if (!StormATC.Domain.ValueObjects.Callsign.TryCreate(VfrCallsign, out StormATC.Domain.ValueObjects.Callsign? callsign))
+        {
+            StatusIsError = true;
+            StatusMessage = UiText.T("Enter the callsign or registration of your aircraft, such as F-GABC.");
+            return;
+        }
+
+        IsImporting = true;
+        StatusIsError = false;
+
+        try
+        {
+            var plan = new FlightPlan
+            {
+                FlightPlanId = $"vfr-local-{icao}",
+                Callsign = callsign,
+                DepartureIcao = icao,
+                DestinationIcao = icao,
+                GeneratedAt = _clock.UtcNow,
+                SourceIdentifier = "VFR local",
+            };
+
+            _sessionContext.PreassignedSquawk = null;
+            AtcSession session = await _sessionContext
+                .LoadFlightPlanAsync(plan, CancellationToken.None)
+                .ConfigureAwait(true);
+            session = _sessionContext.Mutate(current => current.WithFlightRules(FlightRules.Vfr));
+
+            bool tuned = session.CurrentFrequency is not Frequency initialFrequency
+                || await _simulatorConnector
+                    .TuneCom1Async(initialFrequency, CancellationToken.None)
+                    .ConfigureAwait(true);
+
+            _providerStatus.SetFlightPlanStatus(true, $"{plan.ToSummary()} · VFR local");
+
+            StatusMessage = session.CurrentFrequency is Frequency assigned
+                ? UiText.T($"Local VFR flight at {icao}. ")
+                    + (tuned
+                        ? UiText.T($"COM1 is tuned to {assigned.ToDisplay()}.")
+                        : UiText.T($"Tune COM1 to {assigned.ToDisplay()} before transmitting."))
+                : UiText.T($"Local VFR flight at {icao}. No frequencies were found for this aerodrome: connect the simulator so StormATC can read them.");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Starting the local VFR flight failed.");
+            StatusIsError = true;
+            StatusMessage = UiText.T("The local VFR flight could not be started. See the Diagnostics page for details.");
+        }
+        finally
+        {
+            IsImporting = false;
+        }
+    }
+
     /// <summary>The flight rules the pilot can choose between.</summary>
     public IReadOnlyList<string> FlightRulesChoices { get; } = ["IFR", "VFR"];
 
@@ -283,6 +360,11 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
 
     private void UpdateFromSession(AtcSession session)
     {
+        if (string.IsNullOrWhiteSpace(VfrCallsign) && !string.IsNullOrWhiteSpace(session.AircraftState.AtcIdentifier))
+        {
+            VfrCallsign = session.AircraftState.AtcIdentifier;
+        }
+
         if (session.FlightPlan is not FlightPlan plan)
         {
             HasPlan = false;

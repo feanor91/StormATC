@@ -17,6 +17,37 @@
   <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,24">
     <StackPanel>
 
+      <!-- A local VFR flight, with no flight plan. -->
+      <Border Style="{StaticResource CardStyle}">
+        <StackPanel>
+          <TextBlock Text="Local VFR flight" Style="{StaticResource SectionHeaderStyle}" />
+          <TextBlock Text="No flight plan needed: give the aerodrome you are on and your callsign, and fly the circuit with its tower."
+                     Style="{StaticResource SecondaryTextStyle}"
+                     TextWrapping="Wrap"
+                     Margin="0,0,0,10" />
+
+          <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <StackPanel Margin="0,0,16,0">
+              <TextBlock Text="AERODROME (ICAO)" Style="{StaticResource LabelTextStyle}" />
+              <TextBox Text="{Binding VfrAerodrome, UpdateSourceTrigger=PropertyChanged}"
+                       Width="120"
+                       MaxLength="4" />
+            </StackPanel>
+            <StackPanel>
+              <TextBlock Text="CALLSIGN OR REGISTRATION" Style="{StaticResource LabelTextStyle}" />
+              <TextBox Text="{Binding VfrCallsign, UpdateSourceTrigger=PropertyChanged}"
+                       Width="200" />
+            </StackPanel>
+          </StackPanel>
+
+          <Button Content="Start a local VFR flight"
+                  Style="{StaticResource PrimaryButtonStyle}"
+                  HorizontalAlignment="Left"
+                  Command="{Binding StartVfrLocalFlightCommand}"
+                  IsEnabled="{Binding IsImporting, Converter={StaticResource InverseBoolean}}" />
+        </StackPanel>
+      </Border>
+
       <!-- Import -->
       <Border Style="{StaticResource CardStyle}">
         <StackPanel>
