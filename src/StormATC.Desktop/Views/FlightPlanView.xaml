@@ -85,6 +85,17 @@
         <StackPanel>
           <TextBlock Text="Filed plan" Style="{StaticResource SectionHeaderStyle}" />
 
+          <TextBlock Text="FLIGHT RULES" Style="{StaticResource LabelTextStyle}" />
+          <ComboBox ItemsSource="{Binding FlightRulesChoices}"
+                    SelectedItem="{Binding SelectedFlightRules}"
+                    Width="120"
+                    HorizontalAlignment="Left"
+                    Margin="0,0,0,6" />
+          <TextBlock Text="VFR: no IFR clearance and no handoff to Departure. You stay with the tower and fly the circuit."
+                     Style="{StaticResource SecondaryTextStyle}"
+                     TextWrapping="Wrap"
+                     Margin="0,0,0,14" />
+
           <UniformGrid Columns="4" Rows="3">
             <StackPanel Margin="0,0,12,14">
               <TextBlock Text="CALLSIGN" Style="{StaticResource LabelTextStyle}" />

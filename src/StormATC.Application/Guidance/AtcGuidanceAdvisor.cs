@@ -74,6 +74,12 @@ public static class AtcGuidanceAdvisor
                 example);
         }
 
+        if (session.FlightRules == FlightRules.Vfr
+            && VfrGuidance(session, say, spokenCallsign, french) is AtcGuidance vfr)
+        {
+            return vfr;
+        }
+
         return session.Phase switch
         {
             FlightPhase.Disconnected =>
@@ -217,6 +223,74 @@ public static class AtcGuidanceAdvisor
                     UiText.T("Call the current controller"),
                     UiText.T("Use standard phraseology and include your callsign."),
                     spokenCallsign),
+        };
+    }
+
+    /// <summary>
+    /// The hint for a VFR flight, where the instrument-flight advice (IFR clearance, check in
+    /// with Departure, request the approach) does not apply. Null leaves the general hint.
+    /// </summary>
+    private static AtcGuidance? VfrGuidance(
+        AtcSession session,
+        IAtcPhraseology say,
+        string spokenCallsign,
+        bool french)
+    {
+        string Example(string english, string inFrench) => french ? inFrench : english;
+        string runway = session.AssignedArrivalRunway is RunwayIdentifier arrival
+            ? say.SpeakRunway(arrival)
+            : french ? "piste en service" : "runway in use";
+
+        return session.Phase switch
+        {
+            FlightPhase.Preflight or FlightPhase.ClearanceRequested =>
+                new(
+                    UiText.T("Request taxi, VFR"),
+                    UiText.T("A VFR flight needs no IFR clearance: call Ground, or Tower if there is no Ground."),
+                    Example(
+                        $"{spokenCallsign}, VFR local flight, request taxi",
+                        $"{spokenCallsign}, vol local, demandons le roulage")),
+
+            FlightPhase.InitialClimb or FlightPhase.Takeoff =>
+                new(
+                    UiText.T("Stay with the tower"),
+                    UiText.T("Fly the circuit and report each leg, or report leaving the frequency."),
+                    Example(
+                        $"{spokenCallsign}, downwind runway {runway}",
+                        $"{spokenCallsign}, vent arrière {runway}")),
+
+            FlightPhase.Enroute or FlightPhase.Departure or FlightPhase.Descent or FlightPhase.Arrival
+                when session.CircuitLeg == CircuitLeg.None =>
+                new(
+                    UiText.T("Call the tower"),
+                    UiText.T("Tune the tower and give your type, origin, intention, altitude, estimate and ATIS letter."),
+                    Example(
+                        $"{spokenCallsign}, VFR from the north for a touch and go, 1500 feet, estimate the reporting point, information India",
+                        $"{spokenCallsign}, VFR du nord pour un toucher, mille cinq cents pieds, estimé au point de report, information India")),
+
+            FlightPhase.Circuit => session.CircuitLeg switch
+            {
+                CircuitLeg.Joining =>
+                    new(
+                        UiText.T("Report downwind"),
+                        UiText.T("Join the circuit and report when you are on the downwind leg."),
+                        Example(
+                            $"{spokenCallsign}, downwind runway {runway}",
+                            $"{spokenCallsign}, vent arrière {runway}")),
+                CircuitLeg.Downwind =>
+                    new(
+                        UiText.T("Report base"),
+                        UiText.T("Report when you turn onto the base leg."),
+                        Example($"{spokenCallsign}, base runway {runway}", $"{spokenCallsign}, base {runway}")),
+                CircuitLeg.Base =>
+                    new(
+                        UiText.T("Report final"),
+                        UiText.T("Report when you are on final. Landing or touch-and-go clearance follows."),
+                        Example($"{spokenCallsign}, final runway {runway}", $"{spokenCallsign}, finale {runway}")),
+                _ => null,
+            },
+
+            _ => null,
         };
     }
 

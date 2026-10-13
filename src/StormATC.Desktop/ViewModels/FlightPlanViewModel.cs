@@ -8,6 +8,7 @@ using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Application.Sessions;
 using StormATC.Desktop.Services;
+using StormATC.Domain;
 using StormATC.Domain.FlightPlanning;
 using StormATC.Domain.Sessions;
 using StormATC.Domain.ValueObjects;
@@ -35,6 +36,29 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
     private readonly ILogger<FlightPlanViewModel> _logger;
 
     private bool _disposed;
+
+    private bool _syncingFlightRules;
+
+    /// <summary>The flight rules the pilot can choose between.</summary>
+    public IReadOnlyList<string> FlightRulesChoices { get; } = ["IFR", "VFR"];
+
+    /// <summary>
+    /// The rules the flight is operated under. A VFR flight needs no IFR clearance and stays with
+    /// Tower in the circuit. The pilot can also declare VFR on the radio.
+    /// </summary>
+    [ObservableProperty]
+    private string _selectedFlightRules = "IFR";
+
+    partial void OnSelectedFlightRulesChanged(string value)
+    {
+        if (_syncingFlightRules)
+        {
+            return;
+        }
+
+        FlightRules rules = string.Equals(value, "VFR", StringComparison.Ordinal) ? FlightRules.Vfr : FlightRules.Ifr;
+        _sessionContext.Mutate(session => session.WithFlightRules(rules));
+    }
 
     [ObservableProperty]
     private string _callsign = "—";
@@ -267,6 +291,16 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
         }
 
         HasPlan = true;
+
+        _syncingFlightRules = true;
+        try
+        {
+            SelectedFlightRules = session.FlightRules == FlightRules.Vfr ? "VFR" : "IFR";
+        }
+        finally
+        {
+            _syncingFlightRules = false;
+        }
 
         Callsign = plan.Callsign.Original;
         AircraftType = plan.AircraftIcaoType ?? "—";

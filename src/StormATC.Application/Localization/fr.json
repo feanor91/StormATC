@@ -833,5 +833,19 @@
   "The model lists could not be loaded.": "Les listes de modèles n'ont pas pu être chargées.",
   "EXTRA PIPER VOICES FOLDER": "DOSSIER DE VOIX PIPER SUPPLÉMENTAIRES",
   "Voices named fr_* or en_* in this folder join the cast. Each controller gets its own voice and speaking rate.": "Les voix nommées fr_* ou en_* de ce dossier rejoignent la distribution. Chaque contrôleur reçoit sa propre voix et son propre débit.",
-  "Give each controller a different voice": "Donner une voix différente à chaque contrôleur"
+  "Give each controller a different voice": "Donner une voix différente à chaque contrôleur",
+  "FLIGHT RULES": "RÈGLES DE VOL",
+  "VFR: no IFR clearance and no handoff to Departure. You stay with the tower and fly the circuit.": "VFR : pas de clairance IFR ni de transfert au Départ. Vous restez avec la Tour et volez le circuit.",
+  "Request taxi, VFR": "Demander le roulage, VFR",
+  "A VFR flight needs no IFR clearance: call Ground, or Tower if there is no Ground.": "Un vol VFR n'a pas besoin de clairance IFR : appelez Sol, ou la Tour s'il n'y a pas de Sol.",
+  "Stay with the tower": "Restez avec la Tour",
+  "Fly the circuit and report each leg, or report leaving the frequency.": "Volez le circuit et annoncez chaque branche, ou annoncez que vous quittez la fréquence.",
+  "Call the tower": "Appelez la Tour",
+  "Tune the tower and give your type, origin, intention, altitude, estimate and ATIS letter.": "Réglez la Tour et donnez votre type, la provenance, l'intention, l'altitude, l'estimée et la lettre ATIS.",
+  "Report downwind": "Annoncez vent arrière",
+  "Join the circuit and report when you are on the downwind leg.": "Rejoignez le circuit et annoncez quand vous êtes en vent arrière.",
+  "Report base": "Annoncez base",
+  "Report when you turn onto the base leg.": "Annoncez quand vous tournez en base.",
+  "Report final": "Annoncez finale",
+  "Report when you are on final. Landing or touch-and-go clearance follows.": "Annoncez quand vous êtes en finale. L'autorisation d'atterrir ou de faire un toucher suit."
 }
