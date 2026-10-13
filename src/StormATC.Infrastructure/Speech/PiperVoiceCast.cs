@@ -51,6 +51,9 @@ internal sealed class PiperVoiceCast(Random? random = null, Func<string, int>? s
         });
 
     private readonly Random _random = random ?? Random.Shared;
+
+    /// <summary>Called when a controller is given a voice for the first time.</summary>
+    public Action<string, ChosenVoice>? Assigned { get; set; }
     private readonly Lock _gate = new();
     private readonly Dictionary<string, ChosenVoice> _assigned = new(StringComparer.Ordinal);
 
@@ -59,7 +62,13 @@ internal sealed class PiperVoiceCast(Random? random = null, Func<string, int>? s
     /// <paramref name="folder"/> whose file name starts with the language code (<c>fr_</c>,
     /// <c>en_</c>) and that has its <c>.onnx.json</c> beside it.
     /// </summary>
-    public static IReadOnlyList<string> Discover(string? folder, PhraseologyLanguage language, string? primaryPath)
+    public static IReadOnlyList<string> Discover(
+        string? folder,
+        PhraseologyLanguage language,
+        string? primaryPath,
+        bool allowLowQuality = true,
+        bool allowMultiSpeaker = true,
+        IReadOnlyCollection<string>? excluded = null)
     {
         var voices = new List<string>();
         if (!string.IsNullOrWhiteSpace(primaryPath) && File.Exists(primaryPath))
@@ -74,9 +83,13 @@ internal sealed class PiperVoiceCast(Random? random = null, Func<string, int>? s
             {
                 foreach (string path in Directory.EnumerateFiles(folder, "*.onnx").Order(StringComparer.OrdinalIgnoreCase))
                 {
-                    if (Path.GetFileName(path).StartsWith(prefix, StringComparison.OrdinalIgnoreCase)
+                    string name = Path.GetFileNameWithoutExtension(path);
+                    if (name.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)
                         && File.Exists(path + ".json")
-                        && !voices.Contains(path, StringComparer.OrdinalIgnoreCase))
+                        && !voices.Contains(path, StringComparer.OrdinalIgnoreCase)
+                        && (allowLowQuality || !name.EndsWith("-low", StringComparison.OrdinalIgnoreCase))
+                        && (allowMultiSpeaker || ReadSpeakerCount(path) <= 1)
+                        && excluded?.Contains(name, StringComparer.OrdinalIgnoreCase) != true)
                     {
                         voices.Add(path);
                     }
@@ -122,6 +135,7 @@ internal sealed class PiperVoiceCast(Random? random = null, Func<string, int>? s
                 Math.Round(Math.Clamp(baseLengthScale + offset, 0.5, 2.0), 2),
                 speakers > 1 ? _random.Next(speakers) : null);
             _assigned[key] = chosen;
+            Assigned?.Invoke(key, chosen);
             return chosen;
         }
     }

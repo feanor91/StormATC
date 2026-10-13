@@ -39,6 +39,59 @@ public sealed class PiperVoiceCastTests : IDisposable
     }
 
     [Fact]
+    public void Discovery_leaves_out_low_quality_multi_speaker_and_excluded_voices_on_request()
+    {
+        string tom = Voice("fr_FR-tom-medium");
+        string siwis = Voice("fr_FR-siwis-medium");
+        string gilles = Voice("fr_FR-gilles-low");
+        string mls = Voice("fr_FR-mls-medium");
+        File.WriteAllText(mls + ".json", "{\"num_speakers\": 125}");
+        string upmc = Voice("fr_FR-upmc-medium");
+        File.WriteAllText(upmc + ".json", "{\"num_speakers\": 2}");
+
+        IReadOnlyList<string> strict = PiperVoiceCast.Discover(
+            _folder, PhraseologyLanguage.French, tom, allowLowQuality: false, allowMultiSpeaker: false);
+        Assert.Equal([tom, siwis], strict.ToArray());
+
+        IReadOnlyList<string> withLow = PiperVoiceCast.Discover(
+            _folder, PhraseologyLanguage.French, tom, allowLowQuality: true, allowMultiSpeaker: false);
+        Assert.Contains(gilles, withLow);
+        Assert.DoesNotContain(mls, withLow);
+
+        IReadOnlyList<string> excluded = PiperVoiceCast.Discover(
+            _folder, PhraseologyLanguage.French, tom,
+            allowLowQuality: true, allowMultiSpeaker: true, excluded: ["FR_FR-GILLES-LOW", "fr_FR-upmc-medium"]);
+        Assert.DoesNotContain(gilles, excluded);
+        Assert.DoesNotContain(upmc, excluded);
+        Assert.Contains(mls, excluded);
+    }
+
+    [Fact]
+    public void The_voice_set_in_the_settings_is_kept_even_when_it_is_low_quality()
+    {
+        string chosen = Voice("fr_FR-gilles-low");
+
+        IReadOnlyList<string> pool = PiperVoiceCast.Discover(
+            _folder, PhraseologyLanguage.French, chosen, allowLowQuality: false, allowMultiSpeaker: false);
+
+        Assert.Equal([chosen], pool.ToArray());
+    }
+
+    [Fact]
+    public void A_new_assignment_is_announced_once()
+    {
+        var cast = new PiperVoiceCast(new Random(4), _ => 1);
+        var announced = new List<string>();
+        cast.Assigned = (key, _) => announced.Add(key);
+
+        cast.Assign("Tower@118.600", ["a.onnx"], 0.9, 0);
+        cast.Assign("Tower@118.600", ["a.onnx"], 0.9, 0);
+        cast.Assign("Ground@122.130", ["a.onnx"], 0.9, 0);
+
+        Assert.Equal(["Tower@118.600", "Ground@122.130"], announced.ToArray());
+    }
+
+    [Fact]
     public void Discovery_without_a_folder_returns_only_the_main_voice()
     {
         string tom = Voice("fr_FR-tom-medium");

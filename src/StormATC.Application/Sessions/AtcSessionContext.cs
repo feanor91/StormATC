@@ -218,22 +218,54 @@ public sealed class AtcSessionContext(
             ? nearbyStand
             : null;
 
-        return Mutate(session => session
-            .WithFlightPlan(flightPlan)
-            with
+        return Mutate(session =>
+        {
+            // A plan from another aerodrome starts a new flight: the controller, frequency and
+            // clearances of the previous one do not carry over. Without this, importing a plan
+            // after the bundled sample left the session on the sample aerodrome's ATIS, so no
+            // transmission at the real aerodrome could ever be heard. Reloading the same
+            // aerodrome's plan mid-flight keeps the flight where it is.
+            bool freshStart = session.FlightPlan is null
+                || !string.Equals(
+                    session.FlightPlan.DepartureIcao,
+                    flightPlan.DepartureIcao,
+                    StringComparison.OrdinalIgnoreCase);
+
+            AtcSession updated = session.WithFlightPlan(flightPlan) with
             {
                 AssignedDepartureRunway = flightPlan.DepartureRunway,
                 AssignedArrivalRunway = flightPlan.ArrivalRunway,
                 AssignedStand = stand,
-                Phase = session.Phase == FlightPhase.Disconnected ? FlightPhase.Preflight : session.Phase,
-                CurrentController = session.CurrentController == ControllerPosition.None
+                Phase = freshStart || session.Phase == FlightPhase.Disconnected
+                    ? FlightPhase.Preflight
+                    : session.Phase,
+                CurrentController = freshStart || session.CurrentController == ControllerPosition.None
                     ? hasDistinctAtis
                         ? ControllerPosition.Atis
                         : _departureStartController
                     : session.CurrentController,
-                CurrentFrequency = session.CurrentFrequency
-                    ?? (hasDistinctAtis ? atisFrequency : deliveryFrequency),
-            });
+                CurrentFrequency = freshStart
+                    ? hasDistinctAtis ? atisFrequency : deliveryFrequency
+                    : session.CurrentFrequency
+                        ?? (hasDistinctAtis ? atisFrequency : deliveryFrequency),
+            };
+
+            return freshStart
+                ? updated with
+                {
+                    PendingReadback = null,
+                    IfrClearance = null,
+                    TaxiClearance = null,
+                    DepartureClearance = null,
+                    ArrivalClearance = null,
+                    ClearedAltitude = null,
+                    AssignedHeading = null,
+                    HandoffState = HandoffState.None,
+                    CircuitLeg = CircuitLeg.None,
+                    TouchAndGoRequested = false,
+                }
+                : updated;
+        });
     }
 
     /// <summary>Records a new aircraft snapshot from the simulator.</summary>

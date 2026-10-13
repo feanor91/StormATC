@@ -107,12 +107,32 @@ peut être la même). Le trafic d'ambiance tire une voix différente à chaque �
 2. Dans **Settings › Voice & PTT**, renseignez **Dossier de voix Piper supplémentaires**, puis
    **Save settings**. La case **Donner une voix différente à chaque contrôleur** l'active.
 
-Les modèles à plusieurs locuteurs (`fr_FR-mls-medium` : 125 voix, `fr_FR-upmc-medium` : 2,
-`en_GB-vctk-medium` : 109, `en_US-libritts_r-medium` : 904) sont gérés : un tel modèle compte pour
-une seule voix dans la distribution, puis un locuteur est tiré au hasard dans le modèle (option
-`--speaker` de Piper). Ainsi un modèle à 125 voix n'écrase pas les voix à locuteur unique. Les
-locuteurs de ces corpus sont de qualité inégale : si l'un d'eux vous déplaît, retirez simplement le
-modèle du dossier.
+Deux sortes de voix sont **écartées par défaut**, parce qu'elles sont souvent mauvaises :
+
+- les voix publiées en qualité basse (nom se terminant par `-low`, comme `fr_FR-gilles-low`),
+  qui hésitent et sautent des mots ;
+- les modèles à plusieurs locuteurs (`fr_FR-mls-medium` : 125 voix, `en_GB-vctk-medium` : 109,
+  `en_US-libritts_r-medium` : 904), dont certains locuteurs sont très inégaux.
+
+Pour les réintégrer, dans la section `LocalVoice` de `usersettings.json` :
+`"PiperAllowLowQualityVoices": true` et/ou `"PiperAllowMultiSpeakerVoices": true`. Un modèle à
+plusieurs locuteurs compte alors pour une seule voix, puis un locuteur est tiré au hasard dedans
+(option `--speaker` de Piper). La voix réglée dans **Voix française/anglaise Piper** reste toujours
+dans la distribution.
+
+### Retirer une voix qui ne convient pas
+
+Le journal (`%LOCALAPPDATA%\StormATC\logs`) indique la voix donnée à chaque contrôleur la première
+fois qu'il parle :
+
+```
+Voice for French:Tower@118.605: fr_FR-siwis-medium, rate 0.84.
+```
+
+Repérez la ligne du contrôleur dont la voix est mauvaise, puis soit supprimez les fichiers
+`<nom>.onnx` et `<nom>.onnx.json` du dossier de voix, soit ajoutez le nom (sans extension) à la
+liste `"PiperExcludedVoices": ["fr_FR-siwis-medium"]` de `usersettings.json`. Un contrôleur garde sa
+voix pendant toute la session : redémarrez StormATC pour en tirer une nouvelle.
 
 Le débit de chaque contrôleur s'écarte du débit configuré (`PiperLengthScale`, 0,9 par défaut) de
 plus ou moins `PiperLengthScaleSpread` (0,12 par défaut, section `LocalVoice` de

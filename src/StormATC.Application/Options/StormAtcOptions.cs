@@ -282,6 +282,26 @@ public sealed class LocalVoiceOptions
     public string PiperVoicesFolder { get; init; } = string.Empty;
 
     /// <summary>
+    /// Allow the voices Piper publishes at low quality (file names ending in <c>-low</c>) in the
+    /// cast. They are smaller and faster but often hesitate and drop words, so they are left out
+    /// unless asked for. The voice set under the French or English voice path is always kept.
+    /// </summary>
+    public bool PiperAllowLowQualityVoices { get; init; }
+
+    /// <summary>
+    /// Allow models that hold many speakers (for example <c>fr_FR-mls-medium</c>) in the cast.
+    /// A random speaker is drawn inside such a model, and some of them are poor, so they are left
+    /// out unless asked for.
+    /// </summary>
+    public bool PiperAllowMultiSpeakerVoices { get; init; }
+
+    /// <summary>
+    /// Voices to leave out of the cast, by file name without extension, such as
+    /// <c>fr_FR-gilles-low</c>. Compared without regard to case.
+    /// </summary>
+    public IReadOnlyList<string> PiperExcludedVoices { get; init; } = [];
+
+    /// <summary>
     /// When true, each controller (position and frequency) is given its own voice from the cast,
     /// and a speaking rate that differs a little from <see cref="PiperLengthScale"/>.
     /// </summary>

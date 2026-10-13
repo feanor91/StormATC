@@ -56,10 +56,19 @@ public sealed partial class PiperTextToSpeechService : ITextToSpeechService
         ILogger<PiperTextToSpeechService> logger)
     {
         _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
+
         _options = options ?? throw new ArgumentNullException(nameof(options));
         _audioOptions = audioOptions ?? throw new ArgumentNullException(nameof(audioOptions));
         ArgumentNullException.ThrowIfNull(deviceOptions);
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+        // Which voice a controller got, so a poor one can be recognised and removed.
+        _cast.Assigned = (key, chosen) => _logger.LogInformation(
+            "Voice for {Controller}: {Voice}{Speaker}, rate {Rate:0.00}.",
+            key,
+            Path.GetFileNameWithoutExtension(chosen.VoicePath),
+            chosen.SpeakerId is int speaker ? $" speaker {speaker}" : string.Empty,
+            chosen.LengthScale);
 
         // The output device is chosen once in Settings for every voice provider.
         _player = new RadioVoicePlayer(
@@ -228,7 +237,13 @@ public sealed partial class PiperTextToSpeechService : ITextToSpeechService
             return fallback;
         }
 
-        IReadOnlyList<string> pool = PiperVoiceCast.Discover(options.PiperVoicesFolder, voice.Language, primary);
+        IReadOnlyList<string> pool = PiperVoiceCast.Discover(
+            options.PiperVoicesFolder,
+            voice.Language,
+            primary,
+            options.PiperAllowLowQualityVoices,
+            options.PiperAllowMultiSpeakerVoices,
+            options.PiperExcludedVoices);
         if (pool.Count == 0)
         {
             return fallback;
