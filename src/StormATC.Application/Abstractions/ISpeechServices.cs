@@ -230,3 +230,20 @@ public sealed record VoiceConfiguration
     /// <summary>Whether to play the transmission-start and -end clicks.</summary>
     public bool IncludeClicks { get; init; } = true;
 }
+
+/// <summary>The local voice that spoke last, and what to write to set it aside.</summary>
+/// <param name="Description">A short description for the user, such as <c>fr_FR-mls-medium, speaker 42</c>.</param>
+/// <param name="ExclusionEntry">
+/// The <c>PiperExcludedVoices</c> entry that sets it aside: the model, or <c>model:speaker</c>.
+/// </param>
+/// <param name="CanExclude">
+/// False for the voice chosen in Settings, which is always kept and is changed there instead.
+/// </param>
+public sealed record SpokenVoice(string Description, string ExclusionEntry, bool CanExclude);
+
+/// <summary>A voice engine that can say which voice it used last.</summary>
+public interface ILastVoiceReporter
+{
+    /// <summary>The voice that spoke last, or null when none has spoken or the engine has no choice of voice.</summary>
+    SpokenVoice? LastVoice { get; }
+}

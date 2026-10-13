@@ -28,7 +28,7 @@ namespace StormATC.Infrastructure.Speech;
 /// unchanged, so the broadcast loop does not re-run Piper every cycle.
 /// </para>
 /// </remarks>
-public sealed partial class PiperTextToSpeechService : ITextToSpeechService
+public sealed partial class PiperTextToSpeechService : ITextToSpeechService, ILastVoiceReporter
 {
     private const int MaximumNamedCacheEntries = 8;
 
@@ -44,6 +44,7 @@ public sealed partial class PiperTextToSpeechService : ITextToSpeechService
     private readonly Queue<string> _namedCacheOrder = new();
 
     private byte[]? _lastAudio;
+    private (ChosenVoice Voice, PhraseologyLanguage Language)? _lastChosen;
     private VoiceConfiguration _lastVoice = VoiceConfiguration.Default;
     private bool _disposed;
 
@@ -103,7 +104,8 @@ public sealed partial class PiperTextToSpeechService : ITextToSpeechService
             return;
         }
 
-        byte[]? audio = await SynthesizeAsync(text, voice, ChooseVoice(voice, voice.VoiceKey), cancellationToken)
+        ChosenVoice speaker = ChooseVoice(voice, voice.VoiceKey);
+        byte[]? audio = await SynthesizeAsync(text, voice, speaker, cancellationToken)
             .ConfigureAwait(false);
         if (audio is null)
         {
@@ -112,6 +114,7 @@ public sealed partial class PiperTextToSpeechService : ITextToSpeechService
 
         _lastAudio = audio;
         _lastVoice = voice;
+        _lastChosen = (speaker, voice.Language);
         await _player.PlayWavAsync(audio, voice, cancellationToken).ConfigureAwait(false);
     }
 
@@ -148,8 +151,27 @@ public sealed partial class PiperTextToSpeechService : ITextToSpeechService
 
         _lastAudio = audio;
         _lastVoice = voice;
+        _lastChosen = (chosen, voice.Language);
         await _player.PlayWavAsync(audio, voice, cancellationToken).ConfigureAwait(false);
         return true;
+    }
+
+    /// <inheritdoc />
+    public SpokenVoice? LastVoice
+    {
+        get
+        {
+            if (_lastChosen is not (ChosenVoice chosen, PhraseologyLanguage language))
+            {
+                return null;
+            }
+
+            string model = Path.GetFileNameWithoutExtension(chosen.VoicePath);
+            bool kept = string.Equals(chosen.VoicePath, ResolveVoicePath(language), StringComparison.OrdinalIgnoreCase);
+            return chosen.SpeakerId is int speaker
+                ? new SpokenVoice($"{model}, speaker {speaker}", $"{model}:{speaker}", CanExclude: !kept)
+                : new SpokenVoice(model, model, CanExclude: !kept);
+        }
     }
 
     /// <inheritdoc />

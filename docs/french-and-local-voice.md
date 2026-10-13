@@ -120,6 +120,13 @@ française/anglaise Piper** reste toujours dans la distribution.
 
 ### Retirer une voix qui ne convient pas
 
+Le plus simple : sur le **Tableau de bord**, le bouton **Écarter cette voix** (sous « Réécouter le
+contrôleur ») écarte la voix qui vient de parler. Son nom s'affiche juste au-dessus du bouton. Elle
+est ajoutée à `PiperExcludedVoices` et le contrôleur en reçoit une autre à sa prochaine
+transmission. Le bouton ne touche pas à la voix choisie dans les Paramètres, qui se change là-bas.
+
+À la main, c'est possible aussi :
+
 Le journal (`%LOCALAPPDATA%\StormATC\logs`) indique la voix donnée à chaque contrôleur la première
 fois qu'il parle :
 

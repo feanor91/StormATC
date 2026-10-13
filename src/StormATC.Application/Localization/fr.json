@@ -857,5 +857,12 @@
   "Enter the callsign or registration of your aircraft, such as F-GABC.": "Saisissez l'indicatif ou l'immatriculation de votre avion, par exemple F-GABC.",
   "Local VFR flight at {0}. ": "Vol VFR local à {0}. ",
   "Local VFR flight at {0}. No frequencies were found for this aerodrome: connect the simulator so StormATC can read them.": "Vol VFR local à {0}. Aucune fréquence trouvée pour cet aérodrome : connectez le simulateur pour que StormATC puisse les lire.",
-  "The local VFR flight could not be started. See the Diagnostics page for details.": "Le vol VFR local n'a pas pu démarrer. Voir la page Diagnostic pour les détails."
+  "The local VFR flight could not be started. See the Diagnostics page for details.": "Le vol VFR local n'a pas pu démarrer. Voir la page Diagnostic pour les détails.",
+  "Set this voice aside": "Écarter cette voix",
+  "Never use this voice again. The controller gets another one next time.": "Ne plus jamais utiliser cette voix. Le contrôleur en reçoit une autre la prochaine fois.",
+  "Voice: {0}": "Voix : {0}",
+  "No local voice has spoken yet.": "Aucune voix locale n'a encore parlé.",
+  "This is the voice chosen in Settings. Choose another one there.": "C'est la voix choisie dans les Paramètres. Choisissez-en une autre là-bas.",
+  "Voice {0} set aside. The controller will use another voice next time.": "Voix {0} écartée. Le contrôleur utilisera une autre voix la prochaine fois.",
+  "The voice could not be set aside. See the Diagnostics page for details.": "La voix n'a pas pu être écartée. Voir la page Diagnostic pour les détails."
 }

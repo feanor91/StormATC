@@ -119,7 +119,7 @@ public sealed class SpeechRecognitionRouter : ISpeechRecognitionService
 /// Speaks through the voice engine chosen in Settings — the cloud voice or Piper on this
 /// computer — and can switch between them while the application runs.
 /// </summary>
-public sealed class TextToSpeechRouter : ITextToSpeechService
+public sealed class TextToSpeechRouter : ITextToSpeechService, ILastVoiceReporter
 {
     private readonly ITextToSpeechService _cloud;
     private readonly ITextToSpeechService _local;
@@ -184,6 +184,9 @@ public sealed class TextToSpeechRouter : ITextToSpeechService
         await _cloud.StopAsync(cancellationToken).ConfigureAwait(false);
         await _local.StopAsync(cancellationToken).ConfigureAwait(false);
     }
+
+    /// <inheritdoc />
+    public SpokenVoice? LastVoice => ((_lastSpeaker ?? Selected) as ILastVoiceReporter)?.LastVoice;
 
     /// <inheritdoc />
     public Task ReplayLastAsync(CancellationToken cancellationToken) =>

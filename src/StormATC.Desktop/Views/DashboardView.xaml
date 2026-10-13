@@ -653,6 +653,19 @@
                       Command="{Binding ReplayLastTransmissionCommand}"
                       HorizontalAlignment="Stretch"
                       Margin="0,14,0,0" />
+
+              <TextBlock Text="{Binding LastVoiceDescription}"
+                         Style="{StaticResource SecondaryTextStyle}"
+                         Margin="0,8,0,0"
+                         Visibility="{Binding LastVoiceDescription,
+                                              Converter={StaticResource StringToVisibility}}" />
+
+              <Button Content="Set this voice aside"
+                      Style="{StaticResource BaseButtonStyle}"
+                      Command="{Binding RejectLastVoiceCommand}"
+                      ToolTip="Never use this voice again. The controller gets another one next time."
+                      HorizontalAlignment="Stretch"
+                      Margin="0,8,0,0" />
             </StackPanel>
           </Border>
 

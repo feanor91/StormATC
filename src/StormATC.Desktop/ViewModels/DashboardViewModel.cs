@@ -42,6 +42,12 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
     private readonly RadioActivityState _radioActivity;
     private readonly ISpeechRecognitionService _speechRecognition;
     private readonly ITextToSpeechService _textToSpeech;
+    private readonly IOptionsMonitor<LocalVoiceOptions> _localVoiceOptions;
+    private readonly UserSettingsService _userSettings;
+
+    /// <summary>The local voice that spoke last, shown under the replay button.</summary>
+    [ObservableProperty]
+    private string _lastVoiceDescription = string.Empty;
     private readonly SimulatorConnectorRouter _simulatorRouter;
     private readonly MsfsSimConnectConnector _msfsConnector;
     private readonly TrafficRadioService _trafficRadio;
@@ -252,8 +258,12 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
         IOptionsMonitor<ApplicationOptions> applicationOptions,
         IOptionsMonitor<AudioOptions> audioOptions,
         IOptionsMonitor<TrafficOptions> trafficOptions,
+        IOptionsMonitor<LocalVoiceOptions> localVoiceOptions,
+        UserSettingsService userSettings,
         ILogger<DashboardViewModel> logger)
     {
+        _localVoiceOptions = localVoiceOptions ?? throw new ArgumentNullException(nameof(localVoiceOptions));
+        _userSettings = userSettings ?? throw new ArgumentNullException(nameof(userSettings));
         _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
         _coordinator = coordinator ?? throw new ArgumentNullException(nameof(coordinator));
         _radioActivity = radioActivity ?? throw new ArgumentNullException(nameof(radioActivity));
@@ -517,7 +527,60 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
     [RelayCommand]
     private async Task ReplayLastTransmissionAsync()
     {
+        RefreshLastVoice();
         await _textToSpeech.ReplayLastAsync(CancellationToken.None).ConfigureAwait(true);
+    }
+
+    private void RefreshLastVoice() =>
+        LastVoiceDescription = (_textToSpeech as ILastVoiceReporter)?.LastVoice is SpokenVoice voice
+            ? UiText.T($"Voice: {voice.Description}")
+            : string.Empty;
+
+    /// <summary>
+    /// Sets aside the local voice that spoke last: it is added to <c>PiperExcludedVoices</c>, and
+    /// the controller that had it is given another voice the next time it speaks.
+    /// </summary>
+    [RelayCommand]
+    private async Task RejectLastVoiceAsync()
+    {
+        if ((_textToSpeech as ILastVoiceReporter)?.LastVoice is not SpokenVoice voice)
+        {
+            StatusMessage = UiText.T("No local voice has spoken yet.");
+            return;
+        }
+
+        if (!voice.CanExclude)
+        {
+            StatusMessage = UiText.T("This is the voice chosen in Settings. Choose another one there.");
+            return;
+        }
+
+        try
+        {
+            string[] excluded =
+            [
+                .. _localVoiceOptions.CurrentValue.PiperExcludedVoices
+                    .Where(entry => !string.Equals(entry, voice.ExclusionEntry, StringComparison.OrdinalIgnoreCase)),
+                voice.ExclusionEntry,
+            ];
+
+            var array = new System.Text.Json.Nodes.JsonArray();
+            foreach (string entry in excluded)
+            {
+                array.Add(entry);
+            }
+
+            await _userSettings
+                .SaveAsync(LocalVoiceOptions.SectionName, "PiperExcludedVoices", array, CancellationToken.None)
+                .ConfigureAwait(true);
+
+            StatusMessage = UiText.T($"Voice {voice.Description} set aside. The controller will use another voice next time.");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Setting the voice aside failed.");
+            StatusMessage = UiText.T("The voice could not be set aside. See the Diagnostics page for details.");
+        }
     }
 
     /// <summary>Submits a transmission through the full pipeline.</summary>
@@ -584,6 +647,7 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
                     .ConfigureAwait(true);
             }
 
+            RefreshLastVoice();
             SetSpeechState(SpeechState.Idle, UiText.T("Ready"), UiText.T("PUSH TO TALK"));
         }
         catch (Exception ex)
