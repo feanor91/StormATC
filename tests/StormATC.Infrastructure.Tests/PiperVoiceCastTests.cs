@@ -78,6 +78,50 @@ public sealed class PiperVoiceCastTests : IDisposable
     }
 
     [Fact]
+    public void Exclusions_split_into_whole_models_and_single_speakers()
+    {
+        (IReadOnlyCollection<string> models, IReadOnlyDictionary<string, IReadOnlySet<int>> speakers) =
+            PiperVoiceCast.ParseExclusions(["fr_FR-gilles-low", "FR_fr-mls-medium:42", "fr_FR-mls-medium: 7", "  ", "fr_FR-x:abc"]);
+
+        Assert.Equal(["fr_FR-gilles-low", "fr_FR-x:abc"], models.ToArray());
+        Assert.Equal([7, 42], speakers["fr_FR-mls-medium"].Order().ToArray());
+    }
+
+    [Fact]
+    public void An_excluded_speaker_is_never_drawn_and_the_others_still_are()
+    {
+        var cast = new PiperVoiceCast(new Random(21), _ => 10)
+        {
+            ExcludedSpeakers = new Dictionary<string, IReadOnlySet<int>>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["multi"] = new HashSet<int> { 0, 1, 2, 3, 4, 5, 6, 7 },
+            },
+        };
+
+        var drawn = Enumerable.Range(0, 80)
+            .Select(index => cast.Assign($"K{index}", ["C:\\voices\\multi.onnx"], 0.9, 0).SpeakerId)
+            .ToArray();
+
+        Assert.All(drawn, speaker => Assert.InRange(speaker!.Value, 8, 9));
+        Assert.Equal(2, drawn.Distinct().Count());
+    }
+
+    [Fact]
+    public void A_speaker_excluded_after_it_was_assigned_is_replaced()
+    {
+        var cast = new PiperVoiceCast(new Random(3), _ => 5);
+        string[] pool = ["multi.onnx"];
+        int first = cast.Assign("Tower@118.600", pool, 0.9, 0).SpeakerId!.Value;
+
+        cast.ExcludedSpeakers = new Dictionary<string, IReadOnlySet<int>>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["multi"] = new HashSet<int> { first },
+        };
+
+        Assert.NotEqual(first, cast.Assign("Tower@118.600", pool, 0.9, 0).SpeakerId);
+    }
+
+    [Fact]
     public void A_new_assignment_is_announced_once()
     {
         var cast = new PiperVoiceCast(new Random(4), _ => 1);

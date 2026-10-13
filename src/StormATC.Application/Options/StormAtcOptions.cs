@@ -289,15 +289,17 @@ public sealed class LocalVoiceOptions
     public bool PiperAllowLowQualityVoices { get; init; }
 
     /// <summary>
-    /// Allow models that hold many speakers (for example <c>fr_FR-mls-medium</c>) in the cast.
-    /// A random speaker is drawn inside such a model, and some of them are poor, so they are left
-    /// out unless asked for.
+    /// Allow models that hold many speakers (for example <c>fr_FR-mls-medium</c>) in the cast. A
+    /// random speaker is drawn inside such a model. Some speakers are poor: leave those out one by
+    /// one with <see cref="PiperExcludedVoices"/> rather than dropping the whole model.
     /// </summary>
-    public bool PiperAllowMultiSpeakerVoices { get; init; }
+    public bool PiperAllowMultiSpeakerVoices { get; init; } = true;
 
     /// <summary>
-    /// Voices to leave out of the cast, by file name without extension, such as
-    /// <c>fr_FR-gilles-low</c>. Compared without regard to case.
+    /// Voices to leave out of the cast. An entry is a file name without extension, such as
+    /// <c>fr_FR-gilles-low</c>, to drop a whole model; or a model and a speaker number separated
+    /// by a colon, such as <c>fr_FR-mls-medium:42</c>, to drop one speaker of a multi-speaker
+    /// model. The log names the speaker each controller was given. Compared without regard to case.
     /// </summary>
     public IReadOnlyList<string> PiperExcludedVoices { get; init; } = [];
 

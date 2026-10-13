@@ -52,6 +52,46 @@ internal sealed class PiperVoiceCast(Random? random = null, Func<string, int>? s
 
     private readonly Random _random = random ?? Random.Shared;
 
+    /// <summary>
+    /// Speakers that must not be drawn, by model file name without extension. A speaker that is
+    /// excluded after it was assigned is replaced the next time that controller speaks.
+    /// </summary>
+    public IReadOnlyDictionary<string, IReadOnlySet<int>> ExcludedSpeakers { get; set; } =
+        new Dictionary<string, IReadOnlySet<int>>(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// Splits <c>PiperExcludedVoices</c> into whole models to drop and single speakers to skip.
+    /// </summary>
+    /// <returns>The model names, and the excluded speaker numbers of each model.</returns>
+    public static (IReadOnlyCollection<string> Models, IReadOnlyDictionary<string, IReadOnlySet<int>> Speakers)
+        ParseExclusions(IEnumerable<string>? entries)
+    {
+        var models = new List<string>();
+        var speakers = new Dictionary<string, HashSet<int>>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (string entry in entries ?? [])
+        {
+            string trimmed = entry.Trim();
+            int colon = trimmed.LastIndexOf(':');
+            if (colon > 0 && int.TryParse(trimmed[(colon + 1)..], out int speaker) && speaker >= 0)
+            {
+                string model = trimmed[..colon].Trim();
+                if (!speakers.TryGetValue(model, out HashSet<int>? set))
+                {
+                    speakers[model] = set = [];
+                }
+
+                set.Add(speaker);
+            }
+            else if (trimmed.Length > 0)
+            {
+                models.Add(trimmed);
+            }
+        }
+
+        return (models, speakers.ToDictionary(pair => pair.Key, pair => (IReadOnlySet<int>)pair.Value, StringComparer.OrdinalIgnoreCase));
+    }
+
     /// <summary>Called when a controller is given a voice for the first time.</summary>
     public Action<string, ChosenVoice>? Assigned { get; set; }
     private readonly Lock _gate = new();
@@ -117,7 +157,8 @@ internal sealed class PiperVoiceCast(Random? random = null, Func<string, int>? s
         lock (_gate)
         {
             if (_assigned.TryGetValue(key, out ChosenVoice? existing)
-                && pool.Contains(existing.VoicePath, StringComparer.OrdinalIgnoreCase))
+                && pool.Contains(existing.VoicePath, StringComparer.OrdinalIgnoreCase)
+                && !IsExcluded(existing.VoicePath, existing.SpeakerId))
             {
                 return existing;
             }
@@ -133,11 +174,31 @@ internal sealed class PiperVoiceCast(Random? random = null, Func<string, int>? s
             var chosen = new ChosenVoice(
                 voicePath,
                 Math.Round(Math.Clamp(baseLengthScale + offset, 0.5, 2.0), 2),
-                speakers > 1 ? _random.Next(speakers) : null);
+                speakers > 1 ? DrawSpeaker(voicePath, speakers) : null);
             _assigned[key] = chosen;
             Assigned?.Invoke(key, chosen);
             return chosen;
         }
+    }
+
+    private bool IsExcluded(string voicePath, int? speaker) =>
+        speaker is int number
+        && ExcludedSpeakers.TryGetValue(Path.GetFileNameWithoutExtension(voicePath), out IReadOnlySet<int>? set)
+        && set.Contains(number);
+
+    /// <summary>Draws a speaker of a multi-speaker model, avoiding the excluded ones.</summary>
+    private int DrawSpeaker(string voicePath, int speakers)
+    {
+        if (!ExcludedSpeakers.TryGetValue(Path.GetFileNameWithoutExtension(voicePath), out IReadOnlySet<int>? excluded)
+            || excluded.Count == 0)
+        {
+            return _random.Next(speakers);
+        }
+
+        int[] allowed = [.. Enumerable.Range(0, speakers).Where(number => !excluded.Contains(number))];
+
+        // Every speaker excluded: the model is unusable, but a controller must still speak.
+        return allowed.Length == 0 ? _random.Next(speakers) : allowed[_random.Next(allowed.Length)];
     }
 
     /// <summary>Forgets every assignment, so the next session casts its controllers afresh.</summary>

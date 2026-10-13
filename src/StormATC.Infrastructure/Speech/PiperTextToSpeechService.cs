@@ -237,13 +237,17 @@ public sealed partial class PiperTextToSpeechService : ITextToSpeechService
             return fallback;
         }
 
+        (IReadOnlyCollection<string> excludedModels, IReadOnlyDictionary<string, IReadOnlySet<int>> excludedSpeakers) =
+            PiperVoiceCast.ParseExclusions(options.PiperExcludedVoices);
+        _cast.ExcludedSpeakers = excludedSpeakers;
+
         IReadOnlyList<string> pool = PiperVoiceCast.Discover(
             options.PiperVoicesFolder,
             voice.Language,
             primary,
             options.PiperAllowLowQualityVoices,
             options.PiperAllowMultiSpeakerVoices,
-            options.PiperExcludedVoices);
+            excludedModels);
         if (pool.Count == 0)
         {
             return fallback;
