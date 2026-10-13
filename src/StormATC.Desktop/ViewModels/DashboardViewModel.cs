@@ -380,7 +380,9 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
 
         try
         {
-            await _speechRecognition.StopTransmissionAsync(CancellationToken.None)
+            // Stopping closes the microphone driver and starts the recogniser, which can block for
+            // a moment on some headsets; keep that off the UI thread.
+            await Task.Run(() => _speechRecognition.StopTransmissionAsync(CancellationToken.None))
                 .ConfigureAwait(true);
         }
         catch (Exception ex)
@@ -572,11 +574,13 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
             {
                 SetSpeechState(SpeechState.PlayingAudio, UiText.T("Controller responding…"), UiText.T("PUSH TO TALK"));
 
-                await _textToSpeech
+                // Choosing the voice scans the voice folder and opens the audio device; none of
+                // that belongs on the UI thread.
+                await Task.Run(() => _textToSpeech
                     .SpeakAsync(
                         spoken,
                         VoiceConfiguration.For(_sessionContext.CurrentSession.Language) with { VoiceKey = voiceKey },
-                        CancellationToken.None)
+                        CancellationToken.None))
                     .ConfigureAwait(true);
             }
 
