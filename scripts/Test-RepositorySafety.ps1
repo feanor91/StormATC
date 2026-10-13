@@ -8,9 +8,19 @@ $repositoryRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot ".."))
 
 Push-Location $repositoryRoot
 try {
-    $candidateFiles = @(
-        git ls-files --cached --others --exclude-standard |
-            Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+    # Git quotes and octal-escapes non-ASCII file names unless told not to, and PowerShell must
+    # read the raw bytes as UTF-8: a name such as "étude.md" would otherwise reach the path
+    # functions below as a quoted, escaped string and stop the whole check.
+    $previousEncoding = [Console]::OutputEncoding
+    [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)
+    try {
+        $candidateFiles = @(
+            git -c core.quotepath=false ls-files --cached --others --exclude-standard |
+                Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+    }
+    finally {
+        [Console]::OutputEncoding = $previousEncoding
+    }
 
     if ($LASTEXITCODE -ne 0) {
         throw "Git could not enumerate repository files."
