@@ -33,6 +33,9 @@ namespace StormATC.Desktop;
 /// <c>StormATC.Application</c> namespace, and because this file sits in <c>StormATC.Desktop</c>
 /// an unqualified <c>Application</c> would bind to that namespace rather than to WPF's type.
 /// </remarks>
+[System.Diagnostics.CodeAnalysis.SuppressMessage(
+    "Design", "CA1001:Types that own disposable fields should be disposable",
+    Justification = "WPF's Application is not IDisposable; the watchdog is disposed in OnExit.")]
 public partial class App : System.Windows.Application
 {
     private IHost? _host;
