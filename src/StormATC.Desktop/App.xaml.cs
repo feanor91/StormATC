@@ -186,6 +186,11 @@ public partial class App : System.Windows.Application
                     $"{StormATC.Application.Options.ApplicationOptions.SectionName}:InterfaceLanguage"]));
         StormATC.Desktop.Localization.XamlTextTranslator.Register();
 
+        // Courtesy and cadence words ("reçu" or "bien reçu") vary so a long session does not sound
+        // scripted. Instructions and values never vary; tests keep the reproducible first wording.
+        StormATC.Domain.Phraseology.FrenchAtcPhraseology.Instance.VariantPicker =
+            StormATC.Domain.Phraseology.RandomVariantPicker.Instance;
+
         builder.Logging.ClearProviders();
         builder.Logging.AddDebug();
         builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));

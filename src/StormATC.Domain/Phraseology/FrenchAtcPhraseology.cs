@@ -29,6 +29,19 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
     {
     }
 
+    /// <summary>
+    /// Chooses between equivalent wordings of courtesy and cadence words. Defaults to the first
+    /// wording so output is reproducible; the desktop app switches to a random picker.
+    /// </summary>
+    public IVariantPicker VariantPicker { get; set; } = FirstVariantPicker.Instance;
+
+    /// <summary>Returns one of several equivalent wordings. The first is the reference.</summary>
+    private string OneOf(params string[] variants) =>
+        variants[Math.Clamp(VariantPicker.Pick(variants.Length), 0, variants.Length - 1)];
+
+    /// <summary>"Reçu" or "bien reçu": the French "roger".</summary>
+    private string Received() => OneOf("reçu", "bien reçu");
+
     /// <inheritdoc />
     public PhraseologyLanguage Language => PhraseologyLanguage.French;
 
@@ -186,7 +199,7 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
     /// <inheritdoc />
     public string ReadbackCorrect(Callsign callsign, Frequency? nextFrequency, ControllerPosition? nextController)
     {
-        var builder = Phrase(callsign).Add("correct");
+        var builder = Phrase(callsign).Add(OneOf("correct", "collationnement correct"));
 
         if (nextFrequency is Frequency frequency)
         {
@@ -202,7 +215,7 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
     /// <inheritdoc />
     public string ReadbackCorrectPlain(Callsign? callsign) => callsign is null
         ? "Collationnement correct."
-        : Phrase(callsign).Add("correct").Build();
+        : Phrase(callsign).Add(OneOf("correct", "collationnement correct")).Build();
 
     /// <inheritdoc />
     public string PushbackApproval(Callsign callsign, string? pushbackDirection)
@@ -371,7 +384,7 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
     public string Handoff(Callsign callsign, ControllerPosition toController, Frequency frequency) =>
         Phrase(callsign)
             .Add($"contactez {ControllerName(toController)} {SpeakFrequency(frequency)}")
-            .Add("au revoir")
+            .Add(OneOf("au revoir", "bonne journée", string.Empty))
             .Build();
 
     /// <inheritdoc />
@@ -442,7 +455,7 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
         Phrase(callsign)
             .Add(exitTaxiway is { Length: > 0 } exit
                 ? $"dégagez par {SpellIdentifier(exit)}"
-                : "dégagez dès que possible")
+                : OneOf("dégagez dès que possible", "dégagez la piste dès que possible"))
             .Build();
 
     /// <inheritdoc />
@@ -454,26 +467,30 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
 
     /// <inheritdoc />
     public string GoAhead(Callsign callsign, ControllerPosition controller) =>
-        Phrase(callsign).Add(ControllerName(controller)).Add("transmettez").Build();
+        Phrase(callsign).Add(ControllerName(controller)).Add(OneOf("transmettez", "je vous écoute")).Build();
 
     /// <inheritdoc />
-    public string Acknowledgement(Callsign callsign) => Phrase(callsign).Add("reçu").Build();
+    public string Acknowledgement(Callsign callsign) => Phrase(callsign).Add(Received()).Build();
 
     /// <inheritdoc />
-    public string RogerPlain => "Reçu.";
+    public string RogerPlain => Sentence(Received());
 
     /// <inheritdoc />
     public string RogerSayIntentions(Callsign callsign) =>
-        Phrase(callsign).Add("reçu").Add("annoncez vos intentions").Build();
+        Phrase(callsign).Add(Received()).Add("annoncez vos intentions").Build();
 
     /// <inheritdoc />
     public string RogerHoldShort(Callsign callsign) =>
-        Phrase(callsign).Add("reçu").Add("maintenez avant la piste").Build();
+        Phrase(callsign).Add(Received()).Add("maintenez avant la piste").Build();
 
     /// <inheritdoc />
-    public string SayAgain(Callsign? callsign) => callsign is null
-        ? $"{StationCalling}, répétez."
-        : Phrase(callsign).Add("répétez").Build();
+    public string SayAgain(Callsign? callsign)
+    {
+        string request = OneOf("répétez", "répétez votre message");
+        return callsign is null
+            ? $"{StationCalling}, {request}."
+            : Phrase(callsign).Add(request).Build();
+    }
 
     /// <inheritdoc />
     public string SayRequestedLevel(Callsign callsign) =>
@@ -485,7 +502,7 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
 
     /// <inheritdoc />
     public string RadioCheckReply(Callsign callsign, ControllerPosition controller) =>
-        Phrase(callsign).Add(ControllerName(controller)).Add("je vous reçois cinq sur cinq").Build();
+        Phrase(callsign).Add(ControllerName(controller)).Add(OneOf("je vous reçois cinq sur cinq", "je vous reçois très bien")).Build();
 
     /// <inheritdoc />
     /// <remarks>
@@ -567,7 +584,7 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
 
     /// <inheritdoc />
     public string ReadbackReminder(Callsign? callsign) =>
-        $"{SpokenOr(callsign, StationCalling)}, attendez, collationnez votre clairance.";
+        $"{SpokenOr(callsign, StationCalling)}, {OneOf("attendez, collationnez votre clairance", "collationnez votre clairance")}.";
 
     // ---------------------------------------------------------------------------------
     // Readbacks
@@ -612,7 +629,7 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
 
     /// <inheritdoc />
     public string SayAgainReadback(Callsign? callsign) =>
-        $"{SpokenOr(callsign, UnknownAircraft)}, répétez votre collationnement.";
+        $"{SpokenOr(callsign, UnknownAircraft)}, {OneOf("répétez votre collationnement", "répétez le collationnement")}.";
 
     /// <inheritdoc />
     public string VerifyCallsign(Callsign? callsign) =>
@@ -634,6 +651,9 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
 
         return spokenText.Replace(SpeakCallsign(callsign), callsign.Normalized, StringComparison.OrdinalIgnoreCase);
     }
+
+    private static string Sentence(string text) =>
+        $"{char.ToUpperInvariant(text[0])}{text[1..]}.";
 
     private string SpokenOr(Callsign? callsign, string fallback) =>
         callsign is null ? fallback : SpeakCallsign(callsign);
