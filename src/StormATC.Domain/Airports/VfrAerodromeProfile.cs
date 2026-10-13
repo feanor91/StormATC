@@ -78,11 +78,13 @@ public sealed record VfrAerodromeProfile
         // The signed angle from the runway heading to the circuit side: negative when the
         // circuit lies to the left of the direction of landing.
         int difference = (((bearing - runwayHeadingDegrees) % 360) + 540) % 360 - 180;
-        return difference switch
+
+        // A circuit lies beside the runway. Ahead of or behind the landing direction there is no
+        // left or right to speak of, so the profile does not answer.
+        return Math.Abs(difference) switch
         {
-            < 0 => CircuitSide.Left,
-            > 0 => CircuitSide.Right,
-            _ => null,
+            < 10 or > 170 => null,
+            _ => difference < 0 ? CircuitSide.Left : CircuitSide.Right,
         };
     }
 }

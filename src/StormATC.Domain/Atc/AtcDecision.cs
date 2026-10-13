@@ -277,6 +277,9 @@ public sealed record AtcDecision
     /// <summary>A touch-and-go request or its cancellation. Null leaves it unchanged.</summary>
     public bool? NewTouchAndGoRequested { get; init; }
 
+    /// <summary>The runway in use for a VFR circuit or arrival. Null leaves it unchanged.</summary>
+    public RunwayIdentifier? NewArrivalRunway { get; init; }
+
     /// <summary>Clearance to issue, when the decision grants one.</summary>
     public Clearance? IssuedClearance { get; init; }
 
@@ -332,7 +335,8 @@ public sealed record AtcDecision
         || NewPhase is not null
         || NewFlightRules is not null
         || NewCircuitLeg is not null
-        || NewTouchAndGoRequested is not null;
+        || NewTouchAndGoRequested is not null
+        || NewArrivalRunway is not null;
 
     /// <summary>Builds a refusal.</summary>
     public static AtcDecision Reject(string reason, string fallbackPhraseology) => new()

@@ -1,3 +1,4 @@
+using StormATC.Domain.Intents;
 using StormATC.Domain.Sessions;
 using StormATC.Domain.ValueObjects;
 
@@ -122,6 +123,34 @@ public interface IAtcPhraseology
     string VacateInstruction(Callsign callsign, string? exitTaxiway);
 
     string VacateWhenAbleNoCallsign { get; }
+
+    // ---------------------------------------------------------------------------------
+    // VFR circuit and arrival
+    // ---------------------------------------------------------------------------------
+
+    /// <summary>Acknowledges the arrival call and asks for a report at a reporting point.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="pointName">The spoken name of the reporting point, in the profile's language.</param>
+    string ReportPointInstruction(Callsign callsign, string pointName);
+
+    /// <summary>Tells a VFR aircraft to join the circuit on the downwind leg.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="runway">The runway in use.</param>
+    /// <param name="side">The circuit direction, or null when the aerodrome does not publish one.</param>
+    string CircuitJoinInstruction(Callsign callsign, RunwayIdentifier runway, CircuitSide? side);
+
+    /// <summary>Asks the aircraft to report the next leg: base, then final.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="leg">The leg to report, <see cref="CircuitLeg.Base"/> or <see cref="CircuitLeg.Final"/>.</param>
+    /// <param name="runway">The runway in use.</param>
+    /// <param name="side">The circuit direction, or null when unknown.</param>
+    string CircuitReportInstruction(Callsign callsign, CircuitLeg leg, RunwayIdentifier runway, CircuitSide? side);
+
+    /// <summary>Clears the aircraft for a touch and go.</summary>
+    string TouchAndGoClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots);
+
+    /// <summary>Acknowledges that the aircraft is leaving the circuit and the frequency.</summary>
+    string LeaveFrequencyAcknowledgement(Callsign callsign);
 
     // ---------------------------------------------------------------------------------
     // Conversation

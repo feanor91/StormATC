@@ -155,6 +155,8 @@ public sealed record AtcSession
 
     public AtcSession WithCircuitLeg(CircuitLeg leg) => this with { CircuitLeg = leg };
 
+    public AtcSession WithArrivalRunway(RunwayIdentifier runway) => this with { AssignedArrivalRunway = runway };
+
     public AtcSession WithTouchAndGoRequested(bool requested) => this with { TouchAndGoRequested = requested };
 
     /// <summary>Returns a session with the flight plan attached.</summary>

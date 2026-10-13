@@ -34,9 +34,10 @@ internal static partial class VfrIntentRules
             return null;
         }
 
-        // A request for taxi, or a report at the holding point, belongs to the ground and
-        // departure rules even when it mentions circuits or touch and go.
-        if (GroundOrDeparture().IsMatch(transcript))
+        // A request for taxi, a report at the holding point, or a readback of a clearance
+        // ("cleared touch and go runway 08") belongs to the ground, departure and readback rules
+        // even when it mentions circuits or touch and go.
+        if (GroundDepartureOrReadback().IsMatch(transcript))
         {
             return null;
         }
@@ -167,8 +168,8 @@ internal static partial class VfrIntentRules
     [GeneratedRegex(@"\blocal (flight|circuit)s?\b")]
     private static partial Regex LocalFlight();
 
-    [GeneratedRegex(@"\b(taxi|holding|ready for|line up|take ?off|departure|pushback)\b")]
-    private static partial Regex GroundOrDeparture();
+    [GeneratedRegex(@"\b(taxi|holding|ready for|line up|take ?off|departure|pushback|cleared)\b")]
+    private static partial Regex GroundDepartureOrReadback();
 
     [GeneratedRegex(@"\b(reporting|joining(?! instructions)|entering)\b")]
     private static partial Regex Readback();

@@ -366,6 +366,11 @@ public sealed class PilotTransmissionCoordinator(
             session = session.WithTouchAndGoRequested(touchAndGo);
         }
 
+        if (decision.NewArrivalRunway is RunwayIdentifier arrivalRunway)
+        {
+            session = session.WithArrivalRunway(arrivalRunway);
+        }
+
         foreach (AtcWarning warning in decision.Warnings)
         {
             session = session.WithWarning(warning);

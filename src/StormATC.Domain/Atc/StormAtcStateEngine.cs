@@ -23,7 +23,7 @@ namespace StormATC.Domain.Atc;
 /// preconditions.
 /// </para>
 /// </remarks>
-public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : IAtcStateEngine
+public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : IAtcStateEngine
 {
     private readonly IReadbackEvaluator _readbackEvaluator =
         readbackEvaluator ?? throw new ArgumentNullException(nameof(readbackEvaluator));
@@ -124,7 +124,14 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 or PilotIntentType.FrequencyReadback
                 or PilotIntentType.Correction => HandleReadback(context, intent),
             PilotIntentType.RequestPushback => HandlePushbackRequest(context, intent),
-            PilotIntentType.RequestTaxi => HandleTaxiRequest(context),
+            PilotIntentType.RequestTaxi => DeclareRules(HandleTaxiRequest(context), intent),
+            PilotIntentType.VfrArrivalCall => HandleVfrArrivalCall(context, intent),
+            PilotIntentType.ReportAtPoint => HandleReportAtPoint(context, intent),
+            PilotIntentType.ReportDownwind => HandleCircuitLegReport(context, intent, CircuitLeg.Downwind),
+            PilotIntentType.ReportBase => HandleCircuitLegReport(context, intent, CircuitLeg.Base),
+            PilotIntentType.ReportFinal => HandleFinalReport(context, intent),
+            PilotIntentType.RequestTouchAndGo => HandleTouchAndGoRequest(context),
+            PilotIntentType.LeaveFrequency => HandleLeaveFrequency(context),
             PilotIntentType.RequestProgressiveTaxi => HandleProgressiveTaxiRequest(context),
             PilotIntentType.ReportHoldingShort => HandleHoldingShortReport(context, intent),
             PilotIntentType.ReadyForDeparture => HandleReadyForDeparture(context),
@@ -179,7 +186,9 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         // --- Departure handoff trigger. ----------------------------------------------------
         // Real towers hand off shortly after the aircraft is established in the climb. The mock
         // trigger is a stable climb through 1000 ft above aerodrome elevation.
+        // A VFR aircraft stays with Tower: it flies the circuit or leaves the frequency itself.
         if (session.Phase == FlightPhase.InitialClimb
+            && session.FlightRules == FlightRules.Ifr
             && session.CurrentController == ControllerPosition.Tower
             && aircraft.IsClimbing
             && IsAboveAerodromeBy(context, 1000))
@@ -218,6 +227,24 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                     "Descending into the terminal area.",
                     Say(context).Handoff(arriving, ControllerPosition.Approach, frequency));
             }
+        }
+
+        // --- Touch and go: the wheels touch and the aircraft rolls on. ------------------------
+        // No vacate instruction, no handoff: the aircraft is departing again, and once airborne
+        // the "becoming airborne" rule above takes it back to the climb.
+        if (aircraft.IsOnGround
+            && session.Phase is FlightPhase.Final
+            && session.ArrivalClearance is { TouchAndGo: true })
+        {
+            return new AtcDecision
+            {
+                Accepted = true,
+                ResponseType = AtcResponseType.None,
+                NewPhase = FlightPhase.Takeoff,
+                NewCircuitLeg = CircuitLeg.None,
+                FallbackPhraseology = string.Empty,
+                AllowLanguageModelPhraseology = false,
+            };
         }
 
         // --- Touchdown. --------------------------------------------------------------------
@@ -1774,7 +1801,10 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
     /// <summary>
     /// Issues a landing clearance, which is a separate permission from the approach clearance.
     /// </summary>
-    private static AtcDecision HandleLandingClearance(AtcEvaluationContext context, Callsign callsign)
+    private static AtcDecision HandleLandingClearance(
+        AtcEvaluationContext context,
+        Callsign callsign,
+        bool touchAndGo = false)
     {
         AtcSession session = context.Session;
 
@@ -1808,13 +1838,14 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
             IssuedBy = ControllerPosition.Tower,
             IssuedAt = context.CurrentTime,
             Runway = landingRunway,
+            TouchAndGo = touchAndGo,
             RequiredReadbackItems = [ReadbackItemType.Runway],
         };
 
         return new AtcDecision
         {
             Accepted = true,
-            ResponseType = AtcResponseType.LandingClearance,
+            ResponseType = touchAndGo ? AtcResponseType.TouchAndGoClearance : AtcResponseType.LandingClearance,
             NewPhase = FlightPhase.Final,
             IssuedClearance = clearance,
             RequiredReadback = new PendingReadback
@@ -1834,13 +1865,19 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
                 IssuedAt = context.CurrentTime,
                 IsMandatory = true,
             },
-            ApprovedFacts = BuildLandingFacts(context, landingRunway),
+            ApprovedFacts = BuildLandingFacts(context, landingRunway, touchAndGo),
             ProhibitedFacts = ["takeoff clearance", "any runway other than the assigned runway"],
-            FallbackPhraseology = Say(context).LandingClearance(
-                callsign,
-                landingRunway,
-                context.Weather?.WindDirection,
-                context.Weather?.WindSpeedKnots),
+            FallbackPhraseology = touchAndGo
+                ? Say(context).TouchAndGoClearance(
+                    callsign,
+                    landingRunway,
+                    context.Weather?.WindDirection,
+                    context.Weather?.WindSpeedKnots)
+                : Say(context).LandingClearance(
+                    callsign,
+                    landingRunway,
+                    context.Weather?.WindDirection,
+                    context.Weather?.WindSpeedKnots),
         };
     }
 
@@ -2069,7 +2106,14 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
         PilotIntentType.RequestPushback or PilotIntentType.RequestTaxi
             or PilotIntentType.RequestProgressiveTaxi
             or PilotIntentType.RequestTaxiToStand => ControllerPosition.Ground,
-        PilotIntentType.ReadyForDeparture => ControllerPosition.Tower,
+        PilotIntentType.ReadyForDeparture
+            or PilotIntentType.VfrArrivalCall
+            or PilotIntentType.ReportAtPoint
+            or PilotIntentType.ReportDownwind
+            or PilotIntentType.ReportBase
+            or PilotIntentType.ReportFinal
+            or PilotIntentType.RequestTouchAndGo
+            or PilotIntentType.LeaveFrequency => ControllerPosition.Tower,
         _ => null,
     };
 
@@ -2403,12 +2447,13 @@ public sealed class StormAtcStateEngine(IReadbackEvaluator readbackEvaluator) : 
 
     private static Dictionary<string, string> BuildLandingFacts(
         AtcEvaluationContext context,
-        RunwayIdentifier runway)
+        RunwayIdentifier runway,
+        bool touchAndGo = false)
     {
         var facts = new Dictionary<string, string>(StringComparer.Ordinal)
         {
             ["runway"] = runway.ToComparisonValue(),
-            ["clearance"] = "cleared to land",
+            ["clearance"] = touchAndGo ? "cleared touch and go" : "cleared to land",
         };
 
         AddWindFacts(context, facts);

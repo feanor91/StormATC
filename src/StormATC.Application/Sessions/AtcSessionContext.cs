@@ -61,6 +61,12 @@ public sealed class AtcSessionContext(
     private readonly Lock _stateLock = new();
     private Frequency? _departureAtisFrequency;
     private Frequency? _departureDeliveryFrequency;
+
+    /// <summary>
+    /// The position that answers first on the ground: Delivery where the aerodrome publishes
+    /// one, otherwise Ground (as at Lognes, which has Sol and Tour but no Prévol).
+    /// </summary>
+    private ControllerPosition _departureStartController = ControllerPosition.ClearanceDelivery;
     private bool _departureAtisWasMonitored;
 
     private AtcSession _currentSession = AtcSession.Create(
@@ -196,6 +202,10 @@ public sealed class AtcSessionContext(
         {
             _departureAtisFrequency = hasDistinctAtis ? atisFrequency : null;
             _departureDeliveryFrequency = deliveryFrequency;
+            _departureStartController =
+                departure?.Frequencies is { ClearanceDelivery: null, Ground: not null }
+                    ? ControllerPosition.Ground
+                    : ControllerPosition.ClearanceDelivery;
             _departureAtisWasMonitored = false;
         }
 
@@ -219,7 +229,7 @@ public sealed class AtcSessionContext(
                 CurrentController = session.CurrentController == ControllerPosition.None
                     ? hasDistinctAtis
                         ? ControllerPosition.Atis
-                        : ControllerPosition.ClearanceDelivery
+                        : _departureStartController
                     : session.CurrentController,
                 CurrentFrequency = session.CurrentFrequency
                     ?? (hasDistinctAtis ? atisFrequency : deliveryFrequency),
@@ -249,7 +259,26 @@ public sealed class AtcSessionContext(
                     && _departureDeliveryFrequency is Frequency delivery
                     && tuned.IsSameChannel(delivery))
                 {
-                    return updated.WithController(ControllerPosition.ClearanceDelivery, delivery);
+                    return updated.WithController(_departureStartController, delivery);
+                }
+            }
+
+            // A VFR arrival calls the destination tower directly; nobody hands it over. Once the
+            // aircraft is airborne and has tuned that frequency, the tower is its controller, and
+            // its transmissions are heard instead of being ignored as off frequency.
+            if (updated.FlightRules == FlightRules.Vfr
+                && !state.IsOnGround
+                && updated.CurrentController != ControllerPosition.Tower
+                && updated.FlightPlan is FlightPlan plan
+                && _airportCache.TryGetValue(plan.DestinationIcao, out AirportData? destination)
+                && destination?.Frequencies.Tower is Frequency tower
+                && state.Radio.ActiveTransmitFrequency.IsSameChannel(tower))
+            {
+                updated = updated.WithController(ControllerPosition.Tower, tower);
+                if (updated.Phase is FlightPhase.Preflight or FlightPhase.IFRClearanceIssued
+                    or FlightPhase.Departure or FlightPhase.Enroute or FlightPhase.Descent)
+                {
+                    updated = updated.WithPhase(FlightPhase.Arrival);
                 }
             }
 

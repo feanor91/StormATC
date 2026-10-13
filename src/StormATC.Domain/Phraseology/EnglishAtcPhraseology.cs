@@ -1,3 +1,4 @@
+using StormATC.Domain.Intents;
 using StormATC.Domain.Sessions;
 using StormATC.Domain.ValueObjects;
 
@@ -195,6 +196,40 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
 
     /// <inheritdoc />
     public string Acknowledgement(Callsign callsign) => DeterministicPhraseology.Acknowledgement(callsign);
+
+    /// <inheritdoc />
+    public string ReportPointInstruction(Callsign callsign, string pointName) =>
+        $"{callsign.ToSpoken()}, roger, report {pointName}.";
+
+    /// <inheritdoc />
+    public string CircuitJoinInstruction(Callsign callsign, RunwayIdentifier runway, CircuitSide? side) =>
+        $"{callsign.ToSpoken()}, join {Hand(side)}downwind {runway.ToSpoken()}, report downwind.";
+
+    /// <inheritdoc />
+    public string CircuitReportInstruction(Callsign callsign, CircuitLeg leg, RunwayIdentifier runway, CircuitSide? side) =>
+        leg == CircuitLeg.Final
+            ? $"{callsign.ToSpoken()}, report final {runway.ToSpoken()}."
+            : $"{callsign.ToSpoken()}, report {Hand(side)}base {runway.ToSpoken()}.";
+
+    /// <inheritdoc />
+    public string TouchAndGoClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots)
+    {
+        string wind = windDirection is Heading direction && windSpeedKnots is int speed
+            ? $"wind {direction.ToSpoken()} degrees {SpokenNumbers.DigitsIndividually(speed.ToString(System.Globalization.CultureInfo.InvariantCulture))} knots, "
+            : string.Empty;
+        return $"{callsign.ToSpoken()}, {wind}{runway.ToSpoken()}, cleared touch and go.";
+    }
+
+    /// <inheritdoc />
+    public string LeaveFrequencyAcknowledgement(Callsign callsign) =>
+        $"{callsign.ToSpoken()}, roger, good day.";
+
+    private static string Hand(CircuitSide? side) => side switch
+    {
+        CircuitSide.Left => "left-hand ",
+        CircuitSide.Right => "right-hand ",
+        _ => string.Empty,
+    };
 
     /// <inheritdoc />
     public string RogerPlain => "Roger.";

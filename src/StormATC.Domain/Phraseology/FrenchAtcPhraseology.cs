@@ -1,4 +1,5 @@
 using System.Text;
+using StormATC.Domain.Intents;
 using StormATC.Domain.Sessions;
 using StormATC.Domain.ValueObjects;
 
@@ -471,6 +472,49 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
 
     /// <inheritdoc />
     public string Acknowledgement(Callsign callsign) => Phrase(callsign).Add(Received()).Build();
+
+    /// <inheritdoc />
+    public string ReportPointInstruction(Callsign callsign, string pointName) =>
+        Phrase(callsign).Add(Received()).Add($"rappelez {pointName}").Build();
+
+    /// <inheritdoc />
+    public string CircuitJoinInstruction(Callsign callsign, RunwayIdentifier runway, CircuitSide? side) =>
+        Phrase(callsign)
+            .Add($"entrez vent arrière {Hand(side)}{SpeakRunway(runway)}")
+            .Add("rappelez vent arrière")
+            .Build();
+
+    /// <inheritdoc />
+    public string CircuitReportInstruction(Callsign callsign, CircuitLeg leg, RunwayIdentifier runway, CircuitSide? side) =>
+        Phrase(callsign)
+            .Add(leg == CircuitLeg.Final
+                ? $"rappelez finale {SpeakRunway(runway)}"
+                : $"rappelez base {Hand(side)}{SpeakRunway(runway)}")
+            .Build();
+
+    /// <inheritdoc />
+    public string TouchAndGoClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots)
+    {
+        PhraseBuilder builder = Phrase(callsign).Add(SpeakRunway(runway)).Add("autorisé toucher");
+
+        if (Wind(windDirection, windSpeedKnots) is string wind)
+        {
+            builder.Add(wind);
+        }
+
+        return builder.Build();
+    }
+
+    /// <inheritdoc />
+    public string LeaveFrequencyAcknowledgement(Callsign callsign) =>
+        Phrase(callsign).Add(Received()).Add(OneOf("au revoir", "bonne journée")).Build();
+
+    private static string Hand(CircuitSide? side) => side switch
+    {
+        CircuitSide.Left => "main gauche ",
+        CircuitSide.Right => "main droite ",
+        _ => string.Empty,
+    };
 
     /// <inheritdoc />
     public string RogerPlain => Sentence(Received());
