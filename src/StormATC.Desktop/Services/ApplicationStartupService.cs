@@ -264,11 +264,7 @@ public sealed class ApplicationStartupService(
             .ConfigureAwait(false);
         session = _sessionContext.Mutate(current => current.WithFlightRules(FlightRules.Vfr));
 
-        if (session.CurrentFrequency is Frequency initialFrequency)
-        {
-            await _simulatorConnector.TuneCom1Async(initialFrequency, cancellationToken).ConfigureAwait(false);
-        }
-
+        // The radio is left alone: a VFR flight follows whichever frequency the pilot tunes.
         _providerStatus.SetFlightPlanStatus(true, $"{plan.ToSummary()} · VFR local");
         _logger.LogInformation("Started the remembered local VFR flight {Summary}.", plan.ToSummary());
         return true;

@@ -82,11 +82,6 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
                 .ConfigureAwait(true);
             session = _sessionContext.Mutate(current => current.WithFlightRules(FlightRules.Vfr));
 
-            bool tuned = session.CurrentFrequency is not Frequency initialFrequency
-                || await _simulatorConnector
-                    .TuneCom1Async(initialFrequency, CancellationToken.None)
-                    .ConfigureAwait(true);
-
             _providerStatus.SetFlightPlanStatus(true, $"{plan.ToSummary()} · VFR local");
 
             // Remembered, so the next launch with the simulator running starts it again.
@@ -102,9 +97,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
 
             StatusMessage = session.CurrentFrequency is Frequency assigned
                 ? UiText.T($"Local VFR flight at {icao}. ")
-                    + (tuned
-                        ? UiText.T($"COM1 is tuned to {assigned.ToDisplay()}.")
-                        : UiText.T($"Tune COM1 to {assigned.ToDisplay()} before transmitting."))
+                    + UiText.T($"Tune the frequencies yourself in the aircraft, starting with {assigned.ToDisplay()}: StormATC follows the one you tune.")
                 : UiText.T($"Local VFR flight at {icao}. No frequencies were found for this aerodrome: connect the simulator so StormATC can read them.");
         }
         catch (Exception ex)

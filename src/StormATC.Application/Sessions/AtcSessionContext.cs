@@ -295,6 +295,17 @@ public sealed class AtcSessionContext(
                 }
             }
 
+            // A VFR flight at a controlled aerodrome has no clearance to wait for and no fixed
+            // order of frequencies: whichever published frequency the pilot tunes is the
+            // controller who answers. Listening to the ATIS, then calling Ground or Tower, is
+            // simply tuning them in turn.
+            if (updated.FlightRules == FlightRules.Vfr
+                && updated.FlightPlan is FlightPlan localPlan
+                && FollowTunedFrequency(updated, state, localPlan) is AtcSession followed)
+            {
+                updated = followed;
+            }
+
             // A VFR arrival calls the destination tower directly; nobody hands it over. Once the
             // aircraft is airborne and has tuned that frequency, the tower is its controller, and
             // its transmissions are heard instead of being ignored as off frequency.
@@ -316,6 +327,46 @@ public sealed class AtcSessionContext(
 
             return updated;
         });
+    }
+
+    /// <summary>
+    /// The session moved to the controller whose published frequency the aircraft has tuned, or
+    /// null when the tuned frequency is not one of the aerodrome's or already is the session's.
+    /// </summary>
+    private AtcSession? FollowTunedFrequency(AtcSession session, AircraftState state, FlightPlan plan)
+    {
+        string icao = session.Phase is FlightPhase.Descent or FlightPhase.Arrival or FlightPhase.Approach
+            or FlightPhase.Circuit or FlightPhase.Landed or FlightPhase.TaxiIn
+            ? plan.DestinationIcao
+            : plan.DepartureIcao;
+
+        if (!_airportCache.TryGetValue(icao, out AirportData? airport) || airport is null)
+        {
+            return null;
+        }
+
+        Frequency tuned = state.Radio.ActiveTransmitFrequency;
+        ControllerPosition[] positions =
+        [
+            ControllerPosition.Atis,
+            ControllerPosition.ClearanceDelivery,
+            ControllerPosition.Ground,
+            ControllerPosition.Tower,
+        ];
+
+        foreach (ControllerPosition position in positions)
+        {
+            if (airport.Frequencies.For(position) is Frequency published && tuned.IsSameChannel(published))
+            {
+                return session.CurrentController == position
+                    && session.CurrentFrequency is Frequency current
+                    && current.IsSameChannel(published)
+                        ? null
+                        : session.WithController(position, published);
+            }
+        }
+
+        return null;
     }
 
     /// <summary>

@@ -19,7 +19,9 @@ Sur la page **Plan de vol**, la carte « Vol VFR local » ne demande ni plan Sim
 indiquez le code OACI de l'aérodrome où vous êtes (par exemple LFPL) et votre indicatif ou
 immatriculation (proposé d'après l'identifiant de l'avion dans MSFS), puis **Démarrer un vol VFR
 local**. StormATC lit les fréquences et les pistes du terrain dans le simulateur, passe le vol en
-VFR et règle la COM1 : l'ATIS d'abord s'il en existe un, puis Sol (ou la Tour).
+VFR. Il ne touche pas à votre radio : **vous réglez la COM1 dans l'avion** et StormATC suit. Réglez
+l'ATIS (écoute seule), Sol ou la Tour : le contrôleur qui répond est celui dont vous avez réglé la
+fréquence publiée, dans l'ordre que vous voulez.
 
 Le vol est mémorisé : à l'ouverture suivante de StormATC, **si MSFS tourne déjà**, il est relancé
 tout seul et vous n'avez rien à refaire. Décochez la case « Relancer ce vol… » pour ne pas le
