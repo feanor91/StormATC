@@ -1,5 +1,6 @@
 using StormATC.Domain.Aircraft;
 using StormATC.Domain.FlightPlanning;
+using StormATC.Domain.Phraseology;
 using StormATC.Domain.ValueObjects;
 
 namespace StormATC.Domain.Sessions;
@@ -96,6 +97,24 @@ public sealed record AtcSession
     /// <summary>When the session was completed. Null while it is still running.</summary>
     public DateTimeOffset? CompletedAt { get; init; }
 
+    /// <summary>
+    /// The language spoken on the radio. Every controller transmission in this session is worded
+    /// with the matching profile from <see cref="AtcPhraseologies"/>.
+    /// </summary>
+    public PhraseologyLanguage Language { get; init; } = PhraseologyLanguage.English;
+
+    /// <summary>
+    /// The rules the flight is operated under. IFR until the pilot declares VFR; a VFR flight
+    /// has no IFR clearance and stays with Tower while it flies the circuit.
+    /// </summary>
+    public FlightRules FlightRules { get; init; } = FlightRules.Ifr;
+
+    /// <summary>The leg of the aerodrome circuit the aircraft last reported.</summary>
+    public CircuitLeg CircuitLeg { get; init; } = CircuitLeg.None;
+
+    /// <summary>True when the pilot asked for a touch and go rather than a full-stop landing.</summary>
+    public bool TouchAndGoRequested { get; init; }
+
     /// <summary>The callsign in use, taken from the flight plan.</summary>
     public Callsign? Callsign => FlightPlan?.Callsign;
 
@@ -132,6 +151,14 @@ public sealed record AtcSession
     /// <summary>Returns a session in a new flight phase.</summary>
     public AtcSession WithPhase(FlightPhase phase) => this with { Phase = phase };
 
+    public AtcSession WithFlightRules(FlightRules rules) => this with { FlightRules = rules };
+
+    public AtcSession WithCircuitLeg(CircuitLeg leg) => this with { CircuitLeg = leg };
+
+    public AtcSession WithArrivalRunway(RunwayIdentifier runway) => this with { AssignedArrivalRunway = runway };
+
+    public AtcSession WithTouchAndGoRequested(bool requested) => this with { TouchAndGoRequested = requested };
+
     /// <summary>Returns a session with the flight plan attached.</summary>
     public AtcSession WithFlightPlan(FlightPlan plan) => this with { FlightPlan = plan };
 
@@ -164,7 +191,12 @@ public sealed record AtcSession
                 TaxiClearance = clearance,
                 AssignedStand = clearance.TaxiDestination ?? AssignedStand,
             },
-            ClearanceType.Taxi or ClearanceType.Pushback
+            ClearanceType.Taxi => updated with
+            {
+                TaxiClearance = clearance,
+                AssignedDepartureRunway = clearance.Runway ?? AssignedDepartureRunway,
+            },
+            ClearanceType.Pushback
                 or ClearanceType.RunwayCrossing => updated with { TaxiClearance = clearance },
             ClearanceType.LineUp or ClearanceType.Takeoff => updated with
             {

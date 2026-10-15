@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Domain;
 using StormATC.Domain.ValueObjects;
@@ -92,7 +93,7 @@ public sealed class SimulatorConnectorRouter : ISimulatorConnector
     }
 
     /// <inheritdoc />
-    public string ConnectorName => _active?.ConnectorName ?? "No simulator connected";
+    public string ConnectorName => _active?.ConnectorName ?? UiText.T("No simulator connected");
 
     /// <inheritdoc />
     public SimulatorConnectionState ConnectionState =>
@@ -115,7 +116,7 @@ public sealed class SimulatorConnectorRouter : ISimulatorConnector
     public bool IsMockActive => ReferenceEquals(_active, _mock);
 
     /// <summary>Why the running connector is the running one, in one sentence for the UI.</summary>
-    public string StatusMessage { get; private set; } = "The simulator has not been connected yet.";
+    public string StatusMessage { get; private set; } = UiText.T("The simulator has not been connected yet.");
 
     /// <summary>True while MSFS is being retried in the background.</summary>
     public bool IsWaitingForMsfs => _retryLoop is { IsCompleted: false };
@@ -176,7 +177,7 @@ public sealed class SimulatorConnectorRouter : ISimulatorConnector
             await StopRetryLoopAsync().ConfigureAwait(false);
             await DeactivateAsync(cancellationToken).ConfigureAwait(false);
 
-            StatusMessage = "The simulator connection was closed.";
+            StatusMessage = UiText.T("The simulator connection was closed.");
             ConnectionChanged?.Invoke(
                 this,
                 new SimulatorConnectionChangedEventArgs(SimulatorConnectionState.Disconnected, StatusMessage));
@@ -215,7 +216,7 @@ public sealed class SimulatorConnectorRouter : ISimulatorConnector
         if (PreferredConnector == SimulatorConnectorNames.Mock)
         {
             await ActivateAsync(_mock, cancellationToken).ConfigureAwait(false);
-            StatusMessage = "Running the scripted mock aircraft. No flight simulator is required.";
+            StatusMessage = UiText.T("Running the scripted mock aircraft. No flight simulator is required.");
             return;
         }
 
@@ -224,7 +225,7 @@ public sealed class SimulatorConnectorRouter : ISimulatorConnector
             // Nothing to try: the SDK is a build input, so this build can never reach MSFS.
             await ActivateAsync(_mock, cancellationToken).ConfigureAwait(false);
             StatusMessage =
-                $"{MsfsSimConnectConnector.SdkUnavailableMessage} Running the scripted mock aircraft instead.";
+                UiText.T($"{MsfsSimConnectConnector.SdkUnavailableMessage} Running the scripted mock aircraft instead.");
 
             _logger.LogInformation(
                 "MSFS was preferred but this build has no SimConnect assembly; using the mock connector.");
@@ -244,13 +245,13 @@ public sealed class SimulatorConnectorRouter : ISimulatorConnector
         {
             // Keep an unexpected loader/JIT failure from preventing the safe mock fallback.
             _logger.LogError(ex, "Starting the MSFS SimConnect connector failed.");
-            failureMessage = $"SimConnect failed unexpectedly: {ex.GetBaseException().Message}";
+            failureMessage = UiText.T($"SimConnect failed unexpectedly: {ex.GetBaseException().Message}");
             failureKind = SimulatorConnectionFailureKind.Unexpected;
         }
 
         if (_msfs.ConnectionState == SimulatorConnectionState.Connected)
         {
-            StatusMessage = "Connected to Microsoft Flight Simulator.";
+            StatusMessage = UiText.T("Connected to Microsoft Flight Simulator.");
             return;
         }
 
@@ -261,13 +262,13 @@ public sealed class SimulatorConnectorRouter : ISimulatorConnector
         if (failureKind == SimulatorConnectionFailureKind.SimulatorUnavailable)
         {
             StatusMessage =
-                $"{failureMessage} Using the scripted mock aircraft and watching for the "
-                + "simulator to start.";
+                UiText.T($"{failureMessage} Using the scripted mock aircraft and watching for the "
+                + $"simulator to start.");
             StartRetryLoop();
         }
         else
         {
-            StatusMessage = $"{failureMessage} Using the scripted mock aircraft instead.";
+            StatusMessage = UiText.T($"{failureMessage} Using the scripted mock aircraft instead.");
         }
     }
 
@@ -422,7 +423,7 @@ public sealed class SimulatorConnectorRouter : ISimulatorConnector
                             .ConfigureAwait(false);
                     }
 
-                    StatusMessage = "Connected to Microsoft Flight Simulator.";
+                    StatusMessage = UiText.T("Connected to Microsoft Flight Simulator.");
                     ConnectionChanged?.Invoke(
                         this,
                         new SimulatorConnectionChangedEventArgs(

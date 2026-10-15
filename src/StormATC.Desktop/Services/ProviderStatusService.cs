@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Domain;
 
@@ -32,7 +33,7 @@ public sealed class ProviderStatusService
     private readonly bool _offlineMode;
 
     /// <summary>Shown on every cloud badge in offline mode, so the reason is never ambiguous.</summary>
-    private const string OfflineDetail = "Offline mode — no external services are contacted";
+    private static string OfflineDetail => UiText.T("Offline mode — no external services are contacted");
 
     private readonly ProviderStatusItem _simulator;
     private readonly ProviderStatusItem _model;
@@ -64,12 +65,12 @@ public sealed class ProviderStatusService
         _languageModelOptions =
             languageModelOptions ?? throw new ArgumentNullException(nameof(languageModelOptions));
 
-        _simulator = new ProviderStatusItem("Simulator", _simulatorConnector.ConnectorName);
-        _model = new ProviderStatusItem("Language model", _languageModel.ProviderName);
-        _speechToText = new ProviderStatusItem("Speech to text", _speechRecognition.ProviderName);
-        _textToSpeechStatus = new ProviderStatusItem("Controller voice", _textToSpeech.ProviderName);
-        _flightPlan = new ProviderStatusItem("Flight plan", _flightPlanProvider.ProviderName);
-        _storage = new ProviderStatusItem("Local storage", "SQLite");
+        _simulator = new ProviderStatusItem(UiText.T("Simulator"), _simulatorConnector.ConnectorName);
+        _model = new ProviderStatusItem(UiText.T("Language model"), _languageModel.ProviderName);
+        _speechToText = new ProviderStatusItem(UiText.T("Speech to text"), _speechRecognition.ProviderName);
+        _textToSpeechStatus = new ProviderStatusItem(UiText.T("Controller voice"), _textToSpeech.ProviderName);
+        _flightPlan = new ProviderStatusItem(UiText.T("Flight plan"), _flightPlanProvider.ProviderName);
+        _storage = new ProviderStatusItem(UiText.T("Local storage"), "SQLite");
 
         Items =
         [
@@ -190,45 +191,60 @@ public sealed class ProviderStatusService
             _model.Update(
                 ProviderConnectionState.NotConfigured,
                 keyStored
-                    ? "No model chosen — enter a model identifier in Settings"
+                    ? UiText.T("No model chosen — enter a model identifier in Settings")
                     : hasModelName
-                        ? "No API key — add one in Settings to enable the model"
-                        : "Not configured — deterministic phraseology only");
+                        ? UiText.T("No API key — add one in Settings to enable the model")
+                        : UiText.T("Not configured — deterministic phraseology only"));
 
             return;
         }
 
         _model.Update(
             hasModelName ? ProviderConnectionState.Configured : ProviderConnectionState.NotConfigured,
-            hasModelName ? _languageModel.ProviderName : "Not configured — deterministic phraseology only");
+            hasModelName ? _languageModel.ProviderName : UiText.T("Not configured — deterministic phraseology only"));
     }
 
     /// <summary>Writes the two speech badges.</summary>
-    /// <param name="hasKey">Whether a key is stored, or null when that has not been read.</param>
+    /// <param name="hasKey">Whether a Deepgram key is stored, or null when that has not been read.</param>
+    /// <remarks>
+    /// A local engine (Whisper, Piper) needs no key and works offline, so its badge reflects
+    /// only whether its files are configured.
+    /// </remarks>
     private void UpdateSpeechBadges(bool? hasKey)
     {
-        if (_offlineMode)
-        {
-            _speechToText.Update(ProviderConnectionState.NotConfigured, OfflineDetail);
-            _textToSpeechStatus.Update(ProviderConnectionState.NotConfigured, OfflineDetail);
-            return;
-        }
+        bool localRecognition = IsLocalEngine(_speechRecognition.ProviderName);
+        bool localVoice = IsLocalEngine(_textToSpeech.ProviderName);
 
-        bool recognitionReady = hasKey ?? _speechRecognition.IsConfigured;
-        bool voiceReady = hasKey ?? _textToSpeech.IsConfigured;
+        bool recognitionReady = localRecognition
+            ? _speechRecognition.IsConfigured
+            : !_offlineMode && (hasKey ?? _speechRecognition.IsConfigured);
+        bool voiceReady = localVoice
+            ? _textToSpeech.IsConfigured
+            : !_offlineMode && (hasKey ?? _textToSpeech.IsConfigured);
 
         _speechToText.Update(
             recognitionReady ? ProviderConnectionState.Configured : ProviderConnectionState.NotConfigured,
             recognitionReady
                 ? _speechRecognition.ProviderName
-                : "No API key — use typed transmissions");
+                : localRecognition
+                    ? UiText.T("Whisper is not set up — see Settings, Voice & PTT")
+                    : _offlineMode
+                        ? OfflineDetail
+                        : UiText.T("No API key — use typed transmissions"));
 
         _textToSpeechStatus.Update(
             voiceReady ? ProviderConnectionState.Configured : ProviderConnectionState.NotConfigured,
             voiceReady
                 ? _textToSpeech.ProviderName
-                : "No API key — responses are text only");
+                : localVoice
+                    ? UiText.T("Piper is not set up — see Settings, Voice & PTT")
+                    : _offlineMode
+                        ? OfflineDetail
+                        : UiText.T("No API key — responses are text only"));
     }
+
+    private static bool IsLocalEngine(string providerName) =>
+        providerName.EndsWith("(local)", StringComparison.Ordinal);
 
     private static ProviderConnectionState MapSimulatorState(SimulatorConnectionState state) => state switch
     {
@@ -285,13 +301,13 @@ public sealed partial class ProviderStatusItem : ObservableObject
     /// </summary>
     public string StateText => State switch
     {
-        ProviderConnectionState.Connected => "Connected",
-        ProviderConnectionState.Configured => "Ready",
-        ProviderConnectionState.Connecting => "Connecting",
-        ProviderConnectionState.Degraded => "Degraded",
-        ProviderConnectionState.Unavailable => "Unavailable",
-        ProviderConnectionState.Error => "Error",
-        _ => "Not configured",
+        ProviderConnectionState.Connected => UiText.T("Connected"),
+        ProviderConnectionState.Configured => UiText.T("Ready"),
+        ProviderConnectionState.Connecting => UiText.T("Connecting"),
+        ProviderConnectionState.Degraded => UiText.T("Degraded"),
+        ProviderConnectionState.Unavailable => UiText.T("Unavailable"),
+        ProviderConnectionState.Error => UiText.T("Error"),
+        _ => UiText.T("Not configured"),
     };
 
     /// <summary>Applies a new state and detail.</summary>

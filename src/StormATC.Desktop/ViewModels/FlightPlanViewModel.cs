@@ -3,10 +3,14 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Text.Json.Nodes;
 using StormATC.Application.Abstractions;
+using StormATC.Application.FlightPlanning;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Application.Sessions;
 using StormATC.Desktop.Services;
+using StormATC.Domain;
 using StormATC.Domain.FlightPlanning;
 using StormATC.Domain.Sessions;
 using StormATC.Domain.ValueObjects;
@@ -34,6 +38,100 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
     private readonly ILogger<FlightPlanViewModel> _logger;
 
     private bool _disposed;
+
+    private bool _syncingFlightRules;
+
+    /// <summary>The aerodrome of a local VFR flight, as an ICAO code such as LFPL.</summary>
+    [ObservableProperty]
+    private string _vfrAerodrome = string.Empty;
+
+    /// <summary>Start this flight again each time StormATC opens with the simulator running.</summary>
+    [ObservableProperty]
+    private bool _vfrAutoStart = true;
+
+    /// <summary>The callsign of a local VFR flight; offered from the simulator's aircraft identifier.</summary>
+    [ObservableProperty]
+    private string _vfrCallsign = string.Empty;
+
+    /// <summary>
+    /// Starts a local VFR flight at the aerodrome the pilot is on, with no flight plan: the plan
+    /// is only the aerodrome and the callsign, and the flight is VFR from the first call.
+    /// </summary>
+    [RelayCommand]
+    private async Task StartVfrLocalFlightAsync()
+    {
+        if (!VfrLocalFlight.TryCreatePlan(VfrAerodrome, VfrCallsign, _clock.UtcNow, out FlightPlan? plan, out string? problem))
+        {
+            StatusIsError = true;
+            StatusMessage = problem == "aerodrome"
+                ? UiText.T("Enter the four-letter ICAO code of the aerodrome, such as LFPL.")
+                : UiText.T("Enter the callsign or registration of your aircraft, such as F-GABC.");
+            return;
+        }
+
+        string icao = plan.DepartureIcao;
+
+        IsImporting = true;
+        StatusIsError = false;
+
+        try
+        {
+            _sessionContext.PreassignedSquawk = null;
+            AtcSession session = await _sessionContext
+                .LoadFlightPlanAsync(plan, CancellationToken.None)
+                .ConfigureAwait(true);
+            session = _sessionContext.Mutate(current => current.WithFlightRules(FlightRules.Vfr));
+
+            _providerStatus.SetFlightPlanStatus(true, $"{plan.ToSummary()} · VFR local");
+
+            // Remembered, so the next launch with the simulator running starts it again.
+            await _userSettings
+                .SaveManyAsync(
+                    [
+                        (VfrLocalOptions.SectionName, "Aerodrome", JsonValue.Create(icao)),
+                        (VfrLocalOptions.SectionName, "Callsign", JsonValue.Create(plan.Callsign.Original)),
+                        (VfrLocalOptions.SectionName, "AutoStart", JsonValue.Create(VfrAutoStart)),
+                    ],
+                    CancellationToken.None)
+                .ConfigureAwait(true);
+
+            StatusMessage = session.CurrentFrequency is Frequency assigned
+                ? UiText.T($"Local VFR flight at {icao}. ")
+                    + UiText.T($"Tune the frequencies yourself in the aircraft, starting with {assigned.ToDisplay()}: StormATC follows the one you tune.")
+                : UiText.T($"Local VFR flight at {icao}. No frequencies were found for this aerodrome: connect the simulator so StormATC can read them.");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Starting the local VFR flight failed.");
+            StatusIsError = true;
+            StatusMessage = UiText.T("The local VFR flight could not be started. See the Diagnostics page for details.");
+        }
+        finally
+        {
+            IsImporting = false;
+        }
+    }
+
+    /// <summary>The flight rules the pilot can choose between.</summary>
+    public IReadOnlyList<string> FlightRulesChoices { get; } = ["IFR", "VFR"];
+
+    /// <summary>
+    /// The rules the flight is operated under. A VFR flight needs no IFR clearance and stays with
+    /// Tower in the circuit. The pilot can also declare VFR on the radio.
+    /// </summary>
+    [ObservableProperty]
+    private string _selectedFlightRules = "IFR";
+
+    partial void OnSelectedFlightRulesChanged(string value)
+    {
+        if (_syncingFlightRules)
+        {
+            return;
+        }
+
+        FlightRules rules = string.Equals(value, "VFR", StringComparison.Ordinal) ? FlightRules.Vfr : FlightRules.Ifr;
+        _sessionContext.Mutate(session => session.WithFlightRules(rules));
+    }
 
     [ObservableProperty]
     private string _callsign = "—";
@@ -66,7 +164,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
     private string _arrivalProcedure = "—";
 
     [ObservableProperty]
-    private string _route = "No route filed";
+    private string _route = UiText.T("No route filed");
 
     [ObservableProperty]
     private string _blockTime = "—";
@@ -149,7 +247,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
 
     /// <summary>The label on the import button.</summary>
     public string ImportButtonText =>
-        UsesSimBrief ? "Import latest SimBrief plan" : "Load the bundled sample flight";
+        UsesSimBrief ? UiText.T("Import latest SimBrief plan") : UiText.T("Load the bundled sample flight");
 
     /// <inheritdoc />
     public Task RefreshAsync()
@@ -172,8 +270,8 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
         IsImporting = true;
         StatusIsError = false;
         StatusMessage = UsesSimBrief
-            ? "Fetching your latest flight plan from SimBrief…"
-            : "Loading the bundled sample flight…";
+            ? UiText.T("Fetching your latest flight plan from SimBrief…")
+            : UiText.T("Loading the bundled sample flight…");
 
         try
         {
@@ -212,15 +310,20 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
                 StatusIsError = true;
                 StatusMessage = result.SuggestedAction is { Length: > 0 } action
                     ? $"{result.ErrorMessage} {action}"
-                    : result.ErrorMessage ?? "The import failed.";
+                    : result.ErrorMessage ?? UiText.T("The import failed.");
 
-                _providerStatus.SetFlightPlanStatus(false, "Import failed");
+                _providerStatus.SetFlightPlanStatus(false, UiText.T("Import failed"));
                 return;
             }
 
             // Only the sample scenario pins a transponder code. Reading it from the router rather
             // than testing the provider type means a SimBrief import correctly clears it.
             _sessionContext.PreassignedSquawk = _flightPlanProvider.PreassignedSquawk;
+
+            // An imported plan replaces the remembered local flight at the next launch too.
+            await _userSettings
+                .SaveAsync(VfrLocalOptions.SectionName, "AutoStart", JsonValue.Create(false), CancellationToken.None)
+                .ConfigureAwait(true);
 
             AtcSession session = await _sessionContext
                 .LoadFlightPlanAsync(plan, CancellationToken.None)
@@ -236,16 +339,16 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
                 $"{plan.ToSummary()} · {_flightPlanProvider.LastProviderUsed}");
 
             StatusMessage = tuned
-                ? $"Imported {plan.ToSummary()} from {_flightPlanProvider.LastProviderUsed}. "
-                    + $"COM1 is tuned to {session.CurrentFrequency?.ToDisplay()}."
-                : $"Imported {plan.ToSummary()} from {_flightPlanProvider.LastProviderUsed}. "
-                    + $"Tune COM1 to {session.CurrentFrequency?.ToDisplay()} before transmitting.";
+                ? UiText.T($"Imported {plan.ToSummary()} from {_flightPlanProvider.LastProviderUsed}. ")
+                    + UiText.T($"COM1 is tuned to {session.CurrentFrequency?.ToDisplay()}.")
+                : UiText.T($"Imported {plan.ToSummary()} from {_flightPlanProvider.LastProviderUsed}. ")
+                    + UiText.T($"Tune COM1 to {session.CurrentFrequency?.ToDisplay()} before transmitting.");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "The flight plan import failed.");
             StatusIsError = true;
-            StatusMessage = "The import failed. See the Diagnostics page for details.";
+            StatusMessage = UiText.T("The import failed. See the Diagnostics page for details.");
         }
         finally
         {
@@ -258,6 +361,11 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
 
     private void UpdateFromSession(AtcSession session)
     {
+        if (string.IsNullOrWhiteSpace(VfrCallsign) && !string.IsNullOrWhiteSpace(session.AircraftState.AtcIdentifier))
+        {
+            VfrCallsign = session.AircraftState.AtcIdentifier;
+        }
+
         if (session.FlightPlan is not FlightPlan plan)
         {
             HasPlan = false;
@@ -267,17 +375,27 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
 
         HasPlan = true;
 
+        _syncingFlightRules = true;
+        try
+        {
+            SelectedFlightRules = session.FlightRules == FlightRules.Vfr ? "VFR" : "IFR";
+        }
+        finally
+        {
+            _syncingFlightRules = false;
+        }
+
         Callsign = plan.Callsign.Original;
         AircraftType = plan.AircraftIcaoType ?? "—";
         Departure = plan.DepartureIcao;
         Destination = plan.DestinationIcao;
-        Alternates = plan.AlternateIcaos.Count > 0 ? string.Join(", ", plan.AlternateIcaos) : "None filed";
+        Alternates = plan.AlternateIcaos.Count > 0 ? string.Join(", ", plan.AlternateIcaos) : UiText.T("None filed");
         CruiseAltitude = plan.CruiseAltitude?.ToDisplay() ?? "—";
         DepartureRunway = plan.DepartureRunway?.ToDisplay() ?? "—";
         ArrivalRunway = plan.ArrivalRunway?.ToDisplay() ?? "—";
         DepartureProcedure = plan.StandardInstrumentDeparture ?? "—";
         ArrivalProcedure = plan.StandardTerminalArrival ?? plan.Approach ?? "—";
-        Route = plan.Route is { Length: > 0 } route ? route : "No route filed";
+        Route = plan.Route is { Length: > 0 } route ? route : UiText.T("No route filed");
         Source = plan.SourceIdentifier ?? "—";
 
         BlockTime = plan.EstimatedBlockTime is TimeSpan block
@@ -294,7 +412,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
             TimeSpan age = _clock.UtcNow - when;
             IsStale = age > _simBriefOptions.StaleThreshold;
             StaleMessage = IsStale
-                ? $"This plan was generated {(int)age.TotalHours} hours ago and may not reflect current conditions."
+                ? UiText.T($"This plan was generated {(int)age.TotalHours} hours ago and may not reflect current conditions.")
                 : string.Empty;
         }
         else

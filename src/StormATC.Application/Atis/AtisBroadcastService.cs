@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Localization;
 using StormATC.Application.Sessions;
 using StormATC.Domain;
 using StormATC.Domain.Airports;
@@ -34,7 +35,7 @@ public sealed class AtisBroadcastService : IDisposable
     private AtisBroadcast? _currentBroadcast;
     private Guid? _broadcastSessionId;
     private long _informationSequence = -1;
-    private string _statusMessage = "Load a flight plan to receive departure ATIS.";
+    private string _statusMessage = UiText.T("Load a flight plan to receive departure ATIS.");
     private bool _disposed;
 
     /// <summary>Creates the service and starts observing radio/session changes.</summary>
@@ -114,27 +115,27 @@ public sealed class AtisBroadcastService : IDisposable
 
         if (!IsMonitoringAtis)
         {
-            SetStatus("Tune the selected radio to the departure ATIS frequency before replaying.");
+            SetStatus(UiText.T("Tune the selected radio to the departure ATIS frequency before replaying."));
             return;
         }
 
         if (CurrentBroadcast is null)
         {
-            SetStatus("The departure ATIS is still being prepared.");
+            SetStatus(UiText.T("The departure ATIS is still being prepared."));
             return;
         }
 
-        SetStatus($"Replaying information {CurrentBroadcast.InformationCode} from the audio cache.");
+        SetStatus(UiText.T($"Replaying information {CurrentBroadcast.InformationCode} from the audio cache."));
         bool played = await _textToSpeech
             .SpeakCachedAsync(
                 CacheKey(_sessionContext.CurrentSession.SessionId),
                 CurrentBroadcast.SpokenText,
-                VoiceConfiguration.Default,
+                VoiceConfiguration.For(CurrentBroadcast.Language),
                 cancellationToken)
             .ConfigureAwait(false);
         SetStatus(played
-            ? $"Information {CurrentBroadcast.InformationCode} replay complete; automatic loop continues."
-            : "ATIS text is ready, but voice audio is unavailable. Check Deepgram, mute, and cloud settings.");
+            ? UiText.T($"Information {CurrentBroadcast.InformationCode} replay complete; automatic loop continues.")
+            : UiText.T("ATIS text is ready, but voice audio is unavailable. Check Deepgram, mute, and cloud settings."));
     }
 
     private void OnSessionChanged(object? sender, AtcSession session) => Observe(session);
@@ -165,10 +166,10 @@ public sealed class AtisBroadcastService : IDisposable
             bool statusChanged;
             string nextStatus = session.CurrentController == ControllerPosition.Atis
                 && session.CurrentFrequency is Frequency atis
-                ? $"Tune the selected radio to {atis.ToDisplay()} to receive departure ATIS."
+                ? UiText.T($"Tune the selected radio to {atis.ToDisplay()} to receive departure ATIS.")
                 : session.FlightPlan is null
-                    ? "Load a flight plan to receive departure ATIS."
-                    : "Departure ATIS is no longer the active station.";
+                    ? UiText.T("Load a flight plan to receive departure ATIS.")
+                    : UiText.T("Departure ATIS is no longer the active station.");
 
             lock (_stateLock)
             {
@@ -203,7 +204,7 @@ public sealed class AtisBroadcastService : IDisposable
             }
 
             _requestedPlayback = key;
-            _statusMessage = "Preparing departure ATIS from current airport and weather data.";
+            _statusMessage = UiText.T("Preparing departure ATIS from current airport and weather data.");
             _playbackCancellation?.Cancel();
             _playbackCancellation?.Dispose();
             _playbackCancellation = CancellationTokenSource.CreateLinkedTokenSource(
@@ -227,7 +228,7 @@ public sealed class AtisBroadcastService : IDisposable
                 if (session.SessionId != key.SessionId
                     || session.FlightPlan is not { DepartureIcao: { Length: > 0 } icao })
                 {
-                    SetStatus("Load a flight plan to receive departure ATIS.");
+                    SetStatus(UiText.T("Load a flight plan to receive departure ATIS."));
                     return;
                 }
 
@@ -253,16 +254,16 @@ public sealed class AtisBroadcastService : IDisposable
                 }
 
                 SetStatus(changed
-                    ? $"ATIS changed: now receiving information {broadcast.InformationCode} "
-                      + $"on {broadcast.Frequency.ToDisplay()}."
-                    : $"Receiving information {broadcast.InformationCode} on "
-                      + $"{broadcast.Frequency.ToDisplay()}.");
+                    ? UiText.T($"ATIS changed: now receiving information {broadcast.InformationCode} "
+                      + $"on {broadcast.Frequency.ToDisplay()}.")
+                    : UiText.T($"Receiving information {broadcast.InformationCode} on "
+                      + $"{broadcast.Frequency.ToDisplay()}."));
 
                 bool played = await _textToSpeech
                     .SpeakCachedAsync(
                         CacheKey(key.SessionId),
                         broadcast.SpokenText,
-                        VoiceConfiguration.Default,
+                        VoiceConfiguration.For(broadcast.Language),
                         cancellationToken)
                     .ConfigureAwait(false);
 
@@ -275,15 +276,15 @@ public sealed class AtisBroadcastService : IDisposable
                 if (played)
                 {
                     SetStatus(
-                        $"Information {broadcast.InformationCode} is looping from the audio cache. "
-                        + "Runway and weather are checked locally between repeats.");
+                        UiText.T($"Information {broadcast.InformationCode} is looping from the audio cache. "
+                        + $"Runway and weather are checked locally between repeats."));
                     delay = _repeatDelay;
                 }
                 else
                 {
                     SetStatus(
-                        "ATIS text is ready, but voice audio is unavailable. "
-                        + "Check Deepgram, mute, and cloud settings; no LLM is being called.");
+                        UiText.T("ATIS text is ready, but voice audio is unavailable. "
+                        + "Check Deepgram, mute, and cloud settings; no LLM is being called."));
                     delay = _unavailableRetryDelay;
                 }
 
@@ -297,7 +298,7 @@ public sealed class AtisBroadcastService : IDisposable
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "Departure ATIS generation or playback failed.");
-            SetStatus("ATIS audio failed. Check the Radio audio settings and Diagnostics.");
+            SetStatus(UiText.T("ATIS audio failed. Check the Radio audio settings and Diagnostics."));
         }
     }
 
@@ -327,7 +328,21 @@ public sealed class AtisBroadcastService : IDisposable
                     candidate.OperationalSignature,
                     StringComparison.Ordinal))
             {
-                return (current, false);
+                if (current.Language == candidate.Language)
+                {
+                    return (current, false);
+                }
+
+                // Same facts, new language: reword the current edition without moving to the
+                // next information letter, since nothing operational changed.
+                AtisBroadcast reworded = AtisBroadcastBuilder.Build(
+                    session,
+                    airport,
+                    weather,
+                    now,
+                    _informationSequence)!;
+                _currentBroadcast = reworded;
+                return (reworded, true);
             }
 
             _informationSequence = _broadcastSessionId == session.SessionId

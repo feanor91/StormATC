@@ -7,6 +7,7 @@ using StormATC.Domain.Airports;
 using StormATC.Domain.Atc;
 using StormATC.Domain.FlightPlanning;
 using StormATC.Domain.Intents;
+using StormATC.Domain.Phraseology;
 using StormATC.Domain.Sessions;
 using StormATC.Domain.ValueObjects;
 
@@ -32,8 +33,14 @@ public sealed class AtcSessionContext(
     ITrafficProvider trafficProvider,
     IWeatherProvider weatherProvider,
     IClock clock,
-    ILogger<AtcSessionContext> logger)
+    ILogger<AtcSessionContext> logger,
+    IVfrProfileProvider? vfrProfileProvider = null)
 {
+    private readonly IVfrProfileProvider? _vfrProfileProvider = vfrProfileProvider;
+
+    private readonly Dictionary<string, VfrAerodromeProfile?> _vfrProfileCache =
+        new(StringComparer.OrdinalIgnoreCase);
+
     private readonly IAirportDataProvider _airportDataProvider =
         airportDataProvider ?? throw new ArgumentNullException(nameof(airportDataProvider));
 
@@ -54,6 +61,12 @@ public sealed class AtcSessionContext(
     private readonly Lock _stateLock = new();
     private Frequency? _departureAtisFrequency;
     private Frequency? _departureDeliveryFrequency;
+
+    /// <summary>
+    /// The position that answers first on the ground: Delivery where the aerodrome publishes
+    /// one, otherwise Ground (as at Lognes, which has Sol and Tour but no Prévol).
+    /// </summary>
+    private ControllerPosition _departureStartController = ControllerPosition.ClearanceDelivery;
     private bool _departureAtisWasMonitored;
 
     private AtcSession _currentSession = AtcSession.Create(
@@ -79,6 +92,29 @@ public sealed class AtcSessionContext(
 
     /// <summary>How strictly the engine should enforce procedure.</summary>
     public RealismProfile Realism { get; set; } = RealismProfile.Standard;
+
+    /// <summary>
+    /// The radio language for new sessions. Change it with <see cref="SetLanguage"/> so the
+    /// running session switches too.
+    /// </summary>
+    public PhraseologyLanguage Language { get; private set; } = PhraseologyLanguage.English;
+
+    /// <summary>
+    /// Switches the radio language now: the current session, and every session started after
+    /// it. Only wording, recognition and voice change; the session's state is untouched.
+    /// </summary>
+    public void SetLanguage(PhraseologyLanguage language)
+    {
+        lock (_stateLock)
+        {
+            Language = language;
+        }
+
+        if (CurrentSession.Language != language)
+        {
+            Mutate(session => session with { Language = language });
+        }
+    }
 
     /// <summary>
     /// Relative tail direction used for pushback when the pilot does not request one.
@@ -129,7 +165,10 @@ public sealed class AtcSessionContext(
             Guid.CreateVersion7(),
             now,
             mode,
-            initialState ?? AircraftState.Unknown(now));
+            initialState ?? AircraftState.Unknown(now)) with
+        {
+            Language = Language,
+        };
 
         lock (_stateLock)
         {
@@ -163,6 +202,10 @@ public sealed class AtcSessionContext(
         {
             _departureAtisFrequency = hasDistinctAtis ? atisFrequency : null;
             _departureDeliveryFrequency = deliveryFrequency;
+            _departureStartController =
+                departure?.Frequencies is { ClearanceDelivery: null, Ground: not null }
+                    ? ControllerPosition.Ground
+                    : ControllerPosition.ClearanceDelivery;
             _departureAtisWasMonitored = false;
         }
 
@@ -175,22 +218,54 @@ public sealed class AtcSessionContext(
             ? nearbyStand
             : null;
 
-        return Mutate(session => session
-            .WithFlightPlan(flightPlan)
-            with
+        return Mutate(session =>
+        {
+            // A plan from another aerodrome starts a new flight: the controller, frequency and
+            // clearances of the previous one do not carry over. Without this, importing a plan
+            // after the bundled sample left the session on the sample aerodrome's ATIS, so no
+            // transmission at the real aerodrome could ever be heard. Reloading the same
+            // aerodrome's plan mid-flight keeps the flight where it is.
+            bool freshStart = session.FlightPlan is null
+                || !string.Equals(
+                    session.FlightPlan.DepartureIcao,
+                    flightPlan.DepartureIcao,
+                    StringComparison.OrdinalIgnoreCase);
+
+            AtcSession updated = session.WithFlightPlan(flightPlan) with
             {
                 AssignedDepartureRunway = flightPlan.DepartureRunway,
                 AssignedArrivalRunway = flightPlan.ArrivalRunway,
                 AssignedStand = stand,
-                Phase = session.Phase == FlightPhase.Disconnected ? FlightPhase.Preflight : session.Phase,
-                CurrentController = session.CurrentController == ControllerPosition.None
+                Phase = freshStart || session.Phase == FlightPhase.Disconnected
+                    ? FlightPhase.Preflight
+                    : session.Phase,
+                CurrentController = freshStart || session.CurrentController == ControllerPosition.None
                     ? hasDistinctAtis
                         ? ControllerPosition.Atis
-                        : ControllerPosition.ClearanceDelivery
+                        : _departureStartController
                     : session.CurrentController,
-                CurrentFrequency = session.CurrentFrequency
-                    ?? (hasDistinctAtis ? atisFrequency : deliveryFrequency),
-            });
+                CurrentFrequency = freshStart
+                    ? hasDistinctAtis ? atisFrequency : deliveryFrequency
+                    : session.CurrentFrequency
+                        ?? (hasDistinctAtis ? atisFrequency : deliveryFrequency),
+            };
+
+            return freshStart
+                ? updated with
+                {
+                    PendingReadback = null,
+                    IfrClearance = null,
+                    TaxiClearance = null,
+                    DepartureClearance = null,
+                    ArrivalClearance = null,
+                    ClearedAltitude = null,
+                    AssignedHeading = null,
+                    HandoffState = HandoffState.None,
+                    CircuitLeg = CircuitLeg.None,
+                    TouchAndGoRequested = false,
+                }
+                : updated;
+        });
     }
 
     /// <summary>Records a new aircraft snapshot from the simulator.</summary>
@@ -216,12 +291,82 @@ public sealed class AtcSessionContext(
                     && _departureDeliveryFrequency is Frequency delivery
                     && tuned.IsSameChannel(delivery))
                 {
-                    return updated.WithController(ControllerPosition.ClearanceDelivery, delivery);
+                    return updated.WithController(_departureStartController, delivery);
+                }
+            }
+
+            // A VFR flight at a controlled aerodrome has no clearance to wait for and no fixed
+            // order of frequencies: whichever published frequency the pilot tunes is the
+            // controller who answers. Listening to the ATIS, then calling Ground or Tower, is
+            // simply tuning them in turn.
+            if (updated.FlightRules == FlightRules.Vfr
+                && updated.FlightPlan is FlightPlan localPlan
+                && FollowTunedFrequency(updated, state, localPlan) is AtcSession followed)
+            {
+                updated = followed;
+            }
+
+            // A VFR arrival calls the destination tower directly; nobody hands it over. Once the
+            // aircraft is airborne and has tuned that frequency, the tower is its controller, and
+            // its transmissions are heard instead of being ignored as off frequency.
+            if (updated.FlightRules == FlightRules.Vfr
+                && !state.IsOnGround
+                && updated.CurrentController != ControllerPosition.Tower
+                && updated.FlightPlan is FlightPlan plan
+                && _airportCache.TryGetValue(plan.DestinationIcao, out AirportData? destination)
+                && destination?.Frequencies.Tower is Frequency tower
+                && state.Radio.ActiveTransmitFrequency.IsSameChannel(tower))
+            {
+                updated = updated.WithController(ControllerPosition.Tower, tower);
+                if (updated.Phase is FlightPhase.Preflight or FlightPhase.IFRClearanceIssued
+                    or FlightPhase.Departure or FlightPhase.Enroute or FlightPhase.Descent)
+                {
+                    updated = updated.WithPhase(FlightPhase.Arrival);
                 }
             }
 
             return updated;
         });
+    }
+
+    /// <summary>
+    /// The session moved to the controller whose published frequency the aircraft has tuned, or
+    /// null when the tuned frequency is not one of the aerodrome's or already is the session's.
+    /// </summary>
+    private AtcSession? FollowTunedFrequency(AtcSession session, AircraftState state, FlightPlan plan)
+    {
+        string icao = session.Phase is FlightPhase.Descent or FlightPhase.Arrival or FlightPhase.Approach
+            or FlightPhase.Circuit or FlightPhase.Landed or FlightPhase.TaxiIn
+            ? plan.DestinationIcao
+            : plan.DepartureIcao;
+
+        if (!_airportCache.TryGetValue(icao, out AirportData? airport) || airport is null)
+        {
+            return null;
+        }
+
+        Frequency tuned = state.Radio.ActiveTransmitFrequency;
+        ControllerPosition[] positions =
+        [
+            ControllerPosition.Atis,
+            ControllerPosition.ClearanceDelivery,
+            ControllerPosition.Ground,
+            ControllerPosition.Tower,
+        ];
+
+        foreach (ControllerPosition position in positions)
+        {
+            if (airport.Frequencies.For(position) is Frequency published && tuned.IsSameChannel(published))
+            {
+                return session.CurrentController == position
+                    && session.CurrentFrequency is Frequency current
+                    && current.IsSameChannel(published)
+                        ? null
+                        : session.WithController(position, published);
+            }
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -300,6 +445,12 @@ public sealed class AtcSessionContext(
             Transcript = transcript,
             DepartureAirport = departure,
             DestinationAirport = destination,
+            VfrProfile = await GetVfrProfileAsync(
+                    session.FlightPlan is FlightPlan filed
+                        ? (IsArrivalPhase(session.Phase) ? filed.DestinationIcao : filed.DepartureIcao)
+                        : null,
+                    cancellationToken)
+                .ConfigureAwait(false),
             Traffic = traffic,
             Weather = weather,
             CurrentTime = now,
@@ -307,6 +458,41 @@ public sealed class AtcSessionContext(
             DefaultPushbackDirection = DefaultPushbackDirection,
             PreassignedSquawk = PreassignedSquawk,
         };
+    }
+
+    private static bool IsArrivalPhase(FlightPhase phase) => phase is FlightPhase.Descent
+        or FlightPhase.Arrival or FlightPhase.Approach or FlightPhase.Final or FlightPhase.Landed
+        or FlightPhase.TaxiIn or FlightPhase.Parked or FlightPhase.GoAround or FlightPhase.Circuit;
+
+    /// <summary>Loads an aerodrome's VFR profile, caching the result (including "none").</summary>
+    private async Task<VfrAerodromeProfile?> GetVfrProfileAsync(string? icao, CancellationToken cancellationToken)
+    {
+        if (_vfrProfileProvider is null || string.IsNullOrWhiteSpace(icao))
+        {
+            return null;
+        }
+
+        if (_vfrProfileCache.TryGetValue(icao, out VfrAerodromeProfile? cached))
+        {
+            return cached;
+        }
+
+        VfrAerodromeProfile? profile = null;
+        try
+        {
+            profile = await _vfrProfileProvider.GetProfileAsync(icao, cancellationToken).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "The VFR profile of {Icao} could not be loaded.", icao);
+        }
+
+        _vfrProfileCache[icao] = profile;
+        return profile;
     }
 
     /// <summary>Loads an aerodrome, caching the result for the life of the session.</summary>

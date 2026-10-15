@@ -143,12 +143,35 @@ public sealed record IntentEntities
     /// <summary>The runway the pilot said they would hold short of.</summary>
     public RunwayIdentifier? HoldShortRunway { get; init; }
 
+    /// <summary>The pilot said the flight is VFR (or a local flight).</summary>
+    public bool DeclaresVfr { get; init; }
+
+    /// <summary>The pilot asked for, or is flying, a touch and go.</summary>
+    public bool TouchAndGo { get; init; }
+
+    /// <summary>The circuit direction the pilot named, if any.</summary>
+    public CircuitSide? CircuitSide { get; init; }
+
+    /// <summary>The ATIS information letter the pilot quoted, such as "I" for India.</summary>
+    public string? InformationLetter { get; init; }
+
     /// <summary>True when no entity was extracted at all.</summary>
     public bool IsEmpty =>
         Runway is null && Altitude is null && Squawk is null && Frequency is null
         && Heading is null && Taxiways.Count == 0 && Waypoint is null
         && ApproachName is null && Stand is null && PushbackDirection is null
-        && SpeedKnots is null && !MentionsHoldShort;
+        && SpeedKnots is null && !MentionsHoldShort
+        && !DeclaresVfr && !TouchAndGo && CircuitSide is null && InformationLetter is null;
+}
+
+/// <summary>The direction of turns in the aerodrome circuit.</summary>
+public enum CircuitSide
+{
+    /// <summary>Left-hand circuit: turns to the left.</summary>
+    Left = 1,
+
+    /// <summary>Right-hand circuit: turns to the right.</summary>
+    Right,
 }
 
 /// <summary>Validation and normalisation for directions used in pushback phraseology.</summary>

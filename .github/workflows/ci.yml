@@ -1,8 +1,10 @@
 name: CI
 
 on:
+  # Every pushed branch is compiled and tested, so a feature branch is checked on Windows
+  # (WPF included) before it is merged.
   push:
-    branches: ["main", "master"]
+    branches: ["**"]
   pull_request:
   workflow_dispatch:
 
@@ -47,7 +49,40 @@ jobs:
         run: dotnet build StormATC.sln -c Release --no-restore --nologo
 
       - name: Test
-        run: dotnet test StormATC.sln -c Release --no-build --no-restore --nologo
+        run: >-
+          dotnet test StormATC.sln -c Release --no-build --no-restore --nologo
+          --logger "trx;LogFilePrefix=results"
+          --results-directory TestResults
+
+      - name: Report failed tests
+        if: ${{ failure() }}
+        shell: pwsh
+        run: |
+          # Turn each failed test into an annotation, so failures are readable from the run
+          # summary (and the API) without downloading the log or the trx artifact.
+          Get-ChildItem TestResults -Recurse -Filter *.trx -ErrorAction SilentlyContinue | ForEach-Object {
+            [xml]$trx = Get-Content $_.FullName
+            $ns = New-Object Xml.XmlNamespaceManager($trx.NameTable)
+            $ns.AddNamespace('t', 'http://microsoft.com/schemas/VisualStudio/TeamTest/2010')
+            foreach ($result in $trx.SelectNodes('//t:UnitTestResult[@outcome="Failed"]', $ns)) {
+              $node = $result.SelectSingleNode('t:Output/t:ErrorInfo/t:Message', $ns)
+              $message = if ($node) { $node.InnerText } else { 'No message.' }
+              $message = ($message -replace '\r?\n', ' ').Trim()
+              if ($message.Length -gt 900) { $message = $message.Substring(0, 900) + '...' }
+              $message = $message -replace '%', '%25'
+              $title = "Test failed $($result.testName)" -replace '%', '%25' -replace ',', '%2C' -replace ':', '%3A'
+              Write-Output "::error title=$title::$message"
+            }
+          }
+
+      - name: Upload test results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults/**/*.trx
+          if-no-files-found: ignore
+          retention-days: 14
 
       - name: Restore Windows runtime dependencies
         run: >
@@ -71,17 +106,18 @@ jobs:
           retention-days: 14
 
       - name: Publish rolling GitHub release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/feature/radio-francaise-voix-locale')
         shell: pwsh
         run: |
-          $zip = "StormATC-win-x64-latest.zip"
+          $tag = if ($env:GITHUB_REF_NAME -eq "main") { "latest" } else { "dev-latest" }
+          $zip = "StormATC-win-x64-$tag.zip"
           Compress-Archive -Path artifacts/StormATC-win-x64/* -DestinationPath $zip -Force
-          gh release delete latest --cleanup-tag --yes 2>$null
-          gh release create latest $zip `
+          gh release delete $tag --cleanup-tag --yes 2>$null
+          gh release create $tag $zip `
             --prerelease `
             --target $env:GITHUB_SHA `
-            --title "StormATC latest build" `
-            --notes "Automatic build of $($env:GITHUB_SHA.Substring(0,7)) from main. Built without the MSFS SDK: no SimConnect integration. For the full build, run scripts/New-StormATCInstaller.ps1 locally."
+            --title "StormATC $tag build ($($env:GITHUB_REF_NAME))" `
+            --notes "Automatic build of $($env:GITHUB_SHA.Substring(0,7)) from $($env:GITHUB_REF_NAME). Built without the MSFS SDK: no SimConnect integration. For the full build, run scripts/New-StormATCInstaller.ps1 locally."
           if ($LASTEXITCODE -ne 0) { throw "The rolling release could not be created." }
 
       - name: List vulnerable dependencies

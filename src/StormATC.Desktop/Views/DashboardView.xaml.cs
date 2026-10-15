@@ -1,5 +1,6 @@
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using StormATC.Desktop.ViewModels;
 
 namespace StormATC.Desktop.Views;
@@ -44,6 +45,21 @@ public partial class DashboardView : UserControl
         {
             viewModel.StopTransmissionCommand.Execute(null);
         }
+
+        // The button is disabled while the transmission is processed. A control that is
+        // disabled while it holds keyboard focus or mouse capture can leave the window ignoring
+        // clicks until it loses focus, so hand both back once this event has finished routing.
+        Dispatcher.BeginInvoke(
+            DispatcherPriority.Input,
+            () =>
+            {
+                if (Mouse.Captured is not null)
+                {
+                    Mouse.Capture(null);
+                }
+
+                Keyboard.ClearFocus();
+            });
     }
 
     /// <summary>Sends the typed transmission on Enter.</summary>

@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 using StormATC.Application.Abstractions;
 using StormATC.Application.Intent;
+using StormATC.Application.Localization;
 using StormATC.Application.Phraseology;
 using StormATC.Application.Sessions;
 using StormATC.Domain;
@@ -126,7 +127,7 @@ public sealed class PilotTransmissionCoordinator(
 
             return TransmissionProcessingResult.Failed(
                 transmission.CorrelationId,
-                "The transmission could not be processed. See the Diagnostics page for details.");
+                UiText.T("The transmission could not be processed. See the Diagnostics page for details."));
         }
         finally
         {
@@ -183,7 +184,12 @@ public sealed class PilotTransmissionCoordinator(
         var normalizationStopwatch = Stopwatch.StartNew();
         string displayTranscript =
             TranscriptNormalizer.FormatForDisplay(transmission.RawTranscript);
-        string normalized = TranscriptNormalizer.Normalize(displayTranscript);
+        // A French transmission is rewritten into the parser's canonical English keywords and
+        // digit runs first. Only interpretation changes: the conversation keeps the French text.
+        string interpreted = session.Language == Domain.Phraseology.PhraseologyLanguage.French
+            ? FrenchTranscriptCanonicalizer.Canonicalize(displayTranscript)
+            : displayTranscript;
+        string normalized = TranscriptNormalizer.Normalize(interpreted);
         normalizationStopwatch.Stop();
 
         var pilotTurn = new ConversationTurn
@@ -343,6 +349,26 @@ public sealed class PilotTransmissionCoordinator(
         if (decision.NewPhase is FlightPhase phase)
         {
             session = session.WithPhase(phase);
+        }
+
+        if (decision.NewFlightRules is FlightRules rules)
+        {
+            session = session.WithFlightRules(rules);
+        }
+
+        if (decision.NewCircuitLeg is CircuitLeg leg)
+        {
+            session = session.WithCircuitLeg(leg);
+        }
+
+        if (decision.NewTouchAndGoRequested is bool touchAndGo)
+        {
+            session = session.WithTouchAndGoRequested(touchAndGo);
+        }
+
+        if (decision.NewArrivalRunway is RunwayIdentifier arrivalRunway)
+        {
+            session = session.WithArrivalRunway(arrivalRunway);
         }
 
         foreach (AtcWarning warning in decision.Warnings)

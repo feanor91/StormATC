@@ -2,7 +2,9 @@ using System.IO;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
+using StormATC.Application.FlightPlanning;
 using StormATC.Application.Atis;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Application.Sessions;
 using StormATC.Domain;
@@ -42,8 +44,12 @@ public sealed class ApplicationStartupService(
     IOptions<ApplicationOptions> applicationOptions,
     IOptions<AtcRealismOptions> realismOptions,
     IOptions<SimBriefOptions> simBriefOptions,
+    IOptions<VfrLocalOptions> vfrLocalOptions,
     ILogger<ApplicationStartupService> logger)
 {
+    private readonly VfrLocalOptions _vfrLocal =
+        vfrLocalOptions?.Value ?? throw new ArgumentNullException(nameof(vfrLocalOptions));
+
     private readonly AtcSessionContext _sessionContext =
         sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
 
@@ -116,7 +122,7 @@ public sealed class ApplicationStartupService(
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             _logger.LogError(ex, "Could not create the application data directories.");
-            _warnings.Add("The application data directory could not be created. History will not be saved.");
+            _warnings.Add(UiText.T("The application data directory could not be created. History will not be saved."));
         }
     }
 
@@ -129,7 +135,7 @@ public sealed class ApplicationStartupService(
             int version = await _sessionRepository.GetSchemaVersionAsync(cancellationToken)
                 .ConfigureAwait(false);
 
-            _providerStatus.SetStorageStatus(true, $"Schema v{version}");
+            _providerStatus.SetStorageStatus(true, UiText.T($"Schema v{version}"));
         }
         catch (OperationCanceledException)
         {
@@ -139,8 +145,8 @@ public sealed class ApplicationStartupService(
         {
             // A broken database must not stop a session. Transcripts simply are not saved.
             _logger.LogError(ex, "The local database could not be initialised.");
-            _providerStatus.SetStorageStatus(false, "Unavailable — history will not be saved");
-            _warnings.Add("The local database could not be opened. This session will not be saved.");
+            _providerStatus.SetStorageStatus(false, UiText.T("Unavailable — history will not be saved"));
+            _warnings.Add(UiText.T("The local database could not be opened. This session will not be saved."));
         }
     }
 
@@ -150,7 +156,7 @@ public sealed class ApplicationStartupService(
         {
             if (!await _promptCatalog.HasPromptAsync(name, cancellationToken).ConfigureAwait(false))
             {
-                _warnings.Add($"Prompt '{name}' is missing. Language-model features that use it are disabled.");
+                _warnings.Add(UiText.T($"Prompt '{name}' is missing. Language-model features that use it are disabled."));
             }
         }
     }
@@ -163,6 +169,8 @@ public sealed class ApplicationStartupService(
         SessionMode mode = _simulatorConnector.IsMockActive ? SessionMode.Mock : SessionMode.Live;
 
         _sessionContext.Realism = ParseRealism(_applicationOptions.RealismProfile);
+        _sessionContext.SetLanguage(
+            Domain.Phraseology.PhraseologyLanguages.Parse(_applicationOptions.AtcLanguage));
         _sessionContext.DefaultPushbackDirection =
             PushbackDirections.Normalize(_realismOptions.DefaultPushbackDirection)
             ?? PushbackDirections.TailLeft;
@@ -181,7 +189,7 @@ public sealed class ApplicationStartupService(
     {
         if (!RealismProfile.IsKnownName(name))
         {
-            _warnings.Add($"Realism profile '{name}' is not recognised. Using Standard.");
+            _warnings.Add(UiText.T($"Realism profile '{name}' is not recognised. Using Standard."));
         }
 
         return RealismProfile.FromName(name) with
@@ -192,6 +200,8 @@ public sealed class ApplicationStartupService(
             EnforceHoldShort = _realismOptions.EnforceHoldShort,
             RequireCheckInOnFrequencyChange =
                 _realismOptions.RequireCheckInOnFrequencyChange,
+            AcceptAcknowledgementAsReadback = _realismOptions.AcceptAcknowledgementAsReadback
+                && RealismProfile.FromName(name).AcceptAcknowledgementAsReadback,
             MinimumIntentConfidence = _realismOptions.MinimumIntentConfidence,
         };
     }
@@ -205,8 +215,8 @@ public sealed class ApplicationStartupService(
             if (_simulatorConnector.ConnectionState != SimulatorConnectionState.Connected)
             {
                 _warnings.Add(
-                    $"The simulator connector '{_simulatorConnector.ConnectorName}' is "
-                    + $"{_simulatorConnector.ConnectionState}. Aircraft state will not update.");
+                    UiText.T($"The simulator connector '{_simulatorConnector.ConnectorName}' is "
+                    + $"{_simulatorConnector.ConnectionState}. Aircraft state will not update."));
             }
             else if (_simulatorConnector.PreferredConnector != SimulatorConnectorNames.Mock
                 && _simulatorConnector.IsMockActive)
@@ -228,14 +238,49 @@ public sealed class ApplicationStartupService(
         catch (Exception ex)
         {
             _logger.LogError(ex, "The simulator connector failed to start.");
-            _warnings.Add("The simulator could not be connected. Aircraft state will not update.");
+            _warnings.Add(UiText.T("The simulator could not be connected. Aircraft state will not update."));
         }
+    }
+
+    /// <summary>
+    /// Starts the remembered local VFR flight when the simulator is running, so a pilot who sits
+    /// in the aircraft and opens StormATC does not have to set the flight up again.
+    /// </summary>
+    private async Task<bool> TryStartRememberedVfrFlightAsync(CancellationToken cancellationToken)
+    {
+        if (!_vfrLocal.AutoStart
+            || _simulatorConnector.IsMockActive
+            || !VfrLocalFlight.TryCreatePlan(
+                _vfrLocal.Aerodrome,
+                _vfrLocal.Callsign,
+                DateTimeOffset.UtcNow,
+                out FlightPlan? plan,
+                out _))
+        {
+            return false;
+        }
+
+        _sessionContext.PreassignedSquawk = null;
+        AtcSession session = await _sessionContext
+            .LoadFlightPlanAsync(plan, cancellationToken)
+            .ConfigureAwait(false);
+        session = _sessionContext.Mutate(current => current.WithFlightRules(FlightRules.Vfr));
+
+        // The radio is left alone: a VFR flight follows whichever frequency the pilot tunes.
+        _providerStatus.SetFlightPlanStatus(true, $"{plan.ToSummary()} · VFR local");
+        _logger.LogInformation("Started the remembered local VFR flight {Summary}.", plan.ToSummary());
+        return true;
     }
 
     private async Task LoadFlightPlanAsync(CancellationToken cancellationToken)
     {
         try
         {
+            if (await TryStartRememberedVfrFlightAsync(cancellationToken).ConfigureAwait(false))
+            {
+                return;
+            }
+
             var request = new FlightPlanImportRequest { UserId = _simBriefOptions.UserId };
 
             FlightPlanImportResult result = await _flightPlanProvider
@@ -244,7 +289,7 @@ public sealed class ApplicationStartupService(
 
             if (!result.Success || result.FlightPlan is not FlightPlan plan)
             {
-                _providerStatus.SetFlightPlanStatus(false, result.ErrorMessage ?? "No flight plan loaded");
+                _providerStatus.SetFlightPlanStatus(false, result.ErrorMessage ?? UiText.T("No flight plan loaded"));
 
                 if (result.ErrorMessage is { Length: > 0 } error)
                 {
@@ -271,8 +316,8 @@ public sealed class ApplicationStartupService(
                 if (!tuned)
                 {
                     _warnings.Add(
-                        $"COM1 could not be tuned automatically to "
-                        + $"{initialFrequency.ToDisplay()}. Tune it in the aircraft before transmitting.");
+                        UiText.T($"COM1 could not be tuned automatically to "
+                        + $"{initialFrequency.ToDisplay()}. Tune it in the aircraft before transmitting."));
                 }
             }
 
@@ -303,8 +348,8 @@ public sealed class ApplicationStartupService(
         catch (Exception ex)
         {
             _logger.LogError(ex, "The flight plan could not be imported.");
-            _providerStatus.SetFlightPlanStatus(false, "Import failed");
-            _warnings.Add("The flight plan could not be imported. Load one from the Flight Plan page.");
+            _providerStatus.SetFlightPlanStatus(false, UiText.T("Import failed"));
+            _warnings.Add(UiText.T("The flight plan could not be imported. Load one from the Flight Plan page."));
         }
     }
 }

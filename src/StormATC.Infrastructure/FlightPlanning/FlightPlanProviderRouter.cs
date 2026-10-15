@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Domain.ValueObjects;
 using StormATC.Infrastructure.Mocks;
@@ -104,7 +105,7 @@ public sealed class FlightPlanProviderRouter(
             return await UseSampleAsync(
                 request,
                 cancellationToken,
-                "Offline mode is on, so SimBrief was not contacted. The bundled sample flight was loaded instead.")
+                UiText.T("Offline mode is on, so SimBrief was not contacted. The bundled sample flight was loaded instead."))
                 .ConfigureAwait(false);
         }
 

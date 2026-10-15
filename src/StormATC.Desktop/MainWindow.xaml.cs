@@ -55,15 +55,23 @@ public partial class MainWindow : Window
             return;
         }
 
-        if (e.Key != GetPushToTalkKey()
-            || _keyboardPushToTalkHeld
-            || IsTextInputFocused())
+        if (e.Key != GetPushToTalkKey() || IsTextInputFocused())
+        {
+            return;
+        }
+
+        // Swallow the key's auto-repeats too, not only the first press. A repeat that reached a
+        // focused button would make it press itself and capture the mouse, waiting for a key-up
+        // that this window consumes below: every click would then go to that button, and the
+        // window would seem frozen until it lost focus.
+        e.Handled = true;
+
+        if (_keyboardPushToTalkHeld)
         {
             return;
         }
 
         _keyboardPushToTalkHeld = true;
-        e.Handled = true;
         StartTransmissionIfNeeded();
     }
 
@@ -77,6 +85,12 @@ public partial class MainWindow : Window
         _keyboardPushToTalkHeld = false;
         e.Handled = true;
         StopTransmissionIfReleased();
+
+        // Safety net: if a button did capture the mouse while the key was down, give it back.
+        if (Mouse.Captured is System.Windows.Controls.Primitives.ButtonBase captured)
+        {
+            captured.ReleaseMouseCapture();
+        }
     }
 
     private void OnJoystickPushToTalkPressed(

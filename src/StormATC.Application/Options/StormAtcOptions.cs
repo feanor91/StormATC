@@ -45,6 +45,22 @@ public sealed class ApplicationOptions
     /// Realism profile name: <c>Relaxed</c>, <c>Standard</c>, or <c>Strict</c>.
     /// </summary>
     public string RealismProfile { get; init; } = "Standard";
+
+    /// <summary>
+    /// The language controllers speak and pilots are expected to use: <c>en</c> (ICAO English,
+    /// the default) or <c>fr</c> (French, DSNA phraseology).
+    /// </summary>
+    /// <remarks>
+    /// The language changes wording, speech recognition and the controller voice only. Every
+    /// clearance decision is made by the same deterministic engine in either language.
+    /// </remarks>
+    public string AtcLanguage { get; init; } = "en";
+
+    /// <summary>
+    /// The interface language: <c>en</c>, <c>fr</c>, or empty to follow the Windows display
+    /// language. Applied at startup.
+    /// </summary>
+    public string InterfaceLanguage { get; init; } = string.Empty;
 }
 
 /// <summary>Language-model selection and generation settings shared by every provider.</summary>
@@ -205,6 +221,125 @@ public sealed class AnthropicOptions
     public bool IsConfigured => !string.IsNullOrWhiteSpace(Model);
 }
 
+/// <summary>
+/// Local speech engines that run on the user's computer: Whisper (whisper.cpp) for recognition
+/// and Piper for the controller voice. Neither needs an account or a network connection.
+/// </summary>
+/// <remarks>
+/// Both engines are external programs the user downloads once (see
+/// <c>docs/french-and-local-voice.md</c>). StormATC starts them per transmission and never
+/// writes microphone audio anywhere except a temporary file deleted after transcription.
+/// </remarks>
+public sealed class LocalVoiceOptions
+{
+    public const string SectionName = "LocalVoice";
+
+    /// <summary>Speech-to-text engine: <c>Deepgram</c> (cloud) or <c>Whisper</c> (local).</summary>
+    public string SpeechToTextProvider { get; init; } = SpeechProviders.Deepgram;
+
+    /// <summary>Controller voice engine: <c>Deepgram</c> (cloud) or <c>Piper</c> (local).</summary>
+    public string TextToSpeechProvider { get; init; } = SpeechProviders.Deepgram;
+
+    /// <summary>Path to whisper.cpp's <c>whisper-cli.exe</c>.</summary>
+    public string WhisperExecutablePath { get; init; } = string.Empty;
+
+    /// <summary>
+    /// Path to a multilingual ggml Whisper model, for example <c>ggml-large-v3-turbo-q5_0.bin</c>
+    /// or <c>ggml-small.bin</c>. English-only models (<c>*.en.bin</c>) cannot recognise French.
+    /// </summary>
+    public string WhisperModelPath { get; init; } = string.Empty;
+
+    /// <summary>
+    /// CPU threads given to Whisper. The encoder dominates a transcription and scales almost
+    /// linearly with threads: 8 instead of 4 took a typical clip from about 8 s to about 5 s.
+    /// </summary>
+    [Range(1, 64)]
+    public int WhisperThreads { get; init; } = Math.Clamp(Environment.ProcessorCount, 4, 8);
+
+    /// <summary>Longest time allowed for one transcription before it is abandoned.</summary>
+    public TimeSpan WhisperTimeout { get; init; } = TimeSpan.FromSeconds(30);
+
+    /// <summary>Path to Piper's <c>piper.exe</c>.</summary>
+    public string PiperExecutablePath { get; init; } = string.Empty;
+
+    /// <summary>Piper voice model (<c>.onnx</c>) used for English, for example <c>en_GB-alan-medium.onnx</c>.</summary>
+    public string PiperEnglishVoicePath { get; init; } = string.Empty;
+
+    /// <summary>Piper voice model (<c>.onnx</c>) used for French, for example <c>fr_FR-tom-medium.onnx</c>.</summary>
+    public string PiperFrenchVoicePath { get; init; } = string.Empty;
+
+    /// <summary>
+    /// Piper speaking rate: below 1 is faster, above 1 slower. Controllers speak briskly, so the
+    /// default is slightly faster than the voice's natural pace.
+    /// </summary>
+    [Range(0.5, 2.0)]
+    public double PiperLengthScale { get; init; } = 0.9;
+
+    /// <summary>
+    /// A folder of extra Piper voices (<c>.onnx</c> with its <c>.onnx.json</c>). Voices named
+    /// <c>fr_*</c> join the French cast and <c>en_*</c> the English one.
+    /// </summary>
+    public string PiperVoicesFolder { get; init; } = string.Empty;
+
+    /// <summary>
+    /// Allow the voices Piper publishes at low quality (file names ending in <c>-low</c>) in the
+    /// cast. They are smaller and faster but often hesitate and drop words, so they are left out
+    /// unless asked for. The voice set under the French or English voice path is always kept.
+    /// </summary>
+    public bool PiperAllowLowQualityVoices { get; init; }
+
+    /// <summary>
+    /// Allow models that hold many speakers (for example <c>fr_FR-mls-medium</c>) in the cast. A
+    /// random speaker is drawn inside such a model. Some speakers are poor: leave those out one by
+    /// one with <see cref="PiperExcludedVoices"/> rather than dropping the whole model.
+    /// </summary>
+    public bool PiperAllowMultiSpeakerVoices { get; init; } = true;
+
+    /// <summary>
+    /// Voices to leave out of the cast. An entry is a file name without extension, such as
+    /// <c>fr_FR-gilles-low</c>, to drop a whole model; or a model and a speaker number separated
+    /// by a colon, such as <c>fr_FR-mls-medium:42</c>, to drop one speaker of a multi-speaker
+    /// model. The log names the speaker each controller was given. Compared without regard to case.
+    /// </summary>
+    public IReadOnlyList<string> PiperExcludedVoices { get; init; } = [];
+
+    /// <summary>
+    /// When true, each controller (position and frequency) is given its own voice from the cast,
+    /// and a speaking rate that differs a little from <see cref="PiperLengthScale"/>.
+    /// </summary>
+    public bool VaryControllerVoices { get; init; } = true;
+
+    /// <summary>How far a controller's speaking rate may drift from <see cref="PiperLengthScale"/>.</summary>
+    [Range(0.0, 0.4)]
+    public double PiperLengthScaleSpread { get; init; } = 0.12;
+
+    /// <summary>Longest time allowed for one synthesis before it is abandoned.</summary>
+    public TimeSpan PiperTimeout { get; init; } = TimeSpan.FromSeconds(20);
+}
+
+/// <summary>Stable speech engine identifiers used by configuration and the UI.</summary>
+public static class SpeechProviders
+{
+    /// <summary>Deepgram cloud speech (recognition and voice).</summary>
+    public const string Deepgram = "Deepgram";
+
+    /// <summary>whisper.cpp local recognition.</summary>
+    public const string Whisper = "Whisper";
+
+    /// <summary>Piper local voice.</summary>
+    public const string Piper = "Piper";
+
+    /// <summary>Recognition engines offered in Settings.</summary>
+    public static IReadOnlyList<string> RecognitionEngines { get; } = [Deepgram, Whisper];
+
+    /// <summary>Voice engines offered in Settings.</summary>
+    public static IReadOnlyList<string> VoiceEngines { get; } = [Deepgram, Piper];
+
+    /// <summary>True when <paramref name="value"/> names <paramref name="provider"/>, ignoring case.</summary>
+    public static bool Is(string? value, string provider) =>
+        string.Equals(value?.Trim(), provider, StringComparison.OrdinalIgnoreCase);
+}
+
 /// <summary>Deepgram speech settings.</summary>
 public sealed class DeepgramOptions
 {
@@ -222,6 +357,9 @@ public sealed class DeepgramOptions
 
     /// <summary>Text-to-speech voice identifier.</summary>
     public string Voice { get; init; } = "aura-2-thalia-en";
+
+    /// <summary>Text-to-speech voice used when the ATC language is French.</summary>
+    public string FrenchVoice { get; init; } = "aura-2-hector-fr";
 
     /// <summary>Recognition language.</summary>
     public string Language { get; init; } = "en";
@@ -256,6 +394,28 @@ public sealed class DeepgramOptions
     public IReadOnlyDictionary<string, string> TranscriptCorrections { get; init; } =
         new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
+}
+
+/// <summary>
+/// The local VFR flight to start when StormATC opens with the simulator running: the aerodrome
+/// the pilot is on and the aircraft's callsign, remembered from the last time one was started.
+/// </summary>
+public sealed class VfrLocalOptions
+{
+    /// <summary>The configuration section name.</summary>
+    public const string SectionName = "VfrLocal";
+
+    /// <summary>The aerodrome, as a four-character ICAO code such as LFPL.</summary>
+    public string? Aerodrome { get; init; }
+
+    /// <summary>The callsign or registration, such as F-GABC.</summary>
+    public string? Callsign { get; init; }
+
+    /// <summary>
+    /// When true and the simulator is connected, the flight above is started instead of the
+    /// bundled sample or a SimBrief plan.
+    /// </summary>
+    public bool AutoStart { get; init; }
 }
 
 /// <summary>SimBrief import settings.</summary>
@@ -440,6 +600,13 @@ public sealed class AtcRealismOptions
 
     /// <summary>When true, crossing a hold-short line without clearance raises a warning.</summary>
     public bool EnforceHoldShort { get; init; } = true;
+
+    /// <summary>
+    /// When true, a plain "roger" settles an outstanding readback once the pilot has tried and
+    /// failed to read it back, so they are never stuck on one they cannot reproduce. The Strict
+    /// profile ignores this and requires the real readback.
+    /// </summary>
+    public bool AcceptAcknowledgementAsReadback { get; init; } = true;
 
     /// <summary>When true, the pilot must check in after every frequency change.</summary>
     public bool RequireCheckInOnFrequencyChange { get; init; }

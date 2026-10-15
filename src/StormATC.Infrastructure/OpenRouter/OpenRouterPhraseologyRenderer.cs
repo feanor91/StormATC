@@ -95,6 +95,13 @@ public sealed class OpenRouterPhraseologyRenderer(
             return null;
         }
 
+        // The controller prompts and the number check in PhraseologyValidator are written for
+        // English. Any other radio language keeps the deterministic wording of its profile.
+        if (session.Language != Domain.Phraseology.PhraseologyLanguage.English)
+        {
+            return null;
+        }
+
         // The controller's own prompt sits on top of the global rules, so a position's
         // behaviour can be edited without touching the shared ones.
         string globalRules = await _promptCatalog

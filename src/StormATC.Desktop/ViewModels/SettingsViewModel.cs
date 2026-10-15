@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Application.Sessions;
 using StormATC.Desktop.Services;
@@ -35,6 +36,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
 {
     private readonly ISecretStore _secretStore;
     private readonly ILanguageModelClient _languageModel;
+    private readonly IModelCatalog _modelCatalog;
     private readonly ISpeechRecognitionService _speechRecognition;
     private readonly ITextToSpeechService _textToSpeech;
     private readonly ISessionRepository _sessionRepository;
@@ -52,6 +54,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     /// between a setting that was changed and one that merely happens to be on.
     /// </summary>
     private readonly bool _offlineModeAtStartup;
+    private readonly string _interfaceLanguageAtStartup;
 
     [ObservableProperty]
     private bool _hasOpenRouterKey;
@@ -72,22 +75,22 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     private bool _hasDeepgramKey;
 
     [ObservableProperty]
-    private string _openRouterKeyStatus = "No key stored";
+    private string _openRouterKeyStatus = UiText.T("No key stored");
 
     [ObservableProperty]
-    private string _openAIKeyStatus = "No key stored";
+    private string _openAIKeyStatus = UiText.T("No key stored");
 
     [ObservableProperty]
-    private string _groqKeyStatus = "No key stored";
+    private string _groqKeyStatus = UiText.T("No key stored");
 
     [ObservableProperty]
-    private string _deepSeekKeyStatus = "No key stored";
+    private string _deepSeekKeyStatus = UiText.T("No key stored");
 
     [ObservableProperty]
-    private string _anthropicKeyStatus = "No key stored";
+    private string _anthropicKeyStatus = UiText.T("No key stored");
 
     [ObservableProperty]
-    private string _deepgramKeyStatus = "No key stored";
+    private string _deepgramKeyStatus = UiText.T("No key stored");
 
     [ObservableProperty]
     private string _languageModelTestResult = string.Empty;
@@ -117,13 +120,19 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     private string _selectedLanguageModelProvider = LanguageModelProviders.OpenRouter;
 
     [ObservableProperty]
+    private string _modelListStatus = string.Empty;
+
+    [ObservableProperty]
+    private bool _isLoadingModels;
+
+    [ObservableProperty]
     private string _deepgramVoice = string.Empty;
 
     [ObservableProperty]
     private string _deepgramSpeechModel = string.Empty;
 
     [ObservableProperty]
-    private string _selectedInputDevice = "System default";
+    private string _selectedInputDevice = SystemDefaultDevice;
 
     [ObservableProperty]
     private string _speechRecognitionLanguage = "en";
@@ -148,6 +157,42 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
 
     [ObservableProperty]
     private string _realismProfile = "Standard";
+
+    [ObservableProperty]
+    private string _atcLanguage = EnglishLanguageName;
+
+    [ObservableProperty]
+    private string _interfaceLanguage = WindowsLanguageName;
+
+    [ObservableProperty]
+    private string _speechToTextProvider = SpeechProviders.Deepgram;
+
+    [ObservableProperty]
+    private string _textToSpeechProvider = SpeechProviders.Deepgram;
+
+    [ObservableProperty]
+    private string _whisperExecutablePath = string.Empty;
+
+    [ObservableProperty]
+    private string _whisperModelPath = string.Empty;
+
+    [ObservableProperty]
+    private string _piperExecutablePath = string.Empty;
+
+    [ObservableProperty]
+    private string _piperEnglishVoicePath = string.Empty;
+
+    [ObservableProperty]
+    private string _piperFrenchVoicePath = string.Empty;
+
+    [ObservableProperty]
+    private string _piperVoicesFolder = string.Empty;
+
+    [ObservableProperty]
+    private bool _varyControllerVoices = true;
+
+    [ObservableProperty]
+    private string _localVoiceTestResult = string.Empty;
 
     [ObservableProperty]
     private string _defaultPushbackDirection = PushbackDirections.TailLeft;
@@ -183,7 +228,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     private int _maximumTrafficExchangesPerHour = 6;
 
     [ObservableProperty]
-    private string _trafficIntegrationStatus = "Traffic integration is disabled.";
+    private string _trafficIntegrationStatus = UiText.T("Traffic integration is disabled.");
 
     [ObservableProperty]
     private bool _requireReadbackBeforeProgressing;
@@ -219,7 +264,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     private bool _isBindingJoystickButton;
 
     [ObservableProperty]
-    private string _joystickBindingStatus = "No joystick button assigned.";
+    private string _joystickBindingStatus = UiText.T("No joystick button assigned.");
 
     [ObservableProperty]
     private string _statusMessage = string.Empty;
@@ -234,6 +279,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     public SettingsViewModel(
         ISecretStore secretStore,
         ILanguageModelClient languageModel,
+        IModelCatalog modelCatalog,
         ISpeechRecognitionService speechRecognition,
         ITextToSpeechService textToSpeech,
         ISessionRepository sessionRepository,
@@ -258,10 +304,12 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         IOptions<AtcRealismOptions> realismOptions,
         IOptions<PersistenceOptions> persistenceOptions,
         IOptions<AudioOptions> audioOptions,
+        IOptions<LocalVoiceOptions> localVoiceOptions,
         ILogger<SettingsViewModel> logger)
     {
         _secretStore = secretStore ?? throw new ArgumentNullException(nameof(secretStore));
         _languageModel = languageModel ?? throw new ArgumentNullException(nameof(languageModel));
+        _modelCatalog = modelCatalog ?? throw new ArgumentNullException(nameof(modelCatalog));
         _speechRecognition = speechRecognition ?? throw new ArgumentNullException(nameof(speechRecognition));
         _textToSpeech = textToSpeech ?? throw new ArgumentNullException(nameof(textToSpeech));
         _sessionRepository = sessionRepository ?? throw new ArgumentNullException(nameof(sessionRepository));
@@ -288,6 +336,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         ArgumentNullException.ThrowIfNull(realismOptions);
         ArgumentNullException.ThrowIfNull(persistenceOptions);
         ArgumentNullException.ThrowIfNull(audioOptions);
+        ArgumentNullException.ThrowIfNull(localVoiceOptions);
 
         _openRouterModel = openRouterOptions.Value.Model;
         _openAIModel = openAIOptions.Value.Model;
@@ -314,6 +363,34 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         _trainingCorrectionCount = _transcriptCorrections.Count;
         _simBriefUserId = simBriefOptions.Value.UserId ?? string.Empty;
         _realismProfile = applicationOptions.Value.RealismProfile;
+        _atcLanguage = Domain.Phraseology.PhraseologyLanguages.Parse(applicationOptions.Value.AtcLanguage)
+            == Domain.Phraseology.PhraseologyLanguage.French
+                ? FrenchLanguageName
+                : EnglishLanguageName;
+        _interfaceLanguage = applicationOptions.Value.InterfaceLanguage.Trim().ToUpperInvariant() switch
+        {
+            string code when code.StartsWith("FR", StringComparison.Ordinal) => FrenchInterfaceName,
+            string code when code.StartsWith("EN", StringComparison.Ordinal) => EnglishInterfaceName,
+            _ => WindowsLanguageName,
+        };
+        _interfaceLanguageAtStartup = _interfaceLanguage;
+        _speechToTextProvider = SpeechProviders.Is(
+            localVoiceOptions.Value.SpeechToTextProvider,
+            SpeechProviders.Whisper)
+                ? SpeechProviders.Whisper
+                : SpeechProviders.Deepgram;
+        _textToSpeechProvider = SpeechProviders.Is(
+            localVoiceOptions.Value.TextToSpeechProvider,
+            SpeechProviders.Piper)
+                ? SpeechProviders.Piper
+                : SpeechProviders.Deepgram;
+        _whisperExecutablePath = localVoiceOptions.Value.WhisperExecutablePath;
+        _whisperModelPath = localVoiceOptions.Value.WhisperModelPath;
+        _piperExecutablePath = localVoiceOptions.Value.PiperExecutablePath;
+        _piperEnglishVoicePath = localVoiceOptions.Value.PiperEnglishVoicePath;
+        _piperFrenchVoicePath = localVoiceOptions.Value.PiperFrenchVoicePath;
+        _piperVoicesFolder = localVoiceOptions.Value.PiperVoicesFolder;
+        _varyControllerVoices = localVoiceOptions.Value.VaryControllerVoices;
         _defaultPushbackDirection =
             PushbackDirections.Normalize(realismOptions.Value.DefaultPushbackDirection)
             ?? PushbackDirections.TailLeft;
@@ -340,6 +417,10 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         _joystickButtonIndex = audioOptions.Value.JoystickButtonIndex;
 
         RealismProfiles = ["Relaxed", "Standard", "Strict"];
+        AtcLanguages = [EnglishLanguageName, FrenchLanguageName];
+        InterfaceLanguages = [WindowsLanguageName, EnglishInterfaceName, FrenchInterfaceName];
+        RecognitionEngines = [.. SpeechProviders.RecognitionEngines];
+        VoiceEngines = [.. SpeechProviders.VoiceEngines];
         PushbackDirectionChoices = [.. PushbackDirections.All];
         LanguageModelProviderNames = [.. LanguageModelProviders.All];
         Connectors = [.. SimulatorConnectorNames.All];
@@ -350,16 +431,18 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
             "en-GB",
             "en-AU",
             "en-IN",
+            "fr",
+            "fr-CA",
             "multi",
         ];
-        InputDevices = ["System default"];
+        InputDevices = [SystemDefaultDevice];
         foreach (string device in _speechRecognition.InputDeviceNames)
         {
             InputDevices.Add(device);
         }
 
         _selectedInputDevice = string.IsNullOrWhiteSpace(deepgramOptions.Value.InputDeviceName)
-            ? "System default"
+            ? SystemDefaultDevice
             : InputDevices.FirstOrDefault(device =>
                 device.Contains(
                     deepgramOptions.Value.InputDeviceName,
@@ -375,33 +458,124 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     /// <summary>The selectable realism profiles.</summary>
     public ObservableCollection<string> RealismProfiles { get; }
 
+    /// <summary>The microphone choice that follows the Windows default device.</summary>
+    private static string SystemDefaultDevice => UiText.T("System default");
+
+    /// <summary>Display name of the English radio language.</summary>
+    public const string EnglishLanguageName = "English (ICAO)";
+
+    /// <summary>Display name of the French radio language.</summary>
+    public const string FrenchLanguageName = "Français (DSNA)";
+
+    /// <summary>The selectable radio languages.</summary>
+    public ObservableCollection<string> AtcLanguages { get; }
+
+    /// <summary>Interface language choice that follows the Windows display language.</summary>
+    public static string WindowsLanguageName => UiText.T("Windows language");
+
+    /// <summary>Display name of the English interface.</summary>
+    public const string EnglishInterfaceName = "English";
+
+    /// <summary>Display name of the French interface.</summary>
+    public const string FrenchInterfaceName = "Français";
+
+    /// <summary>The selectable interface languages.</summary>
+    public ObservableCollection<string> InterfaceLanguages { get; }
+
+    /// <summary>The configuration code of the selected interface language; empty follows Windows.</summary>
+    private string InterfaceLanguageCode =>
+        InterfaceLanguage == FrenchInterfaceName ? "fr"
+        : InterfaceLanguage == EnglishInterfaceName ? "en"
+        : string.Empty;
+
+    /// <summary>Speech-to-text engines: Deepgram (cloud) or Whisper (local).</summary>
+    public ObservableCollection<string> RecognitionEngines { get; }
+
+    /// <summary>Controller voice engines: Deepgram (cloud) or Piper (local).</summary>
+    public ObservableCollection<string> VoiceEngines { get; }
+
+    /// <summary>The configuration code of the selected radio language.</summary>
+    private string AtcLanguageCode =>
+        AtcLanguage == FrenchLanguageName ? "fr" : "en";
+
+    /// <summary>
+    /// Tests the selected recognition and voice engines with the saved settings, whichever
+    /// they are. Save first after changing a path or an engine.
+    /// </summary>
+    [RelayCommand]
+    private async Task TestLocalVoiceAsync()
+    {
+        IsTesting = true;
+        LocalVoiceTestResult = UiText.T("Testing…");
+
+        try
+        {
+            ProviderTestResult recognition = await _speechRecognition
+                .TestConnectionAsync(CancellationToken.None)
+                .ConfigureAwait(true);
+
+            ProviderTestResult synthesis = await _textToSpeech
+                .TestConnectionAsync(CancellationToken.None)
+                .ConfigureAwait(true);
+
+            LocalVoiceTestResult =
+                $"{_speechRecognition.ProviderName}: {Describe(recognition)}  ·  "
+                + $"{_textToSpeech.ProviderName}: {Describe(synthesis)}";
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "The speech engine test failed.");
+            LocalVoiceTestResult = UiText.T("The test failed. See the Diagnostics page.");
+        }
+        finally
+        {
+            IsTesting = false;
+            await _providerStatus.RefreshAsync(CancellationToken.None).ConfigureAwait(true);
+        }
+    }
+
     /// <summary>Explains the transcript/readback behaviour of the selected profile.</summary>
     public string RealismProfileDescription => RealismProfile.Trim().ToUpperInvariant() switch
     {
         "RELAXED" =>
-            "Most forgiving. Callsign wording is optional and ambiguous transcript guesses are "
+            UiText.T("Most forgiving. Callsign wording is optional and ambiguous transcript guesses are "
             + "treated as missing, not wrong. Runway, altitude, squawk, taxi route, and hold-short "
-            + "values are still never guessed.",
+            + "values are still never guessed."),
         "STRICT" =>
-            "Training challenge. Every structured value returned by the transcript parser is "
-            + "judged as intentional, and full callsign/readback discipline is enforced.",
+            UiText.T("Training challenge. Every structured value returned by the transcript parser is "
+            + "judged as intentional, and full callsign/readback discipline is enforced."),
         _ =>
-            "Recommended. Repairs common speech-to-text formatting, accepts equivalent ICAO and "
+            UiText.T("Recommended. Repairs common speech-to-text formatting, accepts equivalent ICAO and "
             + "numeric wording, remembers partial corrections, and says “negative” only when a "
-            + "conflicting value was clearly announced.",
+            + "conflicting value was clearly announced."),
     };
 
     /// <summary>Safety boundary shared by every transcript-tolerance profile.</summary>
     public static string TranscriptToleranceNotice =>
-        "All profiles understand spoken digits, written numbers, Alfa/Alpha variants, compact "
+        UiText.T("All profiles understand spoken digits, written numbers, Alfa/Alpha variants, compact "
         + "transcripts, and named/alphanumeric taxiways. No profile silently changes a conflicting "
-        + "runway, altitude, squawk, heading, frequency, taxi route, or hold-short instruction.";
+        + "runway, altitude, squawk, heading, frequency, taxi route, or hold-short instruction.");
 
     /// <summary>GSX-style relative tail directions available for pushback.</summary>
     public ObservableCollection<string> PushbackDirectionChoices { get; }
 
     /// <summary>Language-model providers supported directly by StormATC.</summary>
     public ObservableCollection<string> LanguageModelProviderNames { get; }
+
+    /// <summary>OpenRouter models, free ones first.</summary>
+    public ObservableCollection<ModelChoice> OpenRouterModels { get; } = [];
+
+    /// <summary>OpenAI models, listed once an API key is saved.</summary>
+    public ObservableCollection<ModelChoice> OpenAIModels { get; } = [];
+
+    /// <summary>Groq models, listed once an API key is saved.</summary>
+    public ObservableCollection<ModelChoice> GroqModels { get; } = [];
+
+    /// <summary>DeepSeek models, listed once an API key is saved.</summary>
+    public ObservableCollection<ModelChoice> DeepSeekModels { get; } = [];
+
+    /// <summary>Anthropic models, listed once an API key is saved.</summary>
+    public ObservableCollection<ModelChoice> AnthropicModels { get; } = [];
 
     /// <summary>The selectable simulator connectors.</summary>
     public ObservableCollection<string> Connectors { get; }
@@ -425,14 +599,14 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     /// The mandatory scope statement. Repeated here as well as in the README and at first run.
     /// </summary>
     public static string Disclaimer =>
-        "StormATC is an entertainment product for flight simulation only. It must not be used "
-        + "for real-world aviation, navigation, flight planning, or air traffic control.";
+        UiText.T("StormATC is an entertainment product for flight simulation only. It must not be used "
+        + "for real-world aviation, navigation, flight planning, or air traffic control.");
 
     /// <summary>The cost statement shown beside the API key fields.</summary>
     public static string CostNotice =>
-        "StormATC is free and open source. OpenRouter, OpenAI, Groq, DeepSeek, Anthropic, and "
+        UiText.T("StormATC is free and open source. OpenRouter, OpenAI, Groq, DeepSeek, Anthropic, and "
         + "Deepgram are independent services that bill their own API accounts. A ChatGPT "
-        + "subscription does not include OpenAI API usage. Check current rates before enabling one.";
+        + "subscription does not include OpenAI API usage. Check current rates before enabling one.");
 
     /// <summary>True when traffic-dependent options may be changed.</summary>
     public bool IsTrafficEnabled => EnableLiveTraffic;
@@ -442,9 +616,9 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
 
     /// <summary>Credit warning shown beside the opt-in traffic-radio controls.</summary>
     public static string TrafficCreditNotice =>
-        "Live traffic reading is local and uses no API credits. Language-model chatter uses up "
+        UiText.T("Live traffic reading is local and uses no API credits. Language-model chatter uses up "
         + "to one model request per exchange. Spoken chatter uses two TTS requests per exchange. "
-        + "All are off by default and the hourly exchange limit is a hard ceiling.";
+        + "All are off by default and the hourly exchange limit is a hard ceiling.");
 
     partial void OnEnableLiveTrafficChanged(bool value)
     {
@@ -491,19 +665,93 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         RefreshTrainingPhrases();
         RefreshJoysticks();
         await RefreshKeyStatusAsync().ConfigureAwait(true);
+
+        if (!_modelListsRequested)
+        {
+            _modelListsRequested = true;
+            await LoadModelListsAsync().ConfigureAwait(true);
+        }
+    }
+
+    private bool _modelListsRequested;
+
+    /// <summary>Fetches the model list of every provider that can be reached.</summary>
+    [RelayCommand]
+    private Task RefreshModelListsAsync() => LoadModelListsAsync();
+
+    private async Task LoadModelListsAsync()
+    {
+        if (IsLoadingModels)
+        {
+            return;
+        }
+
+        IsLoadingModels = true;
+        ModelListStatus = UiText.T("Loading model lists…");
+
+        try
+        {
+            (string Provider, ObservableCollection<ModelChoice> Target)[] providers =
+            [
+                (LanguageModelProviders.OpenRouter, OpenRouterModels),
+                (LanguageModelProviders.OpenAI, OpenAIModels),
+                (LanguageModelProviders.Groq, GroqModels),
+                (LanguageModelProviders.DeepSeek, DeepSeekModels),
+                (LanguageModelProviders.Anthropic, AnthropicModels),
+            ];
+
+            ModelCatalogResult[] results = await Task.WhenAll(providers.Select(entry =>
+                _modelCatalog.ListModelsAsync(entry.Provider, CancellationToken.None))).ConfigureAwait(true);
+
+            var notes = new List<string>();
+            for (int index = 0; index < providers.Length; index++)
+            {
+                ModelCatalogResult result = results[index];
+                if (!result.Success)
+                {
+                    if (providers[index].Provider == LanguageModelProviders.OpenRouter
+                        || providers[index].Provider == SelectedLanguageModelProvider)
+                    {
+                        notes.Add(result.Message);
+                    }
+
+                    continue;
+                }
+
+                providers[index].Target.Clear();
+                foreach (ModelChoice model in result.Models)
+                {
+                    providers[index].Target.Add(model);
+                }
+            }
+
+            int free = OpenRouterModels.Count(model => model.IsFree);
+            ModelListStatus = notes.Count > 0
+                ? string.Join(' ', notes.Distinct())
+                : UiText.T($"{OpenRouterModels.Count} OpenRouter models listed, {free} free. Other providers appear once an API key is saved.");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Loading the model lists failed.");
+            ModelListStatus = UiText.T("The model lists could not be loaded.");
+        }
+        finally
+        {
+            IsLoadingModels = false;
+        }
     }
 
     private void RefreshTrafficIntegrationStatus()
     {
         if (!EnableLiveTraffic)
         {
-            TrafficIntegrationStatus = "Disabled — no live traffic scan or recurring API use.";
+            TrafficIntegrationStatus = UiText.T("Disabled — no live traffic scan or recurring API use.");
             return;
         }
 
         if (_msfsConnector.ConnectionState != Domain.SimulatorConnectionState.Connected)
         {
-            TrafficIntegrationStatus = "Enabled, waiting for Microsoft Flight Simulator.";
+            TrafficIntegrationStatus = UiText.T("Enabled, waiting for Microsoft Flight Simulator.");
             return;
         }
 
@@ -511,13 +759,13 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         int fslTlContacts = contacts.Count(contact => contact.IsFslTlModel);
         string detected = contacts.Count switch
         {
-            0 => "No nearby simulator traffic detected yet.",
-            1 => "1 nearby aircraft detected.",
-            _ => $"{contacts.Count} nearby aircraft detected.",
+            0 => UiText.T("No nearby simulator traffic detected yet."),
+            1 => UiText.T("1 nearby aircraft detected."),
+            _ => UiText.T($"{contacts.Count} nearby aircraft detected."),
         };
 
         TrafficIntegrationStatus = fslTlContacts > 0
-            ? $"{detected} {fslTlContacts} use FSLTL models. {_trafficRadio.Status}"
+            ? UiText.T($"{detected} {fslTlContacts} use FSLTL models. {_trafficRadio.Status}")
             : $"{detected} {_trafficRadio.Status}";
     }
 
@@ -553,7 +801,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            StatusMessage = $"Enter a {providerName} key before saving.";
+            StatusMessage = UiText.T($"Enter a {providerName} key before saving.");
             return;
         }
 
@@ -562,7 +810,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
             await _secretStore.SetSecretAsync(secretKey, value.Trim(), CancellationToken.None)
                 .ConfigureAwait(true);
 
-            StatusMessage = $"The {providerName} key was saved to the operating system secret store.";
+            StatusMessage = UiText.T($"The {providerName} key was saved to the operating system secret store.");
             await RefreshKeyStatusAsync().ConfigureAwait(true);
         }
         catch (Exception ex)
@@ -570,7 +818,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
             // The exception message is deliberately not shown: an exception from a secret store
             // can echo the value that failed to store.
             _logger.LogError(ex, "Storing the {Provider} key failed.", providerName);
-            StatusMessage = $"The {providerName} key could not be saved.";
+            StatusMessage = UiText.T($"The {providerName} key could not be saved.");
         }
     }
 
@@ -609,13 +857,13 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         try
         {
             await _secretStore.RemoveSecretAsync(secretKey, CancellationToken.None).ConfigureAwait(true);
-            StatusMessage = $"The {providerName} key was removed.";
+            StatusMessage = UiText.T($"The {providerName} key was removed.");
             await RefreshKeyStatusAsync().ConfigureAwait(true);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Removing the {Provider} key failed.", providerName);
-            StatusMessage = $"The {providerName} key could not be removed.";
+            StatusMessage = UiText.T($"The {providerName} key could not be removed.");
         }
     }
 
@@ -624,7 +872,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     private async Task TestLanguageModelAsync()
     {
         IsTesting = true;
-        LanguageModelTestResult = $"Testing {SelectedLanguageModelProvider}…";
+        LanguageModelTestResult = UiText.T($"Testing {SelectedLanguageModelProvider}…");
 
         try
         {
@@ -637,7 +885,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         catch (Exception ex)
         {
             _logger.LogError(ex, "The language-model connection test failed.");
-            LanguageModelTestResult = "The test failed. See the Diagnostics page.";
+            LanguageModelTestResult = UiText.T("The test failed. See the Diagnostics page.");
         }
         finally
         {
@@ -651,7 +899,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     private async Task TestDeepgramAsync()
     {
         IsTesting = true;
-        DeepgramTestResult = "Testing…";
+        DeepgramTestResult = UiText.T("Testing…");
 
         try
         {
@@ -663,12 +911,12 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
                 .TestConnectionAsync(CancellationToken.None)
                 .ConfigureAwait(true);
 
-            DeepgramTestResult = $"Speech to text: {Describe(recognition)}  ·  Voice: {Describe(synthesis)}";
+            DeepgramTestResult = UiText.T($"Speech to text: {Describe(recognition)}  ·  Voice: {Describe(synthesis)}");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "The Deepgram connection test failed.");
-            DeepgramTestResult = "The test failed. See the Diagnostics page.";
+            DeepgramTestResult = UiText.T("The test failed. See the Diagnostics page.");
         }
         finally
         {
@@ -686,13 +934,13 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     {
         IsTrainingVoice = true;
         TrainingTranscript = string.Empty;
-        TrainingStatus = "Listening for six seconds. Speak the expected phrase naturally...";
+        TrainingStatus = UiText.T("Listening for six seconds. Speak the expected phrase naturally...");
 
         try
         {
             SpeechTrainingSample sample = await _speechRecognition
                 .CaptureTrainingSampleAsync(
-                    SelectedInputDevice.Equals("System default", StringComparison.OrdinalIgnoreCase)
+                    SelectedInputDevice.Equals(SystemDefaultDevice, StringComparison.OrdinalIgnoreCase)
                         ? null
                         : SelectedInputDevice,
                     TimeSpan.FromSeconds(6),
@@ -706,7 +954,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         {
             _logger.LogError(ex, "Voice-training capture failed.");
             TrainingStatus =
-                "The sample could not be recorded. Check the microphone selection and Deepgram connection.";
+                UiText.T("The sample could not be recorded. Check the microphone selection and Deepgram connection.");
         }
         finally
         {
@@ -740,8 +988,8 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         await SaveSpeechProfileAsync().ConfigureAwait(true);
         TrainingCorrectionCount = _transcriptCorrections.Count;
         TrainingStatus = heard.Equals(expected, StringComparison.OrdinalIgnoreCase)
-            ? "Phrase saved as a recognition keyterm. Deepgram already heard it correctly."
-            : "Correction saved. Future matching transcripts will be corrected locally.";
+            ? UiText.T("Phrase saved as a recognition keyterm. Deepgram already heard it correctly.")
+            : UiText.T("Correction saved. Future matching transcripts will be corrected locally.");
     }
 
     private bool CanSaveTrainingCorrection() =>
@@ -759,7 +1007,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
 
         TrainingCorrectionCount = 0;
         TrainingTranscript = string.Empty;
-        TrainingStatus = "Personal voice-training phrases and corrections were cleared.";
+        TrainingStatus = UiText.T("Personal voice-training phrases and corrections were cleared.");
     }
 
     partial void OnTrainingExpectedPhraseChanged(string value)
@@ -800,7 +1048,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         new()
         {
             InputDeviceName =
-                SelectedInputDevice.Equals("System default", StringComparison.OrdinalIgnoreCase)
+                SelectedInputDevice.Equals(SystemDefaultDevice, StringComparison.OrdinalIgnoreCase)
                     ? null
                     : SelectedInputDevice,
             Language = string.IsNullOrWhiteSpace(SpeechRecognitionLanguage)
@@ -818,7 +1066,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         IReadOnlyList<string> current = _speechRecognition.InputDeviceNames;
 
         InputDevices.Clear();
-        InputDevices.Add("System default");
+        InputDevices.Add(SystemDefaultDevice);
         foreach (string device in current)
         {
             if (!InputDevices.Contains(device, StringComparer.OrdinalIgnoreCase))
@@ -892,7 +1140,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
             _logger.LogError(ex, "Enumerating joystick devices failed.");
             devices = [];
             JoystickBindingStatus =
-                "Windows could not enumerate joystick devices. Reconnect the controller and try again.";
+                UiText.T("Windows could not enumerate joystick devices. Reconnect the controller and try again.");
         }
 
         JoystickDevices.Clear();
@@ -918,13 +1166,13 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     {
         if (SelectedJoystick is not JoystickDevice device)
         {
-            JoystickBindingStatus = "Connect and select a controller first.";
+            JoystickBindingStatus = UiText.T("Connect and select a controller first.");
             return;
         }
 
         IsBindingJoystickButton = true;
         JoystickBindingStatus =
-            $"Listening on {device.Name}… release all buttons, then press the PTT button.";
+            UiText.T($"Listening on {device.Name}… release all buttons, then press the PTT button.");
 
         try
         {
@@ -944,18 +1192,18 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
 
             await SaveJoystickBindingAsync(binding, enabled: true).ConfigureAwait(true);
             JoystickBindingStatus =
-                $"{binding.DisplayName} is assigned and ready. Hold it to talk; release to send.";
+                UiText.T($"{binding.DisplayName} is assigned and ready. Hold it to talk; release to send.");
         }
         catch (TimeoutException)
         {
             JoystickBindingStatus =
-                "No new button press was detected. Try again and press the button within 15 seconds.";
+                UiText.T("No new button press was detected. Try again and press the button within 15 seconds.");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Binding a joystick push-to-talk button failed.");
             JoystickBindingStatus =
-                "The button could not be assigned. Reconnect the controller and refresh the list.";
+                UiText.T("The button could not be assigned. Reconnect the controller and refresh the list.");
         }
         finally
         {
@@ -977,12 +1225,12 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         try
         {
             await SaveJoystickBindingAsync(binding: null, enabled: false).ConfigureAwait(true);
-            JoystickBindingStatus = "Joystick push-to-talk assignment cleared.";
+            JoystickBindingStatus = UiText.T("Joystick push-to-talk assignment cleared.");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Clearing the joystick push-to-talk binding failed.");
-            JoystickBindingStatus = "The assignment was cleared for this session but could not be saved.";
+            JoystickBindingStatus = UiText.T("The assignment was cleared for this session but could not be saved.");
         }
     }
 
@@ -1005,8 +1253,8 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         if (binding is null)
         {
             JoystickBindingStatus = JoystickDevices.Count == 0
-                ? "No joystick detected. Connect one, then select Refresh controllers."
-                : "No joystick button assigned.";
+                ? UiText.T("No joystick detected. Connect one, then select Refresh controllers.")
+                : UiText.T("No joystick button assigned.");
             return;
         }
 
@@ -1016,10 +1264,10 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
                 StringComparison.OrdinalIgnoreCase));
 
         JoystickBindingStatus = !connected
-            ? $"{binding.DisplayName} is saved, but that controller is disconnected."
+            ? UiText.T($"{binding.DisplayName} is saved, but that controller is disconnected.")
             : JoystickPushToTalkEnabled
-                ? $"{binding.DisplayName} is assigned and ready."
-                : $"{binding.DisplayName} is assigned but disabled.";
+                ? UiText.T($"{binding.DisplayName} is assigned and ready.")
+                : UiText.T($"{binding.DisplayName} is assigned but disabled.");
     }
 
     private async Task SaveJoystickBindingAsync(
@@ -1078,12 +1326,12 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
             HasDeepgramKey = false;
         }
 
-        OpenRouterKeyStatus = HasOpenRouterKey ? "A key is stored (hidden)" : "No key stored";
-        OpenAIKeyStatus = HasOpenAIKey ? "A key is stored (hidden)" : "No key stored";
-        GroqKeyStatus = HasGroqKey ? "A key is stored (hidden)" : "No key stored";
-        DeepSeekKeyStatus = HasDeepSeekKey ? "A key is stored (hidden)" : "No key stored";
-        AnthropicKeyStatus = HasAnthropicKey ? "A key is stored (hidden)" : "No key stored";
-        DeepgramKeyStatus = HasDeepgramKey ? "A key is stored (hidden)" : "No key stored";
+        OpenRouterKeyStatus = HasOpenRouterKey ? UiText.T("A key is stored (hidden)") : UiText.T("No key stored");
+        OpenAIKeyStatus = HasOpenAIKey ? UiText.T("A key is stored (hidden)") : UiText.T("No key stored");
+        GroqKeyStatus = HasGroqKey ? UiText.T("A key is stored (hidden)") : UiText.T("No key stored");
+        DeepSeekKeyStatus = HasDeepSeekKey ? UiText.T("A key is stored (hidden)") : UiText.T("No key stored");
+        AnthropicKeyStatus = HasAnthropicKey ? UiText.T("A key is stored (hidden)") : UiText.T("No key stored");
+        DeepgramKeyStatus = HasDeepgramKey ? UiText.T("A key is stored (hidden)") : UiText.T("No key stored");
     }
 
     // =====================================================================================
@@ -1102,6 +1350,18 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
                 [
                     (ApplicationOptions.SectionName, "OfflineMode", JsonValue.Create(OfflineMode)),
                     (ApplicationOptions.SectionName, "RealismProfile", JsonValue.Create(RealismProfile)),
+                    (ApplicationOptions.SectionName, "AtcLanguage", JsonValue.Create(AtcLanguageCode)),
+                    (ApplicationOptions.SectionName, "InterfaceLanguage", JsonValue.Create(InterfaceLanguageCode)),
+
+                    (LocalVoiceOptions.SectionName, "SpeechToTextProvider", JsonValue.Create(SpeechToTextProvider)),
+                    (LocalVoiceOptions.SectionName, "TextToSpeechProvider", JsonValue.Create(TextToSpeechProvider)),
+                    (LocalVoiceOptions.SectionName, "WhisperExecutablePath", JsonValue.Create(WhisperExecutablePath.Trim().Trim('"'))),
+                    (LocalVoiceOptions.SectionName, "WhisperModelPath", JsonValue.Create(WhisperModelPath.Trim().Trim('"'))),
+                    (LocalVoiceOptions.SectionName, "PiperExecutablePath", JsonValue.Create(PiperExecutablePath.Trim().Trim('"'))),
+                    (LocalVoiceOptions.SectionName, "PiperEnglishVoicePath", JsonValue.Create(PiperEnglishVoicePath.Trim().Trim('"'))),
+                    (LocalVoiceOptions.SectionName, "PiperFrenchVoicePath", JsonValue.Create(PiperFrenchVoicePath.Trim().Trim('"'))),
+                    (LocalVoiceOptions.SectionName, "PiperVoicesFolder", JsonValue.Create(PiperVoicesFolder.Trim().Trim('"'))),
+                    (LocalVoiceOptions.SectionName, "VaryControllerVoices", JsonValue.Create(VaryControllerVoices)),
                     (ApplicationOptions.SectionName, "CloudServicesConsentGiven", JsonValue.Create(CloudServicesConsentGiven)),
                     (ApplicationOptions.SectionName, "FirstRunCompleted", JsonValue.Create(true)),
 
@@ -1121,7 +1381,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
                             : SpeechRecognitionLanguage.Trim())),
                     (DeepgramOptions.SectionName, "InputDeviceName", JsonValue.Create(
                         SelectedInputDevice.Equals(
-                            "System default",
+                            SystemDefaultDevice,
                             StringComparison.OrdinalIgnoreCase)
                             ? null
                             : SelectedInputDevice)),
@@ -1182,6 +1442,11 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
                 PushbackDirections.Normalize(DefaultPushbackDirection)
                 ?? PushbackDirections.TailLeft;
             _speechRecognition.ApplyRecognitionProfile(BuildSpeechProfile());
+
+            // The radio language switches the running session too: the next controller
+            // transmission, the ATIS and speech recognition all follow it.
+            _sessionContext.SetLanguage(
+                Domain.Phraseology.PhraseologyLanguages.Parse(AtcLanguageCode));
             _joystickInput.Configure(
                 joystickBinding,
                 JoystickPushToTalkEnabled && joystickBinding is not null);
@@ -1196,17 +1461,22 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
             RefreshTrafficIntegrationStatus();
 
             // Offline mode decides which implementations are registered, which happens once when
-            // the host is built. It is the only setting on this page that still needs a restart.
-            RestartRequired = OfflineMode != _offlineModeAtStartup;
+            // the host is built, and the interface language is chosen before the first window.
+            // They are the only settings on this page that still need a restart.
+            bool offlineChanged = OfflineMode != _offlineModeAtStartup;
+            bool interfaceLanguageChanged = InterfaceLanguage != _interfaceLanguageAtStartup;
+            RestartRequired = offlineChanged || interfaceLanguageChanged;
 
-            StatusMessage = RestartRequired
-                ? $"Saved to {SettingsFilePath}. Offline mode takes effect after a restart."
-                : $"Saved to {SettingsFilePath}. {SimulatorStatus}";
+            StatusMessage = offlineChanged
+                ? UiText.T($"Saved to {SettingsFilePath}. Offline mode takes effect after a restart.")
+                : interfaceLanguageChanged
+                    ? UiText.T($"Saved to {SettingsFilePath}. The interface language changes at the next start.")
+                    : UiText.T($"Saved to {SettingsFilePath}. {SimulatorStatus}");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Saving settings failed.");
-            StatusMessage = "The settings could not be saved.";
+            StatusMessage = UiText.T("The settings could not be saved.");
         }
     }
 
@@ -1215,28 +1485,28 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     private async Task ClearLocalHistoryAsync()
     {
         System.Windows.MessageBoxResult confirmation = System.Windows.MessageBox.Show(
-            "This permanently deletes every stored session, transcript, and decision on this "
-            + "computer. It cannot be undone.\n\nContinue?",
-            "StormATC — clear local history",
+            UiText.T("This permanently deletes every stored session, transcript, and decision on this "
+            + "computer. It cannot be undone.\n\nContinue?"),
+            UiText.T("StormATC — clear local history"),
             System.Windows.MessageBoxButton.YesNo,
             System.Windows.MessageBoxImage.Warning,
             System.Windows.MessageBoxResult.No);
 
         if (confirmation != System.Windows.MessageBoxResult.Yes)
         {
-            StatusMessage = "Local history was not changed.";
+            StatusMessage = UiText.T("Local history was not changed.");
             return;
         }
 
         try
         {
             await _sessionRepository.ClearAllHistoryAsync(CancellationToken.None).ConfigureAwait(true);
-            StatusMessage = "All locally stored history was deleted.";
+            StatusMessage = UiText.T("All locally stored history was deleted.");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Clearing local history failed.");
-            StatusMessage = "The local history could not be cleared.";
+            StatusMessage = UiText.T("The local history could not be cleared.");
         }
     }
 }

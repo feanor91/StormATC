@@ -316,6 +316,7 @@ no real navigation data and none of it may be used for navigation.
 | [development.md](docs/development.md) | Building, testing, configuration, coding standards |
 | [contributor-quickstart.md](docs/contributor-quickstart.md) | Forking, setup, first changes, and pull requests |
 | [privacy-and-api-keys.md](docs/privacy-and-api-keys.md) | What is stored, what is sent, how keys are held |
+| [french-and-local-voice.md](docs/french-and-local-voice.md) | French radio (DSNA phraseology) and local voice with Whisper and Piper |
 | [releasing.md](docs/releasing.md) | Building the installer and publishing a release |
 | [website.md](docs/website.md) | Editing, previewing, and deploying the GitHub Pages site |
 

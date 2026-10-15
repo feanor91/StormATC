@@ -4,12 +4,14 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Application.Sessions;
 using StormATC.Application.Transmissions;
 using StormATC.Domain;
 using StormATC.Domain.Airports;
 using StormATC.Domain.Sessions;
+using StormATC.Domain.ValueObjects;
 
 namespace StormATC.Infrastructure.Simulator;
 
@@ -75,7 +77,7 @@ public sealed class TrafficRadioService(
     public event EventHandler<TrafficRadioExchangeEventArgs>? ExchangeGenerated;
 
     /// <summary>Current integration state for Settings and Diagnostics.</summary>
-    public string Status { get; private set; } = "Traffic radio is disabled.";
+    public string Status { get; private set; } = UiText.T("Traffic radio is disabled.");
 
     /// <inheritdoc />
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -93,7 +95,7 @@ public sealed class TrafficRadioService(
             }
             catch (Exception ex)
             {
-                Status = "Traffic radio encountered an error; see Diagnostics.";
+                Status = UiText.T("Traffic radio encountered an error; see Diagnostics.");
                 logger.LogWarning(ex, "Background traffic radio generation failed.");
             }
         }
@@ -107,8 +109,8 @@ public sealed class TrafficRadioService(
         {
             _wasEnabled = false;
             Status = options.EnableLiveTraffic
-                ? "Live traffic is enabled; radio chatter is off."
-                : "Traffic integration is disabled.";
+                ? UiText.T("Live traffic is enabled; radio chatter is off.")
+                : UiText.T("Traffic integration is disabled.");
             return;
         }
 
@@ -117,7 +119,7 @@ public sealed class TrafficRadioService(
         {
             _wasEnabled = true;
             _nextAllowedAt = now.AddSeconds(15);
-            Status = "Traffic radio is armed and waiting for nearby aircraft.";
+            Status = UiText.T("Traffic radio is armed and waiting for nearby aircraft.");
             return;
         }
 
@@ -130,7 +132,7 @@ public sealed class TrafficRadioService(
 
         if (options.PauseChatterWhenOnlineAtcClientDetected && IsOnlineAtcClientRunning())
         {
-            Status = "Traffic chatter is paused while an online ATC client is running.";
+            Status = UiText.T("Traffic chatter is paused while an online ATC client is running.");
             _nextAllowedAt = now.AddMinutes(1);
             return;
         }
@@ -138,15 +140,24 @@ public sealed class TrafficRadioService(
         PruneHourlyBudget(now);
         if (_exchangeTimes.Count >= options.MaximumExchangesPerHour)
         {
-            Status = $"Hourly traffic-radio limit reached ({options.MaximumExchangesPerHour}).";
+            Status = UiText.T($"Hourly traffic-radio limit reached ({options.MaximumExchangesPerHour}).");
             _nextAllowedAt = _exchangeTimes.Peek().AddHours(1);
+            return;
+        }
+
+        // Chatter belongs on a busy regional frequency. On the aerodrome's own ATIS, Ground or
+        // Tower the pilot would hear nobody else's radar contacts, so stay silent there.
+        if (await IsOnOwnAerodromeFrequencyAsync(cancellationToken).ConfigureAwait(false))
+        {
+            Status = UiText.T("Traffic radio is silent: you are on your aerodrome's own frequency.");
+            _nextAllowedAt = now.AddSeconds(10);
             return;
         }
 
         MsfsTrafficSnapshot? traffic = SelectTraffic();
         if (traffic is null)
         {
-            Status = "Traffic radio is armed; no suitable nearby aircraft are visible.";
+            Status = UiText.T("Traffic radio is armed; no suitable nearby aircraft are visible.");
             _nextAllowedAt = now.AddSeconds(30);
             return;
         }
@@ -169,8 +180,8 @@ public sealed class TrafficRadioService(
         _lastCallsign = callsign;
         _nextAllowedAt = now.Add(options.MinimumInterval);
         Status = traffic.IsFslTlModel
-            ? $"Last exchange used FSLTL traffic {callsign}."
-            : $"Last exchange used simulator traffic {callsign}.";
+            ? UiText.T($"Last exchange used FSLTL traffic {callsign}.")
+            : UiText.T($"Last exchange used simulator traffic {callsign}.");
 
         ExchangeGenerated?.Invoke(
             this,
@@ -179,16 +190,59 @@ public sealed class TrafficRadioService(
         if (options.SpeakChatter)
         {
             await textToSpeech
-                .SpeakAsync(exchange.ControllerLine, VoiceConfiguration.Default, cancellationToken)
+                .SpeakAsync(
+                    exchange.ControllerLine,
+                    VoiceConfiguration.Default with { VoiceKey = $"chatter-atc:{Guid.NewGuid():N}" },
+                    cancellationToken)
                 .ConfigureAwait(false);
 
             if (!radioActivity.UserIsTransmitting)
             {
                 await textToSpeech
-                    .SpeakAsync(exchange.PilotLine, VoiceConfiguration.Default, cancellationToken)
+                    .SpeakAsync(
+                        exchange.PilotLine,
+                        VoiceConfiguration.Default with { VoiceKey = $"chatter-pilot:{Guid.NewGuid():N}" },
+                        cancellationToken)
                     .ConfigureAwait(false);
             }
         }
+    }
+
+    /// <summary>
+    /// True when COM1 is tuned to a frequency the departure or destination aerodrome publishes:
+    /// ATIS, Delivery, Ground, Tower, Departure, Approach or Centre.
+    /// </summary>
+    private async Task<bool> IsOnOwnAerodromeFrequencyAsync(CancellationToken cancellationToken)
+    {
+        AtcSession session = sessionContext.CurrentSession;
+        if (session.FlightPlan is not { } plan)
+        {
+            return false;
+        }
+
+        Frequency tuned = session.AircraftState.Radio.ActiveTransmitFrequency;
+        foreach (string icao in new[] { plan.DepartureIcao, plan.DestinationIcao }.Distinct(StringComparer.OrdinalIgnoreCase))
+        {
+            AirportData? airport = await sessionContext.GetAirportAsync(icao, cancellationToken).ConfigureAwait(false);
+            if (airport is null)
+            {
+                continue;
+            }
+
+            AirportFrequencies published = airport.Frequencies;
+            Frequency?[] own =
+            [
+                published.Atis, published.ClearanceDelivery, published.Ground, published.Tower,
+                published.Departure, published.Approach, published.Center,
+            ];
+
+            if (own.Any(frequency => frequency is Frequency candidate && tuned.IsSameChannel(candidate)))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private MsfsTrafficSnapshot? SelectTraffic() =>

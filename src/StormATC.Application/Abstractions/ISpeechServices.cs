@@ -1,3 +1,5 @@
+using StormATC.Domain.Phraseology;
+
 namespace StormATC.Application.Abstractions;
 
 /// <summary>
@@ -194,6 +196,22 @@ public sealed record VoiceConfiguration
     /// <summary>A neutral default used when no per-controller voice is configured.</summary>
     public static VoiceConfiguration Default { get; } = new();
 
+    /// <summary>The default voice for a controller speaking <paramref name="language"/>.</summary>
+    public static VoiceConfiguration For(PhraseologyLanguage language) =>
+        language == PhraseologyLanguage.English ? Default : new() { Language = language };
+
+    /// <summary>
+    /// The language of the text. Providers pick a voice that speaks it when
+    /// <see cref="VoiceId"/> is empty.
+    /// </summary>
+    public PhraseologyLanguage Language { get; init; } = PhraseologyLanguage.English;
+
+    /// <summary>
+    /// Identifies who is speaking, such as <c>Tower@118.700</c>. A local voice engine with several
+    /// voices gives each key its own voice and keeps it. Empty means "use the current controller".
+    /// </summary>
+    public string VoiceKey { get; init; } = string.Empty;
+
     /// <summary>The provider voice identifier.</summary>
     public string VoiceId { get; init; } = string.Empty;
 
@@ -211,4 +229,21 @@ public sealed record VoiceConfiguration
 
     /// <summary>Whether to play the transmission-start and -end clicks.</summary>
     public bool IncludeClicks { get; init; } = true;
+}
+
+/// <summary>The local voice that spoke last, and what to write to set it aside.</summary>
+/// <param name="Description">A short description for the user, such as <c>fr_FR-mls-medium, speaker 42</c>.</param>
+/// <param name="ExclusionEntry">
+/// The <c>PiperExcludedVoices</c> entry that sets it aside: the model, or <c>model:speaker</c>.
+/// </param>
+/// <param name="CanExclude">
+/// False for the voice chosen in Settings, which is always kept and is changed there instead.
+/// </param>
+public sealed record SpokenVoice(string Description, string ExclusionEntry, bool CanExclude);
+
+/// <summary>A voice engine that can say which voice it used last.</summary>
+public interface ILastVoiceReporter
+{
+    /// <summary>The voice that spoke last, or null when none has spoken or the engine has no choice of voice.</summary>
+    SpokenVoice? LastVoice { get; }
 }

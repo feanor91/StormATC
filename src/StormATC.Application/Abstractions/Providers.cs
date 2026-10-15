@@ -19,6 +19,13 @@ public interface IAirportDataProvider
     Task<IReadOnlyList<string>> ListAvailableAirportsAsync(CancellationToken cancellationToken);
 }
 
+/// <summary>Supplies the VFR procedures an aerodrome publishes: reporting points and circuit.</summary>
+public interface IVfrProfileProvider
+{
+    /// <summary>Loads the VFR profile of an aerodrome, or returns null when none is available.</summary>
+    Task<VfrAerodromeProfile?> GetProfileAsync(string icao, CancellationToken cancellationToken);
+}
+
 /// <summary>Supplies en-route sector definitions.</summary>
 public interface IAirspaceDataProvider
 {

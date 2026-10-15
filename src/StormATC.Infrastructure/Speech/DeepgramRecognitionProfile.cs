@@ -71,14 +71,39 @@ internal static class DeepgramRecognitionProfile
     }
 
     /// <summary>
+    /// The profile to use for a transmission in <paramref name="language"/>. A French session
+    /// is recognised in French whatever English variant is configured for English sessions.
+    /// </summary>
+    internal static SpeechRecognitionProfile ForSessionLanguage(
+        SpeechRecognitionProfile profile,
+        PhraseologyLanguage language)
+    {
+        ArgumentNullException.ThrowIfNull(profile);
+
+        return language == PhraseologyLanguage.French
+            ? profile with { Language = PhraseologyLanguage.French.ToCode() }
+            : profile;
+    }
+
+    /// <summary>
     /// Combines the personal profile with the current flight plan and common ATC vocabulary.
     /// </summary>
+    /// <remarks>
+    /// Keyterms are English vocabulary. A French session sends none: the English terms would
+    /// bias recognition toward the wrong language, and Deepgram documents keyterm prompting for
+    /// English and its multilingual model only.
+    /// </remarks>
     internal static IReadOnlyList<string> BuildKeyterms(
         SpeechRecognitionProfile profile,
         AtcSession session)
     {
         ArgumentNullException.ThrowIfNull(profile);
         ArgumentNullException.ThrowIfNull(session);
+
+        if (session.Language == PhraseologyLanguage.French)
+        {
+            return [];
+        }
 
         var terms = new List<string>();
         var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);

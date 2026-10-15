@@ -63,6 +63,12 @@ public sealed record Clearance
     /// <summary>Runway the aircraft must hold short of.</summary>
     public RunwayIdentifier? HoldShortOfRunway { get; init; }
 
+    /// <summary>
+    /// For a landing clearance: true when the clearance is for a touch and go, so the aircraft
+    /// is expected to take off again instead of vacating the runway.
+    /// </summary>
+    public bool TouchAndGo { get; init; }
+
     /// <summary>Taxiways to follow, in order.</summary>
     public IReadOnlyList<string> TaxiRoute { get; init; } = [];
 

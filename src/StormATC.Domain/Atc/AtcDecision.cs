@@ -56,6 +56,12 @@ public sealed record AtcEvaluationContext
     /// <summary>Data for the destination aerodrome.</summary>
     public AirportData? DestinationAirport { get; init; }
 
+    /// <summary>
+    /// The VFR procedures of the aerodrome in use (reporting points, circuit), or null when no
+    /// profile exists for it. The engine falls back to generic phraseology without one.
+    /// </summary>
+    public VfrAerodromeProfile? VfrProfile { get; init; }
+
     /// <summary>Simulated traffic relevant to separation and runway occupancy.</summary>
     public IReadOnlyList<TrafficContact> Traffic { get; init; } = [];
 
@@ -90,7 +96,7 @@ public sealed record AtcEvaluationContext
     {
         FlightPhase.Descent or FlightPhase.Arrival or FlightPhase.Approach or FlightPhase.Final
             or FlightPhase.Landed or FlightPhase.TaxiIn or FlightPhase.Parked
-            or FlightPhase.GoAround => DestinationAirport ?? DepartureAirport,
+            or FlightPhase.GoAround or FlightPhase.Circuit => DestinationAirport ?? DepartureAirport,
         _ => DepartureAirport,
     };
 }
@@ -117,6 +123,7 @@ public sealed record RealismProfile
         RequireCorrectCallsign = true,
         EnforceHoldShort = true,
         RequireCheckInOnFrequencyChange = true,
+        AcceptAcknowledgementAsReadback = false,
         MinimumIntentConfidence = 0.75,
         TranscriptTolerance = TranscriptToleranceMode.Strict,
     };
@@ -154,6 +161,15 @@ public sealed record RealismProfile
 
     /// <summary>When true, the pilot must check in after every frequency change.</summary>
     public bool RequireCheckInOnFrequencyChange { get; init; }
+
+    /// <summary>
+    /// When true, a plain "roger" or "bien reçu" settles an outstanding readback once the pilot
+    /// has already tried and failed to read it back. Not real practice, but it keeps a simulation
+    /// from stalling on a readback the pilot cannot reproduce, such as a long taxi route. The
+    /// first "roger" is still sent back for a real readback, and the Strict profile never
+    /// allows it.
+    /// </summary>
+    public bool AcceptAcknowledgementAsReadback { get; init; } = true;
 
     /// <summary>
     /// Below this confidence the engine asks the pilot to repeat rather than acting on a
@@ -262,6 +278,18 @@ public sealed record AtcDecision
     /// <summary>Phase change to apply, when the decision causes one.</summary>
     public FlightPhase? NewPhase { get; init; }
 
+    /// <summary>A change of flight rules, such as the pilot declaring VFR. Null leaves it unchanged.</summary>
+    public FlightRules? NewFlightRules { get; init; }
+
+    /// <summary>The circuit leg reached. Null leaves it unchanged.</summary>
+    public CircuitLeg? NewCircuitLeg { get; init; }
+
+    /// <summary>A touch-and-go request or its cancellation. Null leaves it unchanged.</summary>
+    public bool? NewTouchAndGoRequested { get; init; }
+
+    /// <summary>The runway in use for a VFR circuit or arrival. Null leaves it unchanged.</summary>
+    public RunwayIdentifier? NewArrivalRunway { get; init; }
+
     /// <summary>Clearance to issue, when the decision grants one.</summary>
     public Clearance? IssuedClearance { get; init; }
 
@@ -314,7 +342,11 @@ public sealed record AtcDecision
         || RequiredReadback is not null
         || ClearsPendingReadback
         || Handoff is not null
-        || NewPhase is not null;
+        || NewPhase is not null
+        || NewFlightRules is not null
+        || NewCircuitLeg is not null
+        || NewTouchAndGoRequested is not null
+        || NewArrivalRunway is not null;
 
     /// <summary>Builds a refusal.</summary>
     public static AtcDecision Reject(string reason, string fallbackPhraseology) => new()

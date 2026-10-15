@@ -17,6 +17,41 @@
   <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,24">
     <StackPanel>
 
+      <!-- A local VFR flight, with no flight plan. -->
+      <Border Style="{StaticResource CardStyle}">
+        <StackPanel>
+          <TextBlock Text="Local VFR flight" Style="{StaticResource SectionHeaderStyle}" />
+          <TextBlock Text="No flight plan needed: give the aerodrome you are on and your callsign, and fly the circuit with its tower."
+                     Style="{StaticResource SecondaryTextStyle}"
+                     TextWrapping="Wrap"
+                     Margin="0,0,0,10" />
+
+          <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <StackPanel Margin="0,0,16,0">
+              <TextBlock Text="AERODROME (ICAO)" Style="{StaticResource LabelTextStyle}" />
+              <TextBox Text="{Binding VfrAerodrome, UpdateSourceTrigger=PropertyChanged}"
+                       Width="120"
+                       MaxLength="4" />
+            </StackPanel>
+            <StackPanel>
+              <TextBlock Text="CALLSIGN OR REGISTRATION" Style="{StaticResource LabelTextStyle}" />
+              <TextBox Text="{Binding VfrCallsign, UpdateSourceTrigger=PropertyChanged}"
+                       Width="200" />
+            </StackPanel>
+          </StackPanel>
+
+          <CheckBox Content="Start this flight again each time StormATC opens with the simulator running"
+                    IsChecked="{Binding VfrAutoStart}"
+                    Margin="0,0,0,10" />
+
+          <Button Content="Start a local VFR flight"
+                  Style="{StaticResource PrimaryButtonStyle}"
+                  HorizontalAlignment="Left"
+                  Command="{Binding StartVfrLocalFlightCommand}"
+                  IsEnabled="{Binding IsImporting, Converter={StaticResource InverseBoolean}}" />
+        </StackPanel>
+      </Border>
+
       <!-- Import -->
       <Border Style="{StaticResource CardStyle}">
         <StackPanel>
@@ -84,6 +119,17 @@
               Visibility="{Binding HasPlan, Converter={StaticResource BoolToVisibility}}">
         <StackPanel>
           <TextBlock Text="Filed plan" Style="{StaticResource SectionHeaderStyle}" />
+
+          <TextBlock Text="FLIGHT RULES" Style="{StaticResource LabelTextStyle}" />
+          <ComboBox ItemsSource="{Binding FlightRulesChoices}"
+                    SelectedItem="{Binding SelectedFlightRules}"
+                    Width="120"
+                    HorizontalAlignment="Left"
+                    Margin="0,0,0,6" />
+          <TextBlock Text="VFR: no IFR clearance and no handoff to Departure. You stay with the tower and fly the circuit."
+                     Style="{StaticResource SecondaryTextStyle}"
+                     TextWrapping="Wrap"
+                     Margin="0,0,0,14" />
 
           <UniformGrid Columns="4" Rows="3">
             <StackPanel Margin="0,0,12,14">

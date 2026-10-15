@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Localization;
 using StormATC.Application.Sessions;
 using StormATC.Domain;
 using StormATC.Domain.Sessions;
@@ -104,13 +105,13 @@ public sealed partial class TranscriptViewModel : ObservableObject, IRefreshable
             LoadTurns(turns);
 
             StatusMessage = turns.Count == 0
-                ? "That session has no stored transcript."
-                : $"Showing {turns.Count} turns from {summary.StartedAt}.";
+                ? UiText.T("That session has no stored transcript.")
+                : UiText.T($"Showing {turns.Count} turns from {summary.StartedAt}.");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to load session {SessionId}.", summary.SessionId);
-            StatusMessage = "That session could not be loaded.";
+            StatusMessage = UiText.T("That session could not be loaded.");
         }
         finally
         {
@@ -124,7 +125,7 @@ public sealed partial class TranscriptViewModel : ObservableObject, IRefreshable
     {
         if (Turns.Count == 0)
         {
-            StatusMessage = "There is nothing to copy yet.";
+            StatusMessage = UiText.T("There is nothing to copy yet.");
             return;
         }
 
@@ -135,13 +136,13 @@ public sealed partial class TranscriptViewModel : ObservableObject, IRefreshable
         try
         {
             System.Windows.Clipboard.SetText(text);
-            StatusMessage = $"Copied {Turns.Count} turns to the clipboard.";
+            StatusMessage = UiText.T($"Copied {Turns.Count} turns to the clipboard.");
         }
         catch (Exception ex)
         {
             // The clipboard can be locked by another process; that is not worth an error dialog.
             _logger.LogWarning(ex, "The transcript could not be copied to the clipboard.");
-            StatusMessage = "The clipboard is unavailable right now.";
+            StatusMessage = UiText.T("The clipboard is unavailable right now.");
         }
     }
 
@@ -169,7 +170,7 @@ public sealed partial class TranscriptViewModel : ObservableObject, IRefreshable
         catch (Exception ex)
         {
             _logger.LogError(ex, "The session list could not be loaded.");
-            StatusMessage = "Stored sessions could not be listed.";
+            StatusMessage = UiText.T("Stored sessions could not be listed.");
         }
     }
 
@@ -196,9 +197,9 @@ public sealed partial class TranscriptViewModel : ObservableObject, IRefreshable
         turn.TurnId,
         turn.Timestamp.ToLocalTime().ToString("HH:mm:ss", CultureInfo.CurrentCulture),
         turn.Speaker == ConversationSpeaker.Pilot
-            ? "Pilot"
+            ? UiText.T("Pilot")
             : turn.Controller == ControllerPosition.None
-                ? "Controller"
+                ? UiText.T("Controller")
                 : Domain.Phraseology.DeterministicPhraseology.SpokenControllerName(turn.Controller),
         turn.Speaker == ConversationSpeaker.Pilot,
         turn.Text,

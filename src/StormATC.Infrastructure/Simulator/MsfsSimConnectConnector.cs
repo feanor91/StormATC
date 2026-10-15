@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Domain;
 using StormATC.Domain.Airports;
@@ -95,7 +96,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
     public SimulatorConnectionFailureKind LastFailureKind { get; private set; }
 
     /// <summary>A specific, user-facing description of the current connection state.</summary>
-    public string StatusMessage { get; private set; } = "SimConnect has not been started.";
+    public string StatusMessage { get; private set; } = UiText.T("SimConnect has not been started.");
 
 #if MSFS_SDK_AVAILABLE
     private WeatherSnapshot? _latestWeather;
@@ -243,7 +244,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         cancellationToken.ThrowIfCancellationRequested();
         SetConnectionState(
             SimulatorConnectionState.Disconnected,
-            "Disconnected from Microsoft Flight Simulator.");
+            UiText.T("Disconnected from Microsoft Flight Simulator."));
         return Task.CompletedTask;
     }
 
@@ -612,7 +613,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
 
             SetConnectionState(
                 SimulatorConnectionState.Connecting,
-                "Connecting to Microsoft Flight Simulator.");
+                UiText.T("Connecting to Microsoft Flight Simulator."));
 
             var initialAttempt = new TaskCompletionSource<bool>(
                 TaskCreationOptions.RunContinuationsAsynchronously);
@@ -648,7 +649,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         {
             SetConnectionState(
                 SimulatorConnectionState.Error,
-                "SimConnect cannot load because StormATC is not running as a 64-bit process.",
+                UiText.T("SimConnect cannot load because StormATC is not running as a 64-bit process."),
                 SimulatorConnectionFailureKind.ArchitectureMismatch);
             return false;
         }
@@ -661,8 +662,8 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         {
             SetConnectionState(
                 SimulatorConnectionState.Error,
-                "The managed SimConnect wrapper is missing from the StormATC application folder. "
-                + "Rebuild with the MSFS SDK configured.",
+                UiText.T("The managed SimConnect wrapper is missing from the StormATC application folder. "
+                + "Rebuild with the MSFS SDK configured."),
                 SimulatorConnectionFailureKind.ManagedAssemblyMissing);
             return false;
         }
@@ -672,8 +673,8 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         {
             SetConnectionState(
                 SimulatorConnectionState.Error,
-                "The native SimConnect.dll is missing from the StormATC application folder. "
-                + "Configure MsfsSimConnectNativePath or MSFS_SIMCONNECT_NATIVE_PATH and rebuild.",
+                UiText.T("The native SimConnect.dll is missing from the StormATC application folder. "
+                + "Configure MsfsSimConnectNativePath or MSFS_SIMCONNECT_NATIVE_PATH and rebuild."),
                 SimulatorConnectionFailureKind.NativeLibraryMissing);
             return false;
         }
@@ -722,7 +723,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
 
                     SetConnectionState(
                         SimulatorConnectionState.Connected,
-                        "Connected to Microsoft Flight Simulator.");
+                        UiText.T("Connected to Microsoft Flight Simulator."));
 
                     _logger.LogInformation(
                         "SimConnect connected at approximately {Rate} updates per second.",
@@ -740,7 +741,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
                     {
                         SetConnectionState(
                             SimulatorConnectionState.Error,
-                            _callbackFailureMessage ?? "SimConnect reported a fatal connection error.",
+                            _callbackFailureMessage ?? UiText.T("SimConnect reported a fatal connection error."),
                             _callbackFailureKind == SimulatorConnectionFailureKind.None
                                 ? SimulatorConnectionFailureKind.Unexpected
                                 : _callbackFailureKind);
@@ -751,13 +752,13 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
                     {
                         SetConnectionState(
                             SimulatorConnectionState.Disconnected,
-                            "The simulator connection was lost.");
+                            UiText.T("The simulator connection was lost."));
                         return;
                     }
 
                     SetConnectionState(
                         SimulatorConnectionState.Reconnecting,
-                        "The simulator connection was lost. Reconnecting.");
+                        UiText.T("The simulator connection was lost. Reconnecting."));
                 }
                 catch (Exception ex) when (connectedOnce && IsRetryableConnectionFailure(ex))
                 {
@@ -768,7 +769,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
 
                     SetConnectionState(
                         SimulatorConnectionState.Reconnecting,
-                        "Microsoft Flight Simulator is not answering SimConnect. Reconnecting.");
+                        UiText.T("Microsoft Flight Simulator is not answering SimConnect. Reconnecting."));
                 }
                 catch (Exception ex)
                 {
@@ -1481,8 +1482,8 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         {
             _callbackFailureKind = SimulatorConnectionFailureKind.VersionMismatch;
             _callbackFailureMessage =
-                "The installed SimConnect client is incompatible with this version of "
-                + "Microsoft Flight Simulator.";
+                UiText.T("The installed SimConnect client is incompatible with this version of "
+                + "Microsoft Flight Simulator.");
 
             _logger.LogError("SimConnect rejected StormATC because the client version mismatched.");
             return;
@@ -1527,7 +1528,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
             CleanupCompletedWorker();
             SetConnectionState(
                 SimulatorConnectionState.Disconnected,
-                "Disconnected from Microsoft Flight Simulator.");
+                UiText.T("Disconnected from Microsoft Flight Simulator."));
         }
         finally
         {
@@ -1607,8 +1608,8 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
             _logger.LogError(nativeMissing, "The native SimConnect runtime could not be loaded.");
             SetConnectionState(
                 SimulatorConnectionState.Error,
-                "The native SimConnect.dll could not be loaded. Verify that the x64 native DLL "
-                + "is beside StormATC.exe.",
+                UiText.T("The native SimConnect.dll could not be loaded. Verify that the x64 native DLL "
+                + "is beside StormATC.exe."),
                 SimulatorConnectionFailureKind.NativeLibraryMissing);
             return;
         }
@@ -1618,7 +1619,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
             _logger.LogError(badImage, "The SimConnect runtime architecture is incompatible.");
             SetConnectionState(
                 SimulatorConnectionState.Error,
-                "SimConnect has the wrong architecture. StormATC and both SimConnect DLLs must be x64.",
+                UiText.T("SimConnect has the wrong architecture. StormATC and both SimConnect DLLs must be x64."),
                 SimulatorConnectionFailureKind.ArchitectureMismatch);
             return;
         }
@@ -1628,8 +1629,8 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
             _logger.LogError(managedMissing, "The managed SimConnect wrapper could not be loaded.");
             SetConnectionState(
                 SimulatorConnectionState.Error,
-                "The managed Microsoft.FlightSimulator.SimConnect.dll could not be loaded from "
-                + "the StormATC application folder.",
+                UiText.T("The managed Microsoft.FlightSimulator.SimConnect.dll could not be loaded from "
+                + "the StormATC application folder."),
                 SimulatorConnectionFailureKind.ManagedAssemblyMissing);
             return;
         }
@@ -1639,8 +1640,8 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
             _logger.LogError(managedLoadFailure, "The managed SimConnect wrapper could not be loaded.");
             SetConnectionState(
                 SimulatorConnectionState.Error,
-                "The managed SimConnect wrapper was found but could not be loaded. Repair the MSFS SDK "
-                + "and rebuild StormATC.",
+                UiText.T("The managed SimConnect wrapper was found but could not be loaded. Repair the MSFS SDK "
+                + "and rebuild StormATC."),
                 SimulatorConnectionFailureKind.ManagedAssemblyMissing);
             return;
         }
@@ -1653,7 +1654,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
 
             SetConnectionState(
                 SimulatorConnectionState.Unavailable,
-                "Microsoft Flight Simulator is not running or did not accept the local SimConnect connection.",
+                UiText.T("Microsoft Flight Simulator is not running or did not accept the local SimConnect connection."),
                 SimulatorConnectionFailureKind.SimulatorUnavailable);
             return;
         }
@@ -1661,7 +1662,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         _logger.LogError(exception, "SimConnect connection failed unexpectedly.");
         SetConnectionState(
             SimulatorConnectionState.Error,
-            $"SimConnect failed unexpectedly: {exception.GetBaseException().Message}",
+            UiText.T($"SimConnect failed unexpectedly: {exception.GetBaseException().Message}"),
             SimulatorConnectionFailureKind.Unexpected);
     }
 

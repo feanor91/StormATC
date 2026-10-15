@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using StormATC.Application.Localization;
 
 namespace StormATC.Desktop.ViewModels;
 
@@ -18,10 +19,10 @@ public sealed partial class MainWindowViewModel : ObservableObject
     private ObservableObject _currentPage;
 
     [ObservableProperty]
-    private string _currentPageTitle = "Dashboard";
+    private string _currentPageTitle = UiText.T("Dashboard");
 
     [ObservableProperty]
-    private string _currentPageDescription = "Live flight, radio and controller guidance";
+    private string _currentPageDescription = UiText.T("Live flight, radio and controller guidance");
 
     /// <summary>Creates the shell view model with every page.</summary>
     public MainWindowViewModel(
@@ -42,38 +43,38 @@ public sealed partial class MainWindowViewModel : ObservableObject
         Pages =
         [
             new NavigationEntry(
-                "Dashboard",
-                "Live flight and guidance",
+                UiText.T("Dashboard"),
+                UiText.T("Live flight and guidance"),
                 "\uE80F",
                 "Ctrl+1",
                 dashboard),
             new NavigationEntry(
-                "Flight Plan",
-                "Route and clearance",
+                UiText.T("Flight Plan"),
+                UiText.T("Route and clearance"),
                 "\uE707",
                 "Ctrl+2",
                 flightPlan),
             new NavigationEntry(
-                "Radio",
-                "Frequencies and handoffs",
+                UiText.T("Radio"),
+                UiText.T("Frequencies and handoffs"),
                 "\uE702",
                 "Ctrl+3",
                 radio),
             new NavigationEntry(
-                "Transcript",
-                "Live and stored sessions",
+                UiText.T("Transcript"),
+                UiText.T("Live and stored sessions"),
                 "\uE8A5",
                 "Ctrl+4",
                 transcript),
             new NavigationEntry(
-                "Settings",
-                "Voice, controls and privacy",
+                UiText.T("Settings"),
+                UiText.T("Voice, controls and privacy"),
                 "\uE713",
                 "Ctrl+5",
                 settings),
             new NavigationEntry(
-                "Diagnostics",
-                "Health and troubleshooting",
+                UiText.T("Diagnostics"),
+                UiText.T("Health and troubleshooting"),
                 "\uE9D9",
                 "Ctrl+6",
                 diagnostics),
@@ -115,7 +116,7 @@ public sealed partial class MainWindowViewModel : ObservableObject
     /// entertainment software and must never be mistaken for an operational tool.
     /// </remarks>
     public static string DisclaimerText =>
-        "Flight simulation only — not for real-world aviation, navigation, or air traffic control.";
+        UiText.T("Flight simulation only — not for real-world aviation, navigation, or air traffic control.");
 
     /// <summary>Switches to a page.</summary>
     [RelayCommand]

@@ -475,7 +475,6 @@ public sealed class DeterministicReadbackEvaluator : IReadbackEvaluator
         List<ReadbackItemType> missing,
         List<IncorrectReadbackItem> incorrect)
     {
-        string callsign = session.Callsign?.ToSpoken() ?? "Aircraft";
         var parts = new List<string>();
 
         // Wrong values first — those are the ones that would cause a deviation.
@@ -501,22 +500,15 @@ public sealed class DeterministicReadbackEvaluator : IReadbackEvaluator
             }
         }
 
-        if (parts.Count == 0)
-        {
-            return $"{callsign}, say again your readback.";
-        }
-
-        // "negative" for a wrong value, "readback correct except" for an omission — the
-        // distinction real controllers make.
         bool hasCriticalIncorrect =
             incorrect.Any(item => IsCritical(pending, item.Type));
-        string lead = hasCriticalIncorrect ? "negative" : "readback incomplete";
-        return $"{callsign}, {lead}, {string.Join(", ", parts)}.";
+
+        // The expected items were worded in the session's language when the clearance was
+        // issued; the lead word ("negative", "négatif") comes from the same profile.
+        return AtcPhraseologies.For(session.Language)
+            .ReadbackCorrection(session.Callsign, hasCriticalIncorrect, parts);
     }
 
-    private static string BuildWrongCallsignCorrection(AtcSession session)
-    {
-        string callsign = session.Callsign?.ToSpoken() ?? "Aircraft";
-        return $"{callsign}, verify callsign, say again.";
-    }
+    private static string BuildWrongCallsignCorrection(AtcSession session) =>
+        AtcPhraseologies.For(session.Language).VerifyCallsign(session.Callsign);
 }

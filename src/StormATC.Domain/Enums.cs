@@ -33,6 +33,41 @@ public enum FlightPhase
     Parked,
     GoAround,
     Abnormal,
+
+    /// <summary>Flying the aerodrome circuit under VFR: crosswind, downwind, base or final.</summary>
+    Circuit,
+}
+
+/// <summary>The rules a flight is operated under.</summary>
+public enum FlightRules
+{
+    /// <summary>Instrument flight rules: clearance, SID, squawk and departure handoff.</summary>
+    Ifr = 0,
+
+    /// <summary>
+    /// Visual flight rules at a controlled aerodrome: no IFR clearance and no handoff to a
+    /// departure controller; the aircraft stays with Tower while it flies the circuit.
+    /// </summary>
+    Vfr,
+}
+
+/// <summary>Where the aircraft is in the aerodrome circuit.</summary>
+public enum CircuitLeg
+{
+    /// <summary>Not in the circuit.</summary>
+    None = 0,
+
+    /// <summary>Cleared to join or reported joining; downwind not yet reported.</summary>
+    Joining,
+
+    /// <summary>Downwind leg reported.</summary>
+    Downwind,
+
+    /// <summary>Base leg reported.</summary>
+    Base,
+
+    /// <summary>Final reported.</summary>
+    Final,
 }
 
 /// <summary>
@@ -90,6 +125,27 @@ public enum PilotIntentType
     Correction,
     RequestFrequency,
     PilotAcknowledgement,
+
+    /// <summary>"Lognes Tour, VFR from X for a touch and go, 1500 feet, estimate E at 05."</summary>
+    VfrArrivalCall,
+
+    /// <summary>Reporting a published VFR reporting point, such as "passing E".</summary>
+    ReportAtPoint,
+
+    /// <summary>Downwind leg of the circuit.</summary>
+    ReportDownwind,
+
+    /// <summary>Base leg of the circuit.</summary>
+    ReportBase,
+
+    /// <summary>Final, in the circuit (no instrument approach involved).</summary>
+    ReportFinal,
+
+    /// <summary>"Request touch and go."</summary>
+    RequestTouchAndGo,
+
+    /// <summary>Leaving the circuit and the frequency.</summary>
+    LeaveFrequency,
 }
 
 /// <summary>
@@ -274,4 +330,16 @@ public enum AtcResponseType
     Unable,
     EmergencyAcknowledgement,
     RadioCheckReply,
+
+    /// <summary>Roger, report the reporting point.</summary>
+    ReportPointInstruction,
+
+    /// <summary>Join the circuit (downwind, base or straight in) and report.</summary>
+    CircuitJoinInstruction,
+
+    /// <summary>Report the next leg of the circuit.</summary>
+    CircuitReportInstruction,
+
+    /// <summary>Cleared for a touch and go.</summary>
+    TouchAndGoClearance,
 }

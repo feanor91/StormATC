@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Application.Transmissions;
 using StormATC.Desktop.Services;
@@ -61,7 +62,7 @@ public sealed partial class DiagnosticsViewModel : ObservableObject, IRefreshabl
     private string _promptDirectory = "—";
 
     [ObservableProperty]
-    private string _configuredModel = "Not configured";
+    private string _configuredModel = UiText.T("Not configured");
 
     [ObservableProperty]
     private string _simulatorState = "—";
@@ -73,22 +74,22 @@ public sealed partial class DiagnosticsViewModel : ObservableObject, IRefreshabl
     private string _flightPlanSource = "—";
 
     [ObservableProperty]
-    private string _lastLatencySummary = "No transmissions yet";
+    private string _lastLatencySummary = UiText.T("No transmissions yet");
 
     [ObservableProperty]
-    private string _averageLatencySummary = "No samples yet";
+    private string _averageLatencySummary = UiText.T("No samples yet");
 
     [ObservableProperty]
     private string _statusMessage = string.Empty;
 
     [ObservableProperty]
-    private string _languageModelKeyPresence = "Unknown";
+    private string _languageModelKeyPresence = UiText.T("Unknown");
 
     [ObservableProperty]
     private string _languageModelProvider = LanguageModelProviders.OpenRouter;
 
     [ObservableProperty]
-    private string _deepgramKeyPresence = "Unknown";
+    private string _deepgramKeyPresence = UiText.T("Unknown");
 
     /// <summary>Creates the diagnostics view model.</summary>
     public DiagnosticsViewModel(
@@ -165,7 +166,7 @@ public sealed partial class DiagnosticsViewModel : ObservableObject, IRefreshabl
         SimulatorState = _simulatorConnector.PreferredConnector == _simulatorConnector.ConnectorName
             ? $"{_simulatorConnector.ConnectorName} — {_simulatorConnector.ConnectionState}"
             : $"{_simulatorConnector.ConnectorName} — {_simulatorConnector.ConnectionState} "
-                + $"(preferred: {_simulatorConnector.PreferredConnector})";
+                + UiText.T($"(preferred: {_simulatorConnector.PreferredConnector})");
 
         SimulatorDetail = _simulatorConnector.StatusMessage;
         FlightPlanSource = _flightPlanProvider.LastProviderUsed;
@@ -182,7 +183,7 @@ public sealed partial class DiagnosticsViewModel : ObservableObject, IRefreshabl
         };
         ConfiguredModel = configuredModel is { Length: > 0 } model
             ? model
-            : "Not configured — deterministic phraseology only";
+            : UiText.T("Not configured — deterministic phraseology only");
 
         StartupWarnings.Clear();
         foreach (string warning in _startupService.StartupWarnings)
@@ -192,7 +193,7 @@ public sealed partial class DiagnosticsViewModel : ObservableObject, IRefreshabl
 
         foreach (string missing in _promptCatalog.MissingPrompts)
         {
-            StartupWarnings.Add($"Prompt file missing: {missing}");
+            StartupWarnings.Add(UiText.T($"Prompt file missing: {missing}"));
         }
 
         try
@@ -205,7 +206,7 @@ public sealed partial class DiagnosticsViewModel : ObservableObject, IRefreshabl
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "The database schema version could not be read.");
-            SchemaVersion = "unavailable";
+            SchemaVersion = UiText.T("unavailable");
         }
 
         if (_diagnosticsOptions.ShowPromptHashes)
@@ -254,19 +255,19 @@ public sealed partial class DiagnosticsViewModel : ObservableObject, IRefreshabl
             };
             LanguageModelKeyPresence = await _secretStore
                 .HasSecretAsync(secretKey, CancellationToken.None).ConfigureAwait(true)
-                ? "Stored"
-                : "Not stored";
+                ? UiText.T("Stored")
+                : UiText.T("Not stored");
 
             DeepgramKeyPresence = await _secretStore
                 .HasSecretAsync(SecretKeys.DeepgramApiKey, CancellationToken.None).ConfigureAwait(true)
-                ? "Stored"
-                : "Not stored";
+                ? UiText.T("Stored")
+                : UiText.T("Not stored");
         }
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "The secret store could not be queried.");
-            LanguageModelKeyPresence = "Unknown";
-            DeepgramKeyPresence = "Unknown";
+            LanguageModelKeyPresence = UiText.T("Unknown");
+            DeepgramKeyPresence = UiText.T("Unknown");
         }
     }
 
@@ -291,12 +292,12 @@ public sealed partial class DiagnosticsViewModel : ObservableObject, IRefreshabl
                 UseShellExecute = true,
             });
 
-            StatusMessage = $"Opened {_storagePaths.ApplicationDataDirectory}.";
+            StatusMessage = UiText.T($"Opened {_storagePaths.ApplicationDataDirectory}.");
         }
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "The application data folder could not be opened.");
-            StatusMessage = $"The folder could not be opened. It is at {_storagePaths.ApplicationDataDirectory}.";
+            StatusMessage = UiText.T($"The folder could not be opened. It is at {_storagePaths.ApplicationDataDirectory}.");
         }
     }
 
@@ -306,7 +307,7 @@ public sealed partial class DiagnosticsViewModel : ObservableObject, IRefreshabl
     {
         _promptCatalog.Invalidate();
         await LoadPromptHashesAsync().ConfigureAwait(true);
-        StatusMessage = "Prompts reloaded from disk.";
+        StatusMessage = UiText.T("Prompts reloaded from disk.");
     }
 
     /// <summary>Writes a redacted diagnostics report to the application data directory.</summary>
@@ -327,12 +328,12 @@ public sealed partial class DiagnosticsViewModel : ObservableObject, IRefreshabl
                     CancellationToken.None)
                 .ConfigureAwait(true);
 
-            StatusMessage = $"Diagnostics written to {path}. It contains no API keys.";
+            StatusMessage = UiText.T($"Diagnostics written to {path}. It contains no API keys.");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "The diagnostics export failed.");
-            StatusMessage = "The diagnostics export failed.";
+            StatusMessage = UiText.T("The diagnostics export failed.");
         }
     }
 
@@ -438,14 +439,14 @@ public sealed partial class DiagnosticsViewModel : ObservableObject, IRefreshabl
             }
 
             LastLatencySummary =
-                $"{(int)timings.Total.TotalMilliseconds} ms total  ·  "
-                + $"parse {(int)timings.IntentParsing.TotalMilliseconds} ms  ·  "
-                + $"engine {(int)timings.EngineEvaluation.TotalMilliseconds} ms  ·  "
-                + $"render {(int)timings.PhraseologyRendering.TotalMilliseconds} ms";
+                UiText.T($"{(int)timings.Total.TotalMilliseconds} ms total  ·  ")
+                + UiText.T($"parse {(int)timings.IntentParsing.TotalMilliseconds} ms  ·  ")
+                + UiText.T($"engine {(int)timings.EngineEvaluation.TotalMilliseconds} ms  ·  ")
+                + UiText.T($"render {(int)timings.PhraseologyRendering.TotalMilliseconds} ms");
 
             AverageLatencySummary =
-                $"{LatencySamples.Average(sample => sample.TotalMs):F0} ms mean over "
-                + $"{LatencySamples.Count} transmissions";
+                UiText.T($"{LatencySamples.Average(sample => sample.TotalMs):F0} ms mean over ")
+                + UiText.T($"{LatencySamples.Count} transmissions");
         });
     }
 

@@ -4,12 +4,13 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NAudio.CoreAudioApi;
 using NAudio.Wave;
 using StormATC.Application.Abstractions;
 using StormATC.Application.Intent;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Application.Sessions;
+using StormATC.Infrastructure.Audio;
 using StormATC.Infrastructure.Security;
 
 namespace StormATC.Infrastructure.Speech;
@@ -81,60 +82,17 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
     public event EventHandler<AudioLevelEventArgs>? AudioLevelChanged;
 
     /// <inheritdoc />
-    public IReadOnlyList<string> InputDeviceNames
-    {
-        get
-        {
-            try
-            {
-                var legacyNames = new List<string>(WaveInEvent.DeviceCount);
-                for (int index = 0; index < WaveInEvent.DeviceCount; index++)
-                {
-                    string name = WaveInEvent.GetCapabilities(index).ProductName;
-                    if (!legacyNames.Contains(name, StringComparer.OrdinalIgnoreCase))
-                    {
-                        legacyNames.Add(name);
-                    }
-                }
-
-                var fullNames = new List<string>();
-                try
-                {
-                    using var enumerator = new MMDeviceEnumerator();
-                    foreach (MMDevice endpoint in enumerator.EnumerateAudioEndPoints(
-                        DataFlow.Capture,
-                        DeviceState.Active))
-                    {
-                        string name = endpoint.FriendlyName?.Trim() ?? string.Empty;
-                        if (name.Length > 0
-                            && !fullNames.Contains(name, StringComparer.OrdinalIgnoreCase))
-                        {
-                            fullNames.Add(name);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // WinMM remains a valid capture fallback. The UI will show its shorter
-                    // product names if Core Audio endpoint discovery is unavailable.
-                    _logger.LogDebug(
-                        ex,
-                        "Could not resolve full Windows microphone endpoint names.");
-                }
-
-                return PreferFullInputDeviceNames(legacyNames, fullNames);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "Could not enumerate microphone input devices.");
-                return [];
-            }
-        }
-    }
+    public IReadOnlyList<string> InputDeviceNames =>
+        MicrophoneDevices.ListInputDeviceNames(_logger);
 
     /// <inheritdoc />
     public Task StartTransmissionAsync(CancellationToken cancellationToken) =>
-        StartCaptureSessionAsync(GetProfile(), publishFinalTranscript: true, cancellationToken);
+        StartCaptureSessionAsync(
+            DeepgramRecognitionProfile.ForSessionLanguage(
+                GetProfile(),
+                _sessionContext.CurrentSession.Language),
+            publishFinalTranscript: true,
+            cancellationToken);
 
     /// <inheritdoc />
     public async Task StopTransmissionAsync(CancellationToken cancellationToken) =>
@@ -155,7 +113,9 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
                 "A voice-training sample must be between 2 and 15 seconds.");
         }
 
-        SpeechRecognitionProfile profile = GetProfile() with
+        SpeechRecognitionProfile profile = DeepgramRecognitionProfile.ForSessionLanguage(
+            GetProfile(),
+            _sessionContext.CurrentSession.Language) with
         {
             InputDeviceName = string.IsNullOrWhiteSpace(inputDeviceName)
                 ? null
@@ -171,7 +131,7 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
         {
             return new SpeechTrainingSample
             {
-                Message = _lastError ?? "The training sample could not be started.",
+                Message = _lastError ?? UiText.T("The training sample could not be started."),
             };
         }
 
@@ -252,8 +212,8 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
             {
                 IsConfigured = false;
                 RaiseError(
-                    "Cloud speech services are disabled.",
-                    "Enable cloud-services consent in Settings, or use typed transmissions.");
+                    UiText.T("Cloud speech services are disabled."),
+                    UiText.T("Enable cloud-services consent in Settings, or use typed transmissions."));
                 return false;
             }
 
@@ -262,8 +222,8 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
             {
                 IsConfigured = false;
                 RaiseError(
-                    "The configured Deepgram endpoint was blocked for security.",
-                    "Restore the official Deepgram endpoint in appsettings.json.");
+                    UiText.T("The configured Deepgram endpoint was blocked for security."),
+                    UiText.T("Restore the official Deepgram endpoint in appsettings.json."));
                 return false;
             }
 
@@ -275,8 +235,8 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
             {
                 IsConfigured = false;
                 RaiseError(
-                    "No Deepgram API key is configured.",
-                    "Add a Deepgram API key in Settings, or use typed transmissions.");
+                    UiText.T("No Deepgram API key is configured."),
+                    UiText.T("Add a Deepgram API key in Settings, or use typed transmissions."));
                 return false;
             }
 
@@ -305,8 +265,8 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
             RaiseError(
-                "Deepgram did not respond before the connection timeout.",
-                "Check the internet connection and try again.");
+                UiText.T("Deepgram did not respond before the connection timeout."),
+                UiText.T("Check the internet connection and try again."));
             await CleanUpAsync().ConfigureAwait(false);
             return false;
         }
@@ -319,8 +279,8 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
         {
             _logger.LogError(ex, "Failed to start a Deepgram transmission.");
             RaiseError(
-                "Speech recognition could not be started.",
-                "Check the selected microphone and internet connection, then try again.");
+                UiText.T("Speech recognition could not be started."),
+                UiText.T("Check the selected microphone and internet connection, then try again."));
             await CleanUpAsync().ConfigureAwait(false);
             return false;
         }
@@ -340,7 +300,7 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
             {
                 return new SpeechTrainingSample
                 {
-                    Message = _lastError ?? "No microphone capture is active.",
+                    Message = _lastError ?? UiText.T("No microphone capture is active."),
                 };
             }
 
@@ -392,8 +352,8 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
                 else
                 {
                     RaiseError(
-                        "Nothing was transcribed from that transmission.",
-                        "Check the microphone level and speak after pressing push-to-talk.");
+                        UiText.T("Nothing was transcribed from that transmission."),
+                        UiText.T("Check the microphone level and speak after pressing push-to-talk."));
                 }
             }
 
@@ -507,8 +467,8 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
             {
                 _logger.LogWarning(args.Exception, "Microphone capture stopped unexpectedly.");
                 RaiseError(
-                    "The microphone stopped unexpectedly.",
-                    "Check that the selected input device is still connected.");
+                    UiText.T("The microphone stopped unexpectedly."),
+                    UiText.T("Check that the selected input device is still connected."));
             }
         };
 
@@ -525,64 +485,8 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
         }
     }
 
-    private int ResolveInputDevice(string? configuredName)
-    {
-        if (WaveInEvent.DeviceCount == 0)
-        {
-            throw new InvalidOperationException("Windows reports no microphone input devices.");
-        }
-
-        string? wanted = string.IsNullOrWhiteSpace(configuredName)
-            ? TryGetWindowsDefaultInputName()
-            : configuredName.Trim();
-
-        if (wanted is { Length: > 0 })
-        {
-            string comparableWanted = ComparableDeviceName(wanted);
-            for (int index = 0; index < WaveInEvent.DeviceCount; index++)
-            {
-                string productName = WaveInEvent.GetCapabilities(index).ProductName;
-                string comparableProduct = ComparableDeviceName(productName);
-
-                // WinMM truncates names to 31 characters, while Core Audio returns the complete
-                // name. Prefix matching maps the two views of the same endpoint.
-                if (DeviceNamesReferToSameEndpoint(comparableProduct, comparableWanted))
-                {
-                    return index;
-                }
-            }
-
-            _logger.LogWarning(
-                "Input device '{Device}' was not found. Using recording device 0.",
-                wanted);
-        }
-
-        return 0;
-    }
-
-    private string? TryGetWindowsDefaultInputName()
-    {
-        try
-        {
-            using var enumerator = new MMDeviceEnumerator();
-            return enumerator
-                .GetDefaultAudioEndpoint(DataFlow.Capture, Role.Communications)
-                .FriendlyName;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogDebug(
-                ex,
-                "Could not resolve the Windows default communications microphone.");
-            return null;
-        }
-    }
-
-    private static string ComparableDeviceName(string value) =>
-        new(value
-            .Where(char.IsLetterOrDigit)
-            .Select(char.ToUpperInvariant)
-            .ToArray());
+    private int ResolveInputDevice(string? configuredName) =>
+        MicrophoneDevices.ResolveInputDevice(configuredName, _logger);
 
     /// <summary>
     /// Replaces WinMM's 31-character product labels with the corresponding complete Core Audio
@@ -590,49 +494,8 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
     /// </summary>
     internal static IReadOnlyList<string> PreferFullInputDeviceNames(
         IReadOnlyList<string> legacyNames,
-        IReadOnlyList<string> fullEndpointNames)
-    {
-        var result = new List<string>();
-        var matchedLegacyNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
-        foreach (string fullName in fullEndpointNames.Where(name =>
-            !string.IsNullOrWhiteSpace(name)))
-        {
-            string comparableFullName = ComparableDeviceName(fullName);
-            string? matchingLegacyName = legacyNames.FirstOrDefault(legacyName =>
-                DeviceNamesReferToSameEndpoint(
-                    ComparableDeviceName(legacyName),
-                    comparableFullName));
-
-            if (matchingLegacyName is not null
-                && !result.Contains(fullName, StringComparer.OrdinalIgnoreCase))
-            {
-                result.Add(fullName.Trim());
-                matchedLegacyNames.Add(matchingLegacyName);
-            }
-        }
-
-        foreach (string legacyName in legacyNames.Where(name =>
-            !string.IsNullOrWhiteSpace(name)))
-        {
-            if (!matchedLegacyNames.Contains(legacyName)
-                && !result.Contains(legacyName, StringComparer.OrdinalIgnoreCase))
-            {
-                result.Add(legacyName.Trim());
-            }
-        }
-
-        return result;
-    }
-
-    private static bool DeviceNamesReferToSameEndpoint(
-        string firstComparableName,
-        string secondComparableName) =>
-        firstComparableName.Length > 0
-        && secondComparableName.Length > 0
-        && (firstComparableName.Equals(secondComparableName, StringComparison.Ordinal)
-            || firstComparableName.StartsWith(secondComparableName, StringComparison.Ordinal)
-            || secondComparableName.StartsWith(firstComparableName, StringComparison.Ordinal));
+        IReadOnlyList<string> fullEndpointNames) =>
+        MicrophoneDevices.PreferFullInputDeviceNames(legacyNames, fullEndpointNames);
 
     private async Task ReceiveLoopAsync(CancellationToken cancellationToken)
     {
@@ -676,8 +539,8 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
         {
             _logger.LogWarning(ex, "The Deepgram websocket closed unexpectedly.");
             RaiseError(
-                "The connection to Deepgram was lost.",
-                "Check the internet connection, then press push-to-talk again.");
+                UiText.T("The connection to Deepgram was lost."),
+                UiText.T("Check the internet connection, then press push-to-talk again."));
         }
     }
 
@@ -743,7 +606,7 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
         {
             return new SpeechTrainingSample
             {
-                Message = "Nothing was transcribed. Check the selected microphone and its level.",
+                Message = UiText.T("Nothing was transcribed. Check the selected microphone and its level."),
             };
         }
 
@@ -765,7 +628,7 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
             Success = true,
             Transcript = text,
             Confidence = confidence,
-            Message = $"Heard with {confidence:P0} confidence.",
+            Message = UiText.T($"Heard with {confidence:P0} confidence."),
         };
     }
 
@@ -776,18 +639,9 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
             return;
         }
 
-        short peak = 0;
-        for (int index = 0; index + 1 < bytesRecorded; index += 2)
-        {
-            short sample = BitConverter.ToInt16(buffer, index);
-            short magnitude = sample == short.MinValue ? short.MaxValue : Math.Abs(sample);
-            if (magnitude > peak)
-            {
-                peak = magnitude;
-            }
-        }
-
-        AudioLevelChanged.Invoke(this, new AudioLevelEventArgs(peak / (double)short.MaxValue));
+        AudioLevelChanged.Invoke(
+            this,
+            new AudioLevelEventArgs(MicrophoneDevices.PeakLevel(buffer, bytesRecorded)));
     }
 
     /// <inheritdoc />
@@ -796,14 +650,14 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
         if (!_applicationOptions.CurrentValue.CloudServicesConsentGiven)
         {
             return ProviderTestResult.Fail(
-                "Cloud services are disabled. Enable consent in Settings before testing.");
+                UiText.T("Cloud services are disabled. Enable consent in Settings before testing."));
         }
 
         if (!ProviderEndpointPolicy.IsAllowedDeepgramStreaming(
                 _options.CurrentValue.StreamingUrl))
         {
             return ProviderTestResult.Fail(
-                "The configured Deepgram endpoint was blocked. Restore the official endpoint.");
+                UiText.T("The configured Deepgram endpoint was blocked. Restore the official endpoint."));
         }
 
         string? apiKey = await _secretStore
@@ -813,7 +667,7 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
         if (string.IsNullOrWhiteSpace(apiKey))
         {
             return ProviderTestResult.Fail(
-                "No Deepgram API key is stored. Enter one and save first.");
+                UiText.T("No Deepgram API key is stored. Enter one and save first."));
         }
 
         var stopwatch = Stopwatch.StartNew();
@@ -824,7 +678,7 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
                     _options.CurrentValue.StreamingUrl))
             {
                 return ProviderTestResult.Fail(
-                    "The configured Deepgram endpoint was blocked. Restore the official endpoint.");
+                    UiText.T("The configured Deepgram endpoint was blocked. Restore the official endpoint."));
             }
 
             using var socket = new ClientWebSocket();
@@ -849,20 +703,20 @@ public sealed class DeepgramSpeechRecognitionService : ISpeechRecognitionService
                 CancellationToken.None).ConfigureAwait(false);
 
             return ProviderTestResult.Ok(
-                $"Connected. Model '{_options.CurrentValue.SpeechToTextModel}', language '{profile.Language}'.",
+                UiText.T($"Connected. Model '{_options.CurrentValue.SpeechToTextModel}', language '{profile.Language}'."),
                 stopwatch.Elapsed);
         }
         catch (WebSocketException ex)
         {
             return ProviderTestResult.Fail(
                 ex.Message.Contains("401", StringComparison.Ordinal)
-                    ? "Deepgram rejected the API key."
-                    : "Could not connect to Deepgram. Check the internet connection.");
+                    ? UiText.T("Deepgram rejected the API key.")
+                    : UiText.T("Could not connect to Deepgram. Check the internet connection."));
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
             return ProviderTestResult.Fail(
-                "Deepgram did not respond before the timeout elapsed.");
+                UiText.T("Deepgram did not respond before the timeout elapsed."));
         }
     }
 
