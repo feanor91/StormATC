@@ -40,6 +40,10 @@
             </StackPanel>
           </StackPanel>
 
+          <CheckBox Content="Start this flight again each time StormATC opens with the simulator running"
+                    IsChecked="{Binding VfrAutoStart}"
+                    Margin="0,0,0,10" />
+
           <Button Content="Start a local VFR flight"
                   Style="{StaticResource PrimaryButtonStyle}"
                   HorizontalAlignment="Left"

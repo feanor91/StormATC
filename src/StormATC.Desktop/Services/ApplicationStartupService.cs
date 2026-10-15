@@ -2,6 +2,7 @@ using System.IO;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
+using StormATC.Application.FlightPlanning;
 using StormATC.Application.Atis;
 using StormATC.Application.Localization;
 using StormATC.Application.Options;
@@ -43,8 +44,12 @@ public sealed class ApplicationStartupService(
     IOptions<ApplicationOptions> applicationOptions,
     IOptions<AtcRealismOptions> realismOptions,
     IOptions<SimBriefOptions> simBriefOptions,
+    IOptions<VfrLocalOptions> vfrLocalOptions,
     ILogger<ApplicationStartupService> logger)
 {
+    private readonly VfrLocalOptions _vfrLocal =
+        vfrLocalOptions?.Value ?? throw new ArgumentNullException(nameof(vfrLocalOptions));
+
     private readonly AtcSessionContext _sessionContext =
         sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
 
@@ -235,10 +240,49 @@ public sealed class ApplicationStartupService(
         }
     }
 
+    /// <summary>
+    /// Starts the remembered local VFR flight when the simulator is running, so a pilot who sits
+    /// in the aircraft and opens StormATC does not have to set the flight up again.
+    /// </summary>
+    private async Task<bool> TryStartRememberedVfrFlightAsync(CancellationToken cancellationToken)
+    {
+        if (!_vfrLocal.AutoStart
+            || _simulatorConnector.IsMockActive
+            || !VfrLocalFlight.TryCreatePlan(
+                _vfrLocal.Aerodrome,
+                _vfrLocal.Callsign,
+                DateTimeOffset.UtcNow,
+                out FlightPlan? plan,
+                out _))
+        {
+            return false;
+        }
+
+        _sessionContext.PreassignedSquawk = null;
+        AtcSession session = await _sessionContext
+            .LoadFlightPlanAsync(plan, cancellationToken)
+            .ConfigureAwait(false);
+        session = _sessionContext.Mutate(current => current.WithFlightRules(FlightRules.Vfr));
+
+        if (session.CurrentFrequency is Frequency initialFrequency)
+        {
+            await _simulatorConnector.TuneCom1Async(initialFrequency, cancellationToken).ConfigureAwait(false);
+        }
+
+        _providerStatus.SetFlightPlanStatus(true, $"{plan.ToSummary()} · VFR local");
+        _logger.LogInformation("Started the remembered local VFR flight {Summary}.", plan.ToSummary());
+        return true;
+    }
+
     private async Task LoadFlightPlanAsync(CancellationToken cancellationToken)
     {
         try
         {
+            if (await TryStartRememberedVfrFlightAsync(cancellationToken).ConfigureAwait(false))
+            {
+                return;
+            }
+
             var request = new FlightPlanImportRequest { UserId = _simBriefOptions.UserId };
 
             FlightPlanImportResult result = await _flightPlanProvider

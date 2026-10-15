@@ -396,6 +396,28 @@ public sealed class DeepgramOptions
 
 }
 
+/// <summary>
+/// The local VFR flight to start when StormATC opens with the simulator running: the aerodrome
+/// the pilot is on and the aircraft's callsign, remembered from the last time one was started.
+/// </summary>
+public sealed class VfrLocalOptions
+{
+    /// <summary>The configuration section name.</summary>
+    public const string SectionName = "VfrLocal";
+
+    /// <summary>The aerodrome, as a four-character ICAO code such as LFPL.</summary>
+    public string? Aerodrome { get; init; }
+
+    /// <summary>The callsign or registration, such as F-GABC.</summary>
+    public string? Callsign { get; init; }
+
+    /// <summary>
+    /// When true and the simulator is connected, the flight above is started instead of the
+    /// bundled sample or a SimBrief plan.
+    /// </summary>
+    public bool AutoStart { get; init; }
+}
+
 /// <summary>SimBrief import settings.</summary>
 public sealed class SimBriefOptions
 {

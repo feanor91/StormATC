@@ -21,6 +21,11 @@ immatriculation (proposé d'après l'identifiant de l'avion dans MSFS), puis **D
 local**. StormATC lit les fréquences et les pistes du terrain dans le simulateur, passe le vol en
 VFR et règle la COM1 : l'ATIS d'abord s'il en existe un, puis Sol (ou la Tour).
 
+Le vol est mémorisé : à l'ouverture suivante de StormATC, **si MSFS tourne déjà**, il est relancé
+tout seul et vous n'avez rien à refaire. Décochez la case « Relancer ce vol… » pour ne pas le
+mémoriser. Importer un plan SimBrief arrête aussi ce redémarrage automatique. Si StormATC s'ouvre
+avant MSFS, il démarre sur le vol d'exemple : utilisez alors le bouton.
+
 Les règles de vol sont un attribut du vol. Elles se règlent de deux façons :
 
 - sur la page **Plan de vol**, liste « Règles de vol » (IFR ou VFR) ;

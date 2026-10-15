@@ -3,7 +3,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Text.Json.Nodes;
 using StormATC.Application.Abstractions;
+using StormATC.Application.FlightPlanning;
 using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Application.Sessions;
@@ -43,6 +45,10 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
     [ObservableProperty]
     private string _vfrAerodrome = string.Empty;
 
+    /// <summary>Start this flight again each time StormATC opens with the simulator running.</summary>
+    [ObservableProperty]
+    private bool _vfrAutoStart = true;
+
     /// <summary>The callsign of a local VFR flight; offered from the simulator's aircraft identifier.</summary>
     [ObservableProperty]
     private string _vfrCallsign = string.Empty;
@@ -54,36 +60,22 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
     [RelayCommand]
     private async Task StartVfrLocalFlightAsync()
     {
-        string icao = VfrAerodrome.Trim().ToUpperInvariant();
-        if (icao.Length != 4 || !icao.All(char.IsLetterOrDigit))
+        if (!VfrLocalFlight.TryCreatePlan(VfrAerodrome, VfrCallsign, _clock.UtcNow, out FlightPlan? plan, out string? problem))
         {
             StatusIsError = true;
-            StatusMessage = UiText.T("Enter the four-letter ICAO code of the aerodrome, such as LFPL.");
+            StatusMessage = problem == "aerodrome"
+                ? UiText.T("Enter the four-letter ICAO code of the aerodrome, such as LFPL.")
+                : UiText.T("Enter the callsign or registration of your aircraft, such as F-GABC.");
             return;
         }
 
-        if (!StormATC.Domain.ValueObjects.Callsign.TryCreate(VfrCallsign, out StormATC.Domain.ValueObjects.Callsign? callsign))
-        {
-            StatusIsError = true;
-            StatusMessage = UiText.T("Enter the callsign or registration of your aircraft, such as F-GABC.");
-            return;
-        }
+        string icao = plan.DepartureIcao;
 
         IsImporting = true;
         StatusIsError = false;
 
         try
         {
-            var plan = new FlightPlan
-            {
-                FlightPlanId = $"vfr-local-{icao}",
-                Callsign = callsign,
-                DepartureIcao = icao,
-                DestinationIcao = icao,
-                GeneratedAt = _clock.UtcNow,
-                SourceIdentifier = "VFR local",
-            };
-
             _sessionContext.PreassignedSquawk = null;
             AtcSession session = await _sessionContext
                 .LoadFlightPlanAsync(plan, CancellationToken.None)
@@ -96,6 +88,17 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
                     .ConfigureAwait(true);
 
             _providerStatus.SetFlightPlanStatus(true, $"{plan.ToSummary()} · VFR local");
+
+            // Remembered, so the next launch with the simulator running starts it again.
+            await _userSettings
+                .SaveManyAsync(
+                    [
+                        (VfrLocalOptions.SectionName, "Aerodrome", JsonValue.Create(icao)),
+                        (VfrLocalOptions.SectionName, "Callsign", JsonValue.Create(plan.Callsign.Original)),
+                        (VfrLocalOptions.SectionName, "AutoStart", JsonValue.Create(VfrAutoStart)),
+                    ],
+                    CancellationToken.None)
+                .ConfigureAwait(true);
 
             StatusMessage = session.CurrentFrequency is Frequency assigned
                 ? UiText.T($"Local VFR flight at {icao}. ")
@@ -323,6 +326,11 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
             // Only the sample scenario pins a transponder code. Reading it from the router rather
             // than testing the provider type means a SimBrief import correctly clears it.
             _sessionContext.PreassignedSquawk = _flightPlanProvider.PreassignedSquawk;
+
+            // An imported plan replaces the remembered local flight at the next launch too.
+            await _userSettings
+                .SaveAsync(VfrLocalOptions.SectionName, "AutoStart", JsonValue.Create(false), CancellationToken.None)
+                .ConfigureAwait(true);
 
             AtcSession session = await _sessionContext
                 .LoadFlightPlanAsync(plan, CancellationToken.None)

@@ -123,6 +123,9 @@ public static class ServiceCollectionExtensions
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
+        services.AddOptions<VfrLocalOptions>()
+            .Bind(configuration.GetSection(VfrLocalOptions.SectionName));
+
         services.AddOptions<OpenRouterOptions>()
             .Bind(configuration.GetSection(OpenRouterOptions.SectionName))
             .ValidateDataAnnotations()
