@@ -99,6 +99,24 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             return jurisdictionFailure;
         }
 
+        // A plain "roger" settles the outstanding readback once the pilot has already tried and
+        // failed to read it back, when the profile allows it: a readback nobody can reproduce
+        // must not stall the flight. The first "roger" is still sent back for a real readback.
+        if (intent.Type == PilotIntentType.PilotAcknowledgement
+            && context.Realism.AcceptAcknowledgementAsReadback
+            && context.Session.PendingReadback is { IsMandatory: true, AttemptCount: > 0 } outstanding)
+        {
+            return BuildAcceptedReadbackDecision(
+                context,
+                outstanding,
+                new ReadbackAssessment
+                {
+                    Outcome = ReadbackOutcome.Correct,
+                    CallsignStatus = CallsignStatus.Correct,
+                    Confidence = intent.Confidence,
+                });
+        }
+
         // --- Guard 6: an outstanding mandatory readback blocks new requests. ----------------
         // Readback and correction intents are exempt: they are how the pilot resolves it.
         bool isReadbackIntent = IsReadbackIntent(intent.Type);
@@ -871,12 +889,19 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             TaxiRouteLengthMeters = route.TotalLengthMeters,
             TaxiDestination = $"holding point {departureRunway.ToDisplay()}",
             HoldShortOfRunway = departureRunway,
-            RequiredReadbackItems = [ReadbackItemType.TaxiRoute, ReadbackItemType.HoldShortRunway],
+            RequiredReadbackItems = route.TaxiwayNames.Count > 0
+                ? [ReadbackItemType.TaxiRoute, ReadbackItemType.HoldShortRunway]
+                : [ReadbackItemType.HoldShortRunway],
         };
 
-        var expectedItems = new List<ExpectedReadbackItem>
+        var expectedItems = new List<ExpectedReadbackItem>();
+
+        // The route is read back only when it names taxiways. Aerodromes whose taxiways are
+        // unnamed in the simulator data give a route with no names, and "via" followed by
+        // nothing is a readback nobody could ever complete.
+        if (route.TaxiwayNames.Count > 0)
         {
-            new()
+            expectedItems.Add(new()
             {
                 Type = ReadbackItemType.TaxiRoute,
                 ExpectedValue = string.Join(",", route.TaxiwayNames),
@@ -885,15 +910,16 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
                 // A misheard taxi route sends the aircraft the wrong way on the manoeuvring
                 // area, so it is treated as critical.
                 IsCritical = true,
-            },
-            new()
-            {
-                Type = ReadbackItemType.HoldShortRunway,
-                ExpectedValue = departureRunway.ToComparisonValue(),
-                SpokenValue = Say(context).ReadbackItemHoldShort(departureRunway),
-                IsCritical = true,
-            },
-        };
+            });
+        }
+
+        expectedItems.Add(new()
+        {
+            Type = ReadbackItemType.HoldShortRunway,
+            ExpectedValue = departureRunway.ToComparisonValue(),
+            SpokenValue = Say(context).ReadbackItemHoldShort(departureRunway),
+            IsCritical = true,
+        });
 
         return new AtcDecision
         {

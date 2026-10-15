@@ -200,6 +200,8 @@ public sealed class ApplicationStartupService(
             EnforceHoldShort = _realismOptions.EnforceHoldShort,
             RequireCheckInOnFrequencyChange =
                 _realismOptions.RequireCheckInOnFrequencyChange,
+            AcceptAcknowledgementAsReadback = _realismOptions.AcceptAcknowledgementAsReadback
+                && RealismProfile.FromName(name).AcceptAcknowledgementAsReadback,
             MinimumIntentConfidence = _realismOptions.MinimumIntentConfidence,
         };
     }

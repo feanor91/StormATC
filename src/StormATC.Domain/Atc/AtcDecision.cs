@@ -123,6 +123,7 @@ public sealed record RealismProfile
         RequireCorrectCallsign = true,
         EnforceHoldShort = true,
         RequireCheckInOnFrequencyChange = true,
+        AcceptAcknowledgementAsReadback = false,
         MinimumIntentConfidence = 0.75,
         TranscriptTolerance = TranscriptToleranceMode.Strict,
     };
@@ -160,6 +161,15 @@ public sealed record RealismProfile
 
     /// <summary>When true, the pilot must check in after every frequency change.</summary>
     public bool RequireCheckInOnFrequencyChange { get; init; }
+
+    /// <summary>
+    /// When true, a plain "roger" or "bien reçu" settles an outstanding readback once the pilot
+    /// has already tried and failed to read it back. Not real practice, but it keeps a simulation
+    /// from stalling on a readback the pilot cannot reproduce, such as a long taxi route. The
+    /// first "roger" is still sent back for a real readback, and the Strict profile never
+    /// allows it.
+    /// </summary>
+    public bool AcceptAcknowledgementAsReadback { get; init; } = true;
 
     /// <summary>
     /// Below this confidence the engine asks the pilot to repeat rather than acting on a

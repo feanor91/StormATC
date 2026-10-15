@@ -601,6 +601,13 @@ public sealed class AtcRealismOptions
     /// <summary>When true, crossing a hold-short line without clearance raises a warning.</summary>
     public bool EnforceHoldShort { get; init; } = true;
 
+    /// <summary>
+    /// When true, a plain "roger" settles an outstanding readback once the pilot has tried and
+    /// failed to read it back, so they are never stuck on one they cannot reproduce. The Strict
+    /// profile ignores this and requires the real readback.
+    /// </summary>
+    public bool AcceptAcknowledgementAsReadback { get; init; } = true;
+
     /// <summary>When true, the pilot must check in after every frequency change.</summary>
     public bool RequireCheckInOnFrequencyChange { get; init; }
 
