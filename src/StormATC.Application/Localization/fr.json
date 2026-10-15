@@ -866,5 +866,6 @@
   "Voice {0} set aside. The controller will use another voice next time.": "Voix {0} écartée. Le contrôleur utilisera une autre voix la prochaine fois.",
   "The voice could not be set aside. See the Diagnostics page for details.": "La voix n'a pas pu être écartée. Voir la page Diagnostic pour les détails.",
   "Start this flight again each time StormATC opens with the simulator running": "Relancer ce vol à chaque ouverture de StormATC quand le simulateur tourne",
-  "Tune the frequencies yourself in the aircraft, starting with {0}: StormATC follows the one you tune.": "Réglez les fréquences vous-même dans l'avion, en commençant par {0} : StormATC suit celle que vous réglez."
+  "Tune the frequencies yourself in the aircraft, starting with {0}: StormATC follows the one you tune.": "Réglez les fréquences vous-même dans l'avion, en commençant par {0} : StormATC suit celle que vous réglez.",
+  "Traffic radio is silent: you are on your aerodrome's own frequency.": "La radio du trafic est muette : vous êtes sur une fréquence de votre aérodrome."
 }

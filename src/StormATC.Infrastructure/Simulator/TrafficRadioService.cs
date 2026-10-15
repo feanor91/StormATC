@@ -11,6 +11,7 @@ using StormATC.Application.Transmissions;
 using StormATC.Domain;
 using StormATC.Domain.Airports;
 using StormATC.Domain.Sessions;
+using StormATC.Domain.ValueObjects;
 
 namespace StormATC.Infrastructure.Simulator;
 
@@ -144,6 +145,15 @@ public sealed class TrafficRadioService(
             return;
         }
 
+        // Chatter belongs on a busy regional frequency. On the aerodrome's own ATIS, Ground or
+        // Tower the pilot would hear nobody else's radar contacts, so stay silent there.
+        if (await IsOnOwnAerodromeFrequencyAsync(cancellationToken).ConfigureAwait(false))
+        {
+            Status = UiText.T("Traffic radio is silent: you are on your aerodrome's own frequency.");
+            _nextAllowedAt = now.AddSeconds(10);
+            return;
+        }
+
         MsfsTrafficSnapshot? traffic = SelectTraffic();
         if (traffic is null)
         {
@@ -196,6 +206,43 @@ public sealed class TrafficRadioService(
                     .ConfigureAwait(false);
             }
         }
+    }
+
+    /// <summary>
+    /// True when COM1 is tuned to a frequency the departure or destination aerodrome publishes:
+    /// ATIS, Delivery, Ground, Tower, Departure, Approach or Centre.
+    /// </summary>
+    private async Task<bool> IsOnOwnAerodromeFrequencyAsync(CancellationToken cancellationToken)
+    {
+        AtcSession session = sessionContext.CurrentSession;
+        if (session.FlightPlan is not { } plan)
+        {
+            return false;
+        }
+
+        Frequency tuned = session.AircraftState.Radio.ActiveTransmitFrequency;
+        foreach (string icao in new[] { plan.DepartureIcao, plan.DestinationIcao }.Distinct(StringComparer.OrdinalIgnoreCase))
+        {
+            AirportData? airport = await sessionContext.GetAirportAsync(icao, cancellationToken).ConfigureAwait(false);
+            if (airport is null)
+            {
+                continue;
+            }
+
+            AirportFrequencies published = airport.Frequencies;
+            Frequency?[] own =
+            [
+                published.Atis, published.ClearanceDelivery, published.Ground, published.Tower,
+                published.Departure, published.Approach, published.Center,
+            ];
+
+            if (own.Any(frequency => frequency is Frequency candidate && tuned.IsSameChannel(candidate)))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private MsfsTrafficSnapshot? SelectTraffic() =>
