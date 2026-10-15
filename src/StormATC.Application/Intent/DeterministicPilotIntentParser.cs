@@ -207,6 +207,56 @@ public sealed partial class DeterministicPilotIntentParser : IPilotIntentParser
             }
         }
 
+        return ContextualFallback(transcript, session);
+    }
+
+    /// <summary>
+    /// What a VFR pilot on the ground most plausibly means when no phrase matched exactly.
+    /// </summary>
+    /// <remarks>
+    /// A VFR pilot has no clearance to read from, so their wording varies: "VFR for a controlled
+    /// departure", "local flight, request departure", "ready to go". Rather than ask them to
+    /// repeat until they use the exact example, the stage of the flight says what is being asked:
+    /// at the parking it is a request to taxi, at the holding point it is ready for departure.
+    /// The engine still checks every condition (controller, runway, traffic) before it permits
+    /// anything, so a loose reading can only produce a request, never a clearance.
+    /// </remarks>
+    private static (PilotIntentType Type, double Confidence) ContextualFallback(
+        string transcript,
+        AtcSession session)
+    {
+        if (session.FlightRules != FlightRules.Vfr || !session.AircraftState.IsOnGround)
+        {
+            return (PilotIntentType.Unknown, 0);
+        }
+
+        static bool Mentions(string text, params string[] words) =>
+            words.Any(word => text.Contains(word, StringComparison.Ordinal));
+
+        switch (session.Phase)
+        {
+            case FlightPhase.Preflight when session.TaxiClearance is null:
+                if (Mentions(transcript, "taxi", "depart", "vfr", "local", "circuit", "start", "ready"))
+                {
+                    return (PilotIntentType.RequestTaxi, 0.65);
+                }
+
+                break;
+
+            case FlightPhase.TaxiOut or FlightPhase.HoldingShort or FlightPhase.LineUp:
+                if (Mentions(transcript, "ready", "depart", "takeoff", "take off", "line up"))
+                {
+                    return (PilotIntentType.ReadyForDeparture, 0.65);
+                }
+
+                if (Mentions(transcript, "holding", "hold"))
+                {
+                    return (PilotIntentType.ReportHoldingShort, 0.65);
+                }
+
+                break;
+        }
+
         return (PilotIntentType.Unknown, 0);
     }
 

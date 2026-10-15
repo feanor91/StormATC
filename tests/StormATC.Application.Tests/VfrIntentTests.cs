@@ -142,6 +142,66 @@ public class VfrIntentTests
     }
 
     // =====================================================================================
+    // Loose wording on the ground
+    // =====================================================================================
+
+    private static AtcSession OnTheGround(FlightRules rules, FlightPhase phase) =>
+        Session(rules) with { Phase = phase };
+
+    [Theory]
+    [InlineData("Storm un deux trois, vol VFR pour un départ contrôlé")]
+    [InlineData("Storm un deux trois, VFR, demande de départ")]
+    [InlineData("Storm un deux trois, vol local, départ circuit de piste")]
+    [InlineData("Storm un deux trois, prêts à démarrer, vol VFR")]
+    public void A_vfr_pilot_at_the_parking_who_asks_to_depart_is_asking_to_taxi(string french)
+    {
+        string canonical = TranscriptNormalizer.Normalize(FrenchTranscriptCanonicalizer.Canonicalize(french));
+
+        PilotIntent intent = DeterministicPilotIntentParser.Parse(canonical, OnTheGround(FlightRules.Vfr, FlightPhase.Preflight));
+
+        Assert.Equal(PilotIntentType.RequestTaxi, intent.Type);
+    }
+
+    [Theory]
+    [InlineData("Storm un deux trois, prêt pour le départ", PilotIntentType.ReadyForDeparture)]
+    [InlineData("Storm un deux trois, départ", PilotIntentType.ReadyForDeparture)]
+    [InlineData("Storm un deux trois, prêt à l'alignement", PilotIntentType.ReadyForDeparture)]
+    [InlineData("Storm un deux trois, je suis arrêté avant la piste", PilotIntentType.Unknown)]
+    public void A_vfr_pilot_at_the_holding_point_is_understood_loosely(string french, PilotIntentType expected)
+    {
+        string canonical = TranscriptNormalizer.Normalize(FrenchTranscriptCanonicalizer.Canonicalize(french));
+
+        PilotIntent intent = DeterministicPilotIntentParser.Parse(canonical, OnTheGround(FlightRules.Vfr, FlightPhase.HoldingShort));
+
+        Assert.Equal(expected, intent.Type);
+    }
+
+    [Fact]
+    public void An_ifr_pilot_is_not_given_the_loose_reading()
+    {
+        string canonical = TranscriptNormalizer.Normalize(
+            FrenchTranscriptCanonicalizer.Canonicalize("Storm un deux trois, vol pour un départ contrôlé"));
+
+        PilotIntent intent = DeterministicPilotIntentParser.Parse(canonical, OnTheGround(FlightRules.Ifr, FlightPhase.Preflight));
+
+        Assert.Equal(PilotIntentType.Unknown, intent.Type);
+    }
+
+    [Fact]
+    public void An_airborne_vfr_pilot_is_not_given_the_loose_reading()
+    {
+        AtcSession airborne = Session(FlightRules.Vfr) with
+        {
+            Phase = FlightPhase.Preflight,
+            AircraftState = TestAerodromes.AtStand(Fixture.Now) with { IsOnGround = false },
+        };
+
+        PilotIntent intent = DeterministicPilotIntentParser.Parse("vfr departure", airborne);
+
+        Assert.Equal(PilotIntentType.Unknown, intent.Type);
+    }
+
+    // =====================================================================================
     // IFR is untouched
     // =====================================================================================
 
