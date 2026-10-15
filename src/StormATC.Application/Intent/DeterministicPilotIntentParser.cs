@@ -196,65 +196,148 @@ public sealed partial class DeterministicPilotIntentParser : IPilotIntentParser
             return (vfrType, vfrConfidence);
         }
 
+        // "Holding point ... ready" is a pilot ready to depart, not one merely reporting position.
+        if (session.AircraftState.IsOnGround
+            && transcript.Contains("ready", StringComparison.Ordinal)
+            && (transcript.Contains("holding", StringComparison.Ordinal)
+                || transcript.Contains("hold short", StringComparison.Ordinal))
+            && !transcript.Contains("ready for taxi", StringComparison.Ordinal)
+            && !transcript.Contains("ready to taxi", StringComparison.Ordinal))
+        {
+            return (PilotIntentType.ReadyForDeparture, 0.9);
+        }
+
+        (PilotIntentType Type, double Confidence)? weak = null;
         foreach (IntentRule rule in Rules)
         {
             foreach (string phrase in rule.Phrases)
             {
-                if (transcript.Contains(phrase, StringComparison.Ordinal))
+                if (!transcript.Contains(phrase, StringComparison.Ordinal))
                 {
-                    return (rule.Type, rule.Confidence);
+                    continue;
                 }
+
+                // A greeting alone is a weak reading: if the stage of the flight says more, use that.
+                if (rule.Confidence < 0.7 && weak is null)
+                {
+                    weak = (rule.Type, rule.Confidence);
+                    break;
+                }
+
+                return (rule.Type, rule.Confidence);
+            }
+
+            if (weak is not null)
+            {
+                break;
             }
         }
 
-        return ContextualFallback(transcript, session);
+        (PilotIntentType contextual, double contextualConfidence) = ContextualFallback(transcript, session);
+        if (contextual != PilotIntentType.Unknown)
+        {
+            return (contextual, contextualConfidence);
+        }
+
+        return weak ?? (PilotIntentType.Unknown, 0);
     }
 
     /// <summary>
-    /// What a VFR pilot on the ground most plausibly means when no phrase matched exactly.
+    /// What the pilot most plausibly means when no phrase matched exactly, read from the stage of
+    /// the flight.
     /// </summary>
     /// <remarks>
-    /// A VFR pilot has no clearance to read from, so their wording varies: "VFR for a controlled
-    /// departure", "local flight, request departure", "ready to go". Rather than ask them to
-    /// repeat until they use the exact example, the stage of the flight says what is being asked:
-    /// at the parking it is a request to taxi, at the holding point it is ready for departure.
-    /// The engine still checks every condition (controller, runway, traffic) before it permits
-    /// anything, so a loose reading can only produce a request, never a clearance.
+    /// Pilots do not recite the manual: "VFR for a controlled departure", "taxi please", "level
+    /// one eight zero". Rather than ask them to repeat until they use an example, the stage of the
+    /// flight says what is being asked: at the parking it is a request to taxi, at the holding
+    /// point it is readiness, in the climb it is a check-in or a level request. The engine still
+    /// checks every condition (controller, runway, traffic) before it permits anything, so a loose
+    /// reading can only produce a request, never a clearance. Readbacks are never read loosely.
     /// </remarks>
     private static (PilotIntentType Type, double Confidence) ContextualFallback(
         string transcript,
         AtcSession session)
     {
-        if (session.FlightRules != FlightRules.Vfr || !session.AircraftState.IsOnGround)
-        {
-            return (PilotIntentType.Unknown, 0);
-        }
-
         static bool Mentions(string text, params string[] words) =>
             words.Any(word => text.Contains(word, StringComparison.Ordinal));
 
-        switch (session.Phase)
+        bool vfr = session.FlightRules == FlightRules.Vfr;
+
+        if (session.AircraftState.IsOnGround)
         {
-            case FlightPhase.Preflight when session.TaxiClearance is null:
-                if (Mentions(transcript, "taxi", "depart", "vfr", "local", "circuit", "start", "ready"))
-                {
-                    return (PilotIntentType.RequestTaxi, 0.65);
-                }
+            switch (session.Phase)
+            {
+                case FlightPhase.Preflight or FlightPhase.IFRClearanceIssued or FlightPhase.Pushback:
+                    if (session.Phase == FlightPhase.Preflight
+                        && session.IfrClearance is null
+                        && !vfr
+                        && Mentions(transcript, "clearance"))
+                    {
+                        return (PilotIntentType.RequestIFRClearance, 0.65);
+                    }
 
-                break;
+                    if (Mentions(transcript, "pushback", "push back", "push and"))
+                    {
+                        return (PilotIntentType.RequestPushback, 0.65);
+                    }
 
-            case FlightPhase.TaxiOut or FlightPhase.HoldingShort or FlightPhase.LineUp:
-                if (Mentions(transcript, "ready", "depart", "takeoff", "take off", "line up"))
-                {
-                    return (PilotIntentType.ReadyForDeparture, 0.65);
-                }
+                    if (Mentions(transcript, "taxi")
+                        || (vfr && session.TaxiClearance is null
+                            && Mentions(transcript, "depart", "vfr", "local", "circuit", "start", "ready")))
+                    {
+                        return (PilotIntentType.RequestTaxi, 0.65);
+                    }
 
-                if (Mentions(transcript, "holding", "hold"))
-                {
-                    return (PilotIntentType.ReportHoldingShort, 0.65);
-                }
+                    break;
 
-                break;
+                case FlightPhase.Landed or FlightPhase.TaxiIn:
+                    if (Mentions(transcript, "stand", "parking", "gate"))
+                    {
+                        return (PilotIntentType.RequestTaxiToStand, 0.65);
+                    }
+
+                    if (Mentions(transcript, "vacated", "clear of", "runway is clear"))
+                    {
+                        return (PilotIntentType.ReportRunwayVacated, 0.65);
+                    }
+
+                    break;
+
+                case FlightPhase.TaxiOut or FlightPhase.HoldingShort or FlightPhase.LineUp:
+                    if (Mentions(transcript, "ready", "takeoff", "take off", "line up")
+                        || (vfr && Mentions(transcript, "depart")))
+                    {
+                        return (PilotIntentType.ReadyForDeparture, 0.65);
+                    }
+
+                    if (Mentions(transcript, "holding", "hold"))
+                    {
+                        return (PilotIntentType.ReportHoldingShort, 0.65);
+                    }
+
+                    break;
+            }
+
+            return (PilotIntentType.Unknown, 0);
+        }
+
+        // In the air, outside the circuit (whose legs have rules of their own).
+        if (session.Phase is FlightPhase.InitialClimb or FlightPhase.Departure or FlightPhase.Enroute
+            or FlightPhase.Descent or FlightPhase.Arrival)
+        {
+            if (Mentions(transcript, "request")
+                && Mentions(transcript, "flight level", "altitude")
+                && Altitude.Parse(transcript) is Altitude requested)
+            {
+                return requested.Feet > session.AircraftState.IndicatedAltitudeFeet
+                    ? (PilotIntentType.RequestClimb, 0.65)
+                    : (PilotIntentType.RequestDescent, 0.65);
+            }
+
+            if (Mentions(transcript, "hello", "flight level", "altitude", "passing", "climbing", "descending", "feet"))
+            {
+                return (PilotIntentType.CheckIn, 0.65);
+            }
         }
 
         return (PilotIntentType.Unknown, 0);
