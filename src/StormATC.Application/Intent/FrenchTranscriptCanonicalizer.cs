@@ -63,6 +63,9 @@ public static class FrenchTranscriptCanonicalizer
         // --- Ready / request forms. -----------------------------------------------------------
         ("(?:nous sommes |on est |je suis )?(?:prets|pretes|pret|prete) (?:a copier|pour copier)", "ready to copy"),
         ("(?:nous sommes |on est |je suis )?(?:prets|pretes|pret|prete) (?:a rouler|pour rouler)", "ready to taxi"),
+        // Speech recognition often writes "prêts" as "près" or "prés", and pilots also say
+        // "prêt à partir" or "prêts à décoller": all of them are "ready for departure".
+        ("(?:nous sommes |on est |je suis )?(?:prets|pretes|pret|prete|pres|pre) (?:a )?(?:partir|decoller|le depart|au depart|pour le depart)", "ready for departure"),
         ("(?:nous sommes |on est |je suis )?(?:prets|pretes|pret|prete) (?:au|aux|pour le|pour la|pour l|pour)", "ready for"),
         ("(?:demande|demandons|je demande|on demande|nous demandons|demander) (?:a |de )?rouler", "request taxi"),
         ("(?:demande|demandons|je demande|on demande|nous demandons|demander) (?:a |de )?monter", "request climb"),

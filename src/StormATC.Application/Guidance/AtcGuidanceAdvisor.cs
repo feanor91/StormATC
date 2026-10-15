@@ -34,9 +34,9 @@ public static class AtcGuidanceAdvisor
         bool french = session.Language == PhraseologyLanguage.French;
         IAtcPhraseology say = AtcPhraseologies.For(session.Language);
         string spokenCallsign = say.SpeakCallsign(callsign);
-        string departureRunway = session.AssignedDepartureRunway is RunwayIdentifier runway
+        string departureRunway = (session.AssignedDepartureRunway ?? session.TaxiClearance?.Runway) is RunwayIdentifier runway
             ? say.SpeakRunway(runway)
-            : french ? "piste assignée" : "runway assigned runway";
+            : french ? "piste (celle du roulage)" : "runway (the one you were given)";
         string Example(string english, string inFrench) => french ? inFrench : english;
 
         if (session.CurrentController == ControllerPosition.Atis)

@@ -191,7 +191,12 @@ public sealed record AtcSession
                 TaxiClearance = clearance,
                 AssignedStand = clearance.TaxiDestination ?? AssignedStand,
             },
-            ClearanceType.Taxi or ClearanceType.Pushback
+            ClearanceType.Taxi => updated with
+            {
+                TaxiClearance = clearance,
+                AssignedDepartureRunway = clearance.Runway ?? AssignedDepartureRunway,
+            },
+            ClearanceType.Pushback
                 or ClearanceType.RunwayCrossing => updated with { TaxiClearance = clearance },
             ClearanceType.LineUp or ClearanceType.Takeoff => updated with
             {
