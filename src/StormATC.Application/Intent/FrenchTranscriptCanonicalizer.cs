@@ -52,7 +52,7 @@ public static class FrenchTranscriptCanonicalizer
         ("approche interrompue", "missed approach"),
 
         // --- Conversational controls. ---------------------------------------------------------
-        ("(?:pouvez vous |vous pouvez |veuillez |pourriez vous )?(?:repetez|repeter|redites|redire)|dites a nouveau", "say again"),
+        ("(?:pouvez vous |vous pouvez |veuillez |pourriez vous )?(?:repetez|repeter|redites|redire)|dites a nouveau|dites encore|encore une fois|pardon", "say again"),
         ("essai radio|verification radio|comment (?:me )?recevez vous|vous me recevez", "radio check"),
         ("quelle est la frequence|quelle frequence|la frequence please|frequence please", "what is the frequency"),
         ("frequence (?:du |de la |de l )?sol", "ground frequency"),
@@ -65,8 +65,11 @@ public static class FrenchTranscriptCanonicalizer
         ("(?:nous sommes |on est |je suis )?(?:prets|pretes|pret|prete) (?:a rouler|pour rouler)", "ready to taxi"),
         // Speech recognition often writes "prêts" as "près" or "prés", and pilots also say
         // "prêt à partir" or "prêts à décoller": all of them are "ready for departure".
-        ("(?:nous sommes |on est |je suis )?(?:prets|pretes|pret|prete|pres|pre) (?:a )?(?:partir|decoller|le depart|au depart|pour le depart)", "ready for departure"),
+        ("(?:nous sommes |on est |je suis )?(?:prets|pretes|pret|prete|pres|pre) (?:a )?(?:partir|decoller|le depart|au depart|pour le depart|l alignement|alignement|s aligner|aligner)", "ready for departure"),
         ("(?:nous sommes |on est |je suis )?(?:prets|pretes|pret|prete) (?:au|aux|pour le|pour la|pour l|pour)", "ready for"),
+        ("(?:nous sommes |on est |je suis )?(?:prets|pretes|pret|prete)(?: immediat)?", "ready"),
+        // "Demande d'autorisation de rouler" asks to taxi: the permission is part of the request.
+        ("(?:d |de |l )?(?:autorisation|permission)(?: de| d| a| pour)?(?= (?:rouler|roulage|decoller|decollage|atterrir|atterrissage|s aligner|alignement|repoussage|demarrer|mise en route|monter|descendre))", ""),
         ("(?:demande|demandons|je demande|on demande|nous demandons|demander) (?:a |de )?rouler", "request taxi"),
         ("(?:demande|demandons|je demande|on demande|nous demandons|demander) (?:a |de )?monter", "request climb"),
         ("(?:demande|demandons|je demande|on demande|nous demandons|demander) (?:a |de )?descendre", "request descent"),
@@ -76,7 +79,7 @@ public static class FrenchTranscriptCanonicalizer
         ("(?:niveau|altitude) inferieur|plus bas", "lower"),
 
         // --- Clearance delivery. --------------------------------------------------------------
-        ("(?:notre |la |une |de |de la )?clairance", "clearance"),
+        ("(?:notre |ma |mon |votre |la |une |de |de la )?clairance", "clearance"),
         ("niveau de vol", "flight level"),
         ("(?:mise en route et repoussage|repoussage et mise en route)", "pushback and start"),
         ("mise en route", "start"),
@@ -89,8 +92,10 @@ public static class FrenchTranscriptCanonicalizer
         ("face (?:au |a l |a )?sud", "facing south"),
         ("face (?:au |a l |a )?est", "facing east"),
         ("face (?:au |a l |a )?ouest", "facing west"),
+        ("roulage (?:guide|guidee|assiste|assistee)|(?:un )?guidage", "progressive taxi"),
         ("roulage progressif|guidage (?:au |de |du )?roulage|guidage au sol|roulage detaille|instructions de roulage detaillees|(?:nous sommes|on est|je suis) perdus?", "progressive taxi"),
         ("(?:roulage|roulons|rouler|roule|roulez|on roule|je roule) (?:vers le |vers la |vers |au |jusqu au |pour le )?(?:parking|poste de stationnement|poste|porte)", "taxi to stand"),
+        ("(?:on |nous |je )?(?:rentre|rentrons|rejoindre|rejoins|rejoignons|regagner|regagnons) (?:au |le |vers le |a la |la )?(?:parking|poste de stationnement|poste|porte)", "taxi to stand"),
         ("poste de stationnement|parking", "stand"),
         ("(?:au|nous sommes au|on est au|sommes au) point d attente", "at the holding point"),
         ("point d attente", "holding point"),
@@ -117,16 +122,19 @@ public static class FrenchTranscriptCanonicalizer
         ("(?:estime|estimee|estimes)", "estimate"),
         ("(?:a la )?verticale(?: de| du| d)?", "overhead"),
 
-        ("tour de piste", "circuit"),
+        ("(?:a )?(?:l )?alignement|(?:a )?(?:nous |m )?aligner|s aligner", "line up"),
+        ("tours? de piste", "circuit"),
         ("(?:autorises|autorisees|autorisee|autorise) (?:au |a l |pour le |pour l |a )?decollage", "cleared for takeoff"),
         ("(?:autorises|autorisees|autorisee|autorise) (?:a l |pour l |a )?(?:atterrissage|atterrir|poser|se poser)", "cleared to land"),
         ("(?:autorises|autorisees|autorisee|autorise)(?: a| pour| jusqu a)?", "cleared to"),
         ("(?:nous avons |on a |avons |j ai |a |ai )?(?:degage|libere) (?:de )?(?:la )?piste|piste (?:degagee|liberee)", "runway vacated"),
-        ("(?:nous sommes |on est |sommes )?en l air|(?:nous avons |on a |avons |j ai )?decolle", "airborne"),
+        ("(?:nous sommes |on est |sommes )?en l air|(?:nous avons |on a |avons |j ai )?decolle|(?:on |nous |je )?(?:vient|viens|venons) de decoller", "airborne"),
         ("(?:nous sommes |on est |sommes )?(?:etablis|etablies|etablie|etabli)", "established"),
 
         // --- Radar. ---------------------------------------------------------------------------
         ("(?:un )?(?:evitement|contournement)", "deviation"),
+        ("(?:un )?raccourci(?: vers| jusqu a| pour)?", "direct to"),
+        ("incapable|nous sommes incapables", "unable"),
         ("avec vous", "with you"),
         ("(?:on est |nous sommes |sommes )?en montee", "checking in climbing"),
         ("(?:on est |nous sommes |sommes )?en descente", "checking in descending"),
@@ -139,7 +147,7 @@ public static class FrenchTranscriptCanonicalizer
         ("a droite|droite", "right"),
         ("(?:on |nous |je )?(?:contactons|contacte|contacter|passons avec|passe avec|passons sur|passe sur)", "contact"),
         ("avec (?:l )?information|information", "information"),
-        ("(?:on |nous |je )?(?:passons|passe)", "passing"),
+        ("(?:on |nous |je )?(?:passons|passe)|passage(?! bas)", "passing"),
 
         // --- Acknowledgements. ----------------------------------------------------------------
         ("bien recu|c est note|recu|note|compris", "roger"),
