@@ -316,6 +316,10 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
         $"{callsign.ToSpoken()}, hold short {runway.ToSpokenDesignator()}, traffic on the runway.";
 
     /// <inheritdoc />
+    public string HoldPositionTrafficOnShortFinal(Callsign callsign, RunwayIdentifier runway) =>
+        $"{callsign.ToSpoken()}, hold short {runway.ToSpokenDesignator()}, traffic on short final.";
+
+    /// <inheritdoc />
     public string WrongApproachRunway(Callsign callsign, RunwayIdentifier clearedRunway) =>
         $"{callsign.ToSpoken()}, negative, you are cleared for the approach {clearedRunway.ToSpoken()}, confirm.";
 

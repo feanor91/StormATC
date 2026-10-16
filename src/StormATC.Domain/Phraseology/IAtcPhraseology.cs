@@ -199,6 +199,9 @@ public interface IAtcPhraseology
 
     string HoldShortTrafficOnRunway(Callsign callsign, RunwayIdentifier runway);
 
+    /// <summary>Holds the aircraft at the holding point because another aircraft is on short final.</summary>
+    string HoldPositionTrafficOnShortFinal(Callsign callsign, RunwayIdentifier runway);
+
     string WrongApproachRunway(Callsign callsign, RunwayIdentifier clearedRunway);
 
     string ContinueApproachTrafficOnRunway(Callsign callsign);

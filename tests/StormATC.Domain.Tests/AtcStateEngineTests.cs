@@ -1,3 +1,4 @@
+using StormATC.Domain.Airports;
 using StormATC.Domain.Atc;
 using StormATC.Domain.Intents;
 using StormATC.Domain.Readback;
@@ -707,6 +708,60 @@ public class AtcStateEngineTests
         Assert.False(decision.Accepted);
         Assert.NotEqual(ClearanceType.Takeoff, decision.IssuedClearance?.Type);
         Assert.NotEqual(AtcResponseType.TakeoffClearance, decision.ResponseType);
+    }
+
+    [Fact]
+    public void Takeoff_clearance_is_refused_while_traffic_is_on_short_final()
+    {
+        AtcSession session = ReadyForDeparture();
+        RunwayData runway = TestScenario.Departure_STMR.FindRunway(RunwayIdentifier.Create("18"))!;
+
+        // 1.5 NM behind the threshold on the extended centreline, 450 ft, 80 kt: landing on 18.
+        GeoPosition final = runway.ThresholdPosition.Project(
+            Heading.FromDegrees((runway.CenterlineBearing.Degrees + 180) % 360),
+            1.5);
+        var traffic = new List<TrafficContact>
+        {
+            new() { Callsign = "MOCK002", Position = final, AltitudeFeet = 450, GroundSpeedKnots = 80 },
+        };
+
+        AtcDecision decision = _engine.Evaluate(TestScenario.Context(
+            session,
+            TestScenario.Intent(PilotIntentType.ReadyForDeparture, "ready for departure"),
+            traffic: traffic));
+
+        Assert.False(decision.Accepted);
+        Assert.NotEqual(AtcResponseType.TakeoffClearance, decision.ResponseType);
+        Assert.Contains("short final", decision.FallbackPhraseology, StringComparison.Ordinal);
+    }
+
+    [Theory]
+    [InlineData(5.0, 450, 80, 0)]   // too far away
+    [InlineData(1.5, 4_000, 150, 0)] // overflying, far above the circuit
+    [InlineData(1.5, 450, 5, 0)]    // taxiing or parked, not landing
+    [InlineData(1.5, 450, 80, 90)]  // well off the centreline
+    public void Takeoff_clearance_is_not_refused_for_traffic_that_is_not_on_short_final(
+        double distanceNauticalMiles,
+        double altitudeFeet,
+        double groundSpeedKnots,
+        int offCentrelineDegrees)
+    {
+        AtcSession session = ReadyForDeparture();
+        RunwayData runway = TestScenario.Departure_STMR.FindRunway(RunwayIdentifier.Create("18"))!;
+        GeoPosition position = runway.ThresholdPosition.Project(
+            Heading.FromDegrees((runway.CenterlineBearing.Degrees + 180 + offCentrelineDegrees) % 360),
+            distanceNauticalMiles);
+        var traffic = new List<TrafficContact>
+        {
+            new() { Callsign = "MOCK003", Position = position, AltitudeFeet = altitudeFeet, GroundSpeedKnots = groundSpeedKnots },
+        };
+
+        AtcDecision decision = _engine.Evaluate(TestScenario.Context(
+            session,
+            TestScenario.Intent(PilotIntentType.ReadyForDeparture, "ready for departure"),
+            traffic: traffic));
+
+        Assert.Equal(AtcResponseType.TakeoffClearance, decision.ResponseType);
     }
 
     [Fact]

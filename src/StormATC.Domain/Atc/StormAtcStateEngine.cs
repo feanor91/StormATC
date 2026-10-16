@@ -1363,6 +1363,15 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
                 Say(context).HoldShortTrafficOnRunway(callsign, runway));
         }
 
+        // Landing traffic on short final to this runway, or to the opposite end of it, is as
+        // much a conflict as traffic already on the surface.
+        if (FindTrafficOnShortFinal(context, runway) is not null)
+        {
+            return AtcDecision.Reject(
+                $"Traffic is on short final for runway {runway}.",
+                Say(context).HoldPositionTrafficOnShortFinal(callsign, runway));
+        }
+
         var clearance = new Clearance
         {
             ClearanceId = Guid.CreateVersion7(),
@@ -2356,6 +2365,58 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
 
         return Math.Sqrt((offsetX * offsetX) + (offsetY * offsetY));
     }
+
+    /// <summary>Distance from a threshold inside which traffic on the extended centreline is on short final.</summary>
+    private const double ShortFinalNauticalMiles = 3.0;
+
+    /// <summary>Height above the aerodrome below which traffic on the centreline is landing, not overflying.</summary>
+    private const int ShortFinalHeightFeet = 1500;
+
+    /// <summary>How far, in degrees, traffic may be off the extended centreline and still be on final.</summary>
+    private const int ShortFinalToleranceDegrees = 20;
+
+    /// <summary>
+    /// Moving traffic close to the extended centreline of the runway, at either end, and low
+    /// enough to be landing on it. Traffic on the runway itself is <see cref="IsRunwayOccupied"/>'s concern.
+    /// </summary>
+    private static TrafficContact? FindTrafficOnShortFinal(AtcEvaluationContext context, RunwayIdentifier runway)
+    {
+        AirportData? airport = context.DepartureAirport;
+        if (airport?.FindRunway(runway) is not RunwayData data)
+        {
+            return null;
+        }
+
+        Heading runwayDirection = data.CenterlineBearing;
+        int ceiling = airport.ElevationFeet + ShortFinalHeightFeet;
+
+        foreach (TrafficContact contact in context.Traffic)
+        {
+            if (contact.IsOnRunway || contact.GroundSpeedKnots < 40 || contact.AltitudeFeet > ceiling)
+            {
+                continue;
+            }
+
+            // Behind the threshold: traffic landing on this runway. Beyond the far end: traffic landing the other way.
+            bool landingSameWay =
+                data.ThresholdPosition.DistanceNauticalMilesTo(contact.Position) <= ShortFinalNauticalMiles
+                && data.ThresholdPosition.TrueBearingTo(contact.Position).DifferenceTo(Opposite(runwayDirection))
+                    <= ShortFinalToleranceDegrees;
+            bool landingOtherWay =
+                data.EndPosition.DistanceNauticalMilesTo(contact.Position) <= ShortFinalNauticalMiles
+                && data.EndPosition.TrueBearingTo(contact.Position).DifferenceTo(runwayDirection)
+                    <= ShortFinalToleranceDegrees;
+
+            if (landingSameWay || landingOtherWay)
+            {
+                return contact;
+            }
+        }
+
+        return null;
+    }
+
+    private static Heading Opposite(Heading heading) => Heading.FromDegrees((heading.Degrees + 180) % 360);
 
     private static bool IsRunwayOccupied(AtcEvaluationContext context, RunwayIdentifier runway)
     {
