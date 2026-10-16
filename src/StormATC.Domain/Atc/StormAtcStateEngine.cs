@@ -247,6 +247,30 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             }
         }
 
+        // --- Go-around handoff. -------------------------------------------------------------
+        // Tower gives the go-around instruction; once the aircraft is climbing away it is passed
+        // to Approach, which sequences the next approach. A VFR aircraft stays with Tower and
+        // rejoins the circuit.
+        if (session.Phase == FlightPhase.GoAround
+            && session.FlightRules == FlightRules.Ifr
+            && session.CurrentController == ControllerPosition.Tower
+            && !aircraft.IsOnGround
+            && aircraft.IsClimbing
+            && IsAboveAirportBy(context.DestinationAirport ?? context.DepartureAirport, aircraft, 500))
+        {
+            Frequency? approachFrequency = ResolveFrequency(context, ControllerPosition.Approach);
+            if (approachFrequency is Frequency frequency && session.Callsign is Callsign callsign)
+            {
+                return BuildHandoff(
+                    context,
+                    ControllerPosition.Approach,
+                    frequency,
+                    FlightPhase.Approach,
+                    "Climbing away after a go-around.",
+                    Say(context).Handoff(callsign, ControllerPosition.Approach, frequency));
+            }
+        }
+
         // --- Touch and go: the wheels touch and the aircraft rolls on. ------------------------
         // No vacate instruction, no handoff: the aircraft is departing again, and once airborne
         // the "becoming airborne" rule above takes it back to the climb.
@@ -1935,14 +1959,16 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
         }
 
         // A go-around is always approved. Refusing one would be nonsense: the aircraft is
-        // already going around by the time the pilot says so.
-        Altitude climbTo = session.ClearedAltitude ?? Altitude.FromFeet(3000);
+        // already going around by the time the pilot says so. It is answered by whoever has the
+        // aircraft: Tower on short final, Approach when the approach is missed earlier.
+        int elevation = (context.DestinationAirport ?? context.DepartureAirport)?.ElevationFeet ?? 0;
+        Altitude climbTo = session.ClearedAltitude ?? DefaultMissedApproachAltitude(elevation);
 
         var clearance = new Clearance
         {
             ClearanceId = Guid.CreateVersion7(),
             Type = ClearanceType.Climb,
-            IssuedBy = ControllerPosition.Tower,
+            IssuedBy = session.CurrentController,
             IssuedAt = context.CurrentTime,
             InitialAltitude = climbTo,
         };
@@ -2344,6 +2370,19 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
 
         return false;
     }
+
+    /// <summary>
+    /// The altitude to climb to on a go-around when none was assigned: 2000 ft above the aerodrome,
+    /// to the next 500 ft, and never below 3000 ft.
+    /// </summary>
+    private static Altitude DefaultMissedApproachAltitude(int elevationFeet)
+    {
+        int rounded = (elevationFeet + 2000 + 499) / 500 * 500;
+        return Altitude.FromFeet(Math.Max(3000, rounded));
+    }
+
+    private static bool IsAboveAirportBy(AirportData? airport, Aircraft.AircraftState aircraft, int feet) =>
+        aircraft.IndicatedAltitudeFeet > (airport?.ElevationFeet ?? 0) + feet;
 
     private static bool IsAboveAerodromeBy(AtcEvaluationContext context, int feet)
     {

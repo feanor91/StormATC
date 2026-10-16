@@ -884,6 +884,83 @@ public class AtcStateEngineTests
     }
 
     [Fact]
+    public void A_go_around_is_answered_by_the_controller_who_has_the_aircraft()
+    {
+        AtcSession session = OnApproach();
+
+        AtcDecision decision = _engine.Evaluate(TestScenario.Context(
+            session,
+            TestScenario.Intent(PilotIntentType.GoAround, "storm one two three going around", confidence: 0.9)));
+
+        Assert.Equal(ControllerPosition.Approach, decision.IssuedClearance?.IssuedBy);
+    }
+
+    [Theory]
+    [InlineData(0, 3000)]
+    [InlineData(1100, 3500)]
+    [InlineData(5000, 7000)]
+    public void A_go_around_without_an_assigned_altitude_climbs_two_thousand_feet_above_the_aerodrome(
+        int elevationFeet,
+        int expectedFeet)
+    {
+        AtcEvaluationContext context = TestScenario.Context(
+            OnApproach() with { ClearedAltitude = null },
+            TestScenario.Intent(PilotIntentType.GoAround, "storm one two three going around", confidence: 0.9));
+        context = context with { DestinationAirport = TestScenario.Destination_STMD with { ElevationFeet = elevationFeet } };
+
+        AtcDecision decision = _engine.Evaluate(context);
+
+        Assert.Equal(Altitude.FromFeet(expectedFeet), decision.IssuedClearance?.InitialAltitude);
+    }
+
+    [Fact]
+    public void An_ifr_aircraft_climbing_away_after_a_go_around_is_handed_to_approach()
+    {
+        AtcSession session = OnApproach() with
+        {
+            Phase = FlightPhase.GoAround,
+            CurrentController = ControllerPosition.Tower,
+            CurrentFrequency = TestScenario.Tower,
+            AircraftState = TestScenario.Airborne(1_200),
+        };
+
+        AtcDecision decision = _engine.EvaluateStateChange(TestScenario.Context(session, intent: null));
+
+        Assert.Equal(ControllerPosition.Approach, decision.Handoff?.ToController);
+        Assert.Equal(TestScenario.Approach, decision.Handoff?.ToFrequency);
+        Assert.Equal(FlightPhase.Approach, decision.NewPhase);
+    }
+
+    [Fact]
+    public void A_vfr_aircraft_stays_with_tower_after_a_go_around()
+    {
+        AtcSession session = OnApproach() with
+        {
+            Phase = FlightPhase.GoAround,
+            FlightRules = FlightRules.Vfr,
+            CurrentController = ControllerPosition.Tower,
+            CurrentFrequency = TestScenario.Tower,
+            AircraftState = TestScenario.Airborne(1_200),
+        };
+
+        Assert.Null(_engine.EvaluateStateChange(TestScenario.Context(session, intent: null)).Handoff);
+    }
+
+    [Fact]
+    public void No_handoff_is_issued_while_the_aircraft_is_still_low_after_a_go_around()
+    {
+        AtcSession session = OnApproach() with
+        {
+            Phase = FlightPhase.GoAround,
+            CurrentController = ControllerPosition.Tower,
+            CurrentFrequency = TestScenario.Tower,
+            AircraftState = TestScenario.Airborne(300),
+        };
+
+        Assert.Null(_engine.EvaluateStateChange(TestScenario.Context(session, intent: null)).Handoff);
+    }
+
+    [Fact]
     public void Reaching_the_stand_completes_the_session()
     {
         AtcSession session = TestScenario.NewSession(TestScenario.AtStand()) with
