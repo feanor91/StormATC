@@ -174,8 +174,8 @@ public sealed class Callsign : IEquatable<Callsign>
             run.Clear();
             if (spelled.Length >= 3
                 && (spelled.Contains(Normalized, StringComparison.Ordinal)
-                    || (spelled.Length >= 3
-                        && spelled.Contains($"{Normalized[0]}{Normalized[^2..]}", StringComparison.Ordinal))))
+                    || spelled.Contains($"{Normalized[0]}{Normalized[^2..]}", StringComparison.Ordinal)
+                    || SpelledWithoutNationality(spelled)))
             {
                 return true;
             }
@@ -183,6 +183,17 @@ public sealed class Callsign : IEquatable<Callsign>
 
         return false;
     }
+
+    /// <summary>
+    /// French pilots often drop the nationality letter: "Golf Tango Mike Papa" for F-GTMP, or the
+    /// short form "Golf Mike Papa". A five-letter registration is matched on its last four letters
+    /// (or the first of those four and the last two).
+    /// </summary>
+    private bool SpelledWithoutNationality(string spelled) =>
+        Normalized.Length == 5
+        && Normalized.All(char.IsLetter)
+        && (spelled.Contains(Normalized[1..], StringComparison.Ordinal)
+            || spelled.Contains($"{Normalized[1]}{Normalized[^2..]}", StringComparison.Ordinal));
 
     /// <summary>
     /// Renders the callsign the way a controller would say it: telephony as a word, flight

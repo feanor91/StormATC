@@ -13,7 +13,7 @@ short; the commit history has the detail.
 - Improve aviation-number, callsign, waypoint, runway, SID, squawk, and frequency normalisation.
   *Partly done:* French numbers, squawk pairs and "unité", frequencies said without "décimale"
   ("cent dix-huit sept cinq"), runway sides said as a letter, and registrations spelled in the
-  phonetic alphabet (full or abbreviated). SIDs and waypoints are unchanged.
+  phonetic alphabet (full or abbreviated, with or without the nationality letter: "Golf Tango Mike Papa"). SIDs and waypoints are unchanged.
 - Expand accent-tolerant phrase matching without training on or storing a user's raw voice.
 - Make partial readbacks and corrections feel natural instead of repetitive.
 - Add repeatable transcript fixtures for real failure cases with all personal data removed.

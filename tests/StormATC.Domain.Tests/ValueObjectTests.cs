@@ -57,6 +57,8 @@ public class CallsignTests
     [InlineData("fox golf tango mike papa bonjour")]
     [InlineData("foxtrot golf tango mike papa climbing")]
     [InlineData("fox mike papa montons niveau cent vingt")]
+    [InlineData("golf tango mike papa bonjour")]
+    [InlineData("golf mike papa montons niveau cent vingt")]
     public void MatchesTranscript_accepts_a_registration_spelled_in_the_phonetic_alphabet(string transcript) =>
         Assert.True(Callsign.Create("F-GTMP").MatchesTranscript(transcript));
 
