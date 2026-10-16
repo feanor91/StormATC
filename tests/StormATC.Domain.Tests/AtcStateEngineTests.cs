@@ -710,7 +710,7 @@ public class AtcStateEngineTests
         Assert.NotEqual(AtcResponseType.TakeoffClearance, decision.ResponseType);
     }
 
-    private List<TrafficContact> TrafficOnShortFinalTo18()
+    private static List<TrafficContact> TrafficOnShortFinalTo18()
     {
         RunwayData runway = TestScenario.Departure_STMR.FindRunway(RunwayIdentifier.Create("18"))!;
 
