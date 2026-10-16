@@ -97,8 +97,8 @@ public class StateChangeMonitorTests : IAsyncLifetime
         Assert.Equal(FlightPhase.InitialClimb, _context.CurrentSession.Phase);
     }
 
-    private Task LoadFlightPlanAsync() =>
-        _context.LoadFlightPlanAsync(
+    private async Task LoadFlightPlanAsync() =>
+        await _context.LoadFlightPlanAsync(
             new FlightPlan
             {
                 FlightPlanId = "monitor",
