@@ -366,6 +366,11 @@ public sealed class PilotTransmissionCoordinator(
             session = session.WithTouchAndGoRequested(touchAndGo);
         }
 
+        if (decision.NewManoeuvre is CircuitManoeuvre manoeuvre)
+        {
+            session = session.WithRequestedManoeuvre(manoeuvre);
+        }
+
         if (decision.NewArrivalRunway is RunwayIdentifier arrivalRunway)
         {
             session = session.WithArrivalRunway(arrivalRunway);

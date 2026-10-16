@@ -493,6 +493,31 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
             .Build();
 
     /// <inheritdoc />
+    public string OptionClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots) =>
+        ManoeuvreClearance(callsign, runway, "autorisé option", windDirection, windSpeedKnots);
+
+    /// <inheritdoc />
+    public string LowPassClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots) =>
+        ManoeuvreClearance(callsign, runway, "autorisé passage bas", windDirection, windSpeedKnots);
+
+    private string ManoeuvreClearance(
+        Callsign callsign,
+        RunwayIdentifier runway,
+        string clearance,
+        Heading? windDirection,
+        int? windSpeedKnots)
+    {
+        PhraseBuilder builder = Phrase(callsign).Add(SpeakRunway(runway)).Add(clearance);
+
+        if (Wind(windDirection, windSpeedKnots) is string wind)
+        {
+            builder.Add(wind);
+        }
+
+        return builder.Build();
+    }
+
+    /// <inheritdoc />
     public string TouchAndGoClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots)
     {
         PhraseBuilder builder = Phrase(callsign).Add(SpeakRunway(runway)).Add("autorisé toucher");

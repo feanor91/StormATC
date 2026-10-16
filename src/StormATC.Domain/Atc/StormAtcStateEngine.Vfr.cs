@@ -53,6 +53,7 @@ public sealed partial class StormAtcStateEngine
                 NewPhase = FlightPhase.Arrival,
                 NewFlightRules = FlightRules.Vfr,
                 NewTouchAndGoRequested = intent.Entities.TouchAndGo,
+                NewManoeuvre = intent.Entities.Manoeuvre == CircuitManoeuvre.None ? null : intent.Entities.Manoeuvre,
                 NewArrivalRunway = runway,
                 ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
                 {
@@ -65,7 +66,7 @@ public sealed partial class StormAtcStateEngine
             };
         }
 
-        return CircuitJoinDecision(context, callsign, runway, intent.Entities.TouchAndGo);
+        return CircuitJoinDecision(context, callsign, runway, intent.Entities.TouchAndGo, intent.Entities.Manoeuvre);
     }
 
     /// <summary>"Passing Echo": the aircraft is at the reporting point, so it may join the circuit.</summary>
@@ -92,14 +93,15 @@ public sealed partial class StormAtcStateEngine
                 Say(context).Unable(callsign, UnableReason.NoArrivalRunwayAvailable));
         }
 
-        return CircuitJoinDecision(context, callsign, runway, intent.Entities.TouchAndGo ? true : null);
+        return CircuitJoinDecision(context, callsign, runway, intent.Entities.TouchAndGo ? true : null, intent.Entities.Manoeuvre);
     }
 
     private static AtcDecision CircuitJoinDecision(
         AtcEvaluationContext context,
         Callsign callsign,
         RunwayIdentifier runway,
-        bool? touchAndGo)
+        bool? touchAndGo,
+        CircuitManoeuvre manoeuvre = CircuitManoeuvre.None)
     {
         CircuitSide? side = context.VfrProfile?.CircuitSideFor(runway.CenterlineHeading.Degrees);
 
@@ -111,6 +113,7 @@ public sealed partial class StormAtcStateEngine
             NewFlightRules = FlightRules.Vfr,
             NewCircuitLeg = CircuitLeg.Joining,
             NewTouchAndGoRequested = touchAndGo,
+            NewManoeuvre = manoeuvre == CircuitManoeuvre.None ? null : manoeuvre,
             NewArrivalRunway = runway,
             ApprovedFacts = CircuitFacts(runway, side, "join the downwind leg and report downwind"),
             ProhibitedFacts = ["landing clearance", "any runway other than the runway in use"],
@@ -196,16 +199,20 @@ public sealed partial class StormAtcStateEngine
         }
 
         bool touchAndGo = intent.Entities.TouchAndGo || session.TouchAndGoRequested;
-        return HandleLandingClearance(context, callsign, touchAndGo) with
+        CircuitManoeuvre manoeuvre = intent.Entities.Manoeuvre != CircuitManoeuvre.None
+            ? intent.Entities.Manoeuvre
+            : session.RequestedManoeuvre;
+        return HandleLandingClearance(context, callsign, touchAndGo, manoeuvre) with
         {
             NewFlightRules = FlightRules.Vfr,
             NewCircuitLeg = CircuitLeg.Final,
             NewTouchAndGoRequested = touchAndGo,
+            NewManoeuvre = manoeuvre,
         };
     }
 
     /// <summary>"Request touch and go": noted; the clearance itself comes when the aircraft reports final.</summary>
-    private static AtcDecision HandleTouchAndGoRequest(AtcEvaluationContext context)
+    private static AtcDecision HandleTouchAndGoRequest(AtcEvaluationContext context, PilotIntent intent)
     {
         if (context.Session.Callsign is not Callsign callsign)
         {
@@ -216,12 +223,18 @@ public sealed partial class StormAtcStateEngine
         {
             Accepted = true,
             ResponseType = AtcResponseType.Acknowledgement,
-            NewTouchAndGoRequested = true,
+            NewTouchAndGoRequested = intent.Entities.Manoeuvre == CircuitManoeuvre.None ? true : null,
+            NewManoeuvre = intent.Entities.Manoeuvre == CircuitManoeuvre.None ? null : intent.Entities.Manoeuvre,
             ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
             {
-                ["acknowledgement"] = "touch and go requested",
+                ["acknowledgement"] = intent.Entities.Manoeuvre switch
+                {
+                    CircuitManoeuvre.Option => "option requested",
+                    CircuitManoeuvre.LowPass => "low pass requested",
+                    _ => "touch and go requested",
+                },
             },
-            ProhibitedFacts = ["landing clearance", "touch and go clearance before the aircraft reports final"],
+            ProhibitedFacts = ["landing clearance", "any clearance before the aircraft reports final"],
             FallbackPhraseology = Say(context).Acknowledgement(callsign),
         };
     }
@@ -241,6 +254,7 @@ public sealed partial class StormAtcStateEngine
             NewPhase = FlightPhase.Enroute,
             NewCircuitLeg = CircuitLeg.None,
             NewTouchAndGoRequested = false,
+            NewManoeuvre = CircuitManoeuvre.None,
             ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
             {
                 ["acknowledgement"] = "leaving the frequency",

@@ -342,4 +342,10 @@ public enum AtcResponseType
 
     /// <summary>Cleared for a touch and go.</summary>
     TouchAndGoClearance,
+
+    /// <summary>Cleared for the option: full stop, touch and go or stop-and-go, at the pilot's choice.</summary>
+    OptionClearance,
+
+    /// <summary>Cleared for a low pass over the runway, without touching down.</summary>
+    LowPassClearance,
 }

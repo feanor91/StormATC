@@ -355,7 +355,9 @@ public sealed partial class DeterministicPilotIntentParser : IPilotIntentParser
             || transcript.Contains("will comply", StringComparison.Ordinal)
             || transcript.Contains("thank you", StringComparison.Ordinal)
             || transcript.Contains("thanks", StringComparison.Ordinal)
-            || transcript.Contains("got it", StringComparison.Ordinal);
+            || transcript.Contains("got it", StringComparison.Ordinal)
+            || transcript.Contains("stand by", StringComparison.Ordinal)
+            || transcript.Contains("go ahead", StringComparison.Ordinal);
     }
 
     /// <summary>

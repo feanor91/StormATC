@@ -97,8 +97,9 @@ public static class FrenchTranscriptCanonicalizer
         ("(?:roulage|roulons|rouler|roule|roulez|on roule|je roule) (?:vers le |vers la |vers |au |jusqu au |pour le )?(?:parking|poste de stationnement|poste|porte)", "taxi to stand"),
         ("(?:on |nous |je )?(?:rentre|rentrons|rejoindre|rejoins|rejoignons|regagner|regagnons) (?:au |le |vers le |a la |la )?(?:parking|poste de stationnement|poste|porte)", "taxi to stand"),
         ("poste de stationnement|parking", "stand"),
-        ("(?:au|nous sommes au|on est au|sommes au) point d attente", "at the holding point"),
-        ("point d attente", "holding point"),
+        // "Point d'arrêt" was the old wording; the 2017 manual says "point d'attente", but pilots still say both.
+        ("(?:au|nous sommes au|on est au|sommes au) point d (?:attente|arret)", "at the holding point"),
+        ("point d (?:attente|arret)", "holding point"),
         ("(?:on maintient|nous maintenons|je maintiens|maintenons|maintiens|maintient|maintenir|maintenez|on reste|restons) avant", "hold short of"),
         ("(?:on traverse|nous traversons|traversons|traverser|traversez)", "crossing"),
 
@@ -114,8 +115,10 @@ public static class FrenchTranscriptCanonicalizer
         ("vent traversier", "crosswind"),
         ("(?:dernier virage|courte finale|longue finale|en finale|finale)", "final leg"),
         ("(?:en )?base", "base leg"),
-        ("atterrissage complet|arret complet", "full stop"),
-        ("(?:pour )?(?:un |le )?(?:toucher|pose decolle|pose decoller|touch and go)", "touch and go"),
+        ("atterrissage complet|arret complet|(?:pour )?un complet", "full stop"),
+        ("(?:pour )?(?:une |l )?option", "option"),
+        ("(?:pour )?(?:un )?passage bas", "low pass"),
+        ("(?:pour )?(?:un |le )?(?:toucher|touche|pose decolle|pose decoller|touch and go)", "touch and go"),
         ("sortie de circuit|quittant le circuit|quitte le circuit", "leaving circuit"),
         ("vol local", "local flight"),
         ("(?:consignes?|instructions?) d (?:integration|arrivee)", "joining instructions"),
@@ -141,6 +144,7 @@ public static class FrenchTranscriptCanonicalizer
         ("(?:on |nous |je )?(?:montons|monte|montee initiale)", "climbing"),
         ("(?:on |nous |je )?(?:descendons|descends|descend)", "descending"),
         ("(?:on |nous |je )?(?:maintenons|maintiens|maintient)", "maintaining"),
+        ("pour (?:quitter|sortir)", "leaving frequency"),
         ("(?:on |nous |je )?(?:quittons|quitte)", "leaving"),
         ("(?:on |nous |je )?(?:tournons|tourne|tournez|virons|virage)", "turn"),
         ("a gauche|gauche", "left"),
@@ -150,7 +154,9 @@ public static class FrenchTranscriptCanonicalizer
         ("(?:on |nous |je )?(?:passons|passe)|passage(?! bas)", "passing"),
 
         // --- Acknowledgements. ----------------------------------------------------------------
-        ("bien recu|c est note|recu|note|compris", "roger"),
+        ("bien recu|c est note|recu|note|compris|rogger|roger", "roger"),
+        ("j ecoute", "go ahead"),
+        ("stand by|standby", "stand by"),
         ("merci beaucoup|merci", "thanks"),
     ]);
 
@@ -247,6 +253,7 @@ public static class FrenchTranscriptCanonicalizer
         {
             ["zero"] = (NumberWordKind.Zero, 0),
             ["un"] = (NumberWordKind.Unit, 1),
+            ["unite"] = (NumberWordKind.Unit, 1),
             ["deux"] = (NumberWordKind.Unit, 2),
             ["trois"] = (NumberWordKind.Unit, 3),
             ["quatre"] = (NumberWordKind.Unit, 4),

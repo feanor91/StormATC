@@ -148,7 +148,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             PilotIntentType.ReportDownwind => HandleCircuitLegReport(context, intent, CircuitLeg.Downwind),
             PilotIntentType.ReportBase => HandleCircuitLegReport(context, intent, CircuitLeg.Base),
             PilotIntentType.ReportFinal => HandleFinalReport(context, intent),
-            PilotIntentType.RequestTouchAndGo => HandleTouchAndGoRequest(context),
+            PilotIntentType.RequestTouchAndGo => HandleTouchAndGoRequest(context, intent),
             PilotIntentType.LeaveFrequency => HandleLeaveFrequency(context),
             PilotIntentType.RequestProgressiveTaxi => HandleProgressiveTaxiRequest(context),
             PilotIntentType.ReportHoldingShort => HandleHoldingShortReport(context, intent),
@@ -1830,7 +1830,8 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
     private static AtcDecision HandleLandingClearance(
         AtcEvaluationContext context,
         Callsign callsign,
-        bool touchAndGo = false)
+        bool touchAndGo = false,
+        CircuitManoeuvre manoeuvre = CircuitManoeuvre.None)
     {
         AtcSession session = context.Session;
 
@@ -1871,7 +1872,12 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
         return new AtcDecision
         {
             Accepted = true,
-            ResponseType = touchAndGo ? AtcResponseType.TouchAndGoClearance : AtcResponseType.LandingClearance,
+            ResponseType = manoeuvre switch
+            {
+                CircuitManoeuvre.Option => AtcResponseType.OptionClearance,
+                CircuitManoeuvre.LowPass => AtcResponseType.LowPassClearance,
+                _ => touchAndGo ? AtcResponseType.TouchAndGoClearance : AtcResponseType.LandingClearance,
+            },
             NewPhase = FlightPhase.Final,
             IssuedClearance = clearance,
             RequiredReadback = new PendingReadback
@@ -1893,7 +1899,19 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             },
             ApprovedFacts = BuildLandingFacts(context, landingRunway, touchAndGo),
             ProhibitedFacts = ["takeoff clearance", "any runway other than the assigned runway"],
-            FallbackPhraseology = touchAndGo
+            FallbackPhraseology = manoeuvre == CircuitManoeuvre.Option
+                ? Say(context).OptionClearance(
+                    callsign,
+                    landingRunway,
+                    context.Weather?.WindDirection,
+                    context.Weather?.WindSpeedKnots)
+                : manoeuvre == CircuitManoeuvre.LowPass
+                ? Say(context).LowPassClearance(
+                    callsign,
+                    landingRunway,
+                    context.Weather?.WindDirection,
+                    context.Weather?.WindSpeedKnots)
+                : touchAndGo
                 ? Say(context).TouchAndGoClearance(
                     callsign,
                     landingRunway,

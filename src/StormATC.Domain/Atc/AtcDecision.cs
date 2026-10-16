@@ -287,6 +287,9 @@ public sealed record AtcDecision
     /// <summary>A touch-and-go request or its cancellation. Null leaves it unchanged.</summary>
     public bool? NewTouchAndGoRequested { get; init; }
 
+    /// <summary>An option or low-pass request, or <see cref="CircuitManoeuvre.None"/> to clear it. Null leaves it unchanged.</summary>
+    public CircuitManoeuvre? NewManoeuvre { get; init; }
+
     /// <summary>The runway in use for a VFR circuit or arrival. Null leaves it unchanged.</summary>
     public RunwayIdentifier? NewArrivalRunway { get; init; }
 
@@ -346,6 +349,7 @@ public sealed record AtcDecision
         || NewFlightRules is not null
         || NewCircuitLeg is not null
         || NewTouchAndGoRequested is not null
+        || NewManoeuvre is not null
         || NewArrivalRunway is not null;
 
     /// <summary>Builds a refusal.</summary>

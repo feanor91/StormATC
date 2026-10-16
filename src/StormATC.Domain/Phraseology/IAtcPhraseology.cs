@@ -146,6 +146,12 @@ public interface IAtcPhraseology
     /// <param name="side">The circuit direction, or null when unknown.</param>
     string CircuitReportInstruction(Callsign callsign, CircuitLeg leg, RunwayIdentifier runway, CircuitSide? side);
 
+    /// <summary>Clears the aircraft for the option: full stop, touch and go or stop-and-go, at the pilot's choice.</summary>
+    string OptionClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots);
+
+    /// <summary>Clears the aircraft for a low pass over the runway.</summary>
+    string LowPassClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots);
+
     /// <summary>Clears the aircraft for a touch and go.</summary>
     string TouchAndGoClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots);
 

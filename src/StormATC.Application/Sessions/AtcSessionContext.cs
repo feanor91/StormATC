@@ -263,6 +263,7 @@ public sealed class AtcSessionContext(
                     HandoffState = HandoffState.None,
                     CircuitLeg = CircuitLeg.None,
                     TouchAndGoRequested = false,
+                    RequestedManoeuvre = CircuitManoeuvre.None,
                 }
                 : updated;
         });

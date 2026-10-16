@@ -212,6 +212,27 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
             : $"{callsign.ToSpoken()}, report {Hand(side)}base {runway.ToSpoken()}.";
 
     /// <inheritdoc />
+    public string OptionClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots) =>
+        ManoeuvreClearance(callsign, runway, "cleared the option", windDirection, windSpeedKnots);
+
+    /// <inheritdoc />
+    public string LowPassClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots) =>
+        ManoeuvreClearance(callsign, runway, "cleared low pass", windDirection, windSpeedKnots);
+
+    private static string ManoeuvreClearance(
+        Callsign callsign,
+        RunwayIdentifier runway,
+        string clearance,
+        Heading? windDirection,
+        int? windSpeedKnots)
+    {
+        string wind = windDirection is Heading direction && windSpeedKnots is int speed
+            ? $"wind {direction.ToSpoken()} degrees {SpokenNumbers.DigitsIndividually(speed.ToString(System.Globalization.CultureInfo.InvariantCulture))} knots, "
+            : string.Empty;
+        return $"{callsign.ToSpoken()}, {wind}{runway.ToSpoken()}, {clearance}.";
+    }
+
+    /// <inheritdoc />
     public string TouchAndGoClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots)
     {
         string wind = windDirection is Heading direction && windSpeedKnots is int speed
