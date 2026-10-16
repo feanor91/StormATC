@@ -288,8 +288,9 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
         DeterministicPhraseology.Unable(callsign, $"maintain {altitude.ToSpoken()}");
 
     /// <inheritdoc />
-    public string ContactController(Callsign? callsign, ControllerPosition controller) =>
-        $"{callsign?.ToSpoken() ?? StationCalling}, contact {DeterministicPhraseology.SpokenControllerName(controller)}.";
+    public string ContactController(Callsign? callsign, ControllerPosition controller, Frequency? frequency = null) =>
+        $"{callsign?.ToSpoken() ?? StationCalling}, contact {DeterministicPhraseology.SpokenControllerName(controller)}"
+        + (frequency is Frequency f ? $" {f.ToSpoken()}." : ".");
 
     /// <inheritdoc />
     public string FrequencyInformation(Callsign callsign, ControllerPosition controller, Frequency frequency) =>

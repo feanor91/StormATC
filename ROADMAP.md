@@ -48,6 +48,8 @@ StormATC will not distribute shared credentials.
   Runway crossings: a pilot held short of a runway on the taxi route asks ("demandons à traverser")
   and is cleared to cross, or told to hold when the runway is occupied or traffic is on short final.
 - Make controller ownership and frequency guidance unambiguous.
+  *Partly done:* when a request goes to the wrong controller the reply now gives the frequency
+  to call ("contactez Tour 118,700"), not only the name.
 - Add more fictional routes and aerodromes for automated scenarios.
 
 ### User experience and accessibility

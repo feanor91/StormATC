@@ -593,8 +593,9 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
         Phrase(callsign).Add("impossible").Add($"maintenez {SpeakAltitude(altitude)}").Build();
 
     /// <inheritdoc />
-    public string ContactController(Callsign? callsign, ControllerPosition controller) =>
-        $"{SpokenOr(callsign, StationCalling)}, contactez {ControllerName(controller)}.";
+    public string ContactController(Callsign? callsign, ControllerPosition controller, Frequency? frequency = null) =>
+        $"{SpokenOr(callsign, StationCalling)}, contactez {ControllerName(controller)}"
+        + (frequency is Frequency f ? $" {SpeakFrequency(f)}." : ".");
 
     /// <inheritdoc />
     public string FrequencyInformation(Callsign callsign, ControllerPosition controller, Frequency frequency) =>

@@ -2311,7 +2311,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
 
         return AtcDecision.Reject(
             $"{intent.Type} is handled by {needed}, but the aircraft is with {current}.",
-            Say(context).ContactController(session.Callsign, needed));
+            Say(context).ContactController(session.Callsign, needed, ResolveFrequency(context, needed)));
     }
 
     private static ControllerPosition? RequiredControllerFor(PilotIntentType intent) => intent switch

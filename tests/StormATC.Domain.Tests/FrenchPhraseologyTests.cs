@@ -16,6 +16,23 @@ public class FrenchPhraseologyTests
     private static readonly FrenchAtcPhraseology Fr = FrenchAtcPhraseology.Instance;
     private readonly StormAtcStateEngine _engine = new(new DeterministicReadbackEvaluator());
 
+    [Fact]
+    public void Sending_a_pilot_to_another_controller_names_the_frequency()
+    {
+        Frequency tower = Frequency.FromMegahertz(118.700m);
+
+        string withFrequency = Fr.ContactController(null, ControllerPosition.Tower, tower);
+        string without = Fr.ContactController(null, ControllerPosition.Tower);
+
+        Assert.Contains("contactez Tour", withFrequency, StringComparison.Ordinal);
+        Assert.Contains(Fr.SpeakFrequency(tower), withFrequency, StringComparison.Ordinal);
+        Assert.DoesNotContain("décimale", without, StringComparison.Ordinal);
+        Assert.Contains(
+            tower.ToSpoken(),
+            EnglishAtcPhraseology.Instance.ContactController(null, ControllerPosition.Tower, tower),
+            StringComparison.Ordinal);
+    }
+
     // =====================================================================================
     // Numbers
     // =====================================================================================

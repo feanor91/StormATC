@@ -187,7 +187,7 @@ public interface IAtcPhraseology
 
     string UnableMaintain(Callsign callsign, Altitude altitude);
 
-    string ContactController(Callsign? callsign, ControllerPosition controller);
+    string ContactController(Callsign? callsign, ControllerPosition controller, Frequency? frequency = null);
 
     string FrequencyInformation(Callsign callsign, ControllerPosition controller, Frequency frequency);
 
