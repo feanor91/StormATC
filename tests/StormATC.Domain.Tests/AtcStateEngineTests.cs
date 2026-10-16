@@ -710,29 +710,58 @@ public class AtcStateEngineTests
         Assert.NotEqual(AtcResponseType.TakeoffClearance, decision.ResponseType);
     }
 
-    [Fact]
-    public void Takeoff_clearance_is_refused_while_traffic_is_on_short_final()
+    private List<TrafficContact> TrafficOnShortFinalTo18()
     {
-        AtcSession session = ReadyForDeparture();
         RunwayData runway = TestScenario.Departure_STMR.FindRunway(RunwayIdentifier.Create("18"))!;
 
         // 1.5 NM behind the threshold on the extended centreline, 450 ft, 80 kt: landing on 18.
         GeoPosition final = runway.ThresholdPosition.Project(
             Heading.FromDegrees((runway.CenterlineBearing.Degrees + 180) % 360),
             1.5);
-        var traffic = new List<TrafficContact>
-        {
-            new() { Callsign = "MOCK002", Position = final, AltitudeFeet = 450, GroundSpeedKnots = 80 },
-        };
+        return [new() { Callsign = "MOCK002", Position = final, AltitudeFeet = 450, GroundSpeedKnots = 80 }];
+    }
+
+    [Fact]
+    public void Takeoff_clearance_is_not_given_while_traffic_is_on_short_final_the_aircraft_is_lined_up_instead()
+    {
+        AtcDecision decision = _engine.Evaluate(TestScenario.Context(
+            ReadyForDeparture(),
+            TestScenario.Intent(PilotIntentType.ReadyForDeparture, "ready for departure"),
+            traffic: TrafficOnShortFinalTo18()));
+
+        Assert.True(decision.Accepted);
+        Assert.NotEqual(AtcResponseType.TakeoffClearance, decision.ResponseType);
+        Assert.Equal(AtcResponseType.LineUpClearance, decision.ResponseType);
+        Assert.Equal(ClearanceType.LineUp, decision.IssuedClearance?.Type);
+        Assert.Equal(ClearanceType.LineUp, decision.RequiredReadback?.ClearanceType);
+        Assert.Contains("line up and wait", decision.FallbackPhraseology, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void An_aircraft_lined_up_is_told_to_hold_position_while_traffic_is_on_short_final()
+    {
+        AtcSession lined = ReadyForDeparture() with { Phase = FlightPhase.LineUp };
 
         AtcDecision decision = _engine.Evaluate(TestScenario.Context(
-            session,
+            lined,
             TestScenario.Intent(PilotIntentType.ReadyForDeparture, "ready for departure"),
-            traffic: traffic));
+            traffic: TrafficOnShortFinalTo18()));
 
         Assert.False(decision.Accepted);
-        Assert.NotEqual(AtcResponseType.TakeoffClearance, decision.ResponseType);
-        Assert.Contains("short final", decision.FallbackPhraseology, StringComparison.Ordinal);
+        Assert.Null(decision.IssuedClearance);
+        Assert.Contains("hold position", decision.FallbackPhraseology, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void An_aircraft_lined_up_is_cleared_for_takeoff_once_the_runway_is_clear()
+    {
+        AtcSession lined = ReadyForDeparture() with { Phase = FlightPhase.LineUp };
+
+        AtcDecision decision = _engine.Evaluate(TestScenario.Context(
+            lined,
+            TestScenario.Intent(PilotIntentType.ReadyForDeparture, "ready for departure")));
+
+        Assert.Equal(AtcResponseType.TakeoffClearance, decision.ResponseType);
     }
 
     [Theory]

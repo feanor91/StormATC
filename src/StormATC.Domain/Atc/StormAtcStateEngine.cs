@@ -1381,21 +1381,30 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
                 Say(context).Unable(callsign, UnableReason.NoDepartureRunwayAssigned));
         }
 
+        bool linedUp = session.Phase == FlightPhase.LineUp;
+
         // The mock runway-occupancy model: any traffic reported on this runway blocks it.
         if (IsRunwayOccupied(context, runway))
         {
-            return AtcDecision.Reject(
-                $"Runway {runway} is occupied.",
-                Say(context).HoldShortTrafficOnRunway(callsign, runway));
+            return linedUp
+                ? AtcDecision.Reject(
+                    $"Runway {runway} is occupied; the aircraft is lined up and must hold.",
+                    Say(context).HoldPositionLinedUp(callsign))
+                : AtcDecision.Reject(
+                    $"Runway {runway} is occupied.",
+                    Say(context).HoldShortTrafficOnRunway(callsign, runway));
         }
 
         // Landing traffic on short final to this runway, or to the opposite end of it, is as
-        // much a conflict as traffic already on the surface.
+        // much a conflict as traffic already on the surface. An aircraft still holding short
+        // may be lined up to wait for it; one already on the runway stays where it is.
         if (FindTrafficOnShortFinal(context, runway) is not null)
         {
-            return AtcDecision.Reject(
-                $"Traffic is on short final for runway {runway}.",
-                Say(context).HoldPositionTrafficOnShortFinal(callsign, runway));
+            return linedUp
+                ? AtcDecision.Reject(
+                    $"Traffic is on short final for runway {runway}; the aircraft is lined up and must hold.",
+                    Say(context).HoldPositionLinedUp(callsign))
+                : IssueLineUpAndWait(context, callsign, runway);
         }
 
         var clearance = new Clearance
@@ -1447,6 +1456,53 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
                 context.Weather?.WindDirection,
                 context.Weather?.WindSpeedKnots,
                 initialHeading: null),
+        };
+    }
+
+    /// <summary>
+    /// Lines the aircraft up behind landing traffic: the runway is clear, but a takeoff roll would
+    /// conflict with the arrival, so the tower puts the aircraft on the runway to wait.
+    /// </summary>
+    private static AtcDecision IssueLineUpAndWait(
+        AtcEvaluationContext context,
+        Callsign callsign,
+        RunwayIdentifier runway)
+    {
+        var clearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.LineUp,
+            IssuedBy = ControllerPosition.Tower,
+            IssuedAt = context.CurrentTime,
+            Runway = runway,
+            RequiredReadbackItems = [ReadbackItemType.Runway],
+        };
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.LineUpClearance,
+            IssuedClearance = clearance,
+            RequiredReadback = new PendingReadback
+            {
+                ClearanceId = clearance.ClearanceId,
+                ClearanceType = ClearanceType.LineUp,
+                ExpectedItems =
+                [
+                    new ExpectedReadbackItem
+                    {
+                        Type = ReadbackItemType.Runway,
+                        ExpectedValue = runway.ToComparisonValue(),
+                        SpokenValue = Say(context).SpeakRunway(runway),
+                        IsCritical = true,
+                    },
+                ],
+                IssuedAt = context.CurrentTime,
+                IsMandatory = true,
+            },
+            ApprovedFacts = clearance.ToRequiredFacts(),
+            ProhibitedFacts = ["takeoff clearance", "any runway other than the assigned runway"],
+            FallbackPhraseology = Say(context).LineUpAndWait(callsign, runway),
         };
     }
 

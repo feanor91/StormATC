@@ -2,6 +2,7 @@ using StormATC.Application.Intent;
 using StormATC.Domain;
 using StormATC.Domain.FlightPlanning;
 using StormATC.Domain.Intents;
+using StormATC.Domain.Readback;
 using StormATC.Domain.Sessions;
 using StormATC.Domain.ValueObjects;
 
@@ -49,4 +50,35 @@ public class FrenchRunwayCrossingTests
     [Fact]
     public void A_pilot_reading_back_a_crossing_clearance_is_not_asking_for_one() =>
         Assert.NotEqual(PilotIntentType.RequestRunwayCrossing, Understand("Traversons piste un huit, F-HAST"));
+
+    [Theory]
+    [InlineData("Alignons-nous piste un huit et attendons, F-HAST")]
+    [InlineData("Alignement piste un huit, on attend, F-HAST")]
+    public void Reading_back_a_line_up_and_wait_is_taken_as_its_readback(string spoken)
+    {
+        AtcSession session = Session() with
+        {
+            Phase = FlightPhase.HoldingShort,
+            PendingReadback = new PendingReadback
+            {
+                ClearanceId = Guid.CreateVersion7(),
+                ClearanceType = ClearanceType.LineUp,
+                ExpectedItems =
+                [
+                    new ExpectedReadbackItem
+                    {
+                        Type = ReadbackItemType.Runway,
+                        ExpectedValue = RunwayIdentifier.Create("18").ToComparisonValue(),
+                        SpokenValue = "un huit",
+                        IsCritical = true,
+                    },
+                ],
+                IssuedAt = Fixture.Now,
+                IsMandatory = true,
+            },
+        };
+        string canonical = TranscriptNormalizer.Normalize(FrenchTranscriptCanonicalizer.Canonicalize(spoken));
+
+        Assert.Equal(PilotIntentType.TakeoffReadback, DeterministicPilotIntentParser.Parse(canonical, session).Type);
+    }
 }

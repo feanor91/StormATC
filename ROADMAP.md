@@ -42,13 +42,14 @@ StormATC will not distribute shared credentials.
   go-around. The engine now notices the aircraft's own actions with the simulator running (it
   used to do so only from the mock simulator's buttons) and speaks the handoff.
 - Expand taxi, hold-short, runway-occupancy, go-around, and missed-approach behaviour.
-  *Partly done:* takeoff clearance is refused for traffic on short final to either end of the
+  **Done:** takeoff clearance is not given while traffic is on short final to either end of the
   runway; a go-around is answered by the controller who has the aircraft, climbs 2000 ft above the
   aerodrome by default, and is handed to Approach.
   Runway crossings: a pilot held short of a runway on the taxi route asks ("demandons à traverser")
   and is cleared to cross, or told to hold when the runway is occupied or traffic is on short final.
-  Still missing: "line up and wait" is not modelled (the tower only clears the takeoff, or holds
-  the aircraft short), so there is no alignment step to refuse or delay.
+  "Line up and wait": with traffic on short final the tower lines the aircraft up instead of
+  refusing, then says "maintenez position" until the traffic has landed; a new "prêt" gets the
+  takeoff clearance once the runway is clear.
 - Make controller ownership and frequency guidance unambiguous.
   **Done:** when a request goes to the wrong controller the reply now gives the frequency
   to call ("contactez Tour 118,700"), not only the name.

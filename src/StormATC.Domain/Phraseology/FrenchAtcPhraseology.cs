@@ -636,6 +636,10 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
         Phrase(callsign).Add(ReadbackItemHoldShort(runway)).Add("trafic en courte finale").Build();
 
     /// <inheritdoc />
+    public string HoldPositionLinedUp(Callsign callsign) =>
+        Phrase(callsign).Add("maintenez position").Add("trafic en courte finale").Build();
+
+    /// <inheritdoc />
     public string WrongApproachRunway(Callsign callsign, RunwayIdentifier clearedRunway) =>
         Phrase(callsign)
             .Add("négatif")

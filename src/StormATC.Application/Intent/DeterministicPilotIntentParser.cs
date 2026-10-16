@@ -389,7 +389,7 @@ public sealed partial class DeterministicPilotIntentParser : IPilotIntentParser
             ClearanceType.IfrClearance => PilotIntentType.ClearanceReadback,
             ClearanceType.Taxi or ClearanceType.TaxiToStand or ClearanceType.RunwayCrossing
                 => PilotIntentType.TaxiReadback,
-            ClearanceType.Takeoff => PilotIntentType.TakeoffReadback,
+            ClearanceType.Takeoff or ClearanceType.LineUp => PilotIntentType.TakeoffReadback,
             ClearanceType.LandingClearance => PilotIntentType.LandingReadback,
             ClearanceType.ApproachClearance => PilotIntentType.LandingReadback,
             ClearanceType.Climb or ClearanceType.Descent => PilotIntentType.AltitudeReadback,
