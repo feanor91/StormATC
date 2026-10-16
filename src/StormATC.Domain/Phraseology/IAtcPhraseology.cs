@@ -199,6 +199,9 @@ public interface IAtcPhraseology
 
     string HoldShortTrafficOnRunway(Callsign callsign, RunwayIdentifier runway);
 
+    /// <summary>Clears the aircraft to cross a runway while taxiing.</summary>
+    string RunwayCrossingClearance(Callsign callsign, RunwayIdentifier runway);
+
     /// <summary>Holds the aircraft at the holding point because another aircraft is on short final.</summary>
     string HoldPositionTrafficOnShortFinal(Callsign callsign, RunwayIdentifier runway);
 
@@ -281,6 +284,7 @@ public enum UnableReason
     NotLanded,
     AerodromeDataUnavailable,
     NoStandAvailable,
+    NoRunwayCrossingPending,
 }
 
 /// <summary>What progressive taxi guidance tells the pilot to do next.</summary>

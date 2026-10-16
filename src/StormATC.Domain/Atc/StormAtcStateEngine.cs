@@ -163,6 +163,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             PilotIntentType.ReportEstablished => HandleEstablishedReport(context, intent),
             PilotIntentType.ReportRunwayVacated => HandleRunwayVacated(context),
             PilotIntentType.RequestTaxiToStand => HandleTaxiToStandRequest(context, intent),
+            PilotIntentType.RequestRunwayCrossing => HandleRunwayCrossingRequest(context, intent),
             PilotIntentType.GoAround => HandleGoAround(context),
             PilotIntentType.Unable => HandleUnable(context),
             PilotIntentType.PilotAcknowledgement => HandlePilotAcknowledgement(),
@@ -1983,6 +1984,115 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
         };
     }
 
+    /// <summary>
+    /// "Holding short runway 27, request to cross": cleared across the runway the taxi clearance holds
+    /// the aircraft short of, if nothing is on it or about to land on it.
+    /// </summary>
+    private static AtcDecision HandleRunwayCrossingRequest(AtcEvaluationContext context, PilotIntent intent)
+    {
+        AtcSession session = context.Session;
+
+        if (session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        if (!context.AircraftState.IsOnGround)
+        {
+            return AtcDecision.Reject(
+                "A runway is crossed on the ground.",
+                Say(context).Unable(callsign, UnableReason.NotAtThisStageOfFlight));
+        }
+
+        if (session.CurrentController is not (ControllerPosition.Ground or ControllerPosition.Tower))
+        {
+            return AtcDecision.Reject(
+                $"A runway crossing is cleared by Ground or Tower; the aircraft is with {session.CurrentController}.",
+                Say(context).Unable(callsign, UnableReason.NotWithThisController));
+        }
+
+        // The departure runway's holding point is not a crossing: the aircraft is there to depart.
+        Clearance? taxi = session.TaxiClearance;
+        if (taxi?.HoldShortOfRunway is not RunwayIdentifier holding
+            || (taxi.Type == ClearanceType.Taxi && holding == session.AssignedDepartureRunway))
+        {
+            return AtcDecision.Reject(
+                "No runway crossing is planned on the taxi route.",
+                Say(context).Unable(callsign, UnableReason.NoRunwayCrossingPending));
+        }
+
+        if (intent.Entities.Runway is RunwayIdentifier asked
+            && asked != holding
+            && asked != holding.Reciprocal())
+        {
+            return AtcDecision.Reject(
+                $"The aircraft holds short of {holding}, not {asked}.",
+                Say(context).WrongHoldingPoint(callsign, holding));
+        }
+
+        if (IsRunwayOccupied(context, holding))
+        {
+            return AtcDecision.Reject(
+                $"Runway {holding} is occupied.",
+                Say(context).HoldShortTrafficOnRunway(callsign, holding));
+        }
+
+        if (FindTrafficOnShortFinal(context, holding) is not null)
+        {
+            return AtcDecision.Reject(
+                $"Traffic is on short final for runway {holding}.",
+                Say(context).HoldPositionTrafficOnShortFinal(callsign, holding));
+        }
+
+        // The crossing replaces the hold-short restriction but keeps the route, so progressive taxi
+        // goes on from the far side of the runway.
+        var clearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.RunwayCrossing,
+            IssuedBy = session.CurrentController,
+            IssuedAt = context.CurrentTime,
+            Runway = holding,
+            TaxiRoute = taxi.TaxiRoute,
+            TaxiPathNodes = taxi.TaxiPathNodes,
+            TaxiPathTaxiways = taxi.TaxiPathTaxiways,
+            TaxiRouteLengthMeters = taxi.TaxiRouteLengthMeters,
+            TaxiDestination = taxi.TaxiDestination,
+            RequiredReadbackItems = [ReadbackItemType.Runway],
+        };
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.RunwayCrossingClearance,
+            IssuedClearance = clearance,
+            RequiredReadback = new PendingReadback
+            {
+                ClearanceId = clearance.ClearanceId,
+                ClearanceType = ClearanceType.RunwayCrossing,
+                ExpectedItems =
+                [
+                    new ExpectedReadbackItem
+                    {
+                        Type = ReadbackItemType.Runway,
+                        ExpectedValue = holding.ToComparisonValue(),
+                        SpokenValue = Say(context).SpeakRunway(holding),
+                        IsCritical = true,
+                    },
+                ],
+                IssuedAt = context.CurrentTime,
+                IsMandatory = true,
+            },
+            ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["instruction"] = "cross the runway",
+                ["runway"] = holding.ToComparisonValue(),
+            },
+            ProhibitedFacts = ["takeoff clearance", "line up", "any runway other than the one named"],
+            FallbackPhraseology = Say(context).RunwayCrossingClearance(callsign, holding),
+        };
+    }
+
     private static AtcDecision HandleGoAround(AtcEvaluationContext context)
     {
         AtcSession session = context.Session;
@@ -2406,7 +2516,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
     /// </summary>
     private static TrafficContact? FindTrafficOnShortFinal(AtcEvaluationContext context, RunwayIdentifier runway)
     {
-        AirportData? airport = context.DepartureAirport;
+        AirportData? airport = context.RelevantAirport;
         if (airport?.FindRunway(runway) is not RunwayData data)
         {
             return null;

@@ -61,6 +61,8 @@ public static class FrenchTranscriptCanonicalizer
         ("frequence (?:du |de la |de l )?approche", "approach frequency"),
 
         // --- Ready / request forms. -----------------------------------------------------------
+        ("(?:demande|demandons|demander)(?: a| de)? (?:traverser|la traversee|traversee)", "request to cross"),
+        ("(?:pret|prets)(?: a| pour)? traverser", "ready to cross"),
         ("(?:nous sommes |on est |je suis )?(?:prets|pretes|pret|prete) (?:a copier|pour copier)", "ready to copy"),
         ("(?:nous sommes |on est |je suis )?(?:prets|pretes|pret|prete) (?:a rouler|pour rouler)", "ready to taxi"),
         // Speech recognition often writes "prêts" as "près" or "prés", and pilots also say

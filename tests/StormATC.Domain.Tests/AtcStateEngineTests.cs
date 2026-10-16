@@ -1049,6 +1049,129 @@ public class AtcStateEngineTests
         Assert.Null(_engine.EvaluateStateChange(TestScenario.Context(session, intent: null)).Handoff);
     }
 
+    // =====================================================================================
+    // Runway crossing
+    // =====================================================================================
+
+    /// <summary>Taxiing in with Ground, held short of runway 18 on the way to the stand.</summary>
+    private AtcSession HeldShortOfARunwayToCross() => AcknowledgedClearance() with
+    {
+        Phase = FlightPhase.TaxiIn,
+        CurrentController = ControllerPosition.Ground,
+        CurrentFrequency = TestScenario.Ground,
+        AircraftState = TestScenario.AtHoldingPoint(),
+        TaxiClearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.TaxiToStand,
+            IssuedBy = ControllerPosition.Ground,
+            IssuedAt = TestScenario.Now,
+            TaxiRoute = ["A", "B"],
+            TaxiDestination = "A1",
+            HoldShortOfRunway = RunwayIdentifier.Create("18"),
+            RequiredReadbackItems = [ReadbackItemType.TaxiRoute],
+        },
+    };
+
+    private AtcDecision AskToCross(AtcSession session, IReadOnlyList<TrafficContact>? traffic = null, RunwayIdentifier? runway = null) =>
+        _engine.Evaluate(TestScenario.Context(
+            session,
+            TestScenario.Intent(
+                PilotIntentType.RequestRunwayCrossing,
+                "storm one two three request to cross",
+                entities: runway is null ? null : new IntentEntities { Runway = runway }),
+            traffic: traffic));
+
+    [Fact]
+    public void An_aircraft_held_short_of_a_runway_on_its_route_is_cleared_to_cross_it()
+    {
+        AtcDecision decision = AskToCross(HeldShortOfARunwayToCross());
+
+        Assert.True(decision.Accepted);
+        Assert.Equal(AtcResponseType.RunwayCrossingClearance, decision.ResponseType);
+        Assert.Equal(ClearanceType.RunwayCrossing, decision.IssuedClearance?.Type);
+        Assert.Equal(RunwayIdentifier.Create("18"), decision.IssuedClearance?.Runway);
+        Assert.Null(decision.IssuedClearance?.HoldShortOfRunway);
+        Assert.Equal(["A", "B"], decision.IssuedClearance?.TaxiRoute);
+        Assert.Equal("A1", decision.IssuedClearance?.TaxiDestination);
+        Assert.Equal(ClearanceType.RunwayCrossing, decision.RequiredReadback?.ClearanceType);
+        Assert.Contains("cross runway", decision.FallbackPhraseology, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void The_crossing_lifts_the_hold_short_restriction_so_the_runway_is_no_incursion()
+    {
+        AtcSession session = HeldShortOfARunwayToCross();
+        AtcDecision crossing = AskToCross(session);
+        session = session.WithClearance(crossing.IssuedClearance!);
+
+        Assert.Null(session.TaxiClearance?.HoldShortOfRunway);
+    }
+
+    [Fact]
+    public void A_crossing_is_refused_while_the_runway_is_occupied()
+    {
+        var traffic = new List<TrafficContact>
+        {
+            new()
+            {
+                Callsign = "MOCK001",
+                Position = TestScenario.Runway18Midpoint,
+                AltitudeFeet = 0,
+                IsOnRunway = true,
+                OccupiedRunway = RunwayIdentifier.Create("18"),
+            },
+        };
+
+        AtcDecision decision = AskToCross(HeldShortOfARunwayToCross(), traffic);
+
+        Assert.False(decision.Accepted);
+        Assert.NotEqual(AtcResponseType.RunwayCrossingClearance, decision.ResponseType);
+    }
+
+    [Fact]
+    public void A_crossing_is_refused_when_the_route_holds_the_aircraft_short_of_no_runway()
+    {
+        AtcSession session = HeldShortOfARunwayToCross() with
+        {
+            TaxiClearance = HeldShortOfARunwayToCross().TaxiClearance! with { HoldShortOfRunway = null },
+        };
+
+        AtcDecision decision = AskToCross(session);
+
+        Assert.False(decision.Accepted);
+        Assert.Contains("no runway crossing", decision.FallbackPhraseology, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void The_departure_runway_holding_point_is_not_a_crossing()
+    {
+        AtcSession session = HeldShortOfARunwayToCross();
+        session = session with
+        {
+            AssignedDepartureRunway = RunwayIdentifier.Create("18"),
+            TaxiClearance = session.TaxiClearance! with { Type = ClearanceType.Taxi },
+        };
+
+        Assert.False(AskToCross(session).Accepted);
+    }
+
+    [Fact]
+    public void A_crossing_asked_for_another_runway_is_refused()
+    {
+        AtcDecision decision = AskToCross(HeldShortOfARunwayToCross(), runway: RunwayIdentifier.Create("09"));
+
+        Assert.False(decision.Accepted);
+    }
+
+    [Fact]
+    public void A_crossing_is_not_cleared_to_an_aircraft_in_the_air()
+    {
+        AtcSession session = HeldShortOfARunwayToCross() with { AircraftState = TestScenario.Airborne(1_500) };
+
+        Assert.False(AskToCross(session).Accepted);
+    }
+
     [Fact]
     public void Reaching_the_stand_completes_the_session()
     {

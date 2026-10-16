@@ -146,6 +146,9 @@ public enum PilotIntentType
 
     /// <summary>Leaving the circuit and the frequency.</summary>
     LeaveFrequency,
+
+    /// <summary>"Request to cross runway 27": asked at a hold-short line on the taxi route.</summary>
+    RequestRunwayCrossing,
 }
 
 /// <summary>
@@ -348,4 +351,7 @@ public enum AtcResponseType
 
     /// <summary>Cleared for a low pass over the runway, without touching down.</summary>
     LowPassClearance,
+
+    /// <summary>Cleared to cross a runway while taxiing.</summary>
+    RunwayCrossingClearance,
 }

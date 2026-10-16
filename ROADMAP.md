@@ -45,6 +45,8 @@ StormATC will not distribute shared credentials.
   *Partly done:* takeoff clearance is refused for traffic on short final to either end of the
   runway; a go-around is answered by the controller who has the aircraft, climbs 2000 ft above the
   aerodrome by default, and is handed to Approach.
+  Runway crossings: a pilot held short of a runway on the taxi route asks ("demandons à traverser")
+  and is cleared to cross, or told to hold when the runway is occupied or traffic is on short final.
 - Make controller ownership and frequency guidance unambiguous.
 - Add more fictional routes and aerodromes for automated scenarios.
 

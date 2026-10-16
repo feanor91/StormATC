@@ -316,6 +316,10 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
         $"{callsign.ToSpoken()}, hold short {runway.ToSpokenDesignator()}, traffic on the runway.";
 
     /// <inheritdoc />
+    public string RunwayCrossingClearance(Callsign callsign, RunwayIdentifier runway) =>
+        $"{callsign.ToSpoken()}, cross runway {runway.ToSpokenDesignator()}.";
+
+    /// <inheritdoc />
     public string HoldPositionTrafficOnShortFinal(Callsign callsign, RunwayIdentifier runway) =>
         $"{callsign.ToSpoken()}, hold short {runway.ToSpokenDesignator()}, traffic on short final.";
 
@@ -414,6 +418,7 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
         UnableReason.NoDepartureRunwayAssigned => "no departure runway is assigned",
         UnableReason.ProgressiveTaxiGroundOnly => "progressive taxi is only available on the ground",
         UnableReason.NoActiveTaxiRoute => "no active taxi route is available",
+        UnableReason.NoRunwayCrossingPending => "no runway crossing is planned on your route",
         UnableReason.ContactTowerForDeparture => "contact Tower for departure",
         UnableReason.NotAtHoldingPoint => "you are not at the holding point",
         UnableReason.NotWithThisController => "not with this controller",

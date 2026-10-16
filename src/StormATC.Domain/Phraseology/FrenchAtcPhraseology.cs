@@ -627,6 +627,10 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
         Phrase(callsign).Add(ReadbackItemHoldShort(runway)).Add("trafic sur la piste").Build();
 
     /// <inheritdoc />
+    public string RunwayCrossingClearance(Callsign callsign, RunwayIdentifier runway) =>
+        Phrase(callsign).Add($"traversez {SpeakRunway(runway)}").Build();
+
+    /// <inheritdoc />
     public string HoldPositionTrafficOnShortFinal(Callsign callsign, RunwayIdentifier runway) =>
         Phrase(callsign).Add(ReadbackItemHoldShort(runway)).Add("trafic en courte finale").Build();
 
@@ -754,6 +758,7 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
         UnableReason.NoDepartureRunwayAssigned => "aucune piste de départ assignée",
         UnableReason.ProgressiveTaxiGroundOnly => "guidage au roulage uniquement au sol",
         UnableReason.NoActiveTaxiRoute => "aucun itinéraire de roulage en cours",
+        UnableReason.NoRunwayCrossingPending => "aucune traversée de piste prévue sur votre itinéraire",
         UnableReason.ContactTowerForDeparture => "contactez la Tour pour le départ",
         UnableReason.NotAtHoldingPoint => "vous n'êtes pas au point d'attente",
         UnableReason.NotWithThisController => "pas sur cette fréquence",
