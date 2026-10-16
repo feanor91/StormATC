@@ -319,12 +319,63 @@ public static class FrenchTranscriptCanonicalizer
         List<string> tokens = Tokenize(text);
         tokens = MapWords(tokens);
         tokens = ConvertNumbers(tokens);
+        tokens = SpellRunwaySides(tokens);
         tokens = DropFunctionWords(tokens);
 
         string result = string.Join(' ', tokens);
+        result = SpokenFrequencyDigits(result);
         result = PreferReadyForDeparture(result);
         result = AddCheckInMarker(result);
         return CollapseSpaces(result);
+    }
+
+    private static readonly Regex FrequencyWithSpokenDigits = new(
+        @"\b(1(?:1[89]|2\d|3[0-7]))((?: \d){1,3})(?![\d.])",
+        RegexOptions.CultureInvariant,
+        TimeSpan.FromSeconds(1));
+
+    /// <summary>
+    /// "Contactez Tour cent dix-huit sept cinq" gives 118 7 5: with no "décimale" said, the digits
+    /// after a VHF frequency's MHz part are its decimals. Applied only to a frequency change or
+    /// request, so a heading, a code or a callsign number is left alone.
+    /// </summary>
+    private static string SpokenFrequencyDigits(string text) =>
+        text.Contains("contact", StringComparison.Ordinal) || text.Contains("frequency", StringComparison.Ordinal)
+            ? FrequencyWithSpokenDigits.Replace(text, "$1 decimal$2")
+            : text;
+
+    /// <summary>
+    /// A runway side said as a letter ("piste vingt-sept L", "piste zéro neuf R") would be dropped as
+    /// a French article; it is spelled out here so the parser sees "runway 27 left".
+    /// </summary>
+    private static List<string> SpellRunwaySides(List<string> tokens)
+    {
+        for (int index = 0; index < tokens.Count; index++)
+        {
+            if (tokens[index] != "runway")
+            {
+                continue;
+            }
+
+            int next = index + 1;
+            while (next < tokens.Count && next <= index + 2 && tokens[next].Length > 0 && tokens[next].All(char.IsAsciiDigit))
+            {
+                next++;
+            }
+
+            if (next > index + 1 && next < tokens.Count)
+            {
+                tokens[next] = tokens[next] switch
+                {
+                    "l" => "left",
+                    "r" => "right",
+                    "c" => "center",
+                    var other => other,
+                };
+            }
+        }
+
+        return tokens;
     }
 
     /// <summary>
