@@ -3,11 +3,17 @@
 StormATC is in an early community-release stage. This roadmap communicates direction; it is not a
 promise of dates or a claim that an item is already assigned.
 
+Items marked **Done** have shipped; **Partly done** items say what remains. The notes are kept
+short; the commit history has the detail.
+
 ## Current priorities
 
 ### Speech and readback reliability
 
 - Improve aviation-number, callsign, waypoint, runway, SID, squawk, and frequency normalisation.
+  *Partly done:* French numbers, squawk pairs and "unité", frequencies said without "décimale"
+  ("cent dix-huit sept cinq"), runway sides said as a letter, and registrations spelled in the
+  phonetic alphabet (full or abbreviated). SIDs and waypoints are unchanged.
 - Expand accent-tolerant phrase matching without training on or storing a user's raw voice.
 - Make partial readbacks and corrections feel natural instead of repetitive.
 - Add repeatable transcript fixtures for real failure cases with all personal data removed.
@@ -19,7 +25,8 @@ promise of dates or a claim that an item is already assigned.
 - Expand provider-specific structured-output compatibility as model capabilities evolve.
 - Add more speech-to-text and text-to-speech provider choices behind the existing interfaces.
 - Investigate local and fully offline speech recognition and text-to-speech, including controller
-  voices that do not require a Deepgram account.
+  voices that do not require a Deepgram account. **Done:** Whisper (recognition) and Piper (voice)
+  run on the PC, chosen in Settings; see `docs/french-and-local-voice.md`.
 - Preserve explicit consent, encrypted per-user credentials, official-endpoint restrictions, and
   the deterministic ATC authority boundary for every future provider.
 
@@ -30,7 +37,14 @@ StormATC will not distribute shared credentials.
 ### Complete gate-to-gate ATC
 
 - Strengthen delivery, ground, tower, departure, approach, and handoff transitions.
+  **Done:** Delivery→Ground, Ground→Tower, Tower→Departure, Departure→Center (leaving the terminal
+  area), Center/Departure→Approach, Approach→Tower, Tower→Ground and Tower→Approach after a
+  go-around. The engine now notices the aircraft's own actions with the simulator running (it
+  used to do so only from the mock simulator's buttons) and speaks the handoff.
 - Expand taxi, hold-short, runway-occupancy, go-around, and missed-approach behaviour.
+  *Partly done:* takeoff clearance is refused for traffic on short final to either end of the
+  runway; a go-around is answered by the controller who has the aircraft, climbs 2000 ft above the
+  aerodrome by default, and is handed to Approach.
 - Make controller ownership and frequency guidance unambiguous.
 - Add more fictional routes and aerodromes for automated scenarios.
 

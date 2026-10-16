@@ -271,6 +271,31 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             }
         }
 
+        // --- Departure to Center. -------------------------------------------------------------
+        // Departure hands an aircraft that has left the terminal area to the en-route controller.
+        // The mirror of the arrival handoff: it follows the aircraft's position, not a timer.
+        if (session.Phase == FlightPhase.Departure
+            && session.FlightRules == FlightRules.Ifr
+            && session.CurrentController == ControllerPosition.Departure
+            && !aircraft.IsOnGround
+            && context.DepartureAirport is AirportData origin
+            && !aircraft.Position.IsWithin(origin.ReferencePosition, TerminalAreaRadiusNauticalMiles))
+        {
+            Frequency? centerFrequency = ResolveFrequency(context, ControllerPosition.Center);
+            if (centerFrequency is Frequency frequency
+                && frequency != session.CurrentFrequency
+                && session.Callsign is Callsign cruising)
+            {
+                return BuildHandoff(
+                    context,
+                    ControllerPosition.Center,
+                    frequency,
+                    FlightPhase.Enroute,
+                    "Leaving the terminal area after departure.",
+                    Say(context).Handoff(cruising, ControllerPosition.Center, frequency));
+            }
+        }
+
         // --- Touch and go: the wheels touch and the aircraft rolls on. ------------------------
         // No vacate instruction, no handoff: the aircraft is departing again, and once airborne
         // the "becoming airborne" rule above takes it back to the climb.

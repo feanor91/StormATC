@@ -530,6 +530,9 @@ public sealed class PilotTransmissionCoordinator(
         }
     }
 
+    /// <summary>The correlation id of a controller transmission the engine started on its own.</summary>
+    public const string StateChangeCorrelationId = "state-change";
+
     /// <summary>
     /// Feeds a simulator state update through the engine so it can notice physical events —
     /// becoming airborne, touching down, entering a runway without clearance.
@@ -588,7 +591,7 @@ public sealed class PilotTransmissionCoordinator(
                         ControllerSpokenText = rendered.SpokenText,
                         ControllerDisplayText = rendered.DisplayText,
                         UsedDeterministicFallback = rendered.UsedDeterministicFallback,
-                        CorrelationId = "state-change",
+                        CorrelationId = StateChangeCorrelationId,
                     }));
             }
 

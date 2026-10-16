@@ -987,6 +987,40 @@ public class AtcStateEngineTests
     }
 
     [Fact]
+    public void An_aircraft_leaving_the_terminal_area_is_handed_from_departure_to_center()
+    {
+        AtcSession session = EnRoute() with
+        {
+            Phase = FlightPhase.Departure,
+            AircraftState = TestScenario.Airborne(11_000) with
+            {
+                Position = TestScenario.Departure_STMR.ReferencePosition.Project(Heading.FromDegrees(0), 45),
+            },
+        };
+
+        AtcDecision decision = _engine.EvaluateStateChange(TestScenario.Context(session, intent: null));
+
+        Assert.Equal(ControllerPosition.Center, decision.Handoff?.ToController);
+        Assert.Equal(TestScenario.Center, decision.Handoff?.ToFrequency);
+        Assert.Equal(FlightPhase.Enroute, decision.NewPhase);
+    }
+
+    [Fact]
+    public void An_aircraft_inside_the_terminal_area_stays_with_departure()
+    {
+        AtcSession session = EnRoute() with
+        {
+            Phase = FlightPhase.Departure,
+            AircraftState = TestScenario.Airborne(8_000) with
+            {
+                Position = TestScenario.Departure_STMR.ReferencePosition.Project(Heading.FromDegrees(0), 15),
+            },
+        };
+
+        Assert.Null(_engine.EvaluateStateChange(TestScenario.Context(session, intent: null)).Handoff);
+    }
+
+    [Fact]
     public void A_vfr_aircraft_stays_with_tower_after_a_go_around()
     {
         AtcSession session = OnApproach() with

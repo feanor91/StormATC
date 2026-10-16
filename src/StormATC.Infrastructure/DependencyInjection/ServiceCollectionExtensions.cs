@@ -109,6 +109,7 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddSingleton<PilotTransmissionCoordinator>();
+        services.AddSingleton<StateChangeMonitor>();
         services.AddSingleton<RadioActivityState>();
 
         AddProviders(services, configuration);
