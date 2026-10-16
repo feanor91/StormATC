@@ -46,10 +46,13 @@ public sealed class MockFlightPlanProvider(
         FlightPlanImportRequest request,
         CancellationToken cancellationToken)
     {
-        string path = Path.Combine(
-            _storagePaths.DataDirectory,
-            "sample-flights",
-            "STORM123-STMR-STMD.json");
+        // STORMATC_SAMPLE_FLIGHT picks another bundled demonstration flight, for example
+        // "STORM456-STMK-STMT"; the default stays the original STORM123 flight.
+        string requested = Environment.GetEnvironmentVariable("STORMATC_SAMPLE_FLIGHT") ?? string.Empty;
+        string fileName = requested.Length > 0 && requested.All(c => char.IsLetterOrDigit(c) || c == '-')
+            ? requested + ".json"
+            : "STORM123-STMR-STMD.json";
+        string path = Path.Combine(_storagePaths.DataDirectory, "sample-flights", fileName);
 
         if (!File.Exists(path))
         {
@@ -303,6 +306,22 @@ public sealed class MockWeatherProvider : IWeatherProvider
                 WindSpeedKnots = 8,
                 QnhHectopascals = 1013,
                 VisibilityMeters = 10000,
+                Source = "Mock (fictional)",
+            },
+            ["STMK"] = new WeatherSnapshot
+            {
+                WindDirection = Heading.FromDegrees(270),
+                WindSpeedKnots = 10,
+                QnhHectopascals = 1012,
+                VisibilityMeters = 9000,
+                Source = "Mock (fictional)",
+            },
+            ["STMT"] = new WeatherSnapshot
+            {
+                WindDirection = Heading.FromDegrees(260),
+                WindSpeedKnots = 14,
+                QnhHectopascals = 1009,
+                VisibilityMeters = 8000,
                 Source = "Mock (fictional)",
             },
             ["STMD"] = new WeatherSnapshot
