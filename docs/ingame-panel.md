@@ -26,6 +26,23 @@ Si le dossier Community n'est pas trouvé, copiez à la main le dossier
 StormATC doit être lancé : le panneau lui demande l'état une fois par seconde. Sinon il affiche
 « StormATC ne répond pas ».
 
+## Avec Flow Pro (sans compilation)
+
+Si vous utilisez [Flow Pro](https://parallel42.com/products/flow-pro) (Parallel 42), le même panneau
+existe en widget **Custom Script**, qui n'a rien à compiler :
+
+1. Dans MSFS, ouvrez la molette Flow et ajoutez un widget **Custom Script**.
+2. **Edit**, puis collez : `code.html` dans l'onglet HTML, `code.css` dans l'onglet CSS et `code.js`
+   dans l'onglet JS. Les trois fichiers sont dans `msfs-panel\flowpro` (dans le dépôt et dans le
+   dossier d'installation de StormATC).
+3. Donnez-lui un nom (« StormATC »), **Save**, puis **Compile**.
+
+C'est le plus simple à essayer. Comme pour le widget des cartes d'aéroport, ce qu'un widget Flow a le
+droit de faire sur le réseau n'est pas documenté : si le widget affiche « StormATC ne répond pas »
+alors que StormATC tourne, le widget n'a pas accès à `127.0.0.1` et il faut utiliser le paquet de la
+barre d'outils ou la page web. Les fichiers sont générés par `scripts\Build-FlowProWidget.ps1` à
+partir de `msfs-panel\web` ; ne les modifiez pas à la main.
+
 ## En réalité virtuelle
 
 Le panneau est conçu pour la VR : gros caractères, boutons de la taille d'un doigt, aucun survol

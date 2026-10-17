@@ -81,6 +81,10 @@
     <Content Include="..\..\msfs-panel\web\*" LinkBase="panel">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <!-- The Flow Pro version of the panel: three snippets to paste into a Custom Script widget. -->
+    <Content Include="..\..\msfs-panel\flowpro\*" LinkBase="msfs-panel\flowpro">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <!-- The MSFS toolbar package that the settings page installs into the Community folder.
          It is produced by scripts/Build-MsfsPanel.ps1, which the release scripts and the CI
          run first; a build without it simply has no package to install. -->
