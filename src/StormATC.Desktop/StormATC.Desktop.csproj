@@ -77,7 +77,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <!-- The guides the settings page opens, so they work offline from the installed app. -->
-    <Content Include="..\..\docs\third-party-downloads.md;..\..\docs\french-and-local-voice.md" LinkBase="docs">
+    <Content Include="..\..\docs\guides\*.pdf" LinkBase="docs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

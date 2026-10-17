@@ -874,7 +874,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     [RelayCommand]
     private void OpenDownloadGuide()
     {
-        string guide = System.IO.Path.Combine(AppContext.BaseDirectory, "docs", "third-party-downloads.md");
+        string guide = System.IO.Path.Combine(AppContext.BaseDirectory, "docs", "third-party-downloads.pdf");
         if (!System.IO.File.Exists(guide))
         {
             _logger.LogWarning("The download guide {Guide} is missing.", guide);
@@ -883,8 +883,8 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
 
         try
         {
-            // Notepad reads Markdown whatever the file associations are on this PC.
-            using var notepad = System.Diagnostics.Process.Start("notepad.exe", $"\"{guide}\"");
+            using var viewer = System.Diagnostics.Process.Start(
+                new System.Diagnostics.ProcessStartInfo(guide) { UseShellExecute = true });
         }
         catch (System.ComponentModel.Win32Exception ex)
         {

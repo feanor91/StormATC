@@ -124,6 +124,12 @@ foreach ($v in $voices) {
 }
 ```
 
+## Pour les contributeurs : version PDF
+
+L'application embarque ce guide en PDF (`docs/guides/*.pdf`) et l'ouvre depuis **Settings › Voice &
+PTT › Guide de téléchargement**. Après avoir modifié un guide Markdown, régénérez les PDF avec
+`.\scripts\Build-Guides.ps1` (il faut Microsoft Edge) et commitez-les.
+
 ## Licences
 
 Chaque programme et chaque voix a sa propre licence ; StormATC n'en redistribue aucun.
