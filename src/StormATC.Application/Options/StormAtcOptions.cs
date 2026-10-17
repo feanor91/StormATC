@@ -418,6 +418,26 @@ public sealed class VfrLocalOptions
     public bool AutoStart { get; init; }
 }
 
+/// <summary>
+/// The small local web server that feeds the in-simulator panel (the MSFS toolbar window) and
+/// the same page opened in a browser or a VR overlay.
+/// </summary>
+public sealed class ToolbarPanelOptions
+{
+    /// <summary>The configuration section name.</summary>
+    public const string SectionName = "ToolbarPanel";
+
+    /// <summary>The port the panel's page and data are served on.</summary>
+    public const int DefaultPort = 48765;
+
+    /// <summary>When false, the server is not started.</summary>
+    public bool Enabled { get; init; } = true;
+
+    /// <summary>The loopback port. The panel's package must use the same one.</summary>
+    [Range(1024, 65535)]
+    public int Port { get; init; } = DefaultPort;
+}
+
 /// <summary>SimBrief import settings.</summary>
 public sealed class SimBriefOptions
 {

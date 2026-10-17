@@ -111,6 +111,9 @@ try {
         throw "Release clean failed."
     }
 
+    # The toolbar panel package is part of the application folder: the settings page installs it.
+    & (Join-Path $PSScriptRoot "Build-MsfsPanel.ps1")
+
     dotnet publish src\StormATC.Desktop\StormATC.Desktop.csproj `
         -c Release `
         -r win-x64 `

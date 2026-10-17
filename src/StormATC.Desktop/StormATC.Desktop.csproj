@@ -76,6 +76,17 @@
     <Content Include="..\..\data\**\*.json" LinkBase="data">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <!-- The in-simulator panel's page, served by the local panel server (ToolbarPanelServer) for
+         a browser or a VR overlay. The same files are packed into the MSFS toolbar package. -->
+    <Content Include="..\..\msfs-panel\web\*" LinkBase="panel">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- The MSFS toolbar package that the settings page installs into the Community folder.
+         It is produced by scripts/Build-MsfsPanel.ps1, which the release scripts and the CI
+         run first; a build without it simply has no package to install. -->
+    <Content Include="..\..\artifacts\msfs-panel\stormatc-ingamepanel\**\*" LinkBase="msfs-panel\stormatc-ingamepanel">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <!-- The guides the settings page opens, so they work offline from the installed app. -->
     <Content Include="..\..\docs\guides\*.pdf" LinkBase="docs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -90,6 +90,10 @@ jobs:
           -r win-x64 --locked-mode
           -p:NuGetLockFilePath=packages.win-x64.lock.json --nologo
 
+      - name: Build the MSFS toolbar panel package
+        shell: pwsh
+        run: ./scripts/Build-MsfsPanel.ps1
+
       - name: Publish self-contained Windows build
         run: >
           dotnet publish src/StormATC.Desktop/StormATC.Desktop.csproj

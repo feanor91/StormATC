@@ -746,6 +746,31 @@
 
             <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
               <StackPanel>
+                <TextBlock Text="In-simulator panel"
+                           Style="{StaticResource SectionHeaderStyle}" />
+                <TextBlock Text="A toolbar window inside MSFS with two tabs: the dialogue with the controller, and example phraseology for the current phase of flight. It works in VR. Install it once, restart MSFS, then click the StormATC icon in the toolbar. The same page can be opened in a browser or in a VR overlay application."
+                           Style="{StaticResource SecondaryTextStyle}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,8" />
+                <WrapPanel>
+                  <Button Content="Install the panel in MSFS"
+                          Command="{Binding InstallMsfsPanelCommand}"
+                          Style="{StaticResource PrimaryButtonStyle}"
+                          Margin="0,0,8,0" />
+                  <Button Content="Open the panel in a browser"
+                          Command="{Binding OpenPanelInBrowserCommand}" />
+                </WrapPanel>
+                <TextBlock Text="{Binding PanelInstallResult}"
+                           Style="{StaticResource SecondaryTextStyle}"
+                           TextWrapping="Wrap"
+                           Margin="0,8,0,0"
+                           Visibility="{Binding PanelInstallResult,
+                                                Converter={StaticResource StringToVisibility}}" />
+              </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
+              <StackPanel>
                 <TextBlock Text="Voice recognition trainer"
                            Style="{StaticResource SectionHeaderStyle}" />
                 <TextBlock Text="Record a few phrases in your normal accent. StormATC stores only recognition hints and explicit text corrections—not the training audio."

@@ -1,0 +1,100 @@
+# Panneau StormATC dans MSFS (barre d'outils, réalité virtuelle)
+
+StormATC ajoute une fenêtre à la barre d'outils de Microsoft Flight Simulator. Elle a deux onglets :
+
+- **Dialogue ATC** : les échanges avec le contrôleur, du plus ancien au plus récent (vous en vert,
+  le contrôleur en bleu). La liste suit les nouveaux messages tant que vous n'avez pas remonté.
+- **Phraséologie** : des exemples d'appels pour la **phase de vol en cours** (clairance, roulage,
+  circuit VFR, approche, etc.), avec ce que le contrôleur répond, puis les appels toujours possibles
+  (« répétez », « quelle est la fréquence de la Tour ? »…). L'onglet change tout seul avec la phase.
+
+La langue des exemples est celle de la radio réglée dans StormATC. Les boutons **A−** et **A+** en
+haut à droite changent la taille du texte ; le choix est mémorisé.
+
+## Installer le panneau
+
+1. Dans StormATC, **Settings › Voice & PTT › Panneau dans le simulateur › Installer le panneau dans
+   MSFS**. StormATC copie le dossier `stormatc-ingamepanel` dans le dossier **Community** de MSFS 2024
+   (Microsoft Store ou Steam, trouvé d'après `UserCfg.opt`).
+2. Redémarrez MSFS.
+3. Dans la barre d'outils du simulateur, cliquez sur l'icône **StormATC** (deux bulles). Si elle
+   n'apparaît pas, ouvrez la liste des panneaux (l'engrenage de la barre d'outils) et activez-la.
+
+Si le dossier Community n'est pas trouvé, copiez à la main le dossier
+`msfs-panel\stormatc-ingamepanel` de l'installation de StormATC dans votre dossier Community.
+
+StormATC doit être lancé : le panneau lui demande l'état une fois par seconde. Sinon il affiche
+« StormATC ne répond pas ».
+
+## En réalité virtuelle
+
+Le panneau est conçu pour la VR : gros caractères, boutons de la taille d'un doigt, aucun survol
+nécessaire, fenêtre redimensionnable.
+
+- **Barre d'outils de MSFS en VR** : ouvrez la barre d'outils avec le menu de la manette, puis
+  l'icône StormATC. Déplacez et redimensionnez la fenêtre comme les autres panneaux. La barre d'outils
+  en VR a eu des défauts selon les versions du simulateur ; si elle ne s'ouvre pas chez vous, utilisez
+  la solution suivante.
+- **Superposition VR** : la même page est servie par StormATC à l'adresse
+  `http://127.0.0.1:48765/panel`. Les applications de superposition (OpenKneeboard, OVR Toolkit,
+  XSOverlay, fpsVR…) savent afficher une page web dans le casque : ajoutez cette adresse. Le bouton
+  **Ouvrir le panneau dans un navigateur** l'ouvre sur le PC pour vérifier.
+
+## Réglages
+
+Section `ToolbarPanel` de `appsettings.json` (ou `usersettings.json`) :
+
+| Réglage | Défaut | Rôle |
+| --- | --- | --- |
+| `Enabled` | `true` | `false` désactive le serveur local, donc le panneau |
+| `Port` | `48765` | Port sur 127.0.0.1. Le panneau installé dans MSFS utilise le port par défaut ; changez-le seulement pour la page web |
+
+Si le port est déjà pris par un autre programme, StormATC démarre quand même (le journal dit que le
+panneau est indisponible).
+
+## Comment ça marche
+
+Le panneau est une page web dans le simulateur. Elle ne peut pas lire la session de StormATC
+directement : StormATC héberge donc un petit serveur local (`ToolbarPanelServer`), qui n'écoute que
+sur l'interface de boucle locale (127.0.0.1), ne répond qu'aux requêtes de lecture et refuse un autre
+nom d'hôte.
+
+| Adresse | Contenu |
+| --- | --- |
+| `/api/state` | L'état en JSON : vol, contrôleur, fréquence, phase, derniers échanges (80 au plus), exemples de la phase |
+| `/panel` | La page, pour un navigateur ou une superposition VR |
+
+Les exemples viennent de `PhraseologyCatalog` (français et anglais, pour chaque phase et pour le
+vol VFR) ; ce sont des exemples de formation, le moteur décide seul de ce qui est autorisé.
+
+## Compiler le paquet
+
+```powershell
+.\scripts\Build-MsfsPanel.ps1
+```
+
+Le script écrit `artifacts\msfs-panel\stormatc-ingamepanel` (page, script, icône, `layout.json`,
+`manifest.json`). La publication de l'application (`Publish-StormATC.ps1`, la CI) le lance avant de
+construire, et l'installeur l'embarque.
+
+La seule partie compilée est la définition du panneau (`InGamePanel_StormATC.spb`), faite à partir de
+`msfs-panel\package\PackageSources\InGamePanels\*.xml` par `fspackagetool` du SDK MSFS. Elle est
+versionnée dans `msfs-panel\prebuilt`, pour construire sans le SDK. Après avoir modifié ce XML (nom,
+taille, icône du panneau), régénérez-la **avec MSFS lancé** : l'outil du SDK compile dans le
+simulateur et ne fait rien s'il n'est pas lancé.
+
+```powershell
+.\scripts\Build-MsfsPanel.ps1 -Recompile
+```
+
+La page et le style du panneau sont dans `msfs-panel\web` ; ce sont les mêmes fichiers pour la
+fenêtre de MSFS et pour la page web.
+
+## Limites
+
+- Le panneau est en lecture seule : il affiche, il ne pilote pas StormATC. Le push-to-talk reste celui
+  de StormATC.
+- Pas de choix manuel de la phase affichée dans l'onglet Phraséologie : elle suit le vol.
+- Le serveur écoute en HTTP sur la boucle locale ; une autre page web ouverte sur le même PC peut lire
+  l'état (dialogue radio, rien de secret). Les requêtes qui ne viennent pas de `127.0.0.1` ou
+  `localhost` sont refusées.
