@@ -33,9 +33,9 @@ public sealed class ToolbarPanelServerTests : IDisposable
             "118.600",
             "VFR",
             new ToolbarPanelPhase("Departure", "Point d'attente"),
-            new ToolbarPanelLabels("Dialogue ATC", "Phraséologie", "Vous", "Contrôleur", "-", "-", "-", "-", "-", "-"),
+            new ToolbarPanelLabels("Dialogue ATC", "Phraséologie", "Vous", "Contrôleur", "-", "-", "-", "-", "-", "-", "-", "-"),
             [new ToolbarPanelTurn("1", "10:00", "pilot", "Vous", "Bonjour")],
-            new ToolbarPanelPhraseology("Departure", "Point d'attente", [], []));
+            new ToolbarPanelPhraseology("Departure", "Point d'attente", [], [], []));
     }
 
     private static int FreePort()

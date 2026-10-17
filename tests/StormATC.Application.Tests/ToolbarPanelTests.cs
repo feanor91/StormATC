@@ -61,6 +61,70 @@ public class ToolbarPanelTests
         Assert.Equal(expected, PhraseologyCatalog.StageFor(Session(phase, rules)));
 
     [Fact]
+    public void A_pilot_who_taxis_without_calling_is_shown_the_taxi_stage()
+    {
+        AtcSession moving = Session(FlightPhase.Preflight) with
+        {
+            AircraftState = TestAerodromes.AtStand(Fixture.Now) with { GroundSpeedKnots = 12 },
+        };
+
+        Assert.Equal(PhraseologyStage.TaxiOut, PhraseologyCatalog.StageFor(moving));
+    }
+
+    [Theory]
+    [InlineData(FlightRules.Ifr, PhraseologyStage.Climb)]
+    [InlineData(FlightRules.Vfr, PhraseologyStage.VfrCircuit)]
+    public void A_pilot_who_took_off_without_calling_is_shown_the_airborne_stage(
+        FlightRules rules, PhraseologyStage expected)
+    {
+        AtcSession airborne = Session(FlightPhase.HoldingShort, rules) with
+        {
+            AircraftState = TestAerodromes.AtStand(Fixture.Now) with
+            {
+                IsOnGround = false,
+                AltitudeAboveGroundFeet = 600,
+                GroundSpeedKnots = 80,
+            },
+        };
+
+        Assert.Equal(expected, PhraseologyCatalog.StageFor(airborne));
+    }
+
+    [Fact]
+    public void The_window_title_is_the_registration_the_simulator_reports()
+    {
+        AtcSession session = Session() with
+        {
+            AircraftState = TestAerodromes.AtStand(Fixture.Now) with { AtcIdentifier = " F-HAST " },
+        };
+
+        Assert.Equal("F-HAST", ToolbarPanelStateBuilder.Build(session).Registration);
+    }
+
+    [Fact]
+    public void The_window_title_falls_back_to_the_callsign()
+    {
+        AtcSession session = Session() with
+        {
+            AircraftState = TestAerodromes.AtStand(Fixture.Now) with { AtcIdentifier = string.Empty },
+        };
+
+        Assert.Equal("FGABC", ToolbarPanelStateBuilder.Build(session).Registration);
+    }
+
+    [Fact]
+    public void The_state_carries_every_stage_so_the_pilot_can_read_another_one()
+    {
+        ToolbarPanelState state = ToolbarPanelStateBuilder.Build(Session(FlightPhase.LineUp, FlightRules.Vfr));
+
+        Assert.Equal(PhraseologyCatalog.Stages.Count, state.Phraseology.Stages.Count);
+        Assert.All(state.Phraseology.Stages, stage => Assert.NotEmpty(stage.Examples));
+        Assert.Contains(state.Phraseology.Stages, stage => stage.Key == "Clearance");
+        Assert.Contains(state.Phraseology.Stages, stage => stage.Key == nameof(PhraseologyStage.Departure));
+        Assert.Equal("Departure", state.Phraseology.Stage);
+    }
+
+    [Fact]
     public void Every_phase_has_a_stage()
     {
         foreach (FlightPhase phase in Enum.GetValues<FlightPhase>())

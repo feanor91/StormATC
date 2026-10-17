@@ -9,7 +9,8 @@
     min-height: 320px;
     background: #101820;
     color: #e8eef4;
-    font-family: 'Segoe UI', Arial, sans-serif;
+    /* Roboto-Regular is the simulator's own UI font (it has the accented letters). */
+    font-family: 'Roboto-Regular', 'Roboto', 'Segoe UI', Arial, sans-serif;
     font-size: 1.2em;
     line-height: 1.35;
 }
@@ -81,3 +82,20 @@
 .sa-quote { display: block; }
 
 .sa-always { margin: 1em 0 0.5em 0; font-size: 1em; color: #ffd166; }
+
+/* The phase buttons: large, wrapping, no hover needed (VR controllers point and click). */
+.sa-chips { margin: 0 0 0.6em 0; }
+.sa-chip {
+    min-height: 2.4em;
+    margin: 0 0.4em 0.4em 0;
+    padding: 0.2em 0.8em;
+    border: 1px solid #3a5068;
+    border-radius: 1.2em;
+    background: #1b2a38;
+    color: #cfdbe8;
+    font-size: 0.9em;
+    font-weight: 700;
+}
+.sa-chip.sa-active { background: #2c6bb0; border-color: #4aa3ff; color: #ffffff; }
+
+.sa-root button { font-family: inherit; }

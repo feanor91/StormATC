@@ -183,6 +183,12 @@ public partial class App : System.Windows.Application
             "StormATC",
             "usersettings.json");
 
+        // The installer downloads Whisper, Piper and the voices to a standard folder: point the
+        // settings at them on the first start, so no path has to be typed.
+        StormATC.Infrastructure.LocalVoice.LocalVoiceBootstrap.Apply(
+            userSettingsPath,
+            StormATC.Infrastructure.LocalVoice.LocalVoiceBootstrap.DefaultRoot);
+
         builder.Configuration.AddJsonFile(userSettingsPath, optional: true, reloadOnChange: true);
 
         builder.Configuration.AddEnvironmentVariables(prefix: "STORMATC_");

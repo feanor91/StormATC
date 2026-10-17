@@ -60,6 +60,7 @@ var StormAtcPanel = (function () {
         var lastState = null;
         var offline = false;
         var stickToBottom = true;
+        var chosenStage = storageGet('stormatc.stage') || 'auto';
 
         clear(root);
         root.className = 'sa-root';
@@ -175,15 +176,55 @@ var StormAtcPanel = (function () {
             return card;
         }
 
+        function findStage(p, key) {
+            for (var i = 0; i < p.stages.length; i++) {
+                if (p.stages[i].key === key) { return p.stages[i]; }
+            }
+            return null;
+        }
+
+        function chooseStage(key) {
+            chosenStage = key;
+            storageSet('stormatc.stage', key);
+            if (lastState) {
+                renderPhraseology(lastState);
+                phraseologyPane.scrollTop = 0;
+            }
+        }
+
         function renderPhraseology(state) {
             clear(phraseologyPane);
             var p = state.phraseology;
+
+            // The pilot may read any phase; "Auto" follows the flight.
+            var shown = chosenStage === 'auto' ? null : findStage(p, chosenStage);
+            if (!shown) { chosenStage = 'auto'; }
+            var examples = shown ? shown.examples : p.examples;
+            var title = shown ? shown.title : p.title;
+
+            var chips = el('div', 'sa-chips');
+            var auto = el('button', 'sa-chip' + (chosenStage === 'auto' ? ' sa-active' : ''), state.labels.auto);
+            auto.setAttribute('type', 'button');
+            auto.onclick = function () { chooseStage('auto'); };
+            chips.appendChild(auto);
+            for (var s = 0; s < p.stages.length; s++) {
+                (function (stage) {
+                    var label = stage.title + (stage.key === p.stage ? ' ●' : '');
+                    var chip = el('button', 'sa-chip' + (chosenStage === stage.key ? ' sa-active' : ''), label);
+                    chip.setAttribute('type', 'button');
+                    chip.onclick = function () { chooseStage(stage.key); };
+                    chips.appendChild(chip);
+                }(p.stages[s]));
+            }
+            phraseologyPane.appendChild(chips);
+
             var heading = el('div', 'sa-stage');
-            heading.appendChild(el('span', 'sa-stage-label', state.labels.currentStage));
-            heading.appendChild(el('span', 'sa-stage-title', p.title));
+            heading.appendChild(el('span', 'sa-stage-label',
+                shown ? state.labels.chooseStage : state.labels.currentStage));
+            heading.appendChild(el('span', 'sa-stage-title', title));
             phraseologyPane.appendChild(heading);
-            for (var i = 0; i < p.examples.length; i++) {
-                phraseologyPane.appendChild(renderExample(p.examples[i], state.labels));
+            for (var i = 0; i < examples.length; i++) {
+                phraseologyPane.appendChild(renderExample(examples[i], state.labels));
             }
             phraseologyPane.appendChild(el('h3', 'sa-always', state.labels.always));
             for (var j = 0; j < p.always.length; j++) {
@@ -200,7 +241,10 @@ var StormAtcPanel = (function () {
             var wasAtBottom = dialoguePane.scrollHeight - dialoguePane.scrollTop - dialoguePane.clientHeight < 40;
             stickToBottom = stickToBottom || wasAtBottom;
             renderDialogue(state);
+            // A new message must not throw the pilot back to the top of the list being read.
+            var readingAt = phraseologyPane.scrollTop;
             renderPhraseology(state);
+            phraseologyPane.scrollTop = readingAt;
             scrollDialogue(false);
         }
 

@@ -14,8 +14,17 @@ class StormAtcPanelElement extends TemplateElement {
         }
 
         var root = this.querySelector("#StormAtcRoot");
+        var frame = this.querySelector("#StormAtcFrame");
         if (root && !this.panel) {
-            this.panel = StormAtcPanel.mount(root);
+            // The window's title is the registration of the aircraft being flown.
+            this.panel = StormAtcPanel.mount(root, {
+                onState: function (state) {
+                    var title = state.registration || state.callsign || "StormATC";
+                    if (frame && frame.getAttribute("title") !== title) {
+                        frame.setAttribute("title", title);
+                    }
+                }
+            });
         }
     }
 

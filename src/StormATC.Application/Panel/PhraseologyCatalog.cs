@@ -74,11 +74,30 @@ public sealed record PhraseologyGuide(
 public static class PhraseologyCatalog
 {
     /// <summary>The stage a session is in.</summary>
+    /// <remarks>
+    /// The session's phase says where ATC thinks the flight is; the aircraft says where it really
+    /// is. A pilot who taxis or takes off without calling leaves the phase behind, so the
+    /// aircraft's movement moves the stage forward (never backward).
+    /// </remarks>
     public static PhraseologyStage StageFor(AtcSession session)
     {
         ArgumentNullException.ThrowIfNull(session);
 
         bool vfr = session.FlightRules == FlightRules.Vfr;
+        bool beforeTaxi = session.Phase is FlightPhase.Disconnected or FlightPhase.Preflight
+            or FlightPhase.ClearanceRequested or FlightPhase.IFRClearanceIssued or FlightPhase.Pushback;
+        bool onGroundPhase = beforeTaxi || session.Phase is FlightPhase.TaxiOut
+            or FlightPhase.HoldingShort or FlightPhase.LineUp or FlightPhase.Takeoff;
+
+        if (onGroundPhase && !session.AircraftState.IsOnGround && session.AircraftState.AltitudeAboveGroundFeet > 50)
+        {
+            return vfr ? PhraseologyStage.VfrCircuit : PhraseologyStage.Climb;
+        }
+
+        if (beforeTaxi && session.AircraftState.IsOnGround && session.AircraftState.GroundSpeedKnots > 3)
+        {
+            return PhraseologyStage.TaxiOut;
+        }
 
         return session.Phase switch
         {
