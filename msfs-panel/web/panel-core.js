@@ -96,6 +96,19 @@ var StormAtcPanel = (function () {
         root.appendChild(tabs);
         root.appendChild(body);
 
+        // Inside the simulator's window the root does not get a height from its parents: take the
+        // height of the window's content area, and follow it when the pilot resizes the window.
+        function fitToParent() {
+            var node = root.parentNode;
+            while (node && node.className !== undefined) {
+                if (typeof node.className === 'string' && node.className.indexOf('ingameUiWrapper') !== -1) {
+                    if (node.clientHeight > 80) { root.style.height = node.clientHeight + 'px'; }
+                    return;
+                }
+                node = node.parentNode;
+            }
+        }
+
         function applyScale() {
             root.style.fontSize = Math.round(scale * 100) / 100 + 'em';
         }
@@ -210,8 +223,8 @@ var StormAtcPanel = (function () {
             var allStages = p.stages || [];
             for (var s = 0; s < allStages.length; s++) {
                 (function (stage) {
-                    var label = stage.title + (stage.key === p.stage ? ' ●' : '');
-                    var chip = el('button', 'sa-chip' + (chosenStage === stage.key ? ' sa-active' : ''), label);
+                    var chip = el('button', 'sa-chip' + (chosenStage === stage.key ? ' sa-active' : ''), stage.title);
+                    if (stage.key === p.stage) { chip.appendChild(el('span', 'sa-now')); }
                     chip.setAttribute('type', 'button');
                     chip.onclick = function () { chooseStage(stage.key); };
                     chips.appendChild(chip);
@@ -262,6 +275,9 @@ var StormAtcPanel = (function () {
                         lastJson = xhr.responseText;
                         try { render(JSON.parse(xhr.responseText)); } catch (e) { /* keep the last view */ }
                     }
+                    // The simulator resets the window's title when it opens it: apply it again.
+                    if (lastState && options.onState) { options.onState(lastState); }
+                    fitToParent();
                 } else {
                     markOffline();
                 }
@@ -294,6 +310,8 @@ var StormAtcPanel = (function () {
         tabDialogue.textContent = 'Dialogue ATC';
         tabPhraseology.textContent = 'Phraséologie';
         applyScale();
+        fitToParent();
+        var fitTimer = window.setInterval(fitToParent, 300);
         showTab(tab);
         renderStatus(null);
         request();
@@ -301,6 +319,7 @@ var StormAtcPanel = (function () {
         return {
             stop: function () {
                 stopped = true;
+                window.clearInterval(fitTimer);
                 if (timer) { window.clearTimeout(timer); }
             }
         };

@@ -98,5 +98,10 @@
     font-weight: 700;
 }
 .sa-chip.sa-active { background: #2c6bb0; border-color: #4aa3ff; color: #ffffff; }
+.sa-now { display: inline-block; width: 0.55em; height: 0.55em; margin-left: 0.5em; border-radius: 50%; background: #3ddc84; }
+
+/* Inside the simulator's window: let the panel take all the room the window gives it. */
+#StormAtcFrame template-slot { display: flex; flex-direction: column; flex-grow: 1; min-height: 0; }
+#StormAtcRoot { display: flex; flex-direction: column; flex-grow: 1; min-height: 0; }
 
 .sa-root button { font-family: inherit; }
