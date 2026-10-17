@@ -847,6 +847,29 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     private async Task RemoveAnthropicKeyAsync() =>
         await RemoveKeyAsync(SecretKeys.AnthropicApiKey, "Anthropic").ConfigureAwait(true);
 
+    /// <summary>Opens a download page for Whisper, Piper or the voices in the default browser.</summary>
+    /// <param name="address">The address; only the project, GitHub and Hugging Face are opened.</param>
+    [RelayCommand]
+    private void OpenDownloadPage(string? address)
+    {
+        if (!Uri.TryCreate(address, UriKind.Absolute, out Uri? uri)
+            || uri.Scheme != Uri.UriSchemeHttps
+            || uri.Host is not ("github.com" or "huggingface.co"))
+        {
+            return;
+        }
+
+        try
+        {
+            using var browser = System.Diagnostics.Process.Start(
+                new System.Diagnostics.ProcessStartInfo(uri.AbsoluteUri) { UseShellExecute = true });
+        }
+        catch (System.ComponentModel.Win32Exception ex)
+        {
+            _logger.LogWarning(ex, "Could not open {Address}.", uri);
+        }
+    }
+
     /// <summary>Deletes the stored Deepgram key.</summary>
     [RelayCommand]
     private async Task RemoveDeepgramKeyAsync() =>

@@ -644,10 +644,32 @@
               <StackPanel>
                 <TextBlock Text="Speech engines"
                            Style="{StaticResource SectionHeaderStyle}" />
-                <TextBlock Text="Deepgram runs in the cloud and needs a key. Whisper (recognition) and Piper (controller voice) run on this computer: no account, no network. See docs/french-and-local-voice.md to download them. Save, then test."
+                <TextBlock Text="Deepgram runs in the cloud and needs a key. Whisper (recognition) and Piper (controller voice) run on this computer: no account, no network. Download them once with the buttons below, then fill in the paths. Save, then test."
                            Style="{StaticResource SecondaryTextStyle}"
                            TextWrapping="Wrap"
-                           Margin="0,0,0,14" />
+                           Margin="0,0,0,8" />
+                <WrapPanel Margin="0,0,0,14">
+                  <Button Content="Download guide"
+                          Command="{Binding OpenDownloadPageCommand}"
+                          CommandParameter="https://github.com/feanor91/StormATC/blob/main/docs/third-party-downloads.md"
+                          Style="{StaticResource PrimaryButtonStyle}"
+                          Margin="0,0,8,0" />
+                  <Button Content="Get Whisper"
+                          Command="{Binding OpenDownloadPageCommand}"
+                          CommandParameter="https://github.com/ggml-org/whisper.cpp/releases"
+                          Margin="0,0,8,0" />
+                  <Button Content="Get Whisper models"
+                          Command="{Binding OpenDownloadPageCommand}"
+                          CommandParameter="https://huggingface.co/ggerganov/whisper.cpp/tree/main"
+                          Margin="0,0,8,0" />
+                  <Button Content="Get Piper"
+                          Command="{Binding OpenDownloadPageCommand}"
+                          CommandParameter="https://github.com/rhasspy/piper/releases/tag/2023.11.14-2"
+                          Margin="0,0,8,0" />
+                  <Button Content="Get Piper voices"
+                          Command="{Binding OpenDownloadPageCommand}"
+                          CommandParameter="https://huggingface.co/rhasspy/piper-voices/tree/main" />
+                </WrapPanel>
 
                 <Grid>
                   <Grid.ColumnDefinitions>
