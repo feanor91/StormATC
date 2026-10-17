@@ -37,6 +37,16 @@ public sealed class MsfsPanelInstallerTests : IDisposable
         Assert.Null(MsfsPanelInstaller.ReadInstalledPackagesPath("{ Something 1 }"));
 
     [Fact]
+    public void The_usual_community_folders_are_the_store_and_steam_ones()
+    {
+        IReadOnlyList<string> folders = MsfsPanelInstaller.DefaultCommunityFolders();
+
+        Assert.Equal(2, folders.Count);
+        Assert.All(folders, folder => Assert.EndsWith(Path.Combine("Packages", "Community"), folder, StringComparison.Ordinal));
+        Assert.Contains(folders, folder => folder.Contains("Microsoft.Limitless_8wekyb3d8bbwe", StringComparison.Ordinal));
+    }
+
+    [Fact]
     public void The_package_is_copied_into_the_community_folder()
     {
         string community = Path.Combine(_root, "Community");

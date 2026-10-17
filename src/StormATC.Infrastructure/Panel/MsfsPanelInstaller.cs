@@ -33,28 +33,58 @@ public static partial class MsfsPanelInstaller
         ];
     }
 
+    /// <summary>The usual Community folders, used when <c>UserCfg.opt</c> cannot be read.</summary>
+    public static IReadOnlyList<string> DefaultCommunityFolders()
+    {
+        string local = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        string roaming = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+        return
+        [
+            Path.Combine(local, "Packages", "Microsoft.Limitless_8wekyb3d8bbwe", "LocalCache", "Packages", "Community"),
+            Path.Combine(roaming, "Microsoft Flight Simulator 2024", "Packages", "Community"),
+        ];
+    }
+
     /// <summary>The Community folders of the installed simulators, as far as they can be found.</summary>
+    /// <remarks>
+    /// The folder named in <c>UserCfg.opt</c> comes first. The file is rewritten by the simulator
+    /// when it starts and stops, so it may be unreadable for a moment: the usual folders are
+    /// tried as well, and a folder that exists is always enough.
+    /// </remarks>
     public static IReadOnlyList<string> FindCommunityFolders()
     {
         List<string> found = [];
-        foreach (string file in UserConfigurationFiles())
+
+        void Add(string? community)
         {
-            if (!File.Exists(file))
-            {
-                continue;
-            }
-
-            string? packages = ReadInstalledPackagesPath(File.ReadAllText(file));
-            if (packages is null)
-            {
-                continue;
-            }
-
-            string community = Path.Combine(packages, "Community");
-            if (Directory.Exists(community) && !found.Contains(community, StringComparer.OrdinalIgnoreCase))
+            if (community is not null
+                && Directory.Exists(community)
+                && !found.Contains(community, StringComparer.OrdinalIgnoreCase))
             {
                 found.Add(community);
             }
+        }
+
+        foreach (string file in UserConfigurationFiles())
+        {
+            try
+            {
+                if (File.Exists(file)
+                    && ReadInstalledPackagesPath(File.ReadAllText(file)) is { } packages)
+                {
+                    Add(Path.Combine(packages, "Community"));
+                }
+            }
+            catch (IOException)
+            {
+                // The simulator is writing the file; the usual folders below still apply.
+            }
+        }
+
+        foreach (string community in DefaultCommunityFolders())
+        {
+            Add(community);
         }
 
         return found;
