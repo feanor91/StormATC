@@ -97,17 +97,20 @@ var StormAtcPanel = (function () {
         root.appendChild(tabs);
         root.appendChild(body);
 
-        // Inside the simulator's window the root does not get a height from its parents: take the
-        // height of the window's content area, and follow it when the pilot resizes the window.
+        // Inside the simulator's window the root gets no height from its parents, and the content
+        // area only grows with its content. The window itself has a definite size: the root takes
+        // what is left under the window's header, and follows the window when it is resized.
         function fitToParent() {
-            var node = root.parentNode;
-            while (node && node.className !== undefined) {
-                if (typeof node.className === 'string' && node.className.indexOf('ingameUiWrapper') !== -1) {
-                    if (node.clientHeight > 80) { root.style.height = node.clientHeight + 'px'; }
-                    return;
-                }
-                node = node.parentNode;
+            var frame = root.parentNode;
+            while (frame && !(frame.tagName && frame.tagName.toLowerCase() === 'ingame-ui')) {
+                frame = frame.parentNode;
             }
+            if (!frame || frame.clientHeight < 100) { return; }
+
+            var header = frame.querySelector('ingame-ui-header');
+            var headerHeight = header ? header.offsetHeight : 0;
+            var height = frame.clientHeight - headerHeight - 12;
+            if (height > 80) { root.style.height = height + 'px'; }
         }
 
         function applyScale() {
