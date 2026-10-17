@@ -31,7 +31,11 @@ if (-not $AcknowledgeSimConnectLicenseReview) {
 
 $managedSimConnect = $env:MSFS_SIMCONNECT_PATH
 if ([string]::IsNullOrWhiteSpace($managedSimConnect)) {
-    $managedSimConnect = "C:\MSFS SDK\SimConnect SDK\lib\managed\Microsoft.FlightSimulator.SimConnect.dll"
+    $sdkRelativePath = "SimConnect SDK\lib\managed\Microsoft.FlightSimulator.SimConnect.dll"
+    $managedSimConnect = @("C:\MSFS 2024 SDK", "C:\MSFS SDK") |
+        ForEach-Object { Join-Path $_ $sdkRelativePath } |
+        Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } |
+        Select-Object -First 1
 }
 
 if (-not (Test-Path -LiteralPath $managedSimConnect -PathType Leaf)) {
