@@ -95,14 +95,15 @@ Le script écrit `artifacts\msfs-panel\stormatc-ingamepanel` (page, script, icô
 construire, et l'installeur l'embarque.
 
 La seule partie compilée est la définition du panneau (`InGamePanel_StormATC.spb`), faite à partir de
-`msfs-panel\package\PackageSources\InGamePanels\*.xml` par `fspackagetool` du SDK MSFS. Elle est
-versionnée dans `msfs-panel\prebuilt`, pour construire sans le SDK. Après avoir modifié ce XML (nom,
-taille, icône du panneau), régénérez-la **avec MSFS lancé** : l'outil du SDK compile dans le
-simulateur et ne fait rien s'il n'est pas lancé.
-
-```powershell
-.\scripts\Build-MsfsPanel.ps1 -Recompile
-```
+`msfs-panel\package\PackageSources\InGamePanels\*.xml` par le compilateur du simulateur. Elle est
+versionnée dans `msfs-panel\prebuilt`, pour construire sans le SDK ni le simulateur. Il ne faut la
+refaire que si l'on modifie ce XML (nom, taille, icône du panneau). Dans MSFS (mode développeur) :
+**File › Open project**, choisir `msfs-panel\package\stormatc-ingamepanel.xml` copié dans un dossier
+de travail, **Build All in project**, puis recopier `InGamePanels\InGamePanel_StormATC.spb` produit
+dans `msfs-panel\prebuilt`. Ne pas enregistrer le projet depuis l'éditeur : l'enregistrement a fait
+planter le simulateur lors de nos essais (le paquet porte déjà son `PackageOrderHint`, donc MSFS
+n'a rien à enregistrer). L'outil en ligne de commande `fspackagetool` n'a rien produit chez nous ;
+`Build-MsfsPanel.ps1 -Recompile` l'essaie, MSFS lancé, mais ne marche pas toujours.
 
 La page et le style du panneau sont dans `msfs-panel\web` ; ce sont les mêmes fichiers pour la
 fenêtre de MSFS et pour la page web.

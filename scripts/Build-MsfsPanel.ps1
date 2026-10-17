@@ -67,7 +67,7 @@ if ($Recompile) {
     # the simulator is running it attaches to it and may wait for ever after the work is done,
     # so wait for the .spb and stop the tool.
     $process = Start-Process -FilePath $PackageTool `
-        -ArgumentList @("-nopause", "`"$project`"") `
+        -ArgumentList @("`"$project`"", "-rebuild", "-nopause", "-outputtoseparateconsole") `
         -WorkingDirectory $compile -PassThru -NoNewWindow
 
     $deadline = (Get-Date).AddSeconds(420)
