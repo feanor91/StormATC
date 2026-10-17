@@ -870,6 +870,28 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         }
     }
 
+    /// <summary>Opens the download guide that is installed with the application.</summary>
+    [RelayCommand]
+    private void OpenDownloadGuide()
+    {
+        string guide = System.IO.Path.Combine(AppContext.BaseDirectory, "docs", "third-party-downloads.md");
+        if (!System.IO.File.Exists(guide))
+        {
+            _logger.LogWarning("The download guide {Guide} is missing.", guide);
+            return;
+        }
+
+        try
+        {
+            // Notepad reads Markdown whatever the file associations are on this PC.
+            using var notepad = System.Diagnostics.Process.Start("notepad.exe", $"\"{guide}\"");
+        }
+        catch (System.ComponentModel.Win32Exception ex)
+        {
+            _logger.LogWarning(ex, "Could not open {Guide}.", guide);
+        }
+    }
+
     /// <summary>Deletes the stored Deepgram key.</summary>
     [RelayCommand]
     private async Task RemoveDeepgramKeyAsync() =>

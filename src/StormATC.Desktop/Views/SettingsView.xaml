@@ -650,8 +650,7 @@
                            Margin="0,0,0,8" />
                 <WrapPanel Margin="0,0,0,14">
                   <Button Content="Download guide"
-                          Command="{Binding OpenDownloadPageCommand}"
-                          CommandParameter="https://github.com/feanor91/StormATC/blob/main/docs/third-party-downloads.md"
+                          Command="{Binding OpenDownloadGuideCommand}"
                           Style="{StaticResource PrimaryButtonStyle}"
                           Margin="0,0,8,0" />
                   <Button Content="Get Whisper"
