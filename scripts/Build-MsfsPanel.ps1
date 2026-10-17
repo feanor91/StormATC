@@ -142,7 +142,7 @@ $manifest = [ordered]@{
     minimum_compatibility_version = "9.18.0.250"
     export_type = "Community"
     builder = "Microsoft Flight Simulator 2024"
-    package_order_hint = ""
+    package_order_hint = "UI_PATCH"
     release_notes = [ordered]@{ neutral = [ordered]@{ LastUpdate = ""; OlderHistory = "" } }
     total_package_size = "$totalSize"
 }
