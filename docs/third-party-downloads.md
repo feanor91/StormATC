@@ -8,7 +8,27 @@ OpenRouter), voir [privacy-and-api-keys.md](privacy-and-api-keys.md).
 Le réglage dans l'application et le détail des options sont dans
 [french-and-local-voice.md](french-and-local-voice.md).
 
-## Ce qu'il faut, en bref
+## Avec l'installeur : rien à faire
+
+L'installeur de StormATC (`StormATC-Setup-v…-win-x64.exe`) propose deux cases :
+
+- **Télécharger la reconnaissance vocale et les voix locales** (cochée) : il télécharge Piper,
+  whisper.cpp, le modèle Whisper `small` et 15 voix (environ 1,2 Go) depuis leurs éditeurs, vérifie
+  leur somme SHA-256, et les range dans `%LOCALAPPDATA%\StormATC\local-voice`. Au premier démarrage,
+  StormATC règle tout seul les chemins et active Whisper et Piper, **sauf** ce que vous aviez déjà
+  choisi vous-même. Après une réinstallation de Windows, il suffit donc de relancer l'installeur.
+  Les fichiers déjà présents ne sont pas téléchargés une seconde fois. Si un téléchargement échoue,
+  l'installeur propose de continuer sans la voix locale (voir plus bas pour la faire à la main).
+- **Installer le panneau dans la barre d'outils de MSFS 2024** (cochée si MSFS est trouvé) : voir
+  [ingame-panel.md](ingame-panel.md).
+
+La désinstallation retire le panneau de MSFS mais garde `local-voice`, qui pèse lourd et vous
+appartient ; supprimez ce dossier à la main pour récupérer la place.
+
+Les adresses et les sommes de contrôle sont dans `installer\downloads.inc.iss`, généré par
+`scripts\Update-InstallerDownloads.ps1` (à relancer pour changer de version ou de voix).
+
+## Ce qu'il faut, en bref (à la main)
 
 | Élément | Rôle | Taille | Téléchargement |
 | --- | --- | --- | --- |

@@ -8,10 +8,22 @@ StormATC ajoute une fenêtre à la barre d'outils de Microsoft Flight Simulator.
   circuit VFR, approche, etc.), avec ce que le contrôleur répond, puis les appels toujours possibles
   (« répétez », « quelle est la fréquence de la Tour ? »…). L'onglet change tout seul avec la phase.
 
+Dans l'onglet Phraséologie, des boutons permettent de lire **n'importe quelle phase** : **Auto** suit
+le vol (la phase en cours porte un ●), un autre bouton fixe la phase affichée. Utile en VFR si la
+session est restée en règles IFR, ou pour préparer la suite. La phase « automatique » vient de la
+session ATC, corrigée par le mouvement réel de l'avion (vous roulez : Roulage ; vous êtes en
+l'air : circuit VFR ou montée).
+
+Le titre de la fenêtre est l'immatriculation de l'avion indiquée par le simulateur (à défaut,
+l'indicatif de la session). Le libellé sous l'icône de la barre d'outils reste « StormATC ».
+
 La langue des exemples est celle de la radio réglée dans StormATC. Les boutons **A−** et **A+** en
 haut à droite changent la taille du texte ; le choix est mémorisé.
 
 ## Installer le panneau
+
+Le plus simple : l'installeur de StormATC le fait (case « Installer le panneau dans la barre d'outils
+de MSFS 2024 »), et la désinstallation le retire. Sinon :
 
 1. Dans StormATC, **Settings › Voice & PTT › Panneau dans le simulateur › Installer le panneau dans
    MSFS**. StormATC copie le dossier `stormatc-ingamepanel` dans le dossier **Community** de MSFS 2024
