@@ -26,6 +26,12 @@ de procédure aux instruments ; les points du circuit que l'EFB ajoute (RW08, IC
 partie de la route et ne sont pas repris. Le module ne fait que lire : il ne modifie ni le plan, ni l'avion, ni
 le simulateur.
 
+La **remise de gaz** de l'approche choisie n'est pas dans le plan : StormATC la lit dans les données de
+navigation du simulateur (SimConnect, comme les pistes et les parkings) quand il importe un plan IFR avec
+une approche, et la montre sur la page Plan de vol (« REMISE DE GAZ »), par exemple
+`D221A → INTRCPT → NERAS 3 000 ft → AZR35 → NERAS 3 000 ft → HOLD NERAS`. Elle n'est pas encore
+utilisée dans les phrases de l'ATC.
+
 ## Installation
 
 L'installeur de StormATC le place avec le panneau dans le dossier **Community** de MSFS
