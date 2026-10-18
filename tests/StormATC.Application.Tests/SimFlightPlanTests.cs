@@ -1,0 +1,173 @@
+using StormATC.Application.FlightPlanning;
+using StormATC.Domain.FlightPlanning;
+
+namespace StormATC.Application.Tests;
+
+/// <summary>Reading the flight plan files that Microsoft Flight Simulator writes.</summary>
+public sealed class SimFlightPlanTests : IDisposable
+{
+    private readonly string _folder = Path.Combine(Path.GetTempPath(), "stormatc-pln-" + Guid.NewGuid().ToString("N"));
+
+    public void Dispose()
+    {
+        if (Directory.Exists(_folder))
+        {
+            Directory.Delete(_folder, recursive: true);
+        }
+    }
+
+    // What the simulator wrote when a free flight was started at Lognes.
+    private const string CustomFlight = """
+        <?xml version="1.0" encoding="UTF-8"?>
+
+        <SimBase.Document>
+            <FlightPlan.FlightPlan>
+                <DepartureID>LFPL</DepartureID>
+                <DestinationID>LFPGO</DestinationID>
+                <Title>LFPL - LFPGO</Title>
+                <Descr>Flight from LFPL to LFPGO</Descr>
+                <FPType>VFR</FPType>
+                <CruisingAlt>45000.000</CruisingAlt>
+                <DepartureDetails>
+                    <RunwayNumberFP>8</RunwayNumberFP>
+                </DepartureDetails>
+            </FlightPlan.FlightPlan>
+        </SimBase.Document>
+        """;
+
+    private const string CrossCountry = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <SimBase.Document Type="AceXML" version="1,0">
+            <FlightPlan.FlightPlan>
+                <Title>Lognes to Pontoise</Title>
+                <FPType>VFR</FPType>
+                <CruisingAlt>2500.000</CruisingAlt>
+                <DepartureID>LFPL</DepartureID>
+                <DestinationID>LFPT</DestinationID>
+                <DepartureDetails>
+                    <RunwayNumberFP>26</RunwayNumberFP>
+                    <RunwayDesignatorFP>LEFT</RunwayDesignatorFP>
+                </DepartureDetails>
+                <ATCWaypoint id="LFPL">
+                    <ATCWaypointType>Airport</ATCWaypointType>
+                    <WorldPosition>N48°49'31.80",E2°37'30.00",+000290.00</WorldPosition>
+                </ATCWaypoint>
+                <ATCWaypoint id="MELUN">
+                    <ATCWaypointType>User</ATCWaypointType>
+                    <WorldPosition>N48°32'00.00",E2°40'00.00",+002500.00</WorldPosition>
+                </ATCWaypoint>
+                <ATCWaypoint id="SOUTH">
+                    <ATCWaypointType>User</ATCWaypointType>
+                    <WorldPosition>S10°30'00.00",W20°15'00.00",+002500.00</WorldPosition>
+                </ATCWaypoint>
+                <ATCWaypoint id="LFPT">
+                    <ATCWaypointType>Airport</ATCWaypointType>
+                    <WorldPosition>N49°05'59.00",E2°02'25.00",+000325.00</WorldPosition>
+                </ATCWaypoint>
+            </FlightPlan.FlightPlan>
+        </SimBase.Document>
+        """;
+
+    [Fact]
+    public void The_plan_of_a_started_free_flight_is_read()
+    {
+        Assert.True(PlnFlightPlanParser.TryParse(CustomFlight, out SimFlightPlan? plan));
+
+        Assert.Equal("LFPL", plan.DepartureIcao);
+        Assert.True(plan.IsVfr);
+        Assert.Equal("08", plan.DepartureRunway);
+        Assert.Empty(plan.Waypoints);
+    }
+
+    [Fact]
+    public void A_destination_that_is_not_an_aerodrome_code_makes_it_a_local_flight()
+    {
+        Assert.True(PlnFlightPlanParser.TryParse(CustomFlight, out SimFlightPlan? plan));
+
+        // "LFPGO" is five characters: the departure aerodrome is the destination too.
+        Assert.Equal("LFPL", plan.DestinationIcao);
+    }
+
+    [Fact]
+    public void A_cross_country_plan_gives_its_aerodromes_runway_and_waypoints()
+    {
+        Assert.True(PlnFlightPlanParser.TryParse(CrossCountry, out SimFlightPlan? plan));
+
+        Assert.Equal("LFPL", plan.DepartureIcao);
+        Assert.Equal("LFPT", plan.DestinationIcao);
+        Assert.Equal("26L", plan.DepartureRunway);
+        Assert.Equal(2500, plan.CruisingAltitudeFeet);
+        Assert.Equal(["MELUN", "SOUTH"], plan.Waypoints.Select(w => w.Identifier));
+    }
+
+    [Fact]
+    public void Positions_are_read_with_their_hemispheres()
+    {
+        Assert.True(PlnFlightPlanParser.TryParse(CrossCountry, out SimFlightPlan? plan));
+
+        Assert.Equal(48.5333, plan.Waypoints[0].Position!.Value.Latitude, 3);
+        Assert.Equal(2.6667, plan.Waypoints[0].Position!.Value.Longitude, 3);
+        Assert.Equal(-10.5, plan.Waypoints[1].Position!.Value.Latitude, 3);
+        Assert.Equal(-20.25, plan.Waypoints[1].Position!.Value.Longitude, 3);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    [InlineData("not xml at all")]
+    [InlineData("<SimBase.Document></SimBase.Document>")]
+    [InlineData("<SimBase.Document><FlightPlan.FlightPlan><Title>x</Title></FlightPlan.FlightPlan></SimBase.Document>")]
+    public void A_file_that_holds_no_plan_is_refused(string text) =>
+        Assert.False(PlnFlightPlanParser.TryParse(text, out _));
+
+    [Fact]
+    public void A_plan_becomes_the_flight_plan_StormATC_works_from()
+    {
+        Assert.True(PlnFlightPlanParser.TryParse(CrossCountry, out SimFlightPlan? plan));
+
+        Assert.True(SimFlightPlanConverter.TryConvert(plan, "F-HAST", Fixture.Now, out FlightPlan? flightPlan));
+
+        Assert.Equal("LFPL", flightPlan.DepartureIcao);
+        Assert.Equal("LFPT", flightPlan.DestinationIcao);
+        Assert.Equal("FHAST", flightPlan.Callsign.Normalized);
+        Assert.Equal("26L", flightPlan.DepartureRunway!.Value.ToString());
+        Assert.Equal("MELUN SOUTH", flightPlan.Route);
+        Assert.Equal(2, flightPlan.RouteLegs.Count);
+        Assert.Equal(2500, flightPlan.CruiseAltitude!.Value.Feet);
+        Assert.Equal("Simulator", flightPlan.SourceIdentifier);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void A_plan_cannot_be_used_without_a_callsign(string? callsign)
+    {
+        Assert.True(PlnFlightPlanParser.TryParse(CrossCountry, out SimFlightPlan? plan));
+
+        Assert.False(SimFlightPlanConverter.TryConvert(plan, callsign, Fixture.Now, out _));
+    }
+
+    [Fact]
+    public void The_newest_plan_file_is_found()
+    {
+        Directory.CreateDirectory(_folder);
+        string old = Path.Combine(_folder, "OLD.PLN");
+        string recent = Path.Combine(_folder, "CUSTOMFLIGHT.PLN");
+        File.WriteAllText(old, CrossCountry);
+        File.WriteAllText(recent, CustomFlight);
+        File.SetLastWriteTimeUtc(old, DateTime.UtcNow.AddDays(-3));
+        File.SetLastWriteTimeUtc(recent, DateTime.UtcNow);
+        File.WriteAllText(Path.Combine(_folder, "notes.txt"), "not a plan");
+
+        Assert.Equal(recent, SimFlightPlanLocator.FindNewest([Path.Combine(_folder, "missing"), _folder]));
+    }
+
+    [Fact]
+    public void No_plan_file_means_none_is_found()
+    {
+        Directory.CreateDirectory(_folder);
+
+        Assert.Null(SimFlightPlanLocator.FindNewest([_folder, Path.Combine(_folder, "missing")]));
+    }
+}

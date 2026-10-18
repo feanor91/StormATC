@@ -34,6 +34,30 @@ Les règles de vol sont un attribut du vol. Elles se règlent de deux façons :
 - à la radio : dire « VFR » ou « vol local » dans la première transmission (demande de roulage,
   appel d'arrivée) passe le vol en VFR.
 
+## Le plan de vol fait dans le simulateur (EFB)
+
+StormATC reprend le plan de vol que vous faites dans le simulateur : terrain de départ et
+d'arrivée, VFR ou IFR, piste de départ, altitude, points de la route. Le nom de l'avion
+(l'immatriculation) vient de l'avion lui-même.
+
+- **Automatiquement**, tant que StormATC est ouvert : le simulateur annonce un plan que vous
+  activez (EFB, carte du monde) en donnant le nom de son fichier `.PLN`, et le plan du vol que vous
+  venez de démarrer. Le plan d'un vol qui vient d'être chargé ne remplace que le plan d'exemple,
+  jamais un plan que vous avez importé vous-même.
+- **À la main** : page **Plan de vol › Plan de vol du simulateur › Importer le plan de vol du
+  simulateur**. StormATC lit le dernier plan annoncé, ou à défaut le fichier de plan le plus récent
+  écrit par le simulateur (`...\LocalState\MISSIONS\Custom\CustomFlight\CUSTOMFLIGHT.PLN`, ou le
+  dossier équivalent de l'édition Steam).
+
+Tout ce que le simulateur annonce est écrit dans le journal (`%LOCALAPPDATA%\StormATC\logs`, lignes
+« The simulator announced a flight plan event »), ce qui permet de voir ce que MSFS envoie vraiment.
+Réglages `SimFlightPlan` : `Enabled` (désactive la reprise automatique) et `ImportOnFlightLoaded`.
+
+Ce qui n'est pas garanti : le simulateur ne documente pas, pour l'EFB de MSFS 2024, le nom du fichier
+qu'il annonce ni son emplacement. Si le plan de l'EFB n'est pas repris, le journal le dit et il faut
+corriger d'après ce qu'il contient. Pour un vol IFR, le plan du simulateur n'apporte ni départ
+normalisé (SID) ni arrivée : seuls les vols VFR sont validés.
+
 ## Les phrases reconnues
 
 La phraséologie suit le chapitre « Circuit d'aérodrome contrôlé » du manuel de phraséologie

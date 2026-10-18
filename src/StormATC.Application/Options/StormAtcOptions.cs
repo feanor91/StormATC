@@ -438,6 +438,22 @@ public sealed class ToolbarPanelOptions
     public int Port { get; init; } = DefaultPort;
 }
 
+/// <summary>Bringing the flight plan made in the simulator into StormATC.</summary>
+public sealed class SimFlightPlanOptions
+{
+    /// <summary>The configuration section name.</summary>
+    public const string SectionName = "SimFlightPlan";
+
+    /// <summary>When false, plans the simulator announces are ignored; the page's button still works.</summary>
+    public bool Enabled { get; init; } = true;
+
+    /// <summary>
+    /// Also read the plan of a flight that was just loaded, when the session only has the bundled
+    /// sample. A plan the pilot imported is never replaced this way.
+    /// </summary>
+    public bool ImportOnFlightLoaded { get; init; } = true;
+}
+
 /// <summary>SimBrief import settings.</summary>
 public sealed class SimBriefOptions
 {

@@ -138,6 +138,9 @@ public static class ServiceCollectionExtensions
         services.AddOptions<VfrLocalOptions>()
             .Bind(configuration.GetSection(VfrLocalOptions.SectionName));
 
+        services.AddOptions<SimFlightPlanOptions>()
+            .Bind(configuration.GetSection(SimFlightPlanOptions.SectionName));
+
         services.AddOptions<ToolbarPanelOptions>()
             .Bind(configuration.GetSection(ToolbarPanelOptions.SectionName))
             .ValidateDataAnnotations();
@@ -281,6 +284,8 @@ public static class ServiceCollectionExtensions
         // so the developer controls on the dashboard can drive it directly.
         services.AddSingleton<MockSimulatorConnector>();
         services.AddSingleton<MsfsSimConnectConnector>();
+        services.AddSingleton<ISimulatorFlightPlanEvents>(
+            sp => sp.GetRequiredService<MsfsSimConnectConnector>());
         services.AddSingleton<SimulatorConnectorRouter>();
         services.AddSingleton<ISimulatorConnector>(sp =>
             sp.GetRequiredService<SimulatorConnectorRouter>());

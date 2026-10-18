@@ -33,6 +33,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
     private readonly SimulatorConnectorRouter _simulatorConnector;
     private readonly ProviderStatusService _providerStatus;
     private readonly UserSettingsService _userSettings;
+    private readonly SimFlightPlanService _simFlightPlan;
     private readonly IClock _clock;
     private readonly SimBriefOptions _simBriefOptions;
     private readonly ILogger<FlightPlanViewModel> _logger;
@@ -52,6 +53,31 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
     /// <summary>The callsign of a local VFR flight; offered from the simulator's aircraft identifier.</summary>
     [ObservableProperty]
     private string _vfrCallsign = string.Empty;
+
+    /// <summary>
+    /// Imports the flight plan made in the simulator (the EFB, the world map, or the flight that
+    /// was just started): the plan the simulator announced last, or its newest plan file.
+    /// </summary>
+    [RelayCommand]
+    private async Task ImportSimulatorPlanAsync()
+    {
+        IsImporting = true;
+        StatusIsError = false;
+
+        try
+        {
+            SimFlightPlanImportResult result = await _simFlightPlan
+                .ImportLatestAsync(CancellationToken.None)
+                .ConfigureAwait(true);
+
+            StatusIsError = !result.Imported;
+            StatusMessage = result.Message;
+        }
+        finally
+        {
+            IsImporting = false;
+        }
+    }
 
     /// <summary>
     /// Starts a local VFR flight at the aerodrome the pilot is on, with no flight plan: the plan
@@ -203,6 +229,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
         SimulatorConnectorRouter simulatorConnector,
         ProviderStatusService providerStatus,
         UserSettingsService userSettings,
+        SimFlightPlanService simFlightPlan,
         IClock clock,
         IOptions<SimBriefOptions> simBriefOptions,
         ILogger<FlightPlanViewModel> logger)
@@ -213,6 +240,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
             simulatorConnector ?? throw new ArgumentNullException(nameof(simulatorConnector));
         _providerStatus = providerStatus ?? throw new ArgumentNullException(nameof(providerStatus));
         _userSettings = userSettings ?? throw new ArgumentNullException(nameof(userSettings));
+        _simFlightPlan = simFlightPlan ?? throw new ArgumentNullException(nameof(simFlightPlan));
         _clock = clock ?? throw new ArgumentNullException(nameof(clock));
         _simBriefOptions = simBriefOptions?.Value ?? throw new ArgumentNullException(nameof(simBriefOptions));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

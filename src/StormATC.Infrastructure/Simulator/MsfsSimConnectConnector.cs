@@ -272,6 +272,9 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
     {
         SetCom1ActiveHz = 0,
         SelectCom1Transmitter = 1,
+        FlightPlanActivated = 2,
+        FlightPlanDeactivated = 3,
+        FlightLoaded = 4,
     }
 
     private enum NotificationGroups
@@ -822,6 +825,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         _simConnect.OnRecvFacilityDataEnd += OnReceiveFacilityDataEnd;
         _simConnect.OnRecvQuit += OnReceiveQuit;
         _simConnect.OnRecvException += OnReceiveException;
+        SubscribeToFlightPlanEvents(_simConnect);
 
         int requestedRate = Math.Max(1, _options.UpdatesPerSecond);
         uint frameInterval = (uint)Math.Max(0, (30 / requestedRate) - 1);
@@ -1558,6 +1562,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
                 _simConnect.OnRecvSimobjectDataBytype -= OnReceiveNearbyTraffic;
                 _simConnect.OnRecvFacilityData -= OnReceiveFacilityData;
                 _simConnect.OnRecvFacilityDataEnd -= OnReceiveFacilityDataEnd;
+                UnsubscribeFromFlightPlanEvents(_simConnect);
                 _simConnect.OnRecvQuit -= OnReceiveQuit;
                 _simConnect.OnRecvException -= OnReceiveException;
                 _simConnect.Dispose();

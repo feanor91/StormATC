@@ -26,6 +26,7 @@ public static class DesktopServiceCollectionExtensions
         services.AddSingleton<ProviderStatusService>();
         services.AddSingleton<UserSettingsService>();
         services.AddSingleton<IVoiceRejection, VoiceRejectionService>();
+        services.AddSingleton<SimFlightPlanService>();
         services.AddSingleton<AtisBroadcastService>();
         services.AddSingleton<ApplicationStartupService>();
 

@@ -70,6 +70,10 @@ public partial class App : System.Windows.Application
                 "StormATC {Version} starting. Flight simulation only.",
                 MainWindowViewModel.VersionText);
 
+            // Listens for the flight plans the pilot makes in the simulator from the start, so a
+            // plan activated before any window opens is not missed.
+            _host.Services.GetRequiredService<StormATC.Desktop.Services.SimFlightPlanService>();
+
             _watchdog = new StormATC.Desktop.Services.UiResponsivenessWatchdog(
                 Dispatcher,
                 _host.Services.GetRequiredService<ILogger<App>>());

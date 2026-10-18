@@ -52,6 +52,22 @@
         </StackPanel>
       </Border>
 
+      <!-- The plan made in the simulator -->
+      <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
+        <StackPanel>
+          <TextBlock Text="Simulator flight plan" Style="{StaticResource SectionHeaderStyle}" />
+          <TextBlock Text="A plan you activate in the simulator (the EFB, the world map) is picked up automatically while StormATC is open. If the page stayed empty, import it here: StormATC reads the plan the simulator announced last, or the plan of the flight you just started."
+                     Style="{StaticResource SecondaryTextStyle}"
+                     TextWrapping="Wrap"
+                     Margin="0,0,0,10" />
+          <Button Content="Import the simulator's flight plan"
+                  Style="{StaticResource PrimaryButtonStyle}"
+                  HorizontalAlignment="Left"
+                  Command="{Binding ImportSimulatorPlanCommand}"
+                  IsEnabled="{Binding IsImporting, Converter={StaticResource InverseBoolean}}" />
+        </StackPanel>
+      </Border>
+
       <!-- Import -->
       <Border Style="{StaticResource CardStyle}">
         <StackPanel>
