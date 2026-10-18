@@ -273,7 +273,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
 
     private enum ClientDataAreas
     {
-        Route = 0,
+        Route = 1,
     }
 
     private enum Events
@@ -283,6 +283,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         FlightPlanActivated = 2,
         FlightPlanDeactivated = 3,
         FlightLoaded = 4,
+        OneSecond = 5,
     }
 
     private enum NotificationGroups

@@ -165,8 +165,17 @@ static void ABufferTooSmallNeverWritesPastItsEnd()
     }
 }
 
+static void TheHelloIsValidJson()
+{
+    char buffer[256];
+
+    CHECK(stormatc::WriteHello(buffer, sizeof(buffer), 1));
+    CHECK(strcmp(buffer, "{\"seq\":1,\"source\":\"hello\",\"route\":{}}") == 0);
+}
+
 int main()
 {
+    TheHelloIsValidJson();
     AVfrRouteGivesItsAerodromesRunwaysAltitudeAndLegs();
     AFlightLevelAndNoAltitudeAreTold();
     AnEmptyRouteIsStillValid();

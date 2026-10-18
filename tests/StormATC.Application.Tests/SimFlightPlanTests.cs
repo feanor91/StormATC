@@ -201,6 +201,43 @@ public sealed class SimFlightPlanTests : IDisposable
         Assert.False(SimFlightPlanConverter.TryConvert(plan, callsign, Fixture.Now, out _));
     }
 
+    private static FlightPlan Converted(string text = CrossCountry, string callsign = "F-HAST")
+    {
+        Assert.True(PlnFlightPlanParser.TryParse(text, out SimFlightPlan? plan));
+        Assert.True(SimFlightPlanConverter.TryConvert(plan, callsign, Fixture.Now, out FlightPlan? flightPlan));
+        return flightPlan;
+    }
+
+    [Fact]
+    public void A_plan_announced_again_is_the_same_plan()
+    {
+        Assert.True(SimFlightPlanComparison.IsSamePlan(Converted(), Converted()));
+    }
+
+    [Fact]
+    public void Another_destination_runway_route_or_aircraft_is_another_plan()
+    {
+        FlightPlan current = Converted();
+
+        Assert.False(SimFlightPlanComparison.IsSamePlan(current, Converted(CustomFlight)));
+        Assert.False(SimFlightPlanComparison.IsSamePlan(current, Converted(callsign: "F-GXYZ")));
+        Assert.False(SimFlightPlanComparison.IsSamePlan(
+            current,
+            Converted(CrossCountry.Replace("<RunwayNumberFP>26</RunwayNumberFP>", "<RunwayNumberFP>8</RunwayNumberFP>"))));
+        Assert.False(SimFlightPlanComparison.IsSamePlan(
+            current,
+            Converted(CrossCountry.Replace("<ATCWaypoint id=\"SOUTH\">", "<ATCWaypoint id=\"EAST\">"))));
+    }
+
+    [Fact]
+    public void A_plan_from_another_source_or_none_is_never_the_same()
+    {
+        FlightPlan plan = Converted();
+
+        Assert.False(SimFlightPlanComparison.IsSamePlan(null, plan));
+        Assert.False(SimFlightPlanComparison.IsSamePlan(plan with { SourceIdentifier = "SimBrief" }, plan));
+    }
+
     [Fact]
     public void The_newest_plan_file_is_found()
     {

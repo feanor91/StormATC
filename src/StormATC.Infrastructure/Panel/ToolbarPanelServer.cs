@@ -345,7 +345,7 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
             return;
         }
 
-        if (source is not (SimRouteSources.Atc or SimRouteSources.Avionics or SimRouteSources.Efb))
+        if (source is not (SimRouteSources.Atc or SimRouteSources.Avionics or SimRouteSources.Efb or SimRouteSources.Hello))
         {
             response.StatusCode = (int)HttpStatusCode.BadRequest;
             return;

@@ -28,6 +28,7 @@ const EVENT_FLIGHT_PLAN_ACTIVATED = 2;
 // --- the fake simulator ---------------------------------------------------------------------------
 const calls = [];
 const published = [];
+const posts = [];
 const log = [];
 let memory;
 let table;
@@ -55,6 +56,20 @@ const imports = {
       return 0;
     },
     SimConnect_Close: () => { calls.push('close'); return 0; },
+    fsNetworkHttpRequestPost: (urlPointer, paramPointer) => {
+      // FsNetworkHttpRequestParam (packed, wasm32): postField, headerOptions, headerOptionsSize, data, dataSize.
+      const view = new DataView(memory.buffer);
+      const headersPointer = view.getUint32(paramPointer + 4, true);
+      const headerCount = view.getUint32(paramPointer + 8, true);
+      const dataPointer = view.getUint32(paramPointer + 12, true);
+      const dataSize = view.getUint32(paramPointer + 16, true);
+      const headers = [];
+      for (let i = 0; i < headerCount; i++) {
+        headers.push(text(view.getUint32(headersPointer + i * 4, true), 256));
+      }
+      posts.push({ url: text(urlPointer, 256), headers, body: text(dataPointer, dataSize) });
+      return 1n;
+    },
     fsPlannedRouteRegisterForBroadcast: (callback) => { calls.push('register'); broadcastIndex = callback; return 1; },
     fsPlannedRouteUnregisterForBroadcast: () => { calls.push('unregister'); return 1; },
     fsPlannedRouteGetEfbRoute: () => efbRoutePointer,
@@ -159,7 +174,10 @@ function broadcast(route) {
     'subscribe 1sec 1', 'subscribe FlightPlanActivated 2', 'subscribe FlightPlanDeactivated 3',
   ]);
   assert.ok(calls.includes('dispatch') && calls.includes('register'), 'dispatch and broadcast are registered');
-  assert.strictEqual(published.length, 1, 'the plan already in the EFB is published at start');
+  // The module greets first, so StormATC can tell that it was loaded, then publishes the EFB's plan.
+  assert.strictEqual(published.length, 2, 'a greeting and the plan already in the EFB are published at start');
+  assert.deepStrictEqual(JSON.parse(published[0].json), { seq: 1, source: 'hello', route: {} });
+  published.shift();
   let message = JSON.parse(published[0].json);
   assert.strictEqual(message.source, 'efb');
   assert.strictEqual(published[0].size, 8192, 'the whole area is written');
@@ -168,6 +186,13 @@ function broadcast(route) {
   assert.deepStrictEqual(message.route.departureRunway, { number: '08', designator: '' });
   assert.deepStrictEqual(message.route.cruiseAltitude, { isFlightLevel: false, altitude: 2500 });
   assert.strictEqual(message.route.isVfr, true);
+
+  // Every message also goes to StormATC's local server, with the marker header it asks for.
+  assert.strictEqual(posts.length, 2, 'the greeting and the plan are posted too');
+  assert.strictEqual(posts[0].url, 'http://127.0.0.1:48765/api/flightplan');
+  assert.deepStrictEqual(posts[0].headers, ['X-StormATC: 1', 'Content-Type: application/json']);
+  assert.strictEqual(JSON.parse(posts[0].body).source, 'hello');
+  assert.strictEqual(JSON.parse(posts[1].body).route.departureAirport.ident, 'LFPL');
 
   // 2. Nothing changes: the EFB's route is not published again.
   for (let i = 0; i < 4; i++) { send(EVENT_ID, EVENT_EVERY_SECOND); }
@@ -226,6 +251,10 @@ function broadcast(route) {
   send(EVENT_FILENAME_ID, EVENT_FLIGHT_PLAN_ACTIVATED, '.PLN');
   message = JSON.parse(published[5].json);
   assert.ok(message.route.enroute.length > 20 && message.route.enroute.length < 400, 'long route cut: ' + message.route.enroute.length);
+
+  // The HTTP road carries exactly what the SimConnect road carries.
+  assert.strictEqual(posts.length, published.length + 1, 'one post per message, and the greeting');
+  assert.strictEqual(JSON.parse(posts[posts.length - 1].body).seq, JSON.parse(published[published.length - 1].json).seq);
 
   // 9. Stop.
   exports_.module_deinit();

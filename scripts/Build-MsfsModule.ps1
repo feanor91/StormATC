@@ -54,6 +54,10 @@ try {
     $linkArguments = @(
         "--no-entry", "--allow-undefined", "--export-dynamic", "--export-table",
         "--export=malloc", "--export=free", "--export-if-defined=__wasm_call_ctors",
+        # What the simulator's own allocator reports to the host: modules built with the SDK's
+        # toolchain export these (the other modules in a Community folder do).
+        "--export-if-defined=mallinfo", "--export-if-defined=mchunkit_begin", "--export-if-defined=mchunkit_next",
+        "--export-if-defined=get_pages_state", "--export-if-defined=mark_decommit_pages",
         "-L$library",
         $object,
         "-lc",

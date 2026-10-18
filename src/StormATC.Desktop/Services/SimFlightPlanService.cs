@@ -45,6 +45,7 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
     private readonly IReadOnlyList<string> _folders;
     private string? _lastAnnouncedFile;
     private SimFlightPlan? _lastRoute;
+    private readonly SemaphoreSlim _importGate = new(1, 1);
     private (string File, DateTime Written)? _lastLoadedPlan;
 
     /// <summary>Creates the service and starts listening.</summary>
@@ -91,6 +92,7 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
     /// <inheritdoc />
     public void Dispose()
     {
+        _importGate.Dispose();
         _events.FlightPlanAnnounced -= OnAnnounced;
         _events.RouteReceived -= OnRouteReceived;
         _simulator.ConnectionChanged -= OnConnectionChanged;
@@ -116,7 +118,9 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
     /// </summary>
     private async void OnConnectionChanged(object? sender, SimulatorConnectionChangedEventArgs e)
     {
+        // The scripted aircraft also "connects": only the real simulator has a flight to read.
         if (e.State != SimulatorConnectionState.Connected
+            || _simulator is StormATC.Infrastructure.Simulator.SimulatorConnectorRouter { IsMockActive: true }
             || !_options.CurrentValue.Enabled
             || !_options.CurrentValue.ImportOnFlightLoaded)
         {
@@ -146,6 +150,12 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
         string routeJson,
         CancellationToken cancellationToken)
     {
+        if (source == SimRouteSources.Hello)
+        {
+            _logger.LogInformation("The StormATC module is running in the simulator.");
+            return false;
+        }
+
         if (!PlannedRouteParser.TryParse(routeJson, out SimFlightPlan? plan))
         {
             // An empty route: the pilot cleared the plan, or none was made yet.
@@ -154,19 +164,26 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
 
         _lastRoute = plan;
         _logger.LogInformation(
-            "The simulator's panel sent the {Source} route {Departure} to {Destination} ({Rules}){Initial}.",
+            "StormATC received the {Source} route {Departure} to {Destination} ({Rules}) from the simulator{Initial}.",
             source,
             plan.DepartureIcao,
             plan.DestinationIcao,
             plan.IsVfr ? "VFR" : "IFR",
-            initial ? ", already there when the panel started" : string.Empty);
+            initial ? " (it was already there when the reader started)" : string.Empty);
 
-        if (initial || !_options.CurrentValue.Enabled || source == SimRouteSources.Efb)
+        if (!_options.CurrentValue.Enabled || source == SimRouteSources.Efb)
         {
             return false;
         }
 
-        SimFlightPlanImportResult result = await ImportPlanAsync(plan, $"the simulator ({source})", cancellationToken)
+        // The route the pilot had already sent when StormATC started is applied too, unless it is
+        // the plan already in use (nothing to do) or a SimBrief plan the pilot brought (kept).
+        if (initial && _sessionContext.CurrentSession.FlightPlan is { SourceIdentifier: "SimBrief" })
+        {
+            return false;
+        }
+
+        SimFlightPlanImportResult result = await ImportPlanAsync(plan, $"the simulator ({source})", force: false, cancellationToken)
             .ConfigureAwait(false);
         return result.Imported;
     }
@@ -180,7 +197,7 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
     {
         if (_lastRoute is not null)
         {
-            return await ImportPlanAsync(_lastRoute, "the simulator's panel", cancellationToken).ConfigureAwait(false);
+            return await ImportPlanAsync(_lastRoute, "the simulator's panel", force: true, cancellationToken).ConfigureAwait(false);
         }
 
         // The folders where the simulator writes plans, then the places a plan saved from the EFB
@@ -196,7 +213,7 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
                 UiText.T("The simulator has not written a flight plan. Activate a plan in the simulator, then try again."));
         }
 
-        return await ImportFileAsync(file, cancellationToken).ConfigureAwait(false);
+        return await ImportFileAsync(file, force: true, cancellationToken).ConfigureAwait(false);
     }
 
     private async void OnAnnounced(object? sender, SimulatorFlightPlanEventArgs e)
@@ -211,12 +228,14 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
             switch (e.Kind)
             {
                 case SimulatorFlightPlanEventKind.Activated:
-                    string? file = e.FileName is not null && File.Exists(e.FileName)
+                    // A plan sent to ATC from the EFB is announced as ".PLN" with no path, and the plan
+                    // itself comes through the StormATC module (or the panel). Only a real path is a file.
+                    string? file = e.FileName is not null && Path.IsPathRooted(e.FileName) && File.Exists(e.FileName)
                         ? e.FileName
-                        : FreshFile();
-                    if (e.FileName is not null)
+                        : null;
+                    if (file is not null)
                     {
-                        _lastAnnouncedFile = e.FileName;
+                        _lastAnnouncedFile = file;
                     }
 
                     if (file is null)
@@ -229,7 +248,7 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
                         return;
                     }
 
-                    await ImportFileAsync(file, CancellationToken.None).ConfigureAwait(false);
+                    await ImportFileAsync(file, force: false, CancellationToken.None).ConfigureAwait(false);
                     break;
 
                 case SimulatorFlightPlanEventKind.FlightLoaded when _options.CurrentValue.ImportOnFlightLoaded:
@@ -242,15 +261,6 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
             // This runs on a SimConnect callback: nothing may escape it.
             _logger.LogWarning(ex, "The flight plan announced by the simulator could not be imported.");
         }
-    }
-
-    /// <summary>A plan file the simulator wrote in the last two minutes, for an announcement with no name.</summary>
-    private string? FreshFile()
-    {
-        string? newest = SimFlightPlanLocator.FindNewest(_folders);
-        return newest is not null && DateTime.UtcNow - File.GetLastWriteTimeUtc(newest) < TimeSpan.FromMinutes(2)
-            ? newest
-            : null;
     }
 
     /// <summary>
@@ -304,16 +314,16 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
         }
 
         _lastLoadedPlan = (plan, written);
-        await ImportFileAsync(plan, CancellationToken.None).ConfigureAwait(false);
+        await ImportFileAsync(plan, force: false, CancellationToken.None).ConfigureAwait(false);
     }
 
     /// <summary>Imports a <c>.PLN</c> file the pilot chose.</summary>
     /// <param name="file">The file's path.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     public Task<SimFlightPlanImportResult> ImportPlnFileAsync(string file, CancellationToken cancellationToken) =>
-        ImportFileAsync(file, cancellationToken);
+        ImportFileAsync(file, force: true, cancellationToken);
 
-    private async Task<SimFlightPlanImportResult> ImportFileAsync(string file, CancellationToken cancellationToken)
+    private async Task<SimFlightPlanImportResult> ImportFileAsync(string file, bool force, CancellationToken cancellationToken)
     {
         string text;
         try
@@ -332,16 +342,41 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
             return new SimFlightPlanImportResult(false, UiText.T("The simulator's flight plan file holds no usable plan."));
         }
 
-        return await ImportPlanAsync(simPlan, file, cancellationToken).ConfigureAwait(false);
+        return await ImportPlanAsync(simPlan, file, force, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Loads a plan read from the simulator into the session.</summary>
     /// <param name="simPlan">The plan.</param>
     /// <param name="origin">Where it was read, for the log: a file name or a route source.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
+    /// <param name="force">
+    /// True when the pilot asked for it: the plan is loaded again even if it is the one in use.
+    /// Otherwise a plan that is already loaded is left alone, so that the simulator announcing the
+    /// same plan several times does not reset the session each time.
+    /// </param>
     private async Task<SimFlightPlanImportResult> ImportPlanAsync(
         SimFlightPlan simPlan,
         string origin,
+        bool force,
+        CancellationToken cancellationToken)
+    {
+        // One plan at a time: the simulator announces a plan more than once in a moment, and each
+        // load resets the session.
+        await _importGate.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            return await LoadPlanAsync(simPlan, origin, force, cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            _importGate.Release();
+        }
+    }
+
+    private async Task<SimFlightPlanImportResult> LoadPlanAsync(
+        SimFlightPlan simPlan,
+        string origin,
+        bool force,
         CancellationToken cancellationToken)
     {
         AtcSession current = _sessionContext.CurrentSession;
@@ -351,11 +386,32 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
                 ? existing.Callsign.Original
                 : null;
 
+        // With no simulator (the scripted aircraft) there is no registration to wait for: the
+        // flight keeps the callsign it has. With the simulator, the registration is awaited.
+        if (callsign is null && _simulator is StormATC.Infrastructure.Simulator.SimulatorConnectorRouter { IsMockActive: true } && current.Callsign is { } placeholder)
+        {
+            callsign = placeholder.Original;
+        }
+
         if (!SimFlightPlanConverter.TryConvert(simPlan, callsign, _clock.UtcNow, out FlightPlan? plan))
         {
+            _logger.LogInformation(
+                "The simulator's flight plan from {Origin} was not loaded: the aircraft's registration is not known yet.",
+                origin);
             return new SimFlightPlanImportResult(
                 false,
                 UiText.T("The aircraft's registration is not known yet: StormATC could not name the flight."));
+        }
+
+        FlightRules rulesOfPlan = simPlan.IsVfr ? FlightRules.Vfr : FlightRules.Ifr;
+        if (!force && IsAlreadyLoaded(_sessionContext.CurrentSession, plan, rulesOfPlan))
+        {
+            _logger.LogInformation(
+                "The simulator's flight plan {Summary} is already the one in use; left as it is.",
+                plan.ToSummary());
+            return new SimFlightPlanImportResult(
+                true,
+                UiText.T("Flight plan imported from the simulator: ") + $"{plan.DepartureIcao} → {plan.DestinationIcao}.");
         }
 
         _sessionContext.PreassignedSquawk = null;
@@ -371,4 +427,8 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
             true,
             UiText.T("Flight plan imported from the simulator: ") + $"{plan.DepartureIcao} → {plan.DestinationIcao} ({rules}).");
     }
+
+    /// <summary>Whether the session already runs this plan from the simulator.</summary>
+    private static bool IsAlreadyLoaded(AtcSession session, FlightPlan plan, FlightRules rules) =>
+        session.FlightRules == rules && SimFlightPlanComparison.IsSamePlan(session.FlightPlan, plan);
 }

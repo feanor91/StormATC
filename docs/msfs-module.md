@@ -7,8 +7,11 @@ principal de recevoir un plan : voir [vol VFR](vfr.md).
 ## Ce qu'il fait
 
 Le module est chargé avec le simulateur (il n'a pas besoin du panneau ni d'un vol en cours). Il
-écoute l'API officielle « Planned Route » et publie le plan dans une zone de données SimConnect
-(`StormATC.Route`) que StormATC lit :
+écoute l'API officielle « Planned Route » et publie le plan **par deux chemins**, pour qu'un chemin qui
+échoue ne perde pas le plan : une zone de données SimConnect (`StormATC.Route`) que StormATC lit, et une
+requête HTTP vers le serveur local de StormATC (`http://127.0.0.1:48765/api/flightplan`, le même que celui
+du panneau) par l'API réseau du simulateur. StormATC applique un plan une seule fois : la seconde copie
+d'un plan déjà chargé ne change rien. Les routes publiées :
 
 | Source | Quand |
 | --- | --- |
@@ -27,8 +30,9 @@ L'installeur de StormATC le place avec le panneau dans le dossier **Community** 
 des paramètres le copie aussi. **Redémarrez MSFS** après la première installation : un module se
 charge au démarrage du simulateur.
 
-Le journal de StormATC (`%LOCALAPPDATA%\StormATC\logs`) montre ce qui arrive :
-`The StormATC module in the simulator published the atc route …`. Si rien n'arrive après un
+Le journal de StormATC (`%LOCALAPPDATA%\StormATC\logs`) montre ce qui arrive : au démarrage du
+simulateur, « The StormATC module is running in the simulator » (le module est chargé), puis, à chaque
+envoi, « StormATC received the atc route … from the simulator ». Si rien n'arrive après un
 « Envoyer à l'ATC », le module n'est pas chargé : le panneau de la barre d'outils reste alors le moyen
 de lecture en vol, et un fichier `.PLN` le moyen de secours.
 

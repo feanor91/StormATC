@@ -51,6 +51,12 @@ Uninstallable=yes
 UninstallDisplayIcon={app}\{#AppExeName}
 ChangesAssociations=no
 ChangesEnvironment=no
+; Setup enables Windows' RedirectionGuard by default, which blocks NTFS junctions. MSFS from the
+; Microsoft Store keeps its Community folder behind one (LocalCache is a junction to the drive the
+; game is installed on), so with the guard Setup could not install the toolbar panel and the module
+; there, and StormATC started by Setup inherited the restriction and could not find the folder either.
+; Setup runs without administrator rights and only writes to the user's own folders.
+RedirectionGuard=no
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"

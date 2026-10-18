@@ -225,4 +225,15 @@ inline bool WriteMessage(char* buffer, size_t capacity, long sequence, const cha
     return !json.overflowed();
 }
 
+// The module's greeting, published once when it starts: it is running and has nothing to say yet.
+// StormATC logs it, which tells the pilot that the module was loaded.
+inline bool WriteHello(char* buffer, size_t capacity, long sequence)
+{
+    JsonBuffer json(buffer, capacity);
+    json.raw("{\"seq\":");
+    json.integer(sequence);
+    json.raw(",\"source\":\"hello\",\"route\":{}}");
+    return !json.overflowed();
+}
+
 } // namespace stormatc

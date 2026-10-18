@@ -257,6 +257,46 @@ public sealed class ToolbarPanelServerTests : IDisposable
     }
 
     [Fact]
+    public async Task The_message_the_simulator_module_posts_is_accepted_as_it_is()
+    {
+        var routes = new FakeRoutes(applied: true);
+        (ToolbarPanelServer server, HttpClient client) = await StartWithRoutesAsync(routes);
+        using (server)
+        using (client)
+        {
+            // What msfs-wasm/src/route_json.h writes: a sequence number, the source and the route.
+            const string fromTheModule =
+                """{"seq":4,"source":"atc","route":{"departureAirport":{"type":"A","region":"LF","airport":"LFPL","ident":"LFPL"},"isVfr":true,"enroute":[]}}""";
+
+            using HttpResponseMessage response = await client.SendAsync(RouteRequest(fromTheModule));
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            (string source, bool initial, string route) = Assert.Single(routes.Received);
+            Assert.Equal("atc", source);
+            Assert.False(initial);
+            Assert.Contains("LFPL", route, StringComparison.Ordinal);
+            await server.StopAsync(CancellationToken.None);
+        }
+    }
+
+    [Fact]
+    public async Task The_modules_greeting_is_accepted()
+    {
+        var routes = new FakeRoutes(applied: false);
+        (ToolbarPanelServer server, HttpClient client) = await StartWithRoutesAsync(routes);
+        using (server)
+        using (client)
+        {
+            using HttpResponseMessage response = await client.SendAsync(
+                RouteRequest("""{"seq":1,"source":"hello","route":{}}"""));
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal("hello", Assert.Single(routes.Received).Source);
+            await server.StopAsync(CancellationToken.None);
+        }
+    }
+
+    [Fact]
     public async Task The_route_already_there_when_the_panel_started_is_flagged_as_initial()
     {
         var routes = new FakeRoutes(applied: false);

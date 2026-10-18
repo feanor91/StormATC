@@ -232,6 +232,30 @@ public static class SimFlightPlanConverter
     }
 }
 
+/// <summary>Compares plans read from the simulator.</summary>
+public static class SimFlightPlanComparison
+{
+    /// <summary>
+    /// Whether the plan in use is the same plan from the simulator: same aerodromes, runways, route
+    /// and aircraft. The simulator announces a plan more than once; a plan that is already loaded
+    /// is not loaded again, which would reset the session.
+    /// </summary>
+    /// <param name="current">The plan in use, or null.</param>
+    /// <param name="plan">The plan just read from the simulator.</param>
+    public static bool IsSamePlan(FlightPlan? current, FlightPlan plan)
+    {
+        ArgumentNullException.ThrowIfNull(plan);
+
+        return current is { SourceIdentifier: "Simulator" }
+            && current.DepartureIcao == plan.DepartureIcao
+            && current.DestinationIcao == plan.DestinationIcao
+            && current.DepartureRunway == plan.DepartureRunway
+            && current.ArrivalRunway == plan.ArrivalRunway
+            && current.Route == plan.Route
+            && current.Callsign.Normalized == plan.Callsign.Normalized;
+    }
+}
+
 /// <summary>Finds the simulator's flight plan files.</summary>
 public static class SimFlightPlanLocator
 {

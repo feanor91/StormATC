@@ -11,6 +11,9 @@ public static class SimRouteSources
 
     /// <summary>The route as the EFB shows it, whenever it changes.</summary>
     public const string Efb = "efb";
+
+    /// <summary>The module's greeting when it starts: it is running, there is no route to read yet.</summary>
+    public const string Hello = "hello";
 }
 
 /// <summary>Receives the flight plan routes the in-simulator panel reads from the simulator.</summary>
