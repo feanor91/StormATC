@@ -4,6 +4,7 @@ using System.Text.Json;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using StormATC.Application.Abstractions;
 using StormATC.Application.Options;
 using StormATC.Application.Panel;
 
@@ -26,6 +27,12 @@ namespace StormATC.Infrastructure.Panel;
 /// </remarks>
 public sealed class ToolbarPanelServer : IHostedService, IDisposable
 {
+    /// <summary>The address of the one request that changes anything.</summary>
+    public const string RejectVoicePath = "/api/voice/reject";
+
+    /// <summary>The header the panel adds to that request, so a plain web form cannot send it.</summary>
+    public const string RequestMarkerHeader = "X-StormATC";
+
     private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web);
 
     private static readonly Dictionary<string, string> ContentTypes = new(StringComparer.OrdinalIgnoreCase)
@@ -40,6 +47,7 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
     private readonly ToolbarPanelOptions _options;
     private readonly ILogger<ToolbarPanelServer> _logger;
     private readonly string _panelDirectory;
+    private readonly IVoiceRejection? _voices;
     private HttpListener? _listener;
     private CancellationTokenSource? _stopping;
     private Task? _loop;
@@ -49,12 +57,15 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
     /// <param name="options">The port and whether the server runs.</param>
     /// <param name="logger">The logger.</param>
     /// <param name="panelDirectory">The folder holding the panel's page, script and style.</param>
+    /// <param name="voices">Sets the last controller voice aside; null when there is nothing to judge.</param>
     public ToolbarPanelServer(
         IToolbarPanelStateSource state,
         IOptions<ToolbarPanelOptions> options,
         ILogger<ToolbarPanelServer> logger,
-        string panelDirectory)
+        string panelDirectory,
+        IVoiceRejection? voices = null)
     {
+        _voices = voices;
         _state = state ?? throw new ArgumentNullException(nameof(state));
         _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -172,11 +183,19 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
             response.Headers["Cache-Control"] = "no-store";
 
             string method = context.Request.HttpMethod;
+            string path = context.Request.Url!.AbsolutePath.TrimEnd('/');
+
             if (method == "OPTIONS")
             {
-                response.Headers["Access-Control-Allow-Methods"] = "GET, OPTIONS";
+                response.Headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS";
                 response.Headers["Access-Control-Allow-Headers"] = "*";
                 response.StatusCode = (int)HttpStatusCode.NoContent;
+                return;
+            }
+
+            if (method == "POST" && path == RejectVoicePath)
+            {
+                await RejectVoiceAsync(context, cancellationToken).ConfigureAwait(false);
                 return;
             }
 
@@ -186,7 +205,6 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
                 return;
             }
 
-            string path = context.Request.Url!.AbsolutePath.TrimEnd('/');
             switch (path)
             {
                 case "/api/state":
@@ -215,6 +233,64 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
         {
             response.Close();
         }
+    }
+
+    /// <summary>The one change the panel may ask for: set the last controller voice aside.</summary>
+    private async Task RejectVoiceAsync(HttpListenerContext context, CancellationToken cancellationToken)
+    {
+        HttpListenerResponse response = context.Response;
+
+        // A web page on another site could send this request to the loopback address from the
+        // pilot's browser. The simulator's panel sends the marker header; a page on the web
+        // cannot add it without a preflight, and the preflight is answered only for its origin.
+        if (context.Request.Headers[RequestMarkerHeader] != "1" || !IsTrustedOrigin(context.Request.Headers["Origin"]))
+        {
+            response.StatusCode = (int)HttpStatusCode.Forbidden;
+            return;
+        }
+
+        if (_voices is null)
+        {
+            response.StatusCode = (int)HttpStatusCode.NotFound;
+            return;
+        }
+
+        VoiceRejectionResult result = await _voices.RejectLastVoiceAsync(cancellationToken).ConfigureAwait(false);
+        await WriteAsync(
+            response,
+            "application/json; charset=utf-8",
+            JsonSerializer.SerializeToUtf8Bytes(
+                new { outcome = ToWire(result.Outcome), voice = result.Voice },
+                Json),
+            cancellationToken).ConfigureAwait(false);
+    }
+
+    private static string ToWire(VoiceRejectionOutcome outcome) => outcome switch
+    {
+        VoiceRejectionOutcome.SetAside => "setAside",
+        VoiceRejectionOutcome.NoVoiceYet => "noVoiceYet",
+        VoiceRejectionOutcome.ChosenInSettings => "chosenInSettings",
+        _ => "failed",
+    };
+
+    /// <summary>
+    /// Pages of the web are not trusted; the simulator's panel and a page served by this server are.
+    /// A request without an origin (a script, the panel's embedded browser) is not a web page.
+    /// </summary>
+    internal static bool IsTrustedOrigin(string? origin)
+    {
+        if (string.IsNullOrWhiteSpace(origin))
+        {
+            return true;
+        }
+
+        if (!Uri.TryCreate(origin, UriKind.Absolute, out Uri? uri))
+        {
+            // "null" and other opaque origins: the simulator's own pages and local files.
+            return !origin.StartsWith("http", StringComparison.OrdinalIgnoreCase);
+        }
+
+        return uri.Scheme is not ("http" or "https") || IsLoopbackHost(uri.Host);
     }
 
     private async Task WriteFileAsync(HttpListenerResponse response, string name, CancellationToken cancellationToken)

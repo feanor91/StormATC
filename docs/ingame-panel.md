@@ -8,6 +8,15 @@ StormATC ajoute une fenêtre à la barre d'outils de Microsoft Flight Simulator.
   circuit VFR, approche, etc.), avec ce que le contrôleur répond, puis les appels toujours possibles
   (« répétez », « quelle est la fréquence de la Tour ? »…). L'onglet change tout seul avec la phase.
 
+En bas de l'onglet Dialogue ATC, la **voix du contrôleur** qui vient de parler est indiquée, avec le
+bouton **Je n'aime pas cette voix**. Il écarte cette voix (ou ce locuteur d'un modèle multi-voix) :
+elle est ajoutée à `PiperExcludedVoices`, comme avec le bouton du tableau de bord, et le contrôleur
+en reçoit une autre à sa prochaine transmission. Le bouton reste grisé tant qu'une autre voix n'a pas
+parlé, pour ne pas écarter deux fois la même. La voix choisie dans les paramètres ne peut pas être
+écartée d'ici (le panneau le dit) : elle se change dans StormATC. Cela évite l'aller-retour entre le
+simulateur et StormATC, surtout en VR. La barre n'apparaît que si le moteur de voix local (Piper)
+est actif.
+
 Dans l'onglet Phraséologie, des boutons permettent de lire **n'importe quelle phase** : **Auto** suit
 le vol (la phase en cours porte un ●), un autre bouton fixe la phase affichée. Utile en VFR si la
 session est restée en règles IFR, ou pour préparer la suite. La phase « automatique » vient de la
@@ -86,12 +95,15 @@ panneau est indisponible).
 Le panneau est une page web dans le simulateur. Elle ne peut pas lire la session de StormATC
 directement : StormATC héberge donc un petit serveur local (`ToolbarPanelServer`), qui n'écoute que
 sur l'interface de boucle locale (127.0.0.1), ne répond qu'aux requêtes de lecture et refuse un autre
-nom d'hôte.
+nom d'hôte. La seule requête qui change quelque chose est `POST /api/voice/reject` (le bouton
+ci-dessus) : elle exige l'en-tête `X-StormATC` et est refusée si elle vient d'une page web d'un autre
+site, pour qu'un site visité dans le navigateur ne puisse pas écarter vos voix.
 
 | Adresse | Contenu |
 | --- | --- |
 | `/api/state` | L'état en JSON : vol, contrôleur, fréquence, phase, derniers échanges (80 au plus), exemples de la phase |
 | `/panel` | La page, pour un navigateur ou une superposition VR |
+| `POST /api/voice/reject` | Écarte la voix du contrôleur qui vient de parler |
 
 Les exemples viennent de `PhraseologyCatalog` (français et anglais, pour chaque phase et pour le
 vol VFR) ; ce sont des exemples de formation, le moteur décide seul de ce qui est autorisé.
@@ -122,8 +134,8 @@ fenêtre de MSFS et pour la page web.
 
 ## Limites
 
-- Le panneau est en lecture seule : il affiche, il ne pilote pas StormATC. Le push-to-talk reste celui
-  de StormATC.
+- Le panneau affiche et ne pilote pas StormATC, à une exception : le bouton « Je n'aime pas cette
+  voix ». Le push-to-talk reste celui de StormATC.
 - Pas de choix manuel de la phase affichée dans l'onglet Phraséologie : elle suit le vol.
 - Le serveur écoute en HTTP sur la boucle locale ; une autre page web ouverte sur le même PC peut lire
   l'état (dialogue radio, rien de secret). Les requêtes qui ne viennent pas de `127.0.0.1` ou

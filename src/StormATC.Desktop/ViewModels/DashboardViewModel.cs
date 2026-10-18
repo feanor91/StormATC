@@ -43,8 +43,7 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
     private readonly RadioActivityState _radioActivity;
     private readonly ISpeechRecognitionService _speechRecognition;
     private readonly ITextToSpeechService _textToSpeech;
-    private readonly IOptionsMonitor<LocalVoiceOptions> _localVoiceOptions;
-    private readonly UserSettingsService _userSettings;
+    private readonly IVoiceRejection _voiceRejection;
 
     /// <summary>The local voice that spoke last, shown under the replay button.</summary>
     [ObservableProperty]
@@ -260,12 +259,10 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
         IOptionsMonitor<ApplicationOptions> applicationOptions,
         IOptionsMonitor<AudioOptions> audioOptions,
         IOptionsMonitor<TrafficOptions> trafficOptions,
-        IOptionsMonitor<LocalVoiceOptions> localVoiceOptions,
-        UserSettingsService userSettings,
+        IVoiceRejection voiceRejection,
         ILogger<DashboardViewModel> logger)
     {
-        _localVoiceOptions = localVoiceOptions ?? throw new ArgumentNullException(nameof(localVoiceOptions));
-        _userSettings = userSettings ?? throw new ArgumentNullException(nameof(userSettings));
+        _voiceRejection = voiceRejection ?? throw new ArgumentNullException(nameof(voiceRejection));
         _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
         _coordinator = coordinator ?? throw new ArgumentNullException(nameof(coordinator));
         _stateChangeMonitor = stateChangeMonitor ?? throw new ArgumentNullException(nameof(stateChangeMonitor));
@@ -546,44 +543,19 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
     [RelayCommand]
     private async Task RejectLastVoiceAsync()
     {
-        if ((_textToSpeech as ILastVoiceReporter)?.LastVoice is not SpokenVoice voice)
+        VoiceRejectionResult result = await _voiceRejection
+            .RejectLastVoiceAsync(CancellationToken.None)
+            .ConfigureAwait(true);
+
+        StatusMessage = result.Outcome switch
         {
-            StatusMessage = UiText.T("No local voice has spoken yet.");
-            return;
-        }
-
-        if (!voice.CanExclude)
-        {
-            StatusMessage = UiText.T("This is the voice chosen in Settings. Choose another one there.");
-            return;
-        }
-
-        try
-        {
-            string[] excluded =
-            [
-                .. _localVoiceOptions.CurrentValue.PiperExcludedVoices
-                    .Where(entry => !string.Equals(entry, voice.ExclusionEntry, StringComparison.OrdinalIgnoreCase)),
-                voice.ExclusionEntry,
-            ];
-
-            var array = new System.Text.Json.Nodes.JsonArray();
-            foreach (string entry in excluded)
-            {
-                array.Add(entry);
-            }
-
-            await _userSettings
-                .SaveAsync(LocalVoiceOptions.SectionName, "PiperExcludedVoices", array, CancellationToken.None)
-                .ConfigureAwait(true);
-
-            StatusMessage = UiText.T($"Voice {voice.Description} set aside. The controller will use another voice next time.");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Setting the voice aside failed.");
-            StatusMessage = UiText.T("The voice could not be set aside. See the Diagnostics page for details.");
-        }
+            VoiceRejectionOutcome.NoVoiceYet => UiText.T("No local voice has spoken yet."),
+            VoiceRejectionOutcome.ChosenInSettings =>
+                UiText.T("This is the voice chosen in Settings. Choose another one there."),
+            VoiceRejectionOutcome.SetAside =>
+                UiText.T($"Voice {result.Voice} set aside. The controller will use another voice next time."),
+            _ => UiText.T("The voice could not be set aside. See the Diagnostics page for details."),
+        };
     }
 
     /// <summary>Submits a transmission through the full pipeline.</summary>

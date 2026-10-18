@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Text.Json;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using StormATC.Application.Abstractions;
 using StormATC.Application.Options;
 using StormATC.Application.Panel;
 using StormATC.Infrastructure.Panel;
@@ -36,6 +37,155 @@ public sealed class ToolbarPanelServerTests : IDisposable
             new ToolbarPanelLabels("Dialogue ATC", "Phraséologie", "Vous", "Contrôleur", "-", "-", "-", "-", "-", "-", "-", "-"),
             [new ToolbarPanelTurn("1", "10:00", "pilot", "Vous", "Bonjour")],
             new ToolbarPanelPhraseology("Departure", "Point d'attente", [], [], []));
+    }
+
+    private sealed class FakeVoices(VoiceRejectionOutcome outcome) : IVoiceRejection
+    {
+        public int Rejections { get; private set; }
+
+        public SpokenVoice? LastVoice => new("fr_FR-mls-medium, speaker 42", "fr_FR-mls-medium:42", true);
+
+        public Task<VoiceRejectionResult> RejectLastVoiceAsync(CancellationToken cancellationToken)
+        {
+            Rejections++;
+            return Task.FromResult(new VoiceRejectionResult(outcome, "fr_FR-mls-medium, speaker 42"));
+        }
+    }
+
+    private async Task<(ToolbarPanelServer Server, HttpClient Client)> StartWithVoicesAsync(IVoiceRejection? voices)
+    {
+        int port = FreePort();
+        var server = new ToolbarPanelServer(
+            new FixedState(),
+            Options.Create(new ToolbarPanelOptions { Port = port }),
+            NullLogger<ToolbarPanelServer>.Instance,
+            _folder,
+            voices);
+
+        await server.StartAsync(CancellationToken.None);
+        return (server, new HttpClient { BaseAddress = new Uri($"http://127.0.0.1:{port}/") });
+    }
+
+    private static HttpRequestMessage RejectRequest(string? marker = "1", string? origin = null)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Post, "api/voice/reject") { Content = new StringContent(string.Empty) };
+        if (marker is not null)
+        {
+            request.Headers.Add("X-StormATC", marker);
+        }
+
+        if (origin is not null)
+        {
+            request.Headers.TryAddWithoutValidation("Origin", origin);
+        }
+
+        return request;
+    }
+
+    [Fact]
+    public async Task The_panel_can_set_the_last_voice_aside()
+    {
+        var voices = new FakeVoices(VoiceRejectionOutcome.SetAside);
+        (ToolbarPanelServer server, HttpClient client) = await StartWithVoicesAsync(voices);
+        using (server)
+        using (client)
+        {
+            using HttpResponseMessage response = await client.SendAsync(RejectRequest());
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            using JsonDocument json = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+            Assert.Equal("setAside", json.RootElement.GetProperty("outcome").GetString());
+            Assert.Equal("fr_FR-mls-medium, speaker 42", json.RootElement.GetProperty("voice").GetString());
+            Assert.Equal(1, voices.Rejections);
+
+            await server.StopAsync(CancellationToken.None);
+        }
+    }
+
+    [Theory]
+    [InlineData(VoiceRejectionOutcome.ChosenInSettings, "chosenInSettings")]
+    [InlineData(VoiceRejectionOutcome.NoVoiceYet, "noVoiceYet")]
+    [InlineData(VoiceRejectionOutcome.Failed, "failed")]
+    public async Task The_outcome_is_reported_to_the_panel(VoiceRejectionOutcome outcome, string expected)
+    {
+        (ToolbarPanelServer server, HttpClient client) = await StartWithVoicesAsync(new FakeVoices(outcome));
+        using (server)
+        using (client)
+        {
+            using HttpResponseMessage response = await client.SendAsync(RejectRequest());
+
+            using JsonDocument json = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+            Assert.Equal(expected, json.RootElement.GetProperty("outcome").GetString());
+            await server.StopAsync(CancellationToken.None);
+        }
+    }
+
+    [Theory]
+    [InlineData(null, "http://evil.example")]
+    [InlineData("1", "http://evil.example")]
+    [InlineData("1", "https://evil.example")]
+    [InlineData("0", null)]
+    public async Task A_request_from_a_web_page_or_without_the_marker_is_refused(string? marker, string? origin)
+    {
+        var voices = new FakeVoices(VoiceRejectionOutcome.SetAside);
+        (ToolbarPanelServer server, HttpClient client) = await StartWithVoicesAsync(voices);
+        using (server)
+        using (client)
+        {
+            using HttpResponseMessage response = await client.SendAsync(RejectRequest(marker, origin));
+
+            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+            Assert.Equal(0, voices.Rejections);
+            await server.StopAsync(CancellationToken.None);
+        }
+    }
+
+    [Theory]
+    [InlineData("coui://html_ui")]
+    [InlineData("null")]
+    [InlineData("file://")]
+    public async Task The_simulators_own_pages_are_trusted(string origin)
+    {
+        var voices = new FakeVoices(VoiceRejectionOutcome.SetAside);
+        (ToolbarPanelServer server, HttpClient client) = await StartWithVoicesAsync(voices);
+        using (server)
+        using (client)
+        {
+            using HttpResponseMessage response = await client.SendAsync(RejectRequest(origin: origin));
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            await server.StopAsync(CancellationToken.None);
+        }
+    }
+
+    [Fact]
+    public async Task The_page_served_by_the_server_itself_is_trusted()
+    {
+        var voices = new FakeVoices(VoiceRejectionOutcome.SetAside);
+        (ToolbarPanelServer server, HttpClient client) = await StartWithVoicesAsync(voices);
+        using (server)
+        using (client)
+        {
+            using HttpResponseMessage response = await client.SendAsync(
+                RejectRequest(origin: client.BaseAddress!.GetLeftPart(UriPartial.Authority)));
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            await server.StopAsync(CancellationToken.None);
+        }
+    }
+
+    [Fact]
+    public async Task Without_a_voice_service_there_is_nothing_to_reject()
+    {
+        (ToolbarPanelServer server, HttpClient client) = await StartWithVoicesAsync(null);
+        using (server)
+        using (client)
+        {
+            using HttpResponseMessage response = await client.SendAsync(RejectRequest());
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            await server.StopAsync(CancellationToken.None);
+        }
     }
 
     private static int FreePort()

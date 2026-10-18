@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using StormATC.Application.Abstractions;
 using StormATC.Application.Atis;
 using StormATC.Desktop.Services;
 using StormATC.Desktop.ViewModels;
@@ -24,6 +25,7 @@ public static class DesktopServiceCollectionExtensions
 
         services.AddSingleton<ProviderStatusService>();
         services.AddSingleton<UserSettingsService>();
+        services.AddSingleton<IVoiceRejection, VoiceRejectionService>();
         services.AddSingleton<AtisBroadcastService>();
         services.AddSingleton<ApplicationStartupService>();
 

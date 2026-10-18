@@ -1,3 +1,4 @@
+using StormATC.Application.Abstractions;
 using StormATC.Application.Sessions;
 
 namespace StormATC.Application.Panel;
@@ -11,8 +12,12 @@ public interface IToolbarPanelStateSource
 
 /// <summary>The panel state of the session that is running.</summary>
 /// <param name="sessionContext">The running session.</param>
-public sealed class SessionToolbarPanelStateSource(AtcSessionContext sessionContext) : IToolbarPanelStateSource
+/// <param name="voices">The voice that spoke last, when a local voice engine reports it.</param>
+public sealed class SessionToolbarPanelStateSource(
+    AtcSessionContext sessionContext,
+    IVoiceRejection? voices = null) : IToolbarPanelStateSource
 {
     /// <inheritdoc />
-    public ToolbarPanelState Current() => ToolbarPanelStateBuilder.Build(sessionContext.CurrentSession);
+    public ToolbarPanelState Current() =>
+        ToolbarPanelStateBuilder.Build(sessionContext.CurrentSession, voices?.LastVoice);
 }

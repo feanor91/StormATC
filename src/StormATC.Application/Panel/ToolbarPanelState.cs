@@ -1,4 +1,5 @@
 using System.Globalization;
+using StormATC.Application.Abstractions;
 using StormATC.Domain;
 using StormATC.Domain.Phraseology;
 using StormATC.Domain.Sessions;
@@ -19,6 +20,7 @@ namespace StormATC.Application.Panel;
 /// The registration of the aircraft being flown, as the simulator reports it, or the callsign
 /// when it does not; the panel's window title.
 /// </param>
+/// <param name="Voice">The controller voice that spoke last, or null when there is none to judge.</param>
 public sealed record ToolbarPanelState(
     string Language,
     string Callsign,
@@ -29,7 +31,15 @@ public sealed record ToolbarPanelState(
     ToolbarPanelLabels Labels,
     IReadOnlyList<ToolbarPanelTurn> Turns,
     ToolbarPanelPhraseology Phraseology,
-    string Registration = "");
+    string Registration = "",
+    ToolbarPanelVoice? Voice = null);
+
+/// <summary>The controller voice that spoke last.</summary>
+/// <param name="Description">A short description, such as <c>fr_FR-mls-medium, speaker 42</c>.</param>
+/// <param name="CanReject">
+/// False for the voice chosen in Settings, which is changed there rather than set aside.
+/// </param>
+public sealed record ToolbarPanelVoice(string Description, bool CanReject);
 
 /// <summary>The stage of the flight.</summary>
 /// <param name="Key">A stable identifier.</param>
@@ -76,6 +86,12 @@ public sealed record ToolbarPanelStage(string Key, string Title, IReadOnlyList<P
 /// <param name="NoFlight">Shown while no flight has been loaded.</param>
 /// <param name="Auto">The button that follows the flight's current stage.</param>
 /// <param name="ChooseStage">Label above the stage buttons.</param>
+/// <param name="Voice">Label before the name of the voice that spoke last.</param>
+/// <param name="RejectVoice">The "I don't like this voice" button.</param>
+/// <param name="VoiceSetAside">Confirmation after a voice was set aside.</param>
+/// <param name="VoiceInSettings">Shown for the voice chosen in Settings.</param>
+/// <param name="NoVoiceYet">Shown while no local voice has spoken.</param>
+/// <param name="RejectFailed">Shown when the voice could not be set aside.</param>
 public sealed record ToolbarPanelLabels(
     string TabDialogue,
     string TabPhraseology,
@@ -88,7 +104,13 @@ public sealed record ToolbarPanelLabels(
     string Answer,
     string NoFlight,
     string Auto,
-    string ChooseStage);
+    string ChooseStage,
+    string Voice = "",
+    string RejectVoice = "",
+    string VoiceSetAside = "",
+    string VoiceInSettings = "",
+    string NoVoiceYet = "",
+    string RejectFailed = "");
 
 /// <summary>Builds the state the in-simulator panel shows from the current session.</summary>
 public static class ToolbarPanelStateBuilder
@@ -98,7 +120,8 @@ public static class ToolbarPanelStateBuilder
 
     /// <summary>Builds the panel state.</summary>
     /// <param name="session">The current session.</param>
-    public static ToolbarPanelState Build(AtcSession session)
+    /// <param name="voice">The controller voice that spoke last, when the engine reports one.</param>
+    public static ToolbarPanelState Build(AtcSession session, SpokenVoice? voice = null)
     {
         ArgumentNullException.ThrowIfNull(session);
 
@@ -150,7 +173,8 @@ public static class ToolbarPanelStateBuilder
                 ]),
             string.IsNullOrWhiteSpace(session.AircraftState.AtcIdentifier)
                 ? callsign
-                : session.AircraftState.AtcIdentifier.Trim());
+                : session.AircraftState.AtcIdentifier.Trim(),
+            voice is null ? null : new ToolbarPanelVoice(voice.Description, voice.CanExclude));
     }
 
     private static ToolbarPanelTurn ToTurn(ConversationTurn turn, IAtcPhraseology say, bool french)
@@ -185,7 +209,13 @@ public static class ToolbarPanelStateBuilder
             "Le contrôleur répond",
             "Aucun vol chargé : importez un plan de vol ou démarrez un vol VFR local dans StormATC.",
             "Auto",
-            "Choisir une phase")
+            "Choisir une phase",
+            "Voix",
+            "Je n'aime pas cette voix",
+            "Voix écartée : le contrôleur en aura une autre à sa prochaine transmission.",
+            "C'est la voix choisie dans les paramètres : changez-la dans StormATC.",
+            "Aucune voix locale n'a encore parlé.",
+            "La voix n'a pas pu être écartée. Voir la page Diagnostic de StormATC.")
         : new ToolbarPanelLabels(
             "ATC dialogue",
             "Phraseology",
@@ -198,5 +228,11 @@ public static class ToolbarPanelStateBuilder
             "The controller answers",
             "No flight loaded: import a flight plan or start a local VFR flight in StormATC.",
             "Auto",
-            "Choose a phase");
+            "Choose a phase",
+            "Voice",
+            "I don't like this voice",
+            "Voice set aside: the controller will use another one next time.",
+            "This is the voice chosen in settings: change it in StormATC.",
+            "No local voice has spoken yet.",
+            "The voice could not be set aside. See StormATC's Diagnostics page.");
 }

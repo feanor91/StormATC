@@ -61,6 +61,9 @@ var StormAtcPanel = (function () {
         var offline = false;
         var stickToBottom = true;
         var chosenStage = storageGet('stormatc.stage') || 'auto';
+        var rejectedVoice = '';
+        var rejecting = false;
+        var messageTimer = null;
 
         clear(root);
         root.className = 'sa-root';
@@ -93,9 +96,20 @@ var StormAtcPanel = (function () {
         body.appendChild(dialoguePane);
         body.appendChild(phraseologyPane);
 
+        // Under the conversation: which voice spoke last, and the button to set it aside.
+        var voiceBar = el('div', 'sa-voicebar');
+        var voiceText = el('div', 'sa-voicetext');
+        var rejectButton = el('button', 'sa-reject');
+        var voiceMessage = el('div', 'sa-voicemsg');
+        rejectButton.setAttribute('type', 'button');
+        voiceBar.appendChild(voiceText);
+        voiceBar.appendChild(rejectButton);
+        voiceBar.appendChild(voiceMessage);
+
         root.appendChild(header);
         root.appendChild(tabs);
         root.appendChild(body);
+        root.appendChild(voiceBar);
 
         // Inside the simulator's window the root gets no height from its parents, and the content
         // area only grows with its content. The window itself has a definite size: the root takes
@@ -123,6 +137,12 @@ var StormAtcPanel = (function () {
             applyScale();
         }
 
+        // The bar belongs to the conversation tab and appears once StormATC has answered.
+        function updateVoiceBar() {
+            var ready = lastState && lastState.labels && lastState.labels.rejectVoice;
+            voiceBar.style.display = (tab === 'dialogue' && ready) ? 'block' : 'none';
+        }
+
         function showTab(name) {
             tab = name;
             storageSet('stormatc.tab', name);
@@ -130,6 +150,7 @@ var StormAtcPanel = (function () {
             phraseologyPane.style.display = name === 'phraseology' ? 'block' : 'none';
             tabDialogue.className = 'sa-tab' + (name === 'dialogue' ? ' sa-active' : '');
             tabPhraseology.className = 'sa-tab' + (name === 'phraseology' ? ' sa-active' : '');
+            updateVoiceBar();
             if (name === 'dialogue') { scrollDialogue(true); }
         }
 
@@ -250,6 +271,60 @@ var StormAtcPanel = (function () {
             }
         }
 
+        function showVoiceMessage(text) {
+            voiceMessage.textContent = text;
+            if (messageTimer) { window.clearTimeout(messageTimer); }
+            messageTimer = window.setTimeout(function () { voiceMessage.textContent = ''; }, 7000);
+        }
+
+        function renderVoice(state) {
+            var labels = state.labels;
+            updateVoiceBar();
+            if (!labels.rejectVoice) { return; }
+
+            var voice = state.voice;
+            voiceText.textContent = voice ? labels.voice + ' : ' + voice.description : labels.noVoiceYet;
+            rejectButton.textContent = labels.rejectVoice;
+
+            // A voice that was just set aside waits for the next one before it can be judged again.
+            var already = voice && voice.description === rejectedVoice;
+            rejectButton.disabled = !voice || !voice.canReject || already || rejecting;
+            if (voice && !voice.canReject && !voiceMessage.textContent) {
+                voiceMessage.textContent = labels.voiceInSettings;
+            }
+        }
+
+        function rejectVoice() {
+            if (!lastState || !lastState.voice || rejecting) { return; }
+            var labels = lastState.labels;
+            var description = lastState.voice.description;
+            rejecting = true;
+            rejectButton.disabled = true;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', baseUrl() + '/api/voice/reject', true);
+            xhr.setRequestHeader('X-StormATC', '1');
+            xhr.timeout = 5000;
+            function done(text, accepted) {
+                rejecting = false;
+                if (accepted) { rejectedVoice = description; }
+                showVoiceMessage(text);
+                if (lastState) { renderVoice(lastState); }
+            }
+            xhr.onload = function () {
+                var outcome = 'failed';
+                try { outcome = JSON.parse(xhr.responseText).outcome; } catch (e) { /* keep failed */ }
+                if (xhr.status !== 200) { outcome = 'failed'; }
+                if (outcome === 'setAside') { done(labels.voiceSetAside, true); }
+                else if (outcome === 'chosenInSettings') { done(labels.voiceInSettings, false); }
+                else if (outcome === 'noVoiceYet') { done(labels.noVoiceYet, false); }
+                else { done(labels.rejectFailed, false); }
+            };
+            xhr.onerror = function () { done(labels.rejectFailed, false); };
+            xhr.ontimeout = function () { done(labels.rejectFailed, false); };
+            xhr.send('');
+        }
+
         function render(state) {
             lastState = state;
             renderStatus(state);
@@ -260,6 +335,7 @@ var StormAtcPanel = (function () {
             var wasAtBottom = dialoguePane.scrollHeight - dialoguePane.scrollTop - dialoguePane.clientHeight < 40;
             stickToBottom = stickToBottom || wasAtBottom;
             renderDialogue(state);
+            renderVoice(state);
             // A new message must not throw the pilot back to the top of the list being read.
             var readingAt = phraseologyPane.scrollTop;
             renderPhraseology(state);
@@ -308,9 +384,11 @@ var StormAtcPanel = (function () {
         };
         smaller.onclick = function () { setScale(scale - 0.15); };
         bigger.onclick = function () { setScale(scale + 0.15); };
+        rejectButton.onclick = rejectVoice;
         tabDialogue.onclick = function () { showTab('dialogue'); };
         tabPhraseology.onclick = function () { showTab('phraseology'); };
 
+        voiceBar.style.display = 'none';
         tabDialogue.textContent = 'Dialogue ATC';
         tabPhraseology.textContent = 'Phraséologie';
         applyScale();

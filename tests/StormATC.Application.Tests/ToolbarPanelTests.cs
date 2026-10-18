@@ -1,3 +1,4 @@
+using StormATC.Application.Abstractions;
 using StormATC.Application.Panel;
 using StormATC.Domain;
 using StormATC.Domain.FlightPlanning;
@@ -110,6 +111,51 @@ public class ToolbarPanelTests
         };
 
         Assert.Equal("FGABC", ToolbarPanelStateBuilder.Build(session).Registration);
+    }
+
+    [Fact]
+    public void The_last_voice_is_part_of_the_state_so_it_can_be_judged_in_the_cockpit()
+    {
+        var voice = new SpokenVoice("fr_FR-mls-medium, speaker 42", "fr_FR-mls-medium:42", CanExclude: true);
+
+        ToolbarPanelState state = ToolbarPanelStateBuilder.Build(Session(), voice);
+
+        Assert.NotNull(state.Voice);
+        Assert.Equal("fr_FR-mls-medium, speaker 42", state.Voice.Description);
+        Assert.True(state.Voice.CanReject);
+        Assert.Equal("Je n'aime pas cette voix", state.Labels.RejectVoice);
+    }
+
+    [Fact]
+    public void The_voice_chosen_in_settings_cannot_be_set_aside_from_the_panel()
+    {
+        var chosen = new SpokenVoice("fr_FR-tom-medium", "fr_FR-tom-medium", CanExclude: false);
+
+        Assert.False(ToolbarPanelStateBuilder.Build(Session(), chosen).Voice!.CanReject);
+    }
+
+    [Fact]
+    public void Without_a_local_voice_the_state_has_no_voice()
+    {
+        Assert.Null(ToolbarPanelStateBuilder.Build(Session()).Voice);
+    }
+
+    [Fact]
+    public void The_voice_labels_follow_the_radio_language()
+    {
+        Assert.Equal(
+            "I don't like this voice",
+            ToolbarPanelStateBuilder.Build(Session(language: PhraseologyLanguage.English)).Labels.RejectVoice);
+    }
+
+    [Fact]
+    public void A_voice_is_added_to_the_excluded_ones_once()
+    {
+        string[] first = VoiceExclusions.With(["fr_FR-gilles-low"], "fr_FR-mls-medium:42");
+        string[] again = VoiceExclusions.With(first, "FR_FR-MLS-MEDIUM:42");
+
+        Assert.Equal(["fr_FR-gilles-low", "fr_FR-mls-medium:42"], first);
+        Assert.Equal(["fr_FR-gilles-low", "FR_FR-MLS-MEDIUM:42"], again);
     }
 
     [Fact]

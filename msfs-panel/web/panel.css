@@ -104,3 +104,20 @@
 #StormAtcRoot { display: flex; flex-direction: column; flex-grow: 1; min-height: 0; }
 
 .sa-root button { font-family: inherit; }
+
+/* The voice bar: the last controller voice and the button to set it aside. */
+.sa-voicebar { flex: 0 0 auto; padding: 0.5em 0.6em; background: #0a1118; border-top: 1px solid #263544; }
+.sa-voicetext { font-size: 0.85em; color: #9fb3c8; margin-bottom: 0.4em; word-wrap: break-word; }
+.sa-reject {
+    width: 100%;
+    min-height: 2.8em;
+    border: 1px solid #a64b4b;
+    border-radius: 0.5em;
+    background: #5a2323;
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: 700;
+}
+.sa-reject:active { background: #7a2f2f; }
+.sa-reject:disabled { background: #1f2a35; border-color: #34475a; color: #6f8196; }
+.sa-voicemsg { font-size: 0.85em; color: #ffd166; margin-top: 0.4em; min-height: 1.2em; }
