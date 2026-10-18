@@ -122,6 +122,12 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
     /// </summary>
     private async void OnConnectionChanged(object? sender, SimulatorConnectionChangedEventArgs e)
     {
+        // A route the module gave in an earlier session of the simulator is not this one's.
+        if (e.State != SimulatorConnectionState.Connected)
+        {
+            _lastRoute = null;
+        }
+
         // The scripted aircraft also "connects": only the real simulator has a flight to read.
         if (e.State != SimulatorConnectionState.Connected
             || _simulator is StormATC.Infrastructure.Simulator.SimulatorConnectorRouter { IsMockActive: true }
@@ -283,6 +289,31 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
     /// </param>
     private async Task ImportLoadedFlightAsync(string? flightFile, bool requireRecent)
     {
+        // When the StormATC module is running, the EFB's route is the plan of the flight: the EFB starts
+        // with the plan the flight was started with and follows what the pilot does with it. It is
+        // newer than the plan file the simulator wrote when it loaded the flight, which may be the plan
+        // of an earlier flight (the pilot may be in the menus), so the file is not read.
+        if (requireRecent)
+        {
+            // The module's route is read when the link opens: give it a moment to arrive.
+            for (int attempt = 0; attempt < 12 && _lastRoute is null; attempt++)
+            {
+                await Task.Delay(250).ConfigureAwait(false);
+            }
+        }
+
+        if (requireRecent && _lastRoute is not null
+            && _sessionContext.CurrentSession.FlightPlan is not { SourceIdentifier: "SimBrief" })
+        {
+            await WaitForRegistrationAsync().ConfigureAwait(false);
+            if (_lastRoute is SimFlightPlan route)
+            {
+                _logger.LogInformation("The StormATC module already gave the EFB's plan; the simulator's plan file is not read.");
+                await ImportPlanAsync(route, "the simulator (EFB)", force: false, CancellationToken.None).ConfigureAwait(false);
+                return;
+            }
+        }
+
         // The plan of a free flight sits next to the .FLT file, with the same name.
         string? plan = flightFile is null ? null : Path.ChangeExtension(flightFile, ".PLN");
         if (plan is null || !File.Exists(plan))
@@ -316,14 +347,19 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
             return;
         }
 
-        // The aircraft's registration arrives with its first state, a moment after the link opens.
+        await WaitForRegistrationAsync().ConfigureAwait(false);
+
+        _lastLoadedPlan = (plan, written);
+        await ImportFileAsync(plan, force: false, CancellationToken.None).ConfigureAwait(false);
+    }
+
+    /// <summary>The aircraft's registration arrives with its first state, a moment after the link opens.</summary>
+    private async Task WaitForRegistrationAsync()
+    {
         for (int attempt = 0; attempt < 20 && string.IsNullOrWhiteSpace(_sessionContext.CurrentSession.AircraftState.AtcIdentifier); attempt++)
         {
             await Task.Delay(500).ConfigureAwait(false);
         }
-
-        _lastLoadedPlan = (plan, written);
-        await ImportFileAsync(plan, force: false, CancellationToken.None).ConfigureAwait(false);
     }
 
     /// <summary>Imports a <c>.PLN</c> file the pilot chose.</summary>
