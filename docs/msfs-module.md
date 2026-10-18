@@ -20,7 +20,10 @@ d'un plan déjà chargé ne change rien. Les routes publiées :
 | `efb` | Le plan de l'EFB change (modification en cours). Mémorisé par StormATC, pas appliqué tout seul. |
 
 StormATC applique `atc` et `avionics` : terrain de départ et d'arrivée, VFR ou IFR, pistes, altitude de
-croisière, points de la route. Le module ne fait que lire : il ne modifie ni le plan, ni l'avion, ni
+croisière, points de la route et, pour un vol IFR, la SID, la STAR et l'approche choisies dans l'EFB
+(par exemple `PILU2F`, `VEVA7R`, `ILS Y 04R`) : la clairance annonce alors la SID. Un vol VFR n'a pas
+de procédure aux instruments ; les points du circuit que l'EFB ajoute (RW08, ICLB, DDWND…) ne font pas
+partie de la route et ne sont pas repris. Le module ne fait que lire : il ne modifie ni le plan, ni l'avion, ni
 le simulateur.
 
 ## Installation

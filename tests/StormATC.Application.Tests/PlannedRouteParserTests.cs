@@ -90,4 +90,40 @@ public class PlannedRouteParserTests
     [InlineData("""{ "departureAirport": { "type": "", "region": "", "airport": "", "ident": "" }, "isVfr": true }""")]
     public void A_route_with_no_departure_is_an_empty_route(string route) =>
         Assert.False(PlannedRouteParser.TryParse(route, out _));
+
+    // What the module publishes for an IFR plan with its procedures (msfs-wasm/src/route_json.h).
+    private const string IfrRoute = """
+        {
+          "departureAirport": { "type": "A", "region": "", "airport": "", "ident": "LFPO" },
+          "departureRunway": { "number": "06", "designator": "" },
+          "destinationAirport": { "type": "A", "region": "", "airport": "", "ident": "LFMN" },
+          "destinationRunway": { "number": "04", "designator": "R" },
+          "departure": "PILU2F", "departureTransition": "",
+          "arrival": "VEVA7R", "arrivalTransition": "",
+          "approach": { "type": "ILS", "runway": { "number": "04", "designator": "R" }, "suffix": "Y", "transition": "NERA1" },
+          "cruiseAltitude": { "isFlightLevel": true, "altitude": 450 },
+          "isVfr": false,
+          "enroute": []
+        }
+        """;
+
+    [Fact]
+    public void An_ifr_route_gives_its_departure_arrival_and_approach()
+    {
+        Assert.True(PlannedRouteParser.TryParse(IfrRoute, out SimFlightPlan? plan));
+
+        Assert.Equal("PILU2F", plan.DepartureProcedure);
+        Assert.Equal("VEVA7R", plan.ArrivalProcedure);
+        Assert.Equal("ILS Y 04R", plan.Approach);
+    }
+
+    [Fact]
+    public void A_route_without_procedures_gives_none()
+    {
+        Assert.True(PlannedRouteParser.TryParse(VfrRoute, out SimFlightPlan? plan));
+
+        Assert.Null(plan.DepartureProcedure);
+        Assert.Null(plan.ArrivalProcedure);
+        Assert.Null(plan.Approach);
+    }
 }

@@ -16,6 +16,8 @@ const wasmPath = path.join(__dirname, '..', 'prebuilt', 'stormatc_route.wasm');
 const ROUTE = {
   size: 164, departureAirport: 0, departureRunway: 22, destinationAirport: 61, destinationRunway: 83,
   cruiseAltitude: 147, isVfr: 155, numEnrouteLegs: 156, enrouteLegs: 160,
+  departure: 30, arrival: 91, arrivalTransition: 100,
+  approach: 109, approachRunway: 113, approachSuffix: 121, approachTransition: 125,
 };
 const LEG = { size: 101, type: 0, fixIcao: 4, via: 26, name: 35, altitude: 39, lat: 47, lon: 55 };
 const ICAO = { type: 0, region: 1, airport: 4, ident: 13 };
@@ -109,7 +111,7 @@ function writeIcao(pointer, ident, type = 'A', region = 'LF') {
   writeString(pointer + ICAO.ident, ident, 9);
 }
 
-function newRoute({ departure, destination, runway = 8, designator = 0, vfr = true, altitude = 2500, legs = [] }) {
+function newRoute({ departure, destination, runway = 8, designator = 0, vfr = true, altitude = 2500, legs = [], sid, star, approach }) {
   const pointer = exports_.malloc(ROUTE.size);
   new Uint8Array(memory.buffer, pointer, ROUTE.size).fill(0);
   const view = new DataView(memory.buffer);
@@ -118,6 +120,19 @@ function newRoute({ departure, destination, runway = 8, designator = 0, vfr = tr
   view.setInt32(pointer + ROUTE.departureRunway + 4, designator, true);
   if (destination) {
     writeIcao(pointer + ROUTE.destinationAirport, destination);
+  }
+  if (sid) {
+    writeString(pointer + ROUTE.departure, sid, 9);
+  }
+  if (star) {
+    writeString(pointer + ROUTE.arrival, star, 9);
+  }
+  if (approach) {
+    view.setInt32(pointer + ROUTE.approach, approach.type, true);                // 4 = ILS
+    view.setInt32(pointer + ROUTE.approachRunway, approach.runway, true);
+    view.setInt32(pointer + ROUTE.approachRunway + 4, approach.designator, true);
+    writeString(pointer + ROUTE.approachSuffix, approach.suffix, 2);
+    writeString(pointer + ROUTE.approachTransition, approach.transition, 9);
   }
   view.setInt32(pointer + ROUTE.cruiseAltitude, altitude ? 1 : 0, true);   // 1 = feet
   view.setInt32(pointer + ROUTE.cruiseAltitude + 4, altitude, true);
@@ -238,13 +253,19 @@ function broadcast(route) {
   assert.strictEqual(published.length, 4);
 
   // 5. "Send to avionics": the broadcast carries the route.
-  broadcast(newRoute({ departure: 'LFPL', destination: 'LFPN', vfr: false, altitude: 0 }));
+  broadcast(newRoute({ departure: 'LFPL', destination: 'LFPN', vfr: false, altitude: 0,
+    sid: 'PILU2F', star: 'VEVA7R', approach: { type: 4, runway: 4, designator: 2, suffix: 'Y', transition: 'NERA1' } }));
   assert.strictEqual(published.length, 5);
   message = JSON.parse(published[4].json);
   assert.strictEqual(message.source, 'avionics');
   assert.strictEqual(message.route.destinationAirport.ident, 'LFPN');
   assert.strictEqual(message.route.isVfr, false);
   assert.strictEqual(message.route.cruiseAltitude, null);
+  // The procedures come through: SID, STAR and the approach with its runway, suffix and transition.
+  assert.strictEqual(message.route.departure, 'PILU2F');
+  assert.strictEqual(message.route.arrival, 'VEVA7R');
+  assert.deepStrictEqual(message.route.approach,
+    { type: 'ILS', runway: { number: '04', designator: 'R' }, suffix: 'Y', transition: 'NERA1' });
 
   // 6. A route with no departure (the EFB was cleared) is ignored.
   efbRoutePointer = newRoute({ departure: '', destination: '' });

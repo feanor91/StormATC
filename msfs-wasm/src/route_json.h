@@ -5,6 +5,7 @@
 //   departureAirport / destinationAirport { type, region, airport, ident }
 //   departureRunway / destinationRunway   { number, designator }
 //   enroute [ { fixIcao, via, hasLatLon, lat, lon, name } ]
+//   departure, departureTransition, arrival, arrivalTransition, approach { type, runway, suffix, transition } or null,
 //   cruiseAltitude { isFlightLevel, altitude } or null, isVfr
 //
 // Nothing here depends on the simulator: it only reads the plain structures of MSFS_PlannedRoute.h,
@@ -137,6 +138,26 @@ inline void WriteRunway(JsonBuffer& json, const FsRunwayIdentifier& runway)
     json.raw("}");
 }
 
+// How an approach is named on a chart.
+inline const char* ApproachTypeName(FsApproachProcedureType type)
+{
+    switch (type)
+    {
+        case FsApproachProcedureType_Gps: return "GPS";
+        case FsApproachProcedureType_Vor: return "VOR";
+        case FsApproachProcedureType_Ndb: return "NDB";
+        case FsApproachProcedureType_Ils: return "ILS";
+        case FsApproachProcedureType_Localizer: return "LOC";
+        case FsApproachProcedureType_Sdf: return "SDF";
+        case FsApproachProcedureType_Lda: return "LDA";
+        case FsApproachProcedureType_VorDme: return "VOR DME";
+        case FsApproachProcedureType_NdbDme: return "NDB DME";
+        case FsApproachProcedureType_Rnav: return "RNAV";
+        case FsApproachProcedureType_Localizer_Backcourse: return "LOC BC";
+        default: return "";
+    }
+}
+
 inline void WriteLeg(JsonBuffer& json, const FsEnrouteLeg& leg)
 {
     json.raw("{\"fixIcao\":");
@@ -165,6 +186,33 @@ inline bool WriteRoute(JsonBuffer& json, const FsPlannedRoute& route)
     WriteIcao(json, route.destinationAirport);
     json.raw(",\"destinationRunway\":");
     WriteRunway(json, route.destinationRunway);
+
+    // The procedures: the departure (SID) and arrival (STAR) with their transitions, and the approach.
+    json.raw(",\"departure\":");
+    json.text(route.departure, sizeof(route.departure));
+    json.raw(",\"departureTransition\":");
+    json.text(route.departureTransition, sizeof(route.departureTransition));
+    json.raw(",\"arrival\":");
+    json.text(route.arrival, sizeof(route.arrival));
+    json.raw(",\"arrivalTransition\":");
+    json.text(route.arrivalTransition, sizeof(route.arrivalTransition));
+    json.raw(",\"approach\":");
+    if (route.approach.type == FsApproachProcedureType_None)
+    {
+        json.raw("null");
+    }
+    else
+    {
+        json.raw("{\"type\":");
+        json.text(ApproachTypeName(route.approach.type), 16);
+        json.raw(",\"runway\":");
+        WriteRunway(json, route.approach.runway);
+        json.raw(",\"suffix\":");
+        json.text(route.approach.suffix, sizeof(route.approach.suffix));
+        json.raw(",\"transition\":");
+        json.text(route.approachTransition, sizeof(route.approachTransition));
+        json.raw("}");
+    }
 
     json.raw(",\"cruiseAltitude\":");
     if (route.cruiseAltitude.type == FsFlightAltitudeType_None)

@@ -260,4 +260,52 @@ public sealed class SimFlightPlanTests : IDisposable
 
         Assert.Null(SimFlightPlanLocator.FindNewest([_folder, Path.Combine(_folder, "missing")]));
     }
+
+    // The plan saved from the EFB for an IFR flight, with its departure, arrival and approach.
+    private const string OrlyNice = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <SimBase.Document>
+          <FlightPlan.FlightPlan>
+            <DepartureID>LFPO</DepartureID>
+            <DestinationID>LFMN</DestinationID>
+            <FPType>IFR</FPType>
+            <CruisingAlt>45000.000</CruisingAlt>
+            <DepartureDetails><RunwayNumberFP>6</RunwayNumberFP><DepartureFP>PILU2F</DepartureFP></DepartureDetails>
+            <ATCWaypoint id="FF307"><ATCWaypointType>Intersection</ATCWaypointType></ATCWaypoint>
+            <ArrivalDetails><RunwayNumberFP>4</RunwayNumberFP><RunwayDesignatorFP>RIGHT</RunwayDesignatorFP><ArrivalFP>VEVA7R</ArrivalFP></ArrivalDetails>
+            <ApproachDetails>
+              <ApproachTypeFP>ILS</ApproachTypeFP><RunwayNumberFP>4</RunwayNumberFP><RunwayDesignatorFP>RIGHT</RunwayDesignatorFP>
+              <SuffixFP>Y</SuffixFP><TransitionFP>NERA1</TransitionFP>
+            </ApproachDetails>
+          </FlightPlan.FlightPlan>
+        </SimBase.Document>
+        """;
+
+    [Fact]
+    public void An_ifr_plan_gives_its_procedures_to_the_flight_plan()
+    {
+        Assert.True(PlnFlightPlanParser.TryParse(OrlyNice, out SimFlightPlan? plan));
+        Assert.Equal("PILU2F", plan.DepartureProcedure);
+        Assert.Equal("VEVA7R", plan.ArrivalProcedure);
+        Assert.Equal("ILS Y 04R", plan.Approach);
+
+        Assert.True(SimFlightPlanConverter.TryConvert(plan, "F-HAST", Fixture.Now, out FlightPlan? flightPlan));
+
+        Assert.Equal("PILU2F", flightPlan.StandardInstrumentDeparture);
+        Assert.Equal("VEVA7R", flightPlan.StandardTerminalArrival);
+        Assert.Equal("ILS Y 04R", flightPlan.Approach);
+        Assert.Equal(45000, flightPlan.CruiseAltitude!.Value.Feet);
+    }
+
+    [Fact]
+    public void A_vfr_plan_keeps_no_instrument_procedure()
+    {
+        Assert.True(PlnFlightPlanParser.TryParse(OrlyNice.Replace("IFR", "VFR", StringComparison.Ordinal), out SimFlightPlan? plan));
+
+        Assert.True(SimFlightPlanConverter.TryConvert(plan, "F-HAST", Fixture.Now, out FlightPlan? flightPlan));
+
+        Assert.Null(flightPlan.StandardInstrumentDeparture);
+        Assert.Null(flightPlan.StandardTerminalArrival);
+        Assert.Null(flightPlan.Approach);
+    }
 }

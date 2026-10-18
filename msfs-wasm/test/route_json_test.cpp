@@ -79,6 +79,30 @@ static void AVfrRouteGivesItsAerodromesRunwaysAltitudeAndLegs()
     CHECK(Contains(buffer, "\"hasLatLon\":true,\"lat\":48.9,\"lon\":2.2"));
 }
 
+static void TheProceduresAreTold()
+{
+    FsPlannedRoute route = VfrRoute(nullptr, 0);
+    char buffer[2048];
+
+    // No procedure: empty names and no approach.
+    CHECK(stormatc::WriteMessage(buffer, sizeof(buffer), 1, "efb", route));
+    CHECK(Contains(buffer, "\"departure\":\"\",\"departureTransition\":\"\",\"arrival\":\"\",\"arrivalTransition\":\"\",\"approach\":null"));
+
+    snprintf(route.departure, sizeof(route.departure), "PILU2F");
+    snprintf(route.arrival, sizeof(route.arrival), "VEVA7R");
+    snprintf(route.arrivalTransition, sizeof(route.arrivalTransition), "VEVAD");
+    route.approach.type = FsApproachProcedureType_Ils;
+    route.approach.runway.number = FsRunwayIdentifierNumber_4;
+    route.approach.runway.designator = FsRunwayIdentifierDesignator_Right;
+    snprintf(route.approach.suffix, sizeof(route.approach.suffix), "Y");
+    snprintf(route.approachTransition, sizeof(route.approachTransition), "NERA1");
+
+    CHECK(stormatc::WriteMessage(buffer, sizeof(buffer), 2, "atc", route));
+    CHECK(Contains(buffer, "\"departure\":\"PILU2F\""));
+    CHECK(Contains(buffer, "\"arrival\":\"VEVA7R\",\"arrivalTransition\":\"VEVAD\""));
+    CHECK(Contains(buffer, "\"approach\":{\"type\":\"ILS\",\"runway\":{\"number\":\"04\",\"designator\":\"R\"},\"suffix\":\"Y\",\"transition\":\"NERA1\"}"));
+}
+
 static void AFlightLevelAndNoAltitudeAreTold()
 {
     FsPlannedRoute route = VfrRoute(nullptr, 0);
@@ -177,6 +201,7 @@ int main()
 {
     TheHelloIsValidJson();
     AVfrRouteGivesItsAerodromesRunwaysAltitudeAndLegs();
+    TheProceduresAreTold();
     AFlightLevelAndNoAltitudeAreTold();
     AnEmptyRouteIsStillValid();
     QuotesAndControlCharactersAreEscapedAndNonAsciiIsDropped();

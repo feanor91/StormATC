@@ -15,6 +15,9 @@ namespace StormATC.Application.FlightPlanning;
 /// <param name="DepartureRunway">The departure runway, such as <c>08</c> or <c>26L</c>, when the file gives one.</param>
 /// <param name="Waypoints">The waypoints between the two aerodromes, in order.</param>
 /// <param name="ArrivalRunway">The runway planned at the destination, such as <c>33</c>, when the plan gives one.</param>
+/// <param name="DepartureProcedure">The standard instrument departure (SID), such as <c>PILU2F</c>, when the plan has one.</param>
+/// <param name="ArrivalProcedure">The standard terminal arrival route (STAR), such as <c>VEVA7R</c>, when the plan has one.</param>
+/// <param name="Approach">The planned instrument approach, such as <c>ILS Y 04R</c>, when the plan has one.</param>
 public sealed record SimFlightPlan(
     string Title,
     string DepartureIcao,
@@ -23,7 +26,10 @@ public sealed record SimFlightPlan(
     int? CruisingAltitudeFeet,
     string? DepartureRunway,
     IReadOnlyList<SimFlightPlanWaypoint> Waypoints,
-    string? ArrivalRunway = null);
+    string? ArrivalRunway = null,
+    string? DepartureProcedure = null,
+    string? ArrivalProcedure = null,
+    string? Approach = null);
 
 /// <summary>A waypoint of a simulator flight plan.</summary>
 /// <param name="Identifier">The waypoint's identifier.</param>
@@ -103,7 +109,10 @@ public static class PlnFlightPlanParser
             cruise,
             ParseRunway(root, "DepartureDetails"),
             waypoints,
-            ParseRunway(root, "ArrivalDetails"));
+            ParseRunway(root, "ArrivalDetails"),
+            Procedure(root, "DepartureDetails", "DepartureFP"),
+            Procedure(root, "ArrivalDetails", "ArrivalFP"),
+            ParseApproach(root));
         return true;
     }
 
@@ -168,10 +177,53 @@ public static class PlnFlightPlanParser
         return value.ToString("00", CultureInfo.InvariantCulture) + suffix;
     }
 
+    private static string? Procedure(XElement root, string detailsName, string name)
+    {
+        XElement? details = root.Elements().FirstOrDefault(e => e.Name.LocalName == detailsName);
+        string value = details is null ? string.Empty : Text(details, name);
+        return value.Length == 0 ? null : value.ToUpperInvariant();
+    }
+
+    private static string? ParseApproach(XElement root)
+    {
+        XElement? details = root.Elements().FirstOrDefault(e => e.Name.LocalName == "ApproachDetails");
+        if (details is null)
+        {
+            return null;
+        }
+
+        return ApproachName.Compose(
+            Text(details, "ApproachTypeFP"),
+            Text(details, "SuffixFP"),
+            ParseRunway(root, "ApproachDetails"));
+    }
+
     private static string Text(XElement parent, string name) =>
         parent.Elements().FirstOrDefault(e => e.Name.LocalName == name)?.Value.Trim() ?? string.Empty;
 
     private static string Icao(string text) => text.Trim().ToUpperInvariant();
+}
+
+/// <summary>Writes an approach the way a chart names it.</summary>
+internal static class ApproachName
+{
+    /// <summary>For example <c>ILS Y 04R</c>; null when the plan names no approach type.</summary>
+    /// <param name="type">The approach type (ILS, RNAV, VOR…).</param>
+    /// <param name="suffix">The approach's suffix letter, such as <c>Y</c>.</param>
+    /// <param name="runway">The runway, such as <c>04R</c>.</param>
+    public static string? Compose(string? type, string? suffix, string? runway)
+    {
+        string kind = (type ?? string.Empty).Trim().ToUpperInvariant();
+        if (kind.Length == 0 || kind == "NONE")
+        {
+            return null;
+        }
+
+        return string.Join(
+            ' ',
+            new[] { kind, (suffix ?? string.Empty).Trim().ToUpperInvariant(), runway ?? string.Empty }
+                .Where(part => part.Length > 0));
+    }
 }
 
 /// <summary>Turns a simulator plan into the plan StormATC works from.</summary>
@@ -209,6 +261,10 @@ public static class SimFlightPlanConverter
             DestinationIcao = plan.DestinationIcao,
             DepartureRunway = runway,
             ArrivalRunway = RunwayIdentifier.TryCreate(plan.ArrivalRunway, out RunwayIdentifier arrival) ? arrival : null,
+            // A VFR flight has no instrument procedures, whatever the simulator's plan holds.
+            StandardInstrumentDeparture = plan.IsVfr ? null : plan.DepartureProcedure,
+            StandardTerminalArrival = plan.IsVfr ? null : plan.ArrivalProcedure,
+            Approach = plan.IsVfr ? null : plan.Approach,
             Route = plan.Waypoints.Count == 0 ? null : string.Join(' ', plan.Waypoints.Select(w => w.Identifier)),
             RouteLegs =
             [
@@ -252,6 +308,9 @@ public static class SimFlightPlanComparison
             && current.DepartureRunway == plan.DepartureRunway
             && current.ArrivalRunway == plan.ArrivalRunway
             && current.Route == plan.Route
+            && current.StandardInstrumentDeparture == plan.StandardInstrumentDeparture
+            && current.StandardTerminalArrival == plan.StandardTerminalArrival
+            && current.Approach == plan.Approach
             && current.Callsign.Normalized == plan.Callsign.Normalized;
     }
 }

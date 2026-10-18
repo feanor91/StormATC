@@ -116,7 +116,10 @@ public static class PlannedRouteParser
             CruiseAltitude(route),
             Runway(route, "departureRunway"),
             waypoints,
-            Runway(route, "destinationRunway"));
+            Runway(route, "destinationRunway"),
+            Procedure(route, "departure"),
+            Procedure(route, "arrival"),
+            Approach(route));
         return true;
     }
 
@@ -173,6 +176,23 @@ public static class PlannedRouteParser
         };
 
         return number.ToString("00", CultureInfo.InvariantCulture) + suffix;
+    }
+
+    /// <summary>A procedure's name, such as <c>PILU2F</c>; null when the route has none.</summary>
+    private static string? Procedure(JsonElement route, string name)
+    {
+        string value = Text(route, name).ToUpperInvariant();
+        return value.Length == 0 ? null : value;
+    }
+
+    private static string? Approach(JsonElement route)
+    {
+        if (!route.TryGetProperty("approach", out JsonElement approach) || approach.ValueKind != JsonValueKind.Object)
+        {
+            return null;
+        }
+
+        return ApproachName.Compose(Text(approach, "type"), Text(approach, "suffix"), Runway(approach, "runway"));
     }
 
     private static string Text(JsonElement parent, string name)
