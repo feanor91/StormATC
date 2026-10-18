@@ -214,6 +214,14 @@ void CALLBACK Dispatch(SIMCONNECT_RECV* data, DWORD, void*)
 
 extern "C"
 {
+// The C library of the toolchain was built with stack protection and so imports this function, which the
+// simulator does not provide: a module with an import the simulator cannot resolve is not loaded at all
+// (the simulator lists it as "Failed"). The module itself is built without stack protection.
+MSFS_CALLBACK void __stack_chk_fail(void)
+{
+    __builtin_trap();
+}
+
 MSFS_CALLBACK void module_init(void)
 {
     if (SimConnect_Open(&g_simConnect, ClientName, nullptr, 0, 0, 0) != S_OK)

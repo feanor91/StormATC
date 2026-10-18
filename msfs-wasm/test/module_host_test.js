@@ -159,7 +159,21 @@ function broadcast(route) {
 }
 
 (async () => {
-  const { instance } = await WebAssembly.instantiate(fs.readFileSync(wasmPath), imports);
+  const bytes = fs.readFileSync(wasmPath);
+
+  // The simulator does not load a module that imports something it does not provide (it lists the
+  // module as "Failed"): the module may import only the simulator's API and the few WASI functions
+  // the other modules in a Community folder import too.
+  const provided = new Set([
+    'wasi_snapshot_preview1.fd_close', 'wasi_snapshot_preview1.fd_seek',
+    'wasi_snapshot_preview1.fd_write', 'wasi_snapshot_preview1.commit_pages',
+  ]);
+  const unsupported = WebAssembly.Module.imports(new WebAssembly.Module(bytes))
+    .map((i) => `${i.module}.${i.name}`)
+    .filter((name) => !provided.has(name) && !/^env\.(SimConnect_|fs)/.test(name));
+  assert.deepStrictEqual(unsupported, [], 'the module imports only what the simulator provides');
+
+  const { instance } = await WebAssembly.instantiate(bytes, imports);
   exports_ = instance.exports;
   memory = exports_.memory;
   table = exports_.__indirect_function_table;
