@@ -260,6 +260,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         AirportFacility = 1,
         NearbyTraffic = 2,
         RouteClientData = 3,
+        ApproachFacility = 4,
     }
 
     private enum Requests
@@ -269,6 +270,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         NearbyTraffic = 2,
         RouteClientDataInitial = 3,
         RouteClientDataUpdates = 4,
+        ApproachFacility = 5,
     }
 
     private enum ClientDataAreas
@@ -823,6 +825,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         RegisterDataDefinition(_simConnect);
         RegisterTrafficDataDefinition(_simConnect);
         RegisterAirportFacilityDefinition(_simConnect);
+        RegisterApproachFacilityDefinition(_simConnect);
         _simConnect.MapClientEventToSimEvent(Events.SetCom1ActiveHz, "COM_RADIO_SET_HZ");
         _simConnect.MapClientEventToSimEvent(
             Events.SelectCom1Transmitter,
@@ -1130,7 +1133,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
 
     private void StartNextAirportFacilityRequest()
     {
-        if (_activeAirportRequest is not null || _simConnect is null)
+        if (_activeAirportRequest is not null || _simConnect is null || StartNextApproachRequest())
         {
             return;
         }
@@ -1319,6 +1322,12 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         SimConnect sender,
         SIMCONNECT_RECV_FACILITY_DATA data)
     {
+        if (data.UserRequestId == (uint)Requests.ApproachFacility)
+        {
+            OnReceiveApproachData(data);
+            return;
+        }
+
         if (data.UserRequestId != (uint)Requests.AirportFacility
             || _activeAirportRequest is not AirportFacilityRequest request
             || data.Data.Length == 0)
@@ -1415,6 +1424,12 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         SimConnect sender,
         SIMCONNECT_RECV_FACILITY_DATA_END data)
     {
+        if (data.RequestId == (uint)Requests.ApproachFacility)
+        {
+            OnReceiveApproachDataEnd();
+            return;
+        }
+
         if (data.RequestId != (uint)Requests.AirportFacility
             || _activeAirportRequest is not AirportFacilityRequest request)
         {
@@ -1602,6 +1617,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
     {
         _activeAirportRequest?.Completion.TrySetResult(null);
         _activeAirportRequest = null;
+        CancelApproachRequests();
 
         while (_airportRequestQueue.TryDequeue(out AirportFacilityRequest? request))
         {

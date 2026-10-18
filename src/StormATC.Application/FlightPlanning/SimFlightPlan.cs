@@ -17,7 +17,7 @@ namespace StormATC.Application.FlightPlanning;
 /// <param name="ArrivalRunway">The runway planned at the destination, such as <c>33</c>, when the plan gives one.</param>
 /// <param name="DepartureProcedure">The standard instrument departure (SID), such as <c>PILU2F</c>, when the plan has one.</param>
 /// <param name="ArrivalProcedure">The standard terminal arrival route (STAR), such as <c>VEVA7R</c>, when the plan has one.</param>
-/// <param name="Approach">The planned instrument approach, such as <c>ILS Y 04R</c>, when the plan has one.</param>
+/// <param name="Approach">The planned instrument approach, when the plan has one.</param>
 public sealed record SimFlightPlan(
     string Title,
     string DepartureIcao,
@@ -29,7 +29,18 @@ public sealed record SimFlightPlan(
     string? ArrivalRunway = null,
     string? DepartureProcedure = null,
     string? ArrivalProcedure = null,
-    string? Approach = null);
+    SimApproach? Approach = null);
+
+/// <summary>An instrument approach, as a chart names it.</summary>
+/// <param name="Type">The approach type: <c>ILS</c>, <c>RNAV</c>, <c>VOR</c>…</param>
+/// <param name="Suffix">The suffix letter, such as <c>Y</c>; empty when there is none.</param>
+/// <param name="Runway">The runway, such as <c>04R</c>; empty when the approach is not for one runway.</param>
+public sealed record SimApproach(string Type, string Suffix, string Runway)
+{
+    /// <summary>For example <c>ILS Y 04R</c>.</summary>
+    public override string ToString() =>
+        string.Join(' ', new[] { Type, Suffix, Runway }.Where(part => part.Length > 0));
+}
 
 /// <summary>A waypoint of a simulator flight plan.</summary>
 /// <param name="Identifier">The waypoint's identifier.</param>
@@ -184,7 +195,7 @@ public static class PlnFlightPlanParser
         return value.Length == 0 ? null : value.ToUpperInvariant();
     }
 
-    private static string? ParseApproach(XElement root)
+    private static SimApproach? ParseApproach(XElement root)
     {
         XElement? details = root.Elements().FirstOrDefault(e => e.Name.LocalName == "ApproachDetails");
         if (details is null)
@@ -204,14 +215,14 @@ public static class PlnFlightPlanParser
     private static string Icao(string text) => text.Trim().ToUpperInvariant();
 }
 
-/// <summary>Writes an approach the way a chart names it.</summary>
+/// <summary>Builds an approach from what a plan says about it.</summary>
 internal static class ApproachName
 {
-    /// <summary>For example <c>ILS Y 04R</c>; null when the plan names no approach type.</summary>
+    /// <summary>The approach, or null when the plan names no approach type.</summary>
     /// <param name="type">The approach type (ILS, RNAV, VOR…).</param>
     /// <param name="suffix">The approach's suffix letter, such as <c>Y</c>.</param>
     /// <param name="runway">The runway, such as <c>04R</c>.</param>
-    public static string? Compose(string? type, string? suffix, string? runway)
+    public static SimApproach? Compose(string? type, string? suffix, string? runway)
     {
         string kind = (type ?? string.Empty).Trim().ToUpperInvariant();
         if (kind.Length == 0 || kind == "NONE")
@@ -219,10 +230,7 @@ internal static class ApproachName
             return null;
         }
 
-        return string.Join(
-            ' ',
-            new[] { kind, (suffix ?? string.Empty).Trim().ToUpperInvariant(), runway ?? string.Empty }
-                .Where(part => part.Length > 0));
+        return new SimApproach(kind, (suffix ?? string.Empty).Trim().ToUpperInvariant(), runway ?? string.Empty);
     }
 }
 
@@ -264,7 +272,7 @@ public static class SimFlightPlanConverter
             // A VFR flight has no instrument procedures, whatever the simulator's plan holds.
             StandardInstrumentDeparture = plan.IsVfr ? null : plan.DepartureProcedure,
             StandardTerminalArrival = plan.IsVfr ? null : plan.ArrivalProcedure,
-            Approach = plan.IsVfr ? null : plan.Approach,
+            Approach = plan.IsVfr ? null : plan.Approach?.ToString(),
             Route = plan.Waypoints.Count == 0 ? null : string.Join(' ', plan.Waypoints.Select(w => w.Identifier)),
             RouteLegs =
             [

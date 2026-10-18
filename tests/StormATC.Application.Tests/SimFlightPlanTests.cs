@@ -287,7 +287,7 @@ public sealed class SimFlightPlanTests : IDisposable
         Assert.True(PlnFlightPlanParser.TryParse(OrlyNice, out SimFlightPlan? plan));
         Assert.Equal("PILU2F", plan.DepartureProcedure);
         Assert.Equal("VEVA7R", plan.ArrivalProcedure);
-        Assert.Equal("ILS Y 04R", plan.Approach);
+        Assert.Equal("ILS Y 04R", plan.Approach!.ToString());
 
         Assert.True(SimFlightPlanConverter.TryConvert(plan, "F-HAST", Fixture.Now, out FlightPlan? flightPlan));
 

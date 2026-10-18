@@ -43,6 +43,7 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
     private readonly IOptionsMonitor<SimFlightPlanOptions> _options;
     private readonly ILogger<SimFlightPlanService> _logger;
     private readonly IReadOnlyList<string> _folders;
+    private readonly IApproachProcedureSource? _approaches;
     private string? _lastAnnouncedFile;
     private SimFlightPlan? _lastRoute;
     private readonly SemaphoreSlim _importGate = new(1, 1);
@@ -56,8 +57,9 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
         ProviderStatusService providerStatus,
         IClock clock,
         IOptionsMonitor<SimFlightPlanOptions> options,
-        ILogger<SimFlightPlanService> logger)
-        : this(events, simulator, sessionContext, providerStatus, clock, options, logger, SimFlightPlanLocator.DefaultFolders())
+        ILogger<SimFlightPlanService> logger,
+        IApproachProcedureSource? approaches = null)
+        : this(events, simulator, sessionContext, providerStatus, clock, options, logger, SimFlightPlanLocator.DefaultFolders(), approaches)
     {
     }
 
@@ -70,8 +72,10 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
         IClock clock,
         IOptionsMonitor<SimFlightPlanOptions> options,
         ILogger<SimFlightPlanService> logger,
-        IReadOnlyList<string> folders)
+        IReadOnlyList<string> folders,
+        IApproachProcedureSource? approaches = null)
     {
+        _approaches = approaches;
         _events = events ?? throw new ArgumentNullException(nameof(events));
         _simulator = simulator ?? throw new ArgumentNullException(nameof(simulator));
         _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
@@ -419,6 +423,8 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
                 UiText.T("Flight plan imported from the simulator: ") + $"{plan.DepartureIcao} → {plan.DestinationIcao}.");
         }
 
+        plan = await WithMissedApproachAsync(plan, simPlan, cancellationToken).ConfigureAwait(false);
+
         _sessionContext.PreassignedSquawk = null;
         await _sessionContext.LoadFlightPlanAsync(plan, cancellationToken).ConfigureAwait(false);
         _sessionContext.Mutate(session => session.WithFlightRules(simPlan.IsVfr ? FlightRules.Vfr : FlightRules.Ifr));
@@ -431,6 +437,41 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
         return new SimFlightPlanImportResult(
             true,
             UiText.T("Flight plan imported from the simulator: ") + $"{plan.DepartureIcao} → {plan.DestinationIcao} ({rules}).");
+    }
+
+    /// <summary>Adds the missed approach of the planned approach, when the simulator's data gives it.</summary>
+    private async Task<FlightPlan> WithMissedApproachAsync(FlightPlan plan, SimFlightPlan simPlan, CancellationToken cancellationToken)
+    {
+        if (_approaches is null || simPlan.IsVfr || simPlan.Approach is not SimApproach approach)
+        {
+            return plan;
+        }
+
+        try
+        {
+            IReadOnlyList<MissedApproachPoint>? points = await _approaches
+                .GetMissedApproachAsync(simPlan.DestinationIcao, approach, cancellationToken)
+                .ConfigureAwait(false);
+            if (points is not { Count: > 0 })
+            {
+                _logger.LogInformation(
+                    "The simulator gave no missed approach for {Approach} at {Airport}.",
+                    approach,
+                    simPlan.DestinationIcao);
+                return plan;
+            }
+
+            _logger.LogInformation(
+                "Missed approach of {Approach} at {Airport}: {Points}.",
+                approach,
+                simPlan.DestinationIcao,
+                string.Join(" ", points.Select(p => p.AltitudeFeet is int feet ? $"{p.Identifier}({feet})" : p.Identifier)));
+            return plan with { MissedApproach = points };
+        }
+        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+        {
+            return plan;
+        }
     }
 
     /// <summary>Whether the session already runs this plan from the simulator.</summary>

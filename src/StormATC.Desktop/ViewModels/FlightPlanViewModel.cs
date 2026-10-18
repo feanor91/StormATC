@@ -228,6 +228,12 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
     private string _route = UiText.T("No route filed");
 
     [ObservableProperty]
+    private string _missedApproach = string.Empty;
+
+    [ObservableProperty]
+    private bool _hasMissedApproach;
+
+    [ObservableProperty]
     private string _blockTime = "—";
 
     [ObservableProperty]
@@ -457,7 +463,18 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
         DepartureRunway = plan.DepartureRunway?.ToDisplay() ?? "—";
         ArrivalRunway = plan.ArrivalRunway?.ToDisplay() ?? "—";
         DepartureProcedure = plan.StandardInstrumentDeparture ?? "—";
-        ArrivalProcedure = plan.StandardTerminalArrival ?? plan.Approach ?? "—";
+        ArrivalProcedure = string.Join(
+            " · ",
+            new[] { plan.StandardTerminalArrival, plan.Approach }.Where(part => !string.IsNullOrEmpty(part)))
+            is { Length: > 0 } arrival
+            ? arrival
+            : "—";
+        MissedApproach = string.Join(
+            " → ",
+            plan.MissedApproach.Select(point => point.AltitudeFeet is int feet
+                ? $"{point.Identifier} {feet.ToString("N0", System.Globalization.CultureInfo.CurrentCulture)} ft"
+                : point.Identifier));
+        HasMissedApproach = MissedApproach.Length > 0;
         Route = plan.Route is { Length: > 0 } route ? route : UiText.T("No route filed");
         Source = plan.SourceIdentifier ?? "—";
 

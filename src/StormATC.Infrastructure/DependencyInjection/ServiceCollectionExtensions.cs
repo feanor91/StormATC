@@ -287,6 +287,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<MsfsSimConnectConnector>();
         services.AddSingleton<ISimulatorFlightPlanEvents>(
             sp => sp.GetRequiredService<MsfsSimConnectConnector>());
+        services.AddSingleton<IApproachProcedureSource>(
+            sp => sp.GetRequiredService<MsfsSimConnectConnector>());
         services.AddSingleton<SimulatorConnectorRouter>();
         services.AddSingleton<ISimulatorConnector>(sp =>
             sp.GetRequiredService<SimulatorConnectorRouter>());

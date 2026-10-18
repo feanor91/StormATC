@@ -211,6 +211,14 @@
           <TextBlock Text="{Binding Route}"
                      Style="{StaticResource ValueTextStyle}"
                      TextWrapping="Wrap" />
+
+          <StackPanel Margin="0,14,0,0"
+                      Visibility="{Binding HasMissedApproach, Converter={StaticResource BoolToVisibility}}">
+            <TextBlock Text="MISSED APPROACH" Style="{StaticResource LabelTextStyle}" />
+            <TextBlock Text="{Binding MissedApproach}"
+                       Style="{StaticResource ValueTextStyle}"
+                       TextWrapping="Wrap" />
+          </StackPanel>
         </StackPanel>
       </Border>
 

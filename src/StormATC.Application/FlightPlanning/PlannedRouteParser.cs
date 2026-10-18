@@ -185,7 +185,7 @@ public static class PlannedRouteParser
         return value.Length == 0 ? null : value;
     }
 
-    private static string? Approach(JsonElement route)
+    private static SimApproach? Approach(JsonElement route)
     {
         if (!route.TryGetProperty("approach", out JsonElement approach) || approach.ValueKind != JsonValueKind.Object)
         {

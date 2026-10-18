@@ -114,7 +114,8 @@ public class PlannedRouteParserTests
 
         Assert.Equal("PILU2F", plan.DepartureProcedure);
         Assert.Equal("VEVA7R", plan.ArrivalProcedure);
-        Assert.Equal("ILS Y 04R", plan.Approach);
+        Assert.Equal("ILS Y 04R", plan.Approach!.ToString());
+        Assert.Equal(new SimApproach("ILS", "Y", "04R"), plan.Approach);
     }
 
     [Fact]
