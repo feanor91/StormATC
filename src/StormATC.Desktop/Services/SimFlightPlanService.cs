@@ -81,6 +81,7 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
         _folders = folders ?? throw new ArgumentNullException(nameof(folders));
 
         _events.FlightPlanAnnounced += OnAnnounced;
+        _events.RouteReceived += OnRouteReceived;
         _simulator.ConnectionChanged += OnConnectionChanged;
     }
 
@@ -91,7 +92,22 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
     public void Dispose()
     {
         _events.FlightPlanAnnounced -= OnAnnounced;
+        _events.RouteReceived -= OnRouteReceived;
         _simulator.ConnectionChanged -= OnConnectionChanged;
+    }
+
+    /// <summary>A route published by the StormATC module inside the simulator.</summary>
+    private async void OnRouteReceived(object? sender, SimulatorRouteEventArgs e)
+    {
+        try
+        {
+            await ReceiveRouteAsync(e.Source, e.Initial, e.RouteJson, CancellationToken.None).ConfigureAwait(false);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException)
+        {
+            // This runs on a SimConnect callback: nothing may escape it.
+            _logger.LogWarning(ex, "The route published by the simulator module could not be imported.");
+        }
     }
 
     /// <summary>

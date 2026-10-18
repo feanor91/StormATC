@@ -81,13 +81,6 @@ public static class PlannedRouteParser
                     ident = (name.GetString() ?? string.Empty).Trim();
                 }
 
-                if (ident.Length == 0
-                    || ident.Equals(departure, StringComparison.OrdinalIgnoreCase)
-                    || ident.Equals(destination, StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
                 GeoPosition? position = null;
                 if (Boolean(leg, "hasLatLon")
                     && Number(leg, "lat") is double latitude
@@ -95,6 +88,19 @@ public static class PlannedRouteParser
                     && GeoPosition.TryCreate(latitude, longitude, out GeoPosition parsed))
                 {
                     position = parsed;
+                }
+
+                // A point given only by its position has no name: it still is a leg of the route.
+                if (ident.Length == 0 && position is not null)
+                {
+                    ident = string.Create(CultureInfo.InvariantCulture, $"WPT{waypoints.Count + 1}");
+                }
+
+                if (ident.Length == 0
+                    || ident.Equals(departure, StringComparison.OrdinalIgnoreCase)
+                    || ident.Equals(destination, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
                 }
 
                 waypoints.Add(new SimFlightPlanWaypoint(ident, position));
@@ -109,7 +115,8 @@ public static class PlannedRouteParser
             vfr,
             CruiseAltitude(route),
             Runway(route, "departureRunway"),
-            waypoints);
+            waypoints,
+            Runway(route, "destinationRunway"));
         return true;
     }
 

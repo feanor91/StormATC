@@ -259,6 +259,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         AircraftState = 0,
         AirportFacility = 1,
         NearbyTraffic = 2,
+        RouteClientData = 3,
     }
 
     private enum Requests
@@ -266,6 +267,13 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         AircraftState = 0,
         AirportFacility = 1,
         NearbyTraffic = 2,
+        RouteClientDataInitial = 3,
+        RouteClientDataUpdates = 4,
+    }
+
+    private enum ClientDataAreas
+    {
+        Route = 0,
     }
 
     private enum Events
@@ -826,6 +834,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         _simConnect.OnRecvQuit += OnReceiveQuit;
         _simConnect.OnRecvException += OnReceiveException;
         SubscribeToFlightPlanEvents(_simConnect);
+        SubscribeToRouteClientData(_simConnect);
 
         int requestedRate = Math.Max(1, _options.UpdatesPerSecond);
         uint frameInterval = (uint)Math.Max(0, (30 / requestedRate) - 1);
@@ -1562,6 +1571,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
                 _simConnect.OnRecvSimobjectDataBytype -= OnReceiveNearbyTraffic;
                 _simConnect.OnRecvFacilityData -= OnReceiveFacilityData;
                 _simConnect.OnRecvFacilityDataEnd -= OnReceiveFacilityDataEnd;
+                UnsubscribeFromRouteClientData(_simConnect);
                 UnsubscribeFromFlightPlanEvents(_simConnect);
                 _simConnect.OnRecvQuit -= OnReceiveQuit;
                 _simConnect.OnRecvException -= OnReceiveException;

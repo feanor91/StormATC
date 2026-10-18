@@ -18,7 +18,8 @@ simulateur et StormATC, surtout en VR. La barre n'apparaît que si le moteur de 
 est actif.
 
 Le panneau lit aussi **le plan de vol de l'EFB** et le transmet à StormATC quand vous l'envoyez à
-l'ATC ou à l'avionique : voir [vol VFR](vfr.md). Pour cela, le panneau doit être ouvert (il peut être
+l'ATC ou à l'avionique : voir [vol VFR](vfr.md). C'est le moyen de secours du [module WASM](msfs-module.md),
+qui fait la même chose sans panneau et avant le vol ; pour le panneau, il doit être ouvert (il peut être
 réduit).
 
 Dans l'onglet Phraséologie, des boutons permettent de lire **n'importe quelle phase** : **Auto** suit

@@ -110,6 +110,17 @@ foreach ($name in "panel-core.js", "panel.css") {
     Copy-Item -LiteralPath (Join-Path $source "web\$name") -Destination $panelFolder -Force
 }
 
+# The route reader: a standalone WASM module that the simulator loads at start (compiled by
+# Build-MsfsModule.ps1 and committed in msfs-wasm\prebuilt, like the panel definition).
+$module = Join-Path $repositoryRoot "msfs-wasm\prebuilt\stormatc_route.wasm"
+if (Test-Path -LiteralPath $module) {
+    New-Item -ItemType Directory -Force (Join-Path $destination "modules") | Out-Null
+    Copy-Item -LiteralPath $module -Destination (Join-Path $destination "modules") -Force
+}
+else {
+    Write-Warning "$module is missing: the package has no route reader module. Run scripts\Build-MsfsModule.ps1."
+}
+
 New-Item -ItemType Directory -Force (Join-Path $destination "InGamePanels") | Out-Null
 Copy-Item -LiteralPath $prebuiltSpb -Destination (Join-Path $destination "InGamePanels\$spbName") -Force
 

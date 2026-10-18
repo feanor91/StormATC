@@ -40,33 +40,27 @@ StormATC reprend le plan de vol que vous faites dans l'EFB de MSFS : terrain de 
 d'arrivée, VFR ou IFR, piste de départ, altitude de croisière, points de la route. Le nom de
 l'avion (l'immatriculation) vient de l'avion lui-même.
 
-**Avant de démarrer le vol** (carte du monde, écran « Démarrer le vol ») : le panneau StormATC
-n'existe pas encore, car les panneaux de la barre d'outils ne vivent que pendant le vol. Le
-simulateur écrit alors le plan que vous avez réglé (terrains, piste, VFR ou IFR) dans un fichier à côté
-du vol, et StormATC le lit **au moment où il se connecte au vol** (ou quand le simulateur annonce
-qu'un vol est chargé). Il remplace le plan d'un vol précédent, jamais un plan SimBrief. Un
-« Envoyer à l'ATC » cliqué à cet écran n'est pas lisible en lui-même : seul ce qui est réglé au
-démarrage du vol est repris.
+**Le moyen principal : le module de StormATC dans le simulateur** ([détails](msfs-module.md)). Un petit
+module WASM, chargé avec MSFS (menus compris), lit le plan de l'EFB par l'API officielle du simulateur
+et le donne à StormATC **en direct** : dès que vous cliquez sur **Envoyer à l'ATC** ou **Envoyer à
+l'ATC et à l'avionique**, avant « Démarrer le vol » comme pendant le vol, le plan est chargé dans la
+session et la page Plan de vol se remplit. Rien à enregistrer, rien à ouvrir. Il faut avoir redémarré
+MSFS une fois après l'installation de StormATC (un module se charge au démarrage du simulateur).
 
-**Pendant le vol, en temps réel, avec le panneau StormATC.** Le simulateur donne le plan aux
-programmes JavaScript (Planned Route API). Le panneau StormATC de la barre d'outils le lit et le
-transmet à StormATC :
+Le plan que l'EFB montre mais que vous n'avez pas envoyé est seulement mémorisé : le bouton
+**Importer le plan de vol du simulateur** de la page Plan de vol le charge à la demande.
 
-- quand vous cliquez sur **Envoyer à l'ATC** ou **Envoyer à l'ATC et à l'avionique** dans l'EFB, le
-  plan est chargé dans la session et la page Plan de vol se remplit ;
-- le plan que l'EFB montre mais que vous n'avez pas envoyé est seulement mémorisé (il change à
-  chaque modification) : le bouton **Importer le plan de vol du simulateur** de la page Plan de vol le
-  charge à la demande ;
-- un plan qui était déjà dans l'EFB à l'ouverture du panneau est mémorisé, pas appliqué tout seul.
+**Les moyens de secours**, si le module ne se charge pas :
 
-Il faut que **le panneau soit ouvert** (il peut être réduit) et que StormATC tourne. Il n'est pas
-nécessaire d'enregistrer le plan dans un fichier. En bas du panneau, une ligne dit où en est la
-lecture : « à l'écoute », « plan lu (ATC) : LFPL > LFPT, envoyé à StormATC », ou le problème.
-
-**Un fichier `.PLN`** (enregistré depuis l'EFB, un planificateur…) : page **Plan de vol ›
-Plan de vol du simulateur › Ouvrir un fichier de plan de vol (.pln)…**. Le bouton **Importer le plan
-de vol du simulateur** cherche tout seul le plus récent dans les dossiers du simulateur, sur le
-bureau et dans les documents. L'EFB n'écrit un `.PLN` que si vous enregistrez le plan.
+- **Le panneau StormATC de la barre d'outils**, pendant le vol et ouvert (il peut être réduit), lit le
+  même plan par le JavaScript du simulateur et le transmet à StormATC. Une ligne en bas du panneau dit
+  où en est la lecture.
+- **Le plan du vol qui vient d'être démarré** : le simulateur l'écrit dans un fichier à côté du vol, et
+  StormATC le lit quand il se connecte. Il remplace le plan d'un vol précédent, jamais un plan SimBrief.
+- **Un fichier `.PLN`** (enregistré depuis l'EFB, un planificateur…) : page **Plan de vol › Plan de
+  vol du simulateur › Ouvrir un fichier de plan de vol (.pln)…**. Le bouton d'import cherche aussi le
+  plus récent dans les dossiers du simulateur, sur le bureau et dans les documents. L'EFB n'écrit un
+  `.PLN` que si vous enregistrez le plan.
 
 Tout ce que StormATC reçoit du simulateur est écrit dans le journal (`%LOCALAPPDATA%\StormATC\logs`,
 lignes « The simulator's panel sent the … route » et « The simulator announced a flight plan
