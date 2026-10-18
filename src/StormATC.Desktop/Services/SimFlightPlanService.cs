@@ -36,6 +36,7 @@ public sealed record SimFlightPlanImportResult(bool Imported, string Message);
 public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
 {
     private readonly ISimulatorFlightPlanEvents _events;
+    private readonly ISimulatorConnector _simulator;
     private readonly AtcSessionContext _sessionContext;
     private readonly ProviderStatusService _providerStatus;
     private readonly IClock _clock;
@@ -44,22 +45,25 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
     private readonly IReadOnlyList<string> _folders;
     private string? _lastAnnouncedFile;
     private SimFlightPlan? _lastRoute;
+    private (string File, DateTime Written)? _lastLoadedPlan;
 
     /// <summary>Creates the service and starts listening.</summary>
     public SimFlightPlanService(
         ISimulatorFlightPlanEvents events,
+        ISimulatorConnector simulator,
         AtcSessionContext sessionContext,
         ProviderStatusService providerStatus,
         IClock clock,
         IOptionsMonitor<SimFlightPlanOptions> options,
         ILogger<SimFlightPlanService> logger)
-        : this(events, sessionContext, providerStatus, clock, options, logger, SimFlightPlanLocator.DefaultFolders())
+        : this(events, simulator, sessionContext, providerStatus, clock, options, logger, SimFlightPlanLocator.DefaultFolders())
     {
     }
 
     /// <summary>Creates the service with chosen folders for the simulator's plan files.</summary>
     internal SimFlightPlanService(
         ISimulatorFlightPlanEvents events,
+        ISimulatorConnector simulator,
         AtcSessionContext sessionContext,
         ProviderStatusService providerStatus,
         IClock clock,
@@ -68,6 +72,7 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
         IReadOnlyList<string> folders)
     {
         _events = events ?? throw new ArgumentNullException(nameof(events));
+        _simulator = simulator ?? throw new ArgumentNullException(nameof(simulator));
         _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
         _providerStatus = providerStatus ?? throw new ArgumentNullException(nameof(providerStatus));
         _clock = clock ?? throw new ArgumentNullException(nameof(clock));
@@ -76,13 +81,41 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
         _folders = folders ?? throw new ArgumentNullException(nameof(folders));
 
         _events.FlightPlanAnnounced += OnAnnounced;
+        _simulator.ConnectionChanged += OnConnectionChanged;
     }
 
     /// <summary>Raised after a plan from the simulator was loaded into the session.</summary>
     public event EventHandler<FlightPlan>? PlanImported;
 
     /// <inheritdoc />
-    public void Dispose() => _events.FlightPlanAnnounced -= OnAnnounced;
+    public void Dispose()
+    {
+        _events.FlightPlanAnnounced -= OnAnnounced;
+        _simulator.ConnectionChanged -= OnConnectionChanged;
+    }
+
+    /// <summary>
+    /// StormATC usually connects after the flight was loaded, so the simulator's "flight loaded"
+    /// notice has already gone by: read the plan the flight was started with when the link opens.
+    /// </summary>
+    private async void OnConnectionChanged(object? sender, SimulatorConnectionChangedEventArgs e)
+    {
+        if (e.State != SimulatorConnectionState.Connected
+            || !_options.CurrentValue.Enabled
+            || !_options.CurrentValue.ImportOnFlightLoaded)
+        {
+            return;
+        }
+
+        try
+        {
+            await ImportLoadedFlightAsync(null, requireRecent: true).ConfigureAwait(false);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException)
+        {
+            _logger.LogWarning(ex, "The plan of the flight that was loaded could not be read.");
+        }
+    }
 
     /// <inheritdoc />
     /// <remarks>
@@ -184,7 +217,7 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
                     break;
 
                 case SimulatorFlightPlanEventKind.FlightLoaded when _options.CurrentValue.ImportOnFlightLoaded:
-                    await ImportLoadedFlightAsync(e.FileName).ConfigureAwait(false);
+                    await ImportLoadedFlightAsync(e.FileName, requireRecent: false).ConfigureAwait(false);
                     break;
             }
         }
@@ -204,7 +237,16 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
             : null;
     }
 
-    private async Task ImportLoadedFlightAsync(string? flightFile)
+    /// <summary>
+    /// Reads the plan of the flight that was just started: what the pilot set up before pressing
+    /// "Start flight" (aerodromes, runway, VFR or IFR) is written next to the flight file.
+    /// </summary>
+    /// <param name="flightFile">The flight file the simulator named, or null.</param>
+    /// <param name="requireRecent">
+    /// True when the file is found by looking rather than by being named, so that the plan of a
+    /// flight started long ago is not taken for this one.
+    /// </param>
+    private async Task ImportLoadedFlightAsync(string? flightFile, bool requireRecent)
     {
         // The plan of a free flight sits next to the .FLT file, with the same name.
         string? plan = flightFile is null ? null : Path.ChangeExtension(flightFile, ".PLN");
@@ -218,14 +260,34 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
             return;
         }
 
-        FlightPlan? current = _sessionContext.CurrentSession.FlightPlan;
-        bool placeholder = current is null || current.SourceIdentifier is "Sample" or "Mock";
-        if (!placeholder)
+        DateTime written = File.GetLastWriteTimeUtc(plan);
+        if (requireRecent && DateTime.UtcNow - written > TimeSpan.FromHours(24))
         {
-            _logger.LogInformation("A flight was loaded in the simulator; the plan already in use is kept.");
+            _logger.LogInformation("The simulator's latest plan file {File} is too old to be this flight's plan.", plan);
             return;
         }
 
+        if (_lastLoadedPlan is { } done && done.File == plan && done.Written == written)
+        {
+            return;
+        }
+
+        // The plan of a flight that was just started replaces the plans of earlier flights, but
+        // never a plan the pilot brought from SimBrief.
+        FlightPlan? current = _sessionContext.CurrentSession.FlightPlan;
+        if (current is { SourceIdentifier: "SimBrief" })
+        {
+            _logger.LogInformation("A flight was loaded in the simulator; the SimBrief plan already in use is kept.");
+            return;
+        }
+
+        // The aircraft's registration arrives with its first state, a moment after the link opens.
+        for (int attempt = 0; attempt < 20 && string.IsNullOrWhiteSpace(_sessionContext.CurrentSession.AircraftState.AtcIdentifier); attempt++)
+        {
+            await Task.Delay(500).ConfigureAwait(false);
+        }
+
+        _lastLoadedPlan = (plan, written);
         await ImportFileAsync(plan, CancellationToken.None).ConfigureAwait(false);
     }
 
