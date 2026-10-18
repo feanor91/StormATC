@@ -68,6 +68,59 @@ public sealed class SimFlightPlanTests : IDisposable
         </SimBase.Document>
         """;
 
+    // A plan saved from the EFB: Lognes to Le Puy, with the arrival runway and visual patterns.
+    private const string SavedFromTheEfb = """
+        <?xml version="1.0" encoding="UTF-8"?>
+
+        <SimBase.Document>
+            <FlightPlan.FlightPlan>
+                <DepartureID>LFPL</DepartureID>
+                <DestinationID>LFHP</DestinationID>
+                <Title>LFPL - LFHP</Title>
+                <FPType>VFR</FPType>
+                <CruisingAlt>45000.000</CruisingAlt>
+                <DepartureDetails>
+                    <RunwayNumberFP>8</RunwayNumberFP>
+                    <DepartureVisualPattern>
+                        <VisualPatternDistance>1.000</VisualPatternDistance>
+                        <VisualPatternAltitude>1000.000</VisualPatternAltitude>
+                    </DepartureVisualPattern>
+                </DepartureDetails>
+                <ArrivalDetails>
+                    <RunwayNumberFP>33</RunwayNumberFP>
+                </ArrivalDetails>
+                <ApproachDetails>
+                    <ApproachVisualPattern>
+                        <ApproachVisualPatternType>Downwind</ApproachVisualPatternType>
+                    </ApproachVisualPattern>
+                </ApproachDetails>
+            </FlightPlan.FlightPlan>
+        </SimBase.Document>
+        """;
+
+    [Fact]
+    public void A_plan_saved_from_the_EFB_gives_both_runways()
+    {
+        Assert.True(PlnFlightPlanParser.TryParse(SavedFromTheEfb, out SimFlightPlan? plan));
+
+        Assert.Equal("LFPL", plan.DepartureIcao);
+        Assert.Equal("LFHP", plan.DestinationIcao);
+        Assert.Equal("08", plan.DepartureRunway);
+        Assert.Equal("33", plan.ArrivalRunway);
+        Assert.True(plan.IsVfr);
+    }
+
+    [Fact]
+    public void The_default_altitude_of_a_vfr_plan_is_not_taken_for_a_cruising_altitude()
+    {
+        Assert.True(PlnFlightPlanParser.TryParse(SavedFromTheEfb, out SimFlightPlan? plan));
+        Assert.True(SimFlightPlanConverter.TryConvert(plan, "F-HAST", Fixture.Now, out FlightPlan? flightPlan));
+
+        // 45,000 ft is what the simulator writes when nobody set an altitude.
+        Assert.Null(flightPlan.CruiseAltitude);
+        Assert.Equal("33", flightPlan.ArrivalRunway!.Value.ToString());
+    }
+
     [Fact]
     public void The_plan_of_a_started_free_flight_is_read()
     {

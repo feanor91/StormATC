@@ -10,6 +10,16 @@ class StormAtcPanelElement extends TemplateElement {
         this.routeTimer = null;
         this.routesSent = {};
         this.firstRoutePoll = true;
+        this.bridgeText = "";
+        this.language = "fr";
+    }
+
+    /** Shows what the flight plan reader is doing, at the bottom of the panel. */
+    setBridge(french, english) {
+        this.bridgeText = this.language === "en" ? english : french;
+        if (this.panel) {
+            this.panel.setBridgeStatus(this.bridgeText);
+        }
     }
 
     /**
@@ -22,12 +32,26 @@ class StormAtcPanelElement extends TemplateElement {
      */
     startFlightPlanBridge() {
         var self = this;
-        if (typeof RegisterViewListener !== "function" || this.routeListener) {
+        if (this.routeListener) {
             return;
         }
 
+        if (typeof RegisterViewListener !== "function") {
+            this.setBridge("Plan de vol : lecteur du simulateur indisponible", "Flight plan: simulator reader unavailable");
+            return;
+        }
+
+        this.setBridge("Plan de vol : connexion au simulateur…", "Flight plan: connecting to the simulator…");
+        window.setTimeout(function () {
+            if (!self.routeReady) {
+                self.setBridge("Plan de vol : le simulateur ne répond pas", "Flight plan: the simulator does not answer");
+            }
+        }, 10000);
+
         try {
             this.routeListener = RegisterViewListener("JS_LISTENER_PLANNEDROUTE", function () {
+                self.routeReady = true;
+                self.setBridge("Plan de vol : à l'écoute, aucun plan lu", "Flight plan: listening, no plan read yet");
                 try {
                     self.routeListener.on("EfbRouteUpdated", function (route) { self.offerRoute("efb", route, false); });
                     self.routeListener.on("AvionicsRouteSync", function (route) { self.offerRoute("avionics", route, false); });
@@ -41,6 +65,7 @@ class StormAtcPanelElement extends TemplateElement {
             });
         } catch (e) {
             console.log("[StormATC] the flight plan listener is not available: " + e);
+            this.setBridge("Plan de vol : erreur " + e, "Flight plan: error " + e);
         }
     }
 
@@ -73,10 +98,20 @@ class StormAtcPanelElement extends TemplateElement {
         }
 
         var self = this;
+        var sourceName = { atc: "ATC", avionics: "avionique", efb: "EFB" }[source];
+        var sourceNameEn = { atc: "ATC", avionics: "avionics", efb: "EFB" }[source];
+        var destination = route.destinationAirport && (route.destinationAirport.ident || route.destinationAirport.airport);
+        var text = (departure.ident || departure.airport) + (destination ? " > " + destination : "");
+
         // Remembered only once StormATC has it, so a StormATC that was not running yet gets it later.
         StormAtcPanel.postJson("/api/flightplan", { source: source, initial: initial, route: route }, function (ok) {
             if (ok) {
                 self.routesSent[source] = key;
+                self.setBridge("Plan lu (" + sourceName + ") : " + text + " - envoyé à StormATC",
+                    "Plan read (" + sourceNameEn + "): " + text + " - sent to StormATC");
+            } else {
+                self.setBridge("Plan lu (" + sourceName + ") : " + text + " - StormATC injoignable",
+                    "Plan read (" + sourceNameEn + "): " + text + " - StormATC unreachable");
             }
         });
     }
@@ -86,19 +121,26 @@ class StormAtcPanelElement extends TemplateElement {
             super.connectedCallback();
         }
 
+        var self = this;
         var root = this.querySelector("#StormAtcRoot");
         var frame = this.querySelector("#StormAtcFrame");
         if (root && !this.panel) {
-            // The window's title is the registration of the aircraft being flown.
             this.startFlightPlanBridge();
+
+            // The window's title is the registration of the aircraft being flown.
             this.panel = StormAtcPanel.mount(root, {
                 onState: function (state) {
+                    if (state.language && state.language !== self.language) {
+                        self.language = state.language;
+                        self.panel.setBridgeStatus(self.bridgeText);
+                    }
                     var title = state.registration || state.callsign || "StormATC";
                     if (frame && frame.getAttribute("title") !== title) {
                         frame.setAttribute("title", title);
                     }
                 }
             });
+            this.panel.setBridgeStatus(this.bridgeText);
         }
     }
 

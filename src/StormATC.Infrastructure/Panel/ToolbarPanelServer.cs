@@ -197,8 +197,10 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
 
             if (method == "OPTIONS")
             {
+                // Named rather than "*": the simulator's embedded browser may not honour the wildcard.
                 response.Headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS";
-                response.Headers["Access-Control-Allow-Headers"] = "*";
+                response.Headers["Access-Control-Allow-Headers"] = RequestMarkerHeader + ", Content-Type";
+                response.Headers["Access-Control-Max-Age"] = "600";
                 response.StatusCode = (int)HttpStatusCode.NoContent;
                 return;
             }
@@ -258,6 +260,7 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
 
         if (!IsFromThePanel(context.Request))
         {
+            LogRefused(context.Request);
             response.StatusCode = (int)HttpStatusCode.Forbidden;
             return;
         }
@@ -293,6 +296,7 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
 
         if (!IsFromThePanel(context.Request))
         {
+            LogRefused(context.Request);
             response.StatusCode = (int)HttpStatusCode.Forbidden;
             return;
         }
@@ -354,6 +358,13 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
             JsonSerializer.SerializeToUtf8Bytes(new { applied }, Json),
             cancellationToken).ConfigureAwait(false);
     }
+
+    private void LogRefused(HttpListenerRequest request) =>
+        _logger.LogInformation(
+            "Refused a {Path} request: marker header {Marker}, origin {Origin}.",
+            request.Url?.AbsolutePath,
+            request.Headers[RequestMarkerHeader] ?? "(none)",
+            request.Headers["Origin"] ?? "(none)");
 
     private static string ToWire(VoiceRejectionOutcome outcome) => outcome switch
     {

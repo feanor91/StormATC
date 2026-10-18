@@ -14,6 +14,7 @@ namespace StormATC.Application.FlightPlanning;
 /// <param name="CruisingAltitudeFeet">The planned cruising altitude, when the file gives one.</param>
 /// <param name="DepartureRunway">The departure runway, such as <c>08</c> or <c>26L</c>, when the file gives one.</param>
 /// <param name="Waypoints">The waypoints between the two aerodromes, in order.</param>
+/// <param name="ArrivalRunway">The runway planned at the destination, such as <c>33</c>, when the plan gives one.</param>
 public sealed record SimFlightPlan(
     string Title,
     string DepartureIcao,
@@ -21,7 +22,8 @@ public sealed record SimFlightPlan(
     bool IsVfr,
     int? CruisingAltitudeFeet,
     string? DepartureRunway,
-    IReadOnlyList<SimFlightPlanWaypoint> Waypoints);
+    IReadOnlyList<SimFlightPlanWaypoint> Waypoints,
+    string? ArrivalRunway = null);
 
 /// <summary>A waypoint of a simulator flight plan.</summary>
 /// <param name="Identifier">The waypoint's identifier.</param>
@@ -99,8 +101,9 @@ public static class PlnFlightPlanParser
             destination,
             string.Equals(Text(root, "FPType"), "VFR", StringComparison.OrdinalIgnoreCase),
             cruise,
-            ParseRunway(root),
-            waypoints);
+            ParseRunway(root, "DepartureDetails"),
+            waypoints,
+            ParseRunway(root, "ArrivalDetails"));
         return true;
     }
 
@@ -144,9 +147,9 @@ public static class PlnFlightPlanParser
         return hemisphere is 'S' or 'W' ? -value : value;
     }
 
-    private static string? ParseRunway(XElement root)
+    private static string? ParseRunway(XElement root, string detailsName)
     {
-        XElement? details = root.Elements().FirstOrDefault(e => e.Name.LocalName == "DepartureDetails");
+        XElement? details = root.Elements().FirstOrDefault(e => e.Name.LocalName == detailsName);
         string number = details is null ? string.Empty : Text(details, "RunwayNumberFP");
         if (!int.TryParse(number, NumberStyles.Integer, CultureInfo.InvariantCulture, out int value) || value is < 1 or > 36)
         {
@@ -205,6 +208,7 @@ public static class SimFlightPlanConverter
             DepartureIcao = plan.DepartureIcao,
             DestinationIcao = plan.DestinationIcao,
             DepartureRunway = runway,
+            ArrivalRunway = RunwayIdentifier.TryCreate(plan.ArrivalRunway, out RunwayIdentifier arrival) ? arrival : null,
             Route = plan.Waypoints.Count == 0 ? null : string.Join(' ', plan.Waypoints.Select(w => w.Identifier)),
             RouteLegs =
             [
@@ -214,7 +218,11 @@ public static class SimFlightPlanConverter
                     Position = waypoint.Position,
                 }),
             ],
-            CruiseAltitude = plan.CruisingAltitudeFeet is int feet && Altitude.TryFromFeet(feet, out Altitude altitude)
+            // The simulator writes 45,000 ft in a plan whose altitude was never set; VFR stays below
+            // flight level 180, so a VFR plan above that has no altitude to speak of.
+            CruiseAltitude = plan.CruisingAltitudeFeet is int feet
+                && !(plan.IsVfr && feet > 18000)
+                && Altitude.TryFromFeet(feet, out Altitude altitude)
                 ? altitude
                 : null,
             GeneratedAt = now,
@@ -242,6 +250,16 @@ public static class SimFlightPlanLocator
             Path.Combine(roaming, "Microsoft Flight Simulator 2024", "MISSIONS", "Custom", "CustomFlight"),
         ];
     }
+
+    /// <summary>
+    /// Where a pilot is likely to keep a plan saved from the EFB or a planner: the desktop and the
+    /// documents folder. Only used when the pilot asks for an import.
+    /// </summary>
+    public static IReadOnlyList<string> UserFolders() =>
+    [
+        Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+        Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+    ];
 
     /// <summary>The most recently written <c>.PLN</c> in the folders, or null.</summary>
     /// <param name="folders">The folders to look in.</param>

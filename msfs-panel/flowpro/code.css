@@ -106,6 +106,8 @@
 
 .sa-root button { font-family: inherit; }
 
+.sa-bridge { flex: 0 0 auto; padding: 0.25em 0.6em 0.4em; background: #0a1118; color: #7f93a8; font-size: 0.75em; min-height: 1.4em; word-wrap: break-word; }
+
 /* The voice bar: the last controller voice and the button to set it aside. */
 .sa-voicebar { flex: 0 0 auto; padding: 0.5em 0.6em; background: #0a1118; border-top: 1px solid #263544; }
 .sa-voicetext { font-size: 0.85em; color: #9fb3c8; margin-bottom: 0.4em; word-wrap: break-word; }

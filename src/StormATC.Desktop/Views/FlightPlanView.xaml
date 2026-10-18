@@ -56,15 +56,20 @@
       <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
         <StackPanel>
           <TextBlock Text="Simulator flight plan" Style="{StaticResource SectionHeaderStyle}" />
-          <TextBlock Text="A plan you activate in the simulator (the EFB, the world map) is picked up automatically while StormATC is open. If the page stayed empty, import it here: StormATC reads the plan the simulator announced last, or the plan of the flight you just started."
+          <TextBlock Text="Send your plan to ATC from the simulator's EFB and StormATC picks it up while the StormATC panel is open in the simulator. If the page stayed empty, import it here, or open the .pln file you saved from the EFB."
                      Style="{StaticResource SecondaryTextStyle}"
                      TextWrapping="Wrap"
                      Margin="0,0,0,10" />
-          <Button Content="Import the simulator's flight plan"
-                  Style="{StaticResource PrimaryButtonStyle}"
-                  HorizontalAlignment="Left"
-                  Command="{Binding ImportSimulatorPlanCommand}"
-                  IsEnabled="{Binding IsImporting, Converter={StaticResource InverseBoolean}}" />
+          <StackPanel Orientation="Horizontal">
+            <Button Content="Import the simulator's flight plan"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Margin="0,0,10,0"
+                    Command="{Binding ImportSimulatorPlanCommand}"
+                    IsEnabled="{Binding IsImporting, Converter={StaticResource InverseBoolean}}" />
+            <Button Content="Open a flight plan file (.pln)…"
+                    Command="{Binding OpenPlnFileCommand}"
+                    IsEnabled="{Binding IsImporting, Converter={StaticResource InverseBoolean}}" />
+          </StackPanel>
         </StackPanel>
       </Border>
 

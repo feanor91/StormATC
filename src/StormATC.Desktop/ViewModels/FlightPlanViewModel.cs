@@ -79,6 +79,41 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
         }
     }
 
+    /// <summary>Imports a <c>.PLN</c> flight plan file the pilot picks, such as one saved from the EFB.</summary>
+    [RelayCommand]
+    private async Task OpenPlnFileAsync()
+    {
+        var dialog = new Microsoft.Win32.OpenFileDialog
+        {
+            Title = UiText.T("Open a flight plan file"),
+            Filter = UiText.T("Flight plans (*.pln)|*.pln|All files|*.*"),
+            InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+            CheckFileExists = true,
+        };
+
+        if (dialog.ShowDialog() != true)
+        {
+            return;
+        }
+
+        IsImporting = true;
+        StatusIsError = false;
+
+        try
+        {
+            SimFlightPlanImportResult result = await _simFlightPlan
+                .ImportPlnFileAsync(dialog.FileName, CancellationToken.None)
+                .ConfigureAwait(true);
+
+            StatusIsError = !result.Imported;
+            StatusMessage = result.Message;
+        }
+        finally
+        {
+            IsImporting = false;
+        }
+    }
+
     /// <summary>
     /// Starts a local VFR flight at the aerodrome the pilot is on, with no flight plan: the plan
     /// is only the aerodrome and the callsign, and the flight is VFR from the first call.

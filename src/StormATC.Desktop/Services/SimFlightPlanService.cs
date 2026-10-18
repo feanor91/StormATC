@@ -134,9 +134,11 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
             return await ImportPlanAsync(_lastRoute, "the simulator's panel", cancellationToken).ConfigureAwait(false);
         }
 
+        // The folders where the simulator writes plans, then the places a plan saved from the EFB
+        // usually ends up. The newest file wins.
         string? file = _lastAnnouncedFile is not null && File.Exists(_lastAnnouncedFile)
             ? _lastAnnouncedFile
-            : SimFlightPlanLocator.FindNewest(_folders);
+            : SimFlightPlanLocator.FindNewest([.. _folders, .. SimFlightPlanLocator.UserFolders()]);
 
         if (file is null)
         {
@@ -170,8 +172,11 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
 
                     if (file is null)
                     {
+                        // MSFS 2024 announces ".PLN" and nothing else when the pilot sends a plan to
+                        // ATC from the EFB: the plan itself comes through the panel, not through a file.
                         _logger.LogInformation(
-                            "A flight plan was activated in the simulator, but no readable plan file came with it.");
+                            "A flight plan was activated in the simulator ({Name}), but no readable plan file came with it.",
+                            e.FileName ?? "(none)");
                         return;
                     }
 
@@ -223,6 +228,12 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
 
         await ImportFileAsync(plan, CancellationToken.None).ConfigureAwait(false);
     }
+
+    /// <summary>Imports a <c>.PLN</c> file the pilot chose.</summary>
+    /// <param name="file">The file's path.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    public Task<SimFlightPlanImportResult> ImportPlnFileAsync(string file, CancellationToken cancellationToken) =>
+        ImportFileAsync(file, cancellationToken);
 
     private async Task<SimFlightPlanImportResult> ImportFileAsync(string file, CancellationToken cancellationToken)
     {

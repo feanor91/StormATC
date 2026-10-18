@@ -118,10 +118,15 @@ var StormAtcPanel = (function () {
         voiceBar.appendChild(rejectButton);
         voiceBar.appendChild(voiceMessage);
 
+        // What the panel is doing about the flight plan, so the pilot can see in the cockpit
+        // whether the plan reached StormATC.
+        var bridgeLine = el('div', 'sa-bridge');
+
         root.appendChild(header);
         root.appendChild(tabs);
         root.appendChild(body);
         root.appendChild(voiceBar);
+        root.appendChild(bridgeLine);
 
         // Inside the simulator's window the root gets no height from its parents, and the content
         // area only grows with its content. The window itself has a definite size: the root takes
@@ -411,6 +416,7 @@ var StormAtcPanel = (function () {
         request();
 
         return {
+            setBridgeStatus: function (text) { bridgeLine.textContent = text || ''; },
             stop: function () {
                 stopped = true;
                 window.clearInterval(fitTimer);
