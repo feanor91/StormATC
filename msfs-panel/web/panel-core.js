@@ -49,6 +49,19 @@ var StormAtcPanel = (function () {
         while (node.firstChild) { node.removeChild(node.firstChild); }
     }
 
+    // A request that changes something in StormATC. The marker header keeps a web page of another
+    // site from sending the same request to the pilot's PC.
+    function postJson(path, body, done) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', baseUrl() + path, true);
+        xhr.setRequestHeader('X-StormATC', '1');
+        xhr.timeout = 5000;
+        xhr.onload = function () { if (done) { done(xhr.status === 200); } };
+        xhr.onerror = function () { if (done) { done(false); } };
+        xhr.ontimeout = function () { if (done) { done(false); } };
+        xhr.send(JSON.stringify(body));
+    }
+
     function mount(root, options) {
         options = options || {};
         var scale = parseFloat(storageGet('stormatc.scale')) || 1.2;
@@ -406,5 +419,5 @@ var StormAtcPanel = (function () {
         };
     }
 
-    return { mount: mount };
+    return { mount: mount, postJson: postJson };
 }());

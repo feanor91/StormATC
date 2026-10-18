@@ -17,6 +17,10 @@ parlé, pour ne pas écarter deux fois la même. La voix choisie dans les param�
 simulateur et StormATC, surtout en VR. La barre n'apparaît que si le moteur de voix local (Piper)
 est actif.
 
+Le panneau lit aussi **le plan de vol de l'EFB** et le transmet à StormATC quand vous l'envoyez à
+l'ATC ou à l'avionique : voir [vol VFR](vfr.md). Pour cela, le panneau doit être ouvert (il peut être
+réduit).
+
 Dans l'onglet Phraséologie, des boutons permettent de lire **n'importe quelle phase** : **Auto** suit
 le vol (la phase en cours porte un ●), un autre bouton fixe la phase affichée. Utile en VFR si la
 session est restée en règles IFR, ou pour préparer la suite. La phase « automatique » vient de la
@@ -95,8 +99,8 @@ panneau est indisponible).
 Le panneau est une page web dans le simulateur. Elle ne peut pas lire la session de StormATC
 directement : StormATC héberge donc un petit serveur local (`ToolbarPanelServer`), qui n'écoute que
 sur l'interface de boucle locale (127.0.0.1), ne répond qu'aux requêtes de lecture et refuse un autre
-nom d'hôte. La seule requête qui change quelque chose est `POST /api/voice/reject` (le bouton
-ci-dessus) : elle exige l'en-tête `X-StormATC` et est refusée si elle vient d'une page web d'un autre
+nom d'hôte. Les seules requêtes qui changent quelque chose sont `POST /api/voice/reject` (le bouton
+ci-dessus) et `POST /api/flightplan` (le plan de vol lu par le panneau) : elle exige l'en-tête `X-StormATC` et est refusée si elle vient d'une page web d'un autre
 site, pour qu'un site visité dans le navigateur ne puisse pas écarter vos voix.
 
 | Adresse | Contenu |
@@ -104,6 +108,7 @@ site, pour qu'un site visité dans le navigateur ne puisse pas écarter vos voix
 | `/api/state` | L'état en JSON : vol, contrôleur, fréquence, phase, derniers échanges (80 au plus), exemples de la phase |
 | `/panel` | La page, pour un navigateur ou une superposition VR |
 | `POST /api/voice/reject` | Écarte la voix du contrôleur qui vient de parler |
+| `POST /api/flightplan` | Reçoit le plan de vol lu dans le simulateur (`{source, initial, route}`) |
 
 Les exemples viennent de `PhraseologyCatalog` (français et anglais, pour chaque phase et pour le
 vol VFR) ; ce sont des exemples de formation, le moteur décide seul de ce qui est autorisé.

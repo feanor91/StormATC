@@ -188,6 +188,166 @@ public sealed class ToolbarPanelServerTests : IDisposable
         }
     }
 
+    private sealed class FakeRoutes(bool applied) : ISimRouteReceiver
+    {
+        public List<(string Source, bool Initial, string Route)> Received { get; } = [];
+
+        public Task<bool> ReceiveRouteAsync(string source, bool initial, string routeJson, CancellationToken cancellationToken)
+        {
+            Received.Add((source, initial, routeJson));
+            return Task.FromResult(applied);
+        }
+    }
+
+    private async Task<(ToolbarPanelServer Server, HttpClient Client)> StartWithRoutesAsync(ISimRouteReceiver? routes)
+    {
+        int port = FreePort();
+        var server = new ToolbarPanelServer(
+            new FixedState(),
+            Options.Create(new ToolbarPanelOptions { Port = port }),
+            NullLogger<ToolbarPanelServer>.Instance,
+            _folder,
+            null,
+            routes);
+
+        await server.StartAsync(CancellationToken.None);
+        return (server, new HttpClient { BaseAddress = new Uri($"http://127.0.0.1:{port}/") });
+    }
+
+    private static HttpRequestMessage RouteRequest(string body, string? marker = "1", string? origin = null)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Post, "api/flightplan") { Content = new StringContent(body) };
+        if (marker is not null)
+        {
+            request.Headers.Add("X-StormATC", marker);
+        }
+
+        if (origin is not null)
+        {
+            request.Headers.TryAddWithoutValidation("Origin", origin);
+        }
+
+        return request;
+    }
+
+    private const string RouteBody = """
+        { "source": "atc", "initial": false, "route": { "departureAirport": { "ident": "LFPL" }, "isVfr": true } }
+        """;
+
+    [Fact]
+    public async Task A_route_read_in_the_simulator_reaches_StormATC()
+    {
+        var routes = new FakeRoutes(applied: true);
+        (ToolbarPanelServer server, HttpClient client) = await StartWithRoutesAsync(routes);
+        using (server)
+        using (client)
+        {
+            using HttpResponseMessage response = await client.SendAsync(RouteRequest(RouteBody));
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            using JsonDocument json = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+            Assert.True(json.RootElement.GetProperty("applied").GetBoolean());
+            (string source, bool initial, string route) = Assert.Single(routes.Received);
+            Assert.Equal("atc", source);
+            Assert.False(initial);
+            Assert.Contains("LFPL", route, StringComparison.Ordinal);
+
+            await server.StopAsync(CancellationToken.None);
+        }
+    }
+
+    [Fact]
+    public async Task The_route_already_there_when_the_panel_started_is_flagged_as_initial()
+    {
+        var routes = new FakeRoutes(applied: false);
+        (ToolbarPanelServer server, HttpClient client) = await StartWithRoutesAsync(routes);
+        using (server)
+        using (client)
+        {
+            string body = RouteBody.Replace("\"initial\": false", "\"initial\": true").Replace("\"atc\"", "\"efb\"");
+
+            using HttpResponseMessage response = await client.SendAsync(RouteRequest(body));
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            (string source, bool initial, _) = Assert.Single(routes.Received);
+            Assert.Equal("efb", source);
+            Assert.True(initial);
+            await server.StopAsync(CancellationToken.None);
+        }
+    }
+
+    [Theory]
+    [InlineData(null, "http://evil.example")]
+    [InlineData("1", "http://evil.example")]
+    [InlineData("0", null)]
+    public async Task A_route_from_a_web_page_or_without_the_marker_is_refused(string? marker, string? origin)
+    {
+        var routes = new FakeRoutes(applied: true);
+        (ToolbarPanelServer server, HttpClient client) = await StartWithRoutesAsync(routes);
+        using (server)
+        using (client)
+        {
+            using HttpResponseMessage response = await client.SendAsync(RouteRequest(RouteBody, marker, origin));
+
+            Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+            Assert.Empty(routes.Received);
+            await server.StopAsync(CancellationToken.None);
+        }
+    }
+
+    [Theory]
+    [InlineData("not json")]
+    [InlineData("""{ "source": "atc" }""")]
+    [InlineData("""{ "source": "atc", "route": 5 }""")]
+    [InlineData("""{ "source": "elsewhere", "route": {} }""")]
+    [InlineData("""{ "route": {} }""")]
+    public async Task A_malformed_route_is_refused(string body)
+    {
+        var routes = new FakeRoutes(applied: true);
+        (ToolbarPanelServer server, HttpClient client) = await StartWithRoutesAsync(routes);
+        using (server)
+        using (client)
+        {
+            using HttpResponseMessage response = await client.SendAsync(RouteRequest(body));
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Empty(routes.Received);
+            await server.StopAsync(CancellationToken.None);
+        }
+    }
+
+    [Fact]
+    public async Task An_oversized_route_is_refused()
+    {
+        var routes = new FakeRoutes(applied: true);
+        (ToolbarPanelServer server, HttpClient client) = await StartWithRoutesAsync(routes);
+        using (server)
+        using (client)
+        {
+            string body = "{ \"source\": \"atc\", \"route\": { \"padding\": \"" + new string('x', 600 * 1024) + "\" } }";
+
+            using HttpResponseMessage response = await client.SendAsync(RouteRequest(body));
+
+            Assert.Equal(HttpStatusCode.RequestEntityTooLarge, response.StatusCode);
+            Assert.Empty(routes.Received);
+            await server.StopAsync(CancellationToken.None);
+        }
+    }
+
+    [Fact]
+    public async Task Without_a_receiver_a_route_has_nowhere_to_go()
+    {
+        (ToolbarPanelServer server, HttpClient client) = await StartWithRoutesAsync(null);
+        using (server)
+        using (client)
+        {
+            using HttpResponseMessage response = await client.SendAsync(RouteRequest(RouteBody));
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            await server.StopAsync(CancellationToken.None);
+        }
+    }
+
     private static int FreePort()
     {
         var probe = new TcpListener(IPAddress.Loopback, 0);

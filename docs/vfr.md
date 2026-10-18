@@ -36,27 +36,40 @@ Les règles de vol sont un attribut du vol. Elles se règlent de deux façons :
 
 ## Le plan de vol fait dans le simulateur (EFB)
 
-StormATC reprend le plan de vol que vous faites dans le simulateur : terrain de départ et
-d'arrivée, VFR ou IFR, piste de départ, altitude, points de la route. Le nom de l'avion
-(l'immatriculation) vient de l'avion lui-même.
+StormATC reprend le plan de vol que vous faites dans l'EFB de MSFS : terrain de départ et
+d'arrivée, VFR ou IFR, piste de départ, altitude de croisière, points de la route. Le nom de
+l'avion (l'immatriculation) vient de l'avion lui-même.
 
-- **Automatiquement**, tant que StormATC est ouvert : le simulateur annonce un plan que vous
-  activez (EFB, carte du monde) en donnant le nom de son fichier `.PLN`, et le plan du vol que vous
-  venez de démarrer. Le plan d'un vol qui vient d'être chargé ne remplace que le plan d'exemple,
-  jamais un plan que vous avez importé vous-même.
-- **À la main** : page **Plan de vol › Plan de vol du simulateur › Importer le plan de vol du
-  simulateur**. StormATC lit le dernier plan annoncé, ou à défaut le fichier de plan le plus récent
-  écrit par le simulateur (`...\LocalState\MISSIONS\Custom\CustomFlight\CUSTOMFLIGHT.PLN`, ou le
-  dossier équivalent de l'édition Steam).
+**En temps réel, avec le panneau StormATC** (le moyen principal). Le simulateur donne le plan aux
+programmes JavaScript (Planned Route API). Le panneau StormATC de la barre d'outils le lit et le
+transmet à StormATC :
 
-Tout ce que le simulateur annonce est écrit dans le journal (`%LOCALAPPDATA%\StormATC\logs`, lignes
-« The simulator announced a flight plan event »), ce qui permet de voir ce que MSFS envoie vraiment.
-Réglages `SimFlightPlan` : `Enabled` (désactive la reprise automatique) et `ImportOnFlightLoaded`.
+- quand vous cliquez sur **Envoyer à l'ATC** ou **Envoyer à l'ATC et à l'avionique**, le plan est
+  chargé dans la session et la page Plan de vol se remplit ;
+- le plan que l'EFB montre mais que vous n'avez pas envoyé est seulement mémorisé (il change à
+  chaque modification) : le bouton **Importer le plan de vol du simulateur** de la page Plan de vol le
+  charge à la demande ;
+- un plan qui était déjà dans l'EFB à l'ouverture du panneau est mémorisé, pas appliqué tout seul.
 
-Ce qui n'est pas garanti : le simulateur ne documente pas, pour l'EFB de MSFS 2024, le nom du fichier
-qu'il annonce ni son emplacement. Si le plan de l'EFB n'est pas repris, le journal le dit et il faut
-corriger d'après ce qu'il contient. Pour un vol IFR, le plan du simulateur n'apporte ni départ
-normalisé (SID) ni arrivée : seuls les vols VFR sont validés.
+Il faut que **le panneau soit ouvert** (il peut être réduit) et que StormATC tourne. Il n'est pas
+nécessaire d'enregistrer le plan dans un fichier.
+
+**Sans le panneau**, un moyen de secours : le simulateur annonce les plans activés et le vol qui
+vient d'être chargé avec le nom d'un fichier `.PLN`, que StormATC lit. L'EFB n'écrit un `.PLN` que si
+vous enregistrez le plan ; le vol qui vient d'être démarré en écrit un
+(`...\LocalState\MISSIONS\Custom\CustomFlight\CUSTOMFLIGHT.PLN`, ou le dossier équivalent de
+l'édition Steam). Le bouton d'import lit le plus récent. Un plan que vous avez importé n'est jamais
+remplacé par celui d'un vol qui vient d'être chargé : seul le plan d'exemple l'est.
+
+Tout ce que StormATC reçoit du simulateur est écrit dans le journal (`%LOCALAPPDATA%\StormATC\logs`,
+lignes « The simulator's panel sent the … route » et « The simulator announced a flight plan
+event »). Réglages `SimFlightPlan` : `Enabled` (désactive la reprise automatique) et
+`ImportOnFlightLoaded`.
+
+Ce qui n'est pas garanti : le simulateur ne documente pas tout ce que l'EFB renvoie. Les identifiants
+de points de route et les altitudes peuvent manquer, et un plan IFR n'apporte ni départ normalisé
+(SID) ni arrivée dans StormATC : seuls les vols VFR sont validés. Si le plan de l'EFB n'est pas
+repris, le journal dit ce qui est arrivé.
 
 ## Les phrases reconnues
 

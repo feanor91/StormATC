@@ -30,6 +30,12 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
     /// <summary>The address of the one request that changes anything.</summary>
     public const string RejectVoicePath = "/api/voice/reject";
 
+    /// <summary>The address the panel posts the simulator's flight plan routes to.</summary>
+    public const string FlightPlanPath = "/api/flightplan";
+
+    /// <summary>The largest route accepted, in bytes: a real route is a few kilobytes.</summary>
+    private const int MaximumRouteBytes = 512 * 1024;
+
     /// <summary>The header the panel adds to that request, so a plain web form cannot send it.</summary>
     public const string RequestMarkerHeader = "X-StormATC";
 
@@ -48,6 +54,7 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
     private readonly ILogger<ToolbarPanelServer> _logger;
     private readonly string _panelDirectory;
     private readonly IVoiceRejection? _voices;
+    private readonly ISimRouteReceiver? _routes;
     private HttpListener? _listener;
     private CancellationTokenSource? _stopping;
     private Task? _loop;
@@ -58,14 +65,17 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
     /// <param name="logger">The logger.</param>
     /// <param name="panelDirectory">The folder holding the panel's page, script and style.</param>
     /// <param name="voices">Sets the last controller voice aside; null when there is nothing to judge.</param>
+    /// <param name="routes">Receives the flight plans the panel reads in the simulator; null when unused.</param>
     public ToolbarPanelServer(
         IToolbarPanelStateSource state,
         IOptions<ToolbarPanelOptions> options,
         ILogger<ToolbarPanelServer> logger,
         string panelDirectory,
-        IVoiceRejection? voices = null)
+        IVoiceRejection? voices = null,
+        ISimRouteReceiver? routes = null)
     {
         _voices = voices;
+        _routes = routes;
         _state = state ?? throw new ArgumentNullException(nameof(state));
         _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -199,6 +209,12 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
                 return;
             }
 
+            if (method == "POST" && path == FlightPlanPath)
+            {
+                await ReceiveRouteAsync(context, cancellationToken).ConfigureAwait(false);
+                return;
+            }
+
             if (method is not ("GET" or "HEAD"))
             {
                 response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
@@ -240,10 +256,7 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
     {
         HttpListenerResponse response = context.Response;
 
-        // A web page on another site could send this request to the loopback address from the
-        // pilot's browser. The simulator's panel sends the marker header; a page on the web
-        // cannot add it without a preflight, and the preflight is answered only for its origin.
-        if (context.Request.Headers[RequestMarkerHeader] != "1" || !IsTrustedOrigin(context.Request.Headers["Origin"]))
+        if (!IsFromThePanel(context.Request))
         {
             response.StatusCode = (int)HttpStatusCode.Forbidden;
             return;
@@ -262,6 +275,83 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
             JsonSerializer.SerializeToUtf8Bytes(
                 new { outcome = ToWire(result.Outcome), voice = result.Voice },
                 Json),
+            cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// A web page on another site could send a request to the loopback address from the pilot's
+    /// browser. The simulator's panel sends the marker header, and a page of the web is refused by
+    /// its origin.
+    /// </summary>
+    private static bool IsFromThePanel(HttpListenerRequest request) =>
+        request.Headers[RequestMarkerHeader] == "1" && IsTrustedOrigin(request.Headers["Origin"]);
+
+    /// <summary>The flight plan route the panel read in the simulator: <c>{source, initial, route}</c>.</summary>
+    private async Task ReceiveRouteAsync(HttpListenerContext context, CancellationToken cancellationToken)
+    {
+        HttpListenerResponse response = context.Response;
+
+        if (!IsFromThePanel(context.Request))
+        {
+            response.StatusCode = (int)HttpStatusCode.Forbidden;
+            return;
+        }
+
+        if (_routes is null)
+        {
+            response.StatusCode = (int)HttpStatusCode.NotFound;
+            return;
+        }
+
+        if (context.Request.ContentLength64 > MaximumRouteBytes)
+        {
+            response.StatusCode = (int)HttpStatusCode.RequestEntityTooLarge;
+            return;
+        }
+
+        string source;
+        bool initial;
+        string route;
+        try
+        {
+            using var reader = new StreamReader(context.Request.InputStream, System.Text.Encoding.UTF8);
+            var buffer = new char[MaximumRouteBytes + 1];
+            int read = await reader.ReadBlockAsync(buffer, cancellationToken).ConfigureAwait(false);
+            if (read > MaximumRouteBytes)
+            {
+                response.StatusCode = (int)HttpStatusCode.RequestEntityTooLarge;
+                return;
+            }
+
+            using JsonDocument body = JsonDocument.Parse(new string(buffer, 0, read));
+            JsonElement root = body.RootElement;
+            source = root.TryGetProperty("source", out JsonElement sourceElement) ? sourceElement.GetString() ?? string.Empty : string.Empty;
+            initial = root.TryGetProperty("initial", out JsonElement initialElement) && initialElement.ValueKind == JsonValueKind.True;
+            if (!root.TryGetProperty("route", out JsonElement routeElement) || routeElement.ValueKind != JsonValueKind.Object)
+            {
+                response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return;
+            }
+
+            route = routeElement.GetRawText();
+        }
+        catch (Exception ex) when (ex is JsonException or InvalidOperationException)
+        {
+            response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return;
+        }
+
+        if (source is not (SimRouteSources.Atc or SimRouteSources.Avionics or SimRouteSources.Efb))
+        {
+            response.StatusCode = (int)HttpStatusCode.BadRequest;
+            return;
+        }
+
+        bool applied = await _routes.ReceiveRouteAsync(source, initial, route, cancellationToken).ConfigureAwait(false);
+        await WriteAsync(
+            response,
+            "application/json; charset=utf-8",
+            JsonSerializer.SerializeToUtf8Bytes(new { applied }, Json),
             cancellationToken).ConfigureAwait(false);
     }
 

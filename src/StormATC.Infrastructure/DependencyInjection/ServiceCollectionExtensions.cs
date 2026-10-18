@@ -119,7 +119,8 @@ public static class ServiceCollectionExtensions
             sp.GetRequiredService<IOptions<ToolbarPanelOptions>>(),
             sp.GetRequiredService<ILogger<ToolbarPanelServer>>(),
             Path.Combine(AppContext.BaseDirectory, "panel"),
-            sp.GetService<IVoiceRejection>()));
+            sp.GetService<IVoiceRejection>(),
+            sp.GetService<ISimRouteReceiver>()));
         services.AddSingleton<IHostedService>(sp => sp.GetRequiredService<ToolbarPanelServer>());
         services.AddSingleton<RadioActivityState>();
 

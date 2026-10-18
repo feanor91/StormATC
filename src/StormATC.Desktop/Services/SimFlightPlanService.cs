@@ -33,7 +33,7 @@ public sealed record SimFlightPlanImportResult(bool Imported, string Message);
 /// The same import is available as a button on the Flight Plan page.
 /// </para>
 /// </remarks>
-public sealed class SimFlightPlanService : IDisposable
+public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
 {
     private readonly ISimulatorFlightPlanEvents _events;
     private readonly AtcSessionContext _sessionContext;
@@ -43,6 +43,7 @@ public sealed class SimFlightPlanService : IDisposable
     private readonly ILogger<SimFlightPlanService> _logger;
     private readonly IReadOnlyList<string> _folders;
     private string? _lastAnnouncedFile;
+    private SimFlightPlan? _lastRoute;
 
     /// <summary>Creates the service and starts listening.</summary>
     public SimFlightPlanService(
@@ -83,12 +84,56 @@ public sealed class SimFlightPlanService : IDisposable
     /// <inheritdoc />
     public void Dispose() => _events.FlightPlanAnnounced -= OnAnnounced;
 
+    /// <inheritdoc />
+    /// <remarks>
+    /// The routes the in-simulator panel reads from the simulator: the one the pilot filed with ATC
+    /// and the one sent to the avionics are applied when they change; the EFB's own route, which
+    /// changes with every edit, and the route that was already there when the panel started, are
+    /// only remembered, for the import button.
+    /// </remarks>
+    public async Task<bool> ReceiveRouteAsync(
+        string source,
+        bool initial,
+        string routeJson,
+        CancellationToken cancellationToken)
+    {
+        if (!PlannedRouteParser.TryParse(routeJson, out SimFlightPlan? plan))
+        {
+            // An empty route: the pilot cleared the plan, or none was made yet.
+            return false;
+        }
+
+        _lastRoute = plan;
+        _logger.LogInformation(
+            "The simulator's panel sent the {Source} route {Departure} to {Destination} ({Rules}){Initial}.",
+            source,
+            plan.DepartureIcao,
+            plan.DestinationIcao,
+            plan.IsVfr ? "VFR" : "IFR",
+            initial ? ", already there when the panel started" : string.Empty);
+
+        if (initial || !_options.CurrentValue.Enabled || source == SimRouteSources.Efb)
+        {
+            return false;
+        }
+
+        SimFlightPlanImportResult result = await ImportPlanAsync(plan, $"the simulator ({source})", cancellationToken)
+            .ConfigureAwait(false);
+        return result.Imported;
+    }
+
     /// <summary>
-    /// Imports the plan the simulator announced last, or else the newest plan file it wrote.
+    /// Imports the plan the simulator's panel sent last, or else the plan the simulator announced
+    /// last, or else the newest plan file it wrote.
     /// </summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     public async Task<SimFlightPlanImportResult> ImportLatestAsync(CancellationToken cancellationToken)
     {
+        if (_lastRoute is not null)
+        {
+            return await ImportPlanAsync(_lastRoute, "the simulator's panel", cancellationToken).ConfigureAwait(false);
+        }
+
         string? file = _lastAnnouncedFile is not null && File.Exists(_lastAnnouncedFile)
             ? _lastAnnouncedFile
             : SimFlightPlanLocator.FindNewest(_folders);
@@ -198,6 +243,18 @@ public sealed class SimFlightPlanService : IDisposable
             return new SimFlightPlanImportResult(false, UiText.T("The simulator's flight plan file holds no usable plan."));
         }
 
+        return await ImportPlanAsync(simPlan, file, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>Loads a plan read from the simulator into the session.</summary>
+    /// <param name="simPlan">The plan.</param>
+    /// <param name="origin">Where it was read, for the log: a file name or a route source.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    private async Task<SimFlightPlanImportResult> ImportPlanAsync(
+        SimFlightPlan simPlan,
+        string origin,
+        CancellationToken cancellationToken)
+    {
         AtcSession current = _sessionContext.CurrentSession;
         string? callsign = !string.IsNullOrWhiteSpace(current.AircraftState.AtcIdentifier)
             ? current.AircraftState.AtcIdentifier
@@ -218,7 +275,7 @@ public sealed class SimFlightPlanService : IDisposable
 
         string rules = simPlan.IsVfr ? "VFR" : "IFR";
         _providerStatus.SetFlightPlanStatus(true, $"{plan.ToSummary()} · {rules} · {UiText.T("simulator")}");
-        _logger.LogInformation("Imported the simulator's flight plan {Summary} ({Rules}) from {File}.", plan.ToSummary(), rules, file);
+        _logger.LogInformation("Imported the simulator's flight plan {Summary} ({Rules}) from {Origin}.", plan.ToSummary(), rules, origin);
 
         PlanImported?.Invoke(this, plan);
         return new SimFlightPlanImportResult(
