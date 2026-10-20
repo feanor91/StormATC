@@ -2,7 +2,7 @@
 param(
     [Parameter()]
     [ValidatePattern("^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$")]
-    [string] $Version = (& (Join-Path $PSScriptRoot "Get-StormAtcVersion.ps1")),
+    [string] $Version,
 
     [Parameter()]
     [string] $OutputDirectory = "artifacts\release",
@@ -13,6 +13,11 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
+
+# The version is the one in Directory.Build.props unless one is given.
+if ([string]::IsNullOrWhiteSpace($Version)) {
+    $Version = (& (Join-Path $PSScriptRoot "Get-StormAtcVersion.ps1") | Select-Object -First 1)
+}
 
 $repositoryRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot ".."))
 $outputRoot = [System.IO.Path]::GetFullPath((Join-Path $repositoryRoot $OutputDirectory))
