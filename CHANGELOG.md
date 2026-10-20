@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.2.0 - 2026-10-20
+
 ### Added
 
 - **In-simulator toolbar panel** (works in VR): the ATC dialogue, the phraseology of the current
