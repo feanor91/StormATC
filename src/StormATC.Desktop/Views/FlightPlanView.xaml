@@ -52,6 +52,27 @@
         </StackPanel>
       </Border>
 
+      <!-- The plan made in the simulator -->
+      <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
+        <StackPanel>
+          <TextBlock Text="Simulator flight plan" Style="{StaticResource SectionHeaderStyle}" />
+          <TextBlock Text="Send your plan to ATC from the simulator's EFB and StormATC picks it up while the StormATC panel is open in the simulator. If the page stayed empty, import it here, or open the .pln file you saved from the EFB."
+                     Style="{StaticResource SecondaryTextStyle}"
+                     TextWrapping="Wrap"
+                     Margin="0,0,0,10" />
+          <StackPanel Orientation="Horizontal">
+            <Button Content="Import the simulator's flight plan"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Margin="0,0,10,0"
+                    Command="{Binding ImportSimulatorPlanCommand}"
+                    IsEnabled="{Binding IsImporting, Converter={StaticResource InverseBoolean}}" />
+            <Button Content="Open a flight plan file (.pln)…"
+                    Command="{Binding OpenPlnFileCommand}"
+                    IsEnabled="{Binding IsImporting, Converter={StaticResource InverseBoolean}}" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
       <!-- Import -->
       <Border Style="{StaticResource CardStyle}">
         <StackPanel>
@@ -190,6 +211,14 @@
           <TextBlock Text="{Binding Route}"
                      Style="{StaticResource ValueTextStyle}"
                      TextWrapping="Wrap" />
+
+          <StackPanel Margin="0,14,0,0"
+                      Visibility="{Binding HasMissedApproach, Converter={StaticResource BoolToVisibility}}">
+            <TextBlock Text="MISSED APPROACH" Style="{StaticResource LabelTextStyle}" />
+            <TextBlock Text="{Binding MissedApproach}"
+                       Style="{StaticResource ValueTextStyle}"
+                       TextWrapping="Wrap" />
+          </StackPanel>
         </StackPanel>
       </Border>
 

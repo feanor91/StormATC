@@ -1,0 +1,72 @@
+{
+  "$comment": [
+    "FICTIONAL SAMPLE FLIGHT PLAN. STORM456 is not a real flight.",
+    "Aerodromes and fixes are invented."
+  ],
+  "flightPlanId": "sample-storm456",
+  "sourceIdentifier": "Sample",
+  "callsign": "STORM456",
+  "flightNumber": "456",
+  "aircraftIcaoType": "A320",
+  "registration": "ST-ORN",
+  "departureIcao": "STMK",
+  "destinationIcao": "STMT",
+  "alternateIcaos": [
+    "STMK"
+  ],
+  "departureRunway": "27",
+  "arrivalRunway": "27",
+  "standardInstrumentDeparture": null,
+  "standardTerminalArrival": null,
+  "approach": "ILS 27",
+  "route": "STORM2A LUMAR DCT OSVEN DCT STMT",
+  "cruiseAltitudeFlightLevel": 100,
+  "initialAltitudeFeet": 6000,
+  "preassignedSquawk": "2345",
+  "estimatedBlockTimeMinutes": 95,
+  "plannedBlockFuelKilograms": 5000,
+  "plannedTripFuelKilograms": 2900,
+  "routeLegs": [
+    {
+      "identifier": "STMK",
+      "stage": "DEP",
+      "position": {
+        "latitude": 51.5,
+        "longitude": 6.2
+      },
+      "cumulativeDistanceNauticalMiles": 0
+    },
+    {
+      "identifier": "LUMAR",
+      "via": "DCT",
+      "stage": "CLB",
+      "position": {
+        "latitude": 52.2,
+        "longitude": 5.6
+      },
+      "plannedAltitudeFeet": 10000,
+      "cumulativeDistanceNauticalMiles": 48
+    },
+    {
+      "identifier": "OSVEN",
+      "via": "DCT",
+      "stage": "CRZ",
+      "position": {
+        "latitude": 53.2,
+        "longitude": 4.7
+      },
+      "plannedAltitudeFeet": 10000,
+      "cumulativeDistanceNauticalMiles": 125
+    },
+    {
+      "identifier": "STMT",
+      "via": "DCT",
+      "stage": "DST",
+      "position": {
+        "latitude": 54.2,
+        "longitude": 3.9
+      },
+      "cumulativeDistanceNauticalMiles": 187
+    }
+  ]
+}

@@ -53,6 +53,22 @@ public class CallsignTests
     public void MatchesTranscript_rejects_a_different_callsign(string transcript) =>
         Assert.False(Callsign.Create("STORM123").MatchesTranscript(transcript));
 
+    [Theory]
+    [InlineData("fox golf tango mike papa bonjour")]
+    [InlineData("foxtrot golf tango mike papa climbing")]
+    [InlineData("fox mike papa montons niveau cent vingt")]
+    [InlineData("golf tango mike papa bonjour")]
+    [InlineData("golf mike papa montons niveau cent vingt")]
+    public void MatchesTranscript_accepts_a_registration_spelled_in_the_phonetic_alphabet(string transcript) =>
+        Assert.True(Callsign.Create("F-GTMP").MatchesTranscript(transcript));
+
+    [Theory]
+    [InlineData("fox golf tango mike victor bonjour")]
+    [InlineData("fox mike mike montons")]
+    [InlineData("papa mike")]
+    public void MatchesTranscript_rejects_another_spelled_registration(string transcript) =>
+        Assert.False(Callsign.Create("F-GTMP").MatchesTranscript(transcript));
+
     [Fact]
     public void ToSpoken_expands_the_numeric_suffix()
     {

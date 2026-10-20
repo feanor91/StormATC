@@ -1,3 +1,4 @@
+using StormATC.Domain.Airports;
 using StormATC.Domain.Atc;
 using StormATC.Domain.Intents;
 using StormATC.Domain.Readback;
@@ -709,6 +710,89 @@ public class AtcStateEngineTests
         Assert.NotEqual(AtcResponseType.TakeoffClearance, decision.ResponseType);
     }
 
+    private static List<TrafficContact> TrafficOnShortFinalTo18()
+    {
+        RunwayData runway = TestScenario.Departure_STMR.FindRunway(RunwayIdentifier.Create("18"))!;
+
+        // 1.5 NM behind the threshold on the extended centreline, 450 ft, 80 kt: landing on 18.
+        GeoPosition final = runway.ThresholdPosition.Project(
+            Heading.FromDegrees((runway.CenterlineBearing.Degrees + 180) % 360),
+            1.5);
+        return [new() { Callsign = "MOCK002", Position = final, AltitudeFeet = 450, GroundSpeedKnots = 80 }];
+    }
+
+    [Fact]
+    public void Takeoff_clearance_is_not_given_while_traffic_is_on_short_final_the_aircraft_is_lined_up_instead()
+    {
+        AtcDecision decision = _engine.Evaluate(TestScenario.Context(
+            ReadyForDeparture(),
+            TestScenario.Intent(PilotIntentType.ReadyForDeparture, "ready for departure"),
+            traffic: TrafficOnShortFinalTo18()));
+
+        Assert.True(decision.Accepted);
+        Assert.NotEqual(AtcResponseType.TakeoffClearance, decision.ResponseType);
+        Assert.Equal(AtcResponseType.LineUpClearance, decision.ResponseType);
+        Assert.Equal(ClearanceType.LineUp, decision.IssuedClearance?.Type);
+        Assert.Equal(ClearanceType.LineUp, decision.RequiredReadback?.ClearanceType);
+        Assert.Contains("line up and wait", decision.FallbackPhraseology, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void An_aircraft_lined_up_is_told_to_hold_position_while_traffic_is_on_short_final()
+    {
+        AtcSession lined = ReadyForDeparture() with { Phase = FlightPhase.LineUp };
+
+        AtcDecision decision = _engine.Evaluate(TestScenario.Context(
+            lined,
+            TestScenario.Intent(PilotIntentType.ReadyForDeparture, "ready for departure"),
+            traffic: TrafficOnShortFinalTo18()));
+
+        Assert.False(decision.Accepted);
+        Assert.Null(decision.IssuedClearance);
+        Assert.Contains("hold position", decision.FallbackPhraseology, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void An_aircraft_lined_up_is_cleared_for_takeoff_once_the_runway_is_clear()
+    {
+        AtcSession lined = ReadyForDeparture() with { Phase = FlightPhase.LineUp };
+
+        AtcDecision decision = _engine.Evaluate(TestScenario.Context(
+            lined,
+            TestScenario.Intent(PilotIntentType.ReadyForDeparture, "ready for departure")));
+
+        Assert.Equal(AtcResponseType.TakeoffClearance, decision.ResponseType);
+    }
+
+    [Theory]
+    [InlineData(5.0, 450, 80, 0)]   // too far away
+    [InlineData(1.5, 4_000, 150, 0)] // overflying, far above the circuit
+    [InlineData(1.5, 450, 5, 0)]    // taxiing or parked, not landing
+    [InlineData(1.5, 450, 80, 90)]  // well off the centreline
+    public void Takeoff_clearance_is_not_refused_for_traffic_that_is_not_on_short_final(
+        double distanceNauticalMiles,
+        double altitudeFeet,
+        double groundSpeedKnots,
+        int offCentrelineDegrees)
+    {
+        AtcSession session = ReadyForDeparture();
+        RunwayData runway = TestScenario.Departure_STMR.FindRunway(RunwayIdentifier.Create("18"))!;
+        GeoPosition position = runway.ThresholdPosition.Project(
+            Heading.FromDegrees((runway.CenterlineBearing.Degrees + 180 + offCentrelineDegrees) % 360),
+            distanceNauticalMiles);
+        var traffic = new List<TrafficContact>
+        {
+            new() { Callsign = "MOCK003", Position = position, AltitudeFeet = altitudeFeet, GroundSpeedKnots = groundSpeedKnots },
+        };
+
+        AtcDecision decision = _engine.Evaluate(TestScenario.Context(
+            session,
+            TestScenario.Intent(PilotIntentType.ReadyForDeparture, "ready for departure"),
+            traffic: traffic));
+
+        Assert.Equal(AtcResponseType.TakeoffClearance, decision.ResponseType);
+    }
+
     [Fact]
     public void Takeoff_clearance_is_refused_before_the_aircraft_has_taxied()
     {
@@ -881,6 +965,240 @@ public class AtcStateEngineTests
         Assert.True(decision.Accepted);
         Assert.Equal(AtcResponseType.GoAroundInstruction, decision.ResponseType);
         Assert.Equal(FlightPhase.GoAround, decision.NewPhase);
+    }
+
+    [Fact]
+    public void A_go_around_is_answered_by_the_controller_who_has_the_aircraft()
+    {
+        AtcSession session = OnApproach();
+
+        AtcDecision decision = _engine.Evaluate(TestScenario.Context(
+            session,
+            TestScenario.Intent(PilotIntentType.GoAround, "storm one two three going around", confidence: 0.9)));
+
+        Assert.Equal(ControllerPosition.Approach, decision.IssuedClearance?.IssuedBy);
+    }
+
+    [Theory]
+    [InlineData(0, 3000)]
+    [InlineData(1100, 3500)]
+    [InlineData(5000, 7000)]
+    public void A_go_around_without_an_assigned_altitude_climbs_two_thousand_feet_above_the_aerodrome(
+        int elevationFeet,
+        int expectedFeet)
+    {
+        AtcEvaluationContext context = TestScenario.Context(
+            OnApproach() with { ClearedAltitude = null },
+            TestScenario.Intent(PilotIntentType.GoAround, "storm one two three going around", confidence: 0.9));
+        context = context with { DestinationAirport = TestScenario.Destination_STMD with { ElevationFeet = elevationFeet } };
+
+        AtcDecision decision = _engine.Evaluate(context);
+
+        Assert.Equal(Altitude.FromFeet(expectedFeet), decision.IssuedClearance?.InitialAltitude);
+    }
+
+    [Fact]
+    public void An_ifr_aircraft_climbing_away_after_a_go_around_is_handed_to_approach()
+    {
+        AtcSession session = OnApproach() with
+        {
+            Phase = FlightPhase.GoAround,
+            CurrentController = ControllerPosition.Tower,
+            CurrentFrequency = TestScenario.Tower,
+            AircraftState = TestScenario.Airborne(1_200),
+        };
+
+        AtcDecision decision = _engine.EvaluateStateChange(TestScenario.Context(session, intent: null));
+
+        Assert.Equal(ControllerPosition.Approach, decision.Handoff?.ToController);
+        Assert.Equal(TestScenario.Approach, decision.Handoff?.ToFrequency);
+        Assert.Equal(FlightPhase.Approach, decision.NewPhase);
+    }
+
+    [Fact]
+    public void An_aircraft_leaving_the_terminal_area_is_handed_from_departure_to_center()
+    {
+        AtcSession session = EnRoute() with
+        {
+            Phase = FlightPhase.Departure,
+            AircraftState = TestScenario.Airborne(11_000) with
+            {
+                Position = TestScenario.Departure_STMR.ReferencePosition.Project(Heading.FromDegrees(0), 45),
+            },
+        };
+
+        AtcDecision decision = _engine.EvaluateStateChange(TestScenario.Context(session, intent: null));
+
+        Assert.Equal(ControllerPosition.Center, decision.Handoff?.ToController);
+        Assert.Equal(TestScenario.Center, decision.Handoff?.ToFrequency);
+        Assert.Equal(FlightPhase.Enroute, decision.NewPhase);
+    }
+
+    [Fact]
+    public void An_aircraft_inside_the_terminal_area_stays_with_departure()
+    {
+        AtcSession session = EnRoute() with
+        {
+            Phase = FlightPhase.Departure,
+            AircraftState = TestScenario.Airborne(8_000) with
+            {
+                Position = TestScenario.Departure_STMR.ReferencePosition.Project(Heading.FromDegrees(0), 15),
+            },
+        };
+
+        Assert.Null(_engine.EvaluateStateChange(TestScenario.Context(session, intent: null)).Handoff);
+    }
+
+    [Fact]
+    public void A_vfr_aircraft_stays_with_tower_after_a_go_around()
+    {
+        AtcSession session = OnApproach() with
+        {
+            Phase = FlightPhase.GoAround,
+            FlightRules = FlightRules.Vfr,
+            CurrentController = ControllerPosition.Tower,
+            CurrentFrequency = TestScenario.Tower,
+            AircraftState = TestScenario.Airborne(1_200),
+        };
+
+        Assert.Null(_engine.EvaluateStateChange(TestScenario.Context(session, intent: null)).Handoff);
+    }
+
+    [Fact]
+    public void No_handoff_is_issued_while_the_aircraft_is_still_low_after_a_go_around()
+    {
+        AtcSession session = OnApproach() with
+        {
+            Phase = FlightPhase.GoAround,
+            CurrentController = ControllerPosition.Tower,
+            CurrentFrequency = TestScenario.Tower,
+            AircraftState = TestScenario.Airborne(300),
+        };
+
+        Assert.Null(_engine.EvaluateStateChange(TestScenario.Context(session, intent: null)).Handoff);
+    }
+
+    // =====================================================================================
+    // Runway crossing
+    // =====================================================================================
+
+    /// <summary>Taxiing in with Ground, held short of runway 18 on the way to the stand.</summary>
+    private AtcSession HeldShortOfARunwayToCross() => AcknowledgedClearance() with
+    {
+        Phase = FlightPhase.TaxiIn,
+        CurrentController = ControllerPosition.Ground,
+        CurrentFrequency = TestScenario.Ground,
+        AircraftState = TestScenario.AtHoldingPoint(),
+        TaxiClearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.TaxiToStand,
+            IssuedBy = ControllerPosition.Ground,
+            IssuedAt = TestScenario.Now,
+            TaxiRoute = ["A", "B"],
+            TaxiDestination = "A1",
+            HoldShortOfRunway = RunwayIdentifier.Create("18"),
+            RequiredReadbackItems = [ReadbackItemType.TaxiRoute],
+        },
+    };
+
+    private AtcDecision AskToCross(AtcSession session, IReadOnlyList<TrafficContact>? traffic = null, RunwayIdentifier? runway = null) =>
+        _engine.Evaluate(TestScenario.Context(
+            session,
+            TestScenario.Intent(
+                PilotIntentType.RequestRunwayCrossing,
+                "storm one two three request to cross",
+                entities: runway is null ? null : new IntentEntities { Runway = runway }),
+            traffic: traffic));
+
+    [Fact]
+    public void An_aircraft_held_short_of_a_runway_on_its_route_is_cleared_to_cross_it()
+    {
+        AtcDecision decision = AskToCross(HeldShortOfARunwayToCross());
+
+        Assert.True(decision.Accepted);
+        Assert.Equal(AtcResponseType.RunwayCrossingClearance, decision.ResponseType);
+        Assert.Equal(ClearanceType.RunwayCrossing, decision.IssuedClearance?.Type);
+        Assert.Equal(RunwayIdentifier.Create("18"), decision.IssuedClearance?.Runway);
+        Assert.Null(decision.IssuedClearance?.HoldShortOfRunway);
+        Assert.Equal(["A", "B"], decision.IssuedClearance?.TaxiRoute);
+        Assert.Equal("A1", decision.IssuedClearance?.TaxiDestination);
+        Assert.Equal(ClearanceType.RunwayCrossing, decision.RequiredReadback?.ClearanceType);
+        Assert.Contains("cross runway", decision.FallbackPhraseology, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void The_crossing_lifts_the_hold_short_restriction_so_the_runway_is_no_incursion()
+    {
+        AtcSession session = HeldShortOfARunwayToCross();
+        AtcDecision crossing = AskToCross(session);
+        session = session.WithClearance(crossing.IssuedClearance!);
+
+        Assert.Null(session.TaxiClearance?.HoldShortOfRunway);
+    }
+
+    [Fact]
+    public void A_crossing_is_refused_while_the_runway_is_occupied()
+    {
+        var traffic = new List<TrafficContact>
+        {
+            new()
+            {
+                Callsign = "MOCK001",
+                Position = TestScenario.Runway18Midpoint,
+                AltitudeFeet = 0,
+                IsOnRunway = true,
+                OccupiedRunway = RunwayIdentifier.Create("18"),
+            },
+        };
+
+        AtcDecision decision = AskToCross(HeldShortOfARunwayToCross(), traffic);
+
+        Assert.False(decision.Accepted);
+        Assert.NotEqual(AtcResponseType.RunwayCrossingClearance, decision.ResponseType);
+    }
+
+    [Fact]
+    public void A_crossing_is_refused_when_the_route_holds_the_aircraft_short_of_no_runway()
+    {
+        AtcSession session = HeldShortOfARunwayToCross() with
+        {
+            TaxiClearance = HeldShortOfARunwayToCross().TaxiClearance! with { HoldShortOfRunway = null },
+        };
+
+        AtcDecision decision = AskToCross(session);
+
+        Assert.False(decision.Accepted);
+        Assert.Contains("no runway crossing", decision.FallbackPhraseology, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void The_departure_runway_holding_point_is_not_a_crossing()
+    {
+        AtcSession session = HeldShortOfARunwayToCross();
+        session = session with
+        {
+            AssignedDepartureRunway = RunwayIdentifier.Create("18"),
+            TaxiClearance = session.TaxiClearance! with { Type = ClearanceType.Taxi },
+        };
+
+        Assert.False(AskToCross(session).Accepted);
+    }
+
+    [Fact]
+    public void A_crossing_asked_for_another_runway_is_refused()
+    {
+        AtcDecision decision = AskToCross(HeldShortOfARunwayToCross(), runway: RunwayIdentifier.Create("09"));
+
+        Assert.False(decision.Accepted);
+    }
+
+    [Fact]
+    public void A_crossing_is_not_cleared_to_an_aircraft_in_the_air()
+    {
+        AtcSession session = HeldShortOfARunwayToCross() with { AircraftState = TestScenario.Airborne(1_500) };
+
+        Assert.False(AskToCross(session).Accepted);
     }
 
     [Fact]

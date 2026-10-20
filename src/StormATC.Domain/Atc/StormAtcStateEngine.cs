@@ -148,7 +148,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             PilotIntentType.ReportDownwind => HandleCircuitLegReport(context, intent, CircuitLeg.Downwind),
             PilotIntentType.ReportBase => HandleCircuitLegReport(context, intent, CircuitLeg.Base),
             PilotIntentType.ReportFinal => HandleFinalReport(context, intent),
-            PilotIntentType.RequestTouchAndGo => HandleTouchAndGoRequest(context),
+            PilotIntentType.RequestTouchAndGo => HandleTouchAndGoRequest(context, intent),
             PilotIntentType.LeaveFrequency => HandleLeaveFrequency(context),
             PilotIntentType.RequestProgressiveTaxi => HandleProgressiveTaxiRequest(context),
             PilotIntentType.ReportHoldingShort => HandleHoldingShortReport(context, intent),
@@ -163,6 +163,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             PilotIntentType.ReportEstablished => HandleEstablishedReport(context, intent),
             PilotIntentType.ReportRunwayVacated => HandleRunwayVacated(context),
             PilotIntentType.RequestTaxiToStand => HandleTaxiToStandRequest(context, intent),
+            PilotIntentType.RequestRunwayCrossing => HandleRunwayCrossingRequest(context, intent),
             PilotIntentType.GoAround => HandleGoAround(context),
             PilotIntentType.Unable => HandleUnable(context),
             PilotIntentType.PilotAcknowledgement => HandlePilotAcknowledgement(),
@@ -244,6 +245,55 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
                     newPhase: null,
                     "Descending into the terminal area.",
                     Say(context).Handoff(arriving, ControllerPosition.Approach, frequency));
+            }
+        }
+
+        // --- Go-around handoff. -------------------------------------------------------------
+        // Tower gives the go-around instruction; once the aircraft is climbing away it is passed
+        // to Approach, which sequences the next approach. A VFR aircraft stays with Tower and
+        // rejoins the circuit.
+        if (session.Phase == FlightPhase.GoAround
+            && session.FlightRules == FlightRules.Ifr
+            && session.CurrentController == ControllerPosition.Tower
+            && !aircraft.IsOnGround
+            && aircraft.IsClimbing
+            && IsAboveAirportBy(context.DestinationAirport ?? context.DepartureAirport, aircraft, 500))
+        {
+            Frequency? approachFrequency = ResolveFrequency(context, ControllerPosition.Approach);
+            if (approachFrequency is Frequency frequency && session.Callsign is Callsign callsign)
+            {
+                return BuildHandoff(
+                    context,
+                    ControllerPosition.Approach,
+                    frequency,
+                    FlightPhase.Approach,
+                    "Climbing away after a go-around.",
+                    Say(context).Handoff(callsign, ControllerPosition.Approach, frequency));
+            }
+        }
+
+        // --- Departure to Center. -------------------------------------------------------------
+        // Departure hands an aircraft that has left the terminal area to the en-route controller.
+        // The mirror of the arrival handoff: it follows the aircraft's position, not a timer.
+        if (session.Phase == FlightPhase.Departure
+            && session.FlightRules == FlightRules.Ifr
+            && session.CurrentController == ControllerPosition.Departure
+            && !aircraft.IsOnGround
+            && context.DepartureAirport is AirportData origin
+            && !aircraft.Position.IsWithin(origin.ReferencePosition, TerminalAreaRadiusNauticalMiles))
+        {
+            Frequency? centerFrequency = ResolveFrequency(context, ControllerPosition.Center);
+            if (centerFrequency is Frequency frequency
+                && frequency != session.CurrentFrequency
+                && session.Callsign is Callsign cruising)
+            {
+                return BuildHandoff(
+                    context,
+                    ControllerPosition.Center,
+                    frequency,
+                    FlightPhase.Enroute,
+                    "Leaving the terminal area after departure.",
+                    Say(context).Handoff(cruising, ControllerPosition.Center, frequency));
             }
         }
 
@@ -1331,12 +1381,30 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
                 Say(context).Unable(callsign, UnableReason.NoDepartureRunwayAssigned));
         }
 
+        bool linedUp = session.Phase == FlightPhase.LineUp;
+
         // The mock runway-occupancy model: any traffic reported on this runway blocks it.
         if (IsRunwayOccupied(context, runway))
         {
-            return AtcDecision.Reject(
-                $"Runway {runway} is occupied.",
-                Say(context).HoldShortTrafficOnRunway(callsign, runway));
+            return linedUp
+                ? AtcDecision.Reject(
+                    $"Runway {runway} is occupied; the aircraft is lined up and must hold.",
+                    Say(context).HoldPositionLinedUp(callsign))
+                : AtcDecision.Reject(
+                    $"Runway {runway} is occupied.",
+                    Say(context).HoldShortTrafficOnRunway(callsign, runway));
+        }
+
+        // Landing traffic on short final to this runway, or to the opposite end of it, is as
+        // much a conflict as traffic already on the surface. An aircraft still holding short
+        // may be lined up to wait for it; one already on the runway stays where it is.
+        if (FindTrafficOnShortFinal(context, runway) is not null)
+        {
+            return linedUp
+                ? AtcDecision.Reject(
+                    $"Traffic is on short final for runway {runway}; the aircraft is lined up and must hold.",
+                    Say(context).HoldPositionLinedUp(callsign))
+                : IssueLineUpAndWait(context, callsign, runway);
         }
 
         var clearance = new Clearance
@@ -1388,6 +1456,53 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
                 context.Weather?.WindDirection,
                 context.Weather?.WindSpeedKnots,
                 initialHeading: null),
+        };
+    }
+
+    /// <summary>
+    /// Lines the aircraft up behind landing traffic: the runway is clear, but a takeoff roll would
+    /// conflict with the arrival, so the tower puts the aircraft on the runway to wait.
+    /// </summary>
+    private static AtcDecision IssueLineUpAndWait(
+        AtcEvaluationContext context,
+        Callsign callsign,
+        RunwayIdentifier runway)
+    {
+        var clearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.LineUp,
+            IssuedBy = ControllerPosition.Tower,
+            IssuedAt = context.CurrentTime,
+            Runway = runway,
+            RequiredReadbackItems = [ReadbackItemType.Runway],
+        };
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.LineUpClearance,
+            IssuedClearance = clearance,
+            RequiredReadback = new PendingReadback
+            {
+                ClearanceId = clearance.ClearanceId,
+                ClearanceType = ClearanceType.LineUp,
+                ExpectedItems =
+                [
+                    new ExpectedReadbackItem
+                    {
+                        Type = ReadbackItemType.Runway,
+                        ExpectedValue = runway.ToComparisonValue(),
+                        SpokenValue = Say(context).SpeakRunway(runway),
+                        IsCritical = true,
+                    },
+                ],
+                IssuedAt = context.CurrentTime,
+                IsMandatory = true,
+            },
+            ApprovedFacts = clearance.ToRequiredFacts(),
+            ProhibitedFacts = ["takeoff clearance", "any runway other than the assigned runway"],
+            FallbackPhraseology = Say(context).LineUpAndWait(callsign, runway),
         };
     }
 
@@ -1830,7 +1945,8 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
     private static AtcDecision HandleLandingClearance(
         AtcEvaluationContext context,
         Callsign callsign,
-        bool touchAndGo = false)
+        bool touchAndGo = false,
+        CircuitManoeuvre manoeuvre = CircuitManoeuvre.None)
     {
         AtcSession session = context.Session;
 
@@ -1871,7 +1987,12 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
         return new AtcDecision
         {
             Accepted = true,
-            ResponseType = touchAndGo ? AtcResponseType.TouchAndGoClearance : AtcResponseType.LandingClearance,
+            ResponseType = manoeuvre switch
+            {
+                CircuitManoeuvre.Option => AtcResponseType.OptionClearance,
+                CircuitManoeuvre.LowPass => AtcResponseType.LowPassClearance,
+                _ => touchAndGo ? AtcResponseType.TouchAndGoClearance : AtcResponseType.LandingClearance,
+            },
             NewPhase = FlightPhase.Final,
             IssuedClearance = clearance,
             RequiredReadback = new PendingReadback
@@ -1893,7 +2014,19 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             },
             ApprovedFacts = BuildLandingFacts(context, landingRunway, touchAndGo),
             ProhibitedFacts = ["takeoff clearance", "any runway other than the assigned runway"],
-            FallbackPhraseology = touchAndGo
+            FallbackPhraseology = manoeuvre == CircuitManoeuvre.Option
+                ? Say(context).OptionClearance(
+                    callsign,
+                    landingRunway,
+                    context.Weather?.WindDirection,
+                    context.Weather?.WindSpeedKnots)
+                : manoeuvre == CircuitManoeuvre.LowPass
+                ? Say(context).LowPassClearance(
+                    callsign,
+                    landingRunway,
+                    context.Weather?.WindDirection,
+                    context.Weather?.WindSpeedKnots)
+                : touchAndGo
                 ? Say(context).TouchAndGoClearance(
                     callsign,
                     landingRunway,
@@ -1907,6 +2040,115 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
         };
     }
 
+    /// <summary>
+    /// "Holding short runway 27, request to cross": cleared across the runway the taxi clearance holds
+    /// the aircraft short of, if nothing is on it or about to land on it.
+    /// </summary>
+    private static AtcDecision HandleRunwayCrossingRequest(AtcEvaluationContext context, PilotIntent intent)
+    {
+        AtcSession session = context.Session;
+
+        if (session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        if (!context.AircraftState.IsOnGround)
+        {
+            return AtcDecision.Reject(
+                "A runway is crossed on the ground.",
+                Say(context).Unable(callsign, UnableReason.NotAtThisStageOfFlight));
+        }
+
+        if (session.CurrentController is not (ControllerPosition.Ground or ControllerPosition.Tower))
+        {
+            return AtcDecision.Reject(
+                $"A runway crossing is cleared by Ground or Tower; the aircraft is with {session.CurrentController}.",
+                Say(context).Unable(callsign, UnableReason.NotWithThisController));
+        }
+
+        // The departure runway's holding point is not a crossing: the aircraft is there to depart.
+        Clearance? taxi = session.TaxiClearance;
+        if (taxi?.HoldShortOfRunway is not RunwayIdentifier holding
+            || (taxi.Type == ClearanceType.Taxi && holding == session.AssignedDepartureRunway))
+        {
+            return AtcDecision.Reject(
+                "No runway crossing is planned on the taxi route.",
+                Say(context).Unable(callsign, UnableReason.NoRunwayCrossingPending));
+        }
+
+        if (intent.Entities.Runway is RunwayIdentifier asked
+            && asked != holding
+            && asked != holding.Reciprocal())
+        {
+            return AtcDecision.Reject(
+                $"The aircraft holds short of {holding}, not {asked}.",
+                Say(context).WrongHoldingPoint(callsign, holding));
+        }
+
+        if (IsRunwayOccupied(context, holding))
+        {
+            return AtcDecision.Reject(
+                $"Runway {holding} is occupied.",
+                Say(context).HoldShortTrafficOnRunway(callsign, holding));
+        }
+
+        if (FindTrafficOnShortFinal(context, holding) is not null)
+        {
+            return AtcDecision.Reject(
+                $"Traffic is on short final for runway {holding}.",
+                Say(context).HoldPositionTrafficOnShortFinal(callsign, holding));
+        }
+
+        // The crossing replaces the hold-short restriction but keeps the route, so progressive taxi
+        // goes on from the far side of the runway.
+        var clearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.RunwayCrossing,
+            IssuedBy = session.CurrentController,
+            IssuedAt = context.CurrentTime,
+            Runway = holding,
+            TaxiRoute = taxi.TaxiRoute,
+            TaxiPathNodes = taxi.TaxiPathNodes,
+            TaxiPathTaxiways = taxi.TaxiPathTaxiways,
+            TaxiRouteLengthMeters = taxi.TaxiRouteLengthMeters,
+            TaxiDestination = taxi.TaxiDestination,
+            RequiredReadbackItems = [ReadbackItemType.Runway],
+        };
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.RunwayCrossingClearance,
+            IssuedClearance = clearance,
+            RequiredReadback = new PendingReadback
+            {
+                ClearanceId = clearance.ClearanceId,
+                ClearanceType = ClearanceType.RunwayCrossing,
+                ExpectedItems =
+                [
+                    new ExpectedReadbackItem
+                    {
+                        Type = ReadbackItemType.Runway,
+                        ExpectedValue = holding.ToComparisonValue(),
+                        SpokenValue = Say(context).SpeakRunway(holding),
+                        IsCritical = true,
+                    },
+                ],
+                IssuedAt = context.CurrentTime,
+                IsMandatory = true,
+            },
+            ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["instruction"] = "cross the runway",
+                ["runway"] = holding.ToComparisonValue(),
+            },
+            ProhibitedFacts = ["takeoff clearance", "line up", "any runway other than the one named"],
+            FallbackPhraseology = Say(context).RunwayCrossingClearance(callsign, holding),
+        };
+    }
+
     private static AtcDecision HandleGoAround(AtcEvaluationContext context)
     {
         AtcSession session = context.Session;
@@ -1917,14 +2159,16 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
         }
 
         // A go-around is always approved. Refusing one would be nonsense: the aircraft is
-        // already going around by the time the pilot says so.
-        Altitude climbTo = session.ClearedAltitude ?? Altitude.FromFeet(3000);
+        // already going around by the time the pilot says so. It is answered by whoever has the
+        // aircraft: Tower on short final, Approach when the approach is missed earlier.
+        int elevation = (context.DestinationAirport ?? context.DepartureAirport)?.ElevationFeet ?? 0;
+        Altitude climbTo = session.ClearedAltitude ?? DefaultMissedApproachAltitude(elevation);
 
         var clearance = new Clearance
         {
             ClearanceId = Guid.CreateVersion7(),
             Type = ClearanceType.Climb,
-            IssuedBy = ControllerPosition.Tower,
+            IssuedBy = session.CurrentController,
             IssuedAt = context.CurrentTime,
             InitialAltitude = climbTo,
         };
@@ -2123,7 +2367,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
 
         return AtcDecision.Reject(
             $"{intent.Type} is handled by {needed}, but the aircraft is with {current}.",
-            Say(context).ContactController(session.Callsign, needed));
+            Say(context).ContactController(session.Callsign, needed, ResolveFrequency(context, needed)));
     }
 
     private static ControllerPosition? RequiredControllerFor(PilotIntentType intent) => intent switch
@@ -2313,6 +2557,58 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
         return Math.Sqrt((offsetX * offsetX) + (offsetY * offsetY));
     }
 
+    /// <summary>Distance from a threshold inside which traffic on the extended centreline is on short final.</summary>
+    private const double ShortFinalNauticalMiles = 3.0;
+
+    /// <summary>Height above the aerodrome below which traffic on the centreline is landing, not overflying.</summary>
+    private const int ShortFinalHeightFeet = 1500;
+
+    /// <summary>How far, in degrees, traffic may be off the extended centreline and still be on final.</summary>
+    private const int ShortFinalToleranceDegrees = 20;
+
+    /// <summary>
+    /// Moving traffic close to the extended centreline of the runway, at either end, and low
+    /// enough to be landing on it. Traffic on the runway itself is <see cref="IsRunwayOccupied"/>'s concern.
+    /// </summary>
+    private static TrafficContact? FindTrafficOnShortFinal(AtcEvaluationContext context, RunwayIdentifier runway)
+    {
+        AirportData? airport = context.RelevantAirport;
+        if (airport?.FindRunway(runway) is not RunwayData data)
+        {
+            return null;
+        }
+
+        Heading runwayDirection = data.CenterlineBearing;
+        int ceiling = airport.ElevationFeet + ShortFinalHeightFeet;
+
+        foreach (TrafficContact contact in context.Traffic)
+        {
+            if (contact.IsOnRunway || contact.GroundSpeedKnots < 40 || contact.AltitudeFeet > ceiling)
+            {
+                continue;
+            }
+
+            // Behind the threshold: traffic landing on this runway. Beyond the far end: traffic landing the other way.
+            bool landingSameWay =
+                data.ThresholdPosition.DistanceNauticalMilesTo(contact.Position) <= ShortFinalNauticalMiles
+                && data.ThresholdPosition.TrueBearingTo(contact.Position).DifferenceTo(Opposite(runwayDirection))
+                    <= ShortFinalToleranceDegrees;
+            bool landingOtherWay =
+                data.EndPosition.DistanceNauticalMilesTo(contact.Position) <= ShortFinalNauticalMiles
+                && data.EndPosition.TrueBearingTo(contact.Position).DifferenceTo(runwayDirection)
+                    <= ShortFinalToleranceDegrees;
+
+            if (landingSameWay || landingOtherWay)
+            {
+                return contact;
+            }
+        }
+
+        return null;
+    }
+
+    private static Heading Opposite(Heading heading) => Heading.FromDegrees((heading.Degrees + 180) % 360);
+
     private static bool IsRunwayOccupied(AtcEvaluationContext context, RunwayIdentifier runway)
     {
         foreach (TrafficContact contact in context.Traffic)
@@ -2326,6 +2622,19 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
 
         return false;
     }
+
+    /// <summary>
+    /// The altitude to climb to on a go-around when none was assigned: 2000 ft above the aerodrome,
+    /// to the next 500 ft, and never below 3000 ft.
+    /// </summary>
+    private static Altitude DefaultMissedApproachAltitude(int elevationFeet)
+    {
+        int rounded = (elevationFeet + 2000 + 499) / 500 * 500;
+        return Altitude.FromFeet(Math.Max(3000, rounded));
+    }
+
+    private static bool IsAboveAirportBy(AirportData? airport, Aircraft.AircraftState aircraft, int feet) =>
+        aircraft.IndicatedAltitudeFeet > (airport?.ElevationFeet ?? 0) + feet;
 
     private static bool IsAboveAerodromeBy(AtcEvaluationContext context, int feet)
     {

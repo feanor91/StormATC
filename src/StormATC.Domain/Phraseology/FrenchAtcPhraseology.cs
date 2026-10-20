@@ -111,6 +111,15 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
     /// <inheritdoc />
     public string SpellIcao(string icao) => FrenchSpokenNumbers.SpellOut(icao);
 
+    /// <summary>Renders the name of a departure or arrival procedure: <c>PILU2F</c> becomes "PILU deux Foxtrot".</summary>
+    public static string SpeakProcedure(string procedure)
+    {
+        ArgumentNullException.ThrowIfNull(procedure);
+        return ProcedureNames.TrySplit(procedure, out string word, out string rest)
+            ? $"{word} {FrenchSpokenNumbers.SpellOut(rest)}"
+            : procedure;
+    }
+
     /// <inheritdoc />
     public string SpellIdentifier(string identifier) => FrenchSpokenNumbers.SpellOut(identifier);
 
@@ -164,7 +173,7 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
 
         if (clearance.DepartureProcedure is { Length: > 0 } sid)
         {
-            builder.Add($"départ {sid}");
+            builder.Add($"départ {SpeakProcedure(sid)}");
         }
         else if (clearance.ClearedRoute is { Length: > 0 })
         {
@@ -493,6 +502,31 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
             .Build();
 
     /// <inheritdoc />
+    public string OptionClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots) =>
+        ManoeuvreClearance(callsign, runway, "autorisé option", windDirection, windSpeedKnots);
+
+    /// <inheritdoc />
+    public string LowPassClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots) =>
+        ManoeuvreClearance(callsign, runway, "autorisé passage bas", windDirection, windSpeedKnots);
+
+    private string ManoeuvreClearance(
+        Callsign callsign,
+        RunwayIdentifier runway,
+        string clearance,
+        Heading? windDirection,
+        int? windSpeedKnots)
+    {
+        PhraseBuilder builder = Phrase(callsign).Add(SpeakRunway(runway)).Add(clearance);
+
+        if (Wind(windDirection, windSpeedKnots) is string wind)
+        {
+            builder.Add(wind);
+        }
+
+        return builder.Build();
+    }
+
+    /// <inheritdoc />
     public string TouchAndGoClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots)
     {
         PhraseBuilder builder = Phrase(callsign).Add(SpeakRunway(runway)).Add("autorisé toucher");
@@ -568,8 +602,9 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
         Phrase(callsign).Add("impossible").Add($"maintenez {SpeakAltitude(altitude)}").Build();
 
     /// <inheritdoc />
-    public string ContactController(Callsign? callsign, ControllerPosition controller) =>
-        $"{SpokenOr(callsign, StationCalling)}, contactez {ControllerName(controller)}.";
+    public string ContactController(Callsign? callsign, ControllerPosition controller, Frequency? frequency = null) =>
+        $"{SpokenOr(callsign, StationCalling)}, contactez {ControllerName(controller)}"
+        + (frequency is Frequency f ? $" {SpeakFrequency(f)}." : ".");
 
     /// <inheritdoc />
     public string FrequencyInformation(Callsign callsign, ControllerPosition controller, Frequency frequency) =>
@@ -600,6 +635,18 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
     /// <inheritdoc />
     public string HoldShortTrafficOnRunway(Callsign callsign, RunwayIdentifier runway) =>
         Phrase(callsign).Add(ReadbackItemHoldShort(runway)).Add("trafic sur la piste").Build();
+
+    /// <inheritdoc />
+    public string RunwayCrossingClearance(Callsign callsign, RunwayIdentifier runway) =>
+        Phrase(callsign).Add($"traversez {SpeakRunway(runway)}").Build();
+
+    /// <inheritdoc />
+    public string HoldPositionTrafficOnShortFinal(Callsign callsign, RunwayIdentifier runway) =>
+        Phrase(callsign).Add(ReadbackItemHoldShort(runway)).Add("trafic en courte finale").Build();
+
+    /// <inheritdoc />
+    public string HoldPositionLinedUp(Callsign callsign) =>
+        Phrase(callsign).Add("maintenez position").Add("trafic en courte finale").Build();
 
     /// <inheritdoc />
     public string WrongApproachRunway(Callsign callsign, RunwayIdentifier clearedRunway) =>
@@ -725,6 +772,7 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
         UnableReason.NoDepartureRunwayAssigned => "aucune piste de départ assignée",
         UnableReason.ProgressiveTaxiGroundOnly => "guidage au roulage uniquement au sol",
         UnableReason.NoActiveTaxiRoute => "aucun itinéraire de roulage en cours",
+        UnableReason.NoRunwayCrossingPending => "aucune traversée de piste prévue sur votre itinéraire",
         UnableReason.ContactTowerForDeparture => "contactez la Tour pour le départ",
         UnableReason.NotAtHoldingPoint => "vous n'êtes pas au point d'attente",
         UnableReason.NotWithThisController => "pas sur cette fréquence",

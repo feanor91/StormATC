@@ -205,10 +205,41 @@ public class JsonAirportDataProviderTests
         Assert.NotNull(airport.Frequencies.Departure);
     }
 
+    [Theory]
+    [InlineData("STMK")]
+    [InlineData("STMT")]
+    public async Task Each_extra_fictional_aerodrome_loads_with_a_runway_crossing(string icao)
+    {
+        AirportData airport = (await Provider().GetAirportAsync(icao, CancellationToken.None))!;
+
+        Assert.True(airport.IsFictional);
+        Assert.Equal(2, airport.Runways.Count);
+        Assert.NotEmpty(airport.Stands);
+        Assert.NotNull(airport.Frequencies.Tower);
+        Assert.NotNull(airport.Frequencies.Ground);
+        Assert.True(airport.SupportsTaxiRouting);
+    }
+
     [Fact]
     public async Task An_unknown_aerodrome_returns_null_rather_than_a_placeholder()
     {
         Assert.Null(await Provider().GetAirportAsync("ZZZZ", CancellationToken.None));
+    }
+
+    [Theory]
+    [InlineData("STMK", "K1", "09", "27")]
+    [InlineData("STMT", "K2", "27", "09")]
+    public async Task The_extra_aerodromes_route_to_either_runway_and_flag_the_crossing(
+        string icao, string stand, string first, string second)
+    {
+        AirportData airport = (await Provider().GetAirportAsync(icao, CancellationToken.None))!;
+
+        Assert.True(TaxiPathfinder.FindRouteToHoldingPoint(airport, stand, RunwayIdentifier.Create(first)).Found);
+        Assert.True(TaxiPathfinder.FindRouteToHoldingPoint(airport, stand, RunwayIdentifier.Create(second)).Found);
+
+        TaxiRoute toRemote = TaxiPathfinder.FindRoute(airport.TaxiGraph!, "S_" + stand, "S_R1");
+        Assert.True(toRemote.Found);
+        Assert.Contains(RunwayIdentifier.Create("09"), toRemote.CrossedRunways);
     }
 
     [Fact]

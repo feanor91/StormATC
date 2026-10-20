@@ -60,6 +60,7 @@ chiffre (« piste dix-huit » comme « piste un huit »).
 | Changement de fréquence | « Contactons Tour cent dix-huit décimale sept » |
 | Demandes | « demandons direct NOVAR », « demandons à monter niveau 240 », « demandons l'ILS » |
 | Approche / atterrissage | « établis ILS piste 36 », « autorisés atterrissage piste 36 », « piste dégagée » |
+| Circuit VFR | « finale piste 15, pour une option », « demandons un passage bas » ; le contrôleur répond « autorisé option » ou « autorisé passage bas » |
 | Divers | « répétez », « quelle est la fréquence de la tour ? », « remise de gaz », « mayday » |
 
 ## Voix locale

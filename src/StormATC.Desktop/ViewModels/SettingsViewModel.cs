@@ -48,6 +48,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     private readonly AtcSessionContext _sessionContext;
     private readonly IJoystickInputService _joystickInput;
     private readonly ILogger<SettingsViewModel> _logger;
+    private readonly int _toolbarPanelPort;
 
     /// <summary>
     /// Offline mode as it was when the host was built, so the page can tell the difference
@@ -195,6 +196,9 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     private string _localVoiceTestResult = string.Empty;
 
     [ObservableProperty]
+    private string _panelInstallResult = string.Empty;
+
+    [ObservableProperty]
     private string _defaultPushbackDirection = PushbackDirections.TailLeft;
 
     [ObservableProperty]
@@ -305,8 +309,10 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         IOptions<PersistenceOptions> persistenceOptions,
         IOptions<AudioOptions> audioOptions,
         IOptions<LocalVoiceOptions> localVoiceOptions,
+        IOptions<ToolbarPanelOptions> toolbarPanelOptions,
         ILogger<SettingsViewModel> logger)
     {
+        _toolbarPanelPort = toolbarPanelOptions?.Value.Port ?? ToolbarPanelOptions.DefaultPort;
         _secretStore = secretStore ?? throw new ArgumentNullException(nameof(secretStore));
         _languageModel = languageModel ?? throw new ArgumentNullException(nameof(languageModel));
         _modelCatalog = modelCatalog ?? throw new ArgumentNullException(nameof(modelCatalog));
@@ -846,6 +852,93 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     [RelayCommand]
     private async Task RemoveAnthropicKeyAsync() =>
         await RemoveKeyAsync(SecretKeys.AnthropicApiKey, "Anthropic").ConfigureAwait(true);
+
+    /// <summary>
+    /// Copies the toolbar panel into the Community folder of each MSFS installation found.
+    /// </summary>
+    [RelayCommand]
+    private void InstallMsfsPanel()
+    {
+        try
+        {
+            IReadOnlyList<string> folders = StormATC.Infrastructure.Panel.MsfsPanelInstaller.FindCommunityFolders();
+            if (folders.Count == 0)
+            {
+                PanelInstallResult = UiText.T(
+                    "No MSFS Community folder was found. Copy the folder msfs-panel\\stormatc-ingamepanel "
+                    + "from the StormATC installation into your Community folder yourself.");
+                return;
+            }
+
+            foreach (string folder in folders)
+            {
+                StormATC.Infrastructure.Panel.MsfsPanelInstaller.Install(folder);
+            }
+
+            PanelInstallResult = UiText.T("Panel installed in: ") + string.Join(", ", folders)
+                + UiText.T(". Restart MSFS, then open the StormATC icon in the toolbar.");
+        }
+        catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException)
+        {
+            _logger.LogError(ex, "The MSFS panel could not be installed.");
+            PanelInstallResult = UiText.T("The panel could not be installed: ") + ex.Message;
+        }
+    }
+
+    /// <summary>Opens the panel page in the default browser, for a window or a VR overlay.</summary>
+    [RelayCommand]
+    private void OpenPanelInBrowser() =>
+        OpenDownloadPage($"http://127.0.0.1:{_toolbarPanelPort}/panel");
+
+    /// <summary>Opens a download page for Whisper, Piper or the voices in the default browser.</summary>
+    /// <param name="address">The address; only GitHub, Hugging Face and the local panel page are opened.</param>
+    [RelayCommand]
+    private void OpenDownloadPage(string? address)
+    {
+        if (!Uri.TryCreate(address, UriKind.Absolute, out Uri? uri))
+        {
+            return;
+        }
+
+        bool download = uri.Scheme == Uri.UriSchemeHttps && uri.Host is "github.com" or "huggingface.co";
+        bool ownPanel = uri.Scheme == Uri.UriSchemeHttp && uri.Host == "127.0.0.1" && uri.Port == _toolbarPanelPort;
+        if (!download && !ownPanel)
+        {
+            return;
+        }
+
+        try
+        {
+            using var browser = System.Diagnostics.Process.Start(
+                new System.Diagnostics.ProcessStartInfo(uri.AbsoluteUri) { UseShellExecute = true });
+        }
+        catch (System.ComponentModel.Win32Exception ex)
+        {
+            _logger.LogWarning(ex, "Could not open {Address}.", uri);
+        }
+    }
+
+    /// <summary>Opens the download guide that is installed with the application.</summary>
+    [RelayCommand]
+    private void OpenDownloadGuide()
+    {
+        string guide = System.IO.Path.Combine(AppContext.BaseDirectory, "docs", "third-party-downloads.pdf");
+        if (!System.IO.File.Exists(guide))
+        {
+            _logger.LogWarning("The download guide {Guide} is missing.", guide);
+            return;
+        }
+
+        try
+        {
+            using var viewer = System.Diagnostics.Process.Start(
+                new System.Diagnostics.ProcessStartInfo(guide) { UseShellExecute = true });
+        }
+        catch (System.ComponentModel.Win32Exception ex)
+        {
+            _logger.LogWarning(ex, "Could not open {Guide}.", guide);
+        }
+    }
 
     /// <summary>Deletes the stored Deepgram key.</summary>
     [RelayCommand]

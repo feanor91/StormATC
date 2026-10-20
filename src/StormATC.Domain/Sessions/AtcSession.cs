@@ -1,5 +1,6 @@
 using StormATC.Domain.Aircraft;
 using StormATC.Domain.FlightPlanning;
+using StormATC.Domain.Intents;
 using StormATC.Domain.Phraseology;
 using StormATC.Domain.ValueObjects;
 
@@ -115,6 +116,9 @@ public sealed record AtcSession
     /// <summary>True when the pilot asked for a touch and go rather than a full-stop landing.</summary>
     public bool TouchAndGoRequested { get; init; }
 
+    /// <summary>The option or low pass the pilot asked for, until the aircraft leaves the circuit.</summary>
+    public CircuitManoeuvre RequestedManoeuvre { get; init; }
+
     /// <summary>The callsign in use, taken from the flight plan.</summary>
     public Callsign? Callsign => FlightPlan?.Callsign;
 
@@ -158,6 +162,9 @@ public sealed record AtcSession
     public AtcSession WithArrivalRunway(RunwayIdentifier runway) => this with { AssignedArrivalRunway = runway };
 
     public AtcSession WithTouchAndGoRequested(bool requested) => this with { TouchAndGoRequested = requested };
+
+    /// <summary>Records the option or low pass the pilot asked for.</summary>
+    public AtcSession WithRequestedManoeuvre(CircuitManoeuvre manoeuvre) => this with { RequestedManoeuvre = manoeuvre };
 
     /// <summary>Returns a session with the flight plan attached.</summary>
     public AtcSession WithFlightPlan(FlightPlan plan) => this with { FlightPlan = plan };

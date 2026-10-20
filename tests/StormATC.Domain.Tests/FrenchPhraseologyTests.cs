@@ -16,6 +16,23 @@ public class FrenchPhraseologyTests
     private static readonly FrenchAtcPhraseology Fr = FrenchAtcPhraseology.Instance;
     private readonly StormAtcStateEngine _engine = new(new DeterministicReadbackEvaluator());
 
+    [Fact]
+    public void Sending_a_pilot_to_another_controller_names_the_frequency()
+    {
+        Frequency tower = Frequency.FromMegahertz(118.700m);
+
+        string withFrequency = Fr.ContactController(null, ControllerPosition.Tower, tower);
+        string without = Fr.ContactController(null, ControllerPosition.Tower);
+
+        Assert.Contains("contactez Tour", withFrequency, StringComparison.Ordinal);
+        Assert.Contains(Fr.SpeakFrequency(tower), withFrequency, StringComparison.Ordinal);
+        Assert.DoesNotContain("décimale", without, StringComparison.Ordinal);
+        Assert.Contains(
+            tower.ToSpoken(),
+            EnglishAtcPhraseology.Instance.ContactController(null, ControllerPosition.Tower, tower),
+            StringComparison.Ordinal);
+    }
+
     // =====================================================================================
     // Numbers
     // =====================================================================================
@@ -153,5 +170,16 @@ public class FrenchPhraseologyTests
 
         Assert.NotNull(decision.FallbackPhraseology);
         Assert.Contains("répétez", decision.FallbackPhraseology, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void A_procedure_name_is_said_as_a_word_a_digit_and_a_letter()
+    {
+        string spoken = FrenchAtcPhraseology.SpeakProcedure("PILU2F");
+
+        Assert.StartsWith("PILU ", spoken, StringComparison.Ordinal);
+        Assert.DoesNotContain("2", spoken, StringComparison.Ordinal);
+        Assert.DoesNotContain("PILU2F", spoken, StringComparison.Ordinal);
+        Assert.Equal("RADAR", FrenchAtcPhraseology.SpeakProcedure("RADAR"));
     }
 }

@@ -292,4 +292,31 @@ public class SpokenNumbersTests
     {
         Assert.Equal("4 2", SpokenNumbers.FoldDigitWords("for two"));
     }
+
+    [Theory]
+    [InlineData("PILU2F", "PILU two Foxtrot")]
+    [InlineData("STORM1A", "STORM one Alfa")]
+    [InlineData("VEVA7R", "VEVA seven Romeo")]
+    [InlineData("RADAR", "RADAR")]
+    public void A_procedure_name_is_said_as_a_word_a_digit_and_a_letter(string procedure, string expected) =>
+        Assert.Equal(expected, DeterministicPhraseology.SpeakProcedure(procedure));
+
+    [Fact]
+    public void The_clearance_says_the_departure_procedure_the_way_it_is_spoken()
+    {
+        var clearance = new Clearance
+        {
+            ClearanceId = Guid.CreateVersion7(),
+            Type = ClearanceType.IfrClearance,
+            IssuedBy = ControllerPosition.ClearanceDelivery,
+            IssuedAt = TestScenario.Now,
+            ClearedToDestination = "LFMN",
+            DepartureProcedure = "PILU2F",
+        };
+
+        string spoken = DeterministicPhraseology.IfrClearance(Callsign.Create("STORM123"), clearance);
+
+        Assert.Contains("PILU two Foxtrot departure", spoken, StringComparison.Ordinal);
+        Assert.DoesNotContain("PILU2F", spoken, StringComparison.Ordinal);
+    }
 }

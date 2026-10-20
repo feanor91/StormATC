@@ -1,10 +1,12 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
 using StormATC.Application.Intent;
 using StormATC.Application.Options;
+using StormATC.Application.Panel;
 using StormATC.Application.Phraseology;
 using StormATC.Application.Sessions;
 using StormATC.Application.Transmissions;
@@ -14,6 +16,7 @@ using StormATC.Infrastructure.Data;
 using StormATC.Infrastructure.FlightPlanning;
 using StormATC.Infrastructure.Input;
 using StormATC.Infrastructure.Mocks;
+using StormATC.Infrastructure.Panel;
 using StormATC.Infrastructure.Persistence;
 using StormATC.Infrastructure.Prompts;
 using StormATC.Infrastructure.Security;
@@ -109,6 +112,16 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddSingleton<PilotTransmissionCoordinator>();
+        services.AddSingleton<StateChangeMonitor>();
+        services.AddSingleton<IToolbarPanelStateSource, SessionToolbarPanelStateSource>();
+        services.AddSingleton(sp => new ToolbarPanelServer(
+            sp.GetRequiredService<IToolbarPanelStateSource>(),
+            sp.GetRequiredService<IOptions<ToolbarPanelOptions>>(),
+            sp.GetRequiredService<ILogger<ToolbarPanelServer>>(),
+            Path.Combine(AppContext.BaseDirectory, "panel"),
+            sp.GetService<IVoiceRejection>(),
+            sp.GetService<ISimRouteReceiver>()));
+        services.AddSingleton<IHostedService>(sp => sp.GetRequiredService<ToolbarPanelServer>());
         services.AddSingleton<RadioActivityState>();
 
         AddProviders(services, configuration);
@@ -125,6 +138,13 @@ public static class ServiceCollectionExtensions
 
         services.AddOptions<VfrLocalOptions>()
             .Bind(configuration.GetSection(VfrLocalOptions.SectionName));
+
+        services.AddOptions<SimFlightPlanOptions>()
+            .Bind(configuration.GetSection(SimFlightPlanOptions.SectionName));
+
+        services.AddOptions<ToolbarPanelOptions>()
+            .Bind(configuration.GetSection(ToolbarPanelOptions.SectionName))
+            .ValidateDataAnnotations();
 
         services.AddOptions<OpenRouterOptions>()
             .Bind(configuration.GetSection(OpenRouterOptions.SectionName))
@@ -265,6 +285,10 @@ public static class ServiceCollectionExtensions
         // so the developer controls on the dashboard can drive it directly.
         services.AddSingleton<MockSimulatorConnector>();
         services.AddSingleton<MsfsSimConnectConnector>();
+        services.AddSingleton<ISimulatorFlightPlanEvents>(
+            sp => sp.GetRequiredService<MsfsSimConnectConnector>());
+        services.AddSingleton<IApproachProcedureSource>(
+            sp => sp.GetRequiredService<MsfsSimConnectConnector>());
         services.AddSingleton<SimulatorConnectorRouter>();
         services.AddSingleton<ISimulatorConnector>(sp =>
             sp.GetRequiredService<SimulatorConnectorRouter>());

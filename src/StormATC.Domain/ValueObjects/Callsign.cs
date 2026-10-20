@@ -140,9 +140,60 @@ public sealed class Callsign : IEquatable<Callsign>
             return true;
         }
 
-        return NumericSuffix is { Length: >= 2 }
-            && normalizedTranscript.Contains(NumericSuffix, StringComparison.Ordinal);
+        if (NumericSuffix is { Length: >= 2 }
+            && normalizedTranscript.Contains(NumericSuffix, StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        return MatchesSpelledRegistration(transcript);
     }
+
+    /// <summary>
+    /// A registration said in the phonetic alphabet: "Fox Golf Tango Mike Papa" for F-GTMP, or the
+    /// abbreviated form "Fox Mike Papa" (first letter and last two) once the controller has used it.
+    /// Only a registration made of letters is concerned; an airline callsign has its own rules.
+    /// </summary>
+    private bool MatchesSpelledRegistration(string transcript)
+    {
+        if (Telephony is not null || Normalized.Length < 3)
+        {
+            return false;
+        }
+
+        var run = new StringBuilder();
+        foreach (string token in SpokenNumbers.Tokenize(transcript).Append(string.Empty))
+        {
+            if (PhoneticAlphabet.TryGetLetter(token, out char letter))
+            {
+                run.Append(char.ToUpperInvariant(letter));
+                continue;
+            }
+
+            string spelled = run.ToString();
+            run.Clear();
+            if (spelled.Length >= 3
+                && (spelled.Contains(Normalized, StringComparison.Ordinal)
+                    || spelled.Contains($"{Normalized[0]}{Normalized[^2..]}", StringComparison.Ordinal)
+                    || SpelledWithoutNationality(spelled)))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// French pilots often drop the nationality letter: "Golf Tango Mike Papa" for F-GTMP, or the
+    /// short form "Golf Mike Papa". A five-letter registration is matched on its last four letters
+    /// (or the first of those four and the last two).
+    /// </summary>
+    private bool SpelledWithoutNationality(string spelled) =>
+        Normalized.Length == 5
+        && Normalized.All(char.IsLetter)
+        && (spelled.Contains(Normalized[1..], StringComparison.Ordinal)
+            || spelled.Contains($"{Normalized[1]}{Normalized[^2..]}", StringComparison.Ordinal));
 
     /// <summary>
     /// Renders the callsign the way a controller would say it: telephony as a word, flight

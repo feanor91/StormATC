@@ -59,6 +59,9 @@ public sealed record FlightPlan
     /// <summary>Planned instrument approach, for example <c>ILS 36</c>.</summary>
     public string? Approach { get; init; }
 
+    /// <summary>The missed approach of the planned approach, point by point, where the simulator's navigation data gave it.</summary>
+    public IReadOnlyList<MissedApproachPoint> MissedApproach { get; init; } = [];
+
     /// <summary>The filed route string as written on the plan.</summary>
     public string? Route { get; init; }
 
@@ -100,6 +103,11 @@ public sealed record FlightPlan
     /// <summary>A short human-readable summary, for example <c>STORM123 STMR → STMD</c>.</summary>
     public string ToSummary() => $"{Callsign} {DepartureIcao} → {DestinationIcao}";
 }
+
+/// <summary>A point of a missed approach procedure.</summary>
+/// <param name="Identifier">The fix, or what the leg does where it has no fix (<c>INTRCPT</c>, <c>HOLD</c>).</param>
+/// <param name="AltitudeFeet">The altitude the procedure gives at the point, where it gives one.</param>
+public sealed record MissedApproachPoint(string Identifier, int? AltitudeFeet);
 
 /// <summary>A single leg of a filed route.</summary>
 public sealed record RouteLeg

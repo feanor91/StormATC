@@ -146,6 +146,12 @@ public interface IAtcPhraseology
     /// <param name="side">The circuit direction, or null when unknown.</param>
     string CircuitReportInstruction(Callsign callsign, CircuitLeg leg, RunwayIdentifier runway, CircuitSide? side);
 
+    /// <summary>Clears the aircraft for the option: full stop, touch and go or stop-and-go, at the pilot's choice.</summary>
+    string OptionClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots);
+
+    /// <summary>Clears the aircraft for a low pass over the runway.</summary>
+    string LowPassClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots);
+
     /// <summary>Clears the aircraft for a touch and go.</summary>
     string TouchAndGoClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots);
 
@@ -181,7 +187,7 @@ public interface IAtcPhraseology
 
     string UnableMaintain(Callsign callsign, Altitude altitude);
 
-    string ContactController(Callsign? callsign, ControllerPosition controller);
+    string ContactController(Callsign? callsign, ControllerPosition controller, Frequency? frequency = null);
 
     string FrequencyInformation(Callsign callsign, ControllerPosition controller, Frequency frequency);
 
@@ -192,6 +198,15 @@ public interface IAtcPhraseology
     string WrongHoldingPoint(Callsign callsign, RunwayIdentifier assignedRunway);
 
     string HoldShortTrafficOnRunway(Callsign callsign, RunwayIdentifier runway);
+
+    /// <summary>Clears the aircraft to cross a runway while taxiing.</summary>
+    string RunwayCrossingClearance(Callsign callsign, RunwayIdentifier runway);
+
+    /// <summary>Holds the aircraft at the holding point because another aircraft is on short final.</summary>
+    string HoldPositionTrafficOnShortFinal(Callsign callsign, RunwayIdentifier runway);
+
+    /// <summary>Tells an aircraft already lined up on the runway to stay put because traffic is landing.</summary>
+    string HoldPositionLinedUp(Callsign callsign);
 
     string WrongApproachRunway(Callsign callsign, RunwayIdentifier clearedRunway);
 
@@ -272,6 +287,7 @@ public enum UnableReason
     NotLanded,
     AerodromeDataUnavailable,
     NoStandAvailable,
+    NoRunwayCrossingPending,
 }
 
 /// <summary>What progressive taxi guidance tells the pilot to do next.</summary>

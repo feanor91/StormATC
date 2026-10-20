@@ -149,6 +149,9 @@ public sealed record IntentEntities
     /// <summary>The pilot asked for, or is flying, a touch and go.</summary>
     public bool TouchAndGo { get; init; }
 
+    /// <summary>The option or low pass the pilot asked for on the next pass of the runway.</summary>
+    public CircuitManoeuvre Manoeuvre { get; init; }
+
     /// <summary>The circuit direction the pilot named, if any.</summary>
     public CircuitSide? CircuitSide { get; init; }
 
@@ -161,7 +164,20 @@ public sealed record IntentEntities
         && Heading is null && Taxiways.Count == 0 && Waypoint is null
         && ApproachName is null && Stand is null && PushbackDirection is null
         && SpeedKnots is null && !MentionsHoldShort
-        && !DeclaresVfr && !TouchAndGo && CircuitSide is null && InformationLetter is null;
+        && !DeclaresVfr && !TouchAndGo && Manoeuvre == CircuitManoeuvre.None && CircuitSide is null && InformationLetter is null;
+}
+
+/// <summary>A manoeuvre the pilot asks for on the runway, other than a full-stop landing or a touch and go.</summary>
+public enum CircuitManoeuvre
+{
+    /// <summary>None asked.</summary>
+    None = 0,
+
+    /// <summary>"The option": the pilot chooses between full stop, touch and go and stop-and-go.</summary>
+    Option,
+
+    /// <summary>A low pass over the runway, without touching down.</summary>
+    LowPass,
 }
 
 /// <summary>The direction of turns in the aerodrome circuit.</summary>

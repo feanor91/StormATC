@@ -212,6 +212,27 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
             : $"{callsign.ToSpoken()}, report {Hand(side)}base {runway.ToSpoken()}.";
 
     /// <inheritdoc />
+    public string OptionClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots) =>
+        ManoeuvreClearance(callsign, runway, "cleared the option", windDirection, windSpeedKnots);
+
+    /// <inheritdoc />
+    public string LowPassClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots) =>
+        ManoeuvreClearance(callsign, runway, "cleared low pass", windDirection, windSpeedKnots);
+
+    private static string ManoeuvreClearance(
+        Callsign callsign,
+        RunwayIdentifier runway,
+        string clearance,
+        Heading? windDirection,
+        int? windSpeedKnots)
+    {
+        string wind = windDirection is Heading direction && windSpeedKnots is int speed
+            ? $"wind {direction.ToSpoken()} degrees {SpokenNumbers.DigitsIndividually(speed.ToString(System.Globalization.CultureInfo.InvariantCulture))} knots, "
+            : string.Empty;
+        return $"{callsign.ToSpoken()}, {wind}{runway.ToSpoken()}, {clearance}.";
+    }
+
+    /// <inheritdoc />
     public string TouchAndGoClearance(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots)
     {
         string wind = windDirection is Heading direction && windSpeedKnots is int speed
@@ -267,8 +288,9 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
         DeterministicPhraseology.Unable(callsign, $"maintain {altitude.ToSpoken()}");
 
     /// <inheritdoc />
-    public string ContactController(Callsign? callsign, ControllerPosition controller) =>
-        $"{callsign?.ToSpoken() ?? StationCalling}, contact {DeterministicPhraseology.SpokenControllerName(controller)}.";
+    public string ContactController(Callsign? callsign, ControllerPosition controller, Frequency? frequency = null) =>
+        $"{callsign?.ToSpoken() ?? StationCalling}, contact {DeterministicPhraseology.SpokenControllerName(controller)}"
+        + (frequency is Frequency f ? $" {f.ToSpoken()}." : ".");
 
     /// <inheritdoc />
     public string FrequencyInformation(Callsign callsign, ControllerPosition controller, Frequency frequency) =>
@@ -293,6 +315,18 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
     /// <inheritdoc />
     public string HoldShortTrafficOnRunway(Callsign callsign, RunwayIdentifier runway) =>
         $"{callsign.ToSpoken()}, hold short {runway.ToSpokenDesignator()}, traffic on the runway.";
+
+    /// <inheritdoc />
+    public string RunwayCrossingClearance(Callsign callsign, RunwayIdentifier runway) =>
+        $"{callsign.ToSpoken()}, cross runway {runway.ToSpokenDesignator()}.";
+
+    /// <inheritdoc />
+    public string HoldPositionTrafficOnShortFinal(Callsign callsign, RunwayIdentifier runway) =>
+        $"{callsign.ToSpoken()}, hold short {runway.ToSpokenDesignator()}, traffic on short final.";
+
+    /// <inheritdoc />
+    public string HoldPositionLinedUp(Callsign callsign) =>
+        $"{callsign.ToSpoken()}, hold position, traffic on short final.";
 
     /// <inheritdoc />
     public string WrongApproachRunway(Callsign callsign, RunwayIdentifier clearedRunway) =>
@@ -389,6 +423,7 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
         UnableReason.NoDepartureRunwayAssigned => "no departure runway is assigned",
         UnableReason.ProgressiveTaxiGroundOnly => "progressive taxi is only available on the ground",
         UnableReason.NoActiveTaxiRoute => "no active taxi route is available",
+        UnableReason.NoRunwayCrossingPending => "no runway crossing is planned on your route",
         UnableReason.ContactTowerForDeparture => "contact Tower for departure",
         UnableReason.NotAtHoldingPoint => "you are not at the holding point",
         UnableReason.NotWithThisController => "not with this controller",

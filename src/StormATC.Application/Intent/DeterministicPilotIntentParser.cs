@@ -70,6 +70,9 @@ public sealed partial class DeterministicPilotIntentParser : IPilotIntentParser
             ["request taxi", "ready for taxi", "ready to taxi", "taxi request"]),
 
         // --- Tower. -----------------------------------------------------------------------
+        // Before "holding short": a pilot who holds short of a runway and asks to cross it says both.
+        new(PilotIntentType.RequestRunwayCrossing, 0.96,
+            ["request to cross", "request crossing", "request cross", "ready to cross", "permission to cross"]),
         new(PilotIntentType.ReportHoldingShort, 0.95,
             ["holding short", "hold short of", "at the holding point", "holding point"]),
         new(PilotIntentType.ReadyForDeparture, 0.95,
@@ -355,7 +358,9 @@ public sealed partial class DeterministicPilotIntentParser : IPilotIntentParser
             || transcript.Contains("will comply", StringComparison.Ordinal)
             || transcript.Contains("thank you", StringComparison.Ordinal)
             || transcript.Contains("thanks", StringComparison.Ordinal)
-            || transcript.Contains("got it", StringComparison.Ordinal);
+            || transcript.Contains("got it", StringComparison.Ordinal)
+            || transcript.Contains("stand by", StringComparison.Ordinal)
+            || transcript.Contains("go ahead", StringComparison.Ordinal);
     }
 
     /// <summary>
@@ -382,8 +387,9 @@ public sealed partial class DeterministicPilotIntentParser : IPilotIntentParser
         PilotIntentType expectedReadbackType = pending.ClearanceType switch
         {
             ClearanceType.IfrClearance => PilotIntentType.ClearanceReadback,
-            ClearanceType.Taxi or ClearanceType.TaxiToStand => PilotIntentType.TaxiReadback,
-            ClearanceType.Takeoff => PilotIntentType.TakeoffReadback,
+            ClearanceType.Taxi or ClearanceType.TaxiToStand or ClearanceType.RunwayCrossing
+                => PilotIntentType.TaxiReadback,
+            ClearanceType.Takeoff or ClearanceType.LineUp => PilotIntentType.TakeoffReadback,
             ClearanceType.LandingClearance => PilotIntentType.LandingReadback,
             ClearanceType.ApproachClearance => PilotIntentType.LandingReadback,
             ClearanceType.Climb or ClearanceType.Descent => PilotIntentType.AltitudeReadback,

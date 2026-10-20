@@ -33,6 +33,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
     private readonly SimulatorConnectorRouter _simulatorConnector;
     private readonly ProviderStatusService _providerStatus;
     private readonly UserSettingsService _userSettings;
+    private readonly SimFlightPlanService _simFlightPlan;
     private readonly IClock _clock;
     private readonly SimBriefOptions _simBriefOptions;
     private readonly ILogger<FlightPlanViewModel> _logger;
@@ -52,6 +53,66 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
     /// <summary>The callsign of a local VFR flight; offered from the simulator's aircraft identifier.</summary>
     [ObservableProperty]
     private string _vfrCallsign = string.Empty;
+
+    /// <summary>
+    /// Imports the flight plan made in the simulator (the EFB, the world map, or the flight that
+    /// was just started): the plan the simulator announced last, or its newest plan file.
+    /// </summary>
+    [RelayCommand]
+    private async Task ImportSimulatorPlanAsync()
+    {
+        IsImporting = true;
+        StatusIsError = false;
+
+        try
+        {
+            SimFlightPlanImportResult result = await _simFlightPlan
+                .ImportLatestAsync(CancellationToken.None)
+                .ConfigureAwait(true);
+
+            StatusIsError = !result.Imported;
+            StatusMessage = result.Message;
+        }
+        finally
+        {
+            IsImporting = false;
+        }
+    }
+
+    /// <summary>Imports a <c>.PLN</c> flight plan file the pilot picks, such as one saved from the EFB.</summary>
+    [RelayCommand]
+    private async Task OpenPlnFileAsync()
+    {
+        var dialog = new Microsoft.Win32.OpenFileDialog
+        {
+            Title = UiText.T("Open a flight plan file"),
+            Filter = UiText.T("Flight plans (*.pln)|*.pln|All files|*.*"),
+            InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+            CheckFileExists = true,
+        };
+
+        if (dialog.ShowDialog() != true)
+        {
+            return;
+        }
+
+        IsImporting = true;
+        StatusIsError = false;
+
+        try
+        {
+            SimFlightPlanImportResult result = await _simFlightPlan
+                .ImportPlnFileAsync(dialog.FileName, CancellationToken.None)
+                .ConfigureAwait(true);
+
+            StatusIsError = !result.Imported;
+            StatusMessage = result.Message;
+        }
+        finally
+        {
+            IsImporting = false;
+        }
+    }
 
     /// <summary>
     /// Starts a local VFR flight at the aerodrome the pilot is on, with no flight plan: the plan
@@ -167,6 +228,12 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
     private string _route = UiText.T("No route filed");
 
     [ObservableProperty]
+    private string _missedApproach = string.Empty;
+
+    [ObservableProperty]
+    private bool _hasMissedApproach;
+
+    [ObservableProperty]
     private string _blockTime = "—";
 
     [ObservableProperty]
@@ -203,6 +270,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
         SimulatorConnectorRouter simulatorConnector,
         ProviderStatusService providerStatus,
         UserSettingsService userSettings,
+        SimFlightPlanService simFlightPlan,
         IClock clock,
         IOptions<SimBriefOptions> simBriefOptions,
         ILogger<FlightPlanViewModel> logger)
@@ -213,6 +281,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
             simulatorConnector ?? throw new ArgumentNullException(nameof(simulatorConnector));
         _providerStatus = providerStatus ?? throw new ArgumentNullException(nameof(providerStatus));
         _userSettings = userSettings ?? throw new ArgumentNullException(nameof(userSettings));
+        _simFlightPlan = simFlightPlan ?? throw new ArgumentNullException(nameof(simFlightPlan));
         _clock = clock ?? throw new ArgumentNullException(nameof(clock));
         _simBriefOptions = simBriefOptions?.Value ?? throw new ArgumentNullException(nameof(simBriefOptions));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -394,7 +463,18 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
         DepartureRunway = plan.DepartureRunway?.ToDisplay() ?? "—";
         ArrivalRunway = plan.ArrivalRunway?.ToDisplay() ?? "—";
         DepartureProcedure = plan.StandardInstrumentDeparture ?? "—";
-        ArrivalProcedure = plan.StandardTerminalArrival ?? plan.Approach ?? "—";
+        ArrivalProcedure = string.Join(
+            " · ",
+            new[] { plan.StandardTerminalArrival, plan.Approach }.Where(part => !string.IsNullOrEmpty(part)))
+            is { Length: > 0 } arrival
+            ? arrival
+            : "—";
+        MissedApproach = string.Join(
+            " → ",
+            plan.MissedApproach.Select(point => point.AltitudeFeet is int feet
+                ? $"{point.Identifier} {feet.ToString("N0", System.Globalization.CultureInfo.CurrentCulture)} ft"
+                : point.Identifier));
+        HasMissedApproach = MissedApproach.Length > 0;
         Route = plan.Route is { Length: > 0 } route ? route : UiText.T("No route filed");
         Source = plan.SourceIdentifier ?? "—";
 

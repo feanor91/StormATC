@@ -644,10 +644,31 @@
               <StackPanel>
                 <TextBlock Text="Speech engines"
                            Style="{StaticResource SectionHeaderStyle}" />
-                <TextBlock Text="Deepgram runs in the cloud and needs a key. Whisper (recognition) and Piper (controller voice) run on this computer: no account, no network. See docs/french-and-local-voice.md to download them. Save, then test."
+                <TextBlock Text="Deepgram runs in the cloud and needs a key. Whisper (recognition) and Piper (controller voice) run on this computer: no account, no network. Download them once with the buttons below, then fill in the paths. Save, then test."
                            Style="{StaticResource SecondaryTextStyle}"
                            TextWrapping="Wrap"
-                           Margin="0,0,0,14" />
+                           Margin="0,0,0,8" />
+                <WrapPanel Margin="0,0,0,14">
+                  <Button Content="Download guide"
+                          Command="{Binding OpenDownloadGuideCommand}"
+                          Style="{StaticResource PrimaryButtonStyle}"
+                          Margin="0,0,8,0" />
+                  <Button Content="Get Whisper"
+                          Command="{Binding OpenDownloadPageCommand}"
+                          CommandParameter="https://github.com/ggml-org/whisper.cpp/releases"
+                          Margin="0,0,8,0" />
+                  <Button Content="Get Whisper models"
+                          Command="{Binding OpenDownloadPageCommand}"
+                          CommandParameter="https://huggingface.co/ggerganov/whisper.cpp/tree/main"
+                          Margin="0,0,8,0" />
+                  <Button Content="Get Piper"
+                          Command="{Binding OpenDownloadPageCommand}"
+                          CommandParameter="https://github.com/rhasspy/piper/releases/tag/2023.11.14-2"
+                          Margin="0,0,8,0" />
+                  <Button Content="Get Piper voices"
+                          Command="{Binding OpenDownloadPageCommand}"
+                          CommandParameter="https://huggingface.co/rhasspy/piper-voices/tree/main" />
+                </WrapPanel>
 
                 <Grid>
                   <Grid.ColumnDefinitions>
@@ -719,6 +740,31 @@
                            TextWrapping="Wrap"
                            Margin="0,8,0,0"
                            Visibility="{Binding LocalVoiceTestResult,
+                                                Converter={StaticResource StringToVisibility}}" />
+              </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
+              <StackPanel>
+                <TextBlock Text="In-simulator panel"
+                           Style="{StaticResource SectionHeaderStyle}" />
+                <TextBlock Text="A toolbar window inside MSFS with two tabs: the dialogue with the controller, and example phraseology for the current phase of flight. It works in VR. Install it once, restart MSFS, then click the StormATC icon in the toolbar. The same page can be opened in a browser or in a VR overlay application."
+                           Style="{StaticResource SecondaryTextStyle}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,8" />
+                <WrapPanel>
+                  <Button Content="Install the panel in MSFS"
+                          Command="{Binding InstallMsfsPanelCommand}"
+                          Style="{StaticResource PrimaryButtonStyle}"
+                          Margin="0,0,8,0" />
+                  <Button Content="Open the panel in a browser"
+                          Command="{Binding OpenPanelInBrowserCommand}" />
+                </WrapPanel>
+                <TextBlock Text="{Binding PanelInstallResult}"
+                           Style="{StaticResource SecondaryTextStyle}"
+                           TextWrapping="Wrap"
+                           Margin="0,8,0,0"
+                           Visibility="{Binding PanelInstallResult,
                                                 Converter={StaticResource StringToVisibility}}" />
               </StackPanel>
             </Border>

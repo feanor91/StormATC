@@ -81,7 +81,7 @@ internal static partial class VfrIntentRules
             return (PilotIntentType.ReportFinal, 0.93);
         }
 
-        if (TouchAndGoWord().IsMatch(transcript))
+        if (TouchAndGoWord().IsMatch(transcript) || ManoeuvreOf(transcript) != CircuitManoeuvre.None)
         {
             return (PilotIntentType.RequestTouchAndGo, 0.93);
         }
@@ -116,6 +116,7 @@ internal static partial class VfrIntentRules
         {
             DeclaresVfr = VfrWord().IsMatch(transcript) || LocalFlight().IsMatch(transcript),
             TouchAndGo = TouchAndGoWord().IsMatch(transcript),
+            Manoeuvre = ManoeuvreOf(transcript),
             CircuitSide = side,
             InformationLetter = ExtractInformationLetter(transcript),
             Waypoint = entities.Waypoint ?? ExtractPoint(transcript),
@@ -180,7 +181,7 @@ internal static partial class VfrIntentRules
     [GeneratedRegex(@"\bleaving (the )?(frequency|circuit)\b|\bleaving circuit and frequency\b")]
     private static partial Regex LeavingFrequency();
 
-    [GeneratedRegex(@"\b(touch and go|full stop|joining instructions|request join(ing)?|inbound|estimate|estimating|for landing|to land)\b")]
+    [GeneratedRegex(@"\b(touch and go|full stop|option|low pass|joining instructions|request join(ing)?|inbound|estimate|estimating|for landing|to land)\b")]
     private static partial Regex ArrivalCall();
 
     [GeneratedRegex(@"\bdownwind\b")]
@@ -194,6 +195,18 @@ internal static partial class VfrIntentRules
 
     [GeneratedRegex(@"\b(touch and go|request touch)\b")]
     private static partial Regex TouchAndGoWord();
+
+    [GeneratedRegex(@"\blow pass\b")]
+    private static partial Regex LowPassWord();
+
+    [GeneratedRegex(@"\b(?:the |for the |for )?option\b")]
+    private static partial Regex OptionWord();
+
+    /// <summary>"Low pass" or "the option": the manoeuvre asked for on the runway, if any.</summary>
+    private static CircuitManoeuvre ManoeuvreOf(string transcript) =>
+        LowPassWord().IsMatch(transcript) ? CircuitManoeuvre.LowPass
+        : OptionWord().IsMatch(transcript) ? CircuitManoeuvre.Option
+        : CircuitManoeuvre.None;
 
     [GeneratedRegex(@"\bleft hand\b|\bleft\b")]
     private static partial Regex LeftHand();

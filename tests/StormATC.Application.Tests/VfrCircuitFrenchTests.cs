@@ -159,6 +159,40 @@ public class VfrCircuitFrenchTests : IAsyncLifetime
         Assert.Equal(FlightPhase.Enroute, _context.CurrentSession.Phase);
     }
 
+    [Fact]
+    public async Task The_option_asked_in_the_arrival_call_is_cleared_on_final()
+    {
+        TransmissionProcessingResult arrival = await SendAsync(
+            "Storm un deux trois, bonjour, PA 28, VFR de Melun pour une option, mille deux cents pieds, "
+            + "estimé Écho à zéro cinq, information India");
+        Assert.Equal(PilotIntentType.VfrArrivalCall, arrival.Intent?.Type);
+        Assert.Equal(CircuitManoeuvre.Option, _context.CurrentSession.RequestedManoeuvre);
+
+        TransmissionProcessingResult final = await SendAsync("Storm un deux trois, en finale piste dix-huit");
+        Assert.Equal(PilotIntentType.ReportFinal, final.Intent?.Type);
+        Assert.Equal(AtcResponseType.OptionClearance, final.Decision?.ResponseType);
+        Assert.Contains("autorisé option", final.ControllerSpokenText!, StringComparison.Ordinal);
+
+        TransmissionProcessingResult readback = await SendAsync("Piste dix-huit, autorisé option, Storm un deux trois");
+        Assert.Equal(ReadbackOutcome.Correct, readback.ReadbackAssessment?.Outcome);
+    }
+
+    [Fact]
+    public async Task A_low_pass_is_requested_in_the_circuit_and_cleared_on_final()
+    {
+        await SendAsync(
+            "Storm un deux trois, bonjour, PA 28, VFR de Melun pour un complet, mille deux cents pieds, "
+            + "estimé Écho à zéro cinq, information India");
+
+        TransmissionProcessingResult request = await SendAsync("Storm un deux trois, demandons un passage bas");
+        Assert.Equal(PilotIntentType.RequestTouchAndGo, request.Intent?.Type);
+        Assert.Equal(CircuitManoeuvre.LowPass, _context.CurrentSession.RequestedManoeuvre);
+
+        TransmissionProcessingResult final = await SendAsync("Storm un deux trois, en finale piste dix-huit");
+        Assert.Equal(AtcResponseType.LowPassClearance, final.Decision?.ResponseType);
+        Assert.Contains("autorisé passage bas", final.ControllerSpokenText!, StringComparison.Ordinal);
+    }
+
     private Task<TransmissionProcessingResult> SendAsync(string text) =>
         _coordinator.ProcessAsync(
             PilotTransmission.Create(

@@ -317,6 +317,9 @@ no real navigation data and none of it may be used for navigation.
 | [contributor-quickstart.md](docs/contributor-quickstart.md) | Forking, setup, first changes, and pull requests |
 | [privacy-and-api-keys.md](docs/privacy-and-api-keys.md) | What is stored, what is sent, how keys are held |
 | [french-and-local-voice.md](docs/french-and-local-voice.md) | French radio (DSNA phraseology) and local voice with Whisper and Piper |
+| [msfs-module.md](docs/msfs-module.md) | The WASM module that reads the EFB flight plan live (before and during the flight) |
+| [ingame-panel.md](docs/ingame-panel.md) | The MSFS toolbar panel (ATC dialogue and phraseology by phase), installation, VR use |
+| [third-party-downloads.md](docs/third-party-downloads.md) | Where to download Whisper, Piper and the voices, with direct links and a download script |
 | [releasing.md](docs/releasing.md) | Building the installer and publishing a release |
 | [website.md](docs/website.md) | Editing, previewing, and deploying the GitHub Pages site |
 

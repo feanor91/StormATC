@@ -34,6 +34,44 @@ Les règles de vol sont un attribut du vol. Elles se règlent de deux façons :
 - à la radio : dire « VFR » ou « vol local » dans la première transmission (demande de roulage,
   appel d'arrivée) passe le vol en VFR.
 
+## Le plan de vol fait dans le simulateur (EFB)
+
+StormATC reprend le plan de vol que vous faites dans l'EFB de MSFS : terrain de départ et
+d'arrivée, VFR ou IFR, piste de départ, altitude de croisière, points de la route. Le nom de
+l'avion (l'immatriculation) vient de l'avion lui-même.
+
+**Le moyen principal : le module de StormATC dans le simulateur** ([détails](msfs-module.md)). Un petit
+module WASM, chargé avec MSFS (menus compris), lit le plan de l'EFB par l'API officielle du simulateur
+et le donne à StormATC **en direct** : dès que vous cliquez sur **Envoyer à l'ATC** ou **Envoyer à
+l'ATC et à l'avionique**, avant « Démarrer le vol » comme pendant le vol, le plan est chargé dans la
+session et la page Plan de vol se remplit. Rien à enregistrer, rien à ouvrir. Il faut avoir redémarré
+MSFS une fois après l'installation de StormATC (un module se charge au démarrage du simulateur).
+
+Le plan que l'EFB montre mais que vous n'avez pas envoyé est seulement mémorisé : le bouton
+**Importer le plan de vol du simulateur** de la page Plan de vol le charge à la demande.
+
+**Les moyens de secours**, si le module ne se charge pas :
+
+- **Le panneau StormATC de la barre d'outils**, pendant le vol et ouvert (il peut être réduit), lit le
+  même plan par le JavaScript du simulateur et le transmet à StormATC. Une ligne en bas du panneau dit
+  où en est la lecture.
+- **Le plan du vol qui vient d'être démarré** : le simulateur l'écrit dans un fichier à côté du vol, et
+  StormATC le lit quand il se connecte. Il remplace le plan d'un vol précédent, jamais un plan SimBrief.
+- **Un fichier `.PLN`** (enregistré depuis l'EFB, un planificateur…) : page **Plan de vol › Plan de
+  vol du simulateur › Ouvrir un fichier de plan de vol (.pln)…**. Le bouton d'import cherche aussi le
+  plus récent dans les dossiers du simulateur, sur le bureau et dans les documents. L'EFB n'écrit un
+  `.PLN` que si vous enregistrez le plan.
+
+Tout ce que StormATC reçoit du simulateur est écrit dans le journal (`%LOCALAPPDATA%\StormATC\logs`,
+lignes « The simulator's panel sent the … route » et « The simulator announced a flight plan
+event »). Réglages `SimFlightPlan` : `Enabled` (désactive la reprise automatique) et
+`ImportOnFlightLoaded`.
+
+Ce qui n'est pas garanti : le simulateur ne documente pas tout ce que l'EFB renvoie. Les identifiants
+de points de route et les altitudes peuvent manquer, et un plan IFR n'apporte ni départ normalisé
+(SID) ni arrivée dans StormATC : seuls les vols VFR sont validés. Si le plan de l'EFB n'est pas
+repris, le journal dit ce qui est arrivé.
+
 ## Les phrases reconnues
 
 La phraséologie suit le chapitre « Circuit d'aérodrome contrôlé » du manuel de phraséologie

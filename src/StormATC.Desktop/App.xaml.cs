@@ -70,6 +70,10 @@ public partial class App : System.Windows.Application
                 "StormATC {Version} starting. Flight simulation only.",
                 MainWindowViewModel.VersionText);
 
+            // Listens for the flight plans the pilot makes in the simulator from the start, so a
+            // plan activated before any window opens is not missed.
+            _host.Services.GetRequiredService<StormATC.Desktop.Services.SimFlightPlanService>();
+
             _watchdog = new StormATC.Desktop.Services.UiResponsivenessWatchdog(
                 Dispatcher,
                 _host.Services.GetRequiredService<ILogger<App>>());
@@ -182,6 +186,12 @@ public partial class App : System.Windows.Application
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "StormATC",
             "usersettings.json");
+
+        // The installer downloads Whisper, Piper and the voices to a standard folder: point the
+        // settings at them on the first start, so no path has to be typed.
+        StormATC.Infrastructure.LocalVoice.LocalVoiceBootstrap.Apply(
+            userSettingsPath,
+            StormATC.Infrastructure.LocalVoice.LocalVoiceBootstrap.DefaultRoot);
 
         builder.Configuration.AddJsonFile(userSettingsPath, optional: true, reloadOnChange: true);
 

@@ -1,0 +1,381 @@
+{
+  "$comment": [
+    "FICTIONAL SAMPLE DATA. Storm Tango (STMT) does not exist.",
+    "Runway 27 is the usual direction here, the reverse of Storm Kilo.",
+    "The ST.. prefix is not assigned to any real region."
+  ],
+  "icao": "STMT",
+  "name": "Storm Tango",
+  "isFictional": true,
+  "referencePosition": {
+    "latitude": 54.2,
+    "longitude": 3.9
+  },
+  "elevationFeet": 85,
+  "magneticVariationDegrees": 0.9,
+  "frequencies": {
+    "clearanceDelivery": 121.805,
+    "ground": 121.905,
+    "tower": 118.405,
+    "departure": 119.355,
+    "approach": 120.205,
+    "center": 128.5,
+    "atis": 132.305
+  },
+  "runways": [
+    {
+      "identifier": "09",
+      "thresholdPosition": {
+        "latitude": 54.2,
+        "longitude": 3.87691
+      },
+      "endPosition": {
+        "latitude": 54.2,
+        "longitude": 3.92309
+      },
+      "lengthFeet": 9500,
+      "widthFeet": 148,
+      "surface": "Asphalt",
+      "isPreferred": true,
+      "approaches": [
+        "ILS",
+        "RNAV"
+      ],
+      "holdingPointNodes": [
+        "H_A"
+      ],
+      "exitNodes": [
+        "E_A1"
+      ]
+    },
+    {
+      "identifier": "27",
+      "thresholdPosition": {
+        "latitude": 54.2,
+        "longitude": 3.92309
+      },
+      "endPosition": {
+        "latitude": 54.2,
+        "longitude": 3.87691
+      },
+      "lengthFeet": 9500,
+      "widthFeet": 148,
+      "surface": "Asphalt",
+      "isPreferred": false,
+      "approaches": [
+        "ILS",
+        "RNAV"
+      ],
+      "holdingPointNodes": [
+        "H_B"
+      ],
+      "exitNodes": [
+        "E_B1"
+      ]
+    }
+  ],
+  "stands": [
+    {
+      "name": "K1",
+      "position": {
+        "latitude": 54.1945,
+        "longitude": 3.88936
+      },
+      "taxiNodeName": "S_K1",
+      "suitableFor": [
+        "Narrowbody"
+      ],
+      "requiresPushback": true
+    },
+    {
+      "name": "K2",
+      "position": {
+        "latitude": 54.1945,
+        "longitude": 3.89361
+      },
+      "taxiNodeName": "S_K2",
+      "suitableFor": [
+        "Narrowbody"
+      ],
+      "requiresPushback": true
+    },
+    {
+      "name": "K3",
+      "position": {
+        "latitude": 54.1925,
+        "longitude": 3.8851
+      },
+      "taxiNodeName": "S_K3",
+      "suitableFor": [
+        "Widebody"
+      ],
+      "requiresPushback": true
+    }
+  ],
+  "taxiGraph": {
+    "$comment": "Runway runs east-west. Apron and parallel taxiway A lie south; taxiway D crosses the runway to a remote stand on the north side.",
+    "nodes": [
+      {
+        "name": "S_K1",
+        "kind": "Stand",
+        "standName": "K1",
+        "position": {
+          "latitude": 54.1945,
+          "longitude": 3.88936
+        }
+      },
+      {
+        "name": "S_K2",
+        "kind": "Stand",
+        "standName": "K2",
+        "position": {
+          "latitude": 54.1945,
+          "longitude": 3.89361
+        }
+      },
+      {
+        "name": "S_K3",
+        "kind": "Stand",
+        "standName": "K3",
+        "position": {
+          "latitude": 54.1925,
+          "longitude": 3.8851
+        }
+      },
+      {
+        "name": "A_W",
+        "kind": "Intersection",
+        "position": {
+          "latitude": 54.196,
+          "longitude": 3.87872
+        }
+      },
+      {
+        "name": "A_M1",
+        "kind": "Intersection",
+        "position": {
+          "latitude": 54.196,
+          "longitude": 3.88936
+        }
+      },
+      {
+        "name": "A_M2",
+        "kind": "Intersection",
+        "position": {
+          "latitude": 54.196,
+          "longitude": 3.89361
+        }
+      },
+      {
+        "name": "A_X1",
+        "kind": "Intersection",
+        "position": {
+          "latitude": 54.196,
+          "longitude": 3.90532
+        }
+      },
+      {
+        "name": "A_X3",
+        "kind": "Intersection",
+        "position": {
+          "latitude": 54.196,
+          "longitude": 3.91277
+        }
+      },
+      {
+        "name": "A_E",
+        "kind": "Intersection",
+        "position": {
+          "latitude": 54.196,
+          "longitude": 3.92128
+        }
+      },
+      {
+        "name": "H_A",
+        "kind": "HoldingPoint",
+        "associatedRunway": "09",
+        "position": {
+          "latitude": 54.1988,
+          "longitude": 3.87872
+        }
+      },
+      {
+        "name": "R_A",
+        "kind": "RunwayEntry",
+        "associatedRunway": "09",
+        "position": {
+          "latitude": 54.1998,
+          "longitude": 3.87744
+        }
+      },
+      {
+        "name": "H_B",
+        "kind": "HoldingPoint",
+        "associatedRunway": "27",
+        "position": {
+          "latitude": 54.1988,
+          "longitude": 3.92128
+        }
+      },
+      {
+        "name": "R_B",
+        "kind": "RunwayEntry",
+        "associatedRunway": "27",
+        "position": {
+          "latitude": 54.1998,
+          "longitude": 3.92256
+        }
+      },
+      {
+        "name": "E_A1",
+        "kind": "RunwayExit",
+        "associatedRunway": "09",
+        "position": {
+          "latitude": 54.2,
+          "longitude": 3.90532
+        }
+      },
+      {
+        "name": "E_B1",
+        "kind": "RunwayExit",
+        "associatedRunway": "27",
+        "position": {
+          "latitude": 54.2,
+          "longitude": 3.89468
+        }
+      },
+      {
+        "name": "D_S",
+        "kind": "Intersection",
+        "position": {
+          "latitude": 54.198,
+          "longitude": 3.91277
+        }
+      },
+      {
+        "name": "D_N",
+        "kind": "Intersection",
+        "position": {
+          "latitude": 54.202,
+          "longitude": 3.91277
+        }
+      },
+      {
+        "name": "S_R1",
+        "kind": "Stand",
+        "standName": "R1",
+        "position": {
+          "latitude": 54.2035,
+          "longitude": 3.91277
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "S_K1",
+        "to": "A_M1",
+        "taxiway": "A",
+        "lengthMeters": 167
+      },
+      {
+        "from": "S_K2",
+        "to": "A_M2",
+        "taxiway": "A",
+        "lengthMeters": 167
+      },
+      {
+        "from": "S_K3",
+        "to": "A_W",
+        "taxiway": "A",
+        "lengthMeters": 569
+      },
+      {
+        "from": "A_W",
+        "to": "A_M1",
+        "taxiway": "A",
+        "lengthMeters": 692
+      },
+      {
+        "from": "A_M1",
+        "to": "A_M2",
+        "taxiway": "A",
+        "lengthMeters": 277
+      },
+      {
+        "from": "A_M2",
+        "to": "A_X1",
+        "taxiway": "A",
+        "lengthMeters": 761
+      },
+      {
+        "from": "A_X1",
+        "to": "A_X3",
+        "taxiway": "A",
+        "lengthMeters": 485
+      },
+      {
+        "from": "A_X3",
+        "to": "A_E",
+        "taxiway": "A",
+        "lengthMeters": 554
+      },
+      {
+        "from": "A_W",
+        "to": "H_A",
+        "taxiway": "B",
+        "lengthMeters": 311
+      },
+      {
+        "from": "H_A",
+        "to": "R_A",
+        "taxiway": "B",
+        "lengthMeters": 139
+      },
+      {
+        "from": "A_E",
+        "to": "H_B",
+        "taxiway": "C",
+        "lengthMeters": 311
+      },
+      {
+        "from": "H_B",
+        "to": "R_B",
+        "taxiway": "C",
+        "lengthMeters": 139
+      },
+      {
+        "from": "E_A1",
+        "to": "A_X1",
+        "taxiway": "A",
+        "lengthMeters": 445
+      },
+      {
+        "from": "E_B1",
+        "to": "A_M2",
+        "taxiway": "A",
+        "lengthMeters": 450
+      },
+      {
+        "from": "A_X3",
+        "to": "D_S",
+        "taxiway": "D",
+        "lengthMeters": 222
+      },
+      {
+        "from": "D_S",
+        "to": "D_N",
+        "taxiway": "D",
+        "lengthMeters": 445,
+        "crossesRunway": true,
+        "crossedRunway": "09",
+        "$comment": "The runway-crossing edge. Requires an explicit crossing clearance."
+      },
+      {
+        "from": "D_N",
+        "to": "S_R1",
+        "taxiway": "D",
+        "lengthMeters": 167
+      }
+    ]
+  }
+}
