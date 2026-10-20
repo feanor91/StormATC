@@ -73,7 +73,7 @@ if (@(Invoke-Git tag --list $tag).Count -gt 0) {
 foreach ($existing in @(Invoke-Git tag --list "v*")) {
     $parsed = $null
     if ([version]::TryParse(($existing.TrimStart("v") -replace "-.*$", ""), [ref]$parsed) -and $parsed -ge $next) {
-        throw "The tag $existing is already at or above $tag: a release must be higher than every earlier one."
+        throw "The tag $existing is already at or above ${tag}: a release must be higher than every earlier one."
     }
 }
 
