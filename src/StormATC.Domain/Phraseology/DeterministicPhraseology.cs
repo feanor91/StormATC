@@ -37,7 +37,7 @@ public static class DeterministicPhraseology
 
         if (clearance.DepartureProcedure is { Length: > 0 } sid)
         {
-            builder.Add($"{sid} departure");
+            builder.Add($"{SpeakProcedure(sid)} departure");
         }
         else if (clearance.ClearedRoute is { Length: > 0 })
         {
@@ -353,6 +353,15 @@ public static class DeterministicPhraseology
 
     /// <summary>Renders an aerodrome ICAO code phonetically: <c>STMD</c> becomes the four letters.</summary>
     public static string SpellIcao(string icao) => PhoneticAlphabet.SpellOut(icao);
+
+    /// <summary>Renders the name of a departure or arrival procedure: <c>PILU2F</c> becomes "PILU two Foxtrot".</summary>
+    public static string SpeakProcedure(string procedure)
+    {
+        ArgumentNullException.ThrowIfNull(procedure);
+        return ProcedureNames.TrySplit(procedure, out string word, out string rest)
+            ? $"{word} {PhoneticAlphabet.SpellOut(rest)}"
+            : procedure;
+    }
 
     /// <summary>Renders a taxiway list as spoken: <c>["A","C"]</c> becomes "Alfa, Charlie".</summary>
     public static string SpellTaxiways(IReadOnlyList<string> taxiways)

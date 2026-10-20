@@ -111,6 +111,15 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
     /// <inheritdoc />
     public string SpellIcao(string icao) => FrenchSpokenNumbers.SpellOut(icao);
 
+    /// <summary>Renders the name of a departure or arrival procedure: <c>PILU2F</c> becomes "PILU deux Foxtrot".</summary>
+    public static string SpeakProcedure(string procedure)
+    {
+        ArgumentNullException.ThrowIfNull(procedure);
+        return ProcedureNames.TrySplit(procedure, out string word, out string rest)
+            ? $"{word} {FrenchSpokenNumbers.SpellOut(rest)}"
+            : procedure;
+    }
+
     /// <inheritdoc />
     public string SpellIdentifier(string identifier) => FrenchSpokenNumbers.SpellOut(identifier);
 
@@ -164,7 +173,7 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
 
         if (clearance.DepartureProcedure is { Length: > 0 } sid)
         {
-            builder.Add($"départ {sid}");
+            builder.Add($"départ {SpeakProcedure(sid)}");
         }
         else if (clearance.ClearedRoute is { Length: > 0 })
         {

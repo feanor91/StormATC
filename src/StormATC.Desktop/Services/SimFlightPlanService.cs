@@ -184,7 +184,7 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
             "The {Source} route's points: {Points}.",
             source,
             plan.Waypoints.Count == 0 ? "none" : string.Join(" ", plan.Waypoints.Select(point => point.Identifier)));
-        _logger.LogInformation("The {Source} route as the simulator gave it: {Route}", source, routeJson.Length > 3000 ? routeJson[..3000] : routeJson);
+        _logger.LogDebug("The {Source} route as the simulator gave it: {Route}", source, routeJson.Length > 3000 ? routeJson[..3000] : routeJson);
 
         if (!_options.CurrentValue.Enabled || source == SimRouteSources.Efb)
         {

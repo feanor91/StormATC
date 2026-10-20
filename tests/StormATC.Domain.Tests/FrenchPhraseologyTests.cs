@@ -171,4 +171,15 @@ public class FrenchPhraseologyTests
         Assert.NotNull(decision.FallbackPhraseology);
         Assert.Contains("répétez", decision.FallbackPhraseology, StringComparison.OrdinalIgnoreCase);
     }
+
+    [Fact]
+    public void A_procedure_name_is_said_as_a_word_a_digit_and_a_letter()
+    {
+        string spoken = FrenchAtcPhraseology.SpeakProcedure("PILU2F");
+
+        Assert.StartsWith("PILU ", spoken, StringComparison.Ordinal);
+        Assert.DoesNotContain("2", spoken, StringComparison.Ordinal);
+        Assert.DoesNotContain("PILU2F", spoken, StringComparison.Ordinal);
+        Assert.Equal("RADAR", FrenchAtcPhraseology.SpeakProcedure("RADAR"));
+    }
 }
