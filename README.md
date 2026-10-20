@@ -9,11 +9,13 @@ A free, open-source, voice-first ATC companion for Microsoft Flight Simulator.
 
 [Project website](https://stormairfly.github.io/StormATC/) ·
 [Latest release](https://github.com/stormairfly/StormATC/releases/latest) ·
-[Contribute](CONTRIBUTING.md)
+[Contribute](CONTRIBUTING.md) ·
+[Français](README.fr.md)
 
 ![StormATC dashboard showing a mock flight, controller guidance, radio, typed transmission and push-to-talk](docs/images/stormatc-dashboard.png)
 
-**Want to fly it?** [Download the Windows installer or portable ZIP](https://github.com/stormairfly/StormATC/releases/latest).
+**Want to fly it?** [Download the Windows installer or portable ZIP](https://github.com/stormairfly/StormATC/releases/latest)
+and read [Install](#install-windows).
 **Want to improve it?** Pick a [`good first issue`](https://github.com/stormairfly/StormATC/labels/good%20first%20issue)
 or read the [contributor quickstart](docs/contributor-quickstart.md).
 
@@ -70,6 +72,14 @@ See [docs/architecture.md](docs/architecture.md).
 ## Features
 
 - **Voice-first**: push-to-talk in, spoken controller replies out, with a radio-effect audio chain
+- **French radio and French interface**: DSNA-style phraseology, a French user interface, and a
+  recogniser that understands pilots from the stage of the flight, not only from exact phrases
+- **Local speech, no account**: [Whisper](https://github.com/ggml-org/whisper.cpp) recognises you
+  and [Piper](https://github.com/rhasspy/piper) speaks the controller, both on your own computer,
+  with several controller voices and an "I don't like this voice" button that retires a voice you
+  do not want (also in the MSFS panel, so you never have to leave the simulator)
+- **VFR flights on controlled aerodromes**: local circuit, left or right hand, aerodrome profiles,
+  and a controller that stays with the tower as a real VFR flight does
 - **Hardware push-to-talk**: bind a button on a USB joystick, yoke, gamepad, or HOTAS
 - **Accent-aware voice trainer**: personal keyterms and explicit corrections without storing audio
 - **Typed fallback**: use the complete ATC pipeline without a microphone or cloud account
@@ -86,6 +96,18 @@ See [docs/architecture.md](docs/architecture.md).
   page shows the same facts and continuously loops named cached audio without another synthesis
   request. Local deterministic comparisons create a new edition only after operational values
   change; no language model generates or checks ATIS
+- **The EFB's flight plan, live**: a small WASM module inside MSFS reads the plan made in the EFB
+  and hands it to StormATC the moment you press **Send to ATC** (or to the avionics): aerodromes,
+  runways, VFR or IFR, the route and, for an IFR plan, the **SID, STAR and approach** you chose.
+  A `.PLN` file can be loaded too
+- **Missed approach**: the missed approach of the planned approach is read from the simulator's
+  navigation data and shown on the Flight Plan page
+- **MSFS toolbar panel, usable in VR**: the ATC dialogue and the phraseology of the current phase of
+  flight (VFR or IFR) in a panel inside the simulator
+- **One installer for everything**: StormATC, the panel and the module in MSFS's Community folder
+  (Store or Steam), and, if you tick it, Whisper, Piper and the voices, with the settings wired up
+- **In-app help**: download links and PDF guides for the third-party software and voices, from the
+  Settings page
 - **Opt-in FSLTL traffic awareness**: read moving simulator traffic through SimConnect, identify
   FSLTL models, and show nearby contacts without controlling or duplicating the traffic injector
 - **Optional simulated traffic radio**: display occasional ATC/pilot exchanges using free local
@@ -106,11 +128,31 @@ See [docs/architecture.md](docs/architecture.md).
 
 - Windows 10 or 11
 - [.NET 10 SDK](https://dotnet.microsoft.com/download) to build, or the .NET 10 Desktop Runtime to run
-- Optional: Microsoft Flight Simulator with the SimConnect SDK
+- Optional: Microsoft Flight Simulator 2024 (the toolbar panel and the EFB module are built for it)
+  and, to build from source with SimConnect, the MSFS SDK
+- Optional: Whisper and Piper for local speech: the installer can download them
 - Optional: FSLTL for injected live traffic; FlyByWire SimBridge is not required
 - Optional: an OpenRouter, OpenAI API, Groq, DeepSeek, or Anthropic account for model-assisted
   intent interpretation and phraseology
 - Optional: a [Deepgram](https://deepgram.com) account for speech recognition and the controller voice
+
+---
+
+## Install (Windows)
+
+1. Download `StormATC-Setup-vX.Y.Z-win-x64.exe` from the
+   [latest release](https://github.com/stormairfly/StormATC/releases/latest) (the portable ZIP needs
+   no installer but does not set up the MSFS panel).
+2. Run it. It needs no administrator rights and offers, as ticked options:
+   - **Install the panel and the module in MSFS** (ticked when MSFS is found): the toolbar panel and
+     the EFB flight plan module go to MSFS's Community folder, Store or Steam edition;
+   - **Download speech recognition and the local voices**: Whisper, Piper and the French and English
+     voices, with StormATC set to use them.
+3. Start StormATC, then **restart MSFS once**: a module is loaded when the simulator starts.
+
+The installer is not signed yet, so Windows may show an unknown-publisher warning. Third-party
+software and voices have their own licences: see
+[docs/third-party-downloads.md](docs/third-party-downloads.md) (French).
 
 ---
 
@@ -164,8 +206,8 @@ Nothing has to be configured. Each part decides for itself, and says what it dec
 | | Without any setup | Once you set it up |
 | --- | --- | --- |
 | **Simulator** | A scripted aircraft flies the bundled fictional route STMR → STMD | MSFS is connected automatically when it is running. Start it later and StormATC switches over on its own |
-| **Flight plan** | The bundled fictional sample flight | Enter your SimBrief user ID on the Flight Plan page and press import |
-| **Speaking** | Use Typed transmission on the Dashboard | Add a Deepgram key and hold push-to-talk |
+| **Flight plan** | The bundled fictional sample flight | Press **Send to ATC** in the MSFS EFB (the module installed with StormATC hands the plan over), load a `.PLN` file, or enter your SimBrief user ID on the Flight Plan page |
+| **Speaking** | Use Typed transmission on the Dashboard | Install Whisper and Piper (the installer can) for local speech with no account, or add a Deepgram key, then hold push-to-talk |
 | **Phrasing** | Deterministic phraseology, always available | Choose OpenRouter, OpenAI, Groq, DeepSeek, or Anthropic and add that provider's key and model |
 
 Every one of those is independent. Adding a SimBrief ID does not enable any cloud service, and
@@ -186,11 +228,9 @@ does not include OpenAI API usage.
 ### Provider roadmap
 
 StormATC v0.2 directly supports OpenRouter, OpenAI, Groq, DeepSeek, and Anthropic for language
-models, plus Deepgram for speech. The provider abstractions remain open to:
-
-- additional cloud speech-to-text and text-to-speech services; and
-- local or fully offline speech recognition and text-to-speech, including voices that do not
-  require a Deepgram account.
+models, and Deepgram for cloud speech. Local speech recognition and voices (Whisper and Piper) work
+without any account. The provider abstractions remain open to additional cloud speech-to-text and
+text-to-speech services.
 
 Every cloud integration remains optional. Users and contributors supply their own provider
 accounts and API keys; StormATC does not issue, bundle, or share credentials.
@@ -222,7 +262,11 @@ Enter, test, and remove keys on the Settings page. See
   `%LOCALAPPDATA%\StormATC\stormatc.db`. Clear them at any time from Settings.
 - The microphone is open **only while push-to-talk is held**. StormATC never listens continuously.
 - Raw microphone audio is **never written to disk**.
-- With no keys configured, **nothing leaves your machine at all**.
+- With no keys configured, **nothing leaves your machine at all**. Local speech (Whisper and Piper)
+  runs on your computer.
+- The MSFS panel and the EFB module talk to StormATC **only on your own computer**
+  (`127.0.0.1`): the local server refuses other addresses and web pages, and only accepts a
+  flight plan or a voice rejection from the module and the panel.
 - With Deepgram enabled, held-PTT audio goes to Deepgram for transcription and controller text
   goes there to be spoken.
 - With a language-model provider enabled, transcripts and the facts a controller has approved go
@@ -245,6 +289,16 @@ API keys are read from none of these. See [docs/development.md](docs/development
 ---
 
 ## Preparing a GitHub release
+
+Every release has a higher version than the one before it. The version is written once, in
+`Directory.Build.props`, and `scripts/New-Release.ps1` raises it (patch by default, `-Bump minor`,
+`-Bump major`, or an explicit higher `-Version`), turns the "Unreleased" part of the changelog into
+the new version's section, then commits and tags it. The release workflow refuses a tag that does
+not match the source or is not higher than the previous release.
+
+```powershell
+.\scripts\New-Release.ps1 -Push
+```
 
 Run the repository safety check before every commit or release:
 
@@ -287,10 +341,15 @@ src/
   StormATC.Application/     Use cases, abstractions, the transmission pipeline.
   StormATC.Infrastructure/  SimConnect, SimBrief, OpenRouter, Deepgram, SQLite, DPAPI.
   StormATC.Desktop/         WPF shell and view models. No domain logic.
+msfs-panel/                 The MSFS toolbar panel (web files, package, prebuilt files).
+msfs-wasm/                  The WASM module that reads the EFB flight plan, and its tests.
+installer/                  The Inno Setup installer (Community folder, downloads).
+scripts/                    Build, test, installer, release and version scripts.
 tests/                      Domain, Application, and Infrastructure test suites.
 prompts/                    Controller prompts, edited without rebuilding.
 data/                       Fictional sample aerodromes, flights, and sectors.
-docs/                       Architecture and setup documentation.
+docs/                       Architecture, setup and user documentation (some in French).
+website/                    The GitHub Pages site.
 ```
 
 ---
@@ -316,7 +375,8 @@ no real navigation data and none of it may be used for navigation.
 | [development.md](docs/development.md) | Building, testing, configuration, coding standards |
 | [contributor-quickstart.md](docs/contributor-quickstart.md) | Forking, setup, first changes, and pull requests |
 | [privacy-and-api-keys.md](docs/privacy-and-api-keys.md) | What is stored, what is sent, how keys are held |
-| [french-and-local-voice.md](docs/french-and-local-voice.md) | French radio (DSNA phraseology) and local voice with Whisper and Piper |
+| [french-and-local-voice.md](docs/french-and-local-voice.md) | French radio (DSNA phraseology) and local voice with Whisper and Piper (in French) |
+| [vfr.md](docs/vfr.md) | VFR flights on a controlled aerodrome, and the flight plan made in the EFB (in French) |
 | [msfs-module.md](docs/msfs-module.md) | The WASM module that reads the EFB flight plan live (before and during the flight) |
 | [ingame-panel.md](docs/ingame-panel.md) | The MSFS toolbar panel (ATC dialogue and phraseology by phase), installation, VR use |
 | [third-party-downloads.md](docs/third-party-downloads.md) | Where to download Whisper, Piper and the voices, with direct links and a download script |

@@ -5,6 +5,11 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- A French README (`README.fr.md`) next to the English one, and a README that covers the French radio,
+  the local voices, the MSFS panel, the EFB module, the installer and the version policy.
+
 ## 0.2.0 - 2026-10-20
 
 ### Added
