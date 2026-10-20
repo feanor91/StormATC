@@ -7,6 +7,18 @@ public releases.
 
 ### Added
 
+- **In-simulator toolbar panel** (works in VR): the ATC dialogue, the phraseology of the current
+  phase of flight (with a phase chooser, VFR or IFR), the aircraft's registration as the title, and
+  an "I don't like this voice" button, so that the pilot does not have to leave the simulator.
+- **A WASM module that reads the EFB's flight plan live.** "Send to ATC" (and to the avionics) in the
+  EFB reaches StormATC immediately: aerodromes, runways, VFR or IFR, route, and, for IFR, the SID,
+  the STAR and the approach. The missed approach of the planned approach is read from the
+  simulator's navigation data and shown on the Flight Plan page. A `.PLN` file can also be loaded.
+- **The installer installs everything**: the panel and the module in MSFS's Community folder (Store
+  or Steam), and, on request, Whisper, Piper and the French voices, with the settings wired up.
+- Download links and PDF guides for the third-party software and voices, from the Settings page.
+- IFR clearances say the departure procedure the way a controller does ("PILU two Foxtrot").
+
 - Community governance, conduct, roadmap, support, and contributor onboarding.
 - One-command contributor environment validation.
 - Responsive GitHub Pages landing site with automatic deployment and social link preview.
@@ -19,6 +31,10 @@ public releases.
 
 ### Fixed
 
+- A plan the simulator announces several times is loaded once (each load reset the session), and the
+  EFB's plan wins over the plan file of an earlier flight when StormATC connects.
+- The installer could not write to MSFS's Community folder (the Store edition keeps it behind an NTFS
+  junction, which Windows' redirection guard blocks).
 - Taxi routes now begin at the aircraft's live simulator position even when a stale or unrelated
   stand was assigned earlier. The exact graph path is retained with the clearance for moving
   progress guidance instead of routing from the first facility-array parking position.

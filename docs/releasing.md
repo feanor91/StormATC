@@ -33,18 +33,35 @@ or microphone recordings.
    workflow publishes the responsive landing site in `website/` and updates it whenever that
    source changes on `main`.
 
+## Version numbers
+
+The version is written in one place, `<Version>` in `Directory.Build.props`; the packaging scripts
+read it, so a build is always the version the source says. **Every release has a higher version than
+the one before it**, and `scripts/New-Release.ps1` is how to get one:
+
+```powershell
+.\scripts\New-Release.ps1                 # patch: 0.2.0 -> 0.2.1 (the default)
+.\scripts\New-Release.ps1 -Bump minor     # 0.2.1 -> 0.3.0
+.\scripts\New-Release.ps1 -Version 1.0.0  # an explicit version, which must be higher
+```
+
+On a clean working tree it raises the version (`Directory.Build.props`, the application manifest),
+turns the "Unreleased" part of `CHANGELOG.md` into the section of the new version, commits that as
+"Release StormATC X.Y.Z" and creates the annotated tag `vX.Y.Z`. It refuses a version that is not
+higher than every existing tag. With `-Push` it also pushes the branch and the tag. The tag workflow
+then refuses a tag that does not match `Directory.Build.props` or is not higher than the previous
+release, so a release cannot go out with a version that did not increase.
+
 ## Build a release
 
 Review the licence files installed with the exact Microsoft Flight Simulator SDK version that
 will supply SimConnect. When that review is complete:
 
 ```powershell
-.\scripts\New-StormATCInstaller.ps1 `
-  -Version 0.1.2 `
-  -AcknowledgeSimConnectLicenseReview
+.\scripts\New-StormATCInstaller.ps1 -AcknowledgeSimConnectLicenseReview
 ```
 
-This performs the repository safety scan, locked restore, full Release tests, self-contained
+The version is the one in `Directory.Build.props` (pass `-Version` only to build another one). This performs the repository safety scan, locked restore, full Release tests, self-contained
 `win-x64` publish, package-content validation, ZIP creation, installer compilation, and checksum
 generation. Normal builds and the `win-x64` publish use separate checked-in NuGet lock graphs so
 both paths remain reproducible. The output is placed in `artifacts\release\`:
@@ -57,15 +74,11 @@ Do not rename or edit those files after the checksum file is generated.
 
 ## Create and publish the GitHub release
 
-Commit the exact source used to build the installer, create an annotated semantic-version tag,
-and push both:
+Commit the exact source used to build the installer, then raise the version, tag and push with
+`New-Release.ps1` (see above):
 
 ```powershell
-git add .
-git commit -m "Release StormATC 0.1.2"
-git push
-git tag -a v0.1.2 -m "StormATC v0.1.2"
-git push origin v0.1.2
+.\scripts\New-Release.ps1 -Push
 ```
 
 The tag workflow validates that source and creates a draft GitHub Release. Upload the locally

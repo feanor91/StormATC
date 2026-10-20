@@ -25,6 +25,31 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: false
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Check that the version goes up
+        shell: pwsh
+        run: |
+          # Every release has a higher version than the one before it, and the tag says what the
+          # source says: scripts/New-Release.ps1 makes both true.
+          $tagVersion = $env:GITHUB_REF_NAME.TrimStart("v")
+          $source = (./scripts/Get-StormAtcVersion.ps1 | Select-Object -First 1)
+          if ($tagVersion -ne $source) {
+            throw "The tag $env:GITHUB_REF_NAME does not match the version in Directory.Build.props ($source). Use scripts/New-Release.ps1."
+          }
+
+          $current = [version]($tagVersion -replace "-.*$", "")
+          $earlier = git tag --list "v*" |
+            Where-Object { $_ -ne $env:GITHUB_REF_NAME } |
+            ForEach-Object { $parsed = $null; if ([version]::TryParse(($_.TrimStart("v") -replace "-.*$", ""), [ref]$parsed)) { $parsed } } |
+            Sort-Object -Descending |
+            Select-Object -First 1
+          if ($null -ne $earlier -and $current -le $earlier) {
+            throw "The version $current is not higher than the earlier release $earlier."
+          }
+
+          Write-Host "Releasing $current (the highest earlier release is $earlier)."
 
       - name: Install .NET SDK
         uses: actions/setup-dotnet@v4

@@ -257,7 +257,7 @@ SimConnect licence files supplied with your exact MSFS SDK, and run:
 
 ```powershell
 winget install --id JRSoftware.InnoSetup --exact
-.\scripts\New-StormATCInstaller.ps1 -Version 0.1.2 -AcknowledgeSimConnectLicenseReview
+.\scripts\New-StormATCInstaller.ps1 -AcknowledgeSimConnectLicenseReview
 ```
 
 The publisher runs the secret scan and full Release tests, requires both SimConnect runtime

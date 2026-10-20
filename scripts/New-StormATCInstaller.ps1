@@ -2,7 +2,7 @@
 param(
     [Parameter()]
     [ValidatePattern("^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$")]
-    [string] $Version = "0.1.2",
+    [string] $Version = (& (Join-Path $PSScriptRoot "Get-StormAtcVersion.ps1")),
 
     [Parameter()]
     [string] $OutputDirectory = "artifacts\release",
