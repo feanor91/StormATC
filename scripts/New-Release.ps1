@@ -100,8 +100,8 @@ $changelog = Join-Path $root "CHANGELOG.md"
 $today = Get-Date -Format "yyyy-MM-dd"
 Set-FileText $changelog {
     param($t)
-    if ($t -notmatch "(?m)^## Unreleased\s*$") { throw "CHANGELOG.md has no 'Unreleased' section." }
-    $t -replace "(?m)^## Unreleased\s*$", "## Unreleased`n`n## $next - $today"
+    if ($t -notmatch "(?m)^## Unreleased[ \t]*$") { throw "CHANGELOG.md has no 'Unreleased' section." }
+    $t -replace "(?m)^## Unreleased[ \t]*$", "## Unreleased`n`n## $next - $today"
 }
 
 Invoke-Git add Directory.Build.props src/StormATC.Desktop/app.manifest CHANGELOG.md | Out-Null
