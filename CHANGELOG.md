@@ -5,6 +5,12 @@ public releases.
 
 ## Unreleased
 
+### Fixed
+
+- A model that fails while it generates ("finish reason: error") is tried again instead of giving up, and a
+  chart request to OpenRouter asks for little reasoning, since a model that deliberates first can run out of time
+  before it answers. The blank lines some providers send while they work no longer fill the log.
+
 ## 0.3.1 - 2026-10-22
 
 ### Fixed

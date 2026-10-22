@@ -237,7 +237,10 @@ public sealed class OpenRouterClient(
                     false);
             }
 
-            return (Deserialize<T>(body, provider, stopwatch), false);
+            StructuredModelResponse<T> parsed = Deserialize<T>(body, provider, stopwatch);
+
+            // A provider that fails while it is generating ("finish reason: error") may succeed on the next try.
+            return (parsed, !parsed.Success && parsed.ErrorCategory == ModelErrorCategory.Transient);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
@@ -307,7 +310,9 @@ public sealed class OpenRouterClient(
                     Truncate(body));
                 return StructuredModelResponse.Fail<T>(
                     UiText.T($"{provider.Name} returned no completion content (finish reason: {finish})."),
-                    ModelErrorCategory.MalformedResponse,
+                    string.Equals(finish, "error", StringComparison.OrdinalIgnoreCase)
+                        ? ModelErrorCategory.Transient
+                        : ModelErrorCategory.MalformedResponse,
                     stopwatch.Elapsed,
                     Truncate(body));
             }
@@ -593,6 +598,12 @@ public sealed class OpenRouterClient(
                 temperature = request.Temperature,
                 max_tokens = request.MaxOutputTokens,
                 response_format = responseFormat,
+
+                // Reading a chart needs no long deliberation: a model that reasons first can run out of
+                // time or tokens before it answers. Models that cannot reason ignore this.
+                reasoning = protocol == ProviderProtocol.OpenRouter && request.Images.Count > 0
+                    ? (object)new { effort = "low" }
+                    : null,
             };
     }
 
@@ -894,8 +905,15 @@ public sealed class OpenRouterClient(
         return closingFence >= 0 ? body[..closingFence].Trim() : body.Trim();
     }
 
-    private static string Truncate(string value) =>
-        value.Length <= 2000 ? value : value[..2000] + "… (truncated)";
+    /// <summary>
+    /// The start of a reply, for the log. A provider that takes long to answer sends blank lines while it
+    /// works (a keep-alive), so the padding is removed.
+    /// </summary>
+    private static string Truncate(string value)
+    {
+        string trimmed = value.Trim();
+        return trimmed.Length <= 2000 ? trimmed : trimmed[..2000] + "… (truncated)";
+    }
 
     private enum ProviderProtocol
     {

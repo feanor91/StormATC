@@ -101,6 +101,24 @@ public sealed class LanguageModelProviderClientTests
     }
 
     [Fact]
+    public async Task A_chart_request_to_openrouter_asks_for_little_reasoning_and_others_do_not()
+    {
+        var openRouter = new RecordingHandler(anthropic: false);
+        await CreateClient("OpenRouter", openRouter)
+            .GenerateStructuredAsync<SampleResponse>(ChartRequest(), SampleSchema, CancellationToken.None);
+        var plain = new RecordingHandler(anthropic: false);
+        await CreateClient("OpenRouter", plain).GenerateStructuredAsync<SampleResponse>(
+            new ModelRequest { SystemPrompt = "s", UserPrompt = "u" }, SampleSchema, CancellationToken.None);
+        var openAi = new RecordingHandler(anthropic: false);
+        await CreateClient("OpenAI", openAi)
+            .GenerateStructuredAsync<SampleResponse>(ChartRequest(), SampleSchema, CancellationToken.None);
+
+        Assert.Contains("\"reasoning\":{\"effort\":\"low\"}", openRouter.Body, StringComparison.Ordinal);
+        Assert.DoesNotContain("reasoning", plain.Body, StringComparison.Ordinal);
+        Assert.DoesNotContain("reasoning", openAi.Body, StringComparison.Ordinal);
+    }
+
+    [Fact]
     public async Task Images_go_to_anthropic_as_base64_blocks_before_the_text()
     {
         var handler = new RecordingHandler(anthropic: true);
