@@ -143,6 +143,18 @@ public sealed class PilotTransmissionCoordinator(
         AtcSession session = _sessionContext.CurrentSession;
         DateTimeOffset now = _clock.UtcNow;
 
+        // An aerodrome with no air traffic service has no controller: the pilot makes blind calls on the
+        // air-air frequency and StormATC, which simulates controllers, has nobody to answer with.
+        if (await _sessionContext.GetCurrentVfrProfileAsync(cancellationToken).ConfigureAwait(false)
+            is { HasNoAtc: true } uncontrolled)
+        {
+            totalStopwatch.Stop();
+            return TransmissionProcessingResult.AerodromeWithoutAtc(
+                transmission.CorrelationId,
+                session,
+                uncontrolled.AirAirFrequency);
+        }
+
         // A transmission is heard only on the frequency selected for transmission in the
         // aircraft. ATIS is receive-only; every other staffed position requires the active
         // transmit channel to match the frequency assigned by the session. This gate runs

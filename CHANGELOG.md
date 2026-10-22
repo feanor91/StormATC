@@ -5,6 +5,12 @@ public releases.
 
 ## Unreleased
 
+### Changed
+
+- At an aerodrome whose VFR profile says it has no air traffic service (auto-information, such as Chartres,
+  Etampes, Pithiviers or Buno-Bonnevaux), StormATC no longer plays a controller: it says so in the conversation
+  when the plan is loaded, answers a call with the air-air frequency to use, and does not invent a tower.
+
 ## 0.4.1 - 2026-10-22
 
 ### Added

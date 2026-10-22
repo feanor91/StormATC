@@ -2,6 +2,7 @@ using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using StormATC.Application.Abstractions;
 using StormATC.Domain.Airports;
+using StormATC.Domain.ValueObjects;
 
 namespace StormATC.Infrastructure.Data;
 
@@ -104,8 +105,25 @@ public sealed class JsonVfrProfileProvider(
             sideBearing = Integer(circuit, "sideBearingDegrees");
         }
 
+        string? serviceKind = null;
+        if (root.TryGetProperty("service", out JsonElement service) && service.ValueKind == JsonValueKind.Object
+            && service.TryGetProperty("kind", out JsonElement kind) && kind.ValueKind == JsonValueKind.String)
+        {
+            serviceKind = kind.GetString();
+        }
+
+        Frequency? airAir = null;
+        if (root.TryGetProperty("frequencies", out JsonElement frequencies) && frequencies.ValueKind == JsonValueKind.Object
+            && frequencies.TryGetProperty("airAir", out JsonElement air) && air.ValueKind == JsonValueKind.Number
+            && air.TryGetDecimal(out decimal megahertz) && Frequency.TryFromMegahertz(megahertz, out Frequency parsed))
+        {
+            airAir = parsed;
+        }
+
         return new VfrAerodromeProfile
         {
+            ServiceKind = serviceKind,
+            AirAirFrequency = airAir,
             Icao = icao.ToUpperInvariant(),
             Name = root.TryGetProperty("name", out JsonElement nameValue) ? nameValue.GetString() ?? string.Empty : string.Empty,
             ReportingPoints = points,

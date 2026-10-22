@@ -591,6 +591,15 @@ public sealed partial class DashboardViewModel : ObservableObject, IDisposable
                 return;
             }
 
+            if (result.WasAerodromeWithoutAtc)
+            {
+                StatusMessage = result.ExpectedFrequency is Frequency airAir
+                    ? UiText.T($"There is no controller at this aerodrome (auto-information): make your calls blind on {airAir.ToDisplay()}. StormATC does not answer.")
+                    : UiText.T("There is no controller at this aerodrome (auto-information): make your calls blind on its frequency. StormATC does not answer.");
+                SetSpeechState(SpeechState.Idle, UiText.T("Auto-information"), UiText.T("PUSH TO TALK"));
+                return;
+            }
+
             if (result.WasIgnoredOnAtis)
             {
                 StatusMessage =

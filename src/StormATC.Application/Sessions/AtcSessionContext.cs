@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Domain;
 using StormATC.Domain.Aircraft;
@@ -218,7 +219,7 @@ public sealed class AtcSessionContext(
             ? nearbyStand
             : null;
 
-        return Mutate(session =>
+        AtcSession loaded = Mutate(session =>
         {
             // A plan from another aerodrome starts a new flight: the controller, frequency and
             // clearances of the previous one do not carry over. Without this, importing a plan
@@ -267,6 +268,9 @@ public sealed class AtcSessionContext(
                 }
                 : updated;
         });
+
+        await AnnounceAerodromeWithoutAtcAsync(flightPlan.DepartureIcao, cancellationToken).ConfigureAwait(false);
+        return CurrentSession is { } current && current.SessionId == loaded.SessionId ? current : loaded;
     }
 
     /// <summary>Records a new aircraft snapshot from the simulator.</summary>
@@ -459,6 +463,58 @@ public sealed class AtcSessionContext(
             DefaultPushbackDirection = DefaultPushbackDirection,
             PreassignedSquawk = PreassignedSquawk,
         };
+    }
+
+    /// <summary>
+    /// The VFR profile of the aerodrome the flight is at now: the departure aerodrome until the flight is
+    /// on its way to the destination.
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    public async Task<VfrAerodromeProfile?> GetCurrentVfrProfileAsync(CancellationToken cancellationToken)
+    {
+        AtcSession session = CurrentSession;
+        return await GetVfrProfileAsync(
+                session.FlightPlan is FlightPlan filed
+                    ? (IsArrivalPhase(session.Phase) ? filed.DestinationIcao : filed.DepartureIcao)
+                    : null,
+                cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Tells the pilot, in the conversation, that the departure aerodrome has no air traffic service:
+    /// there is nobody to call, and the calls are made blind on the air-air frequency.
+    /// </summary>
+    private async Task AnnounceAerodromeWithoutAtcAsync(string departureIcao, CancellationToken cancellationToken)
+    {
+        VfrAerodromeProfile? profile = await GetVfrProfileAsync(departureIcao, cancellationToken).ConfigureAwait(false);
+        if (profile is not { HasNoAtc: true })
+        {
+            return;
+        }
+
+        string text = AerodromeWithoutAtcMessage(profile);
+        Mutate(session => session.Conversation.Any(turn => turn.Speaker == ConversationSpeaker.System && turn.Text == text)
+            ? session
+            : session.WithConversationTurn(new ConversationTurn
+            {
+                TurnId = Guid.CreateVersion7(),
+                Timestamp = _clock.UtcNow,
+                Speaker = ConversationSpeaker.System,
+                Text = text,
+            }));
+    }
+
+    /// <summary>What the pilot is told at an aerodrome that has no air traffic service.</summary>
+    /// <param name="profile">The aerodrome's profile.</param>
+    public static string AerodromeWithoutAtcMessage(VfrAerodromeProfile profile)
+    {
+        ArgumentNullException.ThrowIfNull(profile);
+
+        string name = string.IsNullOrWhiteSpace(profile.Name) ? profile.Icao : $"{profile.Name} ({profile.Icao})";
+        return profile.AirAirFrequency is Frequency airAir
+            ? UiText.T($"{name} has no air traffic service (auto-information): there is no controller to call. Make your calls blind on {airAir.ToDisplay()}; StormATC does not answer.")
+            : UiText.T($"{name} has no air traffic service (auto-information): there is no controller to call. Make your calls blind on the aerodrome's frequency; StormATC does not answer.");
     }
 
     private static bool IsArrivalPhase(FlightPhase phase) => phase is FlightPhase.Descent

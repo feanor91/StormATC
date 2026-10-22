@@ -70,6 +70,12 @@ StormATC will not distribute shared credentials.
   chart and checks it. New charts are added to `data/vfr-profiles/` that way; a profile in
   `%LOCALAPPDATA%\StormATC\vfr-profiles` is read first.
 
+- **Auto-information and AFIS.** *First step done:* at an aerodrome whose profile says it has no air traffic
+  service, StormATC no longer invents a controller: it says so in the conversation and on the dashboard and gives
+  the air-air frequency. *Remains:* check the pilot's blind calls (position reports in the circuit), simulate
+  other traffic that calls and answers, use the profile's circuit rules and reporting points in those calls, and an
+  AFIS mode (information and alert, no clearances) for the aerodromes that have one.
+
 ### User experience and accessibility
 
 - Finish keyboard navigation, focus states, screen-reader names, and high-DPI testing.

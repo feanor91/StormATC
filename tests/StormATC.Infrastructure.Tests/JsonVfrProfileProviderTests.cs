@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using StormATC.Application.Abstractions;
 using StormATC.Domain.Airports;
 using StormATC.Domain.Intents;
+using StormATC.Domain.ValueObjects;
 using StormATC.Infrastructure.Data;
 
 namespace StormATC.Infrastructure.Tests;
@@ -93,6 +94,29 @@ public sealed class JsonVfrProfileProviderTests : IDisposable
         Assert.Equal(preferredQfu, profile.PreferredQfu);
         Assert.Equal(circuitHeight, profile.CircuitHeightFeetAmsl);
         Assert.Equal(reportingPoints, profile.ReportingPoints.Count);
+    }
+
+    [Theory]
+    [InlineData("LFFB", true, 123.155)]
+    [InlineData("LFFP", true, 123.500)]
+    [InlineData("LFOR", true, 119.205)]
+    [InlineData("LFOX", true, 119.050)]
+    [InlineData("LFHP", false, 118.005)]
+    [InlineData("LFOZ", false, 122.405)]
+    [InlineData("LFPL", false, 118.605)]
+    [InlineData("LFPM", false, 121.105)]
+    [InlineData("LFPN", false, 120.755)]
+    [InlineData("LFPO", false, null)]
+    public async Task The_profiles_say_which_aerodromes_have_no_air_traffic_service(string icao, bool noAtc, double? airAir)
+    {
+        File.Copy(Path.Combine(BundledFolder(), icao + ".json"), Path.Combine(_data, "vfr-profiles", icao + ".json"));
+
+        VfrAerodromeProfile profile = (await Provider().GetProfileAsync(icao, CancellationToken.None))!;
+
+        Assert.Equal(noAtc, profile.HasNoAtc);
+        Assert.Equal(
+            airAir is double expected ? Frequency.FromMegahertz((decimal)expected) : null,
+            profile.AirAirFrequency);
     }
 
     [Fact]

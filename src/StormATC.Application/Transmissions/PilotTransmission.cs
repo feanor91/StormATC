@@ -76,6 +76,12 @@ public sealed record TransmissionProcessingResult
     /// <summary>True when the pilot attempted to transmit while monitoring receive-only ATIS.</summary>
     public bool WasIgnoredOnAtis { get; init; }
 
+    /// <summary>
+    /// True when the aerodrome has no air traffic service (auto-information): there is no controller to
+    /// answer, so the transmission was not processed. <see cref="ExpectedFrequency"/> is the air-air frequency.
+    /// </summary>
+    public bool WasAerodromeWithoutAtc { get; init; }
+
     /// <summary>The frequency StormATC expected for a radio-gated transmission.</summary>
     public Frequency? ExpectedFrequency { get; init; }
 
@@ -126,6 +132,20 @@ public sealed record TransmissionProcessingResult
         Processed = false,
         CorrelationId = correlationId,
         ErrorMessage = error,
+    };
+
+    /// <summary>Builds the result for a call at an aerodrome that has no air traffic service.</summary>
+    public static TransmissionProcessingResult AerodromeWithoutAtc(
+        string correlationId,
+        AtcSession session,
+        Frequency? airAirFrequency) => new()
+    {
+        Processed = false,
+        WasAerodromeWithoutAtc = true,
+        ExpectedFrequency = airAirFrequency,
+        TunedFrequency = session.AircraftState.Radio.ActiveTransmitFrequency,
+        UpdatedSession = session,
+        CorrelationId = correlationId,
     };
 
     /// <summary>Builds a silent result for a transmission no controller could hear.</summary>

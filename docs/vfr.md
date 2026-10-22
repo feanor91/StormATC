@@ -142,7 +142,12 @@ utilisé au prochain chargement d'un vol, et une mise à jour ne le touche pas.
 
 - Pas de séquencement du trafic : jamais de « numéro deux, suivez… ». Chaque avion est « numéro
   un » tant qu'aucune piste n'est signalée occupée.
-- Pas de mode sans ATS (auto-information) ni d'AFIS : seul le contrôle d'aérodrome est simulé.
+- Pas de simulation de l'auto-information ni de l'AFIS : seul le contrôle d'aérodrome est simulé. Sur un
+  aérodrome que le profil déclare **sans ATS** (`service.kind` : `None`, par exemple Chartres LFOR, Étampes,
+  Pithiviers, Buno-Bonnevaux), StormATC **ne répond pas** : il le dit dans le dialogue au chargement du plan
+  (« n'a pas de service de la circulation aérienne, faites vos comptes rendus à l'aveugle sur 119,205 ») et
+  rappelle la même chose si vous émettez. Les comptes rendus d'auto-information ne sont pas encore
+  vérifiés ni répondus.
 - Pas de transit VFR en route, de zones, ni d'information de vol.
 - Pas de départ VFR avec compte rendu à un point de sortie.
 - Le sens du circuit de LFPL est lu sur le dessin de la carte d'atterrissage, pas sur un texte.

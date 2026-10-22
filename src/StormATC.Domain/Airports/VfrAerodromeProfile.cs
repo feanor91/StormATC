@@ -1,4 +1,5 @@
 using StormATC.Domain.Intents;
+using StormATC.Domain.ValueObjects;
 
 namespace StormATC.Domain.Airports;
 
@@ -38,6 +39,21 @@ public sealed record VfrAerodromeProfile
 
     /// <summary>The aerodrome name.</summary>
     public string Name { get; init; } = string.Empty;
+
+    /// <summary>
+    /// The air traffic service the aerodrome publishes: <c>None</c> (auto-information, no controller),
+    /// <c>Afis</c>, <c>Tower</c>, <c>TowerAndGround</c>…; null when the profile does not say.
+    /// </summary>
+    public string? ServiceKind { get; init; }
+
+    /// <summary>The air-air (auto-information) frequency, when the profile gives one.</summary>
+    public Frequency? AirAirFrequency { get; init; }
+
+    /// <summary>
+    /// True when the profile says the aerodrome has no air traffic service: pilots make blind calls on
+    /// the air-air frequency and nobody answers.
+    /// </summary>
+    public bool HasNoAtc => string.Equals(ServiceKind, "None", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>The published reporting points, in the order they are used on arrival.</summary>
     public IReadOnlyList<VfrReportingPoint> ReportingPoints { get; init; } = [];
