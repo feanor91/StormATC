@@ -691,6 +691,8 @@ internal sealed record MockAircraftModel
     /// <summary>Projects the model into the domain's aircraft snapshot.</summary>
     public AircraftState ToAircraftState(DateTimeOffset timestamp) => new()
     {
+        // The scripted aircraft is not a pilot sitting in a simulator.
+        IsUserInAircraft = false,
         Timestamp = timestamp,
         Position = Position,
         IndicatedAltitudeFeet = AltitudeFeet,

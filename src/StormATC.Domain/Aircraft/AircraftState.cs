@@ -60,6 +60,13 @@ public sealed record AircraftState
     /// <summary>The callsign or registration reported by the simulator, when available.</summary>
     public string AtcIdentifier { get; init; } = string.Empty;
 
+    /// <summary>
+    /// True when the pilot is in the aircraft of a running simulator. False in the simulator's menus
+    /// (the data it reports there is meaningless) and for the scripted aircraft, which has no pilot
+    /// in a simulator. Nothing that reads the radio aloud should start before it is true.
+    /// </summary>
+    public bool IsUserInAircraft { get; init; } = true;
+
     /// <summary>Height above the surface directly below the aircraft, in feet.</summary>
     public double AltitudeAboveGroundFeet { get; init; }
 

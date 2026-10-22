@@ -129,12 +129,55 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorFlightPlanEvents
         simConnect.SubscribeToSystemEvent(Events.FlightPlanDeactivated, "FlightPlanDeactivated");
         simConnect.SubscribeToSystemEvent(Events.FlightLoaded, "FlightLoaded");
         simConnect.SubscribeToSystemEvent(Events.OneSecond, "1sec");
+
+        // "Sim" is 1 while the pilot is flying and 0 in the menus; ask for it once now too, since
+        // StormATC usually connects after the flight began.
+        _simRunning = -1;
+        simConnect.SubscribeToSystemEvent(Events.SimRunning, "Sim");
+        simConnect.OnRecvSystemState += OnReceiveSystemState;
+        simConnect.RequestSystemState(Requests.SimState, "Sim");
+
         simConnect.OnRecvEventFilename += OnReceiveEventFilename;
         simConnect.OnRecvEvent += OnReceiveSystemEvent;
     }
 
+    /// <summary>1 while the pilot is in control of an aircraft, 0 in the menus, -1 before the simulator said.</summary>
+    private int _simRunning = -1;
+
+    /// <summary>
+    /// Whether the pilot is in the aircraft: the simulator says it is running and the data is that of
+    /// a real position (in the menus the altitude is nonsense such as -19,000,000 ft).
+    /// </summary>
+    /// <param name="indicatedAltitudeFeet">The altitude the simulator reports.</param>
+    private bool IsUserInAircraft(double indicatedAltitudeFeet) =>
+        Volatile.Read(ref _simRunning) != 0 && indicatedAltitudeFeet > -2000;
+
+    private void OnReceiveSystemState(SimConnect sender, SIMCONNECT_RECV_SYSTEM_STATE data)
+    {
+        if ((Requests)data.dwRequestID == Requests.SimState)
+        {
+            SetSimRunning((int)data.dwInteger);
+        }
+    }
+
+    private void SetSimRunning(int value)
+    {
+        if (Interlocked.Exchange(ref _simRunning, value == 0 ? 0 : 1) != (value == 0 ? 0 : 1))
+        {
+            if (value == 0)
+            {
+                _logger.LogInformation("The simulator is not running a flight (menus): ATIS and the radio wait for the aircraft.");
+            }
+            else
+            {
+                _logger.LogInformation("The pilot is in the aircraft.");
+            }
+        }
+    }
+
     private void UnsubscribeFromFlightPlanEvents(SimConnect simConnect)
     {
+        simConnect.OnRecvSystemState -= OnReceiveSystemState;
         simConnect.OnRecvEventFilename -= OnReceiveEventFilename;
         simConnect.OnRecvEvent -= OnReceiveSystemEvent;
     }
@@ -159,6 +202,10 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorFlightPlanEvents
     {
         switch ((Events)data.uEventID)
         {
+            case Events.SimRunning:
+                SetSimRunning((int)data.dwData);
+                break;
+
             case Events.FlightPlanDeactivated:
                 RaiseFlightPlanAnnounced(SimulatorFlightPlanEventKind.Deactivated, null);
                 break;

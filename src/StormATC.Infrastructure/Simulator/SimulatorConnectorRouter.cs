@@ -77,6 +77,9 @@ public sealed class SimulatorConnectorRouter : ISimulatorConnector
     private bool _disposed;
     private Frequency? _requestedCom1Frequency;
 
+    /// <summary>Whether the pilot was in the aircraft at the last snapshot; null before the first one.</summary>
+    private bool? _wasUserInAircraft;
+
     /// <summary>Creates the router.</summary>
     public SimulatorConnectorRouter(
         MockSimulatorConnector mock,
@@ -286,6 +289,7 @@ public sealed class SimulatorConnectorRouter : ISimulatorConnector
         connector.AircraftStateChanged += OnAircraftStateChanged;
         connector.ConnectionChanged += OnConnectionChanged;
         _active = connector;
+        _wasUserInAircraft = null;
 
         await connector.ConnectAsync(cancellationToken).ConfigureAwait(false);
 
@@ -452,7 +456,42 @@ public sealed class SimulatorConnectorRouter : ISimulatorConnector
         // Guards against a connector that raises one last event while it is being torn down.
         if (ReferenceEquals(sender, _active))
         {
+            bool inAircraft = e.State.IsUserInAircraft;
+            bool entered = _wasUserInAircraft == false && inAircraft;
+            _wasUserInAircraft = inAircraft;
+
             AircraftStateChanged?.Invoke(this, e);
+
+            // StormATC tunes COM1 to the ATIS when the plan is loaded, but a simulator in its menus
+            // drops the command. When the pilot gets into the aircraft on the ground, tune it again
+            // so that the departure ATIS is the first thing heard.
+            if (entered
+                && e.State.IsOnGround
+                && sender is ISimulatorConnector connector
+                && _requestedCom1Frequency is Frequency requested)
+            {
+                _ = TuneAfterEnteringAsync(connector, requested);
+            }
+        }
+    }
+
+    private async Task TuneAfterEnteringAsync(ISimulatorConnector connector, Frequency frequency)
+    {
+        try
+        {
+            bool tuned = await connector.TuneCom1Async(frequency, CancellationToken.None).ConfigureAwait(false);
+            if (tuned)
+            {
+                _logger.LogInformation("The pilot is in the aircraft: COM1 tuned to {Frequency}.", frequency.ToDisplay());
+            }
+            else
+            {
+                _logger.LogInformation("The pilot is in the aircraft, but COM1 could not be tuned to {Frequency}.", frequency.ToDisplay());
+            }
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or ObjectDisposedException or OperationCanceledException)
+        {
+            _logger.LogDebug(ex, "COM1 could not be tuned after the pilot got into the aircraft.");
         }
     }
 

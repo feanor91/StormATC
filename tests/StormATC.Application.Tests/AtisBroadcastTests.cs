@@ -175,6 +175,63 @@ public sealed class AtisBroadcastTests
     }
 
     [Fact]
+    public async Task The_atis_waits_until_the_pilot_is_in_the_aircraft()
+    {
+        var clock = new FixedClock(Now);
+        var weather = new StubWeatherProvider
+        {
+            Snapshot = new WeatherSnapshot
+            {
+                WindDirection = Heading.FromDegrees(180),
+                WindSpeedKnots = 8,
+                QnhHectopascals = 1015,
+                Source = "test weather",
+            },
+        };
+        var context = new AtcSessionContext(
+            new StubAirportDataProvider(),
+            new StubTrafficProvider(),
+            weather,
+            clock,
+            NullLogger<AtcSessionContext>.Instance);
+        var speech = new RecordingTextToSpeechService();
+        using var service = new AtisBroadcastService(
+            context,
+            weather,
+            speech,
+            clock,
+            NullLogger<AtisBroadcastService>.Instance);
+
+        service.Start();
+        context.StartNewSession(SessionMode.Mock, TestAerodromes.AtStand(Now));
+        await context.LoadFlightPlanAsync(Plan(), CancellationToken.None);
+
+        // The radio is on the ATIS, but the simulator is not running or is in its menus.
+        AircraftState tuned = context.CurrentSession.AircraftState with
+        {
+            IsUserInAircraft = false,
+            Radio = context.CurrentSession.AircraftState.Radio with
+            {
+                Com1Active = Frequency.FromMegahertz(132.150m),
+                TransmitOnCom1 = true,
+            },
+        };
+        context.UpdateAircraftState(tuned);
+        await Task.Delay(150);
+
+        Assert.Equal(0, speech.SpeakCount);
+        Assert.Null(service.CurrentBroadcast);
+        Assert.Contains("in the aircraft", service.StatusMessage, StringComparison.Ordinal);
+
+        // The pilot gets into the aircraft: the ATIS is read.
+        context.UpdateAircraftState(tuned with { IsUserInAircraft = true });
+        await speech.FirstTransmission.WaitAsync(TimeSpan.FromSeconds(2));
+
+        Assert.Equal(1, speech.SpeakCount);
+        Assert.NotNull(service.CurrentBroadcast);
+    }
+
+    [Fact]
     public async Task Service_loops_cached_audio_and_updates_only_after_operational_change()
     {
         var clock = new FixedClock(Now);

@@ -47,6 +47,13 @@ public releases.
   assigned runway, and current simulator weather, with its complete text, information code,
   source, and cached replay shown on the Radio page.
 
+### Changed
+
+- The departure ATIS is read only to a pilot who is in the aircraft: not when StormATC starts without
+  the simulator (the scripted aircraft), nor while MSFS is in its menus. When the pilot gets into the
+  aircraft on the ground, COM1 is tuned to the ATIS again (the simulator drops that command in its
+  menus) and the ATIS is read. The Radio page says it is waiting.
+
 ### Fixed
 
 - A plan the simulator announces several times is loaded once (each load reset the session), and the

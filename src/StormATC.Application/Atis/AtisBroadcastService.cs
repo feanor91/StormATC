@@ -160,11 +160,17 @@ public sealed class AtisBroadcastService : IDisposable
             }
         }
 
-        if (!TryGetMonitoredAtisFrequency(session, out Frequency frequency))
+        // The ATIS is read out only to a pilot who is in the aircraft: not while the simulator is not
+        // running (the scripted aircraft) nor while it is in its menus.
+        bool waitingForAircraft = !session.AircraftState.IsUserInAircraft;
+        Frequency frequency = default;
+        if (waitingForAircraft || !TryGetMonitoredAtisFrequency(session, out frequency))
         {
             bool shouldStop;
             bool statusChanged;
-            string nextStatus = session.CurrentController == ControllerPosition.Atis
+            string nextStatus = waitingForAircraft
+                ? UiText.T("The departure ATIS will be read once you are in the aircraft in the simulator.")
+                : session.CurrentController == ControllerPosition.Atis
                 && session.CurrentFrequency is Frequency atis
                 ? UiText.T($"Tune the selected radio to {atis.ToDisplay()} to receive departure ATIS.")
                 : session.FlightPlan is null

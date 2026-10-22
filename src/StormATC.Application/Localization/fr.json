@@ -300,6 +300,7 @@
   "Live traffic reading is local and uses no API credits. Language-model chatter uses up to one model request per exchange. Spoken chatter uses two TTS requests per exchange. All are off by default and the hourly exchange limit is a hard ceiling.": "La lecture du trafic en direct est locale et ne consomme aucun crédit API. Les échanges formulés par le modèle de langage utilisent au plus une requête par échange. Les échanges parlés utilisent deux requêtes de synthèse vocale par échange. Tout est désactivé par défaut et la limite horaire d'échanges est un plafond strict.",
   "Load a flight plan": "Chargez un plan de vol",
   "Load a flight plan to read live scenery": "Chargez un plan de vol pour lire la scène en direct",
+  "The departure ATIS will be read once you are in the aircraft in the simulator.": "L'ATIS de départ sera lu dès que vous serez dans l'avion, dans le simulateur.",
   "Load a flight plan to receive departure ATIS.": "Chargez un plan de vol pour recevoir l'ATIS départ.",
   "Load the bundled sample flight": "Charger le vol d'exemple fourni",
   "Loading the bundled sample flight…": "Chargement du vol d'exemple fourni…",

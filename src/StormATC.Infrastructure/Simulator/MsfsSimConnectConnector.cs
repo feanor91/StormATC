@@ -271,6 +271,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         RouteClientDataInitial = 3,
         RouteClientDataUpdates = 4,
         ApproachFacility = 5,
+        SimState = 6,
     }
 
     private enum ClientDataAreas
@@ -286,6 +287,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         FlightPlanDeactivated = 3,
         FlightLoaded = 4,
         OneSecond = 5,
+        SimRunning = 6,
     }
 
     private enum NotificationGroups
@@ -1208,6 +1210,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
             VerticalSpeedFeetPerMinute = double.IsFinite(raw.VerticalSpeed)
                 ? raw.VerticalSpeed
                 : 0,
+            IsUserInAircraft = IsUserInAircraft(raw.IndicatedAltitude),
             IsOnGround = raw.OnGround != 0,
             ParkingBrakeSet = raw.ParkingBrake != 0,
             EnginesRunning = raw.EngineCombustion != 0,
