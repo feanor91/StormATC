@@ -13,7 +13,8 @@ public releases.
   them).
 - **Charts in the in-simulator panel** (normal and VR): a third tab shows the PDF charts the pilot puts
   in the `Cartes VAC` folder beside the application, one page at a time with zoom and page buttons; the
-  charts of the flight plan's departure and destination come first. Pages are drawn by StormATC with
+  charts of the flight plan's departure and destination come first, and the destination's chart opens by
+  itself. Pages are drawn by StormATC with
   Windows' own PDF renderer. The Settings page has a button that opens the folder, and the installer
   creates it (and never removes it).
 

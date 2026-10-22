@@ -52,6 +52,11 @@ Dans un dépôt cloné (développement), le dossier `Cartes VAC` à la racine du
 `StormATC.sln`, est utilisé quand celui de l'application est vide. Il est ignoré par git. Le réglage
 `ToolbarPanel:ChartsDirectory` désigne un autre dossier.
 
+**Avec un plan de vol**, l'onglet ouvre tout seul la carte de l'aérodrome d'**arrivée** (celle dont le
+nom de fichier contient son code OACI), une seule fois par destination : **← Cartes** ramène à la
+liste sans la rouvrir, et une nouvelle destination ouvre sa carte. Sans carte pour la destination, la
+liste s'affiche.
+
 **Les utiliser.** La liste montre les cartes par nom ; celles de l'aérodrome de **départ** et de
 l'**arrivée** du plan de vol en cours passent en tête, avec une étiquette (le nom du fichier doit
 contenir le code OACI, par exemple `AD-2.LFPL.pdf`). Touchez une carte pour l'ouvrir : **Précédente** et

@@ -192,6 +192,9 @@ var StormAtcPanel = (function () {
         var chartZoom = 1;
         var chartsTimer = null;
         var chartView = null;
+        // The destination whose chart was opened for the pilot, or that the pilot went back from: the
+        // chart of the aerodrome the flight is heading to opens by itself once, not again and again.
+        var chartHandledFor = '';
 
         function chartTexts() {
             return (lastState && lastState.labels && lastState.labels.charts) || chartLabels || null;
@@ -247,6 +250,7 @@ var StormAtcPanel = (function () {
                 list.appendChild(el('p', 'sa-empty', t.empty.replace('{0}', chartData.directory || '')));
                 return;
             }
+            if (openDestinationChart(charts)) { return; }
             charts.sort(function (a, b) {
                 var d = chartRank(a) - chartRank(b);
                 if (d !== 0) { return d; }
@@ -267,6 +271,20 @@ var StormAtcPanel = (function () {
             }
         }
 
+        // With a flight plan, the chart of the destination aerodrome is what the pilot wants first.
+        function openDestinationChart(charts) {
+            var destination = lastState && lastState.destination;
+            if (!destination || chartHandledFor === destination) { return false; }
+            for (var i = 0; i < charts.length; i++) {
+                if (charts[i].icao === destination) {
+                    chartHandledFor = destination;
+                    openChart(charts[i]);
+                    return true;
+                }
+            }
+            return false;
+        }
+
         function openChart(chart) {
             openedChart = chart;
             chartPage = 1;
@@ -282,6 +300,8 @@ var StormAtcPanel = (function () {
         }
 
         function closeChart() {
+            // Back to the list on purpose: do not open the destination's chart again.
+            if (lastState && lastState.destination) { chartHandledFor = lastState.destination; }
             openedChart = null;
             chartView = null;
             loadCharts();
