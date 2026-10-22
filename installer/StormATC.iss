@@ -89,6 +89,10 @@ Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs 
 Source: "{#SourceDir}\msfs-panel\stormatc-ingamepanel\*"; DestDir: "{code:StoreCommunityFolder}\stormatc-ingamepanel"; Tasks: msfspanel; Check: HasStoreCommunityFolder; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#SourceDir}\msfs-panel\stormatc-ingamepanel\*"; DestDir: "{code:SteamCommunityFolder}\stormatc-ingamepanel"; Tasks: msfspanel; Check: HasSteamCommunityFolder; Flags: ignoreversion recursesubdirs createallsubdirs
 
+[Dirs]
+; The folder the pilot puts the chart PDFs in (the panel's Charts tab). It is never removed: the charts are the pilot's own.
+Name: "{app}\Cartes VAC"; Flags: uninsneveruninstall
+
 [Icons]
 Name: "{group}\StormATC"; Filename: "{app}\{#AppExeName}"; WorkingDir: "{app}"
 Name: "{autodesktop}\StormATC"; Filename: "{app}\{#AppExeName}"; WorkingDir: "{app}"; Tasks: desktopicon

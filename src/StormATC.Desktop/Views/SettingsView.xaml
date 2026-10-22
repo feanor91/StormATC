@@ -748,7 +748,7 @@
               <StackPanel>
                 <TextBlock Text="In-simulator panel"
                            Style="{StaticResource SectionHeaderStyle}" />
-                <TextBlock Text="A toolbar window inside MSFS with two tabs: the dialogue with the controller, and example phraseology for the current phase of flight. It works in VR. Install it once, restart MSFS, then click the StormATC icon in the toolbar. The same page can be opened in a browser or in a VR overlay application."
+                <TextBlock Text="A toolbar window inside MSFS with three tabs: the dialogue with the controller, example phraseology for the current phase of flight, and your charts (PDF files you put in the Charts folder). It works in VR. Install it once, restart MSFS, then click the StormATC icon in the toolbar. The same page can be opened in a browser or in a VR overlay application."
                            Style="{StaticResource SecondaryTextStyle}"
                            TextWrapping="Wrap"
                            Margin="0,0,0,8" />
@@ -758,7 +758,10 @@
                           Style="{StaticResource PrimaryButtonStyle}"
                           Margin="0,0,8,0" />
                   <Button Content="Open the panel in a browser"
-                          Command="{Binding OpenPanelInBrowserCommand}" />
+                          Command="{Binding OpenPanelInBrowserCommand}"
+                          Margin="0,0,8,0" />
+                  <Button Content="Open the charts folder"
+                          Command="{Binding OpenChartsFolderCommand}" />
                 </WrapPanel>
                 <TextBlock Text="{Binding PanelInstallResult}"
                            Style="{StaticResource SecondaryTextStyle}"

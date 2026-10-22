@@ -21,6 +21,8 @@ namespace StormATC.Application.Panel;
 /// when it does not; the panel's window title.
 /// </param>
 /// <param name="Voice">The controller voice that spoke last, or null when there is none to judge.</param>
+/// <param name="Departure">The departure aerodrome of the flight plan, or empty.</param>
+/// <param name="Destination">The destination aerodrome of the flight plan, or empty.</param>
 public sealed record ToolbarPanelState(
     string Language,
     string Callsign,
@@ -32,7 +34,9 @@ public sealed record ToolbarPanelState(
     IReadOnlyList<ToolbarPanelTurn> Turns,
     ToolbarPanelPhraseology Phraseology,
     string Registration = "",
-    ToolbarPanelVoice? Voice = null);
+    ToolbarPanelVoice? Voice = null,
+    string Departure = "",
+    string Destination = "");
 
 /// <summary>The controller voice that spoke last.</summary>
 /// <param name="Description">A short description, such as <c>fr_FR-mls-medium, speaker 42</c>.</param>
@@ -92,6 +96,7 @@ public sealed record ToolbarPanelStage(string Key, string Title, IReadOnlyList<P
 /// <param name="VoiceInSettings">Shown for the voice chosen in Settings.</param>
 /// <param name="NoVoiceYet">Shown while no local voice has spoken.</param>
 /// <param name="RejectFailed">Shown when the voice could not be set aside.</param>
+/// <param name="Charts">The charts tab and its labels.</param>
 public sealed record ToolbarPanelLabels(
     string TabDialogue,
     string TabPhraseology,
@@ -110,7 +115,41 @@ public sealed record ToolbarPanelLabels(
     string VoiceSetAside = "",
     string VoiceInSettings = "",
     string NoVoiceYet = "",
-    string RejectFailed = "");
+    string RejectFailed = "",
+    ToolbarPanelChartLabels? Charts = null);
+
+/// <summary>The texts of the charts tab.</summary>
+/// <param name="Tab">Title of the tab.</param>
+/// <param name="Empty">Shown when the folder holds no chart; <c>{0}</c> is the folder.</param>
+/// <param name="Back">The button back to the list.</param>
+/// <param name="Page">The word before the page number.</param>
+/// <param name="Of">The word between the page number and the page count.</param>
+/// <param name="Previous">The previous page button.</param>
+/// <param name="Next">The next page button.</param>
+/// <param name="ZoomIn">The zoom in button.</param>
+/// <param name="ZoomOut">The zoom out button.</param>
+/// <param name="Fit">The button that fits the page to the window.</param>
+/// <param name="Departure">Tag on the departure aerodrome's charts.</param>
+/// <param name="Destination">Tag on the destination aerodrome's charts.</param>
+/// <param name="Loading">Shown while a page is drawn.</param>
+/// <param name="Failed">Shown when a chart could not be drawn.</param>
+/// <param name="Unavailable">Shown when StormATC cannot list the charts.</param>
+public sealed record ToolbarPanelChartLabels(
+    string Tab,
+    string Empty,
+    string Back,
+    string Page,
+    string Of,
+    string Previous,
+    string Next,
+    string ZoomIn,
+    string ZoomOut,
+    string Fit,
+    string Departure,
+    string Destination,
+    string Loading,
+    string Failed,
+    string Unavailable);
 
 /// <summary>Builds the state the in-simulator panel shows from the current session.</summary>
 public static class ToolbarPanelStateBuilder
@@ -174,7 +213,9 @@ public static class ToolbarPanelStateBuilder
             string.IsNullOrWhiteSpace(session.AircraftState.AtcIdentifier)
                 ? callsign
                 : session.AircraftState.AtcIdentifier.Trim(),
-            voice is null ? null : new ToolbarPanelVoice(voice.Description, voice.CanExclude));
+            voice is null ? null : new ToolbarPanelVoice(voice.Description, voice.CanExclude),
+            session.FlightPlan?.DepartureIcao ?? string.Empty,
+            session.FlightPlan?.DestinationIcao ?? string.Empty);
     }
 
     private static ToolbarPanelTurn ToTurn(ConversationTurn turn, IAtcPhraseology say, bool french)
@@ -215,7 +256,23 @@ public static class ToolbarPanelStateBuilder
             "Voix écartée : le contrôleur en aura une autre à sa prochaine transmission.",
             "C'est la voix choisie dans les paramètres : changez-la dans StormATC.",
             "Aucune voix locale n'a encore parlé.",
-            "La voix n'a pas pu être écartée. Voir la page Diagnostic de StormATC.")
+            "La voix n'a pas pu être écartée. Voir la page Diagnostic de StormATC.",
+            new ToolbarPanelChartLabels(
+                "Cartes",
+                "Aucune carte. Déposez vos cartes (PDF) dans le dossier : {0}",
+                "← Cartes",
+                "Page",
+                "sur",
+                "◀ Précédente",
+                "Suivante ▶",
+                "Zoom +",
+                "Zoom −",
+                "Ajuster",
+                "Départ",
+                "Arrivée",
+                "Chargement de la carte…",
+                "Cette carte n'a pas pu être affichée.",
+                "StormATC ne peut pas lister les cartes."))
         : new ToolbarPanelLabels(
             "ATC dialogue",
             "Phraseology",
@@ -234,5 +291,21 @@ public static class ToolbarPanelStateBuilder
             "Voice set aside: the controller will use another one next time.",
             "This is the voice chosen in settings: change it in StormATC.",
             "No local voice has spoken yet.",
-            "The voice could not be set aside. See StormATC's Diagnostics page.");
+            "The voice could not be set aside. See StormATC's Diagnostics page.",
+            new ToolbarPanelChartLabels(
+                "Charts",
+                "No chart. Put your charts (PDF) in the folder: {0}",
+                "← Charts",
+                "Page",
+                "of",
+                "◀ Previous",
+                "Next ▶",
+                "Zoom +",
+                "Zoom −",
+                "Fit",
+                "Departure",
+                "Destination",
+                "Loading the chart…",
+                "This chart could not be drawn.",
+                "StormATC cannot list the charts."));
 }

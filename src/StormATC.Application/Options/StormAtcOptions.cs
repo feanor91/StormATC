@@ -436,6 +436,12 @@ public sealed class ToolbarPanelOptions
     /// <summary>The loopback port. The panel's package must use the same one.</summary>
     [Range(1024, 65535)]
     public int Port { get; init; } = DefaultPort;
+
+    /// <summary>
+    /// The folder the chart PDFs the panel can show are read from. Empty: the <c>Cartes VAC</c> folder
+    /// beside the application.
+    /// </summary>
+    public string ChartsDirectory { get; init; } = string.Empty;
 }
 
 /// <summary>Bringing the flight plan made in the simulator into StormATC.</summary>

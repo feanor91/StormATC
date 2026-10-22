@@ -1,12 +1,14 @@
 # Panneau StormATC dans MSFS (barre d'outils, réalité virtuelle)
 
-StormATC ajoute une fenêtre à la barre d'outils de Microsoft Flight Simulator. Elle a deux onglets :
+StormATC ajoute une fenêtre à la barre d'outils de Microsoft Flight Simulator. Elle a trois onglets :
 
 - **Dialogue ATC** : les échanges avec le contrôleur, du plus ancien au plus récent (vous en vert,
   le contrôleur en bleu). La liste suit les nouveaux messages tant que vous n'avez pas remonté.
 - **Phraséologie** : des exemples d'appels pour la **phase de vol en cours** (clairance, roulage,
   circuit VFR, approche, etc.), avec ce que le contrôleur répond, puis les appels toujours possibles
   (« répétez », « quelle est la fréquence de la Tour ? »…). L'onglet change tout seul avec la phase.
+- **Cartes** : les cartes (fichiers PDF) que vous avez déposées dans le dossier des cartes de StormATC,
+  affichées dans le simulateur, en VR comme à l'écran. Voir [les cartes](#les-cartes-pdf).
 
 En bas de l'onglet Dialogue ATC, la **voix du contrôleur** qui vient de parler est indiquée, avec le
 bouton **Je n'aime pas cette voix**. Il écarte cette voix (ou ce locuteur d'un modèle multi-voix) :
@@ -33,6 +35,34 @@ l'indicatif de la session). Le libellé sous l'icône de la barre d'outils reste
 
 La langue des exemples est celle de la radio réglée dans StormATC. Les boutons **A−** et **A+** en
 haut à droite changent la taille du texte ; le choix est mémorisé.
+
+## Les cartes (PDF)
+
+L'onglet **Cartes** montre vos cartes VAC (ou toute autre carte, au format PDF) sans quitter le
+simulateur, ce qui est pratique en VR.
+
+**Où les mettre.** Dans le dossier **`Cartes VAC`** de l'application, à côté de `StormATC.exe`
+(`%LOCALAPPDATA%\Programs\StormATC\Cartes VAC` avec l'installeur). Il est créé par l'installeur et,
+au besoin, par StormATC au démarrage ; le bouton **Ouvrir le dossier des cartes** des Réglages
+l'ouvre. Seuls les PDF placés directement dans ce dossier sont montrés. Ils restent chez vous : StormATC
+ne les envoie nulle part et l'installeur ne les contient pas (les cartes du SIA ne sont pas
+redistribuables). Le dossier n'est jamais supprimé à la désinstallation.
+
+Dans un dépôt cloné (développement), le dossier `Cartes VAC` à la racine du dépôt, à côté de
+`StormATC.sln`, est utilisé quand celui de l'application est vide. Il est ignoré par git. Le réglage
+`ToolbarPanel:ChartsDirectory` désigne un autre dossier.
+
+**Les utiliser.** La liste montre les cartes par nom ; celles de l'aérodrome de **départ** et de
+l'**arrivée** du plan de vol en cours passent en tête, avec une étiquette (le nom du fichier doit
+contenir le code OACI, par exemple `AD-2.LFPL.pdf`). Touchez une carte pour l'ouvrir : **Précédente** et
+**Suivante** changent de page, **Zoom +** et **Zoom −** agrandissent (la page est redessinée à la
+bonne définition), **Ajuster** revient à la largeur de la fenêtre, **← Cartes** revient à la liste. On
+déplace la page en la faisant glisser (ou avec les barres de défilement). Un fichier enregistré deux
+fois (`carte (1).pdf`) n'est listé qu'une fois.
+
+Les pages sont dessinées par StormATC avec le moteur PDF de Windows, puis envoyées au panneau comme des
+images : le simulateur n'a donc rien à décoder. Un PDF protégé par mot de passe ou abîmé affiche « Cette
+carte n'a pas pu être affichée ».
 
 ## Installer le panneau
 
@@ -91,6 +121,7 @@ Section `ToolbarPanel` de `appsettings.json` (ou `usersettings.json`) :
 | --- | --- | --- |
 | `Enabled` | `true` | `false` désactive le serveur local, donc le panneau |
 | `Port` | `48765` | Port sur 127.0.0.1. Le panneau installé dans MSFS utilise le port par défaut ; changez-le seulement pour la page web |
+| `ChartsDirectory` | *(vide)* | Dossier des cartes PDF. Vide : `Cartes VAC` à côté de l'application |
 
 Si le port est déjà pris par un autre programme, StormATC démarre quand même (le journal dit que le
 panneau est indisponible).

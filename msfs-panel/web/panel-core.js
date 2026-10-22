@@ -1,5 +1,5 @@
 /*
- * StormATC panel: the ATC dialogue and the phraseology guide.
+ * StormATC panel: the ATC dialogue, the phraseology guide and the charts.
  *
  * Shared by the MSFS toolbar window and by the standalone page (a browser, or a VR overlay).
  * It asks StormATC's local server for the state once a second and draws it. Written in plain
@@ -12,6 +12,8 @@ var StormAtcPanel = (function () {
     var POLL_MS = 1000;
     var MIN_SCALE = 0.8;
     var MAX_SCALE = 2.4;
+    var ZOOMS = [1, 1.5, 2, 3, 4];
+    var CHARTS_REFRESH_MS = 5000;
 
     function storageGet(key) {
         try { return window.localStorage.getItem(key); } catch (e) { return null; }
@@ -65,7 +67,8 @@ var StormAtcPanel = (function () {
     function mount(root, options) {
         options = options || {};
         var scale = parseFloat(storageGet('stormatc.scale')) || 1.2;
-        var tab = storageGet('stormatc.tab') === 'phraseology' ? 'phraseology' : 'dialogue';
+        var savedTab = storageGet('stormatc.tab');
+        var tab = savedTab === 'phraseology' || savedTab === 'charts' ? savedTab : 'dialogue';
         var timer = null;
         var stopped = false;
         var lastJson = '';
@@ -97,16 +100,21 @@ var StormAtcPanel = (function () {
         var tabs = el('div', 'sa-tabs');
         var tabDialogue = el('button', 'sa-tab');
         var tabPhraseology = el('button', 'sa-tab');
+        var tabCharts = el('button', 'sa-tab');
         tabDialogue.setAttribute('type', 'button');
         tabPhraseology.setAttribute('type', 'button');
+        tabCharts.setAttribute('type', 'button');
         tabs.appendChild(tabDialogue);
         tabs.appendChild(tabPhraseology);
+        tabs.appendChild(tabCharts);
 
         var body = el('div', 'sa-body');
         var dialoguePane = el('div', 'sa-pane sa-dialogue');
         var phraseologyPane = el('div', 'sa-pane sa-phraseology');
+        var chartsPane = el('div', 'sa-pane sa-charts');
         body.appendChild(dialoguePane);
         body.appendChild(phraseologyPane);
+        body.appendChild(chartsPane);
 
         // Under the conversation: which voice spoke last, and the button to set it aside.
         var voiceBar = el('div', 'sa-voicebar');
@@ -165,11 +173,216 @@ var StormAtcPanel = (function () {
             storageSet('stormatc.tab', name);
             dialoguePane.style.display = name === 'dialogue' ? 'block' : 'none';
             phraseologyPane.style.display = name === 'phraseology' ? 'block' : 'none';
+            chartsPane.style.display = name === 'charts' ? 'flex' : 'none';
             tabDialogue.className = 'sa-tab' + (name === 'dialogue' ? ' sa-active' : '');
             tabPhraseology.className = 'sa-tab' + (name === 'phraseology' ? ' sa-active' : '');
+            tabCharts.className = 'sa-tab' + (name === 'charts' ? ' sa-active' : '');
             updateVoiceBar();
             if (name === 'dialogue') { scrollDialogue(true); }
+            if (name === 'charts') { loadCharts(); }
         }
+
+        // ---- The charts: the PDFs in StormATC's charts folder, drawn by StormATC ------------------
+        var chartLabels = null;
+        var chartData = null;
+        var chartError = false;
+        var openedChart = null;
+        var chartPage = 1;
+        var chartPages = 0;
+        var chartZoom = 1;
+        var chartsTimer = null;
+        var chartView = null;
+
+        function chartTexts() {
+            return (lastState && lastState.labels && lastState.labels.charts) || chartLabels || null;
+        }
+
+        function getJson(path, done) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', baseUrl() + path, true);
+            xhr.timeout = 15000;
+            xhr.onload = function () {
+                var data = null;
+                if (xhr.status === 200) {
+                    try { data = JSON.parse(xhr.responseText); } catch (e) { data = null; }
+                }
+                done(data);
+            };
+            xhr.onerror = function () { done(null); };
+            xhr.ontimeout = function () { done(null); };
+            xhr.send();
+        }
+
+        function loadCharts() {
+            if (tab !== 'charts' || openedChart) { return; }
+            getJson('/api/charts', function (data) {
+                chartError = !data;
+                chartData = data;
+                renderChartList();
+            });
+        }
+
+        // The charts of the flight's aerodromes come first, tagged.
+        function chartRank(chart) {
+            var s = lastState;
+            if (s && chart.icao && s.departure && chart.icao === s.departure) { return 0; }
+            if (s && chart.icao && s.destination && chart.icao === s.destination) { return 1; }
+            return 2;
+        }
+
+        function renderChartList() {
+            if (openedChart) { return; }
+            clear(chartsPane);
+            var t = chartTexts();
+            var list = el('div', 'sa-chartlist');
+            chartsPane.appendChild(list);
+            if (!t) { return; }
+
+            if (chartError || !chartData) {
+                list.appendChild(el('p', 'sa-empty', t.unavailable));
+                return;
+            }
+            var charts = (chartData.charts || []).slice();
+            if (!charts.length) {
+                list.appendChild(el('p', 'sa-empty', t.empty.replace('{0}', chartData.directory || '')));
+                return;
+            }
+            charts.sort(function (a, b) {
+                var d = chartRank(a) - chartRank(b);
+                if (d !== 0) { return d; }
+                return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0);
+            });
+            for (var i = 0; i < charts.length; i++) {
+                (function (chart) {
+                    var button = el('button', 'sa-chartbtn');
+                    button.setAttribute('type', 'button');
+                    button.appendChild(el('span', 'sa-chartname', chart.name));
+                    var rank = chartRank(chart);
+                    if (rank < 2) {
+                        button.appendChild(el('span', 'sa-charttag', rank === 0 ? t.departure : t.destination));
+                    }
+                    button.onclick = function () { openChart(chart); };
+                    list.appendChild(button);
+                }(charts[i]));
+            }
+        }
+
+        function openChart(chart) {
+            openedChart = chart;
+            chartPage = 1;
+            chartPages = 0;
+            chartZoom = 1;
+            buildViewer();
+            getJson('/api/charts/' + encodeURIComponent(chart.id), function (info) {
+                if (openedChart !== chart) { return; }
+                if (!info) { chartView.message.textContent = chartTexts().failed; return; }
+                chartPages = info.pages;
+                showChartPage();
+            });
+        }
+
+        function closeChart() {
+            openedChart = null;
+            chartView = null;
+            loadCharts();
+            renderChartList();
+        }
+
+        function chartButton(text, onclick) {
+            var button = el('button', 'sa-btn sa-chartnav', text);
+            button.setAttribute('type', 'button');
+            button.onclick = onclick;
+            return button;
+        }
+
+        function buildViewer() {
+            clear(chartsPane);
+            var t = chartTexts();
+            var bar = el('div', 'sa-chartbar');
+            var back = chartButton(t.back, closeChart);
+            var previous = chartButton(t.previous, function () { turnChart(-1); });
+            var label = el('span', 'sa-chartpage');
+            var next = chartButton(t.next, function () { turnChart(1); });
+            var zoomOut = chartButton(t.zoomOut, function () { zoomChart(-1); });
+            var fit = chartButton(t.fit, function () { chartZoom = 1; showChartPage(); });
+            var zoomIn = chartButton(t.zoomIn, function () { zoomChart(1); });
+            var items = [back, previous, label, next, zoomOut, fit, zoomIn];
+            for (var i = 0; i < items.length; i++) { bar.appendChild(items[i]); }
+
+            var scroller = el('div', 'sa-chartscroll');
+            var message = el('div', 'sa-chartmsg', t.loading);
+            var image = el('img', 'sa-chartimg');
+            image.setAttribute('alt', openedChart.name);
+            image.onload = function () { message.textContent = ''; };
+            image.onerror = function () { message.textContent = chartTexts().failed; };
+            scroller.appendChild(message);
+            scroller.appendChild(image);
+
+            // Dragging with a mouse or a VR pointer moves the page; touch screens scroll on their own.
+            var drag = null;
+            scroller.onmousedown = function (e) {
+                drag = { x: e.clientX, y: e.clientY, left: scroller.scrollLeft, top: scroller.scrollTop };
+                if (e.preventDefault) { e.preventDefault(); }
+            };
+            scroller.onmousemove = function (e) {
+                if (!drag) { return; }
+                scroller.scrollLeft = drag.left - (e.clientX - drag.x);
+                scroller.scrollTop = drag.top - (e.clientY - drag.y);
+            };
+            scroller.onmouseup = function () { drag = null; };
+            scroller.onmouseleave = function () { drag = null; };
+
+            chartsPane.appendChild(bar);
+            chartsPane.appendChild(scroller);
+            chartView = { label: label, previous: previous, next: next, zoomOut: zoomOut, zoomIn: zoomIn,
+                          scroller: scroller, image: image, message: message };
+            updateChartBar();
+        }
+
+        function updateChartBar() {
+            if (!chartView) { return; }
+            var t = chartTexts();
+            chartView.label.textContent = chartPages
+                ? t.page + ' ' + chartPage + ' ' + t.of + ' ' + chartPages
+                : '';
+            chartView.previous.disabled = chartPage <= 1;
+            chartView.next.disabled = !chartPages || chartPage >= chartPages;
+            chartView.zoomOut.disabled = chartZoom <= ZOOMS[0];
+            chartView.zoomIn.disabled = chartZoom >= ZOOMS[ZOOMS.length - 1];
+        }
+
+        function turnChart(step) {
+            var target = chartPage + step;
+            if (target < 1 || target > chartPages) { return; }
+            chartPage = target;
+            showChartPage();
+        }
+
+        function zoomChart(step) {
+            var at = 0;
+            for (var i = 0; i < ZOOMS.length; i++) { if (ZOOMS[i] === chartZoom) { at = i; } }
+            var target = Math.max(0, Math.min(ZOOMS.length - 1, at + step));
+            chartZoom = ZOOMS[target];
+            showChartPage();
+        }
+
+        function showChartPage() {
+            if (!chartView || !openedChart) { return; }
+            updateChartBar();
+            var view = chartView;
+            var cssWidth = Math.max(300, view.scroller.clientWidth - 4) * chartZoom;
+            var pixels = Math.min(4096, Math.round(cssWidth * (window.devicePixelRatio || 1)));
+            view.message.textContent = chartTexts().loading;
+            view.image.style.width = Math.round(cssWidth) + 'px';
+            view.image.src = baseUrl() + '/api/charts/' + encodeURIComponent(openedChart.id) + '/' + chartPage +
+                '.png?w=' + pixels;
+            view.scroller.scrollTop = 0;
+            view.scroller.scrollLeft = 0;
+        }
+
+        chartsTimer = window.setInterval(function () {
+            if (tab === 'charts' && !openedChart) { loadCharts(); }
+        }, CHARTS_REFRESH_MS);
 
         function scrollDialogue(force) {
             if (force || stickToBottom) {
@@ -349,6 +562,11 @@ var StormAtcPanel = (function () {
             if (options.onState) { options.onState(state); }
             tabDialogue.textContent = state.labels.tabDialogue;
             tabPhraseology.textContent = state.labels.tabPhraseology;
+            if (state.labels.charts) {
+                chartLabels = state.labels.charts;
+                tabCharts.textContent = state.labels.charts.tab;
+                if (tab === 'charts' && !openedChart) { renderChartList(); }
+            }
             var wasAtBottom = dialoguePane.scrollHeight - dialoguePane.scrollTop - dialoguePane.clientHeight < 40;
             stickToBottom = stickToBottom || wasAtBottom;
             renderDialogue(state);
@@ -404,10 +622,12 @@ var StormAtcPanel = (function () {
         rejectButton.onclick = rejectVoice;
         tabDialogue.onclick = function () { showTab('dialogue'); };
         tabPhraseology.onclick = function () { showTab('phraseology'); };
+        tabCharts.onclick = function () { showTab('charts'); };
 
         voiceBar.style.display = 'none';
         tabDialogue.textContent = 'Dialogue ATC';
         tabPhraseology.textContent = 'Phraséologie';
+        tabCharts.textContent = 'Cartes';
         applyScale();
         fitToParent();
         var fitTimer = window.setInterval(fitToParent, 300);
@@ -420,6 +640,7 @@ var StormAtcPanel = (function () {
             stop: function () {
                 stopped = true;
                 window.clearInterval(fitTimer);
+                if (chartsTimer) { window.clearInterval(chartsTimer); }
                 if (timer) { window.clearTimeout(timer); }
             }
         };

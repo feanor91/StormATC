@@ -403,7 +403,7 @@
         "dependencies": {
           "Microsoft.Extensions.Hosting": "[10.0.0, )",
           "Microsoft.Extensions.Options.DataAnnotations": "[10.0.0, )",
-          "StormATC.Domain": "[0.1.0, )"
+          "StormATC.Domain": "[0.2.0, )"
         }
       },
       "stormatc.domain": {

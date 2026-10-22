@@ -10,7 +10,7 @@ $repositoryRoot = [System.IO.Path]::GetFullPath(
     (Join-Path $PSScriptRoot ".."))
 $solutionPath = Join-Path $repositoryRoot "StormATC.sln"
 $releaseExecutable = Join-Path $repositoryRoot (
-    "src\StormATC.Desktop\bin\Release\net10.0-windows\StormATC.exe")
+    "src\StormATC.Desktop\bin\Release\net10.0-windows10.0.19041.0\StormATC.exe")
 $launcherLogDirectory = Join-Path (
     [Environment]::GetFolderPath([Environment+SpecialFolder]::LocalApplicationData)) (
     "StormATC")

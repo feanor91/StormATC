@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Charts;
 using StormATC.Application.Intent;
 using StormATC.Application.Options;
 using StormATC.Application.Panel;
@@ -12,6 +13,7 @@ using StormATC.Application.Sessions;
 using StormATC.Application.Transmissions;
 using StormATC.Domain.Atc;
 using StormATC.Domain.Readback;
+using StormATC.Infrastructure.Charts;
 using StormATC.Infrastructure.Data;
 using StormATC.Infrastructure.FlightPlanning;
 using StormATC.Infrastructure.Input;
@@ -114,13 +116,15 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<PilotTransmissionCoordinator>();
         services.AddSingleton<StateChangeMonitor>();
         services.AddSingleton<IToolbarPanelStateSource, SessionToolbarPanelStateSource>();
+        services.AddSingleton<IVacChartLibrary, VacChartLibrary>();
         services.AddSingleton(sp => new ToolbarPanelServer(
             sp.GetRequiredService<IToolbarPanelStateSource>(),
             sp.GetRequiredService<IOptions<ToolbarPanelOptions>>(),
             sp.GetRequiredService<ILogger<ToolbarPanelServer>>(),
             Path.Combine(AppContext.BaseDirectory, "panel"),
             sp.GetService<IVoiceRejection>(),
-            sp.GetService<ISimRouteReceiver>()));
+            sp.GetService<ISimRouteReceiver>(),
+            sp.GetService<IVacChartLibrary>()));
         services.AddSingleton<IHostedService>(sp => sp.GetRequiredService<ToolbarPanelServer>());
         services.AddSingleton<RadioActivityState>();
 

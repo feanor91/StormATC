@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Charts;
 using StormATC.Application.Options;
 using StormATC.Application.Panel;
 
@@ -33,6 +34,9 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
     /// <summary>The address the panel posts the simulator's flight plan routes to.</summary>
     public const string FlightPlanPath = "/api/flightplan";
 
+    /// <summary>The address of the chart list, and of the pages of each chart under it.</summary>
+    public const string ChartsPath = "/api/charts";
+
     /// <summary>The largest route accepted, in bytes: a real route is a few kilobytes.</summary>
     private const int MaximumRouteBytes = 512 * 1024;
 
@@ -55,6 +59,7 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
     private readonly string _panelDirectory;
     private readonly IVoiceRejection? _voices;
     private readonly ISimRouteReceiver? _routes;
+    private readonly IVacChartLibrary? _charts;
     private HttpListener? _listener;
     private CancellationTokenSource? _stopping;
     private Task? _loop;
@@ -66,14 +71,17 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
     /// <param name="panelDirectory">The folder holding the panel's page, script and style.</param>
     /// <param name="voices">Sets the last controller voice aside; null when there is nothing to judge.</param>
     /// <param name="routes">Receives the flight plans the panel reads in the simulator; null when unused.</param>
+    /// <param name="charts">The charts the pilot put in the charts folder; null when the panel shows none.</param>
     public ToolbarPanelServer(
         IToolbarPanelStateSource state,
         IOptions<ToolbarPanelOptions> options,
         ILogger<ToolbarPanelServer> logger,
         string panelDirectory,
         IVoiceRejection? voices = null,
-        ISimRouteReceiver? routes = null)
+        ISimRouteReceiver? routes = null,
+        IVacChartLibrary? charts = null)
     {
+        _charts = charts;
         _voices = voices;
         _routes = routes;
         _state = state ?? throw new ArgumentNullException(nameof(state));
@@ -114,6 +122,9 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
             listener.Close();
             return Task.CompletedTask;
         }
+
+        // The charts folder is made so that the pilot can see where to put the charts.
+        _charts?.EnsureDirectory();
 
         _listener = listener;
         _stopping = new CancellationTokenSource();
@@ -223,6 +234,12 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
                 return;
             }
 
+            if (path == ChartsPath || path.StartsWith(ChartsPath + "/", StringComparison.Ordinal))
+            {
+                await ServeChartsAsync(context, path, cancellationToken).ConfigureAwait(false);
+                return;
+            }
+
             switch (path)
             {
                 case "/api/state":
@@ -251,6 +268,82 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
         {
             response.Close();
         }
+    }
+
+    /// <summary>
+    /// The charts: <c>/api/charts</c> lists them, <c>/api/charts/{id}</c> tells the page count of one,
+    /// and <c>/api/charts/{id}/{page}.png?w={pixels}</c> draws a page. A chart is asked for by its
+    /// listed name; nothing in a request names a path.
+    /// </summary>
+    private async Task ServeChartsAsync(HttpListenerContext context, string path, CancellationToken cancellationToken)
+    {
+        HttpListenerResponse response = context.Response;
+        if (_charts is null)
+        {
+            response.StatusCode = (int)HttpStatusCode.NotFound;
+            return;
+        }
+
+        string[] parts = path.Length > ChartsPath.Length
+            ? path[(ChartsPath.Length + 1)..].Split('/')
+            : [];
+
+        if (parts.Length == 0)
+        {
+            await WriteAsync(
+                response,
+                "application/json; charset=utf-8",
+                JsonSerializer.SerializeToUtf8Bytes(new { directory = _charts.Directory, charts = _charts.List() }, Json),
+                cancellationToken).ConfigureAwait(false);
+            return;
+        }
+
+        string id = Uri.UnescapeDataString(parts[0]);
+        VacChart? chart = _charts.List().FirstOrDefault(c => c.Id.Equals(id, StringComparison.OrdinalIgnoreCase));
+        if (chart is null || parts.Length > 2)
+        {
+            response.StatusCode = (int)HttpStatusCode.NotFound;
+            return;
+        }
+
+        if (parts.Length == 1)
+        {
+            int? pages = await _charts.GetPageCountAsync(chart.Id, cancellationToken).ConfigureAwait(false);
+            if (pages is null)
+            {
+                response.StatusCode = (int)HttpStatusCode.NotFound;
+                return;
+            }
+
+            await WriteAsync(
+                response,
+                "application/json; charset=utf-8",
+                JsonSerializer.SerializeToUtf8Bytes(new { chart.Id, chart.Name, chart.Icao, pages }, Json),
+                cancellationToken).ConfigureAwait(false);
+            return;
+        }
+
+        string name = parts[1];
+        if (!name.EndsWith(".png", StringComparison.OrdinalIgnoreCase)
+            || !int.TryParse(name[..^4], NumberStyles.None, CultureInfo.InvariantCulture, out int page))
+        {
+            response.StatusCode = (int)HttpStatusCode.NotFound;
+            return;
+        }
+
+        int width = int.TryParse(context.Request.QueryString["w"], NumberStyles.None, CultureInfo.InvariantCulture, out int asked)
+            ? asked
+            : 1400;
+        VacChartPage? drawn = await _charts.RenderPageAsync(chart.Id, page, width, cancellationToken).ConfigureAwait(false);
+        if (drawn is null)
+        {
+            response.StatusCode = (int)HttpStatusCode.NotFound;
+            return;
+        }
+
+        // A page does not change while the file does not: let the panel keep it for a while.
+        response.Headers["Cache-Control"] = "private, max-age=600";
+        await WriteAsync(response, "image/png", drawn.Png, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>The one change the panel may ask for: set the last controller voice aside.</summary>

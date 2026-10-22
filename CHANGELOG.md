@@ -7,6 +7,12 @@ public releases.
 
 ### Added
 
+- **Charts in the in-simulator panel** (normal and VR): a third tab shows the PDF charts the pilot puts
+  in the `Cartes VAC` folder beside the application, one page at a time with zoom and page buttons; the
+  charts of the flight plan's departure and destination come first. Pages are drawn by StormATC with
+  Windows' own PDF renderer. The Settings page has a button that opens the folder, and the installer
+  creates it (and never removes it).
+
 - A French README (`README.fr.md`) next to the English one, and a README that covers the French radio,
   the local voices, the MSFS panel, the EFB module, the installer and the version policy.
 

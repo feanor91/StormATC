@@ -1,7 +1,7 @@
 {
   "version": 2,
   "dependencies": {
-    "net10.0-windows7.0": {
+    "net10.0-windows10.0.19041": {
       "CommunityToolkit.Mvvm": {
         "type": "Direct",
         "requested": "[8.4.0, )",
@@ -372,7 +372,7 @@
         "dependencies": {
           "Microsoft.Extensions.Hosting": "[10.0.0, )",
           "Microsoft.Extensions.Options.DataAnnotations": "[10.0.0, )",
-          "StormATC.Domain": "[0.1.0, )"
+          "StormATC.Domain": "[0.2.0, )"
         }
       },
       "stormatc.domain": {
@@ -385,8 +385,8 @@
           "Microsoft.Extensions.Hosting": "[10.0.0, )",
           "Microsoft.Extensions.Http": "[10.0.0, )",
           "NAudio": "[2.2.1, )",
-          "StormATC.Application": "[0.1.0, )",
-          "StormATC.Domain": "[0.1.0, )"
+          "StormATC.Application": "[0.2.0, )",
+          "StormATC.Domain": "[0.2.0, )"
         }
       },
       "Microsoft.Data.Sqlite": {
@@ -450,7 +450,7 @@
         }
       }
     },
-    "net10.0-windows7.0/win-x64": {
+    "net10.0-windows10.0.19041/win-x64": {
       "SourceGear.sqlite3": {
         "type": "Transitive",
         "resolved": "3.53.3",
