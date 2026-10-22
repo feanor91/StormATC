@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.3.2 - 2026-10-22
+
 ### Fixed
 
 - A model that fails while it generates ("finish reason: error") is tried again instead of giving up, and a
