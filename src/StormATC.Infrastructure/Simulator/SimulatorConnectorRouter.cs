@@ -80,6 +80,9 @@ public sealed class SimulatorConnectorRouter : ISimulatorConnector
     /// <summary>Whether the pilot was in the aircraft at the last snapshot; null before the first one.</summary>
     private bool? _wasUserInAircraft;
 
+    /// <summary>The last snapshot of the live aircraft, to see whether a tuning took.</summary>
+    private StormATC.Domain.Aircraft.AircraftState? _latestAircraftState;
+
     /// <summary>Creates the router.</summary>
     public SimulatorConnectorRouter(
         MockSimulatorConnector mock,
@@ -456,6 +459,7 @@ public sealed class SimulatorConnectorRouter : ISimulatorConnector
         // Guards against a connector that raises one last event while it is being torn down.
         if (ReferenceEquals(sender, _active))
         {
+            _latestAircraftState = e.State;
             bool inAircraft = e.State.IsUserInAircraft;
             bool entered = _wasUserInAircraft == false && inAircraft;
             _wasUserInAircraft = inAircraft;
@@ -466,7 +470,6 @@ public sealed class SimulatorConnectorRouter : ISimulatorConnector
             // drops the command. When the pilot gets into the aircraft on the ground, tune it again
             // so that the departure ATIS is the first thing heard.
             if (entered
-                && e.State.IsOnGround
                 && sender is ISimulatorConnector connector
                 && _requestedCom1Frequency is Frequency requested)
             {
@@ -475,19 +478,47 @@ public sealed class SimulatorConnectorRouter : ISimulatorConnector
         }
     }
 
+    /// <summary>
+    /// Tunes COM1 to the ATIS once the aircraft has settled. The simulator sets the radios while it
+    /// brings the aircraft up (a command sent the moment the pilot is in control is overwritten), so
+    /// the tuning is repeated until the radio shows the frequency, for up to 30 seconds. It stops at
+    /// once if the pilot is not on the ground: a flight that starts in the air is not on the ATIS.
+    /// </summary>
     private async Task TuneAfterEnteringAsync(ISimulatorConnector connector, Frequency frequency)
     {
         try
         {
-            bool tuned = await connector.TuneCom1Async(frequency, CancellationToken.None).ConfigureAwait(false);
-            if (tuned)
+            for (int attempt = 0; attempt < 15; attempt++)
             {
-                _logger.LogInformation("The pilot is in the aircraft: COM1 tuned to {Frequency}.", frequency.ToDisplay());
+                await Task.Delay(attempt == 0 ? TimeSpan.FromSeconds(1) : TimeSpan.FromSeconds(2)).ConfigureAwait(false);
+
+                StormATC.Domain.Aircraft.AircraftState? latest = _latestAircraftState;
+                if (latest is null || !latest.IsUserInAircraft || !ReferenceEquals(connector, _active))
+                {
+                    return;
+                }
+
+                if (latest.Radio.Com1Active.IsSameChannel(frequency))
+                {
+                    _logger.LogInformation("The pilot is in the aircraft: COM1 is on {Frequency}.", frequency.ToDisplay());
+                    return;
+                }
+
+                if (!latest.IsOnGround)
+                {
+                    // Airborne with another frequency: the pilot is not starting at the gate.
+                    continue;
+                }
+
+                bool tuned = await connector.TuneCom1Async(frequency, CancellationToken.None).ConfigureAwait(false);
+                if (!tuned)
+                {
+                    _logger.LogInformation("The pilot is in the aircraft, but COM1 could not be tuned to {Frequency}.", frequency.ToDisplay());
+                    return;
+                }
             }
-            else
-            {
-                _logger.LogInformation("The pilot is in the aircraft, but COM1 could not be tuned to {Frequency}.", frequency.ToDisplay());
-            }
+
+            _logger.LogInformation("COM1 did not stay on {Frequency} after the pilot got into the aircraft.", frequency.ToDisplay());
         }
         catch (Exception ex) when (ex is InvalidOperationException or ObjectDisposedException or OperationCanceledException)
         {

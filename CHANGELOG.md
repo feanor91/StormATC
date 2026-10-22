@@ -5,6 +5,11 @@ public releases.
 
 ## Unreleased
 
+### Fixed
+
+- COM1 is tuned to the ATIS again until it holds: the simulator sets the radios while it brings the aircraft
+  up, so the first tuning after the pilot got into the aircraft was overwritten.
+
 ## 0.2.1 - 2026-10-22
 
 ### Added
