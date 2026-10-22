@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.4.0 - 2026-10-22
+
 ### Removed
 
 - Reading a chart with a language model (Settings › "VFR profiles from charts", added in 0.3.0): the profiles are
