@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.2.2 - 2026-10-22
+
 ### Fixed
 
 - COM1 is tuned to the ATIS again until it holds: the simulator sets the radios while it brings the aircraft
