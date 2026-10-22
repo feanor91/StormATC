@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.3.1 - 2026-10-22
+
 ### Fixed
 
 - Reading a chart leaves the model room to reason before it answers (12,000 output tokens instead of 4,000),
