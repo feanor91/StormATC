@@ -97,7 +97,8 @@ public sealed class VacProfileImporter(
             SystemPrompt = SystemPrompt,
             UserPrompt = $"Chart file: {chart.Name}. The {images.Count} images are its pages 1 to {images.Count}, in order. Extract the facts.",
             Temperature = 0,
-            MaxOutputTokens = 4000,
+            // A model that reasons first spends tokens before the answer: leave it room for both.
+            MaxOutputTokens = 12000,
             Images = images,
             TimeoutOverride = TimeSpan.FromMinutes(3),
             CorrelationId = Guid.NewGuid().ToString("N"),
@@ -114,6 +115,10 @@ public sealed class VacProfileImporter(
                 chart.Name,
                 response.ErrorCategory,
                 response.ErrorMessage);
+            if (!string.IsNullOrEmpty(response.RawResponse))
+            {
+                logger.LogInformation("The start of what the model sent back: {Raw}", response.RawResponse);
+            }
             return new VacImportResult
             {
                 Success = false,

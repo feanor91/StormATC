@@ -876,6 +876,7 @@
   "{0} reported a server error.": "{0} a signalé une erreur serveur.",
   "{0} returned HTTP {1}.": "{0} a renvoyé HTTP {1}.",
   "{0} returned an oversized response.": "{0} a renvoyé une réponse trop volumineuse.",
+  "{0} returned no completion content (finish reason: {1}).": "{0} n'a renvoyé aucun contenu (raison de fin : {1}).",
   "{0} returned no completion content.": "{0} n'a renvoyé aucun contenu.",
   "{0} routing ready": "{0} guidage au sol prêt",
   "{0} runway ends": "{0} seuils de piste",

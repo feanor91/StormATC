@@ -5,6 +5,11 @@ public releases.
 
 ## Unreleased
 
+### Fixed
+
+- Reading a chart leaves the model room to reason before it answers (12,000 output tokens instead of 4,000),
+  and an empty answer now says why (the finish reason) and is logged with the start of the reply.
+
 ## 0.3.0 - 2026-10-22
 
 ## 0.2.2 - 2026-10-22

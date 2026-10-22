@@ -297,8 +297,16 @@ public sealed class OpenRouterClient(
 
             if (string.IsNullOrWhiteSpace(content))
             {
+                // A model that "thinks" can spend every token it was given before it writes the answer:
+                // say why the content is empty, so that the cause can be seen and not guessed.
+                string finish = ReadFinishReason(document.RootElement);
+                _logger.LogWarning(
+                    "{Provider} returned no completion content (finish reason: {FinishReason}). Start of the reply: {Reply}",
+                    provider.Name,
+                    finish,
+                    Truncate(body));
                 return StructuredModelResponse.Fail<T>(
-                    UiText.T($"{provider.Name} returned no completion content."),
+                    UiText.T($"{provider.Name} returned no completion content (finish reason: {finish})."),
                     ModelErrorCategory.MalformedResponse,
                     stopwatch.Elapsed,
                     Truncate(body));
@@ -727,6 +735,23 @@ public sealed class OpenRouterClient(
             ProviderEndpointPolicy.IsAllowedOpenRouter(openRouter.BaseUrl),
             openRouter.RefererUrl,
             openRouter.ApplicationTitle);
+    }
+
+    /// <summary>Why the model stopped: <c>length</c> when it ran out of tokens, <c>stop</c> when it finished.</summary>
+    private static string ReadFinishReason(JsonElement root)
+    {
+        if (root.TryGetProperty("choices", out JsonElement choices)
+            && choices.ValueKind == JsonValueKind.Array
+            && choices.GetArrayLength() > 0
+            && choices[0].TryGetProperty("finish_reason", out JsonElement reason)
+            && reason.ValueKind == JsonValueKind.String)
+        {
+            return reason.GetString() ?? "unknown";
+        }
+
+        return root.TryGetProperty("stop_reason", out JsonElement stop) && stop.ValueKind == JsonValueKind.String
+            ? stop.GetString() ?? "unknown"
+            : "unknown";
     }
 
     private static string? ReadOpenAIContent(JsonElement root) =>
