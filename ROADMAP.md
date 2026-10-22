@@ -68,7 +68,7 @@ StormATC will not distribute shared credentials.
 - Reading a chart with a language model inside StormATC was tried (0.3.0 to 0.3.2) and removed: free vision models
   were unreliable on tables and small print, and the profiles are more dependable when the maintainer reads each
   chart and checks it. New charts are added to `data/vfr-profiles/` that way; a profile in
-  `%LOCALAPPDATA%\StormATCfr-profiles` is read first.
+  `%LOCALAPPDATA%\StormATC\vfr-profiles` is read first.
 
 ### User experience and accessibility
 

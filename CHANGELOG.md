@@ -9,7 +9,7 @@ public releases.
 
 - Reading a chart with a language model (Settings › "VFR profiles from charts", added in 0.3.0): the profiles are
   made by reading each chart by hand and checking it, which is more reliable. A profile placed in
-  `%LOCALAPPDATA%\StormATCfr-profiles` is still read before the bundled ones. Requests to the language model no
+  `%LOCALAPPDATA%\StormATC\vfr-profiles` is still read before the bundled ones. Requests to the language model no
   longer carry images.
 
 ## 0.3.2 - 2026-10-22
