@@ -5,6 +5,10 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- VFR profile for Chartres-Métropole (LFOR): preferred runway 091, circuit north of the runways, air-air frequency.
+
 ## 0.4.0 - 2026-10-22
 
 ### Removed

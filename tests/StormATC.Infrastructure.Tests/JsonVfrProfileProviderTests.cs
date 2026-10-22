@@ -73,6 +73,7 @@ public sealed class JsonVfrProfileProviderTests : IDisposable
     [InlineData("LFHP", 329, null, 0)]
     [InlineData("LFOX", 56, null, 0)]
     [InlineData("LFOZ", 232, null, 0)]
+    [InlineData("LFOR", 91, null, 0)]
     [InlineData("LFPL", 80, 1200, 1)]
     [InlineData("LFPM", 282, null, 3)]
     [InlineData("LFPN", null, 1500, 2)]
@@ -92,6 +93,18 @@ public sealed class JsonVfrProfileProviderTests : IDisposable
         Assert.Equal(preferredQfu, profile.PreferredQfu);
         Assert.Equal(circuitHeight, profile.CircuitHeightFeetAmsl);
         Assert.Equal(reportingPoints, profile.ReportingPoints.Count);
+    }
+
+    [Fact]
+    public async Task The_Chartres_circuit_lies_north_of_the_runways()
+    {
+        File.Copy(Path.Combine(BundledFolder(), "LFOR.json"), Path.Combine(_data, "vfr-profiles", "LFOR.json"));
+
+        VfrAerodromeProfile profile = (await Provider().GetProfileAsync("LFOR", CancellationToken.None))!;
+
+        // North of the runways: left-hand for 09 (landing east), right-hand for 27.
+        Assert.Equal(CircuitSide.Left, profile.CircuitSideFor(91));
+        Assert.Equal(CircuitSide.Right, profile.CircuitSideFor(271));
     }
 
     [Fact]
