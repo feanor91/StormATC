@@ -118,6 +118,15 @@ documentation. Indiquer la source et la date d'application dans `source`.
 Les cartes VAC du SIA sont © SIA : le dossier `Cartes VAC/` est ignoré par Git, et les profils ne
 contiennent que des faits retranscrits.
 
+**Profils fournis** (AIP France AD 2, relus à la main depuis les fiches du SIA) : Lognes (LFPL),
+Melun-Villaroche (LFPM, points N, SM et B), Paris Saclay Versailles / Toussus (LFPN, points S et NH,
+circuit à 1500 ft), Étampes-Mondésir (LFOX), Orléans-Saint-Denis-de-l'Hôtel (LFOZ), Le Puy-Loudes
+(LFHP), Pithiviers (LFFP), Buno-Bonnevaux (LFFB) et Paris-Orly (LFPO, pour les règles d'accès VFR).
+Le moteur n'en utilise que les points de report, la hauteur et le côté du circuit et la piste
+préférée ; le reste (services, horaires, consignes) est de la documentation. La main du circuit n'est
+renseignée que si la fiche la donne en texte : les autres cas se lisent sur le dessin de la carte,
+qu'il faut vérifier à l'œil.
+
 ## Limites
 
 - Pas de séquencement du trafic : jamais de « numéro deux, suivez… ». Chaque avion est « numéro

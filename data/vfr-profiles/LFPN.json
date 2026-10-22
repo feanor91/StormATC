@@ -1,0 +1,141 @@
+{
+  "$comment": [
+    "REAL DATA, transcribed by hand from the SIA chart set AD 2 LFPN (AIP France, AMDT 07/26, chart dated 2026-06-11).",
+    "Only facts are recorded here; the charts themselves are (c) SIA and are not redistributed.",
+    "Runway geometry, taxiways, parking and frequencies also come from the simulator at run time; this file holds",
+    "what the simulator does not know: services, circuit rules and reporting points.",
+    "Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFPN",
+  "name": "Paris Saclay Versailles (Toussus-le-Noble)",
+  "source": {
+    "publication": "AIP France AD 2 LFPN",
+    "amendment": "AMDT 07/26",
+    "chartDate": "2026-06-11"
+  },
+  "referencePosition": {
+    "latitude": 48.74972,
+    "longitude": 2.11111
+  },
+  "elevationFeet": 538,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "TowerAndGround",
+    "atsHours": "0600-2100 (UTC in winter, local time minus 1 h in summer)",
+    "outsideAtsHours": "reserved for based VFR and IFR aircraft, air-air frequency; non-based aircraft prohibited without DSAC Nord authorisation",
+    "radioMandatory": true,
+    "nightVfrApproved": true,
+    "jetsProhibitedVfr": true
+  },
+  "frequencies": {
+    "atis": 127.48,
+    "tower": 120.755,
+    "ground": 122.13,
+    "airAir": 120.755
+  },
+  "runways": [
+    {
+      "id": "07L/25R",
+      "qfu": [
+        69,
+        249
+      ],
+      "surface": "paved",
+      "lengthMetres": 1100,
+      "widthMetres": 30
+    },
+    {
+      "id": "07R/25L",
+      "qfu": [
+        69,
+        249
+      ],
+      "surface": "paved",
+      "lengthMetres": 1050,
+      "widthMetres": 30
+    }
+  ],
+  "stations": {
+    "atis": "Toussus",
+    "tower": "Toussus Tour",
+    "ground": "Toussus Sol"
+  },
+  "reportingPoints": [
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 48.70972,
+      "longitude": 2.11028,
+      "location": "northern hill of the Chevreuse valley between Gif-sur-Yvette and Saint-Remy-les-Chevreuse (R171 TSU / 2.7 NM)",
+      "purpose": "compulsory arrival point; identify it by the two red and white high-voltage pylons, pass between them close to the south pylon"
+    },
+    {
+      "name": "NH",
+      "spoken": {
+        "fr": "Novembre Hôtel",
+        "en": "November Hotel"
+      },
+      "latitude": 48.75917,
+      "longitude": 2.1
+    }
+  ],
+  "circuit": {
+    "heightFeetAmsl": 1500,
+    "heightNote": "departures climb in the circuit to 1500 ft AMSL before mid downwind; night circuit at 1500 ft AMSL",
+    "handNote": "07R: turn right after the farm 1000 m past the runways; 07L: external crosswind; 25: do not turn crosswind before the D36; prefer the inner base leg because of arrivals from S",
+    "restrictions": "training patterns limited to 4 aircraft (3 outside ATC hours on weekends, 2 at night); class D light aircraft prohibited on weekends and holidays from April to September",
+    "silencePeriods": "1 April to 30 September, Sundays and holidays 1100-1400 (summer 1 h earlier): no thermal-powered traffic"
+  },
+  "withAts": {
+    "arrivals": [
+      {
+        "via": "S",
+        "altitudeFeetAmsl": 1300,
+        "instruction": "contact Chevreuse Info (or Toussus Tour if the SIV is inactive) 5 minutes before S; report at S at 1300 ft AMSL then join the outer base leg"
+      },
+      {
+        "note": "a direct approach for runway 07 is possible on ATC proposal or pilot request"
+      }
+    ],
+    "departures": [
+      {
+        "runway": "07R/07L",
+        "climbToFeetAmsl": 1500,
+        "inCircuit": true,
+        "note": "at the end of downwind follow 249 degrees"
+      },
+      {
+        "runway": "25L",
+        "climbToFeetAmsl": 1500,
+        "note": "straight ahead"
+      },
+      {
+        "runway": "25R",
+        "climbToFeetAmsl": 1500,
+        "note": "straight ahead, pass north of Magny-les-Hameaux and stay south of Voisins-le-Bretonneux"
+      }
+    ],
+    "radio": {
+      "arrival": "once the runway is vacated, contact Toussus Sol directly for the taxi clearance"
+    }
+  },
+  "withoutAts": {
+    "arrivals": {
+      "compulsoryPoint": "S",
+      "altitudeFeetAmsl": 1300,
+      "runwayUnknownAltitudeFeetAmsl": 1500,
+      "note": "if the runway in use is unknown, arrive at S at 1500 ft AMSL and fly overhead to examine the aerodrome"
+    },
+    "particularTrainingProhibited": true,
+    "localFlightsUnder20MinutesProhibited": true
+  },
+  "notes": [
+    "VFR flight plan closure is mandatory outside ATC hours (BRIA).",
+    "Maximum speed in LF-R 35 A and in the circuit: the higher of 100 kt and 1.45 VS.",
+    "Avoid overflying the RBT DME because of concentrated traffic. Significant IFR traffic.",
+    "Give way to IFR aircraft in direct approach on 07L/25R."
+  ]
+}

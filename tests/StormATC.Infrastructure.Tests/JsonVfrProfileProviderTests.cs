@@ -64,6 +64,54 @@ public sealed class JsonVfrProfileProviderTests : IDisposable
         Assert.Equal(CircuitSide.Right, profile.CircuitSideFor(260));
     }
 
+    private static string BundledFolder() => Path.GetFullPath(Path.Combine(
+        AppContext.BaseDirectory, "..", "..", "..", "..", "..", "data", "vfr-profiles"));
+
+    [Theory]
+    [InlineData("LFFB", 277, null, 0)]
+    [InlineData("LFFP", null, null, 0)]
+    [InlineData("LFHP", 329, null, 0)]
+    [InlineData("LFOX", 56, null, 0)]
+    [InlineData("LFOZ", 232, null, 0)]
+    [InlineData("LFPL", 80, 1200, 1)]
+    [InlineData("LFPM", 282, null, 3)]
+    [InlineData("LFPN", null, 1500, 2)]
+    [InlineData("LFPO", null, null, 0)]
+    public async Task Every_bundled_profile_loads_with_what_the_chart_says(
+        string icao, int? preferredQfu, int? circuitHeight, int reportingPoints)
+    {
+        string bundled = Path.Combine(BundledFolder(), icao + ".json");
+        Assert.True(File.Exists(bundled), $"Expected the bundled profile at {bundled}");
+        File.Copy(bundled, Path.Combine(_data, "vfr-profiles", icao + ".json"));
+
+        VfrAerodromeProfile? profile = await Provider().GetProfileAsync(icao, CancellationToken.None);
+
+        Assert.NotNull(profile);
+        Assert.Equal(icao, profile.Icao);
+        Assert.False(string.IsNullOrWhiteSpace(profile.Name));
+        Assert.Equal(preferredQfu, profile.PreferredQfu);
+        Assert.Equal(circuitHeight, profile.CircuitHeightFeetAmsl);
+        Assert.Equal(reportingPoints, profile.ReportingPoints.Count);
+    }
+
+    [Fact]
+    public async Task The_reporting_points_of_Melun_and_Toussus_are_found_by_their_spoken_names()
+    {
+        foreach (string icao in new[] { "LFPM", "LFPN" })
+        {
+            File.Copy(Path.Combine(BundledFolder(), icao + ".json"), Path.Combine(_data, "vfr-profiles", icao + ".json"));
+        }
+
+        VfrAerodromeProfile melun = (await Provider().GetProfileAsync("LFPM", CancellationToken.None))!;
+        VfrAerodromeProfile toussus = (await Provider().GetProfileAsync("LFPN", CancellationToken.None))!;
+
+        Assert.Equal("N", melun.FindPoint("Novembre")?.Name);
+        Assert.Equal("SM", melun.FindPoint("sierra mike")?.Name);
+        Assert.Equal("B", melun.FindPoint("Bravo")?.Name);
+        Assert.Equal("S", toussus.FindPoint("Sierra")?.Name);
+        Assert.Equal("NH", toussus.FindPoint("November Hotel")?.Name);
+    }
+
     [Theory]
     [InlineData(0, 80, CircuitSide.Left)]
     [InlineData(0, 260, CircuitSide.Right)]

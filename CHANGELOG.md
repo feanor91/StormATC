@@ -7,6 +7,10 @@ public releases.
 
 ### Added
 
+- VFR profiles for Melun-Villaroche, Paris Saclay Versailles (Toussus), Étampes-Mondésir,
+  Orléans-Saint-Denis-de-l'Hôtel, Le Puy-Loudes, Pithiviers, Buno-Bonnevaux and Paris-Orly, read from the
+  AIP France AD 2 charts (reporting points, circuit height and preferred runway where the chart gives
+  them).
 - **Charts in the in-simulator panel** (normal and VR): a third tab shows the PDF charts the pilot puts
   in the `Cartes VAC` folder beside the application, one page at a time with zoom and page buttons; the
   charts of the flight plan's departure and destination come first. Pages are drawn by StormATC with
