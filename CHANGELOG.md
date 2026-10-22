@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.2.1 - 2026-10-22
+
 ### Added
 
 - VFR profiles for Melun-Villaroche, Paris Saclay Versailles (Toussus), Étampes-Mondésir,
