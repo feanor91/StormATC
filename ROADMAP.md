@@ -58,6 +58,22 @@ StormATC will not distribute shared credentials.
   taxiway crossing it to a remote stand) and a second demonstration flight, STORM456 STMK→STMT
   (set `STORMATC_SAMPLE_FLIGHT=STORM456-STMK-STMT` to use it).
 
+### VFR aerodromes and charts
+
+- Describe more aerodromes for VFR (reporting points, circuit height and side, preferred runway).
+  **Done:** profiles read by hand from the AIP France AD 2 charts for Lognes, Melun-Villaroche, Toussus,
+  Etampes, Orleans-Saint-Denis, Le Puy-Loudes, Pithiviers, Buno-Bonnevaux and Orly.
+- Show the pilot's own PDF charts inside the simulator, in VR too. **Done:** a Charts tab in the MSFS panel
+  reads the `Cartes VAC` folder beside the application.
+- **Import a chart with a language model.** Fill an aerodrome's VFR profile from a chart PDF in that
+  folder, so that new profiles no longer have to be written by hand. Planned approach: StormATC draws
+  the pages (it already does for the panel), a vision-capable model from the pilot's own provider
+  returns a strict JSON profile, the application checks it against the profile schema and against the
+  text extracted from the PDF, and shows it to the pilot to confirm before saving it in the user's data
+  folder. A language model never writes a profile the pilot has not seen. Reading reporting points
+  from tables and the circuit side from drawings is the part that needs the most checking, because
+  text extraction alone misaligns table rows and cannot read drawings.
+
 ### User experience and accessibility
 
 - Finish keyboard navigation, focus states, screen-reader names, and high-DPI testing.
