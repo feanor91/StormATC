@@ -36,7 +36,6 @@ public static class DesktopServiceCollectionExtensions
         services.AddSingleton<FlightPlanViewModel>();
         services.AddSingleton<RadioViewModel>();
         services.AddSingleton<TranscriptViewModel>();
-        services.AddSingleton<VacProfileImportViewModel>();
         services.AddSingleton<SettingsViewModel>();
         services.AddSingleton<DiagnosticsViewModel>();
         services.AddSingleton<MainWindowViewModel>();

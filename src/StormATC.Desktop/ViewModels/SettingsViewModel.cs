@@ -51,8 +51,6 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     private readonly int _toolbarPanelPort;
     private readonly StormATC.Application.Charts.IVacChartLibrary? _charts;
 
-    /// <summary>Reading charts with a language model, to make VFR profiles.</summary>
-    public VacProfileImportViewModel? VacImport { get; }
 
     /// <summary>
     /// Offline mode as it was when the host was built, so the page can tell the difference
@@ -315,11 +313,9 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         IOptions<LocalVoiceOptions> localVoiceOptions,
         IOptions<ToolbarPanelOptions> toolbarPanelOptions,
         ILogger<SettingsViewModel> logger,
-        StormATC.Application.Charts.IVacChartLibrary? charts = null,
-        VacProfileImportViewModel? vacImport = null)
+        StormATC.Application.Charts.IVacChartLibrary? charts = null)
     {
         _charts = charts;
-        VacImport = vacImport;
         _toolbarPanelPort = toolbarPanelOptions?.Value.Port ?? ToolbarPanelOptions.DefaultPort;
         _secretStore = secretStore ?? throw new ArgumentNullException(nameof(secretStore));
         _languageModel = languageModel ?? throw new ArgumentNullException(nameof(languageModel));

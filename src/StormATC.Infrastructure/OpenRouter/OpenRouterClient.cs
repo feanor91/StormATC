@@ -127,16 +127,7 @@ public sealed class OpenRouterClient(
                 stopwatch.Elapsed);
         }
 
-        if (request.Images.Count > 0 && provider.Protocol == ProviderProtocol.DeepSeek)
-        {
-            return StructuredModelResponse.Fail<T>(
-                UiText.T("DeepSeek's API does not read images here. Choose another language model provider in Settings."),
-                ModelErrorCategory.NotConfigured,
-                stopwatch.Elapsed);
-        }
-
         object payload = BuildStructuredPayload(request, schema, model, provider.Protocol);
-        TimeSpan timeout = request.TimeoutOverride ?? provider.Timeout;
 
         for (int attempt = 0; attempt <= provider.MaximumRetries; attempt++)
         {
@@ -147,7 +138,6 @@ public sealed class OpenRouterClient(
                         payload,
                         apiKey,
                         provider,
-                        timeout,
                         request.CorrelationId,
                         stopwatch,
                         cancellationToken)
@@ -171,7 +161,6 @@ public sealed class OpenRouterClient(
         object payload,
         string apiKey,
         ProviderConfiguration provider,
-        TimeSpan timeout,
         string? correlationId,
         Stopwatch stopwatch,
         CancellationToken cancellationToken)
@@ -187,7 +176,7 @@ public sealed class OpenRouterClient(
         }
 
         using var timeoutSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        timeoutSource.CancelAfter(timeout);
+        timeoutSource.CancelAfter(provider.Timeout);
         using HttpRequestMessage message = CreateCompletionRequest(provider, apiKey);
         message.Content = JsonContent.Create(payload, options: SerializerOptions);
 
@@ -255,7 +244,7 @@ public sealed class OpenRouterClient(
         {
             return (
                 StructuredModelResponse.Fail<T>(
-                    UiText.T($"{provider.Name} did not respond within {timeout.TotalSeconds:F0} seconds."),
+                    UiText.T($"{provider.Name} did not respond within {provider.Timeout.TotalSeconds:F0} seconds."),
                     ModelErrorCategory.Timeout,
                     stopwatch.Elapsed),
                 true);
@@ -546,7 +535,7 @@ public sealed class OpenRouterClient(
             {
                 model,
                 system = request.SystemPrompt,
-                messages = new[] { new { role = "user", content = AnthropicUserContent(request) } },
+                messages = new[] { new { role = "user", content = request.UserPrompt } },
                 temperature = request.Temperature,
                 max_tokens = request.MaxOutputTokens,
                 output_config = new
@@ -586,7 +575,7 @@ public sealed class OpenRouterClient(
             ? new
             {
                 model,
-                messages = BuildMessages(request),
+                messages = BuildMessages(request.SystemPrompt, request.UserPrompt),
                 temperature = request.Temperature,
                 max_completion_tokens = request.MaxOutputTokens,
                 response_format = responseFormat,
@@ -594,64 +583,11 @@ public sealed class OpenRouterClient(
             : new
             {
                 model,
-                messages = BuildMessages(request),
+                messages = BuildMessages(request.SystemPrompt, request.UserPrompt),
                 temperature = request.Temperature,
                 max_tokens = request.MaxOutputTokens,
                 response_format = responseFormat,
-
-                // Reading a chart needs no long deliberation: a model that reasons first can run out of
-                // time or tokens before it answers. Models that cannot reason ignore this.
-                reasoning = protocol == ProviderProtocol.OpenRouter && request.Images.Count > 0
-                    ? (object)new { effort = "low" }
-                    : null,
             };
-    }
-
-    /// <summary>The messages of an OpenAI-style request; the user's message carries the images, if any.</summary>
-    private static object[] BuildMessages(ModelRequest request)
-    {
-        if (request.Images.Count == 0)
-        {
-            return BuildMessages(request.SystemPrompt, request.UserPrompt);
-        }
-
-        List<object> parts = [new { type = "text", text = request.UserPrompt }];
-        foreach (ModelImage image in request.Images)
-        {
-            parts.Add(new
-            {
-                type = "image_url",
-                image_url = new { url = $"data:{image.MediaType};base64,{Convert.ToBase64String(image.Data)}" },
-            });
-        }
-
-        return
-        [
-            new { role = "system", content = request.SystemPrompt },
-            new { role = "user", content = parts },
-        ];
-    }
-
-    /// <summary>The content of an Anthropic user message: the images first, then the text.</summary>
-    private static object AnthropicUserContent(ModelRequest request)
-    {
-        if (request.Images.Count == 0)
-        {
-            return request.UserPrompt;
-        }
-
-        List<object> blocks = [];
-        foreach (ModelImage image in request.Images)
-        {
-            blocks.Add(new
-            {
-                type = "image",
-                source = new { type = "base64", media_type = image.MediaType, data = Convert.ToBase64String(image.Data) },
-            });
-        }
-
-        blocks.Add(new { type = "text", text = request.UserPrompt });
-        return blocks;
     }
 
     private static object BuildStreamingPayload(

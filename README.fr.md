@@ -112,10 +112,9 @@ Voir [docs/architecture.md](docs/architecture.md).
   phase de vol en cours (VFR ou IFR) dans un panneau à l'intérieur du simulateur
 - **Un seul installeur pour tout** : StormATC, le panneau et le module dans le dossier Community de MSFS
   (Store ou Steam) et, si vous le cochez, Whisper, Piper et les voix, avec les réglages déjà faits
-- **Cartes dans le panneau, et profils VFR lus sur les cartes** : vos cartes PDF s'ouvrent dans le panneau
-  MSFS (celle de la destination en premier), et StormATC peut lire une carte avec votre propre modèle
-  capable de lire des images pour proposer le profil VFR de l'aérodrome ; chaque fait est montré avec les
-  mots de la carte et gardé seulement si vous le confirmez
+- **Cartes dans le panneau** : vos cartes PDF s'ouvrent dans le panneau MSFS, celle de la destination en premier,
+  dans le cockpit ou en VR ; des profils VFR pour une liste d'aérodromes qui s'allonge (points de report, hauteur du
+  circuit, piste préférée) sont lus sur les cartes AIP
 - **Aide intégrée** : liens de téléchargement et guides PDF pour les logiciels tiers et les voix, depuis
   la page Réglages
 - **Prise en compte du trafic FSLTL (optionnelle)** : lit le trafic en mouvement du simulateur par
@@ -285,9 +284,6 @@ Saisissez, testez et supprimez les clés dans les Réglages. Voir
   texte du contrôleur y part pour être prononcé.
 - Avec un fournisseur de modèle de langage activé, les transcriptions et les faits approuvés par un
   contrôleur ne vont qu'au fournisseur choisi.
-- Si vous demandez à StormATC de lire une carte avec un modèle (Réglages › Profils VFR à partir des
-  cartes), les images de cette carte vont chez votre fournisseur, uniquement quand vous appuyez sur le
-  bouton.
 
 ---
 

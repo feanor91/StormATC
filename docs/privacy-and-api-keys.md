@@ -35,13 +35,6 @@ between exchanges, yields to user push-to-talk, and pauses by default while a co
 client is running. Local deterministic traffic wording uses no model credits. Spoken exchanges can
 make two text-to-speech requests each, so they require a separate opt-in.
 
-### Reading a chart with a language model
-
-Only when you press **Read the chart** in Settings › VFR profiles from charts: the pages of that one chart
-(images, up to twelve) and a fixed instruction go to the language-model provider you chose, and nothing
-else. They are not stored by StormATC. The profile the model proposes is saved only after you have checked
-and kept each fact, in your own folder (`%LOCALAPPDATA%\StormATC\vfr-profiles`).
-
 ### Offline mode
 
 Settings → **Offline mode** stops StormATC making any network request whatsoever. With it on, the
