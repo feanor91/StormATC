@@ -117,6 +117,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<StateChangeMonitor>();
         services.AddSingleton<IToolbarPanelStateSource, SessionToolbarPanelStateSource>();
         services.AddSingleton<IVacChartLibrary, VacChartLibrary>();
+        services.AddSingleton<IVacProfileStore, UserVfrProfileStore>();
+        services.AddSingleton<VacProfileImporter>();
         services.AddSingleton(sp => new ToolbarPanelServer(
             sp.GetRequiredService<IToolbarPanelStateSource>(),
             sp.GetRequiredService<IOptions<ToolbarPanelOptions>>(),

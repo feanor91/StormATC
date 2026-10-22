@@ -6,7 +6,8 @@ using StormATC.Domain.Airports;
 namespace StormATC.Infrastructure.Data;
 
 /// <summary>
-/// Loads the VFR profile of an aerodrome from <c>data/vfr-profiles/&lt;ICAO&gt;.json</c>.
+/// Loads the VFR profile of an aerodrome from <c>data/vfr-profiles/&lt;ICAO&gt;.json</c>, or from the same
+/// file name in the user's <c>vfr-profiles</c> folder, which is read first.
 /// </summary>
 /// <remarks>
 /// A missing file is normal: most aerodromes have no profile and the engine then uses generic
@@ -30,12 +31,15 @@ public sealed class JsonVfrProfileProvider(
             return null;
         }
 
-        string path = Path.Combine(
-            storagePaths.DataDirectory,
-            "vfr-profiles",
-            $"{icao.ToUpperInvariant()}.json");
+        // The pilot's own profile (one read from a chart and confirmed) wins over the bundled one.
+        string file = $"{icao.ToUpperInvariant()}.json";
+        string? path = new[]
+        {
+            Path.Combine(storagePaths.ApplicationDataDirectory, "vfr-profiles", file),
+            Path.Combine(storagePaths.DataDirectory, "vfr-profiles", file),
+        }.FirstOrDefault(File.Exists);
 
-        if (!File.Exists(path))
+        if (path is null)
         {
             return null;
         }

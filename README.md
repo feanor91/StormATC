@@ -106,6 +106,9 @@ See [docs/architecture.md](docs/architecture.md).
   flight (VFR or IFR) in a panel inside the simulator
 - **One installer for everything**: StormATC, the panel and the module in MSFS's Community folder
   (Store or Steam), and, if you tick it, Whisper, Piper and the voices, with the settings wired up
+- **Charts in the panel, and VFR profiles read from charts**: your PDF charts open in the MSFS panel (the
+  destination's first), and StormATC can read a chart with your own vision-capable model to propose the
+  aerodrome's VFR profile; every fact is shown with the words of the chart and kept only if you confirm it
 - **In-app help**: download links and PDF guides for the third-party software and voices, from the
   Settings page
 - **Opt-in FSLTL traffic awareness**: read moving simulator traffic through SimConnect, identify
@@ -271,6 +274,8 @@ Enter, test, and remove keys on the Settings page. See
   goes there to be spoken.
 - With a language-model provider enabled, transcripts and the facts a controller has approved go
   only to the selected provider.
+- If you ask StormATC to read a chart with a model (Settings › VFR profiles from charts), the images of
+  that chart go to your provider, only when you press the button.
 
 ---
 

@@ -65,14 +65,12 @@ StormATC will not distribute shared credentials.
   Etampes, Orleans-Saint-Denis, Le Puy-Loudes, Pithiviers, Buno-Bonnevaux and Orly.
 - Show the pilot's own PDF charts inside the simulator, in VR too. **Done:** a Charts tab in the MSFS panel
   reads the `Cartes VAC` folder beside the application.
-- **Import a chart with a language model.** Fill an aerodrome's VFR profile from a chart PDF in that
-  folder, so that new profiles no longer have to be written by hand. Planned approach: StormATC draws
-  the pages (it already does for the panel), a vision-capable model from the pilot's own provider
-  returns a strict JSON profile, the application checks it against the profile schema and against the
-  text extracted from the PDF, and shows it to the pilot to confirm before saving it in the user's data
-  folder. A language model never writes a profile the pilot has not seen. Reading reporting points
-  from tables and the circuit side from drawings is the part that needs the most checking, because
-  text extraction alone misaligns table rows and cannot read drawings.
+- Import a chart with a language model. **Done:** Settings › "VFR profiles from charts" draws the pages of a
+  chart in the charts folder, sends them to the pilot's own provider (OpenAI, OpenRouter, Groq or
+  Anthropic, with a model that reads images), checks the strict JSON answer, shows each fact with the
+  words of the chart it was read from, and saves the profile in the user's folder once the pilot has kept
+  the facts that are right. *Remains:* a second, independent reading to cross-check the facts, a vision
+  provider that reads the drawings better for the circuit side, and a way to share confirmed profiles.
 
 ### User experience and accessibility
 

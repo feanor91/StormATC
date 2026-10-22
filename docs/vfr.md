@@ -118,6 +118,33 @@ documentation. Indiquer la source et la date d'application dans `source`.
 Les cartes VAC du SIA sont © SIA : le dossier `Cartes VAC/` est ignoré par Git, et les profils ne
 contiennent que des faits retranscrits.
 
+### Faire lire une carte par StormATC
+
+Plutôt que de les écrire à la main, vous pouvez demander à StormATC de lire une carte : **Réglages ›
+Profils VFR à partir des cartes**.
+
+1. Déposez le PDF dans le dossier des cartes (voir [le panneau](ingame-panel.md#les-cartes-pdf)), nommé avec
+   le code OACI (`AD-2.LFPN.pdf`).
+2. Dans les Réglages, choisissez un fournisseur de modèle de langage **qui lit les images** (OpenAI,
+   OpenRouter, Groq ou Anthropic ; pas DeepSeek), un modèle capable de vision, sa clé, et acceptez les
+   services cloud. Choisissez la carte, puis **Lire la carte**.
+3. StormATC dessine les pages (douze au plus) et les envoie à ce fournisseur : **les images de la carte
+   quittent donc votre PC**, comme le dit la page. Le modèle répond par un document strict : pour chaque
+   fait, la valeur, **les mots de la carte dont elle vient** et la page.
+4. StormATC contrôle la réponse (piste entre 1° et 360°, hauteur de circuit plausible, désignation de
+   point de report de une à six lettres, aucune valeur sans citation, code OACI du nom du fichier). Vous
+   voyez chaque fait avec sa citation, vous cochez ceux qui sont justes ; ceux dont le modèle n'est pas
+   sûr, et le **côté du circuit** (souvent lu sur un dessin), sont décochés tant que vous ne les avez pas
+   vérifiés sur la carte.
+5. **Enregistrer le profil** l'écrit dans `%LOCALAPPDATA%\StormATC\vfr-profiles\<OACI>.json`. Ce dossier est
+   lu **avant** les profils fournis avec StormATC et n'est jamais touché par une mise à jour ; l'ancien
+   profil enregistré est gardé en `.bak`. Il est utilisé au prochain chargement d'un vol.
+
+Le modèle ne fait que proposer : il n'écrit jamais un profil que vous n'avez pas vu, et il ne décide de
+rien dans l'ATC (le moteur lit un profil enregistré comme les autres). Il peut se tromper, surtout sur les
+tableaux et les dessins : vérifiez chaque fait. Le coût est de quelques centimes par carte chez votre
+fournisseur ; StormATC n'en facture rien.
+
 **Profils fournis** (AIP France AD 2, relus à la main depuis les fiches du SIA) : Lognes (LFPL),
 Melun-Villaroche (LFPM, points N, SM et B), Paris Saclay Versailles / Toussus (LFPN, points S et NH,
 circuit à 1500 ft), Étampes-Mondésir (LFOX), Orléans-Saint-Denis-de-l'Hôtel (LFOZ), Le Puy-Loudes

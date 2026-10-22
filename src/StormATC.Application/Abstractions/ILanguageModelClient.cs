@@ -68,7 +68,21 @@ public sealed record ModelRequest
 
     /// <summary>Overrides the configured model for this request only.</summary>
     public string? ModelOverride { get; init; }
+
+    /// <summary>
+    /// Images the model is asked to read (a chart page, for example). Only providers whose API takes
+    /// images can answer such a request; the others refuse it.
+    /// </summary>
+    public IReadOnlyList<ModelImage> Images { get; init; } = [];
+
+    /// <summary>Overrides the provider's timeout for this request: reading images takes longer.</summary>
+    public TimeSpan? TimeoutOverride { get; init; }
 }
+
+/// <summary>An image sent to a model.</summary>
+/// <param name="Data">The encoded image.</param>
+/// <param name="MediaType">Its media type, such as <c>image/png</c>.</param>
+public sealed record ModelImage(byte[] Data, string MediaType = "image/png");
 
 /// <summary>The outcome of a structured generation request.</summary>
 /// <typeparam name="T">The expected response shape.</typeparam>

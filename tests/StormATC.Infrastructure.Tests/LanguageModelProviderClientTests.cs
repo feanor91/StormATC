@@ -61,6 +61,91 @@ public sealed class LanguageModelProviderClientTests
         }
     }
 
+    private static readonly JsonSchemaDefinition SampleSchema = new()
+    {
+        Name = "sample",
+        Schema = """{"type":"object","additionalProperties":false,"required":["spokenText"],"properties":{"spokenText":{"type":"string"}}}""",
+    };
+
+    private static ModelRequest ChartRequest() => new()
+    {
+        SystemPrompt = "Read the chart.",
+        UserPrompt = "Extract the facts.",
+        Images = [new ModelImage([1, 2, 3]), new ModelImage([4, 5, 6])],
+        TimeoutOverride = TimeSpan.FromMinutes(3),
+    };
+
+    [Theory]
+    [InlineData("OpenRouter")]
+    [InlineData("OpenAI")]
+    [InlineData("Groq")]
+    public async Task Images_go_to_openai_style_providers_as_data_urls_in_the_user_message(string provider)
+    {
+        var handler = new RecordingHandler(anthropic: false);
+        OpenRouterClient client = CreateClient(provider, handler);
+
+        StructuredModelResponse<SampleResponse> result =
+            await client.GenerateStructuredAsync<SampleResponse>(ChartRequest(), SampleSchema, CancellationToken.None);
+
+        Assert.True(result.Success, result.ErrorMessage);
+        using System.Text.Json.JsonDocument body = System.Text.Json.JsonDocument.Parse(handler.Body);
+        System.Text.Json.JsonElement user = body.RootElement.GetProperty("messages")[1];
+        Assert.Equal("user", user.GetProperty("role").GetString());
+        System.Text.Json.JsonElement parts = user.GetProperty("content");
+        Assert.Equal(3, parts.GetArrayLength());
+        Assert.Equal("text", parts[0].GetProperty("type").GetString());
+        Assert.Equal("image_url", parts[1].GetProperty("type").GetString());
+        Assert.Equal(
+            "data:image/png;base64," + Convert.ToBase64String([1, 2, 3]),
+            parts[1].GetProperty("image_url").GetProperty("url").GetString());
+    }
+
+    [Fact]
+    public async Task Images_go_to_anthropic_as_base64_blocks_before_the_text()
+    {
+        var handler = new RecordingHandler(anthropic: true);
+        OpenRouterClient client = CreateClient("Anthropic", handler);
+
+        StructuredModelResponse<SampleResponse> result =
+            await client.GenerateStructuredAsync<SampleResponse>(ChartRequest(), SampleSchema, CancellationToken.None);
+
+        Assert.True(result.Success, result.ErrorMessage);
+        using System.Text.Json.JsonDocument body = System.Text.Json.JsonDocument.Parse(handler.Body);
+        System.Text.Json.JsonElement content = body.RootElement.GetProperty("messages")[0].GetProperty("content");
+        Assert.Equal(3, content.GetArrayLength());
+        Assert.Equal("image", content[0].GetProperty("type").GetString());
+        Assert.Equal("image/png", content[0].GetProperty("source").GetProperty("media_type").GetString());
+        Assert.Equal(Convert.ToBase64String([1, 2, 3]), content[0].GetProperty("source").GetProperty("data").GetString());
+        Assert.Equal("text", content[2].GetProperty("type").GetString());
+    }
+
+    [Fact]
+    public async Task A_provider_that_does_not_read_images_refuses_them_without_sending_anything()
+    {
+        var handler = new RecordingHandler(anthropic: false);
+        OpenRouterClient client = CreateClient("DeepSeek", handler);
+
+        StructuredModelResponse<SampleResponse> result =
+            await client.GenerateStructuredAsync<SampleResponse>(ChartRequest(), SampleSchema, CancellationToken.None);
+
+        Assert.False(result.Success);
+        Assert.Equal(ModelErrorCategory.NotConfigured, result.ErrorCategory);
+        Assert.Null(handler.RequestUri);
+    }
+
+    [Fact]
+    public async Task A_request_without_images_keeps_plain_text_messages()
+    {
+        var handler = new RecordingHandler(anthropic: false);
+        OpenRouterClient client = CreateClient("OpenAI", handler);
+
+        await client.GenerateStructuredAsync<SampleResponse>(
+            new ModelRequest { SystemPrompt = "s", UserPrompt = "u" }, SampleSchema, CancellationToken.None);
+
+        using System.Text.Json.JsonDocument body = System.Text.Json.JsonDocument.Parse(handler.Body);
+        Assert.Equal("u", body.RootElement.GetProperty("messages")[1].GetProperty("content").GetString());
+    }
+
     private static OpenRouterClient CreateClient(string provider, HttpMessageHandler handler) =>
         new(
             new HttpClient(handler),

@@ -16,6 +16,13 @@ public releases.
 
 ### Added
 
+- **Read a chart with a language model.** Settings › "VFR profiles from charts": StormATC draws the pages of a
+  chart in the charts folder, sends them to the pilot's own provider (a model that reads images: OpenAI,
+  OpenRouter, Groq or Anthropic), checks the strict JSON answer, and shows each fact with the words of the
+  chart it was read from. The pilot keeps the facts that are right (what the model was unsure of, and the
+  circuit side, start unticked) and the profile is saved in `%LOCALAPPDATA%\StormATC\vfr-profiles`, which
+  is read before the bundled profiles. The model never decides anything for the ATC engine. Requests can
+  now carry images.
 - VFR profiles for Melun-Villaroche, Paris Saclay Versailles (Toussus), Étampes-Mondésir,
   Orléans-Saint-Denis-de-l'Hôtel, Le Puy-Loudes, Pithiviers, Buno-Bonnevaux and Paris-Orly, read from the
   AIP France AD 2 charts (reporting points, circuit height and preferred runway where the chart gives
