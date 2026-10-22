@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.5.0 - 2026-10-22
+
 ### Changed
 
 - At an aerodrome whose VFR profile says it has no air traffic service (auto-information, such as Chartres,
