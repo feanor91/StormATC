@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.9.1 - 2026-10-23
+
 ### Changed
 
 - The SIA's VAC charts are not shipped in the installer nor kept in the repository: Settings > VAC charts downloads
