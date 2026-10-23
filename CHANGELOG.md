@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.7.0 - 2026-10-23
+
 ### Added
 
 - `scripts/Update-VacCharts.ps1` updates the charts in the Cartes VAC folder from the SIA's current AIRAC cycle,
