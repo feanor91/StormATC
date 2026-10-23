@@ -1,0 +1,164 @@
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  body { font-family: sans-serif; font-size: 9.5pt; color: #111; }
+  h1 { font-size: 18pt; margin: 0 0 4pt 0; }
+  h2 { font-size: 12.5pt; margin: 14pt 0 4pt 0; padding: 3pt 6pt; background-color: #1f3a56; color: #ffffff; }
+  h3 { font-size: 10.5pt; margin: 8pt 0 3pt 0; color: #1f3a56; }
+  p { margin: 2pt 0 4pt 0; }
+  table { border-collapse: collapse; width: 100%; margin: 2pt 0 6pt 0; }
+  td.th { background-color: #e3ebf3; text-align: left; font-size: 8.5pt; font-weight: bold; padding: 3pt; border: 0.6pt solid #8da2b5; }
+  td { vertical-align: top; padding: 3pt; border: 0.6pt solid #b8c5d1; font-size: 8.8pt; }
+  td.c { width: 5%; text-align: center; font-size: 11pt; }
+  td.id { width: 6%; font-weight: bold; }
+  td.a { width: 37%; }
+  td.r { width: 37%; }
+  td.n { width: 15%; }
+  .ok { color: #1b6b2f; font-weight: bold; }
+  .box { border: 0.8pt solid #1f3a56; padding: 5pt 7pt; background-color: #f3f7fb; margin: 4pt 0 6pt 0; }
+  .warn { border: 0.8pt solid #9a6a00; padding: 5pt 7pt; background-color: #fff7e0; margin: 4pt 0 6pt 0; }
+  .small { font-size: 8pt; color: #444; }
+  code { font-family: monospace; font-size: 8.6pt; }
+  li { margin: 1pt 0; }
+  .pb { page-break-before: always; }
+</style>
+</head>
+<body>
+
+<h1>StormATC : fiche de tests à valider</h1>
+<p class="small">Version testée : <b>0.12.2</b> (23 octobre 2026). Simulation de vol uniquement. Rien de ce qui suit n'a été vu en vol par
+moi : je ne peux pas lancer MSFS. Tout ce qui est marqué &laquo;&nbsp;à valider&nbsp;&raquo; n'a été vérifié que par des tests automatiques ou à la lecture du code.</p>
+
+<div class="box">
+<b>Comment l'utiliser.</b> Une ligne = un test. Faites l'action, comparez au <i>résultat attendu</i>, cochez
+OK ou KO, et notez ce qui s'est passé si KO (ce que le contrôleur a dit, ce qui s'est affiché).
+Faites-les <b>dans l'ordre des parties</b> : chaque partie suppose que la précédente marche.
+Pour un KO, envoyez-moi : la ligne du test, ce que vous avez dit, ce que StormATC a répondu, et le fichier du jour dans
+<code>%LOCALAPPDATA%\StormATC\logs</code>.
+</div>
+
+<h2>0. Déjà validé par vous (pour mémoire)</h2>
+<table>
+<tr><td class="th">Point</td><td class="th">D'après vos retours</td></tr>
+<tr><td>Module WASM du plan de vol (EFB)</td><td class="ok">Il se charge et envoie le plan (journal : module chargé, plan reçu).</td></tr>
+<tr><td>Import IFR avec SID, STAR, approche</td><td class="ok">Repris depuis l'EFB.</td></tr>
+<tr><td>ATIS : silence quand on parle sur l'ATIS</td><td class="ok">StormATC ne répond pas sur la fréquence ATIS.</td></tr>
+<tr><td>Accord manuel d'une fréquence</td><td class="ok">Fonctionne.</td></tr>
+<tr><td>Cartes VAC : mise à jour depuis le SIA</td><td class="ok">&laquo;&nbsp;Semble fonctionner&nbsp;&raquo; (à confirmer en 1.1 ci-dessous).</td></tr>
+<tr><td>Onglet Cartes du panneau : ouverture d'un PDF, défilement de la liste</td><td class="ok">Le défilement ne remonte plus ; cartes ouvertes &laquo;&nbsp;ça a l'air bien&nbsp;&raquo;.</td></tr>
+</table>
+
+<h2>1. Installation, panneau et cartes</h2>
+<table>
+<tr><td class="th"></td><td class="th">N°</td><td class="th">Action</td><td class="th">Résultat attendu</td><td class="th">Note</td></tr>
+<tr><td class="c">&#9744;</td><td class="id">1.1</td><td class="a">Paramètres &rarr; onglet <b>Cartes VAC</b> : lire la source ; <b>Mettre à jour les cartes depuis le SIA</b>.</td><td class="r">La source et le cycle AIRAC s'affichent ; un compte rendu « N remplacées, N ajoutées, N inchangées… » à la fin ; le cycle indiqué est 2026-10-01 (ou le suivant).</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">1.2</td><td class="a">Vider le dossier <code>Cartes VAC</code> (garder une copie), puis relancer « Mettre à jour ».</td><td class="r">Il télécharge tout (environ 416 cartes, quelques minutes). Rien n'est perdu si vous restaurez la copie.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">1.3</td><td class="a">Dans MSFS, panneau StormATC &rarr; onglet <b>Cartes</b> (avec plus de 15 cartes).</td><td class="r">Cartes du plan de vol d'abord, puis « Dernières cartes », puis des tuiles de lettres (A, B, C…) avec un nombre ; une lettre ouvre la liste de ses terrains, « &larr; Cartes » revient. Les noms d'aéroports sont affichés. La ligne de source SIA est en bas.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">1.4</td><td class="a">Ouvrir une carte, changer de page, zoomer, revenir.</td><td class="r">La carte s'affiche lisible ; page suivante/précédente, zoom +/&minus; et « Ajuster » fonctionnent.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">1.5</td><td class="a">Avec un plan de vol chargé : ouvrir l'onglet Cartes.</td><td class="r">La carte de l'aérodrome d'arrivée s'ouvre toute seule, une fois (pas en boucle).</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">1.6</td><td class="a">Mêmes tests 1.3 à 1.4 en <b>réalité virtuelle</b> (si vous volez en VR).</td><td class="r">Les tuiles se visent au contrôleur ; aucun clavier nécessaire.</td><td class="n"></td></tr>
+</table>
+
+<h2 class="pb">2. Plan de vol et régime</h2>
+<table>
+<tr><td class="th"></td><td class="th">N°</td><td class="th">Action</td><td class="th">Résultat attendu</td><td class="th">Note</td></tr>
+<tr><td class="c">&#9744;</td><td class="id">2.1</td><td class="a">Plan <b>IFR</b> civil dans l'EFB de MSFS &rarr; « Envoyer à l'ATC ».</td><td class="r">Page Plan de vol : départ, arrivée, route, SID, STAR, approche ; régime <b>IFR</b>.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">2.2</td><td class="a">Plan <b>VFR</b> civil dans l'EFB.</td><td class="r">Régime <b>VFR</b> ; pas de SID/STAR.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">2.3</td><td class="a">Plan (IFR) <b>vers ou depuis une base militaire</b> (par exemple LFSI, LFBC, LFSO).</td><td class="r">Le régime est <b>CAM I</b> (plan VFR : <b>CAM V</b>). C'est le <i>point faible connu</i> : le planificateur de MSFS ne transmet pas « militaire », StormATC le devine par la base.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">2.4</td><td class="a">Choisir à la main un régime dans la liste (IFR, VFR, CAM V, CAM I, CAM T), puis renvoyer le même plan depuis l'EFB.</td><td class="r">Le régime choisi n'est pas écrasé.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">2.5</td><td class="a">Bloc <b>Vol VFR local</b> : aérodrome civil (LFPL) + indicatif.</td><td class="r">Vol local démarré, régime <b>VFR</b>, fréquences trouvées.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">2.6</td><td class="a">Vol VFR local sur une <b>base militaire</b> (LFSI).</td><td class="r">Régime <b>CAM V</b> affiché (nouveauté de la 0.12.2).</td><td class="n"></td></tr>
+</table>
+
+<h2 class="pb">3. Vol IFR civil complet</h2>
+<p>Prérequis : plan IFR chargé (2.1), micro ou saisie texte, bonne fréquence accordée à chaque étape (le panneau indique le contrôleur et la fréquence).</p>
+<table>
+<tr><td class="th"></td><td class="th">N°</td><td class="th">Ce que vous dites</td><td class="th">Résultat attendu</td><td class="th">Note</td></tr>
+<tr><td class="c">&#9744;</td><td class="id">3.1</td><td class="a">COM1 sur l'ATIS, puis monter dans l'avion / démarrer le vol.</td><td class="r">StormATC se tait sur l'ATIS. <b>À valider</b> : COM1 se règle seul sur l'ATIS de départ et n'est pas écrasé quelques secondes plus tard (correctif 0.2.2).</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">3.2</td><td class="a">« Prévol, bonjour, <i>indicatif</i>, demandons la clairance IFR. »</td><td class="r">« Prêts à copier », puis la clairance (route, SID, niveau, transpondeur).</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">3.3</td><td class="a">Collationner la clairance en entier.</td><td class="r">« Collationnement correct » ; une erreur de numéro est corrigée.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">3.4</td><td class="a">« Demandons repoussage et mise en route. »</td><td class="r">« Repoussage et mise en route approuvés. »</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">3.5</td><td class="a">« Demandons le roulage. »</td><td class="r">Itinéraire de roulage (voies) jusqu'au point d'attente ; collationner.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">3.6</td><td class="a">Au point d'attente : « prêts au départ ».</td><td class="r">« Alignez-vous piste XX et attendez », puis « autorisé décollage ».</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">3.7</td><td class="a">Décoller, monter au-dessus de 1000 ft.</td><td class="r">Le contrôleur vous passe à Départ avec la fréquence ; le panneau change de contrôleur.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">3.8</td><td class="a">Au premier contact Départ, puis « demandons direct <i>point du plan</i> », « demandons niveau … ».</td><td class="r">Autorisations cohérentes avec la route ; « évitement météo » accepté.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">3.9</td><td class="a">Arrivée : « demandons l'ILS piste XX », puis, après le changement, « établi ILS ».</td><td class="r">Autorisation d'approche, passage à la Tour, « autorisé atterrissage » ; collationner.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">3.10</td><td class="a">Une remise de gaz volontaire (« remise de gaz »).</td><td class="r">Instructions de montée et de cap.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">3.11</td><td class="a">Après l'atterrissage : « piste dégagée », puis « demandons le roulage vers le parking ».</td><td class="r">Contact Sol ; itinéraire de roulage vers le parking.</td><td class="n"></td></tr>
+</table>
+
+<h2 class="pb">4. VFR civil, circuit et aérodromes sans contrôle</h2>
+<table>
+<tr><td class="th"></td><td class="th">N°</td><td class="th">Ce que vous faites / dites</td><td class="th">Résultat attendu</td><td class="th">Note</td></tr>
+<tr><td class="c">&#9744;</td><td class="id">4.1</td><td class="a">Vol local VFR à LFPL (2.5) : « Sol, <i>indicatif</i>, parking, demandons le roulage. »</td><td class="r">Roulage vers le point d'attente piste XX ; pas d'étape de clairance IFR.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">4.2</td><td class="a">Décollage, puis en circuit : « vent arrière main gauche piste XX », « base », « en finale ».</td><td class="r">À chaque compte rendu : « rappelez base… », « rappelez finale… », puis « autorisé atterrissage » (ou « autorisé toucher »).</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">4.3</td><td class="a">« Demandons un toucher » / une option / un passage bas.</td><td class="r">Autorisation correspondante à la finale.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">4.4</td><td class="a">« Sortie de circuit, je quitte la fréquence. »</td><td class="r">« Reçu, au revoir. » Le contrôleur ne vous suit plus.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">4.5</td><td class="a">Arrivée VFR depuis l'extérieur à LFPL ou LFPN avec un point de report (voir la carte) : appel d'arrivée, puis « passe <i>point</i> ».</td><td class="r">« Rappelez <i>point</i> », puis les consignes d'intégration au circuit (main, piste).</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">4.6</td><td class="a">Charger un vol local à un terrain <b>sans ATS</b> (LFOR, LFFB, LFOX).</td><td class="r"><b>À valider.</b> Un message dit qu'il n'y a pas de contrôleur et donne la fréquence air-air ; un appel radio n'obtient <i>aucune</i> réponse.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">4.7</td><td class="a">Vol local à un terrain <b>AFIS</b> (LFHP, LFOZ).</td><td class="r"><b>À observer et noter</b> : ce que StormATC fait n'est pas défini ; il ne doit pas inventer une tour avec clairances. Dites-moi ce que vous constatez.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">4.8</td><td class="a">Contrôle de données : ouvrez la carte VAC de 3 terrains (par exemple LFAB, LFAC, LFQQ) et comparez avec ce que StormATC annonce (sans ATS ? fréquence air-air ?).</td><td class="r">Les profils sont extraits <b>automatiquement</b> du texte des cartes : un cas faux est possible (par exemple LFQQ est classé « Approche » alors que c'est un grand aéroport). Notez les erreurs.</td><td class="n"></td></tr>
+</table>
+
+<h2>5. Voix et panneau</h2>
+<table>
+<tr><td class="th"></td><td class="th">N°</td><td class="th">Action</td><td class="th">Résultat attendu</td><td class="th">Note</td></tr>
+<tr><td class="c">&#9744;</td><td class="id">5.1</td><td class="a">Dialoguer à la voix (appui sur la touche PTT) avec 3 ou 4 phrases du paragraphe 3 ou 4.</td><td class="r">La phrase est comprise (le texte reconnu s'affiche) ; les nombres en français (« trois mille cinq cents ») passent en chiffres.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">5.2</td><td class="a">Onglet <b>Dialogue ATC</b> du panneau MSFS pendant un échange.</td><td class="r">Vos phrases (vert) et celles du contrôleur (bleu), la liste suit les nouveaux messages.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">5.3</td><td class="a">Onglet <b>Phraséologie</b> : suivre la phase de vol (bouton Auto) puis choisir une autre phase.</td><td class="r">Des exemples d'appels adaptés ; le défilement n'est pas remis en haut à chaque message.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">5.4</td><td class="a">Bouton « Je n'aime pas cette voix » après une réponse.</td><td class="r">La voix est écartée ; le contrôleur en prend une autre à la réponse suivante.</td><td class="n"></td></tr>
+</table>
+
+<h2 class="pb">6. Militaire (CAM V, CAM I, CAM T)</h2>
+<p>Base d'essai conseillée : <b>Saint-Dizier (LFSI)</b>, avion militaire (Rafale). Lire d'abord <code>docs/militaire.md</code>
+(la partie militaire expliquée). Pour le QFE, il faut que la météo fournisse le QNH ; sinon le contrôleur ne le dit pas.</p>
+<table>
+<tr><td class="th"></td><td class="th">N°</td><td class="th">Ce que vous faites / dites</td><td class="th">Résultat attendu</td><td class="th">Note</td></tr>
+<tr><td class="c">&#9744;</td><td class="id">6.1</td><td class="a">Vol VFR local à LFSI (2.6).</td><td class="r">Régime <b>CAM V</b> ; un onglet <b>Militaire</b> apparaît dans le panneau MSFS (absent en VFR ou IFR civil).</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">6.2</td><td class="a">Onglet Militaire.</td><td class="r">Régime et base affichés ; fréquences de la base (APP 134,775, TWR 122,100, PAR 123,300 pour LFSI) ; « aucune approche radar » ; exemples d'appels.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">6.3</td><td class="a">« Sol, <i>indicatif</i>, CAM Victor, parking, demandons le roulage. »</td><td class="r">« Roulez piste XX » (avec « QFE XXXX » si QNH disponible).</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">6.4</td><td class="a">Décoller, s'éloigner à 20 NM, revenir : « Tour, <i>indicatif</i>, vingt nautiques au sud, demande le break. »</td><td class="r">« Piste XX, vent …, QFE …, rappelez initiale. »</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">6.5</td><td class="a">À l'initiale : « <i>indicatif</i>, initiale, QFE <i>valeur</i>. »</td><td class="r">« Correct, numéro un, rappelez dernier virage, train sorti verrouillé. » Avec un QFE faux : « négatif, QFE … ».</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">6.6</td><td class="a">« <i>indicatif</i>, dernier virage piste XX » <b>sans</b> dire le train.</td><td class="r">« Vérifiez train sorti verrouillé » ; pas d'autorisation d'atterrir.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">6.7</td><td class="a">« <i>indicatif</i>, train sorti verrouillé. »</td><td class="r">« Piste XX, autorisé atterrissage. »</td><td class="n"></td></tr>
+</table>
+<h2 class="pb">6 (suite). Approches radar, MARSA, CAM T</h2>
+<table>
+<tr><td class="th"></td><td class="th">N°</td><td class="th">Ce que vous faites / dites</td><td class="th">Résultat attendu</td><td class="th">Note</td></tr>
+<tr><td class="c">&#9744;</td><td class="id">6.8</td><td class="a"><b>PAR</b> : en approche, aligné à 8-10 NM dans l'axe : « <i>indicatif</i>, demande PAR piste XX. »</td><td class="r">« Radar PAR piste XX, QFE …, ne répondez plus… » ; l'onglet Militaire affiche « PAR piste XX : en attente du contact radar » puis « contact radar ».</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">6.9</td><td class="a">Pendant le PAR (ne pas répondre) : voler à gauche de l'axe, puis sous la pente.</td><td class="r">Toutes les 4 à 8 s : « légèrement à gauche de l'axe, route XXX, sous la pente, distance N milles ». <b>À juger</b> : les écarts annoncés correspondent-ils à ce que vous voyez ?</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">6.10</td><td class="a">Continuer jusqu'à la piste.</td><td class="r">À 2 NM « vérifiez train sorti verrouillé » ; vers 0,9 NM « autorisé atterrissage » ; l'approche radar disparaît de l'onglet.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">6.11</td><td class="a"><b>SRA</b> : même chose avec « demande SRA piste XX ».</td><td class="r">Route et « altitude recommandée » à chaque mille, <i>sans</i> « pente » ; à 2 NM « fin d'approche de surveillance, annoncez piste en vue ou remise de gaz » ; « piste en vue » &rarr; « autorisé atterrissage ».</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">6.12</td><td class="a">Une remise de gaz pendant un PAR.</td><td class="r">L'approche radar prend fin (onglet) ; pas d'autres appels.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">6.13</td><td class="a"><b>MARSA</b> au sol : « <i>indicatif</i>, patrouille de deux, demande MARSA départ piste XX. »</td><td class="r">« MARSA départ piste XX approuvé, initial cap XXX. » Une demande sans « patrouille de deux » est refusée.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">6.14</td><td class="a"><b>MARSA</b> en vol : « <i>indicatif</i>, patrouille de deux, demande MARSA approche, trail trois milles. »</td><td class="r">« MARSA approche piste XX approuvé » ; ligne MARSA dans l'onglet Militaire, qui disparaît à l'atterrissage.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">6.15</td><td class="a">Changement de régime à la radio : « demandons CAM India », puis « demandons CAM Victor ».</td><td class="r">« Vous êtes maintenant en CAM India » ; le régime change aussi dans le panneau.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">6.16</td><td class="a"><b>CAM T</b> : « demandons CAM Tango » (en vol).</td><td class="r">« Vous êtes en CAM Tango, vol tactique, hors service de la circulation aérienne, rappelez pour reprendre… ».</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">6.17</td><td class="a"><b>Situation tactique</b> : cocher <i>Paramètres &rarr; Intégrations en direct &rarr; Enable live traffic awareness</i>, passer en CAM T, générer une cible avec la tablette du Rafale, dire « demande la situation ».</td><td class="r"><b>Test le plus incertain.</b> Attendu : « un contact, premier, gisement …, N milles, … pieds, chaud/froid/flanc ». Sans cible : « aucun contact ».</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">6.18</td><td class="a">Après 6.17, ouvrir le journal du jour (<code>%LOCALAPPDATA%\StormATC\logs</code>) et chercher « Tactical traffic scan ».</td><td class="r">Une ligne toutes les 30 s en CAM T : nombre d'avions vus et les trois premiers (type, altitude). <b>Si 0 avion alors que la cible existe</b> : les cibles de la tablette ne sont pas des avions ordinaires pour MSFS ; envoyez-moi la ligne.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">6.19</td><td class="a">Dire « demande la situation » en CAM V ou en VFR.</td><td class="r">Pas de situation tactique (réservée à CAM T).</td><td class="n"></td></tr>
+</table>
+
+<h2>7. Ce qui n'est pas simulé (inutile de tester)</h2>
+<ul>
+<li>Fréquences militaires UHF, et celles au-dessus de 137 MHz : les radios de MSFS ne les accordent pas.</li>
+<li>Lecture des tirs du Rafale AzurPoly (MICA, Meteor, canon) : non lue ; pas de « Fox » ni de « splash ».</li>
+<li>Ami ou ennemi, autorisation de tir, procédures radio tactiques : absentes de l'Instruction 1950, donc non inventées.</li>
+<li>Deuxième avion d'une patrouille, séquencement de plusieurs avions au break, PAR/SRA d'un vol CAM I suivi dans la séquence IFR.</li>
+<li>Le circuit de Saint-Dizier (côté sud, main droite en piste 11) est une <b>hypothèse</b> signalée dans son profil.</li>
+</ul>
+
+<h2>8. Pour me signaler un problème</h2>
+<ul>
+<li>Le numéro du test (par exemple 6.9), ce que vous avez dit, ce que le contrôleur a répondu.</li>
+<li>Le régime affiché (VFR, IFR, CAM V, I ou T) et la fréquence accordée.</li>
+<li>Le fichier du jour dans <code>%LOCALAPPDATA%\StormATC\logs</code> (ou Paramètres &rarr; Diagnostic).</li>
+<li>Pour un PAR ou une situation tactique : la position approximative (distance et côté de l'axe, ou distance et cap de la cible).</li>
+</ul>
+
+<p class="small">Cartes : SIA, AIP France (cycle AIRAC 2026-10-01) ; ne jamais utiliser en vol réel. Données de la liste des aérodromes :
+Wikipédia (CC BY-SA 4.0).</p>
+
+</body>
+</html>
