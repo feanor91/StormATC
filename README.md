@@ -351,7 +351,7 @@ scripts/                    Build, test, installer, release and version scripts.
 tests/                      Domain, Application, and Infrastructure test suites.
 prompts/                    Controller prompts, edited without rebuilding.
 data/                       Fictional samples, the VFR aerodrome profiles and the list of French aerodromes.
-Cartes VAC/                 The SIA's VAC charts, as published (see "Aeronautical data and charts").
+Cartes VAC/                 Where the SIA's VAC charts are downloaded to (see "Aeronautical data and charts").
 docs/                       Architecture, setup and user documentation (some in French).
 website/                    The GitHub Pages site.
 ```
@@ -373,21 +373,23 @@ StormATC also ships **real aeronautical data for French aerodromes**. It is for 
 
 | What | Where | Source and conditions |
 | --- | --- | --- |
-| **VAC charts** (one PDF per aerodrome) | `Cartes VAC/`, installed with the application | **SIA** (Service de l'Information Aéronautique, DGAC), *AIP France*, VAC atlas, AIRAC cycle effective **2026-10-01**. Reproduced **as published, unaltered**. |
+| **VAC charts** (one PDF per aerodrome) | `Cartes VAC/`, **downloaded by StormATC on your request** (not shipped, not in this repository) | **SIA** (Service de l'Information Aéronautique, DGAC), *AIP France*, VAC atlas. Kept **as published, unaltered**; the AIRAC cycle and the download date are written in `Cartes VAC/_cycle.txt`. |
 | **VFR aerodrome profiles** | `data/vfr-profiles/` | Facts (services, frequencies, elevation, runways) read from the SIA's AIP France charts and eAIP pages, by hand or extracted by `scripts/extract_vac_profiles.py` and `scripts/extract_military_profiles.py`. A profile says which of the two it is. |
-| **List of French aerodromes** | `data/aerodromes-france.csv` | [Liste des aérodromes et aéroports en France](https://fr.wikipedia.org/wiki/Liste_des_a%C3%A9rodromes_et_a%C3%A9roports_en_France), Wikipedia, under the [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) licence; ICAO code, name and town only. |
+| **List of French aerodromes** | `data/aerodromes-france.csv` | [Liste des aérodromes et aéroports en France](https://fr.wikipedia.org/wiki/Liste_des_a%C3%A9rodromes_et_a%C3%A9roports_en_France), Wikipedia, under the [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) licence; ICAO code, name and town, plus a column saying whether the SIA publishes a VAC chart for it. |
 
 **About the SIA's data.** The charts and the AIP data are public data published by the SIA, reusable
 under the conditions of its [legal notice](https://www.sia.aviation-civile.gouv.fr/informationslegales)
 (article L321-2 of the French *Code des relations entre le public et l'administration*): the information must
 not be altered, its meaning must not be distorted, and **its source and the date of its last update must be
-quoted** — here, *SIA, AIP France, AIRAC cycle effective 2026-10-01*, also written in `Cartes VAC/_cycle.txt`
-and shown in Settings and in the panel. The SIA does not guarantee the accuracy of these documents and is not
+quoted** — StormATC writes *SIA, AIP France, AIRAC cycle effective …* in `Cartes VAC/_cycle.txt` and shows it in
+Settings and in the panel. The SIA does not guarantee the accuracy of these documents and is not
 liable for their use. StormATC is not endorsed by, or affiliated with, the SIA or the DGAC.
 
-**They go out of date.** The SIA publishes a new AIRAC cycle every 28 days. Update the charts from
-**Settings → VAC charts** in StormATC (it contacts `www.sia.aviation-civile.gouv.fr` only, when you press the
-button, and sends nothing about you or your flight), or with `scripts/Update-VacCharts.ps1`.
+**Getting and updating the charts.** Press **Settings → VAC charts → Update the charts from the SIA** in StormATC
+(with an empty folder it downloads them all; **Download the missing charts** fills the gaps), or run
+`scripts/Update-VacCharts.ps1 -IncludeMissing`. StormATC contacts `www.sia.aviation-civile.gouv.fr` only, when you
+press the button, and sends nothing about you or your flight. The SIA publishes a new AIRAC cycle every 28 days:
+update again to stay current.
 
 The StormATC licence (MIT) covers the code and the original content of this repository. It does **not** cover
 the SIA's charts, nor the Wikipedia list: those stay under the conditions above.

@@ -43,7 +43,8 @@ public sealed partial class SiaVacChartUpdater(
             }
         }
 
-        if (includeMissing)
+        // A folder with no chart to update is a folder to fill: there is nothing else an update could do.
+        if (includeMissing || wanted.Count == 0)
         {
             foreach (string icao in AerodromeCodes())
             {
@@ -164,7 +165,15 @@ public sealed partial class SiaVacChartUpdater(
 
         foreach (string line in File.ReadLines(list).Skip(1))
         {
-            string code = line.Split(';')[0].Trim().TrimStart('﻿');
+            string[] columns = line.Split(';');
+            string code = columns[0].Trim().TrimStart('﻿');
+
+            // The last column says whether the SIA publishes a VAC chart for the aerodrome.
+            if (columns.Length > 4 && columns[4].Trim().Equals("non", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
             if (code.Length == 4 && code.StartsWith("LF", StringComparison.Ordinal)
                 && code.All(char.IsAsciiLetterUpper))
             {

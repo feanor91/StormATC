@@ -363,7 +363,7 @@ scripts/                    Scripts de compilation, de test, d'installeur, de ve
 tests/                      Suites de tests Domain, Application et Infrastructure.
 prompts/                    Prompts des contrôleurs, modifiables sans recompiler.
 data/                       Exemples fictifs, profils VFR des aérodromes et liste des aérodromes français.
-Cartes VAC/                 Les cartes VAC du SIA, telles que publiées (voir « Données et cartes aéronautiques »).
+Cartes VAC/                 Où sont téléchargées les cartes VAC du SIA (voir « Données et cartes aéronautiques »).
 docs/                       Documentation d'architecture, d'installation et d'utilisation.
 website/                    Le site GitHub Pages.
 ```
@@ -386,22 +386,24 @@ simulation de vol uniquement : **aucune ne doit servir à naviguer en vol réel.
 
 | Quoi | Où | Source et conditions |
 | --- | --- | --- |
-| **Cartes VAC** (un PDF par aérodrome) | `Cartes VAC/`, installées avec l'application | **SIA** (Service de l'Information Aéronautique, DGAC), *AIP France*, atlas VAC, cycle AIRAC en vigueur le **2026-10-01**. Reproduites **telles que publiées, sans altération**. |
+| **Cartes VAC** (un PDF par aérodrome) | `Cartes VAC/`, **téléchargées par StormATC à votre demande** (ni livrées, ni dans ce dépôt) | **SIA** (Service de l'Information Aéronautique, DGAC), *AIP France*, atlas VAC. Conservées **telles que publiées, sans altération** ; le cycle AIRAC et la date de téléchargement sont écrits dans `Cartes VAC/_cycle.txt`. |
 | **Profils VFR des aérodromes** | `data/vfr-profiles/` | Faits (services, fréquences, altitude, pistes) lus sur les cartes et pages eAIP de l'AIP France du SIA, à la main ou extraits par `scripts/extract_vac_profiles.py` et `scripts/extract_military_profiles.py`. Chaque profil dit lequel des deux. |
-| **Liste des aérodromes français** | `data/aerodromes-france.csv` | [Liste des aérodromes et aéroports en France](https://fr.wikipedia.org/wiki/Liste_des_a%C3%A9rodromes_et_a%C3%A9roports_en_France), Wikipédia, sous licence [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr) ; code OACI, nom et commune seulement. |
+| **Liste des aérodromes français** | `data/aerodromes-france.csv` | [Liste des aérodromes et aéroports en France](https://fr.wikipedia.org/wiki/Liste_des_a%C3%A9rodromes_et_a%C3%A9roports_en_France), Wikipédia, sous licence [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr) ; code OACI, nom et commune, et une colonne disant si le SIA publie une carte VAC pour l'aérodrome. |
 
 **À propos des données du SIA.** Les cartes et les données de l'AIP sont des données publiques publiées par
 le SIA, réutilisables aux conditions de ses [mentions légales](https://www.sia.aviation-civile.gouv.fr/informationslegales)
 (article L321-2 du Code des relations entre le public et l'administration) : les informations ne doivent pas
 être altérées, leur sens ne doit pas être dénaturé, et **leur source et la date de leur dernière mise à jour
-doivent être mentionnées** — ici, *SIA, AIP France, cycle AIRAC en vigueur le 2026-10-01*, aussi écrit dans
-`Cartes VAC/_cycle.txt` et affiché dans les Paramètres et dans le panneau. Le SIA ne garantit pas
+doivent être mentionnées** — StormATC écrit *SIA, AIP France, cycle AIRAC en vigueur le …* dans
+`Cartes VAC/_cycle.txt` et l'affiche dans les Paramètres et dans le panneau. Le SIA ne garantit pas
 l'exactitude de ces documents et n'est pas responsable de leur usage. StormATC n'est ni approuvé par le SIA
 ou la DGAC, ni affilié à eux.
 
-**Elles périment.** Le SIA publie un nouveau cycle AIRAC tous les 28 jours. Mettez les cartes à jour depuis
-**Paramètres → Cartes VAC** dans StormATC (il contacte uniquement `www.sia.aviation-civile.gouv.fr`, quand
-vous appuyez sur le bouton, et n'envoie rien sur vous ni sur votre vol), ou avec `scripts/Update-VacCharts.ps1`.
+**Obtenir et mettre à jour les cartes.** Appuyez sur **Paramètres → Cartes VAC → Mettre à jour les cartes depuis
+le SIA** dans StormATC (avec un dossier vide, il les télécharge toutes ; **Télécharger les cartes manquantes**
+comble les trous), ou lancez `scripts/Update-VacCharts.ps1 -IncludeMissing`. StormATC contacte uniquement
+`www.sia.aviation-civile.gouv.fr`, quand vous appuyez sur le bouton, et n'envoie rien sur vous ni sur votre vol.
+Le SIA publie un nouveau cycle AIRAC tous les 28 jours : mettez à jour de nouveau pour rester à jour.
 
 La licence de StormATC (MIT) couvre le code et le contenu original de ce dépôt. Elle ne couvre **pas** les
 cartes du SIA ni la liste de Wikipédia : elles restent soumises aux conditions ci-dessus.

@@ -80,9 +80,9 @@
     <Content Include="..\..\data\aerodromes-france.csv" LinkBase="data">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <!-- The SIA's VAC charts, as published, with their source notice. They are published and packed in the
-         installer only: a development build uses the folder of the checkout. -->
-    <Content Include="..\..\Cartes VAC\AD-2.*.pdf;..\..\Cartes VAC\_cycle.txt;..\..\Cartes VAC\LISEZ-MOI.txt" LinkBase="Cartes VAC">
+    <!-- The charts folder holds the SIA's VAC charts, downloaded by StormATC on request (Settings > VAC charts):
+         the charts are not redistributed, only the notice that says where they come from. -->
+    <Content Include="..\..\Cartes VAC\LISEZ-MOI.txt" LinkBase="Cartes VAC">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>

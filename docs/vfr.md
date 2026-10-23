@@ -115,8 +115,9 @@ Pour ajouter un aérodrome, copier `LFPL.json` et remplir : `icao`, `name`, `rep
 `circuit.sideBearingDegrees` et `preferredQfu`. Les champs de texte libre ne sont que de la
 documentation. Indiquer la source et la date d'application dans `source`.
 
-Les cartes VAC du SIA sont livrées **telles que publiées** dans `Cartes VAC/` (dépôt et installeur), avec leur
-source et leur cycle AIRAC (`_cycle.txt`, `LISEZ-MOI.txt`) : voir « Données et cartes aéronautiques » dans le README.
+Les cartes VAC du SIA ne sont pas livrées : StormATC les télécharge **telles que publiées** dans `Cartes VAC/`
+(Paramètres → Cartes VAC), avec leur source et leur cycle AIRAC (`_cycle.txt`, `LISEZ-MOI.txt`) : voir « Données et
+cartes aéronautiques » dans le README.
 Les profils ne contiennent que des faits retranscrits.
 
 **Profils fournis** (AIP France AD 2, relus à la main depuis les fiches du SIA) : Lognes (LFPL),

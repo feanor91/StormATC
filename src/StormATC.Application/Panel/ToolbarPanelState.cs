@@ -261,7 +261,7 @@ public static class ToolbarPanelStateBuilder
             "La voix n'a pas pu être écartée. Voir la page Diagnostic de StormATC.",
             new ToolbarPanelChartLabels(
                 "Cartes",
-                "Aucune carte. Déposez vos cartes (PDF) dans le dossier : {0}",
+                "Aucune carte. Téléchargez les cartes du SIA depuis les Paramètres de StormATC (Cartes VAC), ou déposez vos PDF dans le dossier : {0}",
                 "← Cartes",
                 "Page",
                 "sur",
@@ -297,7 +297,7 @@ public static class ToolbarPanelStateBuilder
             "The voice could not be set aside. See StormATC's Diagnostics page.",
             new ToolbarPanelChartLabels(
                 "Charts",
-                "No chart. Put your charts (PDF) in the folder: {0}",
+                "No chart. Download the SIA charts from StormATC's Settings (VAC charts), or put your PDFs in the folder: {0}",
                 "← Charts",
                 "Page",
                 "of",

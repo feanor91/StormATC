@@ -86,7 +86,7 @@ if ($IncludeMissing) {
     $list = Join-Path $repository 'data\aerodromes-france.csv'
     if (-not (Test-Path -LiteralPath $list)) { throw "The list of aerodromes is missing: $list" }
     Import-Csv -LiteralPath $list -Delimiter ';' | ForEach-Object {
-        if ($_.OACI -match '^L[FG][A-Z]{2}$') { [void] $wanted.Add($_.OACI) }
+        if ($_.OACI -match '^L[FG][A-Z]{2}$' -and $_.VAC -ne 'non') { [void] $wanted.Add($_.OACI) }
     }
 }
 

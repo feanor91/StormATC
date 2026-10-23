@@ -5,17 +5,25 @@ public releases.
 
 ## Unreleased
 
+### Changed
+
+- The SIA's VAC charts are not shipped in the installer nor kept in the repository: Settings > VAC charts downloads
+  them (all of them into an empty folder), so the installer stays small and the charts are always the current AIRAC
+  cycle. Version 0.9.0 was never published.
+
 ## 0.9.0 - 2026-10-23
 
 ### Added
 
-- The SIA's VAC charts (416 PDF, AIRAC cycle effective 2026-10-01) are now in the repository and in the installer,
-  as published and unaltered, with their source notice (`Cartes VAC/LISEZ-MOI.txt`, `_cycle.txt`). The README
-  (English and French) says where the data comes from and on what conditions (SIA legal notice; Wikipedia list under
-  CC BY-SA 4.0).
-- The list of French aerodromes moved to `data/aerodromes-france.csv` and is installed with the application.
+- Where the data comes from, in the README (English and French): the SIA's charts and AIP data (reusable unaltered,
+  with source and date quoted; SIA legal notice) and the list of aerodromes (Wikipedia, CC BY-SA 4.0). The charts are
+  not shipped nor in the repository: StormATC downloads them on request, and `Cartes VAC/LISEZ-MOI.txt` says where
+  they come from.
+- The list of French aerodromes, with a column saying whether the SIA publishes a VAC chart for each, is installed in
+  `data/aerodromes-france.csv`.
 - Settings > VAC charts: shows the source and AIRAC cycle of the charts and updates them from the SIA
-  (**Update the charts from the SIA**, **Download the missing charts**), replacing only the charts that changed. The
+  (**Update the charts from the SIA**, **Download the missing charts**), replacing only the charts that changed; with
+  an empty folder it downloads them all. The
   panel's Charts tab shows the same source line. It contacts `www.sia.aviation-civile.gouv.fr` only, on request.
 
 ## 0.8.0 - 2026-10-23

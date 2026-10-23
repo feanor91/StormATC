@@ -3,43 +3,45 @@ CARTES VAC / VAC CHARTS
 
 FR
 --
-Les cartes de ce dossier (AD-2.<OACI>.pdf) sont les cartes d'aerodrome VAC de l'AIP France,
-publiees par le Service de l'Information Aeronautique (SIA, DGAC) :
-https://www.sia.aviation-civile.gouv.fr/
+Ce dossier reçoit les cartes d'aerodrome VAC (AD-2.<OACI>.pdf) de l'AIP France, publiees par le Service de
+l'Information Aeronautique (SIA, DGAC) : https://www.sia.aviation-civile.gouv.fr/
+
+StormATC ne les livre pas : il les telecharge a votre demande (Parametres > Cartes VAC > Mettre a jour les
+cartes depuis le SIA), ou avec scripts/Update-VacCharts.ps1. Vous pouvez aussi y deposer vos propres PDF.
 
   * Source : SIA - AIP France, atlas VAC.
-  * Cycle AIRAC en vigueur le : 2026-10-01 (voir _cycle.txt pour la date de telechargement).
-  * Les cartes sont reproduites TELLES QUE PUBLIEES, sans alteration.
+  * Le cycle AIRAC et la date de telechargement sont ecrits dans _cycle.txt.
+  * Les cartes sont conservees TELLES QUE PUBLIEES, sans alteration.
 
 Ce sont des donnees publiques reutilisables aux conditions fixees par le SIA (mentions legales,
-https://www.sia.aviation-civile.gouv.fr/informationslegales ; article L321-2 du Code des relations
-entre le public et l'administration) : ne pas alterer les informations, ne pas denaturer leur sens,
-citer la source et la date de derniere mise a jour. Le SIA ne garantit pas l'exactitude de ces
-documents et sa responsabilite n'est pas engagee.
+https://www.sia.aviation-civile.gouv.fr/informationslegales ; article L321-2 du Code des relations entre le
+public et l'administration) : ne pas alterer les informations, ne pas denaturer leur sens, citer la source et la
+date de derniere mise a jour. Le SIA ne garantit pas l'exactitude de ces documents et sa responsabilite n'est
+pas engagee.
 
-ATTENTION : ces cartes sont fournies pour la SIMULATION DE VOL uniquement. Elles sont perimees
-au prochain cycle AIRAC (tous les 28 jours). Ne les utilisez JAMAIS pour naviguer en vol reel.
-StormATC peut les mettre a jour depuis le SIA (Parametres > Cartes VAC), ou avec
-scripts/Update-VacCharts.ps1.
+ATTENTION : ces cartes sont destinees a la SIMULATION DE VOL uniquement. Elles perimant a chaque cycle AIRAC
+(tous les 28 jours). Ne les utilisez JAMAIS pour naviguer en vol reel.
 
 La licence de StormATC (MIT) ne couvre pas ces cartes : elles restent soumises aux conditions du SIA.
 
 EN
 --
-The charts in this folder (AD-2.<ICAO>.pdf) are the VAC aerodrome charts of the AIP France, published by the
-Service de l'Information Aeronautique (SIA, DGAC): https://www.sia.aviation-civile.gouv.fr/
+This folder receives the VAC aerodrome charts (AD-2.<ICAO>.pdf) of the AIP France, published by the Service de
+l'Information Aeronautique (SIA, DGAC): https://www.sia.aviation-civile.gouv.fr/
+
+StormATC does not ship them: it downloads them when you ask (Settings > VAC charts > Update the charts from the
+SIA), or with scripts/Update-VacCharts.ps1. You can also drop your own PDFs here.
 
   * Source: SIA - AIP France, VAC atlas.
-  * AIRAC cycle effective: 2026-10-01 (see _cycle.txt for the download date).
-  * The charts are reproduced AS PUBLISHED, unaltered.
+  * The AIRAC cycle and the download date are written in _cycle.txt.
+  * The charts are kept AS PUBLISHED, unaltered.
 
 They are public data that may be reused on the conditions set by the SIA (legal notice, article L321-2 of the
 French Code of relations between the public and the administration): do not alter the information, do not
-distort its meaning, quote the source and the date of the last update. The SIA does not guarantee the accuracy
-of these documents and accepts no liability.
+distort its meaning, quote the source and the date of the last update. The SIA does not guarantee the accuracy of
+these documents and accepts no liability.
 
-WARNING: these charts are provided for FLIGHT SIMULATION only. They go out of date at the next AIRAC cycle
-(every 28 days). NEVER use them for real-world navigation. StormATC can update them from the SIA (Settings >
-VAC charts), or with scripts/Update-VacCharts.ps1.
+WARNING: these charts are for FLIGHT SIMULATION only. They go out of date at every AIRAC cycle (every 28 days).
+NEVER use them for real-world navigation.
 
 StormATC's licence (MIT) does not cover these charts: they remain subject to the SIA's conditions.
