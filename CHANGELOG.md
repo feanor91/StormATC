@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.6.0 - 2026-10-23
+
 ### Added
 
 - Military regimes **CAM V** (Victor, à vue) and **CAM I** (India, aux instruments), selectable on the flight plan
