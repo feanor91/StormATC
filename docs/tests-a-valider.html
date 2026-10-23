@@ -46,6 +46,7 @@ Pour un KO, envoyez-moi : la ligne du test, ce que vous avez dit, ce que StormAT
 <tr><td>ATIS : silence quand on parle sur l'ATIS</td><td class="ok">StormATC ne répond pas sur la fréquence ATIS.</td></tr>
 <tr><td>Accord manuel d'une fréquence</td><td class="ok">Fonctionne.</td></tr>
 <tr><td>Cartes VAC : mise à jour depuis le SIA</td><td class="ok">&laquo;&nbsp;Semble fonctionner&nbsp;&raquo; (à confirmer en 1.1 ci-dessous).</td></tr>
+<tr><td>Cartes VAC : téléchargement complet dans un dossier vide (test 1.2)</td><td class="ok">Les cartes se téléchargent bien.</td></tr>
 <tr><td>Onglet Cartes du panneau : ouverture d'un PDF, défilement de la liste</td><td class="ok">Le défilement ne remonte plus ; cartes ouvertes &laquo;&nbsp;ça a l'air bien&nbsp;&raquo;.</td></tr>
 </table>
 
@@ -53,7 +54,7 @@ Pour un KO, envoyez-moi : la ligne du test, ce que vous avez dit, ce que StormAT
 <table>
 <tr><td class="th"></td><td class="th">N°</td><td class="th">Action</td><td class="th">Résultat attendu</td><td class="th">Note</td></tr>
 <tr><td class="c">&#9744;</td><td class="id">1.1</td><td class="a">Paramètres &rarr; onglet <b>Cartes VAC</b> : lire la source ; <b>Mettre à jour les cartes depuis le SIA</b>.</td><td class="r">La source et le cycle AIRAC s'affichent ; un compte rendu « N remplacées, N ajoutées, N inchangées… » à la fin ; le cycle indiqué est 2026-10-01 (ou le suivant).</td><td class="n"></td></tr>
-<tr><td class="c">&#9744;</td><td class="id">1.2</td><td class="a">Vider le dossier <code>Cartes VAC</code> (garder une copie), puis relancer « Mettre à jour ».</td><td class="r">Il télécharge tout (environ 416 cartes, quelques minutes). Rien n'est perdu si vous restaurez la copie.</td><td class="n"></td></tr>
+<tr><td class="c ok">&#9745;</td><td class="id">1.2</td><td class="a">Vider le dossier <code>Cartes VAC</code> (garder une copie), puis relancer « Mettre à jour ».</td><td class="r">Il télécharge tout (environ 416 cartes, quelques minutes). Rien n'est perdu si vous restaurez la copie.</td><td class="n ok">Validé par vous (23/10)</td></tr>
 <tr><td class="c">&#9744;</td><td class="id">1.3</td><td class="a">Dans MSFS, panneau StormATC &rarr; onglet <b>Cartes</b> (avec plus de 15 cartes).</td><td class="r">Cartes du plan de vol d'abord, puis « Dernières cartes », puis des tuiles de lettres (A, B, C…) avec un nombre ; une lettre ouvre la liste de ses terrains, « &larr; Cartes » revient. Les noms d'aéroports sont affichés. La ligne de source SIA est en bas.</td><td class="n"></td></tr>
 <tr><td class="c">&#9744;</td><td class="id">1.4</td><td class="a">Ouvrir une carte, changer de page, zoomer, revenir.</td><td class="r">La carte s'affiche lisible ; page suivante/précédente, zoom +/&minus; et « Ajuster » fonctionnent.</td><td class="n"></td></tr>
 <tr><td class="c">&#9744;</td><td class="id">1.5</td><td class="a">Avec un plan de vol chargé : ouvrir l'onglet Cartes.</td><td class="r">La carte de l'aérodrome d'arrivée s'ouvre toute seule, une fois (pas en boucle).</td><td class="n"></td></tr>
