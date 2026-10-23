@@ -52,6 +52,7 @@ public sealed record ToolbarPanelFrequency(string Service, string Frequency, str
 /// <param name="Aerodrome">The base the flight is at, or empty.</param>
 /// <param name="Frequencies">The VHF frequencies of the base.</param>
 /// <param name="Radar">The state of a PAR or SRA in progress, or empty.</param>
+/// <param name="Marsa">The MARSA in force, or empty.</param>
 /// <param name="Sections">The military calls, by theme.</param>
 /// <param name="Labels">The texts of the page.</param>
 public sealed record ToolbarPanelMilitary(
@@ -59,6 +60,7 @@ public sealed record ToolbarPanelMilitary(
     string Aerodrome,
     IReadOnlyList<ToolbarPanelFrequency> Frequencies,
     string Radar,
+    string Marsa,
     IReadOnlyList<ToolbarPanelStage> Sections,
     ToolbarPanelMilitaryLabels Labels);
 
@@ -70,6 +72,8 @@ public sealed record ToolbarPanelMilitary(
 /// <param name="VhfOnly">The reminder that MSFS has no UHF radio.</param>
 /// <param name="Radar">Title of the radar approach line.</param>
 /// <param name="NoRadar">Shown when no radar approach is in progress.</param>
+/// <param name="Marsa">Title of the MARSA line.</param>
+/// <param name="NoMarsa">Shown when no MARSA is in force.</param>
 public sealed record ToolbarPanelMilitaryLabels(
     string Tab,
     string Regime,
@@ -77,7 +81,9 @@ public sealed record ToolbarPanelMilitaryLabels(
     string NoFrequencies,
     string VhfOnly,
     string Radar,
-    string NoRadar);
+    string NoRadar,
+    string Marsa,
+    string NoMarsa);
 
 /// <summary>The controller voice that spoke last.</summary>
 /// <param name="Description">A short description, such as <c>fr_FR-mls-medium, speaker 42</c>.</param>
@@ -292,6 +298,11 @@ public static class ToolbarPanelStateBuilder
             profile is null ? string.Empty : string.IsNullOrWhiteSpace(profile.Name) ? profile.Icao : profile.Name + " (" + profile.Icao + ")",
             frequencies,
             radar,
+            session.Marsa is { } marsa
+                ? "MARSA " + (marsa.Kind == Domain.Approach.MarsaKind.Departure ? (french ? "départ" : "departure") : (french ? "approche" : "approach"))
+                    + " : " + (french ? "patrouille de " : "flight of ") + marsa.FlightSize
+                    + (marsa.TrailMiles is int trail ? (french ? ", trail " : ", trail ") + trail + " NM" : string.Empty)
+                : string.Empty,
             [
                 .. PhraseologyCatalog.MilitarySections(session.Language, spoken)
                     .Select(section => new ToolbarPanelStage(section.Key, section.Title, section.Examples)),
@@ -304,7 +315,9 @@ public static class ToolbarPanelStateBuilder
                     "Aucune fréquence dans le profil de cette base.",
                     "Les radios de MSFS vont de 118 à 137 MHz : les fréquences UHF et celles au-dessus de 137 MHz ne peuvent pas être accordées.",
                     "Approche radar",
-                    "Aucune approche radar en cours.")
+                    "Aucune approche radar en cours.",
+                    "MARSA",
+                    "Aucun MARSA en cours.")
                 : new ToolbarPanelMilitaryLabels(
                     "Military",
                     "Regime",
@@ -312,7 +325,9 @@ public static class ToolbarPanelStateBuilder
                     "No frequency in this base's profile.",
                     "MSFS radios cover 118 to 137 MHz: UHF frequencies and those above 137 MHz cannot be tuned.",
                     "Radar approach",
-                    "No radar approach in progress."));
+                    "No radar approach in progress.",
+                    "MARSA",
+                    "No MARSA in force."));
     }
 
     private static ToolbarPanelTurn ToTurn(ConversationTurn turn, IAtcPhraseology say, bool french)

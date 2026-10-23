@@ -421,6 +421,7 @@ cartes du SIA ni la liste de Wikipédia : elles restent soumises aux conditions 
 | [simbrief-integration.md](docs/simbrief-integration.md) | Importer un plan de vol |
 | [development.md](docs/development.md) | Compilation, tests, configuration, standards de code |
 | [contributor-quickstart.md](docs/contributor-quickstart.md) | Fork, mise en place, premières modifications et pull requests |
+| [militaire.md](docs/militaire.md) | La partie militaire expliquée : CAM V/I/T, QFE, break, PAR, SRA, MARSA |
 | [privacy-and-api-keys.md](docs/privacy-and-api-keys.md) | Ce qui est stocké, ce qui est envoyé, comment les clés sont conservées |
 | [french-and-local-voice.md](docs/french-and-local-voice.md) | Radio en français (phraséologie DSNA) et voix locale avec Whisper et Piper |
 | [vfr.md](docs/vfr.md) | Vol VFR sur aérodrome contrôlé, et le plan de vol fait dans l'EFB |

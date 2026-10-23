@@ -57,6 +57,12 @@ public enum FlightRules
     CamV,
 
     /// <summary>
+    /// French military air traffic regime CAM T (Tango, tactique): a tactical flight, outside the air traffic
+    /// service: no clearance and no separation from the controller.
+    /// </summary>
+    CamT,
+
+    /// <summary>
     /// French military air traffic regime CAM I (India, aux instruments): the military counterpart of IFR,
     /// handled by the base's approach and tower with military phraseology.
     /// </summary>
@@ -73,12 +79,13 @@ public static class FlightRulesExtensions
     public static bool IsInstrument(this FlightRules rules) => rules is FlightRules.Ifr or FlightRules.CamI;
 
     /// <summary>True for the French military regimes (CAM V, CAM I).</summary>
-    public static bool IsMilitary(this FlightRules rules) => rules is FlightRules.CamV or FlightRules.CamI;
+    public static bool IsMilitary(this FlightRules rules) => rules is FlightRules.CamV or FlightRules.CamI or FlightRules.CamT;
 
     /// <summary>The label said on the radio: "CAM Victor" or "CAM India" (VFR and IFR for the civil rules).</summary>
     public static string ToSpokenLabel(this FlightRules rules) => rules switch
     {
         FlightRules.CamV => "CAM Victor",
+        FlightRules.CamT => "CAM Tango",
         FlightRules.CamI => "CAM India",
         _ => rules.ToLabel(),
     };
@@ -89,6 +96,7 @@ public static class FlightRulesExtensions
         FlightRules.Vfr => "VFR",
         FlightRules.CamV => "CAM V",
         FlightRules.CamI => "CAM I",
+        FlightRules.CamT => "CAM T",
         _ => "IFR",
     };
 
@@ -98,6 +106,7 @@ public static class FlightRulesExtensions
         "VFR" => FlightRules.Vfr,
         "CAM V" => FlightRules.CamV,
         "CAM I" => FlightRules.CamI,
+        "CAM T" => FlightRules.CamT,
         _ => FlightRules.Ifr,
     };
 }
@@ -169,6 +178,9 @@ public enum PilotIntentType
 
     /// <summary>The pilot reports passing the initial point of a military arrival ("passant initiale, QFE ...").</summary>
     ReportInitial,
+
+    /// <summary>The pilot of a flight asks for a MARSA departure or approach (the flight keeps its own separation).</summary>
+    RequestMarsa,
 
     /// <summary>The pilot asks for a PAR or SRA radar approach.</summary>
     RequestRadarApproach,

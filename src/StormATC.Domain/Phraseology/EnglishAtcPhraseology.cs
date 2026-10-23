@@ -277,6 +277,16 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
         $"QFE {SpokenNumbers.DigitsIndividually(qfeHectopascals.ToString(System.Globalization.CultureInfo.InvariantCulture))}";
 
     /// <inheritdoc />
+    public string MarsaApproved(Callsign callsign, Approach.MarsaKind kind, RunwayIdentifier runway, int initialHeading) =>
+        kind == Approach.MarsaKind.Departure
+            ? $"{callsign.ToSpoken()}, MARSA departure {runway.ToSpoken()} approved, initial heading {SpokenNumbers.DigitsIndividually(initialHeading, 3)}."
+            : $"{callsign.ToSpoken()}, MARSA approach {runway.ToSpoken()} approved.";
+
+    /// <inheritdoc />
+    public string TacticalRegime(Callsign callsign) =>
+        $"{callsign.ToSpoken()}, you are CAM Tango, tactical flight, outside the air traffic service, call to resume CAM Victor or CAM India.";
+
+    /// <inheritdoc />
     public string RegimeChange(Callsign callsign, string regime) =>
         $"{callsign.ToSpoken()}, you are now {regime}.";
 

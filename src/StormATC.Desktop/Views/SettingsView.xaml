@@ -758,36 +758,8 @@
                           Style="{StaticResource PrimaryButtonStyle}"
                           Margin="0,0,8,0" />
                   <Button Content="Open the panel in a browser"
-                          Command="{Binding OpenPanelInBrowserCommand}"
-                          Margin="0,0,8,0" />
-                  <Button Content="Open the charts folder"
-                          Command="{Binding OpenChartsFolderCommand}" />
+                          Command="{Binding OpenPanelInBrowserCommand}" />
                 </WrapPanel>
-                <TextBlock Text="VAC charts"
-                           Style="{StaticResource SectionHeaderStyle}"
-                           Margin="0,14,0,0" />
-                <TextBlock Text="The VAC charts are published by the SIA (Service de l'Information Aéronautique, AIP France) and kept as published. The buttons below contact www.sia.aviation-civile.gouv.fr only, when you press them, and send nothing about you or your flight. For flight simulation only: never use these charts for real navigation."
-                           Style="{StaticResource SecondaryTextStyle}"
-                           TextWrapping="Wrap"
-                           Margin="0,0,0,8" />
-                <TextBlock Text="{Binding ChartsSource}"
-                           Style="{StaticResource SecondaryTextStyle}"
-                           TextWrapping="Wrap"
-                           Margin="0,0,0,8" />
-                <WrapPanel>
-                  <Button Content="Update the charts from the SIA"
-                          Command="{Binding UpdateChartsCommand}"
-                          Style="{StaticResource PrimaryButtonStyle}"
-                          Margin="0,0,8,0" />
-                  <Button Content="Download the missing charts"
-                          Command="{Binding DownloadMissingChartsCommand}" />
-                </WrapPanel>
-                <TextBlock Text="{Binding ChartsUpdateStatus}"
-                           Style="{StaticResource SecondaryTextStyle}"
-                           TextWrapping="Wrap"
-                           Margin="0,8,0,0"
-                           Visibility="{Binding ChartsUpdateStatus,
-                                                Converter={StaticResource StringToVisibility}}" />
                 <TextBlock Text="{Binding PanelInstallResult}"
                            Style="{StaticResource SecondaryTextStyle}"
                            TextWrapping="Wrap"
@@ -1072,6 +1044,48 @@
                              Margin="0,5,0,0" />
                 </StackPanel>
               </Grid>
+            </Border>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+
+      <!-- ==================== VAC charts ==================== -->
+      <TabItem Header="VAC charts"
+               Style="{StaticResource SettingsTabItemStyle}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
+                      Padding="0,0,8,18">
+          <StackPanel MaxWidth="1040" HorizontalAlignment="Left">
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
+              <StackPanel>
+                <TextBlock Text="VAC charts"
+                           Style="{StaticResource SectionHeaderStyle}" />
+                <TextBlock Text="The VAC charts are published by the SIA (Service de l'Information Aéronautique, AIP France) and kept as published. The buttons below contact www.sia.aviation-civile.gouv.fr only, when you press them, and send nothing about you or your flight. For flight simulation only: never use these charts for real navigation."
+                           Style="{StaticResource SecondaryTextStyle}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,8" />
+                <TextBlock Text="{Binding ChartsSource}"
+                           Style="{StaticResource SecondaryTextStyle}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,8" />
+                <WrapPanel>
+                  <Button Content="Update the charts from the SIA"
+                          Command="{Binding UpdateChartsCommand}"
+                          Style="{StaticResource PrimaryButtonStyle}"
+                          Margin="0,0,8,0" />
+                  <Button Content="Download the missing charts"
+                          Command="{Binding DownloadMissingChartsCommand}"
+                          Margin="0,0,8,0" />
+                  <Button Content="Open the charts folder"
+                          Command="{Binding OpenChartsFolderCommand}" />
+                </WrapPanel>
+                <TextBlock Text="{Binding ChartsUpdateStatus}"
+                           Style="{StaticResource SecondaryTextStyle}"
+                           TextWrapping="Wrap"
+                           Margin="0,8,0,0"
+                           Visibility="{Binding ChartsUpdateStatus,
+                                                Converter={StaticResource StringToVisibility}}" />
+              </StackPanel>
             </Border>
           </StackPanel>
         </ScrollViewer>

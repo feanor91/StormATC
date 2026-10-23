@@ -287,6 +287,12 @@ public sealed record AtcDecision
     /// <summary>The radar approach to start or update, when this decision does.</summary>
     public Approach.RadarApproachState? NewRadarApproach { get; init; }
 
+    /// <summary>The MARSA to put in force, when this decision does.</summary>
+    public Approach.MarsaState? NewMarsa { get; init; }
+
+    /// <summary>True when the MARSA ends with this decision.</summary>
+    public bool EndsMarsa { get; init; }
+
     /// <summary>True when the radar approach ends with this decision.</summary>
     public bool EndsRadarApproach { get; init; }
 
@@ -355,6 +361,8 @@ public sealed record AtcDecision
         || NewFlightRules is not null
         || NewCircuitLeg is not null
         || NewRadarApproach is not null
+        || NewMarsa is not null
+        || EndsMarsa
         || EndsRadarApproach
         || NewTouchAndGoRequested is not null
         || NewManoeuvre is not null

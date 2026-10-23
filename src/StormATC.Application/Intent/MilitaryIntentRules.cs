@@ -17,7 +17,12 @@ internal static partial class MilitaryIntentRules
             return FlightRules.CamV;
         }
 
-        return CamIndia().IsMatch(transcript) ? FlightRules.CamI : null;
+        if (CamIndia().IsMatch(transcript))
+        {
+            return FlightRules.CamI;
+        }
+
+        return CamTango().IsMatch(transcript) ? FlightRules.CamT : null;
     }
 
     /// <summary>
@@ -96,6 +101,42 @@ internal static partial class MilitaryIntentRules
 
     [GeneratedRegex(@"\bcam (?:victor|v)\b")]
     private static partial Regex CamVictor();
+
+    [GeneratedRegex(@"\bcam (?:tango|t)\b")]
+    private static partial Regex CamTango();
+
+    /// <summary>True when the pilot asks for a MARSA departure or approach.</summary>
+    public static bool AsksForMarsa(string transcript) =>
+        MarsaWord().IsMatch(transcript) && RequestWord().IsMatch(transcript);
+
+    /// <summary>True for a MARSA approach (otherwise it is a departure).</summary>
+    public static bool MarsaIsApproach(string transcript) => MarsaApproachWord().IsMatch(transcript);
+
+    /// <summary>The number of aircraft the pilot gave ("flight of 2"), or null.</summary>
+    public static int? FlightSizeIn(string transcript)
+    {
+        Match match = FlightOf().Match(transcript);
+        return match.Success && int.TryParse(match.Groups[1].Value, out int size) ? size : null;
+    }
+
+    /// <summary>The trail distance the pilot gave ("trail 3 miles"), or null.</summary>
+    public static int? TrailMilesIn(string transcript)
+    {
+        Match match = TrailMiles().Match(transcript);
+        return match.Success && int.TryParse(match.Groups[1].Value, out int miles) ? miles : null;
+    }
+
+    [GeneratedRegex(@"\bmarsa\b")]
+    private static partial Regex MarsaWord();
+
+    [GeneratedRegex(@"\bmarsa (?:approach|approche)\b")]
+    private static partial Regex MarsaApproachWord();
+
+    [GeneratedRegex(@"\bflight of (\d+)\b")]
+    private static partial Regex FlightOf();
+
+    [GeneratedRegex(@"\btrail (\d+)\b")]
+    private static partial Regex TrailMiles();
 
     [GeneratedRegex(@"\bcam (?:india|i)\b")]
     private static partial Regex CamIndia();

@@ -382,6 +382,15 @@ public sealed class PilotTransmissionCoordinator(
             session = session.WithRadarApproach(null);
         }
 
+        if (decision.NewMarsa is Domain.Approach.MarsaState marsa)
+        {
+            session = session.WithMarsa(marsa);
+        }
+        else if (decision.EndsMarsa)
+        {
+            session = session.WithMarsa(null);
+        }
+
         if (decision.NewTouchAndGoRequested is bool touchAndGo)
         {
             session = session.WithTouchAndGoRequested(touchAndGo);

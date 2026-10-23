@@ -407,6 +407,7 @@ the SIA's charts, nor the Wikipedia list: those stay under the conditions above.
 | [simbrief-integration.md](docs/simbrief-integration.md) | Importing a flight plan |
 | [development.md](docs/development.md) | Building, testing, configuration, coding standards |
 | [contributor-quickstart.md](docs/contributor-quickstart.md) | Forking, setup, first changes, and pull requests |
+| [militaire.md](docs/militaire.md) | The military side explained: CAM V/I/T, QFE, break, PAR, SRA, MARSA (in French) |
 | [privacy-and-api-keys.md](docs/privacy-and-api-keys.md) | What is stored, what is sent, how keys are held |
 | [french-and-local-voice.md](docs/french-and-local-voice.md) | French radio (DSNA phraseology) and local voice with Whisper and Piper (in French) |
 | [vfr.md](docs/vfr.md) | VFR flights on a controlled aerodrome, and the flight plan made in the EFB (in French) |

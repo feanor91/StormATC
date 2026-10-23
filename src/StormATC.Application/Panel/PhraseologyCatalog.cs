@@ -240,10 +240,16 @@ public static class PhraseologyCatalog
                     new("Pendant le SRA (sans répondre)", string.Empty, $"{cs}, sur l'axe, distance quatre milles, altitude recommandée XXXX pieds."),
                     new("Fin de SRA", $"{cs}, piste en vue.", $"{cs}, piste XX, autorisé atterrissage."),
                 ]),
+                new("marsa", "MARSA (patrouille)",
+                [
+                    new("MARSA au départ", $"{cs}, patrouille de deux, demande MARSA départ piste XX.", $"{cs}, MARSA départ piste XX approuvé, initial cap XXX."),
+                    new("MARSA à l'arrivée", $"{cs}, patrouille de deux, demande MARSA approche, trail trois milles.", $"{cs}, MARSA approche piste XX approuvé."),
+                ]),
                 new("regime", "Régime CAM",
                 [
                     new("Passer en CAM India", $"{cs}, demandons CAM India.", $"{cs}, vous êtes maintenant en CAM India."),
                     new("Passer en CAM Victor", $"{cs}, demandons CAM Victor.", $"{cs}, vous êtes maintenant en CAM Victor."),
+                    new("Passer en CAM Tango (vol tactique)", $"{cs}, demandons CAM Tango.", $"{cs}, vous êtes en CAM Tango, vol tactique, hors service de la circulation aérienne, rappelez pour reprendre CAM Victor ou CAM India."),
                 ]),
             ]
             :
@@ -268,10 +274,16 @@ public static class PhraseologyCatalog
                     new("During the SRA (do not answer)", string.Empty, $"{cs}, on centreline, four miles from touchdown, recommended altitude XXXX."),
                     new("End of SRA", $"{cs}, runway in sight.", $"{cs}, runway XX, cleared to land."),
                 ]),
+                new("marsa", "MARSA (formation)",
+                [
+                    new("MARSA departure", $"{cs}, flight of two, request MARSA departure runway XX.", $"{cs}, MARSA departure runway XX approved, initial heading XXX."),
+                    new("MARSA approach", $"{cs}, flight of two, request MARSA approach, trail three miles.", $"{cs}, MARSA approach runway XX approved."),
+                ]),
                 new("regime", "CAM regime",
                 [
                     new("Change to CAM India", $"{cs}, request CAM India.", $"{cs}, you are now CAM India."),
                     new("Change to CAM Victor", $"{cs}, request CAM Victor.", $"{cs}, you are now CAM Victor."),
+                    new("Change to CAM Tango (tactical flight)", $"{cs}, request CAM Tango.", $"{cs}, you are CAM Tango, tactical flight, outside the air traffic service, call to resume CAM Victor or CAM India."),
                 ]),
             ];
     }

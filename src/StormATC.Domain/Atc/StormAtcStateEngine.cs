@@ -161,6 +161,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             PilotIntentType.RequestDeviation => HandleDeviationRequest(context),
             PilotIntentType.RequestRegimeChange => HandleRegimeChange(context, intent),
             PilotIntentType.ReportInitial => HandleInitialReport(context, intent),
+            PilotIntentType.RequestMarsa => HandleMarsaRequest(context, intent),
             PilotIntentType.RequestRadarApproach => HandleRadarApproachRequest(context, intent),
             PilotIntentType.RequestApproach => HandleApproachRequest(context, intent),
             PilotIntentType.ReportEstablished => HandleEstablishedReport(context, intent),
@@ -189,6 +190,12 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
         if (incursion is not null)
         {
             return incursion;
+        }
+
+        // --- A MARSA approach ends when the flight has landed. ------------------------------------
+        if (session.Marsa is { Kind: Domain.Approach.MarsaKind.Approach } && aircraft.IsOnGround)
+        {
+            return new AtcDecision { Accepted = true, ResponseType = AtcResponseType.None, EndsMarsa = true, FallbackPhraseology = string.Empty };
         }
 
         // --- A radar approach in progress (PAR, SRA): the controller talks the aircraft down. ------

@@ -568,6 +568,23 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
     public string Qfe(int qfeHectopascals) => $"QFE {FrenchSpokenNumbers.Cardinal(qfeHectopascals)}";
 
     /// <inheritdoc />
+    public string MarsaApproved(Callsign callsign, Approach.MarsaKind kind, RunwayIdentifier runway, int initialHeading) =>
+        kind == Approach.MarsaKind.Departure
+            ? Phrase(callsign)
+                .Add($"MARSA départ {SpeakRunway(runway)} approuvé")
+                .Add($"initial cap {FrenchSpokenNumbers.Heading(initialHeading)}")
+                .Build()
+            : Phrase(callsign).Add($"MARSA approche {SpeakRunway(runway)} approuvé").Build();
+
+    /// <inheritdoc />
+    public string TacticalRegime(Callsign callsign) =>
+        Phrase(callsign)
+            .Add("vous êtes en CAM Tango")
+            .Add("vol tactique, hors service de la circulation aérienne")
+            .Add("rappelez pour reprendre CAM Victor ou CAM India")
+            .Build();
+
+    /// <inheritdoc />
     public string RegimeChange(Callsign callsign, string regime) =>
         Phrase(callsign).Add($"vous êtes maintenant en {regime}").Build();
 

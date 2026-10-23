@@ -171,6 +171,17 @@ public interface IAtcPhraseology
     /// <param name="qfeHectopascals">The QFE in hectopascals.</param>
     string Qfe(int qfeHectopascals);
 
+    /// <summary>Approves a MARSA departure or approach.</summary>
+    /// <param name="callsign">The flight.</param>
+    /// <param name="kind">Departure or approach.</param>
+    /// <param name="runway">The runway.</param>
+    /// <param name="initialHeading">The initial heading of a departure, magnetic.</param>
+    string MarsaApproved(Callsign callsign, Approach.MarsaKind kind, RunwayIdentifier runway, int initialHeading);
+
+    /// <summary>Confirms CAM Tango: a tactical flight, outside the air traffic service.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    string TacticalRegime(Callsign callsign);
+
     /// <summary>Confirms a change of military regime (CAM Victor, CAM India).</summary>
     /// <param name="callsign">The aircraft.</param>
     /// <param name="regime">The spoken regime, such as "CAM Victor".</param>

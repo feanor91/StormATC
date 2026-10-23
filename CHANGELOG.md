@@ -5,6 +5,21 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **CAM T** (Tango, tactique) regime, selectable on the Flight Plan page or asked for on the radio ("demandons CAM
+  Tango"): the controller says it is a tactical flight outside the air traffic service and to call to resume CAM V or
+  CAM I. The Instruction 1950 does not describe tactical radio procedures, so nothing else is invented.
+- **MARSA** for a flight of at least two aircraft: "patrouille de deux, demande MARSA départ piste 29" is approved
+  with the initial heading; "demande MARSA approche, trail trois milles" is approved for the runway in use and ends
+  at landing. The Military tab of the panel shows it.
+- `docs/militaire.md`: the military side explained in French (regimes, QFE, initial and break, PAR, SRA, MARSA, a
+  typical flight at Saint-Dizier, what StormATC does and does not do).
+
+### Changed
+
+- The VAC charts have their own tab in Settings instead of sitting among the voice settings.
+
 ## 0.10.0 - 2026-10-23
 
 ### Added

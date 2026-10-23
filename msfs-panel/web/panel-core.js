@@ -650,6 +650,9 @@ var StormAtcPanel = (function () {
             militaryPane.appendChild(el('h3', 'sa-always', m.labels.radar));
             militaryPane.appendChild(el('div', 'sa-milnote', m.radar || m.labels.noRadar));
 
+            militaryPane.appendChild(el('h3', 'sa-always', m.labels.marsa));
+            militaryPane.appendChild(el('div', 'sa-milnote', m.marsa || m.labels.noMarsa));
+
             militaryPane.appendChild(el('h3', 'sa-always', m.labels.frequencies));
             if (!m.frequencies.length) {
                 militaryPane.appendChild(el('div', 'sa-milnote', m.labels.noFrequencies));

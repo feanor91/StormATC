@@ -174,7 +174,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
     }
 
     /// <summary>The flight rules the pilot can choose between.</summary>
-    public IReadOnlyList<string> FlightRulesChoices { get; } = ["IFR", "VFR", "CAM V", "CAM I"];
+    public IReadOnlyList<string> FlightRulesChoices { get; } = ["IFR", "VFR", "CAM V", "CAM I", "CAM T"];
 
     /// <summary>
     /// The rules the flight is operated under. A VFR flight needs no IFR clearance and stays with

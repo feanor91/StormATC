@@ -425,7 +425,9 @@ public sealed partial class StormAtcStateEngine
             {
                 ["regime"] = regime.ToLabel(),
             },
-            FallbackPhraseology = Say(context).RegimeChange(callsign, regime.ToSpokenLabel()),
+            FallbackPhraseology = regime == FlightRules.CamT
+                ? Say(context).TacticalRegime(callsign)
+                : Say(context).RegimeChange(callsign, regime.ToSpokenLabel()),
         };
     }
 

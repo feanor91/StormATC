@@ -43,6 +43,11 @@ public static class FrenchTranscriptCanonicalizer
         // --- French military regimes (CAM V, CAM I), as the speech recogniser tends to write them. ---
         ("cam(?:e)? (?:victor|v|5)", "cam victor"),
         ("cam(?:e)? (?:india|inde|i|1)", "cam india"),
+        ("cam(?:e)? (?:tango|t)(?= |$)", "cam tango"),
+        ("demande(?:ons)? (?:un |une |le |l )?marsa depart", "request marsa departure"),
+        ("demande(?:ons)? (?:un |une |le |l )?marsa (?:arrivee|approche)", "request marsa approach"),
+        ("(?:patrouille|formation) de", "flight of"),
+        ("(?:en )?trail (?:a |de )?", "trail "),
 
         // --- Military circuit phraseology (Instruction 1950 DSAE/DIRCAM). -----------------------------
         ("trains? sortis? (?:et )?verrouilles?|train sorti", "gear down and locked"),
