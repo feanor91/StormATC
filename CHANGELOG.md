@@ -5,6 +5,10 @@ public releases.
 
 ## Unreleased
 
+### Changed
+
+- A local VFR flight started at a military base now starts in CAM V instead of civil VFR.
+
 ## 0.12.1 - 2026-10-23
 
 ### Changed
