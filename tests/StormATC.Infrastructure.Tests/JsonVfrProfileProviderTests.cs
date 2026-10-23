@@ -120,6 +120,18 @@ public sealed class JsonVfrProfileProviderTests : IDisposable
             profile.AirAirFrequency);
     }
 
+    [Theory]
+    [InlineData("LFSI", true)]
+    [InlineData("LFBC", true)]
+    [InlineData("LFPL", false)]
+    [InlineData("LFAB", false)]
+    public async Task A_military_base_is_known_as_one(string icao, bool military)
+    {
+        File.Copy(Path.Combine(BundledFolder(), icao + ".json"), Path.Combine(_data, "vfr-profiles", icao + ".json"));
+
+        Assert.Equal(military, (await Provider().GetProfileAsync(icao, CancellationToken.None))!.IsMilitary);
+    }
+
     [Fact]
     public async Task The_frequencies_of_a_base_are_listed_with_their_service()
     {

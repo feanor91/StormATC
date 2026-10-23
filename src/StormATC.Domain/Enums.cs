@@ -81,6 +81,28 @@ public static class FlightRulesExtensions
     /// <summary>True for the French military regimes (CAM V, CAM I).</summary>
     public static bool IsMilitary(this FlightRules rules) => rules is FlightRules.CamV or FlightRules.CamI or FlightRules.CamT;
 
+    /// <summary>
+    /// The regime a flight plan gets: the simulator's planner knows only VFR and IFR, so a plan to or from a military
+    /// base is flown in CAM V (a VFR plan) or CAM I (an IFR plan).
+    /// </summary>
+    /// <param name="visual">True for a VFR plan.</param>
+    /// <param name="militaryBase">True when the plan departs from or arrives at a military base.</param>
+    public static FlightRules ForPlan(bool visual, bool militaryBase) => militaryBase
+        ? (visual ? FlightRules.CamV : FlightRules.CamI)
+        : (visual ? FlightRules.Vfr : FlightRules.Ifr);
+
+    /// <summary>
+    /// True when two regimes handle a flight the same way (both visual or both instrument), or when the pilot chose
+    /// CAM T, which a re-imported plan must not undo.
+    /// </summary>
+    /// <param name="chosen">The regime the session is in.</param>
+    /// <param name="planned">The regime the plan gives.</param>
+    public static bool SameHandling(FlightRules chosen, FlightRules planned) =>
+        chosen == planned
+        || chosen == FlightRules.CamT
+        || (chosen.IsVisual() && planned.IsVisual())
+        || (chosen.IsInstrument() && planned.IsInstrument());
+
     /// <summary>The label said on the radio: "CAM Victor" or "CAM India" (VFR and IFR for the civil rules).</summary>
     public static string ToSpokenLabel(this FlightRules rules) => rules switch
     {

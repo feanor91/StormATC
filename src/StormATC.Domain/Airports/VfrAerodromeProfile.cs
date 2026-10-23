@@ -61,6 +61,9 @@ public sealed record VfrAerodromeProfile
     /// </summary>
     public bool HasNoAtc => string.Equals(ServiceKind, "None", StringComparison.OrdinalIgnoreCase);
 
+    /// <summary>True when the profile says the aerodrome is a military base (its service kind starts with "Military").</summary>
+    public bool IsMilitary => ServiceKind?.StartsWith("Military", StringComparison.OrdinalIgnoreCase) == true;
+
     /// <summary>The frequencies the profile lists, with the service each belongs to.</summary>
     public IReadOnlyList<AerodromeFrequency> Frequencies { get; init; } = [];
 

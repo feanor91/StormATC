@@ -85,6 +85,24 @@ public sealed class MilitaryRegimeTests : IAsyncLifetime
     }
 
     [Theory]
+    [InlineData(true, false, FlightRules.Vfr)]
+    [InlineData(false, false, FlightRules.Ifr)]
+    [InlineData(true, true, FlightRules.CamV)]
+    [InlineData(false, true, FlightRules.CamI)]
+    public void A_plan_gets_its_regime_from_its_type_and_the_bases_it_uses(bool visual, bool militaryBase, FlightRules expected) =>
+        Assert.Equal(expected, FlightRulesExtensions.ForPlan(visual, militaryBase));
+
+    [Theory]
+    [InlineData(FlightRules.CamV, FlightRules.CamV, true)]
+    [InlineData(FlightRules.Vfr, FlightRules.CamV, true)]
+    [InlineData(FlightRules.Ifr, FlightRules.CamI, true)]
+    [InlineData(FlightRules.CamT, FlightRules.Ifr, true)]
+    [InlineData(FlightRules.CamV, FlightRules.CamI, false)]
+    [InlineData(FlightRules.Ifr, FlightRules.Vfr, false)]
+    public void A_re_imported_plan_does_not_undo_the_regime_the_pilot_chose(FlightRules chosen, FlightRules planned, bool same) =>
+        Assert.Equal(same, FlightRulesExtensions.SameHandling(chosen, planned));
+
+    [Theory]
     [InlineData("Robinson Tour, Rafale douze, demande à passer en CAM India", FlightRules.CamI)]
     [InlineData("Rafale douze, demandons CAM Victor", FlightRules.CamV)]
     public void A_request_to_change_regime_is_recognised(string french, FlightRules expected)

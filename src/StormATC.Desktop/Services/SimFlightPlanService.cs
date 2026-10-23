@@ -448,7 +448,12 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
                 UiText.T("The aircraft's registration is not known yet: StormATC could not name the flight."));
         }
 
-        FlightRules rulesOfPlan = simPlan.IsVfr ? FlightRules.Vfr : FlightRules.Ifr;
+        // The simulator's planner offers VFR and IFR (and a "military" flight it does not pass on): a plan to or from a
+        // military base is flown in CAM V or CAM I.
+        bool militaryBase =
+            (await _sessionContext.GetVfrProfileForAsync(plan.DepartureIcao, cancellationToken).ConfigureAwait(false))?.IsMilitary == true
+            || (await _sessionContext.GetVfrProfileForAsync(plan.DestinationIcao, cancellationToken).ConfigureAwait(false))?.IsMilitary == true;
+        FlightRules rulesOfPlan = FlightRulesExtensions.ForPlan(simPlan.IsVfr, militaryBase);
         if (!force && IsAlreadyLoaded(_sessionContext.CurrentSession, plan, rulesOfPlan))
         {
             _logger.LogInformation(
@@ -463,9 +468,9 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
 
         _sessionContext.PreassignedSquawk = null;
         await _sessionContext.LoadFlightPlanAsync(plan, cancellationToken).ConfigureAwait(false);
-        _sessionContext.Mutate(session => session.WithFlightRules(simPlan.IsVfr ? FlightRules.Vfr : FlightRules.Ifr));
+        _sessionContext.Mutate(session => session.WithFlightRules(rulesOfPlan));
 
-        string rules = simPlan.IsVfr ? "VFR" : "IFR";
+        string rules = rulesOfPlan.ToLabel();
         _providerStatus.SetFlightPlanStatus(true, $"{plan.ToSummary()} · {rules} · {UiText.T("simulator")}");
         _logger.LogInformation("Imported the simulator's flight plan {Summary} ({Rules}) from {Origin}.", plan.ToSummary(), rules, origin);
 
@@ -512,5 +517,5 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
 
     /// <summary>Whether the session already runs this plan from the simulator.</summary>
     private static bool IsAlreadyLoaded(AtcSession session, FlightPlan plan, FlightRules rules) =>
-        session.FlightRules == rules && SimFlightPlanComparison.IsSamePlan(session.FlightPlan, plan);
+        FlightRulesExtensions.SameHandling(session.FlightRules, rules) && SimFlightPlanComparison.IsSamePlan(session.FlightPlan, plan);
 }

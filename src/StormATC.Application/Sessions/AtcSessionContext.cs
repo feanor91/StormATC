@@ -527,6 +527,12 @@ public sealed class AtcSessionContext(
         or FlightPhase.Arrival or FlightPhase.Approach or FlightPhase.Final or FlightPhase.Landed
         or FlightPhase.TaxiIn or FlightPhase.Parked or FlightPhase.GoAround or FlightPhase.Circuit;
 
+    /// <summary>The VFR profile of an aerodrome, loaded and cached; null when there is none.</summary>
+    /// <param name="icao">The aerodrome.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    public Task<VfrAerodromeProfile?> GetVfrProfileForAsync(string? icao, CancellationToken cancellationToken) =>
+        GetVfrProfileAsync(icao, cancellationToken);
+
     /// <summary>
     /// The VFR profile of the aerodrome the flight is at now, when it has already been loaded: the departure
     /// aerodrome until the flight is on its way to the destination. Never loads anything: the panel asks often.
