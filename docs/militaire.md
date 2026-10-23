@@ -18,6 +18,12 @@ civiles (la **CAG**, circulation aérienne générale) : il vole selon un *régi
 | **CAM I** | India | Vol **aux instruments** : clairance, procédures, départ et arrivée contrôlés | IFR |
 | **CAM T** | Tango | Vol **tactique** (mission, entraînement) : hors du service de la circulation aérienne | rien |
 
+**Comment le régime est choisi.** Le planificateur de vol de MSFS propose un type de vol « militaire », mais il ne le
+transmet pas (le plan qu'il donne à StormATC ne dit que VFR ou IFR). StormATC regarde donc **les aérodromes** : un plan au
+départ ou à destination d'une **base militaire** qu'il connaît démarre en **CAM V** (plan VFR) ou **CAM I** (plan IFR). Pour
+tout autre plan, choisissez le régime sur la page **Plan de vol** de StormATC (liste « IFR, VFR, CAM V, CAM I, CAM T »)
+ou à la radio.
+
 Pour changer de régime à la radio : « demandons CAM India », « demandons CAM Victor », « demandons CAM Tango ».
 Le contrôleur répond « vous êtes maintenant en CAM India ». En **CAM Tango**, il répond que c'est un vol tactique,
 hors service de la circulation aérienne, et de le rappeler pour reprendre CAM Victor ou India.

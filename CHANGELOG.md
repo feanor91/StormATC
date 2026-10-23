@@ -7,6 +7,14 @@ public releases.
 
 ## 0.12.1 - 2026-10-23
 
+### Changed
+
+- A flight plan imported from the simulator's planner to or from a **military base** (a profile of a base) now starts in
+  **CAM V** (VFR plan) or **CAM I** (IFR plan) instead of VFR or IFR. The planner offers a "military" flight type but
+  does not pass it on (the MSFS route has only VFR or IFR), so the base is what tells StormATC. For any other plan, pick
+  the regime on the Flight Plan page or on the radio.
+- Importing the same plan again no longer undoes a CAM regime the pilot chose.
+
 ## 0.12.0 - 2026-10-23
 
 ### Added
