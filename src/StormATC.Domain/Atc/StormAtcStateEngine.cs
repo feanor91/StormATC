@@ -161,6 +161,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             PilotIntentType.RequestDeviation => HandleDeviationRequest(context),
             PilotIntentType.RequestRegimeChange => HandleRegimeChange(context, intent),
             PilotIntentType.ReportInitial => HandleInitialReport(context, intent),
+            PilotIntentType.RequestRadarApproach => HandleRadarApproachRequest(context, intent),
             PilotIntentType.RequestApproach => HandleApproachRequest(context, intent),
             PilotIntentType.ReportEstablished => HandleEstablishedReport(context, intent),
             PilotIntentType.ReportRunwayVacated => HandleRunwayVacated(context),
@@ -188,6 +189,13 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
         if (incursion is not null)
         {
             return incursion;
+        }
+
+        // --- A radar approach in progress (PAR, SRA): the controller talks the aircraft down. ------
+        AtcDecision? radar = EvaluateRadarApproach(context);
+        if (radar is not null)
+        {
+            return radar;
         }
 
         // --- Becoming airborne. ------------------------------------------------------------

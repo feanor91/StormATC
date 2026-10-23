@@ -200,6 +200,16 @@ public sealed partial class DeterministicPilotIntentParser : IPilotIntentParser
 
         // A military pilot reporting the initial point, or the gear after "check gear down and locked".
         bool military = session.FlightRules.IsMilitary() || MilitaryIntentRules.RegimeIn(transcript) is not null;
+        if (military && MilitaryIntentRules.AsksForRadarApproach(transcript))
+        {
+            return (PilotIntentType.RequestRadarApproach, 0.94);
+        }
+
+        if (military && MilitaryIntentRules.MentionsRunwayInSight(transcript))
+        {
+            return (PilotIntentType.ReportFinal, 0.92);
+        }
+
         if (military && MilitaryIntentRules.IsInitialReport(transcript))
         {
             return (PilotIntentType.ReportInitial, 0.93);

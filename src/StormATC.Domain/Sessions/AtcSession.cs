@@ -110,6 +110,9 @@ public sealed record AtcSession
     /// </summary>
     public FlightRules FlightRules { get; init; } = FlightRules.Ifr;
 
+    /// <summary>The PAR or SRA approach the controller is talking the aircraft down, if any.</summary>
+    public Approach.RadarApproachState? RadarApproach { get; init; }
+
     /// <summary>The leg of the aerodrome circuit the aircraft last reported.</summary>
     public CircuitLeg CircuitLeg { get; init; } = CircuitLeg.None;
 
@@ -158,6 +161,9 @@ public sealed record AtcSession
     public AtcSession WithFlightRules(FlightRules rules) => this with { FlightRules = rules };
 
     public AtcSession WithCircuitLeg(CircuitLeg leg) => this with { CircuitLeg = leg };
+
+    /// <summary>Starts, updates or (with null) ends the radar approach.</summary>
+    public AtcSession WithRadarApproach(Approach.RadarApproachState? state) => this with { RadarApproach = state };
 
     public AtcSession WithArrivalRunway(RunwayIdentifier runway) => this with { AssignedArrivalRunway = runway };
 

@@ -74,6 +74,9 @@ public sealed record RadarApproachState
 
     /// <summary>True once the controller has asked for the gear check.</summary>
     public bool GearChecked { get; init; }
+
+    /// <summary>True once the controller has stopped calling: the end of the approach was announced.</summary>
+    public bool Completed { get; init; }
 }
 
 /// <summary>What the controller says at one call: lateral, vertical, distance, heading, altitude.</summary>

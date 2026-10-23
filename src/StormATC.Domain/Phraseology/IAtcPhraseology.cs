@@ -145,6 +145,28 @@ public interface IAtcPhraseology
     /// <param name="callsign">The aircraft.</param>
     string CheckGearDownAndLocked(Callsign callsign);
 
+    /// <summary>Accepts a PAR or SRA request: runway, QFE and "do not acknowledge".</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="kind">PAR or SRA.</param>
+    /// <param name="runway">The runway.</param>
+    /// <param name="qfeHectopascals">The QFE, when it can be computed.</param>
+    string RadarApproachStart(Callsign callsign, Approach.RadarApproachKind kind, RunwayIdentifier runway, int? qfeHectopascals);
+
+    /// <summary>Radar contact: the aircraft has entered the approach path.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="distanceNauticalMiles">Distance to the threshold.</param>
+    string RadarContact(Callsign callsign, int distanceNauticalMiles);
+
+    /// <summary>One call of the approach: position against the centreline and the path, distance.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="radarCall">What to say.</param>
+    string RadarGuidance(Callsign callsign, Approach.RadarCall radarCall);
+
+    /// <summary>The end of an SRA, or the loss of the approach: report the runway in sight or go around.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="kind">PAR or SRA.</param>
+    string RadarApproachEnd(Callsign callsign, Approach.RadarApproachKind kind);
+
     /// <summary>The QFE as it is spoken.</summary>
     /// <param name="qfeHectopascals">The QFE in hectopascals.</param>
     string Qfe(int qfeHectopascals);

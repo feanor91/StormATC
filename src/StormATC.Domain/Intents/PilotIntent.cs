@@ -149,6 +149,12 @@ public sealed record IntentEntities
     /// <summary>The military regime the pilot named ("CAM Victor", "CAM India"), if any.</summary>
     public FlightRules? DeclaredRegime { get; init; }
 
+    /// <summary>The radar approach the pilot asked for (PAR or SRA), if any.</summary>
+    public Approach.RadarApproachKind? RadarApproach { get; init; }
+
+    /// <summary>The pilot said the runway is in sight.</summary>
+    public bool RunwayInSight { get; init; }
+
     /// <summary>The QFE the pilot quoted, in hectopascals, if any.</summary>
     public int? QfeHectopascals { get; init; }
 
@@ -176,7 +182,7 @@ public sealed record IntentEntities
         && Heading is null && Taxiways.Count == 0 && Waypoint is null
         && ApproachName is null && Stand is null && PushbackDirection is null
         && SpeedKnots is null && !MentionsHoldShort
-        && !DeclaresVfr && DeclaredRegime is null && QfeHectopascals is null && !RequestsBreak && !GearDownAndLocked && !TouchAndGo && Manoeuvre == CircuitManoeuvre.None && CircuitSide is null && InformationLetter is null;
+        && !DeclaresVfr && DeclaredRegime is null && RadarApproach is null && !RunwayInSight && QfeHectopascals is null && !RequestsBreak && !GearDownAndLocked && !TouchAndGo && Manoeuvre == CircuitManoeuvre.None && CircuitSide is null && InformationLetter is null;
 }
 
 /// <summary>A manoeuvre the pilot asks for on the runway, other than a full-stop landing or a touch and go.</summary>

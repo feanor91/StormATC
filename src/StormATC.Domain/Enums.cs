@@ -169,6 +169,9 @@ public enum PilotIntentType
 
     /// <summary>The pilot reports passing the initial point of a military arrival ("passant initiale, QFE ...").</summary>
     ReportInitial,
+
+    /// <summary>The pilot asks for a PAR or SRA radar approach.</summary>
+    RequestRadarApproach,
     RequestApproach,
     ReportEstablished,
     LandingReadback,
@@ -393,6 +396,9 @@ public enum AtcResponseType
 
     /// <summary>Roger, report the reporting point.</summary>
     ReportPointInstruction,
+
+    /// <summary>A call of a radar approach: position against the path, distance, heading.</summary>
+    RadarGuidance,
 
     /// <summary>Join the circuit (downwind, base or straight in) and report.</summary>
     CircuitJoinInstruction,

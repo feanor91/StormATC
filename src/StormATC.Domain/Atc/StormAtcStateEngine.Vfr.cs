@@ -304,7 +304,7 @@ public sealed partial class StormAtcStateEngine
         }
 
         // A military pilot reports the last turn with the gear down and locked; without it the controller asks.
-        if (IsMilitaryCall(context, intent) && !intent.Entities.GearDownAndLocked)
+        if (IsMilitaryCall(context, intent) && !intent.Entities.GearDownAndLocked && session.RadarApproach is not { GearChecked: true })
         {
             return new AtcDecision
             {
@@ -329,6 +329,7 @@ public sealed partial class StormAtcStateEngine
         {
             NewFlightRules = VisualRules(context),
             NewCircuitLeg = CircuitLeg.Final,
+            EndsRadarApproach = session.RadarApproach is not null,
             NewTouchAndGoRequested = touchAndGo,
             NewManoeuvre = manoeuvre,
         };

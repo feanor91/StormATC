@@ -504,6 +504,67 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
         Phrase(callsign).Add("vérifiez train sorti verrouillé").Build();
 
     /// <inheritdoc />
+    public string RadarApproachStart(Callsign callsign, Approach.RadarApproachKind kind, RunwayIdentifier runway, int? qfeHectopascals) =>
+        Phrase(callsign)
+            .Add(kind == Approach.RadarApproachKind.Par ? "radar PAR" : "approche de surveillance")
+            .Add(SpeakRunway(runway))
+            .Add(qfeHectopascals is int qfe ? Qfe(qfe) : string.Empty)
+            .Add("ne répondez plus aux transmissions, sauf demande")
+            .Build();
+
+    /// <inheritdoc />
+    public string RadarContact(Callsign callsign, int distanceNauticalMiles) =>
+        Phrase(callsign).Add("contact radar").Add($"{Miles(distanceNauticalMiles)} du seuil").Build();
+
+    /// <inheritdoc />
+    public string RadarGuidance(Callsign callsign, Approach.RadarCall radarCall)
+    {
+        PhraseBuilder phrase = Phrase(callsign).Add(radarCall.Lateral switch
+        {
+            Approach.RadarLateral.OnCentreline => "sur l'axe",
+            Approach.RadarLateral.SlightlyLeft => "légèrement à gauche de l'axe",
+            Approach.RadarLateral.SlightlyRight => "légèrement à droite de l'axe",
+            Approach.RadarLateral.Left => "à gauche de l'axe",
+            _ => "à droite de l'axe",
+        });
+
+        if (radarCall.CorrectionHeading is int heading)
+        {
+            phrase.Add($"route {FrenchSpokenNumbers.Heading(heading)}");
+        }
+
+        if (radarCall.Vertical is Approach.RadarVertical vertical)
+        {
+            phrase.Add(vertical switch
+            {
+                Approach.RadarVertical.OnPath => "sur la pente",
+                Approach.RadarVertical.SlightlyAbove => "légèrement au-dessus de la pente",
+                Approach.RadarVertical.SlightlyBelow => "légèrement sous la pente",
+                Approach.RadarVertical.Above => "au-dessus de la pente",
+                _ => "sous la pente",
+            });
+        }
+
+        phrase.Add($"distance {Miles(radarCall.DistanceNauticalMiles)}");
+        if (radarCall.RecommendedAltitudeFeet is int altitude)
+        {
+            phrase.Add($"altitude recommandée {FrenchSpokenNumbers.Cardinal(altitude)} pieds");
+        }
+
+        return phrase.Build();
+    }
+
+    /// <inheritdoc />
+    public string RadarApproachEnd(Callsign callsign, Approach.RadarApproachKind kind) =>
+        Phrase(callsign)
+            .Add(kind == Approach.RadarApproachKind.Par ? "fin d'approche PAR" : "fin d'approche de surveillance")
+            .Add("annoncez piste en vue ou remise de gaz")
+            .Build();
+
+    private static string Miles(int miles) =>
+        miles == 1 ? "un mille" : $"{FrenchSpokenNumbers.Cardinal(miles)} milles";
+
+    /// <inheritdoc />
     public string Qfe(int qfeHectopascals) => $"QFE {FrenchSpokenNumbers.Cardinal(qfeHectopascals)}";
 
     /// <inheritdoc />

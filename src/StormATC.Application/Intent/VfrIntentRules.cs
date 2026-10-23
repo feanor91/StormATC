@@ -122,6 +122,8 @@ internal static partial class VfrIntentRules
             QfeHectopascals = MilitaryIntentRules.QfeIn(transcript),
             RequestsBreak = MilitaryIntentRules.MentionsBreak(transcript),
             GearDownAndLocked = MilitaryIntentRules.MentionsGear(transcript),
+            RadarApproach = MilitaryIntentRules.RadarApproachIn(transcript),
+            RunwayInSight = MilitaryIntentRules.MentionsRunwayInSight(transcript),
             TouchAndGo = TouchAndGoWord().IsMatch(transcript),
             Manoeuvre = ManoeuvreOf(transcript),
             CircuitSide = side,

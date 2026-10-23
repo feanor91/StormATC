@@ -50,6 +50,10 @@ public static class FrenchTranscriptCanonicalizer
         ("demande(?:ons)? (?:le |un |l )?break|pour (?:le |un |l )?break", "request break"),
         ("(?<!montee )(?:point initial|initiale|initial)", "initial"),
         ("q f e|que f e|cue f e", "qfe"),
+        // "par" is a French stop word, so a PAR request is rewritten to words that survive.
+        ("demande(?:ons)? (?:un |une |le |l )?(?:p a r|par)(?= |$)|p a r|approche (?:radar )?(?:de )?precision|approche par", "request precision radar"),
+        ("demande(?:ons)? (?:un |une |le |l )?(?:s r a|sra)(?= |$)|s r a|approche (?:radar )?(?:de )?surveillance|approche sra", "request surveillance radar"),
+        ("(?:piste|terrain) en vue|je vois la piste|piste vue", "runway in sight"),
 
         // --- Courtesy and filler. -------------------------------------------------------------
         ("s il vous plait|s il te plait|svp", "please"),

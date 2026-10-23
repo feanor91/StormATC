@@ -284,6 +284,12 @@ public sealed record AtcDecision
     /// <summary>The circuit leg reached. Null leaves it unchanged.</summary>
     public CircuitLeg? NewCircuitLeg { get; init; }
 
+    /// <summary>The radar approach to start or update, when this decision does.</summary>
+    public Approach.RadarApproachState? NewRadarApproach { get; init; }
+
+    /// <summary>True when the radar approach ends with this decision.</summary>
+    public bool EndsRadarApproach { get; init; }
+
     /// <summary>A touch-and-go request or its cancellation. Null leaves it unchanged.</summary>
     public bool? NewTouchAndGoRequested { get; init; }
 
@@ -348,6 +354,8 @@ public sealed record AtcDecision
         || NewPhase is not null
         || NewFlightRules is not null
         || NewCircuitLeg is not null
+        || NewRadarApproach is not null
+        || EndsRadarApproach
         || NewTouchAndGoRequested is not null
         || NewManoeuvre is not null
         || NewArrivalRunway is not null;

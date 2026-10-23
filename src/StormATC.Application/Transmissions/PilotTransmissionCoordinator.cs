@@ -373,6 +373,15 @@ public sealed class PilotTransmissionCoordinator(
             session = session.WithCircuitLeg(leg);
         }
 
+        if (decision.NewRadarApproach is Domain.Approach.RadarApproachState radar)
+        {
+            session = session.WithRadarApproach(radar);
+        }
+        else if (decision.EndsRadarApproach || decision.NewPhase is FlightPhase.GoAround)
+        {
+            session = session.WithRadarApproach(null);
+        }
+
         if (decision.NewTouchAndGoRequested is bool touchAndGo)
         {
             session = session.WithTouchAndGoRequested(touchAndGo);

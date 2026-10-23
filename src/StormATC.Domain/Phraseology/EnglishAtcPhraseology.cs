@@ -216,6 +216,63 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
         $"{callsign.ToSpoken()}, check gear down and locked.";
 
     /// <inheritdoc />
+    public string RadarApproachStart(Callsign callsign, Approach.RadarApproachKind kind, RunwayIdentifier runway, int? qfeHectopascals) =>
+        $"{callsign.ToSpoken()}, {(kind == Approach.RadarApproachKind.Par ? "PAR approach" : "surveillance radar approach")}, {runway.ToSpoken()}, "
+        + (qfeHectopascals is int qfe ? $"{Qfe(qfe)}, " : string.Empty)
+        + "do not acknowledge further transmissions unless requested.";
+
+    /// <inheritdoc />
+    public string RadarContact(Callsign callsign, int distanceNauticalMiles) =>
+        $"{callsign.ToSpoken()}, radar contact, {Miles(distanceNauticalMiles)} from touchdown.";
+
+    /// <inheritdoc />
+    public string RadarGuidance(Callsign callsign, Approach.RadarCall radarCall)
+    {
+        List<string> parts =
+        [
+            radarCall.Lateral switch
+            {
+                Approach.RadarLateral.OnCentreline => "on centreline",
+                Approach.RadarLateral.SlightlyLeft => "slightly left of centreline",
+                Approach.RadarLateral.SlightlyRight => "slightly right of centreline",
+                Approach.RadarLateral.Left => "left of centreline",
+                _ => "right of centreline",
+            },
+        ];
+
+        if (radarCall.CorrectionHeading is int heading)
+        {
+            parts.Add($"heading {SpokenNumbers.DigitsIndividually(heading, 3)}");
+        }
+
+        if (radarCall.Vertical is Approach.RadarVertical vertical)
+        {
+            parts.Add(vertical switch
+            {
+                Approach.RadarVertical.OnPath => "on glidepath",
+                Approach.RadarVertical.SlightlyAbove => "slightly above glidepath",
+                Approach.RadarVertical.SlightlyBelow => "slightly below glidepath",
+                Approach.RadarVertical.Above => "above glidepath",
+                _ => "below glidepath",
+            });
+        }
+
+        parts.Add($"{Miles(radarCall.DistanceNauticalMiles)} from touchdown");
+        if (radarCall.RecommendedAltitudeFeet is int altitude)
+        {
+            parts.Add($"recommended altitude {SpokenNumbers.Altitude(altitude)}");
+        }
+
+        return $"{callsign.ToSpoken()}, {string.Join(", ", parts)}.";
+    }
+
+    /// <inheritdoc />
+    public string RadarApproachEnd(Callsign callsign, Approach.RadarApproachKind kind) =>
+        $"{callsign.ToSpoken()}, {(kind == Approach.RadarApproachKind.Par ? "PAR approach" : "surveillance radar approach")} complete, report runway in sight or go around.";
+
+    private static string Miles(int miles) => miles == 1 ? "one mile" : $"{SpokenNumbers.DigitsIndividually(miles.ToString(System.Globalization.CultureInfo.InvariantCulture))} miles";
+
+    /// <inheritdoc />
     public string Qfe(int qfeHectopascals) =>
         $"QFE {SpokenNumbers.DigitsIndividually(qfeHectopascals.ToString(System.Globalization.CultureInfo.InvariantCulture))}";
 

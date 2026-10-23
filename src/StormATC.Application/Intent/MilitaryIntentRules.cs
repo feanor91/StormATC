@@ -49,6 +49,36 @@ internal static partial class MilitaryIntentRules
     public static bool IsInitialReport(string transcript) =>
         InitialPoint().IsMatch(transcript) && !ArrivalWord().IsMatch(transcript);
 
+    /// <summary>The radar approach a pilot names: PAR (or GCA) or SRA.</summary>
+    public static Domain.Approach.RadarApproachKind? RadarApproachIn(string transcript)
+    {
+        if (ParWord().IsMatch(transcript))
+        {
+            return Domain.Approach.RadarApproachKind.Par;
+        }
+
+        return SraWord().IsMatch(transcript) ? Domain.Approach.RadarApproachKind.Sra : null;
+    }
+
+    /// <summary>True when the pilot asks for something ("request PAR"): a bare mention is not a request.</summary>
+    public static bool AsksForRadarApproach(string transcript) =>
+        RadarApproachIn(transcript) is not null && RequestWord().IsMatch(transcript);
+
+    /// <summary>True when the pilot says the runway or the field is in sight.</summary>
+    public static bool MentionsRunwayInSight(string transcript) => InSight().IsMatch(transcript);
+
+    [GeneratedRegex(@"\b(?:par|gca|precision radar|precision approach)\b")]
+    private static partial Regex ParWord();
+
+    [GeneratedRegex(@"\b(?:sra|surveillance radar|surveillance approach)\b")]
+    private static partial Regex SraWord();
+
+    [GeneratedRegex(@"\b(?:request|requesting|demande|demandons)\b")]
+    private static partial Regex RequestWord();
+
+    [GeneratedRegex(@"\b(?:runway|field|airfield) in sight\b")]
+    private static partial Regex InSight();
+
     [GeneratedRegex(@"\bqfe\s*(\d{3,4})\b")]
     private static partial Regex QfeNumber();
 
