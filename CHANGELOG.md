@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.6.1 - 2026-10-23
+
 ### Changed
 
 - The Charts tab of the panel shows the aerodrome's name beside each chart ("AD-2.LFPL – Lognes-Émerainville").
