@@ -260,7 +260,7 @@ var StormAtcPanel = (function () {
                 (function (chart) {
                     var button = el('button', 'sa-chartbtn');
                     button.setAttribute('type', 'button');
-                    button.appendChild(el('span', 'sa-chartname', chart.name));
+                    button.appendChild(el('span', 'sa-chartname', chart.aerodromeName ? chart.name + ' – ' + chart.aerodromeName : chart.name));
                     var rank = chartRank(chart);
                     if (rank < 2) {
                         button.appendChild(el('span', 'sa-charttag', rank === 0 ? t.departure : t.destination));

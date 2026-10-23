@@ -6,7 +6,11 @@ namespace StormATC.Application.Charts;
 /// <param name="Id">What the panel asks for it by: the file's name without its extension.</param>
 /// <param name="Name">The name shown to the pilot.</param>
 /// <param name="Icao">The aerodrome the file's name mentions, such as <c>LFPL</c>, or null.</param>
-public sealed record VacChart(string Id, string Name, string? Icao);
+public sealed record VacChart(string Id, string Name, string? Icao)
+{
+    /// <summary>The name of the aerodrome the chart is of, when it is known (<c>Lognes-Émerainville</c>).</summary>
+    public string? AerodromeName => AerodromeNames.Find(Icao);
+}
 
 /// <summary>One page of a chart, drawn as a PNG image.</summary>
 /// <param name="Png">The image.</param>
