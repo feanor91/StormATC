@@ -134,6 +134,7 @@ public sealed record ToolbarPanelLabels(
 /// <param name="Loading">Shown while a page is drawn.</param>
 /// <param name="Failed">Shown when a chart could not be drawn.</param>
 /// <param name="Unavailable">Shown when StormATC cannot list the charts.</param>
+/// <param name="Recent">Title of the charts the pilot opened last.</param>
 public sealed record ToolbarPanelChartLabels(
     string Tab,
     string Empty,
@@ -149,7 +150,8 @@ public sealed record ToolbarPanelChartLabels(
     string Destination,
     string Loading,
     string Failed,
-    string Unavailable);
+    string Unavailable,
+    string Recent);
 
 /// <summary>Builds the state the in-simulator panel shows from the current session.</summary>
 public static class ToolbarPanelStateBuilder
@@ -272,7 +274,8 @@ public static class ToolbarPanelStateBuilder
                 "Arrivée",
                 "Chargement de la carte…",
                 "Cette carte n'a pas pu être affichée.",
-                "StormATC ne peut pas lister les cartes."))
+                "StormATC ne peut pas lister les cartes.",
+                "Dernières cartes"))
         : new ToolbarPanelLabels(
             "ATC dialogue",
             "Phraseology",
@@ -307,5 +310,6 @@ public static class ToolbarPanelStateBuilder
                 "Destination",
                 "Loading the chart…",
                 "This chart could not be drawn.",
-                "StormATC cannot list the charts."));
+                "StormATC cannot list the charts.",
+                "Last charts"));
 }

@@ -5,6 +5,11 @@ public releases.
 
 ## Unreleased
 
+### Changed
+
+- The Charts tab of the panel, with more than 15 charts, shows the flight's charts, the last five opened and an
+  index of letter tiles (by aerodrome name) instead of one long list: no keyboard needed, so it works in VR.
+
 ## 0.6.1 - 2026-10-23
 
 ### Changed

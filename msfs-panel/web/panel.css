@@ -147,6 +147,26 @@
 .sa-chartname { flex: 1 1 auto; word-wrap: break-word; }
 .sa-charttag { flex: 0 0 auto; margin-left: 0.6em; padding: 0.1em 0.6em; border-radius: 1em; background: #2c6bb0; font-size: 0.8em; }
 
+.sa-charthead { margin: 0.6em 0 0.4em 0; font-size: 0.9em; font-weight: 700; color: #9fb3c8; }
+.sa-letters { display: flex; flex-wrap: wrap; margin: 0.4em -0.25em 0 -0.25em; }
+.sa-letter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 4.2em;
+    height: 4.2em;
+    margin: 0.25em;
+    border: 1px solid #3a5068;
+    border-radius: 0.5em;
+    background: #16222e;
+    color: #e8eef4;
+    font-size: 1em;
+}
+.sa-letter:active { background: #2c4258; }
+.sa-letterchar { font-size: 1.6em; font-weight: 700; line-height: 1; }
+.sa-lettercount { font-size: 0.75em; color: #9fb3c8; }
+
 .sa-chartbar { flex: 0 0 auto; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; padding: 0.3em 0.4em; background: #0a1118; border-bottom: 1px solid #263544; }
 .sa-chartnav { min-width: 3em; margin: 0.2em 0.3em 0.2em 0; padding: 0 0.6em; font-size: 0.9em; }
 .sa-chartnav:disabled { color: #566a7e; background: #131d27; }

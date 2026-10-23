@@ -14,6 +14,9 @@ var StormAtcPanel = (function () {
     var MAX_SCALE = 2.4;
     var ZOOMS = [1, 1.5, 2, 3, 4];
     var CHARTS_REFRESH_MS = 5000;
+    var CHARTS_FLAT_MAX = 15;
+    var RECENT_CHARTS_KEY = 'stormatc.recentCharts';
+    var RECENT_CHARTS_MAX = 5;
 
     function storageGet(key) {
         try { return window.localStorage.getItem(key); } catch (e) { return null; }
@@ -191,6 +194,7 @@ var StormAtcPanel = (function () {
         var chartPages = 0;
         var chartZoom = 1;
         var chartsTimer = null;
+        var chartLetter = null;
         var chartView = null;
         // The destination whose chart was opened for the pilot, or that the pilot went back from: the
         // chart of the aerodrome the flight is heading to opens by itself once, not again and again.
@@ -254,21 +258,96 @@ var StormAtcPanel = (function () {
             charts.sort(function (a, b) {
                 var d = chartRank(a) - chartRank(b);
                 if (d !== 0) { return d; }
-                return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0);
+                var an = chartTitle(a), bn = chartTitle(b);
+                return an < bn ? -1 : (an > bn ? 1 : 0);
             });
-            for (var i = 0; i < charts.length; i++) {
-                (function (chart) {
-                    var button = el('button', 'sa-chartbtn');
-                    button.setAttribute('type', 'button');
-                    button.appendChild(el('span', 'sa-chartname', chart.aerodromeName ? chart.name + ' – ' + chart.aerodromeName : chart.name));
-                    var rank = chartRank(chart);
-                    if (rank < 2) {
-                        button.appendChild(el('span', 'sa-charttag', rank === 0 ? t.departure : t.destination));
-                    }
-                    button.onclick = function () { openChart(chart); };
-                    list.appendChild(button);
-                }(charts[i]));
+
+            function addChartButton(chart) {
+                var button = el('button', 'sa-chartbtn');
+                button.setAttribute('type', 'button');
+                button.appendChild(el('span', 'sa-chartname', chartTitle(chart)));
+                var rank = chartRank(chart);
+                if (rank < 2) {
+                    button.appendChild(el('span', 'sa-charttag', rank === 0 ? t.departure : t.destination));
+                }
+                button.onclick = function () { openChart(chart); };
+                list.appendChild(button);
             }
+
+            // Few charts: one flat list. Many: an index by letter, which is easy to use with a
+            // controller or in VR, where there is no keyboard to search with.
+            if (charts.length <= CHARTS_FLAT_MAX) {
+                charts.forEach(addChartButton);
+                return;
+            }
+
+            if (chartLetter !== null) {
+                var up = el('button', 'sa-btn sa-chartnav', t.back);
+                up.setAttribute('type', 'button');
+                up.onclick = function () { chartLetter = null; renderChartList(); };
+                list.appendChild(up);
+                list.appendChild(el('p', 'sa-charthead', chartLetter));
+                charts.filter(function (c) { return chartLetterOf(c) === chartLetter; }).forEach(addChartButton);
+                return;
+            }
+
+            charts.filter(function (c) { return chartRank(c) < 2; }).forEach(addChartButton);
+
+            var recent = recentCharts(charts);
+            if (recent.length) {
+                list.appendChild(el('p', 'sa-charthead', t.recent));
+                recent.forEach(addChartButton);
+            }
+
+            var counts = {};
+            charts.forEach(function (c) { var l = chartLetterOf(c); counts[l] = (counts[l] || 0) + 1; });
+            var grid = el('div', 'sa-letters');
+            Object.keys(counts).sort().forEach(function (letter) {
+                var tile = el('button', 'sa-letter');
+                tile.setAttribute('type', 'button');
+                tile.appendChild(el('span', 'sa-letterchar', letter));
+                tile.appendChild(el('span', 'sa-lettercount', String(counts[letter])));
+                tile.onclick = function () { chartLetter = letter; renderChartList(); };
+                grid.appendChild(tile);
+            });
+            list.appendChild(grid);
+        }
+
+        // The title of a chart in the list: its file name and the aerodrome's name.
+        function chartTitle(chart) {
+            return chart.aerodromeName ? chart.name + ' – ' + chart.aerodromeName : chart.name;
+        }
+
+        // The letter a chart is filed under: the first letter of the aerodrome's name, without accent.
+        function chartLetterOf(chart) {
+            var text = (chart.aerodromeName || chart.name || '').toString();
+            var first = text.normalize ? text.normalize('NFD').charAt(0).toUpperCase() : text.charAt(0).toUpperCase();
+            return first >= 'A' && first <= 'Z' ? first : '#';
+        }
+
+        function recentIds() {
+            try {
+                var saved = JSON.parse(window.localStorage.getItem(RECENT_CHARTS_KEY) || '[]');
+                return Array.isArray(saved) ? saved : [];
+            } catch (e) { return []; }
+        }
+
+        function rememberChart(chart) {
+            try {
+                var ids = recentIds().filter(function (id) { return id !== chart.id; });
+                ids.unshift(chart.id);
+                window.localStorage.setItem(RECENT_CHARTS_KEY, JSON.stringify(ids.slice(0, RECENT_CHARTS_MAX)));
+            } catch (e) { /* the list of recent charts is a convenience: ignore a store that does not work */ }
+        }
+
+        function recentCharts(charts) {
+            var found = [];
+            recentIds().forEach(function (id) {
+                for (var i = 0; i < charts.length; i++) {
+                    if (charts[i].id === id && chartRank(charts[i]) >= 2) { found.push(charts[i]); break; }
+                }
+            });
+            return found;
         }
 
         // With a flight plan, the chart of the destination aerodrome is what the pilot wants first.
@@ -286,6 +365,7 @@ var StormAtcPanel = (function () {
         }
 
         function openChart(chart) {
+            rememberChart(chart);
             openedChart = chart;
             chartPage = 1;
             chartPages = 0;
