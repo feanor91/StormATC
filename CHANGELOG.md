@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.8.0 - 2026-10-23
+
 ### Added
 
 - Military arrival in CAM V, following Instruction 1950 DSAE/DIRCAM: the first call ("demande le break") is
