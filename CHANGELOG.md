@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.12.1 - 2026-10-23
+
 ## 0.12.0 - 2026-10-23
 
 ### Added
