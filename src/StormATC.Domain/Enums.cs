@@ -166,6 +166,9 @@ public enum PilotIntentType
 
     /// <summary>The pilot asks to change military regime (CAM Victor, CAM India).</summary>
     RequestRegimeChange,
+
+    /// <summary>The pilot reports passing the initial point of a military arrival ("passant initiale, QFE ...").</summary>
+    ReportInitial,
     RequestApproach,
     ReportEstablished,
     LandingReadback,

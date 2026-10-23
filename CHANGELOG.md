@@ -5,6 +5,16 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- Military arrival in CAM V, following Instruction 1950 DSAE/DIRCAM: the first call ("demande le break") is
+  answered with the runway, the wind and the QFE and "rappelez initiale"; the report at the initial point is
+  answered "correct, numero un, rappelez dernier virage, train sorti verrouille" (a wrong QFE is corrected); the
+  last turn is cleared to land only once the gear is reported "train sorti verrouille", otherwise the controller says
+  "verifiez train sorti verrouille".
+- The QFE (the QNH less the elevation of the field) is given in military arrivals and taxi clearances, only when a
+  weather source supplies the QNH: it is never invented.
+
 ## 0.7.0 - 2026-10-23
 
 ### Added

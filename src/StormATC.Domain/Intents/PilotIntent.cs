@@ -149,6 +149,15 @@ public sealed record IntentEntities
     /// <summary>The military regime the pilot named ("CAM Victor", "CAM India"), if any.</summary>
     public FlightRules? DeclaredRegime { get; init; }
 
+    /// <summary>The QFE the pilot quoted, in hectopascals, if any.</summary>
+    public int? QfeHectopascals { get; init; }
+
+    /// <summary>The pilot asked for a break arrival.</summary>
+    public bool RequestsBreak { get; init; }
+
+    /// <summary>The pilot said the gear is down and locked.</summary>
+    public bool GearDownAndLocked { get; init; }
+
     /// <summary>The pilot asked for, or is flying, a touch and go.</summary>
     public bool TouchAndGo { get; init; }
 
@@ -167,7 +176,7 @@ public sealed record IntentEntities
         && Heading is null && Taxiways.Count == 0 && Waypoint is null
         && ApproachName is null && Stand is null && PushbackDirection is null
         && SpeedKnots is null && !MentionsHoldShort
-        && !DeclaresVfr && DeclaredRegime is null && !TouchAndGo && Manoeuvre == CircuitManoeuvre.None && CircuitSide is null && InformationLetter is null;
+        && !DeclaresVfr && DeclaredRegime is null && QfeHectopascals is null && !RequestsBreak && !GearDownAndLocked && !TouchAndGo && Manoeuvre == CircuitManoeuvre.None && CircuitSide is null && InformationLetter is null;
 }
 
 /// <summary>A manoeuvre the pilot asks for on the runway, other than a full-stop landing or a touch and go.</summary>

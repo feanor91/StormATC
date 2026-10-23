@@ -142,7 +142,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
                 or PilotIntentType.FrequencyReadback
                 or PilotIntentType.Correction => HandleReadback(context, intent),
             PilotIntentType.RequestPushback => HandlePushbackRequest(context, intent),
-            PilotIntentType.RequestTaxi => DeclareRules(HandleTaxiRequest(context), intent, context),
+            PilotIntentType.RequestTaxi => DeclareRules(WithQfe(HandleTaxiRequest(context), context, intent), intent, context),
             PilotIntentType.VfrArrivalCall => HandleVfrArrivalCall(context, intent),
             PilotIntentType.ReportAtPoint => HandleReportAtPoint(context, intent),
             PilotIntentType.ReportDownwind => HandleCircuitLegReport(context, intent, CircuitLeg.Downwind),
@@ -160,6 +160,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             PilotIntentType.RequestDirect => HandleDirectRequest(context, intent),
             PilotIntentType.RequestDeviation => HandleDeviationRequest(context),
             PilotIntentType.RequestRegimeChange => HandleRegimeChange(context, intent),
+            PilotIntentType.ReportInitial => HandleInitialReport(context, intent),
             PilotIntentType.RequestApproach => HandleApproachRequest(context, intent),
             PilotIntentType.ReportEstablished => HandleEstablishedReport(context, intent),
             PilotIntentType.ReportRunwayVacated => HandleRunwayVacated(context),
@@ -2380,6 +2381,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
         PilotIntentType.ReadyForDeparture
             or PilotIntentType.VfrArrivalCall
             or PilotIntentType.ReportAtPoint
+            or PilotIntentType.ReportInitial
             or PilotIntentType.ReportDownwind
             or PilotIntentType.ReportBase
             or PilotIntentType.ReportFinal

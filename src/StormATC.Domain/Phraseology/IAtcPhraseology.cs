@@ -128,6 +128,27 @@ public interface IAtcPhraseology
     // VFR circuit and arrival
     // ---------------------------------------------------------------------------------
 
+    /// <summary>First answer to a military arrival: runway, wind, QFE and where to report.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="runway">The runway in use.</param>
+    /// <param name="windDirection">Wind direction, when a weather source supplied it.</param>
+    /// <param name="windSpeedKnots">Wind speed, when a weather source supplied it.</param>
+    /// <param name="qfeHectopascals">The QFE, when it can be computed.</param>
+    string MilitaryArrivalInstruction(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots, int? qfeHectopascals);
+
+    /// <summary>Answer to the report at the initial point: QFE check, number in the sequence, report turning final.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="correctedQfe">The QFE to give when the pilot quoted a wrong one, else null.</param>
+    string InitialPointInstruction(Callsign callsign, int? correctedQfe);
+
+    /// <summary>Asks the pilot to check the gear before the landing clearance.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    string CheckGearDownAndLocked(Callsign callsign);
+
+    /// <summary>The QFE as it is spoken.</summary>
+    /// <param name="qfeHectopascals">The QFE in hectopascals.</param>
+    string Qfe(int qfeHectopascals);
+
     /// <summary>Confirms a change of military regime (CAM Victor, CAM India).</summary>
     /// <param name="callsign">The aircraft.</param>
     /// <param name="regime">The spoken regime, such as "CAM Victor".</param>

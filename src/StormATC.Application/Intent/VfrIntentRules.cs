@@ -57,7 +57,8 @@ internal static partial class VfrIntentRules
 
         // "VFR from Albi to Blagnac for a touch and go, 1500 feet, estimate E at 05, information
         // India, request joining instructions": the first call to a tower the aircraft arrives at.
-        if (saysVfr && !transcript.Contains("taxi", StringComparison.Ordinal) && ArrivalCall().IsMatch(transcript))
+        if ((saysVfr || session.FlightRules == FlightRules.CamV)
+            && !transcript.Contains("taxi", StringComparison.Ordinal) && ArrivalCall().IsMatch(transcript))
         {
             return (PilotIntentType.VfrArrivalCall, 0.93);
         }
@@ -118,6 +119,9 @@ internal static partial class VfrIntentRules
             DeclaresVfr = VfrWord().IsMatch(transcript) || LocalFlight().IsMatch(transcript)
                 || MilitaryIntentRules.RegimeIn(transcript) == FlightRules.CamV,
             DeclaredRegime = MilitaryIntentRules.RegimeIn(transcript),
+            QfeHectopascals = MilitaryIntentRules.QfeIn(transcript),
+            RequestsBreak = MilitaryIntentRules.MentionsBreak(transcript),
+            GearDownAndLocked = MilitaryIntentRules.MentionsGear(transcript),
             TouchAndGo = TouchAndGoWord().IsMatch(transcript),
             Manoeuvre = ManoeuvreOf(transcript),
             CircuitSide = side,
@@ -184,7 +188,7 @@ internal static partial class VfrIntentRules
     [GeneratedRegex(@"\bleaving (the )?(frequency|circuit)\b|\bleaving circuit and frequency\b")]
     private static partial Regex LeavingFrequency();
 
-    [GeneratedRegex(@"\b(touch and go|full stop|option|low pass|joining instructions|request join(ing)?|inbound|estimate|estimating|for landing|to land)\b")]
+    [GeneratedRegex(@"\b(touch and go|full stop|option|low pass|joining instructions|request join(ing)?|inbound|estimate|estimating|for landing|to land|for (the |le |un )?break|request (the |le |un )?break)\b")]
     private static partial Regex ArrivalCall();
 
     [GeneratedRegex(@"\bdownwind\b")]

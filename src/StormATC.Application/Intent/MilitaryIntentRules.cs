@@ -29,6 +29,41 @@ internal static partial class MilitaryIntentRules
         && ChangeWord().IsMatch(transcript)
         && !MovementWord().IsMatch(transcript);
 
+    /// <summary>The QFE quoted in a transmission, in hectopascals, or null.</summary>
+    public static int? QfeIn(string transcript)
+    {
+        Match match = QfeNumber().Match(transcript);
+        return match.Success && int.TryParse(match.Groups[1].Value, out int value) ? value : null;
+    }
+
+    /// <summary>True when the pilot asks for, or says he is flying, a break arrival.</summary>
+    public static bool MentionsBreak(string transcript) => BreakWord().IsMatch(transcript);
+
+    /// <summary>True when the pilot says the gear is down and locked.</summary>
+    public static bool MentionsGear(string transcript) => GearWord().IsMatch(transcript);
+
+    /// <summary>
+    /// True for "passing initial, QFE 1005": the report at the initial point, as opposed to the first call
+    /// of the arrival ("request initial for the break").
+    /// </summary>
+    public static bool IsInitialReport(string transcript) =>
+        InitialPoint().IsMatch(transcript) && !ArrivalWord().IsMatch(transcript);
+
+    [GeneratedRegex(@"\bqfe\s*(\d{3,4})\b")]
+    private static partial Regex QfeNumber();
+
+    [GeneratedRegex(@"\bbreak\b")]
+    private static partial Regex BreakWord();
+
+    [GeneratedRegex(@"\bgear down\b")]
+    private static partial Regex GearWord();
+
+    [GeneratedRegex(@"\binitial\b(?! climb)|\bip\b")]
+    private static partial Regex InitialPoint();
+
+    [GeneratedRegex(@"\b(?:request|requesting|inbound|estimate|estimating|for)\b")]
+    private static partial Regex ArrivalWord();
+
     [GeneratedRegex(@"\bcam (?:victor|v)\b")]
     private static partial Regex CamVictor();
 

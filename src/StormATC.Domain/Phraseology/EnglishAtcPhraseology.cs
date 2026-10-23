@@ -198,6 +198,28 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
     public string Acknowledgement(Callsign callsign) => DeterministicPhraseology.Acknowledgement(callsign);
 
     /// <inheritdoc />
+    public string MilitaryArrivalInstruction(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots, int? qfeHectopascals)
+    {
+        string wind = windDirection is Heading direction && windSpeedKnots is int speed
+            ? $"wind {direction.ToSpoken()} degrees {SpokenNumbers.DigitsIndividually(speed.ToString(System.Globalization.CultureInfo.InvariantCulture))} knots, "
+            : string.Empty;
+        string qfe = qfeHectopascals is int value ? $"{Qfe(value)}, " : string.Empty;
+        return $"{callsign.ToSpoken()}, {runway.ToSpoken()}, {wind}{qfe}report initial.";
+    }
+
+    /// <inheritdoc />
+    public string InitialPointInstruction(Callsign callsign, int? correctedQfe) =>
+        $"{callsign.ToSpoken()}, {(correctedQfe is int qfe ? $"negative, {Qfe(qfe)}" : "correct")}, number one, report turning final, gear down and locked.";
+
+    /// <inheritdoc />
+    public string CheckGearDownAndLocked(Callsign callsign) =>
+        $"{callsign.ToSpoken()}, check gear down and locked.";
+
+    /// <inheritdoc />
+    public string Qfe(int qfeHectopascals) =>
+        $"QFE {SpokenNumbers.DigitsIndividually(qfeHectopascals.ToString(System.Globalization.CultureInfo.InvariantCulture))}";
+
+    /// <inheritdoc />
     public string RegimeChange(Callsign callsign, string regime) =>
         $"{callsign.ToSpoken()}, you are now {regime}.";
 

@@ -38,6 +38,31 @@ public sealed partial class StormAtcStateEngine
                 Say(context).Unable(callsign, UnableReason.NoArrivalRunwayAvailable));
         }
 
+        // A military arrival is not given a circuit: it reports the initial point and breaks.
+        if (IsMilitaryCall(context, intent))
+        {
+            int? qfe = QfeFor(context, context.DestinationAirport ?? context.DepartureAirport);
+            return new AtcDecision
+            {
+                Accepted = true,
+                ResponseType = AtcResponseType.ReportPointInstruction,
+                NewPhase = FlightPhase.Arrival,
+                NewFlightRules = VisualRules(context),
+                NewCircuitLeg = CircuitLeg.Joining,
+                NewTouchAndGoRequested = intent.Entities.TouchAndGo,
+                NewManoeuvre = intent.Entities.Manoeuvre == CircuitManoeuvre.None ? null : intent.Entities.Manoeuvre,
+                NewArrivalRunway = runway,
+                ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+                {
+                    ["instruction"] = "report the initial point",
+                    ["runway"] = runway.ToComparisonValue(),
+                },
+                ProhibitedFacts = ["landing clearance"],
+                FallbackPhraseology = Say(context).MilitaryArrivalInstruction(
+                    callsign, runway, context.Weather?.WindDirection, context.Weather?.WindSpeedKnots, qfe),
+            };
+        }
+
         // When the aerodrome publishes a reporting point, ask for a report there; the circuit
         // instruction follows. Without one, join the circuit straight away.
         VfrReportingPoint? point = context.VfrProfile?.FindPoint(intent.Entities.Waypoint)
@@ -175,6 +200,86 @@ public sealed partial class StormAtcStateEngine
         };
     }
 
+    /// <summary>"Passing initial, QFE 1005": QFE check, number one, report the last turn with the gear down.</summary>
+    private static AtcDecision HandleInitialReport(AtcEvaluationContext context, PilotIntent intent)
+    {
+        AtcSession session = context.Session;
+
+        if (session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        if (context.AircraftState.IsOnGround)
+        {
+            return AtcDecision.Reject(
+                "The initial point is reported in flight.",
+                Say(context).Unable(callsign, UnableReason.NotAtThisStageOfFlight));
+        }
+
+        if (session.CurrentController != ControllerPosition.Tower)
+        {
+            return AtcDecision.Reject(
+                "The arrival is worked by Tower.",
+                Say(context).Unable(callsign, UnableReason.ContactTower));
+        }
+
+        if (ResolveVfrRunway(context) is not RunwayIdentifier runway)
+        {
+            return AtcDecision.Reject(
+                "No runway is known for this aerodrome.",
+                Say(context).Unable(callsign, UnableReason.NoArrivalRunwayAvailable));
+        }
+
+        // The QFE is corrected only when the pilot quoted one and it is not the one computed from the weather.
+        int? actual = QfeFor(context, context.DestinationAirport ?? context.DepartureAirport);
+        int? corrected = intent.Entities.QfeHectopascals is int said && actual is int expected && Math.Abs(said - expected) > 1
+            ? expected
+            : null;
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.CircuitReportInstruction,
+            NewPhase = FlightPhase.Circuit,
+            NewFlightRules = VisualRules(context),
+            NewCircuitLeg = CircuitLeg.Base,
+            NewArrivalRunway = runway,
+            ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["instruction"] = "report turning final, gear down and locked",
+                ["runway"] = runway.ToComparisonValue(),
+            },
+            ProhibitedFacts = ["landing clearance"],
+            FallbackPhraseology = Say(context).InitialPointInstruction(callsign, corrected),
+        };
+    }
+
+    /// <summary>True for a flight in a CAM regime, or a call that names one.</summary>
+    private static bool IsMilitaryCall(AtcEvaluationContext context, PilotIntent intent) =>
+        context.Session.FlightRules.IsMilitary() || intent.Entities.DeclaredRegime is FlightRules regime && regime.IsMilitary();
+
+    /// <summary>
+    /// The QFE at an aerodrome: the QNH less the weight of the air between sea level and the field
+    /// (about 1 hPa for 27 ft). Null when there is no weather source or no elevation: it is never invented.
+    /// </summary>
+    private static int? QfeFor(AtcEvaluationContext context, AirportData? airport) =>
+        context.Weather?.QnhHectopascals is int qnh && airport is not null
+            ? (int)Math.Round(qnh - (airport.ElevationFeet / 27.3), MidpointRounding.AwayFromZero)
+            : null;
+
+    /// <summary>A military taxi clearance gives the QFE.</summary>
+    private static AtcDecision WithQfe(AtcDecision decision, AtcEvaluationContext context, PilotIntent intent)
+    {
+        if (!decision.Accepted || decision.ResponseType != AtcResponseType.TaxiClearance || !IsMilitaryCall(context, intent)
+            || QfeFor(context, context.DepartureAirport) is not int qfe)
+        {
+            return decision;
+        }
+
+        return decision with { FallbackPhraseology = $"{decision.FallbackPhraseology.TrimEnd('.')}, {Say(context).Qfe(qfe)}." };
+    }
+
     /// <summary>"Final": cleared to land, or cleared for a touch and go when that was asked.</summary>
     private static AtcDecision HandleFinalReport(AtcEvaluationContext context, PilotIntent intent)
     {
@@ -196,6 +301,24 @@ public sealed partial class StormAtcStateEngine
         {
             session = session.WithArrivalRunway(chosen);
             context = context with { Session = session };
+        }
+
+        // A military pilot reports the last turn with the gear down and locked; without it the controller asks.
+        if (IsMilitaryCall(context, intent) && !intent.Entities.GearDownAndLocked)
+        {
+            return new AtcDecision
+            {
+                Accepted = true,
+                ResponseType = AtcResponseType.Acknowledgement,
+                NewPhase = FlightPhase.Circuit,
+                NewCircuitLeg = CircuitLeg.Final,
+                ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+                {
+                    ["instruction"] = "check gear down and locked",
+                },
+                ProhibitedFacts = ["landing clearance before the gear is reported down and locked"],
+                FallbackPhraseology = Say(context).CheckGearDownAndLocked(callsign),
+            };
         }
 
         bool touchAndGo = intent.Entities.TouchAndGo || session.TouchAndGoRequested;

@@ -79,8 +79,9 @@ StormATC will not distribute shared credentials.
 ### Military control (CAM)
 
 - **Saint-Dizier-Robinson (LFSI) first.** *Step 1 done:* CAM V and CAM I regimes (selector, call recognition,
-  change of regime), military phraseology examples in the panel, LFSI profile. *Remains:* initial and break arrival
-  in the engine, QFE in taxi and landing clearances, PAR/SRA guidance, CAM T (tactical), MARSA, and a VHF-only
+  change of regime), military phraseology examples in the panel, LFSI profile. *Step 2 done:* CAM V arrival with
+  initial point, break and gear check, QFE in arrival and taxi calls. *Remains:* PAR/SRA guidance (a talk-down with
+  periodic corrections), CAM T (tactical), MARSA, sequencing of several aircraft at the break, and a VHF-only
   caveat (MSFS exposes no UHF radio). Nothing military has been flown in MSFS yet: a Rafale test flight is needed at
   each step.
 

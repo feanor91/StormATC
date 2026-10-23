@@ -156,4 +156,13 @@ public sealed class MilitaryRegimeTests : IAsyncLifetime
             PhraseologyCatalog.Always(PhraseologyLanguage.French, "FOXTROT ALFA", FlightRules.CamV),
             example => example.Pilot.Contains("CAM India", StringComparison.Ordinal));
     }
+
+    [Fact]
+    public void A_break_arrival_call_is_an_arrival_call_in_cam_v()
+    {
+        PilotIntent intent = ParseFrench("Storm un deux trois, vingt nautiques au sud, demande le break", FlightRules.CamV);
+
+        Assert.Equal(PilotIntentType.VfrArrivalCall, intent.Type);
+        Assert.True(intent.Entities.RequestsBreak);
+    }
 }

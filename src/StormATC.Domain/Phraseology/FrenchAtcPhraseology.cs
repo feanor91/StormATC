@@ -483,6 +483,30 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
     public string Acknowledgement(Callsign callsign) => Phrase(callsign).Add(Received()).Build();
 
     /// <inheritdoc />
+    public string MilitaryArrivalInstruction(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots, int? qfeHectopascals) =>
+        Phrase(callsign)
+            .Add(SpeakRunway(runway))
+            .Add(Wind(windDirection, windSpeedKnots) ?? string.Empty)
+            .Add(qfeHectopascals is int qfe ? Qfe(qfe) : string.Empty)
+            .Add("rappelez initiale")
+            .Build();
+
+    /// <inheritdoc />
+    public string InitialPointInstruction(Callsign callsign, int? correctedQfe) =>
+        Phrase(callsign)
+            .Add(correctedQfe is int qfe ? $"négatif, {Qfe(qfe)}" : "correct")
+            .Add("numéro un")
+            .Add("rappelez dernier virage, train sorti verrouillé")
+            .Build();
+
+    /// <inheritdoc />
+    public string CheckGearDownAndLocked(Callsign callsign) =>
+        Phrase(callsign).Add("vérifiez train sorti verrouillé").Build();
+
+    /// <inheritdoc />
+    public string Qfe(int qfeHectopascals) => $"QFE {FrenchSpokenNumbers.Cardinal(qfeHectopascals)}";
+
+    /// <inheritdoc />
     public string RegimeChange(Callsign callsign, string regime) =>
         Phrase(callsign).Add($"vous êtes maintenant en {regime}").Build();
 

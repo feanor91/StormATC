@@ -44,6 +44,13 @@ public static class FrenchTranscriptCanonicalizer
         ("cam(?:e)? (?:victor|v|5)", "cam victor"),
         ("cam(?:e)? (?:india|inde|i|1)", "cam india"),
 
+        // --- Military circuit phraseology (Instruction 1950 DSAE/DIRCAM). -----------------------------
+        ("trains? sortis? (?:et )?verrouilles?|train sorti", "gear down and locked"),
+        ("dernier virage", "turning final"),
+        ("demande(?:ons)? (?:le |un |l )?break|pour (?:le |un |l )?break", "request break"),
+        ("(?<!montee )(?:point initial|initiale|initial)", "initial"),
+        ("q f e|que f e|cue f e", "qfe"),
+
         // --- Courtesy and filler. -------------------------------------------------------------
         ("s il vous plait|s il te plait|svp", "please"),
         ("au revoir|bonne journee|bonne soiree|bon vol|a plus tard|a bientot", ","),

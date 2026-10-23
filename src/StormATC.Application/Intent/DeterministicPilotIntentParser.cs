@@ -198,6 +198,19 @@ public sealed partial class DeterministicPilotIntentParser : IPilotIntentParser
             return (PilotIntentType.RequestRegimeChange, 0.94);
         }
 
+        // A military pilot reporting the initial point, or the gear after "check gear down and locked".
+        bool military = session.FlightRules.IsMilitary() || MilitaryIntentRules.RegimeIn(transcript) is not null;
+        if (military && MilitaryIntentRules.IsInitialReport(transcript))
+        {
+            return (PilotIntentType.ReportInitial, 0.93);
+        }
+
+        if (military && MilitaryIntentRules.MentionsGear(transcript) && !transcript.Contains("final", StringComparison.Ordinal)
+            && !transcript.Contains("base", StringComparison.Ordinal))
+        {
+            return (PilotIntentType.ReportFinal, 0.9);
+        }
+
         // VFR circuit and arrival calls are tested before the general rules: "passing e" would
         // otherwise be read as a check-in, and "downwind" has no general rule at all.
         if (VfrIntentRules.TryMatch(transcript, session) is (PilotIntentType vfrType, double vfrConfidence))
