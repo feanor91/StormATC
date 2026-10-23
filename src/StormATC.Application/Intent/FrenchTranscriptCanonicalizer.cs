@@ -40,6 +40,10 @@ public static class FrenchTranscriptCanonicalizer
         ("uniforme", "uniform"),
         ("zoulou", "zulu"),
 
+        // --- French military regimes (CAM V, CAM I), as the speech recogniser tends to write them. ---
+        ("cam(?:e)? (?:victor|v|5)", "cam victor"),
+        ("cam(?:e)? (?:india|inde|i|1)", "cam india"),
+
         // --- Courtesy and filler. -------------------------------------------------------------
         ("s il vous plait|s il te plait|svp", "please"),
         ("au revoir|bonne journee|bonne soiree|bon vol|a plus tard|a bientot", ","),

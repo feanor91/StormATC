@@ -74,7 +74,7 @@ public static class AtcGuidanceAdvisor
                 example);
         }
 
-        if (session.FlightRules == FlightRules.Vfr
+        if (session.FlightRules.IsVisual()
             && VfrGuidance(session, say, spokenCallsign, french) is AtcGuidance vfr)
         {
             return vfr;

@@ -198,6 +198,10 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
     public string Acknowledgement(Callsign callsign) => DeterministicPhraseology.Acknowledgement(callsign);
 
     /// <inheritdoc />
+    public string RegimeChange(Callsign callsign, string regime) =>
+        $"{callsign.ToSpoken()}, you are now {regime}.";
+
+    /// <inheritdoc />
     public string ReportPointInstruction(Callsign callsign, string pointName) =>
         $"{callsign.ToSpoken()}, roger, report {pointName}.";
 

@@ -83,7 +83,7 @@ public static class PhraseologyCatalog
     {
         ArgumentNullException.ThrowIfNull(session);
 
-        bool vfr = session.FlightRules == FlightRules.Vfr;
+        bool vfr = session.FlightRules.IsVisual();
         bool beforeTaxi = session.Phase is FlightPhase.Disconnected or FlightPhase.Preflight
             or FlightPhase.ClearanceRequested or FlightPhase.IFRClearanceIssued or FlightPhase.Pushback;
         bool onGroundPhase = beforeTaxi || session.Phase is FlightPhase.TaxiOut
@@ -147,6 +147,57 @@ public static class PhraseologyCatalog
         return language == PhraseologyLanguage.French
             ? French(stage, callsign)
             : English(stage, callsign);
+    }
+
+    /// <summary>
+    /// The guide for a stage under the given rules: the civil guide, plus the military calls that apply
+    /// at that stage when the flight is in a CAM regime.
+    /// </summary>
+    /// <param name="stage">The stage.</param>
+    /// <param name="language">The radio language.</param>
+    /// <param name="callsign">The aircraft's callsign as it is spoken.</param>
+    /// <param name="rules">The rules the flight is operated under.</param>
+    public static PhraseologyGuide For(PhraseologyStage stage, PhraseologyLanguage language, string callsign, FlightRules rules)
+    {
+        PhraseologyGuide guide = For(stage, language, callsign);
+        if (!rules.IsMilitary())
+        {
+            return guide;
+        }
+
+        bool french = language == PhraseologyLanguage.French;
+        string regime = rules.ToSpokenLabel();
+        PhraseExample[] extra = stage switch
+        {
+            PhraseologyStage.VfrDeparture or PhraseologyStage.TaxiOut or PhraseologyStage.Clearance => french
+                ? [new($"Demander le roulage en {regime}", $"Sol, {callsign}, {regime}, parking, demandons le roulage.", $"{callsign}, roulez point d'arrêt piste XX, QFE XXXX.")]
+                : [new($"Request taxi in {regime}", $"Ground, {callsign}, {regime}, parking, request taxi.", $"{callsign}, taxi to holding point runway XX, QFE XXXX.")],
+            PhraseologyStage.VfrCircuit or PhraseologyStage.Approach => french
+                ? [new("Finale, contrôle du train", $"Tour, {callsign}, finale piste XX, train sorti verrouillé.", $"{callsign}, piste XX, autorisé atterrissage.")]
+                : [new("Final, gear check", $"Tower, {callsign}, final runway XX, gear down and locked.", $"{callsign}, runway XX, cleared to land.")],
+            _ => [],
+        };
+
+        return extra.Length == 0 ? guide : guide with { Examples = [.. guide.Examples, .. extra] };
+    }
+
+    /// <summary>The calls that are always possible, whatever the stage and the rules.</summary>
+    /// <param name="language">The radio language.</param>
+    /// <param name="callsign">The aircraft's callsign as it is spoken.</param>
+    /// <param name="rules">The rules the flight is operated under.</param>
+    public static IReadOnlyList<PhraseExample> Always(PhraseologyLanguage language, string callsign, FlightRules rules)
+    {
+        IReadOnlyList<PhraseExample> civil = Always(language, callsign);
+        if (!rules.IsMilitary())
+        {
+            return civil;
+        }
+
+        string other = rules == FlightRules.CamV ? FlightRules.CamI.ToSpokenLabel() : FlightRules.CamV.ToSpokenLabel();
+        PhraseExample change = language == PhraseologyLanguage.French
+            ? new($"Changer de régime ({rules.ToSpokenLabel()} actuellement)", $"{callsign}, demandons {other}.", $"{callsign}, vous êtes maintenant en {other}.")
+            : new($"Change regime (now {rules.ToSpokenLabel()})", $"{callsign}, request {other}.", $"{callsign}, you are now {other}.");
+        return [.. civil, change];
     }
 
     /// <summary>The calls that are always possible, whatever the stage.</summary>

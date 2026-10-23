@@ -76,6 +76,14 @@ StormATC will not distribute shared credentials.
   other traffic that calls and answers, use the profile's circuit rules and reporting points in those calls, and an
   AFIS mode (information and alert, no clearances) for the aerodromes that have one.
 
+### Military control (CAM)
+
+- **Saint-Dizier-Robinson (LFSI) first.** *Step 1 done:* CAM V and CAM I regimes (selector, call recognition,
+  change of regime), military phraseology examples in the panel, LFSI profile. *Remains:* initial and break arrival
+  in the engine, QFE in taxi and landing clearances, PAR/SRA guidance, CAM T (tactical), MARSA, and a VHF-only
+  caveat (MSFS exposes no UHF radio). Nothing military has been flown in MSFS yet: a Rafale test flight is needed at
+  each step.
+
 ### User experience and accessibility
 
 - Finish keyboard navigation, focus states, screen-reader names, and high-DPI testing.

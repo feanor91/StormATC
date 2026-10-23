@@ -128,6 +128,11 @@ public interface IAtcPhraseology
     // VFR circuit and arrival
     // ---------------------------------------------------------------------------------
 
+    /// <summary>Confirms a change of military regime (CAM Victor, CAM India).</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="regime">The spoken regime, such as "CAM Victor".</param>
+    string RegimeChange(Callsign callsign, string regime);
+
     /// <summary>Acknowledges the arrival call and asks for a report at a reporting point.</summary>
     /// <param name="callsign">The aircraft.</param>
     /// <param name="pointName">The spoken name of the reporting point, in the profile's language.</param>

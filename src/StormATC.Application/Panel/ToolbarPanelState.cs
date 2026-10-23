@@ -172,7 +172,7 @@ public static class ToolbarPanelStateBuilder
             : french ? "l'indicatif" : "callsign";
 
         PhraseologyStage stage = PhraseologyCatalog.StageFor(session);
-        PhraseologyGuide guide = PhraseologyCatalog.For(stage, session.Language, spoken);
+        PhraseologyGuide guide = PhraseologyCatalog.For(stage, session.Language, spoken, session.FlightRules);
 
         string controller = session.CurrentController == ControllerPosition.None
             ? string.Empty
@@ -194,7 +194,7 @@ public static class ToolbarPanelStateBuilder
             callsign,
             controller,
             frequency,
-            session.FlightRules == FlightRules.Vfr ? "VFR" : "IFR",
+            session.FlightRules.ToLabel(),
             new ToolbarPanelPhase(stage.ToString(), guide.Title),
             Labels(french),
             turns,
@@ -202,11 +202,11 @@ public static class ToolbarPanelStateBuilder
                 stage.ToString(),
                 guide.Title,
                 guide.Examples,
-                PhraseologyCatalog.Always(session.Language, spoken),
+                PhraseologyCatalog.Always(session.Language, spoken, session.FlightRules),
                 [
                     .. PhraseologyCatalog.Stages.Select(other =>
                     {
-                        PhraseologyGuide otherGuide = PhraseologyCatalog.For(other, session.Language, spoken);
+                        PhraseologyGuide otherGuide = PhraseologyCatalog.For(other, session.Language, spoken, session.FlightRules);
                         return new ToolbarPanelStage(other.ToString(), otherGuide.Title, otherGuide.Examples);
                     }),
                 ]),

@@ -28,8 +28,9 @@ internal static partial class VfrIntentRules
     /// </summary>
     public static (PilotIntentType Type, double Confidence)? TryMatch(string transcript, AtcSession session)
     {
-        bool saysVfr = VfrWord().IsMatch(transcript) || LocalFlight().IsMatch(transcript);
-        if (!saysVfr && session.FlightRules != FlightRules.Vfr)
+        bool saysVfr = VfrWord().IsMatch(transcript) || LocalFlight().IsMatch(transcript)
+            || MilitaryIntentRules.RegimeIn(transcript) == FlightRules.CamV;
+        if (!saysVfr && !session.FlightRules.IsVisual())
         {
             return null;
         }
@@ -61,7 +62,7 @@ internal static partial class VfrIntentRules
             return (PilotIntentType.VfrArrivalCall, 0.93);
         }
 
-        if (session.FlightRules != FlightRules.Vfr && !saysVfr)
+        if (!session.FlightRules.IsVisual() && !saysVfr)
         {
             return null;
         }
@@ -114,7 +115,9 @@ internal static partial class VfrIntentRules
 
         return entities with
         {
-            DeclaresVfr = VfrWord().IsMatch(transcript) || LocalFlight().IsMatch(transcript),
+            DeclaresVfr = VfrWord().IsMatch(transcript) || LocalFlight().IsMatch(transcript)
+                || MilitaryIntentRules.RegimeIn(transcript) == FlightRules.CamV,
+            DeclaredRegime = MilitaryIntentRules.RegimeIn(transcript),
             TouchAndGo = TouchAndGoWord().IsMatch(transcript),
             Manoeuvre = ManoeuvreOf(transcript),
             CircuitSide = side,

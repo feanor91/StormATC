@@ -49,6 +49,57 @@ public enum FlightRules
     /// departure controller; the aircraft stays with Tower while it flies the circuit.
     /// </summary>
     Vfr,
+
+    /// <summary>
+    /// French military air traffic regime CAM V (Victor, à vue): the military counterpart of VFR,
+    /// handled by the base's tower and approach with military phraseology.
+    /// </summary>
+    CamV,
+
+    /// <summary>
+    /// French military air traffic regime CAM I (India, aux instruments): the military counterpart of IFR,
+    /// handled by the base's approach and tower with military phraseology.
+    /// </summary>
+    CamI,
+}
+
+/// <summary>Groups the flight rules by how a flight is handled, whatever the civil or military regime.</summary>
+public static class FlightRulesExtensions
+{
+    /// <summary>True for VFR and for CAM V: visual flight, no clearance, the circuit stays with Tower.</summary>
+    public static bool IsVisual(this FlightRules rules) => rules is FlightRules.Vfr or FlightRules.CamV;
+
+    /// <summary>True for IFR and for CAM I: instrument flight with a clearance and a departure handoff.</summary>
+    public static bool IsInstrument(this FlightRules rules) => rules is FlightRules.Ifr or FlightRules.CamI;
+
+    /// <summary>True for the French military regimes (CAM V, CAM I).</summary>
+    public static bool IsMilitary(this FlightRules rules) => rules is FlightRules.CamV or FlightRules.CamI;
+
+    /// <summary>The label said on the radio: "CAM Victor" or "CAM India" (VFR and IFR for the civil rules).</summary>
+    public static string ToSpokenLabel(this FlightRules rules) => rules switch
+    {
+        FlightRules.CamV => "CAM Victor",
+        FlightRules.CamI => "CAM India",
+        _ => rules.ToLabel(),
+    };
+
+    /// <summary>The short label shown to the pilot: VFR, IFR, CAM V or CAM I.</summary>
+    public static string ToLabel(this FlightRules rules) => rules switch
+    {
+        FlightRules.Vfr => "VFR",
+        FlightRules.CamV => "CAM V",
+        FlightRules.CamI => "CAM I",
+        _ => "IFR",
+    };
+
+    /// <summary>Reads a label produced by <see cref="ToLabel"/>; anything unknown is IFR.</summary>
+    public static FlightRules FromLabel(string? label) => label?.Trim().ToUpperInvariant() switch
+    {
+        "VFR" => FlightRules.Vfr,
+        "CAM V" => FlightRules.CamV,
+        "CAM I" => FlightRules.CamI,
+        _ => FlightRules.Ifr,
+    };
 }
 
 /// <summary>Where the aircraft is in the aerodrome circuit.</summary>
@@ -112,6 +163,9 @@ public enum PilotIntentType
     RequestDescent,
     RequestDirect,
     RequestDeviation,
+
+    /// <summary>The pilot asks to change military regime (CAM Victor, CAM India).</summary>
+    RequestRegimeChange,
     RequestApproach,
     ReportEstablished,
     LandingReadback,

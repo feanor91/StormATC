@@ -142,7 +142,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
                 or PilotIntentType.FrequencyReadback
                 or PilotIntentType.Correction => HandleReadback(context, intent),
             PilotIntentType.RequestPushback => HandlePushbackRequest(context, intent),
-            PilotIntentType.RequestTaxi => DeclareRules(HandleTaxiRequest(context), intent),
+            PilotIntentType.RequestTaxi => DeclareRules(HandleTaxiRequest(context), intent, context),
             PilotIntentType.VfrArrivalCall => HandleVfrArrivalCall(context, intent),
             PilotIntentType.ReportAtPoint => HandleReportAtPoint(context, intent),
             PilotIntentType.ReportDownwind => HandleCircuitLegReport(context, intent, CircuitLeg.Downwind),
@@ -159,6 +159,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             PilotIntentType.RequestDescent => HandleDescentRequest(context, intent),
             PilotIntentType.RequestDirect => HandleDirectRequest(context, intent),
             PilotIntentType.RequestDeviation => HandleDeviationRequest(context),
+            PilotIntentType.RequestRegimeChange => HandleRegimeChange(context, intent),
             PilotIntentType.RequestApproach => HandleApproachRequest(context, intent),
             PilotIntentType.ReportEstablished => HandleEstablishedReport(context, intent),
             PilotIntentType.ReportRunwayVacated => HandleRunwayVacated(context),
@@ -207,7 +208,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
         // trigger is a stable climb through 1000 ft above aerodrome elevation.
         // A VFR aircraft stays with Tower: it flies the circuit or leaves the frequency itself.
         if (session.Phase == FlightPhase.InitialClimb
-            && session.FlightRules == FlightRules.Ifr
+            && session.FlightRules.IsInstrument()
             && session.CurrentController == ControllerPosition.Tower
             && aircraft.IsClimbing
             && IsAboveAerodromeBy(context, 1000))
@@ -253,7 +254,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
         // to Approach, which sequences the next approach. A VFR aircraft stays with Tower and
         // rejoins the circuit.
         if (session.Phase == FlightPhase.GoAround
-            && session.FlightRules == FlightRules.Ifr
+            && session.FlightRules.IsInstrument()
             && session.CurrentController == ControllerPosition.Tower
             && !aircraft.IsOnGround
             && aircraft.IsClimbing
@@ -276,7 +277,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
         // Departure hands an aircraft that has left the terminal area to the en-route controller.
         // The mirror of the arrival handoff: it follows the aircraft's position, not a timer.
         if (session.Phase == FlightPhase.Departure
-            && session.FlightRules == FlightRules.Ifr
+            && session.FlightRules.IsInstrument()
             && session.CurrentController == ControllerPosition.Departure
             && !aircraft.IsOnGround
             && context.DepartureAirport is AirportData origin

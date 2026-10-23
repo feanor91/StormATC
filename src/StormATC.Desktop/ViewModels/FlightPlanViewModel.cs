@@ -174,7 +174,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
     }
 
     /// <summary>The flight rules the pilot can choose between.</summary>
-    public IReadOnlyList<string> FlightRulesChoices { get; } = ["IFR", "VFR"];
+    public IReadOnlyList<string> FlightRulesChoices { get; } = ["IFR", "VFR", "CAM V", "CAM I"];
 
     /// <summary>
     /// The rules the flight is operated under. A VFR flight needs no IFR clearance and stays with
@@ -190,7 +190,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
             return;
         }
 
-        FlightRules rules = string.Equals(value, "VFR", StringComparison.Ordinal) ? FlightRules.Vfr : FlightRules.Ifr;
+        FlightRules rules = FlightRulesExtensions.FromLabel(value);
         _sessionContext.Mutate(session => session.WithFlightRules(rules));
     }
 
@@ -447,7 +447,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
         _syncingFlightRules = true;
         try
         {
-            SelectedFlightRules = session.FlightRules == FlightRules.Vfr ? "VFR" : "IFR";
+            SelectedFlightRules = session.FlightRules.ToLabel();
         }
         finally
         {

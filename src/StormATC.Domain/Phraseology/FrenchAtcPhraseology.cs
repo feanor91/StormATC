@@ -483,6 +483,10 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
     public string Acknowledgement(Callsign callsign) => Phrase(callsign).Add(Received()).Build();
 
     /// <inheritdoc />
+    public string RegimeChange(Callsign callsign, string regime) =>
+        Phrase(callsign).Add($"vous êtes maintenant en {regime}").Build();
+
+    /// <inheritdoc />
     public string ReportPointInstruction(Callsign callsign, string pointName) =>
         Phrase(callsign).Add(Received()).Add($"rappelez {pointName}").Build();
 

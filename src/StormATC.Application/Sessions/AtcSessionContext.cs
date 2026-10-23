@@ -304,7 +304,7 @@ public sealed class AtcSessionContext(
             // order of frequencies: whichever published frequency the pilot tunes is the
             // controller who answers. Listening to the ATIS, then calling Ground or Tower, is
             // simply tuning them in turn.
-            if (updated.FlightRules == FlightRules.Vfr
+            if (updated.FlightRules.IsVisual()
                 && updated.FlightPlan is FlightPlan localPlan
                 && FollowTunedFrequency(updated, state, localPlan) is AtcSession followed)
             {
@@ -314,7 +314,7 @@ public sealed class AtcSessionContext(
             // A VFR arrival calls the destination tower directly; nobody hands it over. Once the
             // aircraft is airborne and has tuned that frequency, the tower is its controller, and
             // its transmissions are heard instead of being ignored as off frequency.
-            if (updated.FlightRules == FlightRules.Vfr
+            if (updated.FlightRules.IsVisual()
                 && !state.IsOnGround
                 && updated.CurrentController != ControllerPosition.Tower
                 && updated.FlightPlan is FlightPlan plan

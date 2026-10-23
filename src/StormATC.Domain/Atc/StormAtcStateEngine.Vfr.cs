@@ -51,7 +51,7 @@ public sealed partial class StormAtcStateEngine
                 Accepted = true,
                 ResponseType = AtcResponseType.ReportPointInstruction,
                 NewPhase = FlightPhase.Arrival,
-                NewFlightRules = FlightRules.Vfr,
+                NewFlightRules = VisualRules(context),
                 NewTouchAndGoRequested = intent.Entities.TouchAndGo,
                 NewManoeuvre = intent.Entities.Manoeuvre == CircuitManoeuvre.None ? null : intent.Entities.Manoeuvre,
                 NewArrivalRunway = runway,
@@ -110,7 +110,7 @@ public sealed partial class StormAtcStateEngine
             Accepted = true,
             ResponseType = AtcResponseType.CircuitJoinInstruction,
             NewPhase = FlightPhase.Circuit,
-            NewFlightRules = FlightRules.Vfr,
+            NewFlightRules = VisualRules(context),
             NewCircuitLeg = CircuitLeg.Joining,
             NewTouchAndGoRequested = touchAndGo,
             NewManoeuvre = manoeuvre == CircuitManoeuvre.None ? null : manoeuvre,
@@ -162,7 +162,7 @@ public sealed partial class StormAtcStateEngine
             Accepted = true,
             ResponseType = AtcResponseType.CircuitReportInstruction,
             NewPhase = FlightPhase.Circuit,
-            NewFlightRules = FlightRules.Vfr,
+            NewFlightRules = VisualRules(context),
             NewCircuitLeg = reported,
             NewTouchAndGoRequested = intent.Entities.TouchAndGo ? true : null,
             NewArrivalRunway = runway,
@@ -204,7 +204,7 @@ public sealed partial class StormAtcStateEngine
             : session.RequestedManoeuvre;
         return HandleLandingClearance(context, callsign, touchAndGo, manoeuvre) with
         {
-            NewFlightRules = FlightRules.Vfr,
+            NewFlightRules = VisualRules(context),
             NewCircuitLeg = CircuitLeg.Final,
             NewTouchAndGoRequested = touchAndGo,
             NewManoeuvre = manoeuvre,
@@ -264,14 +264,46 @@ public sealed partial class StormAtcStateEngine
         };
     }
 
+    /// <summary>A visual flight keeps its regime: CAM V stays CAM V, anything else visual is VFR.</summary>
+    private static FlightRules VisualRules(AtcEvaluationContext context) =>
+        context.Session.FlightRules.IsVisual() ? context.Session.FlightRules : FlightRules.Vfr;
+
     /// <summary>
     /// Marks a decision as VFR when the pilot said so ("local flight", "VFR"), so a VFR flight
     /// is recognised from its first transmission.
     /// </summary>
-    private static AtcDecision DeclareRules(AtcDecision decision, PilotIntent intent) =>
-        decision.Accepted && intent.Entities.DeclaresVfr && decision.NewFlightRules is null
-            ? decision with { NewFlightRules = FlightRules.Vfr }
-            : decision;
+    private static AtcDecision DeclareRules(AtcDecision decision, PilotIntent intent, AtcEvaluationContext context) =>
+        decision.Accepted && decision.NewFlightRules is null && intent.Entities.DeclaredRegime is FlightRules regime
+            ? decision with { NewFlightRules = regime }
+            : decision.Accepted && intent.Entities.DeclaresVfr && decision.NewFlightRules is null
+                ? decision with { NewFlightRules = VisualRules(context) }
+                : decision;
+
+    /// <summary>The pilot asks to change military regime: CAM Victor (à vue) or CAM India (instruments).</summary>
+    private static AtcDecision HandleRegimeChange(AtcEvaluationContext context, PilotIntent intent)
+    {
+        if (context.Session.Callsign is not Callsign callsign)
+        {
+            return AtcDecision.Silent();
+        }
+
+        if (intent.Entities.DeclaredRegime is not FlightRules regime)
+        {
+            return HandleUnrecognized(context, intent);
+        }
+
+        return new AtcDecision
+        {
+            Accepted = true,
+            ResponseType = AtcResponseType.Acknowledgement,
+            NewFlightRules = regime,
+            ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["regime"] = regime.ToLabel(),
+            },
+            FallbackPhraseology = Say(context).RegimeChange(callsign, regime.ToSpokenLabel()),
+        };
+    }
 
     /// <summary>
     /// The runway in use for a VFR circuit or arrival: the one already assigned in this circuit,

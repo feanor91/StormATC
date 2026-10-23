@@ -192,6 +192,12 @@ public sealed partial class DeterministicPilotIntentParser : IPilotIntentParser
             return (PilotIntentType.PilotAcknowledgement, 0.95);
         }
 
+        // "Request CAM India" changes the military regime; it is not a circuit or IFR call.
+        if (MilitaryIntentRules.AsksRegimeChange(transcript))
+        {
+            return (PilotIntentType.RequestRegimeChange, 0.94);
+        }
+
         // VFR circuit and arrival calls are tested before the general rules: "passing e" would
         // otherwise be read as a check-in, and "downwind" has no general rule at all.
         if (VfrIntentRules.TryMatch(transcript, session) is (PilotIntentType vfrType, double vfrConfidence))
@@ -264,7 +270,7 @@ public sealed partial class DeterministicPilotIntentParser : IPilotIntentParser
         static bool Mentions(string text, params string[] words) =>
             words.Any(word => text.Contains(word, StringComparison.Ordinal));
 
-        bool vfr = session.FlightRules == FlightRules.Vfr;
+        bool vfr = session.FlightRules.IsVisual();
 
         if (session.AircraftState.IsOnGround)
         {

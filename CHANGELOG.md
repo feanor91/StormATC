@@ -5,6 +5,18 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- Military regimes **CAM V** (Victor, à vue) and **CAM I** (India, aux instruments), selectable on the flight plan
+  page. CAM V is handled like VFR (no clearance, circuit with the tower) and CAM I like IFR, and the regime is
+  kept through the whole flight.
+- The pilot can name the regime in a call ("Rafale douze, CAM Victor, demande le roulage") or ask to change it
+  ("demande CAM India"): the controller answers "vous êtes maintenant en CAM India".
+- The panel's phraseology tab shows the military calls (taxi in CAM Victor, final with gear check "train sorti
+  verrouillé", change of regime) when the flight is in a CAM regime.
+- VFR profile for Saint-Dizier-Robinson (LFSI), the first military base: VHF frequencies, runways, CTR.
+  Initial/break, PAR/SRA guidance, QFE and CAM T are not simulated yet.
+
 ## 0.5.0 - 2026-10-22
 
 ### Changed

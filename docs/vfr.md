@@ -122,7 +122,7 @@ contiennent que des faits retranscrits.
 Melun-Villaroche (LFPM, points N, SM et B), Paris Saclay Versailles / Toussus (LFPN, points S et NH,
 circuit à 1500 ft), Chartres-Métropole (LFOR, circuit au nord des pistes), Étampes-Mondésir (LFOX),
 Orléans-Saint-Denis-de-l'Hôtel (LFOZ), Le Puy-Loudes (LFHP), Pithiviers (LFFP), Buno-Bonnevaux (LFFB)
-et Paris-Orly (LFPO, pour les règles d'accès VFR). Le moteur n'en utilise que les points de report, la
+Paris-Orly (LFPO, pour les règles d'accès VFR) et la base militaire de Saint-Dizier-Robinson (LFSI, régimes CAM). Le moteur n'en utilise que les points de report, la
 hauteur et le côté du circuit et la piste préférée ; le reste (services, horaires, consignes) est de la
 documentation. La main du circuit n'est renseignée que si la fiche la donne en texte : les autres cas se
 lisent sur le dessin de la carte, qu'il faut vérifier à l'œil.

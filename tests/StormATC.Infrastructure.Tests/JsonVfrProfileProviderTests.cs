@@ -79,6 +79,7 @@ public sealed class JsonVfrProfileProviderTests : IDisposable
     [InlineData("LFPM", 282, null, 3)]
     [InlineData("LFPN", null, 1500, 2)]
     [InlineData("LFPO", null, null, 0)]
+    [InlineData("LFSI", 110, null, 0)]
     public async Task Every_bundled_profile_loads_with_what_the_chart_says(
         string icao, int? preferredQfu, int? circuitHeight, int reportingPoints)
     {
