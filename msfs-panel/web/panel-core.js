@@ -195,6 +195,7 @@ var StormAtcPanel = (function () {
         var chartZoom = 1;
         var chartsTimer = null;
         var chartLetter = null;
+        var renderedChartList = null;
         var chartView = null;
         // The destination whose chart was opened for the pilot, or that the pilot went back from: the
         // chart of the aerodrome the flight is heading to opens by itself once, not again and again.
@@ -237,10 +238,24 @@ var StormAtcPanel = (function () {
             return 2;
         }
 
+        // What the list shows, as text. The list is refreshed every few seconds and with every state
+        // update; rebuilding it when nothing changed would send the pilot back to the top.
+        function chartListSignature(t) {
+            var charts = (chartData && chartData.charts) || [];
+            return JSON.stringify([
+                t && t.tab, chartError, chartData && chartData.directory, chartLetter,
+                lastState && lastState.departure, lastState && lastState.destination, recentIds(),
+                charts.map(function (c) { return c.id + '|' + (c.aerodromeName || ''); })
+            ]);
+        }
+
         function renderChartList() {
             if (openedChart) { return; }
-            clear(chartsPane);
             var t = chartTexts();
+            var signature = chartListSignature(t);
+            if (signature === renderedChartList && chartsPane.firstChild) { return; }
+            renderedChartList = signature;
+            clear(chartsPane);
             var list = el('div', 'sa-chartlist');
             chartsPane.appendChild(list);
             if (!t) { return; }
@@ -396,6 +411,7 @@ var StormAtcPanel = (function () {
         }
 
         function buildViewer() {
+            renderedChartList = null;
             clear(chartsPane);
             var t = chartTexts();
             var bar = el('div', 'sa-chartbar');
