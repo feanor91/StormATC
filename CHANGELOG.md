@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.9.0 - 2026-10-23
+
 ### Added
 
 - The SIA's VAC charts (416 PDF, AIRAC cycle effective 2026-10-01) are now in the repository and in the installer,
