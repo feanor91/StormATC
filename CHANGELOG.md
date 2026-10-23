@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.6.2 - 2026-10-23
+
 ### Changed
 
 - The Charts tab of the panel, with more than 15 charts, shows the flight's charts, the last five opened and an
