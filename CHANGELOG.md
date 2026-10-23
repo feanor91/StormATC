@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.6.3 - 2026-10-23
+
 ### Fixed
 
 - The Charts tab no longer jumps back to the top of the list every few seconds: the list is rebuilt only when
