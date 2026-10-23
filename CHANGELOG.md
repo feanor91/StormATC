@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.10.0 - 2026-10-23
+
 ### Added
 
 - PAR and SRA radar approaches for a military flight ("demande PAR piste 29", "demande SRA piste 29"): the controller
