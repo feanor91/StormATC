@@ -67,7 +67,7 @@
   },
   "notes": [
     "Military base: civil VFR pilots do not fly in without prior agreement; in the simulator the flight is flown in CAM V or CAM I.",
-    "The base publishes its frequencies in UHF and VHF. Only the VHF ones are given here (APP 134.775 and 142.450, TWR 122.100 and 140.175 for line-up and take-off, PAR 123.300, SRE 140.900).",
+    "The base publishes its frequencies in UHF and VHF. Only those a MSFS radio can tune (118 to 137 MHz) matter: APP 134.775, TWR 122.100, PAR 123.300. The VHF frequencies above 137 MHz (APP 142.450, TWR 140.175 for line-up and take-off, SRE 140.900) are military and cannot be tuned in MSFS.",
     "Arresting gear (BAR) marked by six yellow circles 3 m in diameter on the runway; BATR over 1200 m, east part, on runway 11L/29R used by the ACB.",
     "Deactivation of the CTR is announced on 134.775 (RAI)."
   ]

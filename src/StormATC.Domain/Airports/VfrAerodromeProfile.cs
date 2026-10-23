@@ -32,6 +32,12 @@ public sealed record VfrReportingPoint(string Name, string SpokenFrench, string 
 /// Runway geometry, taxiways, parking and frequencies come from the simulator. This profile adds
 /// only the VFR procedures, so an aerodrome without one still works with generic phraseology.
 /// </remarks>
+/// <summary>A frequency an aerodrome publishes.</summary>
+/// <param name="Service">The service: APP, TWR, GND, ATIS, PAR, SRE, A/A…</param>
+/// <param name="Frequency">The frequency.</param>
+/// <param name="Remark">What the aerodrome says about it (transit, recovery, particular…), or empty.</param>
+public sealed record AerodromeFrequency(string Service, Frequency Frequency, string Remark);
+
 public sealed record VfrAerodromeProfile
 {
     /// <summary>The ICAO code.</summary>
@@ -54,6 +60,9 @@ public sealed record VfrAerodromeProfile
     /// the air-air frequency and nobody answers.
     /// </summary>
     public bool HasNoAtc => string.Equals(ServiceKind, "None", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>The frequencies the profile lists, with the service each belongs to.</summary>
+    public IReadOnlyList<AerodromeFrequency> Frequencies { get; init; } = [];
 
     /// <summary>The published reporting points, in the order they are used on arrival.</summary>
     public IReadOnlyList<VfrReportingPoint> ReportingPoints { get; init; } = [];

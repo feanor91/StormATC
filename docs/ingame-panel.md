@@ -1,6 +1,6 @@
 # Panneau StormATC dans MSFS (barre d'outils, réalité virtuelle)
 
-StormATC ajoute une fenêtre à la barre d'outils de Microsoft Flight Simulator. Elle a trois onglets :
+StormATC ajoute une fenêtre à la barre d'outils de Microsoft Flight Simulator. Elle a trois onglets, et un quatrième en régime militaire :
 
 - **Dialogue ATC** : les échanges avec le contrôleur, du plus ancien au plus récent (vous en vert,
   le contrôleur en bleu). La liste suit les nouveaux messages tant que vous n'avez pas remonté.
@@ -9,6 +9,9 @@ StormATC ajoute une fenêtre à la barre d'outils de Microsoft Flight Simulator.
   (« répétez », « quelle est la fréquence de la Tour ? »…). L'onglet change tout seul avec la phase.
 - **Cartes** : les cartes (fichiers PDF) que vous avez déposées dans le dossier des cartes de StormATC,
   affichées dans le simulateur, en VR comme à l'écran. Voir [les cartes](#les-cartes-pdf).
+- **Militaire** (seulement en CAM V ou CAM I) : le régime et la base, l'approche radar PAR/SRA en cours, les
+  fréquences de la base que les radios de MSFS peuvent accorder (118 à 137 MHz) et les appels militaires par thème
+  (roulage, arrivée et break, PAR et SRA, changement de régime).
 
 En bas de l'onglet Dialogue ATC, la **voix du contrôleur** qui vient de parler est indiquée, avec le
 bouton **Je n'aime pas cette voix**. Il écarte cette voix (ou ce locuteur d'un modèle multi-voix) :

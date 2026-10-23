@@ -53,6 +53,12 @@ public enum PhraseologyStage
 /// <param name="Controller">What the controller answers; empty when it is a readback.</param>
 public sealed record PhraseExample(string Situation, string Pilot, string Controller);
 
+/// <summary>A theme of the military page and its calls.</summary>
+/// <param name="Key">A stable identifier.</param>
+/// <param name="Title">The theme's name, in the radio language.</param>
+/// <param name="Examples">The calls.</param>
+public sealed record PhraseologySection(string Key, string Title, IReadOnlyList<PhraseExample> Examples);
+
 /// <summary>The phraseology for one stage of the flight.</summary>
 /// <param name="Stage">The stage.</param>
 /// <param name="Title">The stage's title, in the radio language.</param>
@@ -198,6 +204,76 @@ public static class PhraseologyCatalog
             ? new($"Changer de régime ({rules.ToSpokenLabel()} actuellement)", $"{callsign}, demandons {other}.", $"{callsign}, vous êtes maintenant en {other}.")
             : new($"Change regime (now {rules.ToSpokenLabel()})", $"{callsign}, request {other}.", $"{callsign}, you are now {other}.");
         return [.. civil, change];
+    }
+
+    /// <summary>
+    /// The calls of the French military regimes (CAM V, CAM I), by theme: taxi, arrival and break, PAR and SRA,
+    /// regime change. They follow Instruction 1950 DSAE/DIRCAM as far as StormATC answers them.
+    /// </summary>
+    /// <param name="language">The radio language.</param>
+    /// <param name="callsign">The aircraft's callsign as it is spoken.</param>
+    public static IReadOnlyList<PhraseologySection> MilitarySections(PhraseologyLanguage language, string callsign)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(callsign);
+        string cs = callsign;
+
+        return language == PhraseologyLanguage.French
+            ?
+            [
+                new("ground", "Roulage",
+                [
+                    new("Demander le roulage", $"Sol, {cs}, CAM Victor, parking, demandons le roulage.", $"{cs}, roulez piste XX, QFE XXXX."),
+                    new("Collationner", $"Roulons piste XX, QFE XXXX, {cs}.", $"{cs}, collationnement correct."),
+                ]),
+                new("arrival", "Arrivée et break",
+                [
+                    new("Premier appel", $"Tour, {cs}, vingt nautiques au sud, demande le break.", $"{cs}, piste XX, vent XXX degrés XX nœuds, QFE XXXX, rappelez initiale."),
+                    new("À l'initiale", $"{cs}, initiale, QFE XXXX.", $"{cs}, correct, numéro un, rappelez dernier virage, train sorti verrouillé."),
+                    new("Dernier virage", $"{cs}, dernier virage piste XX, train sorti verrouillé.", $"{cs}, piste XX, vent XXX degrés XX nœuds, autorisé atterrissage."),
+                    new("Si le train n'a pas été annoncé", $"{cs}, dernier virage piste XX.", $"{cs}, vérifiez train sorti verrouillé."),
+                ]),
+                new("radar", "Approche radar PAR et SRA",
+                [
+                    new("Demander un PAR", $"{cs}, demande PAR piste XX.", $"{cs}, radar PAR piste XX, QFE XXXX, ne répondez plus aux transmissions, sauf demande."),
+                    new("Demander un SRA", $"{cs}, demande SRA piste XX.", $"{cs}, approche de surveillance piste XX, QFE XXXX, ne répondez plus aux transmissions, sauf demande."),
+                    new("Pendant le PAR (sans répondre)", string.Empty, $"{cs}, légèrement à gauche de l'axe, route XXX, sous la pente, distance trois milles."),
+                    new("Pendant le SRA (sans répondre)", string.Empty, $"{cs}, sur l'axe, distance quatre milles, altitude recommandée XXXX pieds."),
+                    new("Fin de SRA", $"{cs}, piste en vue.", $"{cs}, piste XX, autorisé atterrissage."),
+                ]),
+                new("regime", "Régime CAM",
+                [
+                    new("Passer en CAM India", $"{cs}, demandons CAM India.", $"{cs}, vous êtes maintenant en CAM India."),
+                    new("Passer en CAM Victor", $"{cs}, demandons CAM Victor.", $"{cs}, vous êtes maintenant en CAM Victor."),
+                ]),
+            ]
+            :
+            [
+                new("ground", "Taxi",
+                [
+                    new("Request taxi", $"Ground, {cs}, CAM Victor, parking, request taxi.", $"{cs}, taxi runway XX, QFE XXXX."),
+                    new("Read back", $"Taxi runway XX, QFE XXXX, {cs}.", $"{cs}, readback correct."),
+                ]),
+                new("arrival", "Arrival and break",
+                [
+                    new("First call", $"Tower, {cs}, twenty miles south, request the break.", $"{cs}, runway XX, wind XXX degrees XX knots, QFE XXXX, report initial."),
+                    new("At the initial point", $"{cs}, initial, QFE XXXX.", $"{cs}, correct, number one, report turning final, gear down and locked."),
+                    new("Turning final", $"{cs}, turning final runway XX, gear down and locked.", $"{cs}, runway XX, wind XXX degrees XX knots, cleared to land."),
+                    new("If the gear was not reported", $"{cs}, turning final runway XX.", $"{cs}, check gear down and locked."),
+                ]),
+                new("radar", "PAR and SRA radar approach",
+                [
+                    new("Request a PAR", $"{cs}, request PAR runway XX.", $"{cs}, PAR approach, runway XX, QFE XXXX, do not acknowledge further transmissions unless requested."),
+                    new("Request an SRA", $"{cs}, request SRA runway XX.", $"{cs}, surveillance radar approach, runway XX, QFE XXXX, do not acknowledge further transmissions unless requested."),
+                    new("During the PAR (do not answer)", string.Empty, $"{cs}, slightly left of centreline, heading XXX, below glidepath, three miles from touchdown."),
+                    new("During the SRA (do not answer)", string.Empty, $"{cs}, on centreline, four miles from touchdown, recommended altitude XXXX."),
+                    new("End of SRA", $"{cs}, runway in sight.", $"{cs}, runway XX, cleared to land."),
+                ]),
+                new("regime", "CAM regime",
+                [
+                    new("Change to CAM India", $"{cs}, request CAM India.", $"{cs}, you are now CAM India."),
+                    new("Change to CAM Victor", $"{cs}, request CAM Victor.", $"{cs}, you are now CAM Victor."),
+                ]),
+            ];
     }
 
     /// <summary>The calls that are always possible, whatever the stage.</summary>

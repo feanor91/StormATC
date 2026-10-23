@@ -19,5 +19,5 @@ public sealed class SessionToolbarPanelStateSource(
 {
     /// <inheritdoc />
     public ToolbarPanelState Current() =>
-        ToolbarPanelStateBuilder.Build(sessionContext.CurrentSession, voices?.LastVoice);
+        ToolbarPanelStateBuilder.Build(sessionContext.CurrentSession, voices?.LastVoice, sessionContext.CachedCurrentVfrProfile());
 }

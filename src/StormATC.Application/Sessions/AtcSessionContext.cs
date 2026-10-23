@@ -521,6 +521,22 @@ public sealed class AtcSessionContext(
         or FlightPhase.Arrival or FlightPhase.Approach or FlightPhase.Final or FlightPhase.Landed
         or FlightPhase.TaxiIn or FlightPhase.Parked or FlightPhase.GoAround or FlightPhase.Circuit;
 
+    /// <summary>
+    /// The VFR profile of the aerodrome the flight is at now, when it has already been loaded: the departure
+    /// aerodrome until the flight is on its way to the destination. Never loads anything: the panel asks often.
+    /// </summary>
+    public VfrAerodromeProfile? CachedCurrentVfrProfile()
+    {
+        AtcSession session = CurrentSession;
+        string? icao = session.FlightPlan is FlightPlan filed
+            ? (IsArrivalPhase(session.Phase) ? filed.DestinationIcao : filed.DepartureIcao)
+            : null;
+        lock (_vfrProfileCache)
+        {
+            return icao is not null && _vfrProfileCache.TryGetValue(icao, out VfrAerodromeProfile? profile) ? profile : null;
+        }
+    }
+
     /// <summary>Loads an aerodrome's VFR profile, caching the result (including "none").</summary>
     private async Task<VfrAerodromeProfile?> GetVfrProfileAsync(string? icao, CancellationToken cancellationToken)
     {
@@ -529,9 +545,12 @@ public sealed class AtcSessionContext(
             return null;
         }
 
-        if (_vfrProfileCache.TryGetValue(icao, out VfrAerodromeProfile? cached))
+        lock (_vfrProfileCache)
         {
-            return cached;
+            if (_vfrProfileCache.TryGetValue(icao, out VfrAerodromeProfile? cached))
+            {
+                return cached;
+            }
         }
 
         VfrAerodromeProfile? profile = null;
@@ -548,7 +567,11 @@ public sealed class AtcSessionContext(
             _logger.LogWarning(ex, "The VFR profile of {Icao} could not be loaded.", icao);
         }
 
-        _vfrProfileCache[icao] = profile;
+        lock (_vfrProfileCache)
+        {
+            _vfrProfileCache[icao] = profile;
+        }
+
         return profile;
     }
 

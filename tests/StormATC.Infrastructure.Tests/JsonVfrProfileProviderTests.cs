@@ -121,6 +121,23 @@ public sealed class JsonVfrProfileProviderTests : IDisposable
     }
 
     [Fact]
+    public async Task The_frequencies_of_a_base_are_listed_with_their_service()
+    {
+        File.Copy(Path.Combine(BundledFolder(), "LFBC.json"), Path.Combine(_data, "vfr-profiles", "LFBC.json"));
+        File.Copy(Path.Combine(BundledFolder(), "LFSI.json"), Path.Combine(_data, "vfr-profiles", "LFSI.json"));
+
+        VfrAerodromeProfile cazaux = (await Provider().GetProfileAsync("LFBC", CancellationToken.None))!;
+        VfrAerodromeProfile robinson = (await Provider().GetProfileAsync("LFSI", CancellationToken.None))!;
+
+        Assert.Contains(cazaux.Frequencies, f => f.Service == "TWR" && f.Frequency == Frequency.FromMegahertz(118.400m));
+        Assert.Contains(cazaux.Frequencies, f => f.Service == "PAR" && f.Frequency == Frequency.FromMegahertz(123.300m));
+        Assert.Contains(robinson.Frequencies, f => f.Service == "APP" && f.Frequency == Frequency.FromMegahertz(134.775m));
+
+        // MSFS COM radios stop at 137 MHz: the military frequencies above it (such as the SRE at 140.900) are not kept.
+        Assert.DoesNotContain(robinson.Frequencies, f => f.Frequency.Megahertz > 137m);
+    }
+
+    [Fact]
     public async Task Every_bundled_profile_loads_and_is_named_after_its_file()
     {
         string[] files = Directory.GetFiles(BundledFolder(), "*.json");

@@ -176,3 +176,10 @@
 .sa-chartimg { display: block; max-width: none; background: #ffffff; margin: 0; -webkit-user-drag: none; user-select: none; }
 .sa-chartmsg { position: absolute; top: 0.6em; left: 0.8em; padding: 0.2em 0.6em; border-radius: 0.4em; background: rgba(10, 17, 24, 0.85); color: #ffd166; z-index: 1; }
 .sa-chartmsg:empty { display: none; }
+
+/* The military page: the base's VHF frequencies and the radar approach line. */
+.sa-milnote { margin: 0 0 0.4em 0; font-size: 0.9em; color: #9fb3c8; }
+.sa-freqrow { display: flex; flex-direction: row; align-items: baseline; margin: 0 0 0.25em 0; padding: 0.25em 0.6em; border-radius: 0.4em; background: #16222e; }
+.sa-freqservice { flex: 0 0 5.5em; font-weight: 700; color: #ffd166; }
+.sa-freqvalue { flex: 0 0 5.5em; font-weight: 700; color: #ffffff; }
+.sa-freqremark { flex: 1 1 auto; font-size: 0.8em; color: #9fb3c8; }

@@ -120,8 +120,29 @@ public sealed class JsonVfrProfileProvider(
             airAir = parsed;
         }
 
+        var listed = new List<AerodromeFrequency>();
+        if (root.TryGetProperty("frequencies", out JsonElement all) && all.ValueKind == JsonValueKind.Object)
+        {
+            foreach (JsonProperty entry in all.EnumerateObject())
+            {
+                string label = ServiceLabel(entry.Name);
+                if (entry.Value.ValueKind == JsonValueKind.Array)
+                {
+                    foreach (JsonElement item in entry.Value.EnumerateArray())
+                    {
+                        AddFrequency(listed, label, item);
+                    }
+                }
+                else
+                {
+                    AddFrequency(listed, label, entry.Value);
+                }
+            }
+        }
+
         return new VfrAerodromeProfile
         {
+            Frequencies = listed,
             ServiceKind = serviceKind,
             AirAirFrequency = airAir,
             Icao = icao.ToUpperInvariant(),
@@ -132,6 +153,42 @@ public sealed class JsonVfrProfileProvider(
             CircuitSideBearing = sideBearing,
         };
     }
+
+    /// <summary>A frequency written as a number or as <c>{ "mhz": 122.1, "remark": "..." }</c>.</summary>
+    private static void AddFrequency(List<AerodromeFrequency> into, string service, JsonElement value)
+    {
+        string remark = string.Empty;
+        JsonElement number = value;
+        if (value.ValueKind == JsonValueKind.Object && value.TryGetProperty("mhz", out JsonElement mhz))
+        {
+            number = mhz;
+            if (value.TryGetProperty("remark", out JsonElement note) && note.ValueKind == JsonValueKind.String)
+            {
+                remark = note.GetString() ?? string.Empty;
+            }
+        }
+
+        if (number.ValueKind == JsonValueKind.Number && number.TryGetDecimal(out decimal megahertz)
+            && Frequency.TryFromMegahertz(megahertz, out Frequency frequency))
+        {
+            into.Add(new AerodromeFrequency(service, frequency, remark));
+        }
+    }
+
+    private static string ServiceLabel(string key) => key switch
+    {
+        "approach" or "app" => "APP",
+        "approachTransit" => "APP (transit)",
+        "tower" or "twr" => "TWR",
+        "towerLineUpAndTakeOff" => "TWR (alignement, décollage)",
+        "ground" or "gnd" => "GND",
+        "atis" or "atisFr" or "atisEn" => "ATIS",
+        "airAir" => "A/A",
+        "afis" => "AFIS",
+        "par" => "PAR",
+        "sre" or "sra" => "SRE",
+        _ => key.ToUpperInvariant(),
+    };
 
     private static string? SpokenName(JsonElement spoken, string language) =>
         spoken.TryGetProperty(language, out JsonElement value) && value.GetString() is { Length: > 0 } text

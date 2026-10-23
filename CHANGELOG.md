@@ -5,6 +5,21 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- PAR and SRA radar approaches for a military flight ("demande PAR piste 29", "demande SRA piste 29"): the controller
+  accepts, gives the QFE and says not to acknowledge, then talks the aircraft down from its position against the
+  extended centreline: radar contact, "sur l'axe / légèrement à gauche de l'axe, route XXX", "sur la pente /
+  au-dessus / sous la pente" and the distance (PAR), or the distance and the recommended altitude (SRA), every 4 to
+  8 seconds. The gear check comes at 2 NM (PAR) or 3 NM (SRA). The PAR ends with the landing clearance at 0.9 NM; the
+  SRA ends at 2 NM with "annoncez piste en vue ou remise de gaz", and "piste en vue" is answered with the clearance.
+  A go-around ends the approach. The height is the radio height above ground; this is a simulation of the
+  procedure, not a certified radar.
+- A **Military** tab in the MSFS panel, shown in a CAM regime: the regime and the base, the radar approach in
+  progress, the base's frequencies that an MSFS radio can tune (118 to 137 MHz), and the military calls by theme
+  (taxi, arrival and break, PAR and SRA, regime change).
+- Profiles list their frequencies with the service of each (APP, TWR, GND, PAR...).
+
 ## 0.9.1 - 2026-10-23
 
 ### Changed

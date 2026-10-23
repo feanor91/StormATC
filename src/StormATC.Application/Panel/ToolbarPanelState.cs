@@ -1,6 +1,7 @@
 using System.Globalization;
 using StormATC.Application.Abstractions;
 using StormATC.Domain;
+using StormATC.Domain.Airports;
 using StormATC.Domain.Phraseology;
 using StormATC.Domain.Sessions;
 
@@ -23,6 +24,7 @@ namespace StormATC.Application.Panel;
 /// <param name="Voice">The controller voice that spoke last, or null when there is none to judge.</param>
 /// <param name="Departure">The departure aerodrome of the flight plan, or empty.</param>
 /// <param name="Destination">The destination aerodrome of the flight plan, or empty.</param>
+/// <param name="Military">The military page, in a CAM regime; null otherwise.</param>
 public sealed record ToolbarPanelState(
     string Language,
     string Callsign,
@@ -36,7 +38,46 @@ public sealed record ToolbarPanelState(
     string Registration = "",
     ToolbarPanelVoice? Voice = null,
     string Departure = "",
-    string Destination = "");
+    string Destination = "",
+    ToolbarPanelMilitary? Military = null);
+
+/// <summary>A frequency of the aerodrome, as the military page lists it.</summary>
+/// <param name="Service">The service (APP, TWR, PAR…).</param>
+/// <param name="Frequency">The frequency in MHz.</param>
+/// <param name="Remark">What the aerodrome says about it, or empty.</param>
+public sealed record ToolbarPanelFrequency(string Service, string Frequency, string Remark);
+
+/// <summary>The military page: the regime, the base's VHF frequencies, the radar approach and the calls.</summary>
+/// <param name="Regime">CAM V or CAM I.</param>
+/// <param name="Aerodrome">The base the flight is at, or empty.</param>
+/// <param name="Frequencies">The VHF frequencies of the base.</param>
+/// <param name="Radar">The state of a PAR or SRA in progress, or empty.</param>
+/// <param name="Sections">The military calls, by theme.</param>
+/// <param name="Labels">The texts of the page.</param>
+public sealed record ToolbarPanelMilitary(
+    string Regime,
+    string Aerodrome,
+    IReadOnlyList<ToolbarPanelFrequency> Frequencies,
+    string Radar,
+    IReadOnlyList<ToolbarPanelStage> Sections,
+    ToolbarPanelMilitaryLabels Labels);
+
+/// <summary>The texts of the military page.</summary>
+/// <param name="Tab">Title of the tab.</param>
+/// <param name="Regime">Label before the regime.</param>
+/// <param name="Frequencies">Title of the list of frequencies.</param>
+/// <param name="NoFrequencies">Shown when the base's profile lists none.</param>
+/// <param name="VhfOnly">The reminder that MSFS has no UHF radio.</param>
+/// <param name="Radar">Title of the radar approach line.</param>
+/// <param name="NoRadar">Shown when no radar approach is in progress.</param>
+public sealed record ToolbarPanelMilitaryLabels(
+    string Tab,
+    string Regime,
+    string Frequencies,
+    string NoFrequencies,
+    string VhfOnly,
+    string Radar,
+    string NoRadar);
 
 /// <summary>The controller voice that spoke last.</summary>
 /// <param name="Description">A short description, such as <c>fr_FR-mls-medium, speaker 42</c>.</param>
@@ -162,7 +203,8 @@ public static class ToolbarPanelStateBuilder
     /// <summary>Builds the panel state.</summary>
     /// <param name="session">The current session.</param>
     /// <param name="voice">The controller voice that spoke last, when the engine reports one.</param>
-    public static ToolbarPanelState Build(AtcSession session, SpokenVoice? voice = null)
+    /// <param name="profile">The VFR profile of the aerodrome the flight is at, when loaded: the base's frequencies.</param>
+    public static ToolbarPanelState Build(AtcSession session, SpokenVoice? voice = null, VfrAerodromeProfile? profile = null)
     {
         ArgumentNullException.ThrowIfNull(session);
 
@@ -217,7 +259,60 @@ public static class ToolbarPanelStateBuilder
                 : session.AircraftState.AtcIdentifier.Trim(),
             voice is null ? null : new ToolbarPanelVoice(voice.Description, voice.CanExclude),
             session.FlightPlan?.DepartureIcao ?? string.Empty,
-            session.FlightPlan?.DestinationIcao ?? string.Empty);
+            session.FlightPlan?.DestinationIcao ?? string.Empty,
+            BuildMilitary(session, spoken, french, profile));
+    }
+
+    private static ToolbarPanelMilitary? BuildMilitary(AtcSession session, string spoken, bool french, VfrAerodromeProfile? profile)
+    {
+        if (!session.FlightRules.IsMilitary())
+        {
+            return null;
+        }
+
+        ToolbarPanelFrequency[] frequencies =
+        [
+            .. (profile?.Frequencies ?? [])
+                .Where(listed => listed.Frequency.Megahertz is >= 118m and <= 137m)
+                .Select(listed => new ToolbarPanelFrequency(listed.Service, listed.Frequency.ToDisplay(), listed.Remark)),
+        ];
+
+        string radar = session.RadarApproach is { } approach
+            ? (approach.Kind == Domain.Approach.RadarApproachKind.Par ? "PAR" : "SRA")
+                + " " + (french ? "piste " : "runway ") + approach.Runway
+                + " : " + (approach.Completed
+                    ? (french ? "terminée" : "complete")
+                    : approach.Established
+                        ? (french ? "contact radar" : "radar contact")
+                        : (french ? "en attente du contact radar" : "waiting for radar contact"))
+            : string.Empty;
+
+        return new ToolbarPanelMilitary(
+            session.FlightRules.ToLabel(),
+            profile is null ? string.Empty : string.IsNullOrWhiteSpace(profile.Name) ? profile.Icao : profile.Name + " (" + profile.Icao + ")",
+            frequencies,
+            radar,
+            [
+                .. PhraseologyCatalog.MilitarySections(session.Language, spoken)
+                    .Select(section => new ToolbarPanelStage(section.Key, section.Title, section.Examples)),
+            ],
+            french
+                ? new ToolbarPanelMilitaryLabels(
+                    "Militaire",
+                    "Régime",
+                    "Fréquences VHF de la base",
+                    "Aucune fréquence dans le profil de cette base.",
+                    "Les radios de MSFS vont de 118 à 137 MHz : les fréquences UHF et celles au-dessus de 137 MHz ne peuvent pas être accordées.",
+                    "Approche radar",
+                    "Aucune approche radar en cours.")
+                : new ToolbarPanelMilitaryLabels(
+                    "Military",
+                    "Regime",
+                    "VHF frequencies of the base",
+                    "No frequency in this base's profile.",
+                    "MSFS radios cover 118 to 137 MHz: UHF frequencies and those above 137 MHz cannot be tuned.",
+                    "Radar approach",
+                    "No radar approach in progress."));
     }
 
     private static ToolbarPanelTurn ToTurn(ConversationTurn turn, IAtcPhraseology say, bool french)

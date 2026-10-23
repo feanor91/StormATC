@@ -71,7 +71,7 @@ var StormAtcPanel = (function () {
         options = options || {};
         var scale = parseFloat(storageGet('stormatc.scale')) || 1.2;
         var savedTab = storageGet('stormatc.tab');
-        var tab = savedTab === 'phraseology' || savedTab === 'charts' ? savedTab : 'dialogue';
+        var tab = savedTab === 'phraseology' || savedTab === 'charts' || savedTab === 'military' ? savedTab : 'dialogue';
         var timer = null;
         var stopped = false;
         var lastJson = '';
@@ -104,20 +104,26 @@ var StormAtcPanel = (function () {
         var tabDialogue = el('button', 'sa-tab');
         var tabPhraseology = el('button', 'sa-tab');
         var tabCharts = el('button', 'sa-tab');
+        var tabMilitary = el('button', 'sa-tab');
+        tabMilitary.style.display = 'none';
+        tabMilitary.setAttribute('type', 'button');
         tabDialogue.setAttribute('type', 'button');
         tabPhraseology.setAttribute('type', 'button');
         tabCharts.setAttribute('type', 'button');
         tabs.appendChild(tabDialogue);
         tabs.appendChild(tabPhraseology);
         tabs.appendChild(tabCharts);
+        tabs.appendChild(tabMilitary);
 
         var body = el('div', 'sa-body');
         var dialoguePane = el('div', 'sa-pane sa-dialogue');
         var phraseologyPane = el('div', 'sa-pane sa-phraseology');
         var chartsPane = el('div', 'sa-pane sa-charts');
+        var militaryPane = el('div', 'sa-pane sa-military');
         body.appendChild(dialoguePane);
         body.appendChild(phraseologyPane);
         body.appendChild(chartsPane);
+        body.appendChild(militaryPane);
 
         // Under the conversation: which voice spoke last, and the button to set it aside.
         var voiceBar = el('div', 'sa-voicebar');
@@ -177,6 +183,8 @@ var StormAtcPanel = (function () {
             dialoguePane.style.display = name === 'dialogue' ? 'block' : 'none';
             phraseologyPane.style.display = name === 'phraseology' ? 'block' : 'none';
             chartsPane.style.display = name === 'charts' ? 'flex' : 'none';
+            militaryPane.style.display = name === 'military' ? 'block' : 'none';
+            tabMilitary.className = 'sa-tab' + (name === 'military' ? ' sa-active' : '');
             tabDialogue.className = 'sa-tab' + (name === 'dialogue' ? ' sa-active' : '');
             tabPhraseology.className = 'sa-tab' + (name === 'phraseology' ? ' sa-active' : '');
             tabCharts.className = 'sa-tab' + (name === 'charts' ? ' sa-active' : '');
@@ -547,10 +555,12 @@ var StormAtcPanel = (function () {
         function renderExample(example, labels) {
             var card = el('div', 'sa-card');
             card.appendChild(el('div', 'sa-situation', example.situation));
-            var pilot = el('div', 'sa-say sa-pilot');
-            pilot.appendChild(el('span', 'sa-label', labels.say));
-            pilot.appendChild(el('span', 'sa-quote', example.pilot));
-            card.appendChild(pilot);
+            if (example.pilot) {
+                var pilot = el('div', 'sa-say sa-pilot');
+                pilot.appendChild(el('span', 'sa-label', labels.say));
+                pilot.appendChild(el('span', 'sa-quote', example.pilot));
+                card.appendChild(pilot);
+            }
             if (example.controller) {
                 var atc = el('div', 'sa-say sa-atc');
                 atc.appendChild(el('span', 'sa-label', labels.answer));
@@ -616,6 +626,50 @@ var StormAtcPanel = (function () {
             for (var j = 0; j < p.always.length; j++) {
                 phraseologyPane.appendChild(renderExample(p.always[j], state.labels));
             }
+        }
+
+        // The military page: the regime, the base's VHF frequencies, the radar approach, and the calls by theme.
+        function renderMilitary(state) {
+            var m = state.military;
+            if (!m) {
+                tabMilitary.style.display = 'none';
+                if (tab === 'military') { showTab('dialogue'); }
+                return;
+            }
+            tabMilitary.style.display = '';
+            tabMilitary.textContent = m.labels.tab;
+            if (tab !== 'military') { return; }
+
+            var readingAt = militaryPane.scrollTop;
+            clear(militaryPane);
+            var head = el('div', 'sa-stage');
+            head.appendChild(el('span', 'sa-stage-label', m.labels.regime));
+            head.appendChild(el('span', 'sa-stage-title', m.regime + (m.aerodrome ? ' \u2013 ' + m.aerodrome : '')));
+            militaryPane.appendChild(head);
+
+            militaryPane.appendChild(el('h3', 'sa-always', m.labels.radar));
+            militaryPane.appendChild(el('div', 'sa-milnote', m.radar || m.labels.noRadar));
+
+            militaryPane.appendChild(el('h3', 'sa-always', m.labels.frequencies));
+            if (!m.frequencies.length) {
+                militaryPane.appendChild(el('div', 'sa-milnote', m.labels.noFrequencies));
+            }
+            for (var f = 0; f < m.frequencies.length; f++) {
+                var row = el('div', 'sa-freqrow');
+                row.appendChild(el('span', 'sa-freqservice', m.frequencies[f].service));
+                row.appendChild(el('span', 'sa-freqvalue', m.frequencies[f].frequency));
+                if (m.frequencies[f].remark) { row.appendChild(el('span', 'sa-freqremark', m.frequencies[f].remark)); }
+                militaryPane.appendChild(row);
+            }
+            militaryPane.appendChild(el('div', 'sa-milnote', m.labels.vhfOnly));
+
+            for (var s = 0; s < m.sections.length; s++) {
+                militaryPane.appendChild(el('h3', 'sa-always', m.sections[s].title));
+                for (var e = 0; e < m.sections[s].examples.length; e++) {
+                    militaryPane.appendChild(renderExample(m.sections[s].examples[e], state.labels));
+                }
+            }
+            militaryPane.scrollTop = readingAt;
         }
 
         function showVoiceMessage(text) {
@@ -692,6 +746,7 @@ var StormAtcPanel = (function () {
             var readingAt = phraseologyPane.scrollTop;
             renderPhraseology(state);
             phraseologyPane.scrollTop = readingAt;
+            renderMilitary(state);
             scrollDialogue(false);
         }
 
