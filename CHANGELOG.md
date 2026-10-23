@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.11.0 - 2026-10-23
+
 ### Added
 
 - **CAM T** (Tango, tactique) regime, selectable on the Flight Plan page or asked for on the radio ("demandons CAM
