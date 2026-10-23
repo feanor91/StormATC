@@ -162,6 +162,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             PilotIntentType.RequestRegimeChange => HandleRegimeChange(context, intent),
             PilotIntentType.ReportInitial => HandleInitialReport(context, intent),
             PilotIntentType.RequestMarsa => HandleMarsaRequest(context, intent),
+            PilotIntentType.RequestTacticalPicture => HandleTacticalPicture(context, intent),
             PilotIntentType.RequestRadarApproach => HandleRadarApproachRequest(context, intent),
             PilotIntentType.RequestApproach => HandleApproachRequest(context, intent),
             PilotIntentType.ReportEstablished => HandleEstablishedReport(context, intent),

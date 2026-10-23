@@ -105,6 +105,12 @@ internal static partial class MilitaryIntentRules
     [GeneratedRegex(@"\bcam (?:tango|t)\b")]
     private static partial Regex CamTango();
 
+    /// <summary>True when the pilot asks for the tactical picture ("request picture", "bogey dope").</summary>
+    public static bool AsksForTacticalPicture(string transcript) => TacticalPicture().IsMatch(transcript);
+
+    [GeneratedRegex(@"\b(?:request picture|picture|bogey dope|braa)\b")]
+    private static partial Regex TacticalPicture();
+
     /// <summary>True when the pilot asks for a MARSA departure or approach.</summary>
     public static bool AsksForMarsa(string transcript) =>
         MarsaWord().IsMatch(transcript) && RequestWord().IsMatch(transcript);

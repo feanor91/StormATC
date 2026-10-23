@@ -44,6 +44,7 @@ public static class FrenchTranscriptCanonicalizer
         ("cam(?:e)? (?:victor|v|5)", "cam victor"),
         ("cam(?:e)? (?:india|inde|i|1)", "cam india"),
         ("cam(?:e)? (?:tango|t)(?= |$)", "cam tango"),
+        ("(?:demande(?:ons)? )?(?:la |le |l )?(?:situation tactique|situation|point de situation|image tactique)", "request picture"),
         ("demande(?:ons)? (?:un |une |le |l )?marsa depart", "request marsa departure"),
         ("demande(?:ons)? (?:un |une |le |l )?marsa (?:arrivee|approche)", "request marsa approach"),
         ("(?:patrouille|formation) de", "flight of"),

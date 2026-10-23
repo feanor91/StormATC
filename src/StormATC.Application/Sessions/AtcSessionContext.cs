@@ -304,7 +304,7 @@ public sealed class AtcSessionContext(
             // order of frequencies: whichever published frequency the pilot tunes is the
             // controller who answers. Listening to the ATIS, then calling Ground or Tower, is
             // simply tuning them in turn.
-            if (updated.FlightRules.IsVisual()
+            if ((updated.FlightRules.IsVisual() || updated.FlightRules == FlightRules.CamT)
                 && updated.FlightPlan is FlightPlan localPlan
                 && FollowTunedFrequency(updated, state, localPlan) is AtcSession followed)
             {
@@ -404,7 +404,10 @@ public sealed class AtcSessionContext(
         try
         {
             traffic = await _trafficProvider
-                .GetRelevantTrafficAsync(session.AircraftState, cancellationToken)
+                .GetRelevantTrafficAsync(
+                    session.AircraftState,
+                    cancellationToken,
+                    session.FlightRules == FlightRules.CamT ? TacticalRangeNauticalMiles : 15)
                 .ConfigureAwait(false);
         }
         catch (OperationCanceledException)
@@ -516,6 +519,9 @@ public sealed class AtcSessionContext(
             ? UiText.T($"{name} has no air traffic service (auto-information): there is no controller to call. Make your calls blind on {airAir.ToDisplay()}; StormATC does not answer.")
             : UiText.T($"{name} has no air traffic service (auto-information): there is no controller to call. Make your calls blind on the aerodrome's frequency; StormATC does not answer.");
     }
+
+    /// <summary>How far around a tactical (CAM T) flight the traffic is read, in nautical miles.</summary>
+    public const double TacticalRangeNauticalMiles = 150;
 
     private static bool IsArrivalPhase(FlightPhase phase) => phase is FlightPhase.Descent
         or FlightPhase.Arrival or FlightPhase.Approach or FlightPhase.Final or FlightPhase.Landed

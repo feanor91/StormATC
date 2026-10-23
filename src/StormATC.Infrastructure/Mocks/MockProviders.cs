@@ -245,7 +245,8 @@ public sealed class MockTrafficProvider : ITrafficProvider
     /// <inheritdoc />
     public Task<IReadOnlyList<TrafficContact>> GetRelevantTrafficAsync(
         AircraftState aircraftState,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken,
+        double radiusNauticalMiles = 15)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

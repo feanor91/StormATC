@@ -81,7 +81,7 @@ StormATC will not distribute shared credentials.
 - **Saint-Dizier-Robinson (LFSI) first.** *Step 1 done:* CAM V and CAM I regimes (selector, call recognition,
   change of regime), military phraseology examples in the panel, LFSI profile. *Step 2 done:* CAM V arrival with
   initial point, break and gear check, QFE in arrival and taxi calls. *Step 3 done:* PAR and SRA talk-downs from the
-  aircraft's position, and a Military tab in the panel. *Step 4 done:* CAM T regime and MARSA (departure and approach, flight of at least two). *Remains:* sequencing of several
+  aircraft's position, and a Military tab in the panel. *Step 4 done:* CAM T regime and MARSA (departure and approach, flight of at least two). *Step 5 done:* the tactical picture of a CAM T flight from the simulator's traffic. *Next, if wanted:* read the AzurPoly Rafale's weapon events (MICA, Meteor, gun) and selected target, once their content has been recorded in flight. *Remains:* sequencing of several
   aircraft at the break, radar approaches for CAM I flights flown from the IFR sequence, and the military
   frequencies above 137 MHz, which an MSFS radio cannot tune. Nothing military has been flown in MSFS yet: a Rafale test flight is needed at
   each step.

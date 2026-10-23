@@ -113,6 +113,12 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
     public WeatherSnapshot? LatestWeather { get; private set; }
 #endif
 
+    /// <summary>
+    /// How far around the aircraft the traffic scan reaches, in metres: 20 km for the circuit, up to 400 km for a
+    /// tactical picture. Set by the traffic provider from what the engine asks for.
+    /// </summary>
+    public int NearbyTrafficRadiusMeters { get; set; } = 20_000;
+
     /// <summary>Nearby simulator-managed aircraft from the latest traffic scan.</summary>
     public IReadOnlyList<MsfsTrafficSnapshot> NearbyTraffic =>
         Volatile.Read(ref _nearbyTraffic);
@@ -1123,7 +1129,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
             _simConnect.RequestDataOnSimObjectType(
                 Requests.NearbyTraffic,
                 Definitions.NearbyTraffic,
-                20_000,
+                (uint)NearbyTrafficRadiusMeters,
                 SIMCONNECT_SIMOBJECT_TYPE.AIRCRAFT);
         }
         catch (Exception ex)
@@ -1267,6 +1273,33 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         AircraftStateChanged?.Invoke(this, new AircraftStateChangedEventArgs(aircraftState));
     }
 
+    private DateTimeOffset _nextTacticalLogAt = DateTimeOffset.MinValue;
+
+    /// <summary>
+    /// With a tactical range (CAM T), says every 30 seconds how many aircraft the simulator reports and the nearest
+    /// ones, so a pilot can check that the aircraft a tablet generates are seen. Nothing is logged at the circuit range.
+    /// </summary>
+    private void LogTacticalScan()
+    {
+        DateTimeOffset now = DateTimeOffset.UtcNow;
+        if (NearbyTrafficRadiusMeters <= 20_000 || now < _nextTacticalLogAt)
+        {
+            return;
+        }
+
+        _nextTacticalLogAt = now.AddSeconds(30);
+        IReadOnlyList<MsfsTrafficSnapshot> scan = _nearbyTraffic;
+        string nearest = string.Join(
+            "; ",
+            scan.Take(3).Select(contact =>
+                $"{contact.ModelTitle} ({contact.AltitudeFeet:N0} ft, {(contact.IsOnGround ? "ground" : "airborne")})"));
+        _logger.LogInformation(
+            "Tactical traffic scan within {Radius} km: {Count} aircraft. First: {Nearest}",
+            NearbyTrafficRadiusMeters / 1000,
+            scan.Count,
+            nearest.Length == 0 ? "none" : nearest);
+    }
+
     private void OnReceiveNearbyTraffic(
         SimConnect sender,
         SIMCONNECT_RECV_SIMOBJECT_DATA_BYTYPE data)
@@ -1318,6 +1351,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
                 ref _nearbyTraffic,
                 (IReadOnlyList<MsfsTrafficSnapshot>)[.. _trafficBuffer]);
             _trafficRequestPending = false;
+            LogTacticalScan();
         }
     }
 

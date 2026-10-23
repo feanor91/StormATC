@@ -182,6 +182,9 @@ public enum PilotIntentType
     /// <summary>The pilot of a flight asks for a MARSA departure or approach (the flight keeps its own separation).</summary>
     RequestMarsa,
 
+    /// <summary>A military pilot asks for the tactical picture: the contacts around, by bearing and range.</summary>
+    RequestTacticalPicture,
+
     /// <summary>The pilot asks for a PAR or SRA radar approach.</summary>
     RequestRadarApproach,
     RequestApproach,

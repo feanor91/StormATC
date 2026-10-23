@@ -29,14 +29,18 @@ public sealed class MsfsTrafficProvider(
     /// <inheritdoc />
     public Task<IReadOnlyList<TrafficContact>> GetRelevantTrafficAsync(
         AircraftState aircraftState,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken,
+        double radiusNauticalMiles = RelevantRadiusNauticalMiles)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         if (_connector.ConnectionState != SimulatorConnectionState.Connected)
         {
-            return _fallback.GetRelevantTrafficAsync(aircraftState, cancellationToken);
+            return _fallback.GetRelevantTrafficAsync(aircraftState, cancellationToken, radiusNauticalMiles);
         }
+
+        // The scan reaches as far as the widest radius asked for: the circuit's 20 km, or a tactical picture's range.
+        _connector.NearbyTrafficRadiusMeters = (int)Math.Clamp(radiusNauticalMiles * 1852, 20_000, 400_000);
 
         if (!_options.CurrentValue.EnableLiveTraffic)
         {
@@ -49,7 +53,7 @@ public sealed class MsfsTrafficProvider(
             .. _connector.NearbyTraffic
                 .Where(contact =>
                     contact.Position.DistanceNauticalMilesTo(aircraftState.Position)
-                    <= RelevantRadiusNauticalMiles)
+                    <= radiusNauticalMiles)
                 .GroupBy(contact => contact.ObjectId)
                 .Select(group => group.First())
                 .Select(contact => ToDomainContact(contact, airports)),
@@ -69,6 +73,9 @@ public sealed class MsfsTrafficProvider(
             Position = snapshot.Position,
             AltitudeFeet = snapshot.AltitudeFeet,
             GroundSpeedKnots = snapshot.GroundSpeedKnots,
+            HeadingDegrees = snapshot.MagneticHeadingDegrees,
+            ModelTitle = snapshot.ModelTitle,
+            IsOnGround = snapshot.IsOnGround,
             IsOnRunway = snapshot.IsOnAnyRunway || runway is not null,
             OccupiedRunway = runway,
         };

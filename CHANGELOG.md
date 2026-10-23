@@ -5,6 +5,15 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **Tactical picture** for a CAM T flight: "demande la situation" (or "situation", "picture", "bogey dope") gives the
+  three nearest airborne contacts of the simulator's traffic as bearing (magnetic), range, altitude and aspect (hot,
+  flank, cold). In CAM T the traffic is read out to 150 NM instead of 20 km, and the log says every 30 seconds how many
+  aircraft the simulator reports, to check that the targets a tablet generates are seen. Needs "Enable live traffic
+  awareness". StormATC names no side and gives no clearance to engage.
+- A CAM T flight now follows the frequency it has tuned, like a VFR flight.
+
 ## 0.11.0 - 2026-10-23
 
 ### Added

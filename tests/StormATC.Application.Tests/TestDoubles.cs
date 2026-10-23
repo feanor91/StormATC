@@ -63,7 +63,8 @@ internal sealed class StubTrafficProvider : ITrafficProvider
 
     public Task<IReadOnlyList<TrafficContact>> GetRelevantTrafficAsync(
         AircraftState aircraftState,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken,
+        double radiusNauticalMiles = 15)
     {
         if (ShouldThrow)
         {

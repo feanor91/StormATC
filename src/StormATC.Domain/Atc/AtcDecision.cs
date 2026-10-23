@@ -223,6 +223,15 @@ public sealed record TrafficContact
     /// <summary>Ground speed in knots.</summary>
     public double GroundSpeedKnots { get; init; }
 
+    /// <summary>Magnetic heading in degrees, when the simulator reports it.</summary>
+    public double? HeadingDegrees { get; init; }
+
+    /// <summary>The simulator's title for the aircraft (its type), or empty.</summary>
+    public string ModelTitle { get; init; } = string.Empty;
+
+    /// <summary>True when the contact is on the ground (parked, taxiing or rolling).</summary>
+    public bool IsOnGround { get; init; }
+
     /// <summary>True when this traffic is on a runway surface.</summary>
     public bool IsOnRunway { get; init; }
 

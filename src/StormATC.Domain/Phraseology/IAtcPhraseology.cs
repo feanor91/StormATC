@@ -171,6 +171,15 @@ public interface IAtcPhraseology
     /// <param name="qfeHectopascals">The QFE in hectopascals.</param>
     string Qfe(int qfeHectopascals);
 
+    /// <summary>The nearest contacts: bearing, range, altitude and aspect of each.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="contacts">The contacts, nearest first (at most three).</param>
+    string TacticalPicture(Callsign callsign, IReadOnlyList<Approach.TacticalContact> contacts);
+
+    /// <summary>No contact in range.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    string NoTacticalContact(Callsign callsign);
+
     /// <summary>Approves a MARSA departure or approach.</summary>
     /// <param name="callsign">The flight.</param>
     /// <param name="kind">Departure or approach.</param>

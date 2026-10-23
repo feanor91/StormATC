@@ -245,6 +245,11 @@ public static class PhraseologyCatalog
                     new("MARSA au départ", $"{cs}, patrouille de deux, demande MARSA départ piste XX.", $"{cs}, MARSA départ piste XX approuvé, initial cap XXX."),
                     new("MARSA à l'arrivée", $"{cs}, patrouille de deux, demande MARSA approche, trail trois milles.", $"{cs}, MARSA approche piste XX approuvé."),
                 ]),
+                new("tactical", "Situation tactique (CAM T)",
+                [
+                    new("Demander la situation", $"{cs}, demande la situation.", $"{cs}, deux contacts, premier, gisement zéro quatre cinq, trente-huit milles, vingt-cinq mille pieds, chaud, deuxième, …"),
+                    new("Rien en vue", $"{cs}, situation.", $"{cs}, aucun contact."),
+                ]),
                 new("regime", "Régime CAM",
                 [
                     new("Passer en CAM India", $"{cs}, demandons CAM India.", $"{cs}, vous êtes maintenant en CAM India."),
@@ -278,6 +283,11 @@ public static class PhraseologyCatalog
                 [
                     new("MARSA departure", $"{cs}, flight of two, request MARSA departure runway XX.", $"{cs}, MARSA departure runway XX approved, initial heading XXX."),
                     new("MARSA approach", $"{cs}, flight of two, request MARSA approach, trail three miles.", $"{cs}, MARSA approach runway XX approved."),
+                ]),
+                new("tactical", "Tactical picture (CAM T)",
+                [
+                    new("Ask for the picture", $"{cs}, request picture.", $"{cs}, two contacts, first, bearing zero four five, 38 miles, 25000 feet, hot, second, …"),
+                    new("Nothing around", $"{cs}, picture.", $"{cs}, no contact."),
                 ]),
                 new("regime", "CAM regime",
                 [

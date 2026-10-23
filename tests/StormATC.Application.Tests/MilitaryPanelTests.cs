@@ -55,7 +55,7 @@ public class MilitaryPanelTests
         {
             IReadOnlyList<PhraseologySection> sections = PhraseologyCatalog.MilitarySections(language, "FOXTROT ALFA");
 
-            Assert.Equal(["ground", "arrival", "radar", "marsa", "regime"], sections.Select(s => s.Key));
+            Assert.Equal(["ground", "arrival", "radar", "marsa", "tactical", "regime"], sections.Select(s => s.Key));
             Assert.All(sections, section =>
             {
                 Assert.False(string.IsNullOrWhiteSpace(section.Title));

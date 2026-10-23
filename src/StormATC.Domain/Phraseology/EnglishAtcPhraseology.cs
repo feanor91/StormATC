@@ -277,6 +277,30 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
         $"QFE {SpokenNumbers.DigitsIndividually(qfeHectopascals.ToString(System.Globalization.CultureInfo.InvariantCulture))}";
 
     /// <inheritdoc />
+    public string TacticalPicture(Callsign callsign, IReadOnlyList<Approach.TacticalContact> contacts)
+    {
+        List<string> parts = [contacts.Count == 1 ? "one contact" : $"{contacts.Count} contacts"];
+        for (int i = 0; i < contacts.Count; i++)
+        {
+            Approach.TacticalContact contact = contacts[i];
+            parts.Add(
+                $"{(i == 0 ? "first" : i == 1 ? "second" : "third")}, bearing {SpokenNumbers.DigitsIndividually(contact.BearingMagnetic, 3)}, "
+                + $"{Math.Max(1, contact.RangeNauticalMiles)} miles, {contact.AltitudeFeet} feet, "
+                + contact.Aspect switch
+                {
+                    Approach.TacticalAspect.Hot => "hot",
+                    Approach.TacticalAspect.Cold => "cold",
+                    _ => "flank",
+                });
+        }
+
+        return $"{callsign.ToSpoken()}, {string.Join(", ", parts)}.";
+    }
+
+    /// <inheritdoc />
+    public string NoTacticalContact(Callsign callsign) => $"{callsign.ToSpoken()}, no contact.";
+
+    /// <inheritdoc />
     public string MarsaApproved(Callsign callsign, Approach.MarsaKind kind, RunwayIdentifier runway, int initialHeading) =>
         kind == Approach.MarsaKind.Departure
             ? $"{callsign.ToSpoken()}, MARSA departure {runway.ToSpoken()} approved, initial heading {SpokenNumbers.DigitsIndividually(initialHeading, 3)}."

@@ -568,6 +568,33 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
     public string Qfe(int qfeHectopascals) => $"QFE {FrenchSpokenNumbers.Cardinal(qfeHectopascals)}";
 
     /// <inheritdoc />
+    public string TacticalPicture(Callsign callsign, IReadOnlyList<Approach.TacticalContact> contacts)
+    {
+        PhraseBuilder phrase = Phrase(callsign)
+            .Add(contacts.Count == 1 ? "un contact" : $"{FrenchSpokenNumbers.Cardinal(contacts.Count)} contacts");
+        for (int i = 0; i < contacts.Count; i++)
+        {
+            Approach.TacticalContact contact = contacts[i];
+            phrase.Add(
+                $"{(i == 0 ? "premier" : i == 1 ? "deuxième" : "troisième")}, gisement {FrenchSpokenNumbers.Heading(contact.BearingMagnetic)}, "
+                + $"{FrenchSpokenNumbers.Cardinal(Math.Max(1, contact.RangeNauticalMiles))} milles, "
+                + $"{FrenchSpokenNumbers.Cardinal(contact.AltitudeFeet)} pieds, "
+                + contact.Aspect switch
+                {
+                    Approach.TacticalAspect.Hot => "chaud",
+                    Approach.TacticalAspect.Cold => "froid",
+                    _ => "flanc",
+                });
+        }
+
+        return phrase.Build();
+    }
+
+    /// <inheritdoc />
+    public string NoTacticalContact(Callsign callsign) =>
+        Phrase(callsign).Add("aucun contact").Build();
+
+    /// <inheritdoc />
     public string MarsaApproved(Callsign callsign, Approach.MarsaKind kind, RunwayIdentifier runway, int initialHeading) =>
         kind == Approach.MarsaKind.Departure
             ? Phrase(callsign)

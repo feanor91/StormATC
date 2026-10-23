@@ -43,9 +43,14 @@ public interface IAirspaceDataProvider
 public interface ITrafficProvider
 {
     /// <summary>Returns traffic relevant to the given aircraft state.</summary>
+    /// <param name="aircraftState">The aircraft.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <param name="radiusNauticalMiles">How far around the aircraft the traffic is wanted: 15 for the circuit and the
+    /// runways, more for a tactical picture.</param>
     Task<IReadOnlyList<TrafficContact>> GetRelevantTrafficAsync(
         AircraftState aircraftState,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken,
+        double radiusNauticalMiles = 15);
 }
 
 /// <summary>

@@ -23,8 +23,29 @@ Le contrôleur répond « vous êtes maintenant en CAM India ». En **CAM Tango*
 hors service de la circulation aérienne, et de le rappeler pour reprendre CAM Victor ou India.
 
 > L'Instruction 1950 dit elle-même qu'elle **ne décrit pas** les procédures radio tactiques (elles font l'objet de
-> documents particuliers). StormATC n'invente donc rien pour le tactique : il enregistre le régime, ne donne plus de
-> clairance, et c'est tout.
+> documents particuliers). StormATC n'invente donc pas de phraséologie de combat : il enregistre le régime, ne donne
+> plus de clairance, et propose la **situation tactique** ci-dessous.
+
+### La situation tactique (CAM T)
+
+En CAM T, vous pouvez demander « **demande la situation** » (ou « situation », « picture », « bogey dope »). Le
+contrôleur donne les **trois contacts les plus proches** vus par MSFS, de la forme : « deux contacts, premier,
+gisement zéro quatre cinq, trente-huit milles, vingt-cinq mille pieds, chaud, deuxième… ».
+
+- **Gisement** : le cap magnétique de l'avion vers le contact. **Distance** en milles nautiques, **altitude** arrondie
+  à 100 pieds.
+- **Aspect** : *chaud* = le contact se dirige vers vous, *froid* = il s'éloigne, *flanc* = il vous coupe la route.
+- Les contacts sont les **avions IA** que MSFS signale, y compris ceux que la tablette du Rafale AzurPoly fait
+  apparaître. En CAM T, StormATC lit le trafic jusqu'à **150 milles** (20 km dans les autres régimes). Il faut que
+  **Paramètres → Intégrations en direct → « Enable live traffic awareness »** soit coché.
+- StormATC **ne dit pas qui est ami ou ennemi** et ne donne aucune autorisation de tir : il décrit seulement ce que
+  MSFS lui montre. Les mots *chaud/froid/flanc* et la forme du message sont des choix de StormATC, pas ceux d'un
+  document officiel.
+- **Pour vérifier** que les cibles sont vues : le journal (`%LOCALAPPDATA%\StormATC\logs`) écrit toutes les
+  30 secondes en CAM T « Tactical traffic scan within … km : N aircraft » avec les trois premiers (type, altitude).
+
+Le Rafale d'AzurPoly publie aussi, dans ses variables internes, la cible sélectionnée et des événements de tir
+(MICA, Meteor, canon…). StormATC **ne les lit pas encore** : leur contenu doit d'abord être relevé en vol.
 
 ## 2. Le vocabulaire
 
@@ -93,6 +114,7 @@ Variante par mauvais temps : à l'étape 4, « demande PAR piste 29 », puis lai
 | Fait | Pas encore / pas du tout |
 | --- | --- |
 | Régimes CAM V, CAM I, CAM T (choix, annonce, changement) | Procédures radio **tactiques** (hors de l'Instruction 1950) |
+| Situation tactique en CAM T : gisement, distance, altitude, aspect des contacts de MSFS | Identifier ami ou ennemi, autoriser un tir, annoncer « Fox » ou « splash » (tirs du Rafale non lus) |
 | Roulage et arrivée : QFE, initiale, break, train sorti verrouillé | Séquencer **plusieurs** avions au break (pas de trafic militaire simulé) |
 | PAR et SRA depuis la position réelle de l'avion | PAR/SRA d'un vol **CAM I** suivi dans la séquence IFR |
 | MARSA au départ et à l'arrivée (patrouille d'au moins 2) | Le deuxième avion de la patrouille |
