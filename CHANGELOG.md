@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.12.0 - 2026-10-23
+
 ### Added
 
 - **Tactical picture** for a CAM T flight: "demande la situation" (or "situation", "picture", "bogey dope") gives the
