@@ -55,5 +55,9 @@ publish/
 *.zip
 *.sha256
 
-## SIA charts kept locally (copyright SIA, not redistributed)
-Cartes VAC/
+## SIA charts: the AIP France VAC charts are kept as published and shipped (see "Cartes VAC/LISEZ-MOI.txt").
+## Anything else dropped in that folder (copies, notes, a pilot's own charts) stays local.
+Cartes VAC/*
+!Cartes VAC/AD-2.????.pdf
+!Cartes VAC/_cycle.txt
+!Cartes VAC/LISEZ-MOI.txt

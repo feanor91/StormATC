@@ -5,6 +5,17 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- The SIA's VAC charts (416 PDF, AIRAC cycle effective 2026-10-01) are now in the repository and in the installer,
+  as published and unaltered, with their source notice (`Cartes VAC/LISEZ-MOI.txt`, `_cycle.txt`). The README
+  (English and French) says where the data comes from and on what conditions (SIA legal notice; Wikipedia list under
+  CC BY-SA 4.0).
+- The list of French aerodromes moved to `data/aerodromes-france.csv` and is installed with the application.
+- Settings > VAC charts: shows the source and AIRAC cycle of the charts and updates them from the SIA
+  (**Update the charts from the SIA**, **Download the missing charts**), replacing only the charts that changed. The
+  panel's Charts tab shows the same source line. It contacts `www.sia.aviation-civile.gouv.fr` only, on request.
+
 ## 0.8.0 - 2026-10-23
 
 ### Added

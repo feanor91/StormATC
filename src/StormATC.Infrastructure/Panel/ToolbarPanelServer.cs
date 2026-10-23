@@ -293,7 +293,8 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
             await WriteAsync(
                 response,
                 "application/json; charset=utf-8",
-                JsonSerializer.SerializeToUtf8Bytes(new { directory = _charts.Directory, charts = _charts.List() }, Json),
+                JsonSerializer.SerializeToUtf8Bytes(
+                    new { directory = _charts.Directory, source = _charts.Source?.Text, charts = _charts.List() }, Json),
                 cancellationToken).ConfigureAwait(false);
             return;
         }

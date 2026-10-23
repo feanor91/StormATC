@@ -82,7 +82,11 @@ Name: "msfspanel"; Description: "{cm:TaskMsfsPanel}"; GroupDescription: "{cm:Tas
 Name: "localvoice"; Description: "{cm:TaskLocalVoice}"; GroupDescription: "{cm:TaskLocalVoiceGroup}"
 
 [Files]
-Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#SourceDir}\*"; DestDir: "{app}"; Excludes: "Cartes VAC\*"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+; The SIA's VAC charts, as published (see "Cartes VAC\LISEZ-MOI.txt"). Without ignoreversion, a chart the pilot has
+; already updated to a newer AIRAC cycle is not replaced by an older one, and they are never removed on uninstall.
+Source: "{#SourceDir}\Cartes VAC\*"; DestDir: "{app}\Cartes VAC"; Flags: uninsneveruninstall
 
 ; The MSFS toolbar panel goes into the Community folder of each MSFS 2024 installation found
 ; (Microsoft Store and Steam). Setup removes it again on uninstall.

@@ -21,6 +21,7 @@
 | AI traffic wording explicitly enabled | A nearby traffic callsign and coarse observed situation go to the selected language-model API, at most once per generated exchange. |
 | Spoken traffic explicitly enabled | The generated controller and pilot lines go to the configured text-to-speech service, as two short requests per exchange. |
 | SimBrief configured | Your SimBrief user ID, to fetch your own plan. |
+| You press **Update the charts** (Settings > VAC charts) | One request per chart to `www.sia.aviation-civile.gouv.fr` (the SIA's public eAIP): the address of the chart, with a "StormATC" user agent. Nothing about you or your flight. It never runs by itself. |
 | MSFS connected | Nothing goes to the internet. SimConnect stays local; StormATC reads flight/facility data and sends one local COM1 tuning event when a flight is loaded. |
 
 That table is the whole of it.

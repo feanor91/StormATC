@@ -49,7 +49,7 @@ ne les envoie nulle part et l'installeur ne les contient pas (les cartes du SIA 
 redistribuables). Le dossier n'est jamais supprimé à la désinstallation.
 
 Dans un dépôt cloné (développement), le dossier `Cartes VAC` à la racine du dépôt, à côté de
-`StormATC.sln`, est utilisé quand celui de l'application est vide. Il est ignoré par git. Le réglage
+`StormATC.sln`, est utilisé quand celui de l'application est vide. Il contient les cartes du SIA livrées avec StormATC. Le réglage
 `ToolbarPanel:ChartsDirectory` désigne un autre dossier.
 
 **Avec un plan de vol**, l'onglet ouvre tout seul la carte de l'aérodrome d'**arrivée** (celle dont le

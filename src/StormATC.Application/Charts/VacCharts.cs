@@ -24,6 +24,9 @@ public interface IVacChartLibrary
     /// <summary>The folder the charts are read from.</summary>
     string Directory { get; }
 
+    /// <summary>Where the charts come from and the AIRAC cycle they are of, as the folder's notice says; null without one.</summary>
+    VacChartSource? Source { get; }
+
     /// <summary>Creates the folder when it does not exist yet, so the pilot can see where to put the charts.</summary>
     void EnsureDirectory();
 

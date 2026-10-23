@@ -6,7 +6,7 @@
     The SIA publishes a new AIRAC cycle every 28 days. This script finds the cycle in effect today (or the one
     you name), downloads the chart of every aerodrome that has a PDF in the folder, and replaces a file only
     when the new chart is different (SHA-256). With -IncludeMissing it also downloads the charts of the
-    aerodromes listed in docs/aerodromes-france.csv that the folder does not have yet.
+    aerodromes listed in data/aerodromes-france.csv that the folder does not have yet.
 
     The charts are the SIA's: they are kept as published, and the cycle date is written to _cycle.txt in the
     folder so the source and date can be quoted. Flight simulation only: never use for real navigation.
@@ -18,7 +18,7 @@
     The AIRAC effective date, such as 2026-10-01. Default: the cycle in effect today.
 
 .PARAMETER IncludeMissing
-    Also download the charts of the aerodromes in docs/aerodromes-france.csv that are not in the folder.
+    Also download the charts of the aerodromes in data/aerodromes-france.csv that are not in the folder.
 
 .PARAMETER DryRun
     Report what would change without writing anything.
@@ -83,7 +83,7 @@ Get-ChildItem -LiteralPath $Directory -Filter 'AD-2.*.pdf' | ForEach-Object {
     if ($_.BaseName -match '^AD-2\.(L[FG][A-Z]{2})$') { [void] $wanted.Add($Matches[1]) }
 }
 if ($IncludeMissing) {
-    $list = Join-Path $repository 'docs\aerodromes-france.csv'
+    $list = Join-Path $repository 'data\aerodromes-france.csv'
     if (-not (Test-Path -LiteralPath $list)) { throw "The list of aerodromes is missing: $list" }
     Import-Csv -LiteralPath $list -Delimiter ';' | ForEach-Object {
         if ($_.OACI -match '^L[FG][A-Z]{2}$') { [void] $wanted.Add($_.OACI) }

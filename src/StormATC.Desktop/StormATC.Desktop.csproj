@@ -76,6 +76,16 @@
     <Content Include="..\..\data\**\*.json" LinkBase="data">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <!-- The list of the French aerodromes (ICAO code, name, town), from Wikipedia (CC BY-SA 4.0). -->
+    <Content Include="..\..\data\aerodromes-france.csv" LinkBase="data">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- The SIA's VAC charts, as published, with their source notice. They are published and packed in the
+         installer only: a development build uses the folder of the checkout. -->
+    <Content Include="..\..\Cartes VAC\AD-2.*.pdf;..\..\Cartes VAC\_cycle.txt;..\..\Cartes VAC\LISEZ-MOI.txt" LinkBase="Cartes VAC">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <!-- The in-simulator panel's page, served by the local panel server (ToolbarPanelServer) for
          a browser or a VR overlay. The same files are packed into the MSFS toolbar package. -->
     <Content Include="..\..\msfs-panel\web\*" LinkBase="panel">

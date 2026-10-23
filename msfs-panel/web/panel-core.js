@@ -243,7 +243,7 @@ var StormAtcPanel = (function () {
         function chartListSignature(t) {
             var charts = (chartData && chartData.charts) || [];
             return JSON.stringify([
-                t && t.tab, chartError, chartData && chartData.directory, chartLetter,
+                t && t.tab, chartError, chartData && chartData.directory, chartData && chartData.source, chartLetter,
                 lastState && lastState.departure, lastState && lastState.destination, recentIds(),
                 charts.map(function (c) { return c.id + '|' + (c.aerodromeName || ''); })
             ]);
@@ -258,6 +258,7 @@ var StormAtcPanel = (function () {
             clear(chartsPane);
             var list = el('div', 'sa-chartlist');
             chartsPane.appendChild(list);
+            if (chartData && chartData.source) { chartsPane.appendChild(el('p', 'sa-chartsource', chartData.source)); }
             if (!t) { return; }
 
             if (chartError || !chartData) {

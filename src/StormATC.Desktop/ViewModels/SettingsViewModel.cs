@@ -50,6 +50,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     private readonly ILogger<SettingsViewModel> _logger;
     private readonly int _toolbarPanelPort;
     private readonly StormATC.Application.Charts.IVacChartLibrary? _charts;
+    private readonly StormATC.Application.Charts.IVacChartUpdater? _chartUpdater;
 
 
     /// <summary>
@@ -313,9 +314,12 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         IOptions<LocalVoiceOptions> localVoiceOptions,
         IOptions<ToolbarPanelOptions> toolbarPanelOptions,
         ILogger<SettingsViewModel> logger,
-        StormATC.Application.Charts.IVacChartLibrary? charts = null)
+        StormATC.Application.Charts.IVacChartLibrary? charts = null,
+        StormATC.Application.Charts.IVacChartUpdater? chartUpdater = null)
     {
         _charts = charts;
+        _chartUpdater = chartUpdater;
+        _chartsSource = ReadChartsSource();
         _toolbarPanelPort = toolbarPanelOptions?.Value.Port ?? ToolbarPanelOptions.DefaultPort;
         _secretStore = secretStore ?? throw new ArgumentNullException(nameof(secretStore));
         _languageModel = languageModel ?? throw new ArgumentNullException(nameof(languageModel));
@@ -919,6 +923,59 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         catch (System.ComponentModel.Win32Exception ex)
         {
             _logger.LogWarning(ex, "Could not open {Address}.", uri);
+        }
+    }
+
+    [ObservableProperty]
+    private string _chartsSource = string.Empty;
+
+    [ObservableProperty]
+    private string _chartsUpdateStatus = string.Empty;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(UpdateChartsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(DownloadMissingChartsCommand))]
+    private bool _isUpdatingCharts;
+
+    private string ReadChartsSource() =>
+        _charts?.Source?.Text ?? UiText.T("No notice of source in the charts folder.");
+
+    private bool CanUpdateCharts() => _chartUpdater is not null && !IsUpdatingCharts;
+
+    /// <summary>Replaces the charts in the folder that the SIA has changed in the AIRAC cycle in effect.</summary>
+    [RelayCommand(CanExecute = nameof(CanUpdateCharts))]
+    private Task UpdateChartsAsync() => RunChartUpdateAsync(includeMissing: false);
+
+    /// <summary>Also downloads the charts of the French aerodromes that the folder does not have.</summary>
+    [RelayCommand(CanExecute = nameof(CanUpdateCharts))]
+    private Task DownloadMissingChartsAsync() => RunChartUpdateAsync(includeMissing: true);
+
+    private async Task RunChartUpdateAsync(bool includeMissing)
+    {
+        if (_chartUpdater is null)
+        {
+            return;
+        }
+
+        IsUpdatingCharts = true;
+        ChartsUpdateStatus = UiText.T("Contacting the SIA…");
+        try
+        {
+            var progress = new Progress<string>(line => ChartsUpdateStatus = UiText.T("Updating the charts: ") + line);
+            StormATC.Application.Charts.VacChartUpdateResult result = await _chartUpdater
+                .UpdateAsync(includeMissing, progress, CancellationToken.None).ConfigureAwait(true);
+            ChartsUpdateStatus = UiText.T(
+                $"Charts of the AIRAC cycle {result.Cycle.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}: {result.Changed} replaced, {result.Added} added, {result.Unchanged} unchanged, {result.NotPublished} not published by the SIA, {result.Failed} failed.");
+            ChartsSource = ReadChartsSource();
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or System.Net.Http.HttpRequestException or System.IO.IOException or UnauthorizedAccessException)
+        {
+            _logger.LogWarning(ex, "The charts could not be updated.");
+            ChartsUpdateStatus = UiText.T("The charts could not be updated: ") + ex.Message;
+        }
+        finally
+        {
+            IsUpdatingCharts = false;
         }
     }
 

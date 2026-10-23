@@ -362,7 +362,8 @@ installer/                  L'installeur Inno Setup (dossier Community, téléch
 scripts/                    Scripts de compilation, de test, d'installeur, de version et de release.
 tests/                      Suites de tests Domain, Application et Infrastructure.
 prompts/                    Prompts des contrôleurs, modifiables sans recompiler.
-data/                       Aérodromes, vols et secteurs d'exemple fictifs.
+data/                       Exemples fictifs, profils VFR des aérodromes et liste des aérodromes français.
+Cartes VAC/                 Les cartes VAC du SIA, telles que publiées (voir « Données et cartes aéronautiques »).
 docs/                       Documentation d'architecture, d'installation et d'utilisation.
 website/                    Le site GitHub Pages.
 ```
@@ -371,10 +372,39 @@ website/                    Le site GitHub Pages.
 
 ## Données d'exemple
 
-Tout ce qui se trouve sous `data/` est **fictif**. Storm International (STMR), Storm Delta Regional
-(STMD), ainsi que toutes les coordonnées, fréquences, pistes, voies de circulation et parkings qu'ils
-contiennent sont inventés pour le vol de démonstration. Le préfixe OACI `ST..` n'est attribué à aucune
-région réelle. StormATC n'embarque aucune donnée de navigation réelle et aucune ne doit servir à naviguer.
+Les aérodromes, vols et secteurs d'exemple sous `data/` sont **fictifs**. Storm International (STMR),
+Storm Delta Regional (STMD), ainsi que toutes les coordonnées, fréquences, pistes, voies de circulation et
+parkings qu'ils contiennent sont inventés pour le vol de démonstration. Le préfixe OACI `ST..` n'est
+attribué à aucune région réelle.
+
+---
+
+## Données et cartes aéronautiques
+
+StormATC embarque aussi des **données aéronautiques réelles sur les aérodromes français**, pour la
+simulation de vol uniquement : **aucune ne doit servir à naviguer en vol réel.**
+
+| Quoi | Où | Source et conditions |
+| --- | --- | --- |
+| **Cartes VAC** (un PDF par aérodrome) | `Cartes VAC/`, installées avec l'application | **SIA** (Service de l'Information Aéronautique, DGAC), *AIP France*, atlas VAC, cycle AIRAC en vigueur le **2026-10-01**. Reproduites **telles que publiées, sans altération**. |
+| **Profils VFR des aérodromes** | `data/vfr-profiles/` | Faits (services, fréquences, altitude, pistes) lus sur les cartes et pages eAIP de l'AIP France du SIA, à la main ou extraits par `scripts/extract_vac_profiles.py` et `scripts/extract_military_profiles.py`. Chaque profil dit lequel des deux. |
+| **Liste des aérodromes français** | `data/aerodromes-france.csv` | [Liste des aérodromes et aéroports en France](https://fr.wikipedia.org/wiki/Liste_des_a%C3%A9rodromes_et_a%C3%A9roports_en_France), Wikipédia, sous licence [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.fr) ; code OACI, nom et commune seulement. |
+
+**À propos des données du SIA.** Les cartes et les données de l'AIP sont des données publiques publiées par
+le SIA, réutilisables aux conditions de ses [mentions légales](https://www.sia.aviation-civile.gouv.fr/informationslegales)
+(article L321-2 du Code des relations entre le public et l'administration) : les informations ne doivent pas
+être altérées, leur sens ne doit pas être dénaturé, et **leur source et la date de leur dernière mise à jour
+doivent être mentionnées** — ici, *SIA, AIP France, cycle AIRAC en vigueur le 2026-10-01*, aussi écrit dans
+`Cartes VAC/_cycle.txt` et affiché dans les Paramètres et dans le panneau. Le SIA ne garantit pas
+l'exactitude de ces documents et n'est pas responsable de leur usage. StormATC n'est ni approuvé par le SIA
+ou la DGAC, ni affilié à eux.
+
+**Elles périment.** Le SIA publie un nouveau cycle AIRAC tous les 28 jours. Mettez les cartes à jour depuis
+**Paramètres → Cartes VAC** dans StormATC (il contacte uniquement `www.sia.aviation-civile.gouv.fr`, quand
+vous appuyez sur le bouton, et n'envoie rien sur vous ni sur votre vol), ou avec `scripts/Update-VacCharts.ps1`.
+
+La licence de StormATC (MIT) couvre le code et le contenu original de ce dépôt. Elle ne couvre **pas** les
+cartes du SIA ni la liste de Wikipédia : elles restent soumises aux conditions ci-dessus.
 
 ---
 

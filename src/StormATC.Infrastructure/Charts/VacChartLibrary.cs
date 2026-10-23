@@ -65,6 +65,29 @@ public sealed class VacChartLibrary : IVacChartLibrary, IDisposable
     public string Directory => _directory;
 
     /// <inheritdoc />
+    public VacChartSource? Source
+    {
+        get
+        {
+            try
+            {
+                string notice = Path.Combine(_directory, "_cycle.txt");
+                if (!File.Exists(notice))
+                {
+                    return null;
+                }
+
+                string text = File.ReadAllText(notice).Trim();
+                return text.Length == 0 ? null : new VacChartSource(text, AiracCycle.CycleOf(text));
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                return null;
+            }
+        }
+    }
+
+    /// <inheritdoc />
     public void Dispose() => _drawing.Dispose();
 
     /// <summary>

@@ -115,8 +115,9 @@ Pour ajouter un aérodrome, copier `LFPL.json` et remplir : `icao`, `name`, `rep
 `circuit.sideBearingDegrees` et `preferredQfu`. Les champs de texte libre ne sont que de la
 documentation. Indiquer la source et la date d'application dans `source`.
 
-Les cartes VAC du SIA sont © SIA : le dossier `Cartes VAC/` est ignoré par Git, et les profils ne
-contiennent que des faits retranscrits.
+Les cartes VAC du SIA sont livrées **telles que publiées** dans `Cartes VAC/` (dépôt et installeur), avec leur
+source et leur cycle AIRAC (`_cycle.txt`, `LISEZ-MOI.txt`) : voir « Données et cartes aéronautiques » dans le README.
+Les profils ne contiennent que des faits retranscrits.
 
 **Profils fournis** (AIP France AD 2, relus à la main depuis les fiches du SIA) : Lognes (LFPL),
 Melun-Villaroche (LFPM, points N, SM et B), Paris Saclay Versailles / Toussus (LFPN, points S et NH,
@@ -156,7 +157,7 @@ vigueur, télécharge les cartes que vous avez déjà et ne remplace un fichier 
 ```
 .\scripts\Update-VacCharts.ps1 -DryRun           # ce qui changerait, sans rien écrire
 .\scripts\Update-VacCharts.ps1                   # met à jour
-.\scripts\Update-VacCharts.ps1 -IncludeMissing   # ajoute aussi les cartes de docs/aerodromes-france.csv
+.\scripts\Update-VacCharts.ps1 -IncludeMissing   # ajoute aussi les cartes de data/aerodromes-france.csv
 ```
 
 Les cartes restent telles que publiées ; le cycle et la source sont écrits dans `_cycle.txt` du dossier (le SIA
@@ -166,7 +167,7 @@ autorise la réutilisation sans altération, avec mention de la source et de la 
 
 Les profils sont écrits à la main à partir des fiches AIP (AD 2) : on lit le texte et les pages en image
 (les tableaux sortent décalés du texte, il faut les vérifier sur l'image) et on ne retranscrit que ce que la
-carte dit. Pour en ajouter, déposez les PDF dans `Cartes VAC/` à la racine du dépôt (ils sont ignorés par git)
+carte dit. Pour en ajouter, déposez les PDF dans `Cartes VAC/` à la racine du dépôt
 et demandez au mainteneur de les traiter, ou copiez `LFPL.json` et remplissez-le (voir plus haut).
 
 Un profil placé dans `%LOCALAPPDATA%\StormATC\vfr-profiles\<OACI>.json` est lu **avant** ceux qui sont fournis

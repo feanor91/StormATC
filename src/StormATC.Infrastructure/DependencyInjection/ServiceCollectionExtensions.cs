@@ -117,6 +117,12 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<StateChangeMonitor>();
         services.AddSingleton<IToolbarPanelStateSource, SessionToolbarPanelStateSource>();
         services.AddSingleton<IVacChartLibrary, VacChartLibrary>();
+        services.AddSingleton(TimeProvider.System);
+        services.AddHttpClient<IVacChartUpdater, Charts.SiaVacChartUpdater>(client =>
+        {
+            client.Timeout = TimeSpan.FromSeconds(90);
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("StormATC-VAC-update (flight simulation)");
+        });
         services.AddSingleton(sp => new ToolbarPanelServer(
             sp.GetRequiredService<IToolbarPanelStateSource>(),
             sp.GetRequiredService<IOptions<ToolbarPanelOptions>>(),
