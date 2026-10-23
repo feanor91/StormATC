@@ -141,9 +141,15 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
             AtcSession session = await _sessionContext
                 .LoadFlightPlanAsync(plan, CancellationToken.None)
                 .ConfigureAwait(true);
-            session = _sessionContext.Mutate(current => current.WithFlightRules(FlightRules.Vfr));
 
-            _providerStatus.SetFlightPlanStatus(true, $"{plan.ToSummary()} · VFR local");
+            // A local flight at a military base is flown in CAM V rather than civil VFR.
+            bool militaryBase = (await _sessionContext
+                .GetVfrProfileForAsync(plan.DepartureIcao, CancellationToken.None)
+                .ConfigureAwait(true))?.IsMilitary == true;
+            FlightRules rules = FlightRulesExtensions.ForPlan(visual: true, militaryBase);
+            session = _sessionContext.Mutate(current => current.WithFlightRules(rules));
+
+            _providerStatus.SetFlightPlanStatus(true, $"{plan.ToSummary()} · {rules.ToLabel()} local");
 
             // Remembered, so the next launch with the simulator running starts it again.
             await _userSettings
