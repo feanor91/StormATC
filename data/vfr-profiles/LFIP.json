@@ -1,0 +1,26 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFIP (AIP France, chart dated 2023-11-02), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFIP",
+  "name": "Peyresourde-Balestas",
+  "source": {
+    "publication": "AIP France AD 2 LFIP",
+    "chartDate": "2023-11-02",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 42.79694,
+    "longitude": 0.43389
+  },
+  "elevationFeet": 5193,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 118.755
+  }
+}

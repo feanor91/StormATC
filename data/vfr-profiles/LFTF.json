@@ -1,0 +1,36 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFTF (AIP France, chart dated 2025-10-02), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFTF",
+  "name": "Cuers - Pierrefeu",
+  "source": {
+    "publication": "AIP France AD 2 LFTF",
+    "chartDate": "2025-10-02",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.2475,
+    "longitude": 6.12722
+  },
+  "elevationFeet": 269,
+  "magneticVariationDegrees": 3.0,
+  "service": {
+    "kind": "Tower"
+  },
+  "frequencies": {
+    "tower": 122.7
+  },
+  "runways": [
+    {
+      "id": "11/29",
+      "qfu": [
+        108,
+        288
+      ]
+    }
+  ]
+}

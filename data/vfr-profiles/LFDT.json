@@ -1,0 +1,42 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFDT (AIP France, chart dated 2024-01-25), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFDT",
+  "name": "Tarbes - Laloubère",
+  "source": {
+    "publication": "AIP France AD 2 LFDT",
+    "chartDate": "2024-01-25",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.215,
+    "longitude": 0.0775
+  },
+  "elevationFeet": 1075,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 122.605
+  },
+  "runways": [
+    {
+      "id": "08L/26R",
+      "qfu": [
+        80,
+        260
+      ]
+    },
+    {
+      "id": "08R/26L",
+      "qfu": [
+        80,
+        260
+      ]
+    }
+  ]
+}

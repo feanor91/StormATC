@@ -1,0 +1,46 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFTH (AIP France, chart dated 2026-09-03), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFTH",
+  "name": "Toulon-Hyères",
+  "source": {
+    "publication": "AIP France AD 2 LFTH",
+    "chartDate": "2026-09-03",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.09722,
+    "longitude": 6.14611
+  },
+  "elevationFeet": 13,
+  "magneticVariationDegrees": 3.0,
+  "service": {
+    "kind": "TowerAndGround"
+  },
+  "frequencies": {
+    "atis": 129.65,
+    "approach": 126.325,
+    "tower": 121.0,
+    "ground": 121.8
+  },
+  "runways": [
+    {
+      "id": "05/23",
+      "qfu": [
+        49,
+        229
+      ]
+    },
+    {
+      "id": "13/31",
+      "qfu": [
+        132,
+        312
+      ]
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFTA (AIP France, chart dated 2026-02-19), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFTA",
+  "name": "Tranche-sur-Mer",
+  "source": {
+    "publication": "AIP France AD 2 LFTA",
+    "chartDate": "2026-02-19",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 46.36556,
+    "longitude": -1.4275
+  },
+  "elevationFeet": 9,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 123.5
+  },
+  "runways": [
+    {
+      "id": "17/35",
+      "qfu": [
+        172,
+        352
+      ]
+    }
+  ]
+}

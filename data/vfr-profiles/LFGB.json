@@ -1,0 +1,51 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFGB (AIP France, chart dated 2025-12-25), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFGB",
+  "name": "Mulhouse - Habsheim",
+  "source": {
+    "publication": "AIP France AD 2 LFGB",
+    "chartDate": "2025-12-25",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.73722,
+    "longitude": 7.42972
+  },
+  "elevationFeet": 789,
+  "magneticVariationDegrees": 3.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "fis": 130.9,
+    "airAir": 125.255
+  },
+  "runways": [
+    {
+      "id": "02/20",
+      "qfu": [
+        19,
+        199
+      ]
+    },
+    {
+      "id": "02R/20L",
+      "qfu": [
+        19,
+        199
+      ]
+    },
+    {
+      "id": "16/34",
+      "qfu": [
+        159,
+        339
+      ]
+    }
+  ]
+}

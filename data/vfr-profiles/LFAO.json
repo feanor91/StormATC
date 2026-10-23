@@ -1,0 +1,42 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFAO (AIP France, chart dated 2022-12-29), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFAO",
+  "name": "Bagnoles-de-l'Orne - Couterne",
+  "source": {
+    "publication": "AIP France AD 2 LFAO",
+    "chartDate": "2022-12-29",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 48.54472,
+    "longitude": -0.385
+  },
+  "elevationFeet": 714,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 123.5
+  },
+  "runways": [
+    {
+      "id": "12/30",
+      "qfu": [
+        120,
+        300
+      ]
+    },
+    {
+      "id": "12L/30R",
+      "qfu": [
+        120,
+        300
+      ]
+    }
+  ]
+}

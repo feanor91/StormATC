@@ -1,0 +1,24 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFHU (AIP France, chart dated 2024-08-08), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFHU",
+  "name": "Alpe d'Huez",
+  "source": {
+    "publication": "AIP France AD 2 LFHU",
+    "chartDate": "2024-08-08",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 45.0875,
+    "longitude": 6.08361
+  },
+  "elevationFeet": 6103,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "None"
+  }
+}

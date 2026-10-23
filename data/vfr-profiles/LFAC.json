@@ -1,0 +1,30 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFAC (AIP France, chart dated 2026-05-14), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFAC",
+  "name": "Calais - Dunkerque",
+  "source": {
+    "publication": "AIP France AD 2 LFAC",
+    "chartDate": "2026-05-14",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 50.96083,
+    "longitude": 1.95139
+  },
+  "elevationFeet": 12,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "Afis"
+  },
+  "frequencies": {
+    "fis": 132.54,
+    "approach": 120.275,
+    "afis": 119.485,
+    "airAir": 119.485
+  }
+}

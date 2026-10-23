@@ -1,0 +1,36 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFDP (AIP France, chart dated 2026-07-09), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFDP",
+  "name": "Saint-Pierre-d'Oléron",
+  "source": {
+    "publication": "AIP France AD 2 LFDP",
+    "chartDate": "2026-07-09",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 45.95778,
+    "longitude": -1.31139
+  },
+  "elevationFeet": 22,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 120.205
+  },
+  "runways": [
+    {
+      "id": "10/28",
+      "qfu": [
+        96,
+        276
+      ]
+    }
+  ]
+}

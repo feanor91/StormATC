@@ -1,0 +1,48 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFMF (AIP France, chart dated 2023-11-30), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFMF",
+  "name": "Fayence - Tourrettes",
+  "source": {
+    "publication": "AIP France AD 2 LFMF",
+    "chartDate": "2023-11-30",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.60806,
+    "longitude": 6.70167
+  },
+  "elevationFeet": 738,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 119.055
+  },
+  "runways": [
+    {
+      "id": "10R/28L",
+      "qfu": [
+        98,
+        278
+      ]
+    },
+    {
+      "id": "10L/28R",
+      "qfu": [
+        98,
+        278
+      ]
+    },
+    {
+      "id": "32",
+      "qfu": [
+        317
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFRG (AIP France, chart dated 2026-10-01), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFRG",
+  "name": "Deauville - Normandie",
+  "source": {
+    "publication": "AIP France AD 2 LFRG",
+    "chartDate": "2026-10-01",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 49.36333,
+    "longitude": 0.16
+  },
+  "elevationFeet": 479,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "Tower"
+  },
+  "frequencies": {
+    "atis": 119.18,
+    "approach": 120.35,
+    "tower": 118.305
+  },
+  "runways": [
+    {
+      "id": "12/30",
+      "qfu": [
+        116,
+        296
+      ]
+    }
+  ]
+}

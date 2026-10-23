@@ -1,0 +1,51 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFQB (AIP France, chart dated 2025-05-15), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFQB",
+  "name": "Troyes - Barberey",
+  "source": {
+    "publication": "AIP France AD 2 LFQB",
+    "chartDate": "2025-05-15",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 48.32167,
+    "longitude": 4.01667
+  },
+  "elevationFeet": 389,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "Afis"
+  },
+  "frequencies": {
+    "fis": 120.325,
+    "afis": 123.73
+  },
+  "runways": [
+    {
+      "id": "17/35",
+      "qfu": [
+        172,
+        352
+      ]
+    },
+    {
+      "id": "17R/35L",
+      "qfu": [
+        172,
+        352
+      ]
+    },
+    {
+      "id": "05/23",
+      "qfu": [
+        50,
+        230
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFLE (AIP France, chart dated 2025-09-04), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFLE",
+  "name": "Chambéry - Challes-les-Eaux",
+  "source": {
+    "publication": "AIP France AD 2 LFLE",
+    "chartDate": "2025-09-04",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 45.56056,
+    "longitude": 5.97583
+  },
+  "elevationFeet": 973,
+  "magneticVariationDegrees": 3.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 118.405
+  },
+  "runways": [
+    {
+      "id": "14",
+      "qfu": [
+        141
+      ]
+    }
+  ]
+}

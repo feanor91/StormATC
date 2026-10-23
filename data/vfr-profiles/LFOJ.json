@@ -1,0 +1,37 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFOJ (AIP France, chart dated 2026-04-16), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFOJ",
+  "name": "Orléans - Bricy",
+  "source": {
+    "publication": "AIP France AD 2 LFOJ",
+    "chartDate": "2026-04-16",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.98778,
+    "longitude": 1.76056
+  },
+  "elevationFeet": 412,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "Tower"
+  },
+  "frequencies": {
+    "approach": 122.7,
+    "tower": 122.1
+  },
+  "runways": [
+    {
+      "id": "07/25",
+      "qfu": [
+        68,
+        248
+      ]
+    }
+  ]
+}

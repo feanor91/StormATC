@@ -1,0 +1,46 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBE (AIP France, chart dated 2026-06-11), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFBE",
+  "name": "Bergerac Dordogne Périgord",
+  "source": {
+    "publication": "AIP France AD 2 LFBE",
+    "chartDate": "2026-06-11",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 44.82444,
+    "longitude": 0.52056
+  },
+  "elevationFeet": 172,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "Tower"
+  },
+  "frequencies": {
+    "atis": 127.48,
+    "approach": 119.275,
+    "tower": 119.805,
+    "airAir": 119.805
+  },
+  "runways": [
+    {
+      "id": "09/27",
+      "qfu": [
+        93,
+        273
+      ]
+    },
+    {
+      "id": "09R/27L",
+      "qfu": [
+        93,
+        273
+      ]
+    }
+  ]
+}

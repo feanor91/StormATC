@@ -1,0 +1,58 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFXB (AIP France, chart dated 2026-05-14), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFXB",
+  "name": "Saintes - Thénac",
+  "source": {
+    "publication": "AIP France AD 2 LFXB",
+    "chartDate": "2026-05-14",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 45.70194,
+    "longitude": -0.63611
+  },
+  "elevationFeet": 118,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "Approach"
+  },
+  "frequencies": {
+    "fis": 124.2,
+    "approach": 132.45
+  },
+  "runways": [
+    {
+      "id": "05/23",
+      "qfu": [
+        51,
+        231
+      ]
+    },
+    {
+      "id": "05L/23R",
+      "qfu": [
+        51,
+        231
+      ]
+    },
+    {
+      "id": "05R/23L",
+      "qfu": [
+        50,
+        230
+      ]
+    },
+    {
+      "id": "12/30",
+      "qfu": [
+        119,
+        299
+      ]
+    }
+  ]
+}

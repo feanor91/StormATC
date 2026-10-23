@@ -1,0 +1,47 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFML (AIP France, chart dated 2024-06-13), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFML",
+  "name": "Marseille Provence",
+  "source": {
+    "publication": "AIP France AD 2 LFML",
+    "chartDate": "2024-06-13",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.43667,
+    "longitude": 5.215
+  },
+  "elevationFeet": 70,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "TowerAndGround"
+  },
+  "frequencies": {
+    "fis": 124.35,
+    "atis": 125.355,
+    "approach": 124.35,
+    "tower": 133.1,
+    "ground": 121.905
+  },
+  "runways": [
+    {
+      "id": "13L/31R",
+      "qfu": [
+        132,
+        312
+      ]
+    },
+    {
+      "id": "13R/31L",
+      "qfu": [
+        133,
+        313
+      ]
+    }
+  ]
+}

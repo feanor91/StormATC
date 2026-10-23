@@ -1,0 +1,46 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFLL (AIP France, chart dated 2026-03-19), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFLL",
+  "name": "Lyon-Saint-Exupéry",
+  "source": {
+    "publication": "AIP France AD 2 LFLL",
+    "chartDate": "2026-03-19",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 45.72556,
+    "longitude": 5.08111
+  },
+  "elevationFeet": 821,
+  "magneticVariationDegrees": 3.0,
+  "service": {
+    "kind": "TowerAndGround"
+  },
+  "frequencies": {
+    "fis": 135.2,
+    "approach": 131.315,
+    "tower": 120.455,
+    "ground": 121.83
+  },
+  "runways": [
+    {
+      "id": "17R/35L",
+      "qfu": [
+        173,
+        353
+      ]
+    },
+    {
+      "id": "17L/35R",
+      "qfu": [
+        173,
+        353
+      ]
+    }
+  ]
+}

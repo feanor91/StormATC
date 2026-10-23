@@ -1,0 +1,36 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFKP (AIP France, chart dated 2025-03-20), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFKP",
+  "name": "Tour-du-Pin - Cessieu",
+  "source": {
+    "publication": "AIP France AD 2 LFKP",
+    "chartDate": "2025-03-20",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 45.5575,
+    "longitude": 5.38611
+  },
+  "elevationFeet": 1055,
+  "magneticVariationDegrees": 3.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 119.615
+  },
+  "runways": [
+    {
+      "id": "11/29",
+      "qfu": [
+        112,
+        292
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFMN (AIP France, chart dated 2026-01-22), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFMN",
+  "name": "Nice-Côte d'Azur",
+  "source": {
+    "publication": "AIP France AD 2 LFMN",
+    "chartDate": "2026-01-22",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.66528,
+    "longitude": 7.215
+  },
+  "elevationFeet": 12,
+  "magneticVariationDegrees": 3.0,
+  "service": {
+    "kind": "TowerAndGround"
+  },
+  "frequencies": {
+    "fis": 120.85,
+    "approach": 124.18,
+    "tower": 118.7,
+    "ground": 121.705
+  },
+  "runways": [
+    {
+      "id": "04L/22R",
+      "qfu": [
+        42,
+        222
+      ]
+    },
+    {
+      "id": "04R/22L",
+      "qfu": [
+        42,
+        222
+      ]
+    }
+  ]
+}

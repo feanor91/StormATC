@@ -1,0 +1,45 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFSD (AIP France, chart dated 2026-05-14), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFSD",
+  "name": "Dijon-Bourgogne",
+  "source": {
+    "publication": "AIP France AD 2 LFSD",
+    "chartDate": "2026-05-14",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.26583,
+    "longitude": 5.095
+  },
+  "elevationFeet": 728,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "Afis"
+  },
+  "frequencies": {
+    "fis": 135.85,
+    "approach": 125.415,
+    "afis": 118.33
+  },
+  "runways": [
+    {
+      "id": "17/35",
+      "qfu": [
+        173,
+        353
+      ]
+    },
+    {
+      "id": "01/19",
+      "qfu": [
+        13,
+        193
+      ]
+    }
+  ]
+}

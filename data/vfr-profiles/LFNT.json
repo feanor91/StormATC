@@ -1,0 +1,50 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFNT (AIP France, chart dated 2024-02-22), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFNT",
+  "name": "Avignon - Pujaut",
+  "source": {
+    "publication": "AIP France AD 2 LFNT",
+    "chartDate": "2024-02-22",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.99611,
+    "longitude": 4.75444
+  },
+  "elevationFeet": 146,
+  "service": {
+    "kind": "Approach"
+  },
+  "frequencies": {
+    "approach": 118.925,
+    "airAir": 123.355
+  },
+  "runways": [
+    {
+      "id": "16R/34L",
+      "qfu": [
+        163,
+        343
+      ]
+    },
+    {
+      "id": "16L/34R",
+      "qfu": [
+        164,
+        344
+      ]
+    },
+    {
+      "id": "12/30",
+      "qfu": [
+        121,
+        301
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBH (AIP France, chart dated 2026-07-09), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFBH",
+  "name": "Rochelle - île de Ré",
+  "source": {
+    "publication": "AIP France AD 2 LFBH",
+    "chartDate": "2026-07-09",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 46.17917,
+    "longitude": -1.19528
+  },
+  "elevationFeet": 74,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "Tower"
+  },
+  "frequencies": {
+    "fis": 124.205,
+    "atis": 126.88,
+    "approach": 124.205,
+    "tower": 118.005
+  },
+  "runways": [
+    {
+      "id": "09/27",
+      "qfu": [
+        92,
+        272
+      ]
+    }
+  ]
+}

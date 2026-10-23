@@ -1,0 +1,29 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFNZ (AIP France, chart dated 2024-11-28), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFNZ",
+  "name": "Mazet de Romanin",
+  "source": {
+    "publication": "AIP France AD 2 LFNZ",
+    "chartDate": "2024-11-28",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.77083,
+    "longitude": 4.89444
+  },
+  "elevationFeet": 395,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "fis": 132.3,
+    "atis": 125.355,
+    "airAir": 118.455
+  }
+}

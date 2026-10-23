@@ -1,0 +1,38 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFTW (AIP France, chart dated 2022-10-06), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFTW",
+  "name": "Nîmes-Garons",
+  "source": {
+    "publication": "AIP France AD 2 LFTW",
+    "chartDate": "2022-10-06",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.7575,
+    "longitude": 4.41639
+  },
+  "elevationFeet": 309,
+  "service": {
+    "kind": "TowerAndGround"
+  },
+  "frequencies": {
+    "atis": 129.355,
+    "approach": 131.055,
+    "tower": 123.2,
+    "ground": 121.8
+  },
+  "runways": [
+    {
+      "id": "18/36",
+      "qfu": [
+        175,
+        355
+      ]
+    }
+  ]
+}

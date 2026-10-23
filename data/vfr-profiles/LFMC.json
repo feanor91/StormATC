@@ -1,0 +1,46 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFMC (AIP France, chart dated 2026-05-14), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFMC",
+  "name": "Luc - Le Cannet",
+  "source": {
+    "publication": "AIP France AD 2 LFMC",
+    "chartDate": "2026-05-14",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.38472,
+    "longitude": 6.38694
+  },
+  "elevationFeet": 265,
+  "magneticVariationDegrees": 3.0,
+  "service": {
+    "kind": "TowerAndGround"
+  },
+  "frequencies": {
+    "atis": 128.65,
+    "approach": 122.2,
+    "tower": 123.0,
+    "ground": 121.85
+  },
+  "runways": [
+    {
+      "id": "13/31",
+      "qfu": [
+        127,
+        307
+      ]
+    },
+    {
+      "id": "09/27",
+      "qfu": [
+        86,
+        266
+      ]
+    }
+  ]
+}

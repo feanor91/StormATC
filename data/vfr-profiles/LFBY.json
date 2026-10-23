@@ -1,0 +1,38 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBY (AIP France, chart dated 2026-05-14), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFBY",
+  "name": "Dax - Seyresse",
+  "source": {
+    "publication": "AIP France AD 2 LFBY",
+    "chartDate": "2026-05-14",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.68917,
+    "longitude": -1.06889
+  },
+  "elevationFeet": 102,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "TowerAndGround"
+  },
+  "frequencies": {
+    "atis": 140.075,
+    "approach": 122.05,
+    "tower": 118.325,
+    "ground": 121.775
+  },
+  "runways": [
+    {
+      "id": "07",
+      "qfu": [
+        73
+      ]
+    }
+  ]
+}

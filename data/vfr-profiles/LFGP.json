@@ -1,0 +1,50 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFGP (AIP France, chart dated 2026-04-16), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFGP",
+  "name": "Saint-Florentin - Chéu",
+  "source": {
+    "publication": "AIP France AD 2 LFGP",
+    "chartDate": "2026-04-16",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.98139,
+    "longitude": 3.77694
+  },
+  "elevationFeet": 355,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 120.04
+  },
+  "runways": [
+    {
+      "id": "07L/25R",
+      "qfu": [
+        70,
+        250
+      ]
+    },
+    {
+      "id": "07C/25C",
+      "qfu": [
+        70,
+        250
+      ]
+    },
+    {
+      "id": "07R/25L",
+      "qfu": [
+        70,
+        250
+      ]
+    }
+  ]
+}

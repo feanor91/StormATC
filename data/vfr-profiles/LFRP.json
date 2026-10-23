@@ -1,0 +1,35 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFRP (AIP France, chart dated 2026-02-19), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFRP",
+  "name": "Ploërmel - Loyat",
+  "source": {
+    "publication": "AIP France AD 2 LFRP",
+    "chartDate": "2026-02-19",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 48.00194,
+    "longitude": -2.37861
+  },
+  "elevationFeet": 237,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 118.255
+  },
+  "runways": [
+    {
+      "id": "09/27",
+      "qfu": [
+        95,
+        275
+      ]
+    }
+  ]
+}

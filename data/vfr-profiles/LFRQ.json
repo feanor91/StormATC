@@ -1,0 +1,37 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFRQ (AIP France, chart dated 2026-10-01), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFRQ",
+  "name": "Quimper Cornouaille",
+  "source": {
+    "publication": "AIP France AD 2 LFRQ",
+    "chartDate": "2026-10-01",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.975,
+    "longitude": -4.16778
+  },
+  "elevationFeet": 297,
+  "service": {
+    "kind": "Tower"
+  },
+  "frequencies": {
+    "approach": 125.86,
+    "tower": 118.63,
+    "airAir": 118.63
+  },
+  "runways": [
+    {
+      "id": "09/27",
+      "qfu": [
+        94,
+        274
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFEB (AIP France, chart dated 2026-02-19), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFEB",
+  "name": "Dinan - Trélivan",
+  "source": {
+    "publication": "AIP France AD 2 LFEB",
+    "chartDate": "2026-02-19",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 48.44333,
+    "longitude": -2.10333
+  },
+  "elevationFeet": 393,
+  "service": {
+    "kind": "Tower"
+  },
+  "frequencies": {
+    "approach": 126.95,
+    "tower": 120.15,
+    "airAir": 119.765
+  },
+  "runways": [
+    {
+      "id": "07/25",
+      "qfu": [
+        70,
+        250
+      ]
+    }
+  ]
+}

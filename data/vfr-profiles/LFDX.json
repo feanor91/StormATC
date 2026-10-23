@@ -1,0 +1,27 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFDX (AIP France, chart dated 2025-12-25), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFDX",
+  "name": "Fumel - Montayral",
+  "source": {
+    "publication": "AIP France AD 2 LFDX",
+    "chartDate": "2025-12-25",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 44.45917,
+    "longitude": 1.00722
+  },
+  "elevationFeet": 692,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 119.565
+  }
+}

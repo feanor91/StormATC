@@ -1,0 +1,57 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFQO (AIP France, chart dated 2025-04-17), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFQO",
+  "name": "Lille - Marcq-en-Barœul",
+  "source": {
+    "publication": "AIP France AD 2 LFQO",
+    "chartDate": "2025-04-17",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 50.68722,
+    "longitude": 3.07556
+  },
+  "elevationFeet": 70,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 122.005
+  },
+  "runways": [
+    {
+      "id": "07R/25L",
+      "qfu": [
+        73,
+        253
+      ]
+    },
+    {
+      "id": "17R/35L",
+      "qfu": [
+        171,
+        351
+      ]
+    },
+    {
+      "id": "07L/25R",
+      "qfu": [
+        73,
+        253
+      ]
+    },
+    {
+      "id": "17L/35R",
+      "qfu": [
+        170,
+        350
+      ]
+    }
+  ]
+}

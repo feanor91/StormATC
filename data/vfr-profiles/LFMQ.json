@@ -1,0 +1,37 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFMQ (AIP France, chart dated 2026-03-19), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFMQ",
+  "name": "Castellet",
+  "source": {
+    "publication": "AIP France AD 2 LFMQ",
+    "chartDate": "2026-03-19",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.25222,
+    "longitude": 5.78611
+  },
+  "elevationFeet": 1391,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "Afis"
+  },
+  "frequencies": {
+    "approach": 124.35,
+    "afis": 119.005
+  },
+  "runways": [
+    {
+      "id": "12/30",
+      "qfu": [
+        125,
+        305
+      ]
+    }
+  ]
+}

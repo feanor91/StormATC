@@ -1,0 +1,35 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFOS (AIP France, chart dated 2024-08-08), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFOS",
+  "name": "Saint-Valery - Vittefleur",
+  "source": {
+    "publication": "AIP France AD 2 LFOS",
+    "chartDate": "2024-08-08",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 49.83528,
+    "longitude": 0.65556
+  },
+  "elevationFeet": 269,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 119.51
+  },
+  "runways": [
+    {
+      "id": "06/24",
+      "qfu": [
+        64,
+        244
+      ]
+    }
+  ]
+}

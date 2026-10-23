@@ -1,0 +1,37 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBP (AIP France, chart dated 2026-04-16), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFBP",
+  "name": "Pau-Pyrénées",
+  "source": {
+    "publication": "AIP France AD 2 LFBP",
+    "chartDate": "2026-04-16",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.38,
+    "longitude": -0.41861
+  },
+  "elevationFeet": 616,
+  "service": {
+    "kind": "Tower"
+  },
+  "frequencies": {
+    "fis": 126.525,
+    "approach": 128.8,
+    "tower": 124.15
+  },
+  "runways": [
+    {
+      "id": "13/31",
+      "qfu": [
+        125,
+        305
+      ]
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the SIA eAIP page AD 2 LFRJ (AIP France, valid from 2026-10-01), not read by hand.",
+    "This is a military air base (CAM regimes). Only what the page prints as text is recorded: position, elevation,",
+    "magnetic variation, runways and the VHF frequencies. Circuit rules and reporting points are NOT extracted.",
+    "MSFS exposes only VHF radios: the UHF frequencies of the base are not usable and are not listed.",
+    "Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFRJ",
+  "name": "Base d'aéronautique navale de Landivisiau",
+  "source": {
+    "publication": "AIP France AD 2 LFRJ",
+    "chartDate": "2026-10-01",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 48.53028,
+    "longitude": -4.15167
+  },
+  "elevationFeet": 348,
+  "service": {
+    "kind": "MilitaryTower",
+    "regimes": [
+      "CAM V",
+      "CAM I"
+    ]
+  },
+  "frequencies": {
+    "app": [
+      {
+        "mhz": 122.4,
+        "remark": "APP"
+      }
+    ],
+    "par": [
+      {
+        "mhz": 118.8,
+        "remark": "Pente"
+      }
+    ],
+    "sre": [
+      {
+        "mhz": 120.9,
+        "remark": "Radar CENTAURE"
+      }
+    ],
+    "twr": [
+      {
+        "mhz": 119.2,
+        "remark": "TWR"
+      },
+      {
+        "mhz": 119.7,
+        "remark": "TWR"
+      },
+      {
+        "mhz": 118.8,
+        "remark": "VDF"
+      },
+      {
+        "mhz": 119.2,
+        "remark": "VDF"
+      },
+      {
+        "mhz": 119.7,
+        "remark": "VDF"
+      },
+      {
+        "mhz": 120.9,
+        "remark": "VDF"
+      },
+      {
+        "mhz": 122.4,
+        "remark": "UDF"
+      }
+    ]
+  },
+  "magneticVariationDegrees": -0.2,
+  "runways": [
+    {
+      "id": "07/25",
+      "qfu": [
+        73,
+        253
+      ],
+      "surface": "concrete",
+      "lengthMetres": 2700,
+      "widthMetres": 45
+    }
+  ],
+  "notes": [
+    "The base also publishes 10 UHF frequencies that MSFS cannot tune."
+  ]
+}

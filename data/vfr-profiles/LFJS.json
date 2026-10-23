@@ -1,0 +1,35 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFJS (AIP France, chart dated 2022-06-16), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFJS",
+  "name": "Soissons - Courmelles",
+  "source": {
+    "publication": "AIP France AD 2 LFJS",
+    "chartDate": "2022-06-16",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 49.345,
+    "longitude": 3.28306
+  },
+  "elevationFeet": 518,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 120.38
+  },
+  "runways": [
+    {
+      "id": "07/25",
+      "qfu": [
+        68,
+        248
+      ]
+    }
+  ]
+}

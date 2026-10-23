@@ -1,0 +1,27 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFEH (AIP France, chart dated 2026-04-16), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFEH",
+  "name": "Aubigny-sur-Nère",
+  "source": {
+    "publication": "AIP France AD 2 LFEH",
+    "chartDate": "2026-04-16",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.47972,
+    "longitude": 2.39278
+  },
+  "elevationFeet": 631,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 124.28
+  }
+}

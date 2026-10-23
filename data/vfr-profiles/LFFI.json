@@ -1,0 +1,36 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFFI (AIP France, chart dated 2024-04-18), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFFI",
+  "name": "Ancenis",
+  "source": {
+    "publication": "AIP France AD 2 LFFI",
+    "chartDate": "2024-04-18",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.40722,
+    "longitude": -1.17889
+  },
+  "elevationFeet": 109,
+  "service": {
+    "kind": "Approach"
+  },
+  "frequencies": {
+    "approach": 124.25,
+    "airAir": 118.205
+  },
+  "runways": [
+    {
+      "id": "07/25",
+      "qfu": [
+        72,
+        252
+      ]
+    }
+  ]
+}

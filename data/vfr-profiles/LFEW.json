@@ -1,0 +1,36 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFEW (AIP France, chart dated 2019-08-15), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFEW",
+  "name": "Saulieu - Liernais",
+  "source": {
+    "publication": "AIP France AD 2 LFEW",
+    "chartDate": "2019-08-15",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.23861,
+    "longitude": 4.26444
+  },
+  "elevationFeet": 1710,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "fis": 120.675,
+    "airAir": 123.5
+  },
+  "runways": [
+    {
+      "id": "05/23",
+      "qfu": [
+        54,
+        234
+      ]
+    }
+  ]
+}

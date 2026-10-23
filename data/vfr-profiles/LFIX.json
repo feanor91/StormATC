@@ -1,0 +1,35 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFIX (AIP France, chart dated 2024-02-22), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFIX",
+  "name": "Itxassou",
+  "source": {
+    "publication": "AIP France AD 2 LFIX",
+    "chartDate": "2024-02-22",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.33639,
+    "longitude": -1.42333
+  },
+  "elevationFeet": 607,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 119.885
+  },
+  "runways": [
+    {
+      "id": "08/26",
+      "qfu": [
+        81,
+        261
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFLB (AIP France, chart dated 2026-08-06), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFLB",
+  "name": "Chambéry - Savoie",
+  "source": {
+    "publication": "AIP France AD 2 LFLB",
+    "chartDate": "2026-08-06",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 45.63917,
+    "longitude": 5.88
+  },
+  "elevationFeet": 779,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "Tower"
+  },
+  "frequencies": {
+    "fis": 123.705,
+    "atis": 127.1,
+    "approach": 121.205,
+    "tower": 118.305
+  },
+  "runways": [
+    {
+      "id": "18/36",
+      "qfu": [
+        175,
+        355
+      ]
+    },
+    {
+      "id": "18L/36R",
+      "qfu": [
+        175,
+        355
+      ]
+    }
+  ]
+}

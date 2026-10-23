@@ -1,0 +1,42 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFEY (AIP France, chart dated 2022-10-06), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFEY",
+  "name": "Île-d'Yeu",
+  "source": {
+    "publication": "AIP France AD 2 LFEY",
+    "chartDate": "2022-10-06",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 46.7175,
+    "longitude": -2.3925
+  },
+  "elevationFeet": 79,
+  "service": {
+    "kind": "Afis"
+  },
+  "frequencies": {
+    "afis": 118.905
+  },
+  "runways": [
+    {
+      "id": "14/32",
+      "qfu": [
+        142,
+        322
+      ]
+    },
+    {
+      "id": "04/22",
+      "qfu": [
+        35,
+        215
+      ]
+    }
+  ]
+}

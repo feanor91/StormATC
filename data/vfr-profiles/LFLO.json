@@ -1,0 +1,45 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFLO (AIP France, chart dated 2025-03-20), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFLO",
+  "name": "Roanne-Renaison",
+  "source": {
+    "publication": "AIP France AD 2 LFLO",
+    "chartDate": "2025-03-20",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 46.05278,
+    "longitude": 3.99972
+  },
+  "elevationFeet": 1106,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "Afis"
+  },
+  "frequencies": {
+    "approach": 123.405,
+    "afis": 120.905,
+    "airAir": 120.905
+  },
+  "runways": [
+    {
+      "id": "01/19",
+      "qfu": [
+        14,
+        194
+      ]
+    },
+    {
+      "id": "01L/19R",
+      "qfu": [
+        14,
+        194
+      ]
+    }
+  ]
+}

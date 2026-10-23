@@ -1,0 +1,42 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFEX (AIP France, chart dated 2023-01-26), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFEX",
+  "name": "Nancy - Azelot",
+  "source": {
+    "publication": "AIP France AD 2 LFEX",
+    "chartDate": "2023-01-26",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 48.59194,
+    "longitude": 6.23972
+  },
+  "elevationFeet": 958,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 120.09
+  },
+  "runways": [
+    {
+      "id": "18/36",
+      "qfu": [
+        178,
+        358
+      ]
+    },
+    {
+      "id": "06/24",
+      "qfu": [
+        56,
+        236
+      ]
+    }
+  ]
+}

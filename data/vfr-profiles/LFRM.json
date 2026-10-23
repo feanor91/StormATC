@@ -1,0 +1,37 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFRM (AIP France, chart dated 2026-02-19), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFRM",
+  "name": "Le Mans-Arnage",
+  "source": {
+    "publication": "AIP France AD 2 LFRM",
+    "chartDate": "2026-02-19",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.94861,
+    "longitude": 0.20167
+  },
+  "elevationFeet": 194,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "Afis"
+  },
+  "frequencies": {
+    "afis": 125.905,
+    "airAir": 125.905
+  },
+  "runways": [
+    {
+      "id": "02/20",
+      "qfu": [
+        19,
+        199
+      ]
+    }
+  ]
+}

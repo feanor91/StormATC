@@ -1,0 +1,39 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFKF (AIP France, chart dated 2025-04-17), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFKF",
+  "name": "Figari Sud Corse",
+  "source": {
+    "publication": "AIP France AD 2 LFKF",
+    "chartDate": "2025-04-17",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 41.50222,
+    "longitude": 9.09667
+  },
+  "elevationFeet": 85,
+  "magneticVariationDegrees": 3.0,
+  "service": {
+    "kind": "TowerAndGround"
+  },
+  "frequencies": {
+    "atis": 118.73,
+    "approach": 121.05,
+    "tower": 120.3,
+    "ground": 121.805
+  },
+  "runways": [
+    {
+      "id": "05/23",
+      "qfu": [
+        45,
+        225
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFNO (AIP France, chart dated 2026-04-16), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFNO",
+  "name": "Florac - Sainte-Enimie",
+  "source": {
+    "publication": "AIP France AD 2 LFNO",
+    "chartDate": "2026-04-16",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 44.28556,
+    "longitude": 3.46556
+  },
+  "elevationFeet": 3055,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 120.43
+  },
+  "runways": [
+    {
+      "id": "03/21",
+      "qfu": [
+        25,
+        205
+      ]
+    },
+    {
+      "id": "08/26",
+      "qfu": [
+        84,
+        264
+      ]
+    },
+    {
+      "id": "14/32",
+      "qfu": [
+        138,
+        318
+      ]
+    }
+  ]
+}

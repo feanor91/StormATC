@@ -1,0 +1,36 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFEC (AIP France, chart dated 2025-01-23), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFEC",
+  "name": "Ouessant",
+  "source": {
+    "publication": "AIP France AD 2 LFEC",
+    "chartDate": "2025-01-23",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 48.46333,
+    "longitude": -5.06361
+  },
+  "elevationFeet": 142,
+  "service": {
+    "kind": "Afis"
+  },
+  "frequencies": {
+    "afis": 118.105,
+    "airAir": 118.105
+  },
+  "runways": [
+    {
+      "id": "05/23",
+      "qfu": [
+        53,
+        233
+      ]
+    }
+  ]
+}

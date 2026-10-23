@@ -5,6 +5,16 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- `scripts/Update-VacCharts.ps1` updates the charts in the Cartes VAC folder from the SIA's current AIRAC cycle,
+  replacing a file only when it changed; `-IncludeMissing` also fetches the charts of the list of aerodromes.
+- 404 VFR profiles extracted from the text of the VAC charts (services and frequencies, elevation, position,
+  runways): StormATC now knows which aerodromes have no air traffic service, and their air-air frequency, all over
+  France. Circuit rules and reporting points are drawings and are not extracted.
+- Profiles of 11 military bases from the SIA eAIP (Cazaux, Mont-de-Marsan, Solenzara, Orange, Avord, Villacoublay,
+  Nancy-Ochey, Luxeuil, Evreux, Landivisiau, Lanveoc): VHF frequencies and runways, CAM V and CAM I regimes.
+
 ## 0.6.3 - 2026-10-23
 
 ### Fixed

@@ -1,0 +1,37 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFSN (AIP France, chart dated 2026-01-22), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFSN",
+  "name": "Nancy-Essey",
+  "source": {
+    "publication": "AIP France AD 2 LFSN",
+    "chartDate": "2026-01-22",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 48.69222,
+    "longitude": 6.22611
+  },
+  "elevationFeet": 757,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "Afis"
+  },
+  "frequencies": {
+    "approach": 127.25,
+    "afis": 119.605
+  },
+  "runways": [
+    {
+      "id": "03/21",
+      "qfu": [
+        26,
+        206
+      ]
+    }
+  ]
+}

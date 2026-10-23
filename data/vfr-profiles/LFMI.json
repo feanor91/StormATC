@@ -1,0 +1,38 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFMI (AIP France, chart dated 2025-10-30), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFMI",
+  "name": "Istres - Le Tubé",
+  "source": {
+    "publication": "AIP France AD 2 LFMI",
+    "chartDate": "2025-10-30",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.5225,
+    "longitude": 4.92417
+  },
+  "elevationFeet": 82,
+  "magneticVariationDegrees": 3.0,
+  "service": {
+    "kind": "TowerAndGround"
+  },
+  "frequencies": {
+    "approach": 131.0,
+    "tower": 123.6,
+    "ground": 121.85
+  },
+  "runways": [
+    {
+      "id": "15/33",
+      "qfu": [
+        150,
+        330
+      ]
+    }
+  ]
+}

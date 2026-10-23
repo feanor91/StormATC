@@ -1,0 +1,36 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFNB (AIP France, chart dated 2026-04-16), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFNB",
+  "name": "Mende - Brenoux",
+  "source": {
+    "publication": "AIP France AD 2 LFNB",
+    "chartDate": "2026-04-16",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 44.50417,
+    "longitude": 3.5275
+  },
+  "elevationFeet": 3362,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "Afis"
+  },
+  "frequencies": {
+    "afis": 119.605
+  },
+  "runways": [
+    {
+      "id": "12/30",
+      "qfu": [
+        124,
+        304
+      ]
+    }
+  ]
+}

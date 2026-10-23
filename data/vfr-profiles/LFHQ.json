@@ -1,0 +1,36 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFHQ (AIP France, chart dated 2025-09-04), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFHQ",
+  "name": "Saint-Flour - Coltines",
+  "source": {
+    "publication": "AIP France AD 2 LFHQ",
+    "chartDate": "2025-09-04",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 45.075,
+    "longitude": 2.9925
+  },
+  "elevationFeet": 3218,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 120.055
+  },
+  "runways": [
+    {
+      "id": "01/19",
+      "qfu": [
+        7,
+        187
+      ]
+    }
+  ]
+}

@@ -121,6 +121,41 @@ public sealed class JsonVfrProfileProviderTests : IDisposable
     }
 
     [Fact]
+    public async Task Every_bundled_profile_loads_and_is_named_after_its_file()
+    {
+        string[] files = Directory.GetFiles(BundledFolder(), "*.json");
+        Assert.True(files.Length > 400, $"Expected the bundled profiles, found {files.Length}");
+
+        foreach (string file in files)
+        {
+            string icao = Path.GetFileNameWithoutExtension(file);
+            File.Copy(file, Path.Combine(_data, "vfr-profiles", icao + ".json"), overwrite: true);
+
+            VfrAerodromeProfile? profile = await Provider().GetProfileAsync(icao, CancellationToken.None);
+
+            Assert.True(profile is not null, $"{icao} does not load");
+            Assert.Equal(icao, profile.Icao);
+            Assert.False(string.IsNullOrWhiteSpace(profile.Name), $"{icao} has no name");
+        }
+    }
+
+    [Theory]
+    [InlineData("LFAB", true, 119.005)]
+    [InlineData("LFBO", false, null)]
+    [InlineData("LFBC", false, null)]
+    public async Task The_extracted_profiles_tell_controlled_from_uncontrolled_aerodromes(string icao, bool noAtc, double? airAir)
+    {
+        File.Copy(Path.Combine(BundledFolder(), icao + ".json"), Path.Combine(_data, "vfr-profiles", icao + ".json"));
+
+        VfrAerodromeProfile profile = (await Provider().GetProfileAsync(icao, CancellationToken.None))!;
+
+        Assert.Equal(noAtc, profile.HasNoAtc);
+        Assert.Equal(
+            airAir is double expected ? Frequency.FromMegahertz((decimal)expected) : null,
+            profile.AirAirFrequency);
+    }
+
+    [Fact]
     public async Task The_Chartres_circuit_lies_north_of_the_runways()
     {
         File.Copy(Path.Combine(BundledFolder(), "LFOR.json"), Path.Combine(_data, "vfr-profiles", "LFOR.json"));

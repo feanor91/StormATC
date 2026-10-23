@@ -1,0 +1,28 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFSM (AIP France, chart dated 2025-09-04), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFSM",
+  "name": "Montbéliard - Courcelles",
+  "source": {
+    "publication": "AIP France AD 2 LFSM",
+    "chartDate": "2025-09-04",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.48667,
+    "longitude": 6.79139
+  },
+  "elevationFeet": 1041,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "Afis"
+  },
+  "frequencies": {
+    "approach": 133.51,
+    "afis": 132.03
+  }
+}

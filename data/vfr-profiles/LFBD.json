@@ -1,0 +1,46 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBD (AIP France, chart dated 2026-09-03), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFBD",
+  "name": "Bordeaux - Mérignac",
+  "source": {
+    "publication": "AIP France AD 2 LFBD",
+    "chartDate": "2026-09-03",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 44.82861,
+    "longitude": -0.71528
+  },
+  "elevationFeet": 166,
+  "service": {
+    "kind": "TowerAndGround"
+  },
+  "frequencies": {
+    "fis": 120.575,
+    "atis": 131.155,
+    "approach": 119.275,
+    "tower": 118.305,
+    "ground": 121.905
+  },
+  "runways": [
+    {
+      "id": "05/23",
+      "qfu": [
+        45,
+        225
+      ]
+    },
+    {
+      "id": "11/29",
+      "qfu": [
+        106,
+        286
+      ]
+    }
+  ]
+}

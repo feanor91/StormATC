@@ -1,0 +1,35 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFHW (AIP France, chart dated 2024-01-25), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFHW",
+  "name": "Belleville - Villié-Morgon",
+  "source": {
+    "publication": "AIP France AD 2 LFHW",
+    "chartDate": "2024-01-25",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 46.14111,
+    "longitude": 4.71389
+  },
+  "elevationFeet": 705,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 123.5
+  },
+  "runways": [
+    {
+      "id": "16/34",
+      "qfu": [
+        163,
+        343
+      ]
+    }
+  ]
+}

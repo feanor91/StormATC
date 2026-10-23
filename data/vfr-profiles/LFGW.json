@@ -1,0 +1,41 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFGW (AIP France, chart dated 2022-09-08), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFGW",
+  "name": "Verdun - Sommedieue",
+  "source": {
+    "publication": "AIP France AD 2 LFGW",
+    "chartDate": "2022-09-08",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 49.12222,
+    "longitude": 5.47083
+  },
+  "elevationFeet": 1236,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 125.255
+  },
+  "runways": [
+    {
+      "id": "28",
+      "qfu": [
+        98
+      ]
+    },
+    {
+      "id": "10R/28L",
+      "qfu": [
+        98,
+        278
+      ]
+    }
+  ]
+}

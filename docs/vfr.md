@@ -121,11 +121,46 @@ contiennent que des faits retranscrits.
 **Profils fournis** (AIP France AD 2, relus à la main depuis les fiches du SIA) : Lognes (LFPL),
 Melun-Villaroche (LFPM, points N, SM et B), Paris Saclay Versailles / Toussus (LFPN, points S et NH,
 circuit à 1500 ft), Chartres-Métropole (LFOR, circuit au nord des pistes), Étampes-Mondésir (LFOX),
-Orléans-Saint-Denis-de-l'Hôtel (LFOZ), Le Puy-Loudes (LFHP), Pithiviers (LFFP), Buno-Bonnevaux (LFFB)
-Paris-Orly (LFPO, pour les règles d'accès VFR) et la base militaire de Saint-Dizier-Robinson (LFSI, régimes CAM). Le moteur n'en utilise que les points de report, la
+Orléans-Saint-Denis-de-l'Hôtel (LFOZ), Le Puy-Loudes (LFHP), Pithiviers (LFFP), Buno-Bonnevaux (LFFB),
+Paris-Orly (LFPO, pour les règles d'accès VFR) et la base militaire de Saint-Dizier-Robinson (LFSI, régimes CAM).
+Le moteur n'en utilise que les points de report, la
 hauteur et le côté du circuit et la piste préférée ; le reste (services, horaires, consignes) est de la
 documentation. La main du circuit n'est renseignée que si la fiche la donne en texte : les autres cas se
 lisent sur le dessin de la carte, qu'il faut vérifier à l'œil.
+
+### Profils extraits automatiquement
+
+Pour tous les autres aérodromes dont une carte VAC existe, `scripts/extract_vac_profiles.py` lit le **texte
+imprimé en en-tête et dans le tableau des pistes** de la carte (poppler `pdftotext` requis) :
+services et fréquences (APP, TWR, GND, ATIS, AFIS, A/A), altitude, position, variation magnétique, pistes et
+leur QFU. Ces profils portent `"extraction": "automatic"` dans `source`. Ils servent surtout à savoir si un
+aérodrome est **sans ATS** (StormATC ne répond alors pas) et quelle est sa fréquence air-air. Le circuit et les
+points de report sont des **dessins** : ils ne sont pas extraits, le moteur garde ses valeurs par défaut. Un
+profil écrit à la main n'est jamais écrasé.
+
+```
+python scripts/extract_vac_profiles.py "<dossier Cartes VAC>" --overwrite
+```
+
+Les **bases militaires** sans carte VAC (Cazaux, Mont-de-Marsan, Solenzara, Orange, Avord, Villacoublay,
+Nancy-Ochey, Luxeuil, Évreux, Landivisiau, Lanvéoc) sont extraites de la page eAIP AD 2 du SIA par
+`scripts/extract_military_profiles.py` : position, altitude, pistes et fréquences **VHF** (MSFS n'a pas de radio
+UHF), en régimes CAM V et CAM I. Creil (LFPC), Cambrai-Épinoy (LFQI), Valdahon (LFXH) et Coëtquidan (LFXQ) n'ont
+pas de page exploitable.
+
+### Mettre à jour les cartes
+
+Le SIA publie un nouveau cycle AIRAC tous les 28 jours. `scripts/Update-VacCharts.ps1` retrouve le cycle en
+vigueur, télécharge les cartes que vous avez déjà et ne remplace un fichier que s'il a changé :
+
+```
+.\scripts\Update-VacCharts.ps1 -DryRun           # ce qui changerait, sans rien écrire
+.\scripts\Update-VacCharts.ps1                   # met à jour
+.\scripts\Update-VacCharts.ps1 -IncludeMissing   # ajoute aussi les cartes de docs/aerodromes-france.csv
+```
+
+Les cartes restent telles que publiées ; le cycle et la source sont écrits dans `_cycle.txt` du dossier (le SIA
+autorise la réutilisation sans altération, avec mention de la source et de la date).
 
 ### Ajouter un aérodrome à partir d'une carte
 

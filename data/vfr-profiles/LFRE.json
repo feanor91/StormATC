@@ -1,0 +1,35 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFRE (AIP France, chart dated 2025-07-10), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFRE",
+  "name": "Baule-Escoublac",
+  "source": {
+    "publication": "AIP France AD 2 LFRE",
+    "chartDate": "2025-07-10",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.28833,
+    "longitude": -2.34694
+  },
+  "elevationFeet": 106,
+  "service": {
+    "kind": "Afis"
+  },
+  "frequencies": {
+    "afis": 121.405
+  },
+  "runways": [
+    {
+      "id": "11/29",
+      "qfu": [
+        106,
+        286
+      ]
+    }
+  ]
+}

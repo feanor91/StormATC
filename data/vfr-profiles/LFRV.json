@@ -1,0 +1,43 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFRV (AIP France, chart dated 2025-08-07), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFRV",
+  "name": "Vannes - Meucon",
+  "source": {
+    "publication": "AIP France AD 2 LFRV",
+    "chartDate": "2025-08-07",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.71917,
+    "longitude": -2.72333
+  },
+  "elevationFeet": 440,
+  "service": {
+    "kind": "Afis"
+  },
+  "frequencies": {
+    "afis": 122.605,
+    "airAir": 122.605
+  },
+  "runways": [
+    {
+      "id": "04/22",
+      "qfu": [
+        40,
+        220
+      ]
+    },
+    {
+      "id": "08/26",
+      "qfu": [
+        81,
+        261
+      ]
+    }
+  ]
+}

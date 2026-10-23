@@ -1,0 +1,45 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFMK (AIP France, chart dated 2026-03-19), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFMK",
+  "name": "Carcassonne Salvaza",
+  "source": {
+    "publication": "AIP France AD 2 LFMK",
+    "chartDate": "2026-03-19",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.21583,
+    "longitude": 2.30861
+  },
+  "elevationFeet": 434,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "Tower"
+  },
+  "frequencies": {
+    "approach": 123.85,
+    "tower": 134.505,
+    "airAir": 134.505
+  },
+  "runways": [
+    {
+      "id": "09/27",
+      "qfu": [
+        94,
+        274
+      ]
+    },
+    {
+      "id": "09L/27R",
+      "qfu": [
+        94,
+        274
+      ]
+    }
+  ]
+}

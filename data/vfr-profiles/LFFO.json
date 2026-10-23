@@ -1,0 +1,36 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFFO (AIP France, chart dated 2024-04-18), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFFO",
+  "name": "Beauvoir - Fromentine",
+  "source": {
+    "publication": "AIP France AD 2 LFFO",
+    "chartDate": "2024-04-18",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 46.89056,
+    "longitude": -2.08861
+  },
+  "elevationFeet": 10,
+  "service": {
+    "kind": "Approach"
+  },
+  "frequencies": {
+    "approach": 120.125,
+    "airAir": 119.935
+  },
+  "runways": [
+    {
+      "id": "10/28",
+      "qfu": [
+        99,
+        279
+      ]
+    }
+  ]
+}

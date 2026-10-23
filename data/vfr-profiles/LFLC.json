@@ -1,0 +1,39 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFLC (AIP France, chart dated 2025-03-20), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFLC",
+  "name": "Clermont-Ferrand Auvergne",
+  "source": {
+    "publication": "AIP France AD 2 LFLC",
+    "chartDate": "2025-03-20",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 45.78611,
+    "longitude": 3.1625
+  },
+  "elevationFeet": 1092,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "TowerAndGround"
+  },
+  "frequencies": {
+    "fis": 122.225,
+    "approach": 122.225,
+    "tower": 118.625,
+    "ground": 121.95
+  },
+  "runways": [
+    {
+      "id": "08/26",
+      "qfu": [
+        81,
+        261
+      ]
+    }
+  ]
+}

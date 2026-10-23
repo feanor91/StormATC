@@ -1,0 +1,46 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFMP (AIP France, chart dated 2025-10-02), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFMP",
+  "name": "Perpignan-Rivesaltes",
+  "source": {
+    "publication": "AIP France AD 2 LFMP",
+    "chartDate": "2025-10-02",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 42.74083,
+    "longitude": 2.86972
+  },
+  "elevationFeet": 144,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "TowerAndGround"
+  },
+  "frequencies": {
+    "atis": 127.88,
+    "approach": 130.855,
+    "tower": 118.3,
+    "ground": 121.78
+  },
+  "runways": [
+    {
+      "id": "15/33",
+      "qfu": [
+        147,
+        327
+      ]
+    },
+    {
+      "id": "13/31",
+      "qfu": [
+        126,
+        306
+      ]
+    }
+  ]
+}

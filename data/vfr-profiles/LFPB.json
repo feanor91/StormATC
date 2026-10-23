@@ -1,0 +1,53 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFPB (AIP France, chart dated 2026-06-11), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFPB",
+  "name": "Paris-Le Bourget",
+  "source": {
+    "publication": "AIP France AD 2 LFPB",
+    "chartDate": "2026-06-11",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 48.96944,
+    "longitude": 2.44139
+  },
+  "elevationFeet": 220,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "TowerAndGround"
+  },
+  "frequencies": {
+    "atis": 120.005,
+    "approach": 121.155,
+    "tower": 118.93,
+    "ground": 121.905
+  },
+  "runways": [
+    {
+      "id": "07/25",
+      "qfu": [
+        67,
+        247
+      ]
+    },
+    {
+      "id": "03/21",
+      "qfu": [
+        24,
+        204
+      ]
+    },
+    {
+      "id": "09/27",
+      "qfu": [
+        84,
+        264
+      ]
+    }
+  ]
+}

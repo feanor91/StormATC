@@ -1,0 +1,43 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFAB (AIP France, chart dated 2024-01-25), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFAB",
+  "name": "Dieppe - Saint-Aubin",
+  "source": {
+    "publication": "AIP France AD 2 LFAB",
+    "chartDate": "2024-01-25",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 49.8825,
+    "longitude": 1.08528
+  },
+  "elevationFeet": 344,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 119.005
+  },
+  "runways": [
+    {
+      "id": "13/31",
+      "qfu": [
+        126,
+        306
+      ]
+    },
+    {
+      "id": "13L/31R",
+      "qfu": [
+        126,
+        306
+      ]
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFLY (AIP France, chart dated 2026-03-19), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFLY",
+  "name": "Lyon-Bron",
+  "source": {
+    "publication": "AIP France AD 2 LFLY",
+    "chartDate": "2026-03-19",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 45.72944,
+    "longitude": 4.93889
+  },
+  "elevationFeet": 659,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "Tower"
+  },
+  "frequencies": {
+    "fis": 135.2,
+    "atis": 128.13,
+    "approach": 136.075,
+    "tower": 118.1,
+    "airAir": 118.1
+  },
+  "runways": [
+    {
+      "id": "16/34",
+      "qfu": [
+        162,
+        342
+      ]
+    }
+  ]
+}

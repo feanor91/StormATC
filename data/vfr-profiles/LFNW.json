@@ -1,0 +1,35 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFNW (AIP France, chart dated 2022-12-29), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFNW",
+  "name": "Puivert",
+  "source": {
+    "publication": "AIP France AD 2 LFNW",
+    "chartDate": "2022-12-29",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 42.91028,
+    "longitude": 2.05472
+  },
+  "elevationFeet": 1610,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 120.005
+  },
+  "runways": [
+    {
+      "id": "14/32",
+      "qfu": [
+        137,
+        317
+      ]
+    }
+  ]
+}

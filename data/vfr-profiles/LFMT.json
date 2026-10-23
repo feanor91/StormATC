@@ -1,0 +1,46 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFMT (AIP France, chart dated 2024-11-28), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFMT",
+  "name": "Montpellier-Méditerranée",
+  "source": {
+    "publication": "AIP France AD 2 LFMT",
+    "chartDate": "2024-11-28",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.58333,
+    "longitude": 3.96139
+  },
+  "elevationFeet": 17,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "TowerAndGround"
+  },
+  "frequencies": {
+    "fis": 134.375,
+    "approach": 130.855,
+    "tower": 118.775,
+    "ground": 121.955
+  },
+  "runways": [
+    {
+      "id": "12L/30R",
+      "qfu": [
+        123,
+        303
+      ]
+    },
+    {
+      "id": "12R/30L",
+      "qfu": [
+        123,
+        303
+      ]
+    }
+  ]
+}

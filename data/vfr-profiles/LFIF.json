@@ -1,0 +1,43 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFIF (AIP France, chart dated 2024-11-28), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFIF",
+  "name": "Saint-Affrique - Belmont",
+  "source": {
+    "publication": "AIP France AD 2 LFIF",
+    "chartDate": "2024-11-28",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.82278,
+    "longitude": 2.74722
+  },
+  "elevationFeet": 1686,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 123.5
+  },
+  "runways": [
+    {
+      "id": "12/30",
+      "qfu": [
+        117,
+        297
+      ]
+    },
+    {
+      "id": "12R/30L",
+      "qfu": [
+        117,
+        297
+      ]
+    }
+  ]
+}

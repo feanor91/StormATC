@@ -1,0 +1,42 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFOY (AIP France, chart dated 2024-04-18), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFOY",
+  "name": "Havre - Saint-Romain-de-Colbosc",
+  "source": {
+    "publication": "AIP France AD 2 LFOY",
+    "chartDate": "2024-04-18",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 49.54389,
+    "longitude": 0.35972
+  },
+  "elevationFeet": 423,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 123.5
+  },
+  "runways": [
+    {
+      "id": "01/19",
+      "qfu": [
+        11,
+        191
+      ]
+    },
+    {
+      "id": "05/23",
+      "qfu": [
+        53,
+        233
+      ]
+    }
+  ]
+}

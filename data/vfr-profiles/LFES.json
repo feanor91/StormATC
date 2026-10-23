@@ -1,0 +1,43 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFES (AIP France, chart dated 2025-08-07), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFES",
+  "name": "Guiscriff - Scaër",
+  "source": {
+    "publication": "AIP France AD 2 LFES",
+    "chartDate": "2025-08-07",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 48.05361,
+    "longitude": -3.66417
+  },
+  "elevationFeet": 574,
+  "service": {
+    "kind": "Approach"
+  },
+  "frequencies": {
+    "approach": 125.86,
+    "airAir": 129.805
+  },
+  "runways": [
+    {
+      "id": "02/20",
+      "qfu": [
+        23,
+        203
+      ]
+    },
+    {
+      "id": "02R/20L",
+      "qfu": [
+        23,
+        203
+      ]
+    }
+  ]
+}

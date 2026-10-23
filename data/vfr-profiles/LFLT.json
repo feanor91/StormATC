@@ -1,0 +1,35 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFLT (AIP France, chart dated 2023-08-10), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFLT",
+  "name": "Montluçon - Domérat",
+  "source": {
+    "publication": "AIP France AD 2 LFLT",
+    "chartDate": "2023-08-10",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 46.35278,
+    "longitude": 2.57056
+  },
+  "elevationFeet": 771,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 123.5
+  },
+  "runways": [
+    {
+      "id": "11/29",
+      "qfu": [
+        109,
+        289
+      ]
+    }
+  ]
+}

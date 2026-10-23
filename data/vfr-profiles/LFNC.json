@@ -1,0 +1,42 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFNC (AIP France, chart dated 2023-02-23), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFNC",
+  "name": "Mont-Dauphin - Saint-Crépin",
+  "source": {
+    "publication": "AIP France AD 2 LFNC",
+    "chartDate": "2023-02-23",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 44.70056,
+    "longitude": 6.59917
+  },
+  "elevationFeet": 2963,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 123.5
+  },
+  "runways": [
+    {
+      "id": "16/34",
+      "qfu": [
+        159,
+        339
+      ]
+    },
+    {
+      "id": "16L/34R",
+      "qfu": [
+        159,
+        339
+      ]
+    }
+  ]
+}

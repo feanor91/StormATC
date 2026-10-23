@@ -1,0 +1,35 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFGL (AIP France, chart dated 2023-03-23), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFGL",
+  "name": "Lons-le-Saunier - Courlaoux",
+  "source": {
+    "publication": "AIP France AD 2 LFGL",
+    "chartDate": "2023-03-23",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 46.675,
+    "longitude": 5.46917
+  },
+  "elevationFeet": 762,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 123.5
+  },
+  "runways": [
+    {
+      "id": "08/26",
+      "qfu": [
+        79,
+        259
+      ]
+    }
+  ]
+}

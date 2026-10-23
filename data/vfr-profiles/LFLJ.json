@@ -1,0 +1,35 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFLJ (AIP France, chart dated 2022-12-01), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFLJ",
+  "name": "Courchevel",
+  "source": {
+    "publication": "AIP France AD 2 LFLJ",
+    "chartDate": "2022-12-01",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 45.39583,
+    "longitude": 6.6325
+  },
+  "elevationFeet": 6583,
+  "service": {
+    "kind": "Afis"
+  },
+  "frequencies": {
+    "afis": 120.08
+  },
+  "runways": [
+    {
+      "id": "04/22",
+      "qfu": [
+        42,
+        222
+      ]
+    }
+  ]
+}

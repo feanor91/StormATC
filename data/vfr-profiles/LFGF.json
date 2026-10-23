@@ -1,0 +1,43 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFGF (AIP France, chart dated 2025-12-25), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFGF",
+  "name": "Beaune - Challanges",
+  "source": {
+    "publication": "AIP France AD 2 LFGF",
+    "chartDate": "2025-12-25",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.01028,
+    "longitude": 4.89639
+  },
+  "elevationFeet": 656,
+  "magneticVariationDegrees": 3.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 119.91
+  },
+  "runways": [
+    {
+      "id": "02/20",
+      "qfu": [
+        23,
+        203
+      ]
+    },
+    {
+      "id": "02R/20L",
+      "qfu": [
+        23,
+        203
+      ]
+    }
+  ]
+}

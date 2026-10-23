@@ -1,0 +1,45 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFQQ (AIP France, chart dated 2026-02-19), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFQQ",
+  "name": "Lille - Lesquin",
+  "source": {
+    "publication": "AIP France AD 2 LFQQ",
+    "chartDate": "2026-02-19",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 50.56333,
+    "longitude": 3.08694
+  },
+  "elevationFeet": 157,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "Approach"
+  },
+  "frequencies": {
+    "fis": 126.48,
+    "ground": 121.855,
+    "approach": 126.48
+  },
+  "runways": [
+    {
+      "id": "08/26",
+      "qfu": [
+        75,
+        255
+      ]
+    },
+    {
+      "id": "01/19",
+      "qfu": [
+        13,
+        193
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBO (AIP France, chart dated 2026-10-01), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFBO",
+  "name": "Toulouse-Blagnac",
+  "source": {
+    "publication": "AIP France AD 2 LFBO",
+    "chartDate": "2026-10-01",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.635,
+    "longitude": 1.36778
+  },
+  "elevationFeet": 499,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "TowerAndGround"
+  },
+  "frequencies": {
+    "atis": 123.13,
+    "fis": 121.25,
+    "approach": 129.305,
+    "tower": 118.105,
+    "ground": 121.905
+  }
+}

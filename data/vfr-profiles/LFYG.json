@@ -1,0 +1,27 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFYG (AIP France, chart dated 2025-05-15), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFYG",
+  "name": "Cambrai-Niergnies",
+  "source": {
+    "publication": "AIP France AD 2 LFYG",
+    "chartDate": "2025-05-15",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 50.14139,
+    "longitude": 3.26361
+  },
+  "elevationFeet": 324,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 122.93
+  }
+}

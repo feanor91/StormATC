@@ -1,0 +1,44 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFOU (AIP France, chart dated 2026-06-11), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFOU",
+  "name": "Cholet - Le Pontreau",
+  "source": {
+    "publication": "AIP France AD 2 LFOU",
+    "chartDate": "2026-06-11",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.08194,
+    "longitude": -0.87722
+  },
+  "elevationFeet": 443,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "Afis"
+  },
+  "frequencies": {
+    "approach": 124.25,
+    "afis": 120.405
+  },
+  "runways": [
+    {
+      "id": "02/20",
+      "qfu": [
+        25,
+        205
+      ]
+    },
+    {
+      "id": "02R/20L",
+      "qfu": [
+        25,
+        205
+      ]
+    }
+  ]
+}

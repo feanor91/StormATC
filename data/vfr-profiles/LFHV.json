@@ -1,0 +1,43 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFHV (AIP France, chart dated 2026-03-19), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFHV",
+  "name": "Villefranche - Tarare",
+  "source": {
+    "publication": "AIP France AD 2 LFHV",
+    "chartDate": "2026-03-19",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 45.92,
+    "longitude": 4.635
+  },
+  "elevationFeet": 1076,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 118.255
+  },
+  "runways": [
+    {
+      "id": "18/36",
+      "qfu": [
+        179,
+        359
+      ]
+    },
+    {
+      "id": "18L/36R",
+      "qfu": [
+        179,
+        359
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFOB (AIP France, chart dated 2026-09-03), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFOB",
+  "name": "Paris Beauvais",
+  "source": {
+    "publication": "AIP France AD 2 LFOB",
+    "chartDate": "2026-09-03",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 49.45444,
+    "longitude": 2.11278
+  },
+  "elevationFeet": 359,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "Tower"
+  },
+  "frequencies": {
+    "atis": 118.38,
+    "approach": 123.985,
+    "tower": 121.405
+  },
+  "runways": [
+    {
+      "id": "12/30",
+      "qfu": [
+        122,
+        302
+      ]
+    },
+    {
+      "id": "04/22",
+      "qfu": [
+        40,
+        220
+      ]
+    }
+  ]
+}

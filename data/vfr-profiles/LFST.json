@@ -1,0 +1,40 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFST (AIP France, chart dated 2026-08-06), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFST",
+  "name": "Strasbourg-Entzheim",
+  "source": {
+    "publication": "AIP France AD 2 LFST",
+    "chartDate": "2026-08-06",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 48.54194,
+    "longitude": 7.63444
+  },
+  "elevationFeet": 505,
+  "magneticVariationDegrees": 3.0,
+  "service": {
+    "kind": "TowerAndGround"
+  },
+  "frequencies": {
+    "fis": 120.41,
+    "atis": 126.93,
+    "approach": 120.41,
+    "tower": 119.25,
+    "ground": 121.805
+  },
+  "runways": [
+    {
+      "id": "05/23",
+      "qfu": [
+        46,
+        226
+      ]
+    }
+  ]
+}

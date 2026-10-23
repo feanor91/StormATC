@@ -1,0 +1,44 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFQW (AIP France, chart dated 2025-12-25), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFQW",
+  "name": "Vesoul - Frotey",
+  "source": {
+    "publication": "AIP France AD 2 LFQW",
+    "chartDate": "2025-12-25",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.63861,
+    "longitude": 6.20417
+  },
+  "elevationFeet": 1249,
+  "magneticVariationDegrees": 3.0,
+  "service": {
+    "kind": "Approach"
+  },
+  "frequencies": {
+    "approach": 129.925,
+    "airAir": 118.155
+  },
+  "runways": [
+    {
+      "id": "08/26",
+      "qfu": [
+        79,
+        259
+      ]
+    },
+    {
+      "id": "08R/26L",
+      "qfu": [
+        79,
+        259
+      ]
+    }
+  ]
+}

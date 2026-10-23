@@ -1,0 +1,44 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFGG (AIP France, chart dated 2025-08-07), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFGG",
+  "name": "Belfort - Chaux",
+  "source": {
+    "publication": "AIP France AD 2 LFGG",
+    "chartDate": "2025-08-07",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.70111,
+    "longitude": 6.83083
+  },
+  "elevationFeet": 1367,
+  "magneticVariationDegrees": 3.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "fis": 130.9,
+    "airAir": 119.515
+  },
+  "runways": [
+    {
+      "id": "18R/36L",
+      "qfu": [
+        175,
+        355
+      ]
+    },
+    {
+      "id": "18L/36R",
+      "qfu": [
+        175,
+        355
+      ]
+    }
+  ]
+}

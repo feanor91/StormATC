@@ -1,0 +1,29 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBT (AIP France, chart dated 2026-09-03), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFBT",
+  "name": "Tarbes-Lourdes-Pyrénées",
+  "source": {
+    "publication": "AIP France AD 2 LFBT",
+    "chartDate": "2026-09-03",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 43.18556,
+    "longitude": -0.00278
+  },
+  "elevationFeet": 1260,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "TowerAndGround"
+  },
+  "frequencies": {
+    "approach": 128.8,
+    "tower": 119.055,
+    "ground": 121.805
+  }
+}

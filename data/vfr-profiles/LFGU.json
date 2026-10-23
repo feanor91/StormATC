@@ -1,0 +1,42 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFGU (AIP France, chart dated 2023-01-26), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFGU",
+  "name": "Sarreguemines - Neunkirch",
+  "source": {
+    "publication": "AIP France AD 2 LFGU",
+    "chartDate": "2023-01-26",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 49.1275,
+    "longitude": 7.10667
+  },
+  "elevationFeet": 863,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 120.11
+  },
+  "runways": [
+    {
+      "id": "05R/23L",
+      "qfu": [
+        52,
+        232
+      ]
+    },
+    {
+      "id": "05L/23R",
+      "qfu": [
+        52,
+        232
+      ]
+    }
+  ]
+}

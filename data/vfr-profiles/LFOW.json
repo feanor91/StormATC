@@ -1,0 +1,43 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFOW (AIP France, chart dated 2026-05-14), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFOW",
+  "name": "Saint-Quentin - Roupy",
+  "source": {
+    "publication": "AIP France AD 2 LFOW",
+    "chartDate": "2026-05-14",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 49.81611,
+    "longitude": 3.20583
+  },
+  "elevationFeet": 325,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 123.5
+  },
+  "runways": [
+    {
+      "id": "04/22",
+      "qfu": [
+        38,
+        218
+      ]
+    },
+    {
+      "id": "14/32",
+      "qfu": [
+        135,
+        315
+      ]
+    }
+  ]
+}

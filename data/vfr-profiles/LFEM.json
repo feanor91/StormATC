@@ -1,0 +1,43 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFEM (AIP France, chart dated 2026-05-14), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFEM",
+  "name": "Montargis - Vimory",
+  "source": {
+    "publication": "AIP France AD 2 LFEM",
+    "chartDate": "2026-05-14",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.96056,
+    "longitude": 2.68583
+  },
+  "elevationFeet": 308,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 123.355
+  },
+  "runways": [
+    {
+      "id": "04R/22L",
+      "qfu": [
+        45,
+        225
+      ]
+    },
+    {
+      "id": "04L/22R",
+      "qfu": [
+        45,
+        225
+      ]
+    }
+  ]
+}

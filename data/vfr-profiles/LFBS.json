@@ -1,0 +1,51 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBS (AIP France, chart dated 2026-02-19), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFBS",
+  "name": "Grands Lacs",
+  "source": {
+    "publication": "AIP France AD 2 LFBS",
+    "chartDate": "2026-02-19",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 44.36806,
+    "longitude": -1.13222
+  },
+  "elevationFeet": 100,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "Tower"
+  },
+  "frequencies": {
+    "tower": 118.04,
+    "airAir": 118.04
+  },
+  "runways": [
+    {
+      "id": "09/27",
+      "qfu": [
+        90,
+        270
+      ]
+    },
+    {
+      "id": "09R/27L",
+      "qfu": [
+        90,
+        270
+      ]
+    },
+    {
+      "id": "13/31",
+      "qfu": [
+        134,
+        314
+      ]
+    }
+  ]
+}

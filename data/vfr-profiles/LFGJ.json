@@ -1,0 +1,30 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFGJ (AIP France, chart dated 2026-08-06), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFGJ",
+  "name": "Dole-Jura",
+  "source": {
+    "publication": "AIP France AD 2 LFGJ",
+    "chartDate": "2026-08-06",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.04278,
+    "longitude": 5.435
+  },
+  "elevationFeet": 645,
+  "magneticVariationDegrees": 3.0,
+  "service": {
+    "kind": "Tower"
+  },
+  "frequencies": {
+    "atis": 121.605,
+    "approach": 125.415,
+    "tower": 130.775,
+    "afis": 130.775
+  }
+}

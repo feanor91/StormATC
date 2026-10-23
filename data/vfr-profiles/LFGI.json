@@ -1,0 +1,43 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFGI (AIP France, chart dated 2025-12-25), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFGI",
+  "name": "Dijon - Darois",
+  "source": {
+    "publication": "AIP France AD 2 LFGI",
+    "chartDate": "2025-12-25",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.38528,
+    "longitude": 4.94694
+  },
+  "elevationFeet": 1586,
+  "magneticVariationDegrees": 3.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 119.555
+  },
+  "runways": [
+    {
+      "id": "02/20",
+      "qfu": [
+        16,
+        196
+      ]
+    },
+    {
+      "id": "02R/20L",
+      "qfu": [
+        16,
+        196
+      ]
+    }
+  ]
+}

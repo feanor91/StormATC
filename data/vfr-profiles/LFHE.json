@@ -1,0 +1,53 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFHE (AIP France, chart dated 2024-08-08), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFHE",
+  "name": "Romans - Saint-Paul",
+  "source": {
+    "publication": "AIP France AD 2 LFHE",
+    "chartDate": "2024-08-08",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 45.06472,
+    "longitude": 5.10139
+  },
+  "elevationFeet": 595,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 118.805
+  },
+  "runways": [
+    {
+      "id": "05",
+      "qfu": [
+        5
+      ]
+    },
+    {
+      "id": "06",
+      "qfu": [
+        5
+      ]
+    },
+    {
+      "id": "24R",
+      "qfu": [
+        240
+      ]
+    },
+    {
+      "id": "02/20",
+      "qfu": [
+        19,
+        199
+      ]
+    }
+  ]
+}

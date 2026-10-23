@@ -1,0 +1,37 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFRO (AIP France, chart dated 2024-11-28), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFRO",
+  "name": "Lannion",
+  "source": {
+    "publication": "AIP France AD 2 LFRO",
+    "chartDate": "2024-11-28",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 48.75444,
+    "longitude": -3.47194
+  },
+  "elevationFeet": 290,
+  "magneticVariationDegrees": -1.0,
+  "service": {
+    "kind": "Afis"
+  },
+  "frequencies": {
+    "approach": 125.86,
+    "afis": 118.405
+  },
+  "runways": [
+    {
+      "id": "11/29",
+      "qfu": [
+        108,
+        288
+      ]
+    }
+  ]
+}

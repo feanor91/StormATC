@@ -1,0 +1,43 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFQJ (AIP France, chart dated 2025-12-25), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFQJ",
+  "name": "Maubeuge - Élesmes",
+  "source": {
+    "publication": "AIP France AD 2 LFQJ",
+    "chartDate": "2025-12-25",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 50.30833,
+    "longitude": 4.03
+  },
+  "elevationFeet": 452,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 121.005
+  },
+  "runways": [
+    {
+      "id": "05/23",
+      "qfu": [
+        46,
+        226
+      ]
+    },
+    {
+      "id": "05L/23R",
+      "qfu": [
+        46,
+        226
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFRB (AIP France, chart dated 2026-06-11), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFRB",
+  "name": "Brest-Bretagne",
+  "source": {
+    "publication": "AIP France AD 2 LFRB",
+    "chartDate": "2026-06-11",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 48.44722,
+    "longitude": -4.42167
+  },
+  "elevationFeet": 325,
+  "magneticVariationDegrees": -1.0,
+  "service": {
+    "kind": "Tower"
+  },
+  "frequencies": {
+    "fis": 119.575,
+    "atis": 129.355,
+    "approach": 122.4,
+    "tower": 120.105
+  },
+  "runways": [
+    {
+      "id": "07R/25L",
+      "qfu": [
+        72,
+        252
+      ]
+    },
+    {
+      "id": "07L/25R",
+      "qfu": [
+        72,
+        252
+      ]
+    }
+  ]
+}

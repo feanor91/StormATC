@@ -1,0 +1,35 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFDV (AIP France, chart dated 2024-01-25), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFDV",
+  "name": "Couhé - Vérac",
+  "source": {
+    "publication": "AIP France AD 2 LFDV",
+    "chartDate": "2024-01-25",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 46.27056,
+    "longitude": 0.18833
+  },
+  "elevationFeet": 500,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 119.23
+  },
+  "runways": [
+    {
+      "id": "02/20",
+      "qfu": [
+        19,
+        199
+      ]
+    }
+  ]
+}

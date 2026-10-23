@@ -1,0 +1,42 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFHA (AIP France, chart dated 2021-08-12), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFHA",
+  "name": "Issoire - Le Broc",
+  "source": {
+    "publication": "AIP France AD 2 LFHA",
+    "chartDate": "2021-08-12",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 45.51389,
+    "longitude": 3.26611
+  },
+  "elevationFeet": 1240,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 118.155
+  },
+  "runways": [
+    {
+      "id": "18L/36R",
+      "qfu": [
+        175,
+        355
+      ]
+    },
+    {
+      "id": "18R/36L",
+      "qfu": [
+        175,
+        355
+      ]
+    }
+  ]
+}

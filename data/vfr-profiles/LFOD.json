@@ -1,0 +1,35 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFOD (AIP France, chart dated 2023-03-23), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFOD",
+  "name": "Saumur - Saint-Florent",
+  "source": {
+    "publication": "AIP France AD 2 LFOD",
+    "chartDate": "2023-03-23",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 47.25667,
+    "longitude": -0.11361
+  },
+  "elevationFeet": 269,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 120.605
+  },
+  "runways": [
+    {
+      "id": "10/28",
+      "qfu": [
+        95,
+        275
+      ]
+    }
+  ]
+}

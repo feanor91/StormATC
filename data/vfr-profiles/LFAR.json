@@ -1,0 +1,35 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFAR (AIP France, chart dated 2021-12-30), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFAR",
+  "name": "Montdidier",
+  "source": {
+    "publication": "AIP France AD 2 LFAR",
+    "chartDate": "2021-12-30",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 49.67306,
+    "longitude": 2.56917
+  },
+  "elevationFeet": 358,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 123.5
+  },
+  "runways": [
+    {
+      "id": "09/27",
+      "qfu": [
+        85,
+        265
+      ]
+    }
+  ]
+}

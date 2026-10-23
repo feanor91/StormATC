@@ -1,0 +1,44 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFLG (AIP France, chart dated 2026-04-16), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFLG",
+  "name": "Grenoble - Le Versoud",
+  "source": {
+    "publication": "AIP France AD 2 LFLG",
+    "chartDate": "2026-04-16",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 45.21806,
+    "longitude": 5.84861
+  },
+  "elevationFeet": 724,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "TowerAndGround"
+  },
+  "frequencies": {
+    "tower": 121.0,
+    "ground": 121.655
+  },
+  "runways": [
+    {
+      "id": "04/22",
+      "qfu": [
+        42,
+        222
+      ]
+    },
+    {
+      "id": "04L/22R",
+      "qfu": [
+        42,
+        222
+      ]
+    }
+  ]
+}

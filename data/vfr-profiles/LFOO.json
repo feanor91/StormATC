@@ -1,0 +1,42 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFOO (AIP France, chart dated 2024-08-08), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFOO",
+  "name": "Sables-d'Olonne - Talmont",
+  "source": {
+    "publication": "AIP France AD 2 LFOO",
+    "chartDate": "2024-08-08",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 46.47556,
+    "longitude": -1.725
+  },
+  "elevationFeet": 104,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 123.355
+  },
+  "runways": [
+    {
+      "id": "06/24",
+      "qfu": [
+        62,
+        242
+      ]
+    },
+    {
+      "id": "06L/24R",
+      "qfu": [
+        62,
+        242
+      ]
+    }
+  ]
+}

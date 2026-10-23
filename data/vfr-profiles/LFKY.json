@@ -1,0 +1,36 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFKY (AIP France, chart dated 2022-02-24), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFKY",
+  "name": "Belley - Peyrieu",
+  "source": {
+    "publication": "AIP France AD 2 LFKY",
+    "chartDate": "2022-02-24",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 45.69389,
+    "longitude": 5.69167
+  },
+  "elevationFeet": 739,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "fis": 123.7,
+    "airAir": 123.5
+  },
+  "runways": [
+    {
+      "id": "18/36",
+      "qfu": [
+        183,
+        3
+      ]
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFJD (AIP France, chart dated 2025-09-04), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFJD",
+  "name": "Corlier",
+  "source": {
+    "publication": "AIP France AD 2 LFJD",
+    "chartDate": "2025-09-04",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 46.03972,
+    "longitude": 5.49611
+  },
+  "elevationFeet": 2770,
+  "magneticVariationDegrees": 3.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 130.0
+  },
+  "runways": [
+    {
+      "id": "12/30",
+      "qfu": [
+        119,
+        299
+      ]
+    }
+  ]
+}

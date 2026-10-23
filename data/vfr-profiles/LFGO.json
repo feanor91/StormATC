@@ -1,0 +1,43 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFGO (AIP France, chart dated 2025-01-23), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFGO",
+  "name": "Pont-sur-Yonne",
+  "source": {
+    "publication": "AIP France AD 2 LFGO",
+    "chartDate": "2025-01-23",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 48.28944,
+    "longitude": 3.24889
+  },
+  "elevationFeet": 232,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 118.18
+  },
+  "runways": [
+    {
+      "id": "14R/32L",
+      "qfu": [
+        141,
+        321
+      ]
+    },
+    {
+      "id": "14L/32R",
+      "qfu": [
+        141,
+        321
+      ]
+    }
+  ]
+}

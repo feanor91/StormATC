@@ -1,0 +1,27 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFMX (AIP France, chart dated 2024-08-08), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFMX",
+  "name": "Château-Arnoux-Saint-Auban",
+  "source": {
+    "publication": "AIP France AD 2 LFMX",
+    "chartDate": "2024-08-08",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 44.05861,
+    "longitude": 5.99083
+  },
+  "elevationFeet": 1507,
+  "magneticVariationDegrees": 2.0,
+  "service": {
+    "kind": "None"
+  },
+  "frequencies": {
+    "airAir": 122.305
+  }
+}

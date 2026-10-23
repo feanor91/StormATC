@@ -1,0 +1,54 @@
+{
+  "$comment": [
+    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBI (AIP France, chart dated 2026-07-09), not read by hand.",
+    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
+    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+  ],
+  "icao": "LFBI",
+  "name": "Poitiers-Biard",
+  "source": {
+    "publication": "AIP France AD 2 LFBI",
+    "chartDate": "2026-07-09",
+    "extraction": "automatic"
+  },
+  "referencePosition": {
+    "latitude": 46.5875,
+    "longitude": 0.30667
+  },
+  "elevationFeet": 423,
+  "magneticVariationDegrees": 1.0,
+  "service": {
+    "kind": "Tower"
+  },
+  "frequencies": {
+    "fis": 124.0,
+    "atis": 121.78,
+    "approach": 134.1,
+    "tower": 118.505,
+    "airAir": 118.505
+  },
+  "runways": [
+    {
+      "id": "03/21",
+      "qfu": [
+        29,
+        209
+      ]
+    },
+    {
+      "id": "03R/21L",
+      "qfu": [
+        29,
+        209
+      ]
+    },
+    {
+      "id": "03L/21R",
+      "qfu": [
+        29,
+        209
+      ]
+    }
+  ]
+}
