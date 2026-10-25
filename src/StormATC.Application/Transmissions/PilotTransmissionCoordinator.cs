@@ -392,6 +392,16 @@ public sealed class PilotTransmissionCoordinator(
             session = session.WithMarsa(null);
         }
 
+        if (decision.NewVfrTransit is bool transit)
+        {
+            session = session.WithVfrTransit(transit);
+        }
+
+        if (decision.TrafficAdvisedAt is DateTimeOffset advisedAt)
+        {
+            session = session.WithTrafficAdvisedAt(advisedAt);
+        }
+
         if (decision.NewFlightFollowing is Domain.Approach.FlightFollowingState following)
         {
             session = session.WithFlightFollowing(following);

@@ -55,6 +55,22 @@ public static class FrenchTranscriptCanonicalizer
         ("dernier virage", "turning final"),
         ("demande(?:ons)? (?:le |un |l )?break|pour (?:le |un |l )?break", "request break"),
         ("(?:demande(?:ons)?|demander|demain|demandez) (?:de |du |un |le |l )?(?:suivi|suivit)(?: vfr)?|(?:suivi|suivit) vfr", "request flight following"),
+
+        // --- The everyday requests of the phraseology manual. -----------------------------------------
+        ("(?:demande(?:ons)? )?(?:la |une )?remont(?:ee|er|ons|ez) (?:de |la )?piste|(?:demande(?:ons)? )?(?:la )?remontee", "request backtrack"),
+        ("demande(?:ons)? (?:l |la )?heure(?: exacte)?|heure exacte", "request time check"),
+        ("(?<![a-z])ident(?![a-z])", "squawk ident"),
+        ("(?:parlez|parle|parlons) (?:plus )?(?:lentement|doucement|moins vite)", "speak slower"),
+        ("annul(?:ons|e|er|ez|ation)? (?:l |le |mon |notre |du |de l )?(?:plan de vol )?ifr", "cancel ifr"),
+        ("pas de contact visuel|negatif (?:contact|visuel)|aucun contact|(?:on |nous |je )?(?:ne )?(?:le )?(?:voyons|voit|vois) pas(?: le trafic)?", "negative contact"),
+        ("trafic en vue|(?:on |nous |je )?(?:voit|voyons|vois) le trafic|contact visuel(?: sur le trafic)?|visuel sur le trafic", "traffic in sight"),
+        ("(?:on |nous |je )?(?:surveille|surveillons|recherche|recherchons|cherche|cherchons)(?: le trafic)?", "looking out"),
+        ("(?:demande(?:ons)? )?(?:un |le )?v ?f ?r speciale?", "request special vfr"),
+        ("(?:demande(?:ons)? )?(?:de |du |le |un )?transit(?: par la verticale| de la zone| du terrain| de l aerodrome| vfr)?", "request transit"),
+        ("(?:demande(?:ons)? )?(?:d )?allonger (?:la )?vent arriere|allongeons (?:la )?vent arriere|etendre (?:la )?vent arriere", "request extend downwind"),
+        ("(?:demande(?:ons)?|demander) (?:un |une )?(?:360|trois cent soixante|orbite|tour complet)(?: degres)?", "request orbit"),
+        ("(?:demande(?:ons)? )?(?:la )?(?:cloture|clore|fermeture) (?:du |de mon |de notre )?plan de vol", "close flight plan"),
+        ("(?:pret|prets|prete)(?: au| pour le| pour un)?(?: depart| decollage)? immediat", "ready for departure immediate"),
         ("(?<!montee )(?:point initial|initiale|initial)", "initial"),
         ("q f e|que f e|cue f e", "qfe"),
         // "par" is a French stop word, so a PAR request is rewritten to words that survive.

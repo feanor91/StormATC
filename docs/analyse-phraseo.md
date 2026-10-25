@@ -54,6 +54,17 @@ fréquence ; et depuis la 0.15.0 le suivi VFR par l'information de vol.
 Cette liste vient d'une comparaison par mots-clés avec le code, pas d'un test en vol : quelques points sont peut-être
 déjà couverts en partie.
 
+## Ce qui a été repris depuis (version 0.16.0)
+
+Remontée de piste, heure exacte, ident, « parlez plus lentement », annulation de l'IFR, VFR spécial, transit par la
+verticale, 360, allonger la vent arrière, clôture du plan de vol, décollage immédiat, réponses à une information trafic
+(« je surveille », « trafic en vue », « pas de contact visuel »), et l'information trafic donnée par le contrôleur.
+L'alignement conditionnel derrière un avion en finale existait déjà.
+
+Pas encore repris : les modifications de route, le contrôle de vitesse (réduire, Mach), les attentes, le RNP, le VPT et
+l'approche indirecte, le RVSM, le SELCAL et le CPDLC, l'entrée sans ATIS, le séquencement du circuit, la turbulence de
+sillage, le tractage et les véhicules d'inspection.
+
 ## Ce qu'on peut en faire
 
 1. **Rapport d'écarts** (ce document) : fait.

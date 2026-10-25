@@ -111,6 +111,12 @@ public sealed partial class StormAtcStateEngine
                 Say(context).Unable(callsign, UnableReason.NotAtThisStageOfFlight));
         }
 
+        // Overhead the aerodrome on a transit clearance: nothing to join.
+        if (session.VfrTransit)
+        {
+            return TransitOverhead(context, callsign);
+        }
+
         if (ResolveVfrRunway(context) is not RunwayIdentifier runway)
         {
             return AtcDecision.Reject(

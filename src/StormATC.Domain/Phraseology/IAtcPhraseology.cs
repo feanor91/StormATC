@@ -226,6 +226,74 @@ public interface IAtcPhraseology
     /// <summary>Acknowledges that the aircraft is leaving the circuit and the frequency.</summary>
     string LeaveFrequencyAcknowledgement(Callsign callsign);
 
+    /// <summary>Backtrack the runway: taxi along it against the traffic direction.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="runway">The runway to backtrack.</param>
+    string BacktrackInstruction(Callsign callsign, RunwayIdentifier runway);
+
+    /// <summary>The exact time, in UTC.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="utc">The time to give.</param>
+    string TimeCheck(Callsign callsign, DateTimeOffset utc);
+
+    /// <summary>Acknowledges an ident.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="airborne">True when the aircraft is flying, so that it can be identified.</param>
+    string IdentAcknowledgement(Callsign callsign, bool airborne);
+
+    /// <summary>Repeats the last transmission more slowly.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="lastTransmission">What was said last, or null when there is nothing to repeat.</param>
+    string SpeakSlowly(Callsign callsign, string? lastTransmission);
+
+    /// <summary>The IFR flight plan is cancelled and the flight goes on VFR.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    string CancelIfrAcknowledgement(Callsign callsign);
+
+    /// <summary>Cleared special VFR in the zone.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    string SpecialVfrClearance(Callsign callsign);
+
+    /// <summary>Special VFR cannot be given: the visibility is too low.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="visibilityMeters">The visibility.</param>
+    string SpecialVfrRefused(Callsign callsign, int visibilityMeters);
+
+    /// <summary>Cleared to cross the zone over the aerodrome, at an altitude.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="altitude">The altitude to keep over the aerodrome.</param>
+    /// <param name="qnhHectopascals">The QNH, when known.</param>
+    string TransitClearance(Callsign callsign, Altitude altitude, int? qnhHectopascals);
+
+    /// <summary>The flight is over the aerodrome: carry on and report leaving the zone.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    string TransitContinue(Callsign callsign);
+
+    /// <summary>A 360 turn is approved.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="side">The side of the turn, or null for the pilot's choice.</param>
+    string OrbitApproved(Callsign callsign, CircuitSide? side);
+
+    /// <summary>The downwind leg may be extended.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    string ExtendDownwindApproved(Callsign callsign);
+
+    /// <summary>The flight plan is closed.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    string FlightPlanClosed(Callsign callsign);
+
+    /// <summary>Cleared for an immediate takeoff.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="runway">The runway.</param>
+    string ImmediateTakeoffClearance(Callsign callsign, RunwayIdentifier runway);
+
+    /// <summary>Traffic information: where another aircraft is, as a clock position, its distance and its altitude.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="clockPosition">The other aircraft's position on the clock face, 1 to 12.</param>
+    /// <param name="miles">The distance in nautical miles.</param>
+    /// <param name="relativeAltitudeFeet">The other aircraft's altitude relative to ours, in feet; positive is above.</param>
+    string TrafficInformation(Callsign callsign, int clockPosition, int miles, int relativeAltitudeFeet);
+
     /// <summary>A flight information service takes a VFR flight: its transponder code and what to report.</summary>
     /// <param name="callsign">The aircraft.</param>
     /// <param name="serviceName">The service, as named on the radio ("Paris Information").</param>

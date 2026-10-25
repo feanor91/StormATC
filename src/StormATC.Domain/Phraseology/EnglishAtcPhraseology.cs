@@ -363,6 +363,78 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
         $"{callsign.ToSpoken()}, roger, good day.";
 
     /// <inheritdoc />
+    public string BacktrackInstruction(Callsign callsign, RunwayIdentifier runway) =>
+        $"{callsign.ToSpoken()}, backtrack runway {SpeakRunway(runway)}, report ready for departure.";
+
+    /// <inheritdoc />
+    public string TimeCheck(Callsign callsign, DateTimeOffset utc) =>
+        $"{callsign.ToSpoken()}, time {SpokenNumbers.DigitsIndividually(utc.UtcDateTime.ToString("HHmm", System.Globalization.CultureInfo.InvariantCulture))} UTC.";
+
+    /// <inheritdoc />
+    public string IdentAcknowledgement(Callsign callsign, bool airborne) =>
+        airborne ? $"{callsign.ToSpoken()}, identified." : $"{callsign.ToSpoken()}, roger.";
+
+    /// <inheritdoc />
+    public string SpeakSlowly(Callsign callsign, string? lastTransmission) =>
+        lastTransmission is { Length: > 0 }
+            ? $"I say again, slowly: {lastTransmission}"
+            : $"{callsign.ToSpoken()}, roger, speaking slower.";
+
+    /// <inheritdoc />
+    public string CancelIfrAcknowledgement(Callsign callsign) =>
+        $"{callsign.ToSpoken()}, IFR flight plan cancelled, good day.";
+
+    /// <inheritdoc />
+    public string SpecialVfrClearance(Callsign callsign) =>
+        $"{callsign.ToSpoken()}, cleared special VFR in the zone, remain clear of cloud and in sight of the surface, report leaving the zone.";
+
+    /// <inheritdoc />
+    public string SpecialVfrRefused(Callsign callsign, int visibilityMeters) =>
+        $"{callsign.ToSpoken()}, unable special VFR, visibility {visibilityMeters} metres.";
+
+    /// <inheritdoc />
+    public string TransitClearance(Callsign callsign, Altitude altitude, int? qnhHectopascals) =>
+        $"{callsign.ToSpoken()}, cleared to transit overhead the aerodrome, altitude {SpeakAltitude(altitude)}"
+        + (qnhHectopascals is int qnh
+            ? $", QNH {SpokenNumbers.DigitsIndividually(qnh.ToString(System.Globalization.CultureInfo.InvariantCulture))}"
+            : string.Empty)
+        + ", report overhead.";
+
+    /// <inheritdoc />
+    public string TransitContinue(Callsign callsign) =>
+        $"{callsign.ToSpoken()}, roger, continue, report leaving the zone.";
+
+    /// <inheritdoc />
+    public string OrbitApproved(Callsign callsign, CircuitSide? side) =>
+        $"{callsign.ToSpoken()}, "
+        + side switch
+        {
+            CircuitSide.Left => "left 360 approved",
+            CircuitSide.Right => "right 360 approved",
+            _ => "360 approved",
+        }
+        + ", report downwind.";
+
+    /// <inheritdoc />
+    public string ExtendDownwindApproved(Callsign callsign) =>
+        $"{callsign.ToSpoken()}, extend downwind, I will call you for base.";
+
+    /// <inheritdoc />
+    public string FlightPlanClosed(Callsign callsign) =>
+        $"{callsign.ToSpoken()}, flight plan closed, good day.";
+
+    /// <inheritdoc />
+    public string ImmediateTakeoffClearance(Callsign callsign, RunwayIdentifier runway) =>
+        $"{callsign.ToSpoken()}, runway {SpeakRunway(runway)}, cleared for immediate takeoff.";
+
+    /// <inheritdoc />
+    public string TrafficInformation(Callsign callsign, int clockPosition, int miles, int relativeAltitudeFeet) =>
+        $"{callsign.ToSpoken()}, traffic {clockPosition} o'clock, {miles} {(miles > 1 ? "miles" : "mile")}, "
+        + (Math.Abs(relativeAltitudeFeet) < 300
+            ? "same altitude."
+            : $"{Math.Abs(relativeAltitudeFeet / 100) * 100} feet {(relativeAltitudeFeet > 0 ? "above" : "below")}.");
+
+    /// <inheritdoc />
     public string FlightFollowingAccepted(Callsign callsign, string serviceName, SquawkCode squawk) =>
         $"{callsign.ToSpoken()}, {serviceName}, flight following approved, squawk {SpeakSquawk(squawk)}, report any change of intentions.";
 

@@ -213,6 +213,39 @@ public enum PilotIntentType
     /// <summary>A VFR pilot asks a flight information service for a flight following ("suivi VFR").</summary>
     RequestFlightFollowing,
 
+    /// <summary>The pilot asks to backtrack the runway ("remontée de piste").</summary>
+    RequestBacktrack,
+
+    /// <summary>The pilot asks the exact time.</summary>
+    RequestTimeCheck,
+
+    /// <summary>The pilot squawks ident.</summary>
+    ReportIdent,
+
+    /// <summary>The pilot asks the controller to speak slower.</summary>
+    SpeakSlowly,
+
+    /// <summary>An IFR flight cancels its IFR flight plan and goes on VFR.</summary>
+    CancelIfr,
+
+    /// <summary>The pilot answers a traffic information: looking out, traffic in sight, or no contact.</summary>
+    ReportTrafficLookout,
+
+    /// <summary>The pilot asks for a special VFR clearance.</summary>
+    RequestSpecialVfr,
+
+    /// <summary>A VFR pilot asks to cross a controlled aerodrome's zone ("transit").</summary>
+    RequestTransit,
+
+    /// <summary>The pilot asks for a 360 turn.</summary>
+    RequestOrbit,
+
+    /// <summary>The pilot asks to extend the downwind leg.</summary>
+    RequestExtendDownwind,
+
+    /// <summary>The pilot asks to close the flight plan.</summary>
+    RequestFlightPlanClosure,
+
     /// <summary>The pilot asks for a PAR or SRA radar approach.</summary>
     RequestRadarApproach,
     RequestApproach,

@@ -5,6 +5,18 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **More of the phraseology manual**, from the analysis of phraseo.aeronautique.xyz (see docs/analyse-phraseo.md):
+  backtracking a runway ("remontée de piste"), the exact time, ident, "parlez plus lentement" (the controller repeats the
+  last call slowly), cancelling IFR in flight, special VFR (refused under 1500 m of visibility), a transit across an
+  aerodrome's zone (altitude and QNH, then "reçu, poursuivez" overhead), a 360 (to the left or the right), extending the
+  downwind, closing the flight plan, ready for an immediate departure ("prêt immédiat": cleared for an immediate
+  takeoff), and the answers to a traffic information ("je surveille", "trafic en vue", "pas de contact visuel").
+- **Traffic information**: a controller who works a flight in the air (flight information, departure, centre, approach)
+  tells an IFR flight or a followed VFR flight about traffic within 6 nm and 1000 ft: clock position, distance and
+  relative altitude, at most once in three minutes.
+
 ## 0.15.1 - 2026-10-25
 
 ### Fixed

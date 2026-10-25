@@ -678,6 +678,96 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
         Phrase(callsign).Add(Received()).Add(OneOf("au revoir", "bonne journée")).Build();
 
     /// <inheritdoc />
+    public string BacktrackInstruction(Callsign callsign, RunwayIdentifier runway) =>
+        Phrase(callsign).Add($"remontez la piste {SpeakRunway(runway)}").Add("rappelez prêt au départ").Build();
+
+    /// <inheritdoc />
+    public string TimeCheck(Callsign callsign, DateTimeOffset utc) =>
+        Phrase(callsign)
+            .Add($"il est {FrenchSpokenNumbers.DigitsIndividually(utc.UtcDateTime.ToString("HHmm", System.Globalization.CultureInfo.InvariantCulture))} UTC")
+            .Build();
+
+    /// <inheritdoc />
+    public string IdentAcknowledgement(Callsign callsign, bool airborne) =>
+        Phrase(callsign).Add(airborne ? "identifié" : Received()).Build();
+
+    /// <inheritdoc />
+    public string SpeakSlowly(Callsign callsign, string? lastTransmission) =>
+        lastTransmission is { Length: > 0 }
+            ? $"Je répète lentement : {lastTransmission}"
+            : Phrase(callsign).Add("reçu, je parle plus lentement").Build();
+
+    /// <inheritdoc />
+    public string CancelIfrAcknowledgement(Callsign callsign) =>
+        Phrase(callsign).Add("annulation du plan de vol IFR enregistrée").Add("bon vol").Build();
+
+    /// <inheritdoc />
+    public string SpecialVfrClearance(Callsign callsign) =>
+        Phrase(callsign)
+            .Add("autorisé VFR spécial dans la zone")
+            .Add("restez hors des nuages et maintenez la vue du sol")
+            .Add("rappelez en sortie de zone")
+            .Build();
+
+    /// <inheritdoc />
+    public string SpecialVfrRefused(Callsign callsign, int visibilityMeters) =>
+        Phrase(callsign)
+            .Add($"VFR spécial impossible, visibilité {visibilityMeters} mètres")
+            .Build();
+
+    /// <inheritdoc />
+    public string TransitClearance(Callsign callsign, Altitude altitude, int? qnhHectopascals)
+    {
+        var builder = Phrase(callsign)
+            .Add("transit autorisé par la verticale de l'aérodrome")
+            .Add($"altitude {SpeakAltitude(altitude)}");
+        if (qnhHectopascals is int qnh)
+        {
+            builder.Add($"QNH {FrenchSpokenNumbers.DigitsIndividually(qnh.ToString(System.Globalization.CultureInfo.InvariantCulture))}");
+        }
+
+        return builder.Add("rappelez à la verticale").Build();
+    }
+
+    /// <inheritdoc />
+    public string TransitContinue(Callsign callsign) =>
+        Phrase(callsign).Add("reçu, poursuivez").Add("rappelez en sortie de zone").Build();
+
+    /// <inheritdoc />
+    public string OrbitApproved(Callsign callsign, CircuitSide? side) =>
+        Phrase(callsign)
+            .Add(side switch
+            {
+                CircuitSide.Left => "360 par la gauche approuvé",
+                CircuitSide.Right => "360 par la droite approuvé",
+                _ => "360 approuvé",
+            })
+            .Add("rappelez vent arrière")
+            .Build();
+
+    /// <inheritdoc />
+    public string ExtendDownwindApproved(Callsign callsign) =>
+        Phrase(callsign).Add("allongez la vent arrière").Add("je vous rappelle pour la base").Build();
+
+    /// <inheritdoc />
+    public string FlightPlanClosed(Callsign callsign) =>
+        Phrase(callsign).Add("plan de vol clos").Add(OneOf("bonne journée", "au revoir")).Build();
+
+    /// <inheritdoc />
+    public string ImmediateTakeoffClearance(Callsign callsign, RunwayIdentifier runway) =>
+        Phrase(callsign).Add(SpeakRunway(runway)).Add("autorisé décollage immédiat").Build();
+
+    /// <inheritdoc />
+    public string TrafficInformation(Callsign callsign, int clockPosition, int miles, int relativeAltitudeFeet) =>
+        Phrase(callsign)
+            .Add($"trafic à {clockPosition} heures")
+            .Add($"{miles} {(miles > 1 ? "milles" : "mille")}")
+            .Add(Math.Abs(relativeAltitudeFeet) < 300
+                ? "même altitude"
+                : $"{Math.Abs(relativeAltitudeFeet / 100) * 100} pieds {(relativeAltitudeFeet > 0 ? "au-dessus" : "en dessous")}")
+            .Build();
+
+    /// <inheritdoc />
     public string FlightFollowingAccepted(Callsign callsign, string serviceName, SquawkCode squawk) =>
         Phrase(callsign)
             .Add($"{serviceName}, suivi accordé")

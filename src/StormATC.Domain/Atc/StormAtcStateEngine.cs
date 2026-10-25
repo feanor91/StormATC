@@ -164,6 +164,17 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             PilotIntentType.RequestMarsa => HandleMarsaRequest(context, intent),
             PilotIntentType.RequestTacticalPicture => HandleTacticalPicture(context, intent),
             PilotIntentType.RequestFlightFollowing => HandleFlightFollowingRequest(context, intent),
+            PilotIntentType.RequestBacktrack => HandleBacktrack(context),
+            PilotIntentType.RequestTimeCheck => HandleTimeCheck(context),
+            PilotIntentType.ReportIdent => HandleIdent(context),
+            PilotIntentType.SpeakSlowly => HandleSpeakSlowly(context),
+            PilotIntentType.CancelIfr => HandleCancelIfr(context),
+            PilotIntentType.ReportTrafficLookout => HandleTrafficLookout(context),
+            PilotIntentType.RequestSpecialVfr => HandleSpecialVfr(context),
+            PilotIntentType.RequestTransit => HandleTransit(context),
+            PilotIntentType.RequestOrbit => HandleOrbit(context, intent),
+            PilotIntentType.RequestExtendDownwind => HandleExtendDownwind(context),
+            PilotIntentType.RequestFlightPlanClosure => HandleFlightPlanClosure(context),
             PilotIntentType.RequestRadarApproach => HandleRadarApproachRequest(context, intent),
             PilotIntentType.RequestApproach => HandleApproachRequest(context, intent),
             PilotIntentType.ReportEstablished => HandleEstablishedReport(context, intent),
@@ -212,6 +223,13 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
         if (followed is not null)
         {
             return followed;
+        }
+
+        // --- Traffic close to a flight a controller works in the air. ------------------------------
+        AtcDecision? traffic = EvaluateTrafficInformation(context);
+        if (traffic is not null)
+        {
+            return traffic;
         }
 
         // --- Becoming airborne. ------------------------------------------------------------
@@ -1477,12 +1495,14 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
                 "landing clearance",
                 "wind information unless supplied in approved facts",
             ],
-            FallbackPhraseology = Say(context).TakeoffClearance(
-                callsign,
-                runway,
-                context.Weather?.WindDirection,
-                context.Weather?.WindSpeedKnots,
-                initialHeading: null),
+            FallbackPhraseology = context.Intent?.Entities.ReadyImmediate == true
+                ? Say(context).ImmediateTakeoffClearance(callsign, runway)
+                : Say(context).TakeoffClearance(
+                    callsign,
+                    runway,
+                    context.Weather?.WindDirection,
+                    context.Weather?.WindSpeedKnots,
+                    initialHeading: null),
         };
     }
 

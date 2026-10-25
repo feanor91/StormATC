@@ -347,6 +347,8 @@ public static class PhraseologyCatalog
                 new("Collationner", $"Roulons point d'attente piste XX via Alpha, Charlie, maintenons avant piste XX, {cs}.", $"{cs}, collationnement correct."),
                 new("Arrivé au point d'attente", $"{cs}, au point d'attente piste XX.", $"{cs}, contactez Tour cent dix-huit décimale sept."),
                 new("Traverser une piste", $"{cs}, au point d'attente piste XX, demandons à traverser.", $"{cs}, traversez piste XX."),
+                new("Remonter la piste", $"{cs}, demandons la remontée de piste XX.", $"{cs}, remontez la piste XX, rappelez prêt au départ."),
+                new("Demander l'heure", $"{cs}, demandons l'heure exacte.", $"{cs}, il est un deux zéro zéro UTC."),
             ]),
             PhraseologyStage.Departure => ("Point d'attente, alignement, décollage",
             [
@@ -366,6 +368,10 @@ public static class PhraseologyCatalog
                 new("Demander un niveau", $"{cs}, demandons à monter niveau deux quatre zéro.", $"{cs}, montez niveau deux quatre zéro."),
                 new("Cap", $"Tournons à gauche cap deux sept zéro, {cs}.", string.Empty),
                 new("Évitement météo", $"{cs}, demandons un évitement.", $"{cs}, évitement approuvé."),
+                new("Trafic annoncé", $"Je surveille, {cs}.", $"{cs}, trafic à douze heures, trois milles, cinq cents pieds au-dessus."),
+                new("Annuler l'IFR", $"{cs}, annulons l'IFR.", $"{cs}, annulation du plan de vol IFR enregistrée, bon vol."),
+                new("Ident", $"{cs}, ident.", $"{cs}, identifié."),
+                new("Parlez plus lentement", $"{cs}, parlez plus lentement s'il vous plaît.", $"Je répète lentement : …"),
             ]),
             PhraseologyStage.Descent => ("Descente et arrivée",
             [
@@ -402,6 +408,11 @@ public static class PhraseologyCatalog
                 new("Finale", $"Tour, {cs}, en finale piste XX.", $"{cs}, piste XX, autorisé atterrissage."),
                 new("Demander un toucher", $"{cs}, demandons toucher.", $"{cs}, piste XX, autorisé toucher."),
                 new("Quitter le circuit", $"{cs}, sortie de circuit, je quitte la fréquence.", $"{cs}, reçu, au revoir."),
+                new("VFR spécial", $"Tour, {cs}, demandons VFR spécial.", $"{cs}, autorisé VFR spécial dans la zone, rappelez en sortie de zone."),
+                new("Transit par la verticale", $"Tour, {cs}, demandons transit par la verticale de l'aérodrome.", $"{cs}, transit autorisé, altitude deux mille pieds, QNH XXXX, rappelez à la verticale."),
+                new("360", $"Tour, {cs}, demandons un 360 par la droite.", $"{cs}, 360 par la droite approuvé, rappelez vent arrière."),
+                new("Allonger la vent arrière", $"Tour, {cs}, demandons d'allonger la vent arrière.", $"{cs}, allongez la vent arrière, je vous rappelle pour la base."),
+                new("Clôturer le plan de vol", $"{cs}, demandons la clôture du plan de vol.", $"{cs}, plan de vol clos, bonne journée."),
             ]),
             PhraseologyStage.Abnormal => ("Urgence",
             [
@@ -441,6 +452,8 @@ public static class PhraseologyCatalog
                 new("Read back", $"Taxi to holding point runway XX via Alpha, Charlie, hold short runway XX, {cs}.", $"{cs}, readback correct."),
                 new("At the holding point", $"{cs}, holding short runway XX.", $"{cs}, contact Tower one one eight decimal seven."),
                 new("Cross a runway", $"{cs}, holding short runway XX, request crossing.", $"{cs}, cross runway XX."),
+                new("Backtrack the runway", $"{cs}, request backtrack runway XX.", $"{cs}, backtrack runway XX, report ready for departure."),
+                new("Ask the time", $"{cs}, request time check.", $"{cs}, time one two zero zero UTC."),
             ]),
             PhraseologyStage.Departure => ("Holding point, line-up, take-off",
             [
@@ -460,6 +473,10 @@ public static class PhraseologyCatalog
                 new("Ask for a level", $"{cs}, request climb flight level two four zero.", $"{cs}, climb flight level two four zero."),
                 new("Heading", $"Turn left heading two seven zero, {cs}.", string.Empty),
                 new("Weather deviation", $"{cs}, request deviation.", $"{cs}, deviation approved."),
+                new("Traffic information", $"Looking out, {cs}.", $"{cs}, traffic twelve o'clock, three miles, five hundred feet above."),
+                new("Cancel IFR", $"{cs}, cancel IFR.", $"{cs}, IFR flight plan cancelled, good day."),
+                new("Ident", $"{cs}, squawk ident.", $"{cs}, identified."),
+                new("Speak slower", $"{cs}, speak slower please.", $"I say again, slowly: …"),
             ]),
             PhraseologyStage.Descent => ("Descent and arrival",
             [
@@ -496,6 +513,11 @@ public static class PhraseologyCatalog
                 new("Final", $"Tower, {cs}, final runway XX.", $"{cs}, runway XX, cleared to land."),
                 new("Ask for a touch and go", $"{cs}, request touch and go.", $"{cs}, runway XX, cleared touch and go."),
                 new("Leave the circuit", $"{cs}, leaving the circuit and frequency.", $"{cs}, roger, goodbye."),
+                new("Special VFR", $"Tower, {cs}, request special VFR.", $"{cs}, cleared special VFR in the zone, report leaving the zone."),
+                new("Transit overhead", $"Tower, {cs}, request transit overhead the aerodrome.", $"{cs}, cleared to transit, altitude two thousand feet, QNH XXXX, report overhead."),
+                new("360", $"Tower, {cs}, request right 360.", $"{cs}, right 360 approved, report downwind."),
+                new("Extend downwind", $"Tower, {cs}, request extended downwind.", $"{cs}, extend downwind, I will call you for base."),
+                new("Close the flight plan", $"{cs}, request flight plan closure.", $"{cs}, flight plan closed, good day."),
             ]),
             PhraseologyStage.Abnormal => ("Emergency",
             [

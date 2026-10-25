@@ -116,6 +116,12 @@ public sealed record AtcSession
     /// <summary>The MARSA in force for the flight, if any.</summary>
     public Approach.MarsaState? Marsa { get; init; }
 
+    /// <summary>True while the flight crosses the zone of an aerodrome on a transit clearance.</summary>
+    public bool VfrTransit { get; init; }
+
+    /// <summary>When the last traffic information was given, so that they are not given too often.</summary>
+    public DateTimeOffset? TrafficAdvisedAt { get; init; }
+
     /// <summary>The VFR flight following in force, or null.</summary>
     public Approach.FlightFollowingState? FlightFollowing { get; init; }
 
@@ -170,6 +176,14 @@ public sealed record AtcSession
 
     /// <summary>Starts or (with null) ends the MARSA.</summary>
     public AtcSession WithMarsa(Approach.MarsaState? state) => this with { Marsa = state };
+
+    /// <summary>Starts or ends a transit.</summary>
+    /// <param name="transit">True while the flight is cleared to cross the zone.</param>
+    public AtcSession WithVfrTransit(bool transit) => this with { VfrTransit = transit };
+
+    /// <summary>Records that a traffic information was just given.</summary>
+    /// <param name="at">When.</param>
+    public AtcSession WithTrafficAdvisedAt(DateTimeOffset at) => this with { TrafficAdvisedAt = at };
 
     /// <summary>Starts, moves or ends a flight following.</summary>
     /// <param name="state">The flight following, or null to end it.</param>

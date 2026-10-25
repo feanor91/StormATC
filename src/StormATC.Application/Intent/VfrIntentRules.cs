@@ -106,7 +106,7 @@ internal static partial class VfrIntentRules
     /// <summary>Adds the VFR entities of a transmission to the ones already extracted.</summary>
     public static IntentEntities Enrich(IntentEntities entities, string transcript)
     {
-        bool circuitContext = CircuitWord().IsMatch(transcript);
+        bool circuitContext = CircuitWord().IsMatch(transcript) || transcript.Contains("orbit", StringComparison.Ordinal);
 
         CircuitSide? side = null;
         if (circuitContext)
@@ -135,6 +135,7 @@ internal static partial class VfrIntentRules
             RadarApproach = MilitaryIntentRules.RadarApproachIn(transcript),
             RunwayInSight = MilitaryIntentRules.MentionsRunwayInSight(transcript),
             TouchAndGo = TouchAndGoWord().IsMatch(transcript),
+            ReadyImmediate = ProcedureIntentRules.IsReadyImmediate(transcript),
             Manoeuvre = ManoeuvreOf(transcript),
             CircuitSide = side,
             InformationLetter = ExtractInformationLetter(transcript),

@@ -231,6 +231,12 @@ public sealed partial class DeterministicPilotIntentParser : IPilotIntentParser
             return (PilotIntentType.ReportFinal, 0.9);
         }
 
+        // The everyday requests of the phraseology manual: backtrack, time, ident, special VFR, transit...
+        if (ProcedureIntentRules.TryMatch(transcript, session) is (PilotIntentType procedureType, double procedureConfidence))
+        {
+            return (procedureType, procedureConfidence);
+        }
+
         // VFR circuit and arrival calls are tested before the general rules: "passing e" would
         // otherwise be read as a check-in, and "downwind" has no general rule at all.
         if (VfrIntentRules.TryMatch(transcript, session) is (PilotIntentType vfrType, double vfrConfidence))
