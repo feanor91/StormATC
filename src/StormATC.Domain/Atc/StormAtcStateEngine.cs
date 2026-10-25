@@ -983,9 +983,10 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
                 ExpectedValue = string.Join(",", route.TaxiwayNames),
                 SpokenValue = Say(context).ReadbackItemTaxiRoute(route.TaxiwayNames),
 
-                // A misheard taxi route sends the aircraft the wrong way on the manoeuvring
-                // area, so it is treated as critical.
-                IsCritical = true,
+                // The hold-short instruction is the critical part of a taxi readback. The route is
+                // often read in part, or lost by speech recognition, and the pilot who taxis a
+                // different way is not stopped here.
+                IsCritical = false,
             });
         }
 

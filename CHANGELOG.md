@@ -5,6 +5,17 @@ public releases.
 
 ## Unreleased
 
+### Fixed
+
+- The callsign is recognised from its last letters: "Alpha Sierra Tango" or "Sierra Tango" for F-HAST, and a few
+  common speech-recognition spellings of "Sierra" ("cira", "sira"). Before, only the full registration or its first letter
+  and last two were understood, and anything else made the controller ask to say again.
+- A readback that leaves the callsign out is accepted when the rest is right (only the strict realism asks for it), and a
+  taxi readback that gets the route wrong or only in part is accepted when the hold-short instruction is right.
+- The language model that helps understand a call was given 400 tokens, and a reasoning model spent them all thinking and
+  answered nothing: it now gets 1500 and is asked to reason briefly, so a request outside the usual phrases is understood
+  instead of answered with "say again".
+
 ## 0.15.0 - 2026-10-25
 
 ### Added

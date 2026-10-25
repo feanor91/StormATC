@@ -151,7 +151,8 @@ public sealed class Callsign : IEquatable<Callsign>
 
     /// <summary>
     /// A registration said in the phonetic alphabet: "Fox Golf Tango Mike Papa" for F-GTMP, or the
-    /// abbreviated form "Fox Mike Papa" (first letter and last two) once the controller has used it.
+    /// abbreviated form "Fox Mike Papa" (first letter and last two) once the controller has used it,
+    /// or only its last three letters ("Tango Mike Papa"), or its last two ("Mike Papa").
     /// Only a registration made of letters is concerned; an airline callsign has its own rules.
     /// </summary>
     private bool MatchesSpelledRegistration(string transcript)
@@ -175,7 +176,14 @@ public sealed class Callsign : IEquatable<Callsign>
             if (spelled.Length >= 3
                 && (spelled.Contains(Normalized, StringComparison.Ordinal)
                     || spelled.Contains($"{Normalized[0]}{Normalized[^2..]}", StringComparison.Ordinal)
-                    || SpelledWithoutNationality(spelled)))
+                    || SpelledWithoutNationality(spelled)
+                    || SpelledLastLetters(spelled)))
+            {
+                return true;
+            }
+
+            // Two letters alone ("Sierra Tango") name the aircraft only as the whole of what was spelled.
+            if (spelled.Length == 2 && Normalized.Length >= 4 && spelled == Normalized[^2..])
             {
                 return true;
             }
@@ -183,6 +191,12 @@ public sealed class Callsign : IEquatable<Callsign>
 
         return false;
     }
+
+    /// <summary>The last three letters of a registration, the shortest form a controller needs to tell the aircraft.</summary>
+    private bool SpelledLastLetters(string spelled) =>
+        Normalized.Length >= 4
+        && Normalized.All(char.IsLetter)
+        && spelled.Contains(Normalized[^3..], StringComparison.Ordinal);
 
     /// <summary>
     /// French pilots often drop the nationality letter: "Golf Tango Mike Papa" for F-GTMP, or the

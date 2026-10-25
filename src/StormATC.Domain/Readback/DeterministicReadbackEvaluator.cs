@@ -74,8 +74,13 @@ public sealed class DeterministicReadbackEvaluator : IReadbackEvaluator
             if (expected.Type == ReadbackItemType.Callsign)
             {
                 // Handled separately above — the callsign is not an ordinary value comparison.
+                // A callsign that is not said at all is not held against the pilot unless the realism is
+                // strict: on a frequency of its own the controller knows who answers, and speech recognition
+                // often loses the registration. A wrong callsign (another aircraft's) is still refused above.
                 if (callsignStatus == CallsignStatus.Correct
-                    || !realism.RequireCorrectCallsign)
+                    || !realism.RequireCorrectCallsign
+                    || (callsignStatus == CallsignStatus.Missing
+                        && realism.TranscriptTolerance != TranscriptToleranceMode.Strict))
                 {
                     correct.Add(ReadbackItemType.Callsign);
                 }

@@ -571,6 +571,20 @@ public sealed class OpenRouterClient(
             },
         };
 
+        if (protocol == ProviderProtocol.OpenRouter)
+        {
+            // Models that reason before they answer would otherwise spend the whole token budget thinking.
+            return new
+            {
+                model,
+                messages = BuildMessages(request.SystemPrompt, request.UserPrompt),
+                temperature = request.Temperature,
+                max_tokens = request.MaxOutputTokens,
+                reasoning = new { effort = "low" },
+                response_format = responseFormat,
+            };
+        }
+
         return protocol == ProviderProtocol.OpenAI
             ? new
             {

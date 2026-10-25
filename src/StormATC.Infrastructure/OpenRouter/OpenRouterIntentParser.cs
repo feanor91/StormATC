@@ -136,7 +136,9 @@ public sealed class OpenRouterIntentParser(
                     SystemPrompt = systemPrompt,
                     UserPrompt = BuildUserPrompt(normalizedTranscript, session, deterministicHypothesis),
                     Temperature = _options.CurrentValue.IntentParserTemperature,
-                    MaxOutputTokens = 400,
+                    // Reasoning models spend most of their budget thinking before they answer: 400 tokens were
+                    // used up and no answer came back.
+                    MaxOutputTokens = 1500,
                 },
                 Schema,
                 cancellationToken)

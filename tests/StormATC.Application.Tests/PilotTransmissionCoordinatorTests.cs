@@ -310,7 +310,7 @@ public class PilotTransmissionCoordinatorTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Partial_readback_corrections_accumulate_across_the_exact_ST123_exchange()
+    public async Task A_readback_without_the_callsign_is_accepted_when_the_rest_is_right()
     {
         _context.PreassignedSquawk = SquawkCode.Create("5217");
         AtcSession original = _context.CurrentSession;
@@ -336,19 +336,9 @@ public class PilotTransmissionCoordinatorTests : IAsyncLifetime
             "Echo November Victor Alfa FRAN1 departure, Runway 26 left, "
             + "initially seven thousand and squawk five two one seven.");
 
-        Assert.Equal(ReadbackOutcome.Incomplete, firstReadback.ReadbackAssessment?.Outcome);
-        PendingReadback afterFirst = Assert.IsType<PendingReadback>(
-            _context.CurrentSession.PendingReadback);
-        Assert.Contains(ReadbackItemType.Runway, afterFirst.SatisfiedItems);
-        Assert.Contains(ReadbackItemType.InitialAltitude, afterFirst.SatisfiedItems);
-        Assert.Contains(ReadbackItemType.Squawk, afterFirst.SatisfiedItems);
-        Assert.DoesNotContain(ReadbackItemType.Callsign, afterFirst.SatisfiedItems);
-
-        TransmissionProcessingResult correction = await SendAsync(
-            "Sorry, Echo November Victor Alfa from one departure Runway 26 left "
-            + "initially 7000AndSquawk5217 SierraTango123.");
-
-        Assert.Equal(ReadbackOutcome.Correct, correction.ReadbackAssessment?.Outcome);
+        // A readback that leaves the callsign out is accepted: the controller knows who answers on the frequency, and
+        // speech recognition often loses the registration. Only the strict realism asks for it.
+        Assert.Equal(ReadbackOutcome.Correct, firstReadback.ReadbackAssessment?.Outcome);
         Assert.Null(_context.CurrentSession.PendingReadback);
         Assert.True(_context.CurrentSession.IfrClearance?.IsAcknowledged);
     }
