@@ -623,6 +623,8 @@
   "Update the charts from the SIA": "Mettre à jour les cartes depuis le SIA",
   "Download the missing charts": "Télécharger les cartes manquantes",
   "Traffic radio is silent while the simulator is in its menus.": "La radio du trafic reste muette tant que le simulateur est dans ses menus.",
+  "Traffic radio is silent: the aircraft's radio has no power.": "La radio du trafic reste muette : la radio de l'avion n'est pas alimentée.",
+  "The departure ATIS will be read once the aircraft's radio has power.": "L'ATIS de départ sera lu quand la radio de l'avion sera alimentée.",
   "Start of the flight": "Départ du vol",
   "When a flight starts in MSFS with a flight plan, the simulator can put you at the holding point or on the runway. These two options change that. They only act on a flight that has just been loaded, when the aircraft is on the ground and at rest near the departure aerodrome; both move or shut down your aircraft, so they are off by default.": "Quand un vol démarre dans MSFS avec un plan de vol, le simulateur peut vous placer au point d'attente ou sur la piste. Ces deux options changent cela. Elles n'agissent que sur un vol qui vient d'être chargé, quand l'avion est au sol et à l'arrêt près de l'aérodrome de départ ; toutes deux déplacent ou éteignent votre avion, elles sont donc désactivées par défaut.",
   "Start at a parking stand instead of the holding point or the runway": "Démarrer sur un parking plutôt qu'au point d'attente ou sur la piste",

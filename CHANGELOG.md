@@ -9,6 +9,8 @@ public releases.
 
 ### Fixed
 
+- The traffic chatter and the departure ATIS stay silent while the aircraft's radio has no power (battery or avionics off,
+  as after "Start cold and dark").
 - "Start at the parking" and "Cold and dark" never ran: they waited for the simulator to announce a loaded flight, which
   MSFS 2024 does not do. They now act when the simulator goes from its menus to the cockpit, wait for a flight plan whose
   departure is where the aircraft stands, and write each decision to the log.

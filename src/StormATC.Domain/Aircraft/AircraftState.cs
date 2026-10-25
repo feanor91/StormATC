@@ -76,6 +76,12 @@ public sealed record AircraftState
     /// <summary>Height above the surface directly below the aircraft, in feet.</summary>
     public double AltitudeAboveGroundFeet { get; init; }
 
+    /// <summary>
+    /// True when COM1 has electrical power. With the battery or the avionics off the radio is dead: nothing is
+    /// heard and nothing can be said. True when the simulator does not say.
+    /// </summary>
+    public bool Com1Powered { get; init; } = true;
+
     /// <summary>The aircraft's wingspan in feet; 0 when the simulator did not say.</summary>
     public double WingSpanFeet { get; init; }
 

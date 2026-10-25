@@ -381,6 +381,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector, ISimu
         ("AMBIENT VISIBILITY",              "meters",           SIMCONNECT_DATATYPE.FLOAT64),
         ("AMBIENT TEMPERATURE",             "celsius",          SIMCONNECT_DATATYPE.FLOAT64),
         ("WING SPAN",                       "feet",             SIMCONNECT_DATATYPE.FLOAT64),
+        ("CIRCUIT COM ON:1",                "bool",             SIMCONNECT_DATATYPE.INT32),
     ];
 
     private static readonly (string Variable, string? Unit, SIMCONNECT_DATATYPE Type)[]
@@ -438,6 +439,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector, ISimu
         public double AmbientVisibility;
         public double AmbientTemperature;
         public double WingSpan;
+        public int Com1Circuit;
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
@@ -1239,6 +1241,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector, ISimu
             AltitudeAboveGroundFeet = double.IsFinite(raw.AltitudeAboveGround)
                 ? Math.Max(0, raw.AltitudeAboveGround)
                 : 0,
+            Com1Powered = raw.Com1Circuit != 0,
             WingSpanFeet = double.IsFinite(raw.WingSpan) ? Math.Max(0, raw.WingSpan) : 0,
             AutopilotEngaged = raw.AutopilotMaster != 0,
             GearHandleDown = raw.GearHandlePosition != 0,
