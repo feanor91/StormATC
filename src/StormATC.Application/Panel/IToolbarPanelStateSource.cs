@@ -13,11 +13,17 @@ public interface IToolbarPanelStateSource
 /// <summary>The panel state of the session that is running.</summary>
 /// <param name="sessionContext">The running session.</param>
 /// <param name="voices">The voice that spoke last, when a local voice engine reports it.</param>
+/// <param name="options">The panel's options (the suggested reply), read live.</param>
 public sealed class SessionToolbarPanelStateSource(
     AtcSessionContext sessionContext,
-    IVoiceRejection? voices = null) : IToolbarPanelStateSource
+    IVoiceRejection? voices = null,
+    Microsoft.Extensions.Options.IOptionsMonitor<Options.ToolbarPanelOptions>? options = null) : IToolbarPanelStateSource
 {
     /// <inheritdoc />
     public ToolbarPanelState Current() =>
-        ToolbarPanelStateBuilder.Build(sessionContext.CurrentSession, voices?.LastVoice, sessionContext.CachedCurrentVfrProfile());
+        ToolbarPanelStateBuilder.Build(
+            sessionContext.CurrentSession,
+            voices?.LastVoice,
+            sessionContext.CachedCurrentVfrProfile(),
+            showSuggestion: options?.CurrentValue.ShowSuggestedReply ?? false);
 }

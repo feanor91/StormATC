@@ -622,6 +622,8 @@
   "The VAC charts are published by the SIA (Service de l'Information Aéronautique, AIP France) and kept as published. The buttons below contact www.sia.aviation-civile.gouv.fr only, when you press them, and send nothing about you or your flight. For flight simulation only: never use these charts for real navigation.": "Les cartes VAC sont publiées par le SIA (Service de l'Information Aéronautique, AIP France) et conservées telles que publiées. Les boutons ci-dessous contactent uniquement www.sia.aviation-civile.gouv.fr, quand vous les utilisez, et n'envoient rien sur vous ni sur votre vol. Pour la simulation de vol uniquement : ne jamais utiliser ces cartes en navigation réelle.",
   "Update the charts from the SIA": "Mettre à jour les cartes depuis le SIA",
   "Download the missing charts": "Télécharger les cartes manquantes",
+  "Show what to say in the panel's dialogue": "Afficher ce qu'il faut dire dans le dialogue du panneau",
+  "Under the conversation, the panel shows the readback or the next call you have to make. A training aid: turn it off to fly without it.": "Sous la conversation, le panneau affiche le collationnement ou le prochain appel à faire. Une aide à l'entraînement : décochez pour voler sans.",
   "Open the charts folder": "Ouvrir le dossier des cartes",
   "No MSFS Community folder was found. Copy the folder msfs-panel\\stormatc-ingamepanel from the StormATC installation into your Community folder yourself.": "Aucun dossier Community de MSFS n'a été trouvé. Copiez vous-même le dossier msfs-panel\\stormatc-ingamepanel de l'installation de StormATC dans votre dossier Community.",
   "Panel installed in: ": "Panneau installé dans : ",

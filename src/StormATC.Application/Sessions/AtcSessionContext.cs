@@ -273,6 +273,28 @@ public sealed class AtcSessionContext(
         return CurrentSession is { } current && current.SessionId == loaded.SessionId ? current : loaded;
     }
 
+    /// <summary>
+    /// When the registration the simulator reports changes (the pilot picks another one), a callsign that was the
+    /// old registration becomes the new one. A callsign that is not the registration (an airline's, SimBrief's) is
+    /// left alone.
+    /// </summary>
+    private AtcSession FollowRegistration(AtcSession before, AtcSession updated, AircraftState state)
+    {
+        string previous = before.AircraftState.AtcIdentifier;
+        string current = state.AtcIdentifier;
+        if (string.IsNullOrWhiteSpace(previous) || string.IsNullOrWhiteSpace(current)
+            || Callsign.Normalize(previous) == Callsign.Normalize(current)
+            || before.FlightPlan is not FlightPlan plan
+            || Callsign.Normalize(plan.Callsign.Original) != Callsign.Normalize(previous)
+            || !Callsign.TryCreate(current, out Callsign? renamed))
+        {
+            return updated;
+        }
+
+        _logger.LogInformation("The aircraft's registration changed from {Previous} to {Current}: the callsign follows.", previous, current);
+        return updated.WithFlightPlan(plan with { Callsign = renamed, Registration = current.Trim() });
+    }
+
     /// <summary>Records a new aircraft snapshot from the simulator.</summary>
     public AtcSession UpdateAircraftState(AircraftState state)
     {
@@ -280,6 +302,7 @@ public sealed class AtcSessionContext(
         return Mutate(session =>
         {
             AtcSession updated = session.WithAircraftState(state);
+            updated = FollowRegistration(session, updated, state);
 
             // ATIS is a receive-only first step. Tuning the published Delivery (or its realistic
             // combined-position fallback) is the explicit action that moves the session from

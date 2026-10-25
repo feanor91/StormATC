@@ -5,6 +5,20 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **Suggested reply** in the panel: under the conversation of the Dialogue tab, what you have to say next (the readback
+  still required, or an example of the next call), in the radio language. It is an option, on by default: Settings >
+  Voice & PTT > In-simulator panel > "Show what to say in the panel's dialogue".
+
+### Fixed
+
+- The panel's chart buttons showed empty boxes instead of arrows (the simulator's browser lacks those characters):
+  "< Cartes", "< Précédente", "Suivante >".
+- When the aircraft's registration changes in the simulator (a new registration picked), a callsign that was the old
+  registration follows it. A callsign that is not the registration (an airline's, SimBrief's) is left alone. If the panel
+  title still shows the old registration, the simulator has not applied the new one yet.
+
 ## 0.12.2 - 2026-10-23
 
 ### Changed

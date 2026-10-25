@@ -442,6 +442,12 @@ public sealed class ToolbarPanelOptions
     /// beside the application.
     /// </summary>
     public string ChartsDirectory { get; init; } = string.Empty;
+
+    /// <summary>
+    /// When true, the panel's dialogue tab shows what the pilot has to say next (the readback required, or an
+    /// example of the next call). It is a training aid: turn it off to fly without it.
+    /// </summary>
+    public bool ShowSuggestedReply { get; init; } = true;
 }
 
 /// <summary>Bringing the flight plan made in the simulator into StormATC.</summary>

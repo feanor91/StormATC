@@ -1,5 +1,6 @@
 using System.Globalization;
 using StormATC.Application.Abstractions;
+using StormATC.Application.Guidance;
 using StormATC.Domain;
 using StormATC.Domain.Airports;
 using StormATC.Domain.Phraseology;
@@ -25,6 +26,7 @@ namespace StormATC.Application.Panel;
 /// <param name="Departure">The departure aerodrome of the flight plan, or empty.</param>
 /// <param name="Destination">The destination aerodrome of the flight plan, or empty.</param>
 /// <param name="Military">The military page, in a CAM regime; null otherwise.</param>
+/// <param name="Suggestion">What the pilot has to say next; null when the option is off.</param>
 public sealed record ToolbarPanelState(
     string Language,
     string Callsign,
@@ -39,7 +41,15 @@ public sealed record ToolbarPanelState(
     ToolbarPanelVoice? Voice = null,
     string Departure = "",
     string Destination = "",
-    ToolbarPanelMilitary? Military = null);
+    ToolbarPanelMilitary? Military = null,
+    ToolbarPanelSuggestion? Suggestion = null);
+
+/// <summary>What the pilot has to say next, shown under the dialogue when the option is on.</summary>
+/// <param name="Heading">The label above it ("À dire", "What to say").</param>
+/// <param name="Title">What the call is ("Read back the clearance").</param>
+/// <param name="Detail">What is still required, or why there is nothing to say.</param>
+/// <param name="Example">The words to say, or empty when there is nothing to say.</param>
+public sealed record ToolbarPanelSuggestion(string Heading, string Title, string Detail, string Example);
 
 /// <summary>A frequency of the aerodrome, as the military page lists it.</summary>
 /// <param name="Service">The service (APP, TWR, PAR…).</param>
@@ -210,7 +220,12 @@ public static class ToolbarPanelStateBuilder
     /// <param name="session">The current session.</param>
     /// <param name="voice">The controller voice that spoke last, when the engine reports one.</param>
     /// <param name="profile">The VFR profile of the aerodrome the flight is at, when loaded: the base's frequencies.</param>
-    public static ToolbarPanelState Build(AtcSession session, SpokenVoice? voice = null, VfrAerodromeProfile? profile = null)
+    /// <param name="showSuggestion">True to include what the pilot has to say next.</param>
+    public static ToolbarPanelState Build(
+        AtcSession session,
+        SpokenVoice? voice = null,
+        VfrAerodromeProfile? profile = null,
+        bool showSuggestion = false)
     {
         ArgumentNullException.ThrowIfNull(session);
 
@@ -266,7 +281,18 @@ public static class ToolbarPanelStateBuilder
             voice is null ? null : new ToolbarPanelVoice(voice.Description, voice.CanExclude),
             session.FlightPlan?.DepartureIcao ?? string.Empty,
             session.FlightPlan?.DestinationIcao ?? string.Empty,
-            BuildMilitary(session, spoken, french, profile));
+            BuildMilitary(session, spoken, french, profile),
+            showSuggestion ? BuildSuggestion(session, french) : null);
+    }
+
+    private static ToolbarPanelSuggestion BuildSuggestion(AtcSession session, bool french)
+    {
+        AtcGuidance guidance = AtcGuidanceAdvisor.ForSession(session);
+        return new ToolbarPanelSuggestion(
+            french ? "À dire" : "What to say",
+            guidance.Title,
+            guidance.Detail,
+            guidance.Example);
     }
 
     private static ToolbarPanelMilitary? BuildMilitary(AtcSession session, string spoken, bool french, VfrAerodromeProfile? profile)
@@ -372,11 +398,11 @@ public static class ToolbarPanelStateBuilder
             new ToolbarPanelChartLabels(
                 "Cartes",
                 "Aucune carte. Téléchargez les cartes du SIA depuis les Paramètres de StormATC (Cartes VAC), ou déposez vos PDF dans le dossier : {0}",
-                "← Cartes",
+                "< Cartes",
                 "Page",
                 "sur",
-                "◀ Précédente",
-                "Suivante ▶",
+                "< Précédente",
+                "Suivante >",
                 "Zoom +",
                 "Zoom −",
                 "Ajuster",
@@ -408,11 +434,11 @@ public static class ToolbarPanelStateBuilder
             new ToolbarPanelChartLabels(
                 "Charts",
                 "No chart. Download the SIA charts from StormATC's Settings (VAC charts), or put your PDFs in the folder: {0}",
-                "← Charts",
+                "< Charts",
                 "Page",
                 "of",
-                "◀ Previous",
-                "Next ▶",
+                "< Previous",
+                "Next >",
                 "Zoom +",
                 "Zoom −",
                 "Fit",

@@ -4,6 +4,9 @@ StormATC ajoute une fenêtre à la barre d'outils de Microsoft Flight Simulator.
 
 - **Dialogue ATC** : les échanges avec le contrôleur, du plus ancien au plus récent (vous en vert,
   le contrôleur en bleu). La liste suit les nouveaux messages tant que vous n'avez pas remonté.
+- **Dialogue ATC** affiche aussi, sous la conversation, **ce que vous avez à dire** (le collationnement attendu ou un
+  exemple du prochain appel). C'est une option, activée par défaut : *Paramètres → Voix & alternat → Fenêtre dans le
+  simulateur → « Afficher ce qu'il faut dire dans le dialogue du panneau »*.
 - **Phraséologie** : des exemples d'appels pour la **phase de vol en cours** (clairance, roulage,
   circuit VFR, approche, etc.), avec ce que le contrôleur répond, puis les appels toujours possibles
   (« répétez », « quelle est la fréquence de la Tour ? »…). L'onglet change tout seul avec la phase.

@@ -27,7 +27,7 @@
 <body>
 
 <h1>StormATC : fiche de tests à valider</h1>
-<p class="small">Version testée : <b>0.12.2</b> (23 octobre 2026). Simulation de vol uniquement. Rien de ce qui suit n'a été vu en vol par
+<p class="small">Version testée : <b>0.13.0</b> (25 octobre 2026). Simulation de vol uniquement. Rien de ce qui suit n'a été vu en vol par
 moi : je ne peux pas lancer MSFS. Tout ce qui est marqué &laquo;&nbsp;à valider&nbsp;&raquo; n'a été vérifié que par des tests automatiques ou à la lecture du code.</p>
 
 <div class="box">
@@ -55,10 +55,11 @@ Pour un KO, envoyez-moi : la ligne du test, ce que vous avez dit, ce que StormAT
 <tr><td class="th"></td><td class="th">N°</td><td class="th">Action</td><td class="th">Résultat attendu</td><td class="th">Note</td></tr>
 <tr><td class="c">&#9744;</td><td class="id">1.1</td><td class="a">Paramètres &rarr; onglet <b>Cartes VAC</b> : lire la source ; <b>Mettre à jour les cartes depuis le SIA</b>.</td><td class="r">La source et le cycle AIRAC s'affichent ; un compte rendu « N remplacées, N ajoutées, N inchangées… » à la fin ; le cycle indiqué est 2026-10-01 (ou le suivant).</td><td class="n"></td></tr>
 <tr><td class="c ok">&#9745;</td><td class="id">1.2</td><td class="a">Vider le dossier <code>Cartes VAC</code> (garder une copie), puis relancer « Mettre à jour ».</td><td class="r">Il télécharge tout (environ 416 cartes, quelques minutes). Rien n'est perdu si vous restaurez la copie.</td><td class="n ok">Validé par vous (23/10)</td></tr>
-<tr><td class="c">&#9744;</td><td class="id">1.3</td><td class="a">Dans MSFS, panneau StormATC &rarr; onglet <b>Cartes</b> (avec plus de 15 cartes).</td><td class="r">Cartes du plan de vol d'abord, puis « Dernières cartes », puis des tuiles de lettres (A, B, C…) avec un nombre ; une lettre ouvre la liste de ses terrains, « &larr; Cartes » revient. Les noms d'aéroports sont affichés. La ligne de source SIA est en bas.</td><td class="n"></td></tr>
+<tr><td class="c ok">&#9745;</td><td class="id">1.3</td><td class="a">Dans MSFS, panneau StormATC &rarr; onglet <b>Cartes</b> (avec plus de 15 cartes).</td><td class="r">Cartes du plan de vol d'abord, puis « Dernières cartes », puis des tuiles de lettres (A, B, C…) avec un nombre ; une lettre ouvre la liste de ses terrains, « &larr; Cartes » revient. Les noms d'aéroports sont affichés. La ligne de source SIA est en bas.</td><td class="n"></td></tr>
 <tr><td class="c">&#9744;</td><td class="id">1.4</td><td class="a">Ouvrir une carte, changer de page, zoomer, revenir.</td><td class="r">La carte s'affiche lisible ; page suivante/précédente, zoom +/&minus; et « Ajuster » fonctionnent.</td><td class="n"></td></tr>
-<tr><td class="c">&#9744;</td><td class="id">1.5</td><td class="a">Avec un plan de vol chargé : ouvrir l'onglet Cartes.</td><td class="r">La carte de l'aérodrome d'arrivée s'ouvre toute seule, une fois (pas en boucle).</td><td class="n"></td></tr>
+<tr><td class="c ok">&#9745;</td><td class="id">1.5</td><td class="a">Avec un plan de vol chargé : ouvrir l'onglet Cartes.</td><td class="r">La carte de l'aérodrome d'arrivée s'ouvre toute seule, une fois (pas en boucle).</td><td class="n"></td></tr>
 <tr><td class="c">&#9744;</td><td class="id">1.6</td><td class="a">Mêmes tests 1.3 à 1.4 en <b>réalité virtuelle</b> (si vous volez en VR).</td><td class="r">Les tuiles se visent au contrôleur ; aucun clavier nécessaire.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">1.7</td><td class="a">Boutons du lecteur de cartes (revenir, précédente, suivante).</td><td class="r">Les flèches sont des « &lt; » et « &gt; » lisibles, plus de cases vides (corrigé en 0.13.0).</td><td class="n"></td></tr>
 </table>
 
 <h2 class="pb">2. Plan de vol et régime</h2>
@@ -109,6 +110,8 @@ Pour un KO, envoyez-moi : la ligne du test, ce que vous avez dit, ce que StormAT
 <tr><td class="c">&#9744;</td><td class="id">5.2</td><td class="a">Onglet <b>Dialogue ATC</b> du panneau MSFS pendant un échange.</td><td class="r">Vos phrases (vert) et celles du contrôleur (bleu), la liste suit les nouveaux messages.</td><td class="n"></td></tr>
 <tr><td class="c">&#9744;</td><td class="id">5.3</td><td class="a">Onglet <b>Phraséologie</b> : suivre la phase de vol (bouton Auto) puis choisir une autre phase.</td><td class="r">Des exemples d'appels adaptés ; le défilement n'est pas remis en haut à chaque message.</td><td class="n"></td></tr>
 <tr><td class="c">&#9744;</td><td class="id">5.4</td><td class="a">Bouton « Je n'aime pas cette voix » après une réponse.</td><td class="r">La voix est écartée ; le contrôleur en prend une autre à la réponse suivante.</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">5.5</td><td class="a">Onglet Dialogue ATC, option « Afficher ce qu'il faut dire » cochée (Paramètres &rarr; Voix &amp; alternat).</td><td class="r">Sous la conversation : « À dire : <i>titre</i> » et la phrase à dire (collationnement attendu, prochain appel). Décochée : le bandeau disparaît (en quelques secondes).</td><td class="n"></td></tr>
+<tr><td class="c">&#9744;</td><td class="id">5.6</td><td class="a">Changer l'immatriculation de l'avion dans MSFS, puis regarder le titre du panneau et ce que dit le contrôleur.</td><td class="r">Si MSFS applique la nouvelle immatriculation, le titre et l'indicatif suivent (nouveauté 0.13.0). <b>Si le titre garde l'ancienne</b>, MSFS ne l'a pas encore appliquée (peut-être au prochain chargement de vol) : notez à quel moment elle change.</td><td class="n"></td></tr>
 </table>
 
 <h2 class="pb">6. Militaire (CAM V, CAM I, CAM T)</h2>

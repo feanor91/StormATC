@@ -752,6 +752,10 @@
                            Style="{StaticResource SecondaryTextStyle}"
                            TextWrapping="Wrap"
                            Margin="0,0,0,8" />
+                <CheckBox Content="Show what to say in the panel's dialogue"
+                          IsChecked="{Binding ShowSuggestedReply}"
+                          ToolTip="Under the conversation, the panel shows the readback or the next call you have to make. A training aid: turn it off to fly without it."
+                          Margin="0,0,0,8" />
                 <WrapPanel>
                   <Button Content="Install the panel in MSFS"
                           Command="{Binding InstallMsfsPanelCommand}"

@@ -139,9 +139,14 @@ var StormAtcPanel = (function () {
         // whether the plan reached StormATC.
         var bridgeLine = el('div', 'sa-bridge');
 
+        // What to say next, under the conversation, when the option is on.
+        var suggestBar = el('div', 'sa-suggest');
+        suggestBar.style.display = 'none';
+
         root.appendChild(header);
         root.appendChild(tabs);
         root.appendChild(body);
+        root.appendChild(suggestBar);
         root.appendChild(voiceBar);
         root.appendChild(bridgeLine);
 
@@ -177,6 +182,19 @@ var StormAtcPanel = (function () {
             voiceBar.style.display = (tab === 'dialogue' && ready) ? 'block' : 'none';
         }
 
+        function renderSuggestion(state) {
+            var s = state && state.suggestion;
+            clear(suggestBar);
+            if (!s || tab !== 'dialogue') { suggestBar.style.display = 'none'; return; }
+            suggestBar.style.display = 'block';
+            suggestBar.appendChild(el('div', 'sa-suggest-head', s.heading + ' : ' + s.title));
+            if (s.example) {
+                suggestBar.appendChild(el('div', 'sa-suggest-example', '« ' + s.example + ' »'));
+            } else if (s.detail) {
+                suggestBar.appendChild(el('div', 'sa-suggest-detail', s.detail));
+            }
+        }
+
         function showTab(name) {
             tab = name;
             storageSet('stormatc.tab', name);
@@ -189,6 +207,7 @@ var StormAtcPanel = (function () {
             tabPhraseology.className = 'sa-tab' + (name === 'phraseology' ? ' sa-active' : '');
             tabCharts.className = 'sa-tab' + (name === 'charts' ? ' sa-active' : '');
             updateVoiceBar();
+            renderSuggestion(lastState);
             if (name === 'dialogue') { scrollDialogue(true); }
             if (name === 'charts') { loadCharts(); }
         }
@@ -744,6 +763,7 @@ var StormAtcPanel = (function () {
             var wasAtBottom = dialoguePane.scrollHeight - dialoguePane.scrollTop - dialoguePane.clientHeight < 40;
             stickToBottom = stickToBottom || wasAtBottom;
             renderDialogue(state);
+            renderSuggestion(state);
             renderVoice(state);
             // A new message must not throw the pilot back to the top of the list being read.
             var readingAt = phraseologyPane.scrollTop;

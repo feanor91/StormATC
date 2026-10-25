@@ -321,6 +321,7 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         _chartUpdater = chartUpdater;
         _chartsSource = ReadChartsSource();
         _toolbarPanelPort = toolbarPanelOptions?.Value.Port ?? ToolbarPanelOptions.DefaultPort;
+        _showSuggestedReply = toolbarPanelOptions?.Value.ShowSuggestedReply ?? true;
         _secretStore = secretStore ?? throw new ArgumentNullException(nameof(secretStore));
         _languageModel = languageModel ?? throw new ArgumentNullException(nameof(languageModel));
         _modelCatalog = modelCatalog ?? throw new ArgumentNullException(nameof(modelCatalog));
@@ -923,6 +924,29 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         catch (System.ComponentModel.Win32Exception ex)
         {
             _logger.LogWarning(ex, "Could not open {Address}.", uri);
+        }
+    }
+
+    /// <summary>Whether the panel's dialogue tab shows what the pilot has to say next.</summary>
+    [ObservableProperty]
+    private bool _showSuggestedReply = true;
+
+    partial void OnShowSuggestedReplyChanged(bool value)
+    {
+        _ = SaveSuggestedReplyAsync(value);
+    }
+
+    private async Task SaveSuggestedReplyAsync(bool value)
+    {
+        try
+        {
+            await _userSettings
+                .SaveAsync(ToolbarPanelOptions.SectionName, nameof(ToolbarPanelOptions.ShowSuggestedReply), JsonValue.Create(value), CancellationToken.None)
+                .ConfigureAwait(true);
+        }
+        catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException or JsonException)
+        {
+            _logger.LogWarning(ex, "The suggested-reply setting could not be saved.");
         }
     }
 
