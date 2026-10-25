@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.14.2 - 2026-10-25
+
 ### Fixed
 
 - "Start at the parking" and "Cold and dark" never ran: they waited for the simulator to announce a loaded flight, which
