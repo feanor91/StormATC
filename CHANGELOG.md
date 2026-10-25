@@ -5,6 +5,12 @@ public releases.
 
 ## Unreleased
 
+### Fixed
+
+- "Start at the parking" and "Cold and dark" never ran: they waited for the simulator to announce a loaded flight, which
+  MSFS 2024 does not do. They now act when the simulator goes from its menus to the cockpit, wait for a flight plan whose
+  departure is where the aircraft stands, and write each decision to the log.
+
 ## 0.14.1 - 2026-10-25
 
 ### Fixed

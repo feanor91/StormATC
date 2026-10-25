@@ -23,13 +23,16 @@ namespace StormATC.Desktop.Services;
 /// middle of a flight, and only when the aircraft is on the ground, at rest, near the departure aerodrome
 /// of the flight plan. What is done, and what the simulator answered, is written to the log.
 /// </para>
+/// <para>
+/// A flight "starts" when the simulator goes from its menus to the aircraft: MSFS 2024 does not always announce
+/// a loaded flight, but the menus and the cockpit are told apart in every flight.
+/// </para>
 /// </remarks>
 public sealed class StartPositionService : IDisposable
 {
     /// <summary>The farthest the aircraft may be from the departure aerodrome for the plan to be its own, in nautical miles.</summary>
     internal const double NearAerodromeNauticalMiles = 5;
 
-    private readonly ISimulatorFlightPlanEvents _events;
     private readonly ISimulatorConnector _simulator;
     private readonly ISimulatorAircraftControl _control;
     private readonly AtcSessionContext _sessionContext;
@@ -38,11 +41,10 @@ public sealed class StartPositionService : IDisposable
     private readonly IOptionsMonitor<StartPositionOptions> _options;
     private readonly ILogger<StartPositionService> _logger;
     private CancellationTokenSource? _run;
-    private TaskCompletionSource? _planImported;
+    private bool _wasInMenus;
 
     /// <summary>Creates the service and starts listening for loaded flights.</summary>
     public StartPositionService(
-        ISimulatorFlightPlanEvents events,
         ISimulatorConnector simulator,
         ISimulatorAircraftControl control,
         AtcSessionContext sessionContext,
@@ -51,7 +53,6 @@ public sealed class StartPositionService : IDisposable
         IOptionsMonitor<StartPositionOptions> options,
         ILogger<StartPositionService> logger)
     {
-        _events = events ?? throw new ArgumentNullException(nameof(events));
         _simulator = simulator ?? throw new ArgumentNullException(nameof(simulator));
         _control = control ?? throw new ArgumentNullException(nameof(control));
         _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
@@ -60,27 +61,25 @@ public sealed class StartPositionService : IDisposable
         _options = options ?? throw new ArgumentNullException(nameof(options));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-        _events.FlightPlanAnnounced += OnAnnounced;
-        _plans.PlanImported += OnPlanImported;
+        _simulator.AircraftStateChanged += OnAircraftStateChanged;
     }
 
     /// <inheritdoc />
     public void Dispose()
     {
-        _events.FlightPlanAnnounced -= OnAnnounced;
-        _plans.PlanImported -= OnPlanImported;
+        _simulator.AircraftStateChanged -= OnAircraftStateChanged;
         _run?.Cancel();
         _run?.Dispose();
     }
 
-    private void OnPlanImported(object? sender, FlightPlan plan) => _planImported?.TrySetResult();
-
-    private void OnAnnounced(object? sender, SimulatorFlightPlanEventArgs e)
+    private void OnAircraftStateChanged(object? sender, AircraftStateChangedEventArgs e)
     {
+        bool inMenus = e.State.InSimulatorMenus;
+        bool entered = _wasInMenus && !inMenus;
+        _wasInMenus = inMenus;
+
         StartPositionOptions options = _options.CurrentValue;
-        if (e.Kind != SimulatorFlightPlanEventKind.FlightLoaded
-            || !(options.StartAtParking || options.ColdAndDark)
-            || _simulator is StormATC.Infrastructure.Simulator.SimulatorConnectorRouter { IsMockActive: true })
+        if (!entered || !(options.StartAtParking || options.ColdAndDark))
         {
             return;
         }
@@ -88,7 +87,6 @@ public sealed class StartPositionService : IDisposable
         CancellationTokenSource? previous = Interlocked.Exchange(ref _run, new CancellationTokenSource());
         previous?.Cancel();
         previous?.Dispose();
-        _planImported = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         CancellationToken token = _run!.Token;
         _ = Task.Run(() => RunAsync(token), CancellationToken.None);
     }
@@ -97,11 +95,10 @@ public sealed class StartPositionService : IDisposable
     {
         try
         {
-            _logger.LogInformation("A flight was loaded: StormATC will place the aircraft as asked once it is ready.");
+            _logger.LogInformation("The pilot is in the aircraft: StormATC will place it as asked once it stands still.");
 
-            // The menus hand over to the flight a moment after the notice: whatever is on the ground
-            // before that is the previous flight's.
-            await Task.Delay(TimeSpan.FromSeconds(8), cancellationToken).ConfigureAwait(false);
+            // The simulator brings the aircraft up for a moment after the menus hand over to it.
+            await Task.Delay(TimeSpan.FromSeconds(3), cancellationToken).ConfigureAwait(false);
 
             AircraftState? state = await WaitForAircraftAtRestAsync(cancellationToken).ConfigureAwait(false);
             if (state is null)
@@ -173,33 +170,42 @@ public sealed class StartPositionService : IDisposable
     /// <summary>Moves the aircraft to a stand of the departure aerodrome. Returns its new state, or null when it did not move.</summary>
     private async Task<AircraftState?> PlaceAtParkingAsync(AircraftState state, CancellationToken cancellationToken)
     {
-        // The plan of the flight that was just loaded arrives a moment after the notice.
-        if (_planImported is { } imported)
+        // The plan of the flight that was just started reaches StormATC a moment after the aircraft is up:
+        // wait for a plan whose departure is where the aircraft stands.
+        FlightPlan? plan = null;
+        AirportData? airport = null;
+        double distance = double.MaxValue;
+        for (int attempt = 0; attempt < 40; attempt++)
         {
-            await Task.WhenAny(imported.Task, Task.Delay(TimeSpan.FromSeconds(20), cancellationToken)).ConfigureAwait(false);
+            plan = _sessionContext.CurrentSession.FlightPlan;
+            if (plan is not null && plan.SourceIdentifier is not ("Sample" or "Mock"))
+            {
+                airport = await _sessionContext.GetAirportAsync(plan.DepartureIcao, cancellationToken).ConfigureAwait(false);
+                if (airport is not null)
+                {
+                    distance = state.Position.DistanceNauticalMilesTo(airport.ReferencePosition);
+                    if (distance <= NearAerodromeNauticalMiles)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            await Task.Delay(500, cancellationToken).ConfigureAwait(false);
         }
 
-        FlightPlan? plan = _sessionContext.CurrentSession.FlightPlan;
-        if (plan is null || plan.SourceIdentifier is "Sample" or "Mock")
-        {
-            _logger.LogInformation("There is no flight plan to say where the flight starts: the aircraft was not moved to a parking.");
-            return null;
-        }
-
-        AirportData? airport = await _sessionContext.GetAirportAsync(plan.DepartureIcao, cancellationToken).ConfigureAwait(false);
-        if (airport is null || airport.Stands.Count == 0)
-        {
-            _logger.LogInformation("{Icao} has no parking stand in the simulator's data: the aircraft was not moved.", plan.DepartureIcao);
-            return null;
-        }
-
-        double distance = state.Position.DistanceNauticalMilesTo(airport.ReferencePosition);
-        if (distance > NearAerodromeNauticalMiles)
+        if (plan is null || airport is null || distance > NearAerodromeNauticalMiles)
         {
             _logger.LogInformation(
-                "The aircraft is {Distance:F0} nm from {Icao}, the departure of the plan: it was not moved.",
-                distance,
-                plan.DepartureIcao);
+                "No flight plan departs from where the aircraft stands (plan {Plan}, {Distance:F0} nm from its departure): it was not moved to a parking.",
+                plan?.ToSummary() ?? "none",
+                distance == double.MaxValue ? -1 : distance);
+            return null;
+        }
+
+        if (airport.Stands.Count == 0)
+        {
+            _logger.LogInformation("{Icao} has no parking stand in the simulator's data: the aircraft was not moved.", plan.DepartureIcao);
             return null;
         }
 
