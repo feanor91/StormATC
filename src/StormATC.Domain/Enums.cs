@@ -246,6 +246,36 @@ public enum PilotIntentType
     /// <summary>The pilot asks to close the flight plan.</summary>
     RequestFlightPlanClosure,
 
+    /// <summary>The pilot asks to change the route of the flight plan.</summary>
+    RequestRouteChange,
+
+    /// <summary>The pilot asks for a speed: to keep one, to reduce, or free speed.</summary>
+    RequestSpeed,
+
+    /// <summary>The pilot asks to hold, over a fix or at the present position.</summary>
+    RequestHold,
+
+    /// <summary>The pilot is ready to leave the hold.</summary>
+    ReportReadyToLeaveHold,
+
+    /// <summary>The pilot states whether the aircraft is approved for RVSM.</summary>
+    ReportRvsm,
+
+    /// <summary>A SELCAL check on the oceanic HF frequency.</summary>
+    RequestSelcalCheck,
+
+    /// <summary>The pilot logs on to CPDLC.</summary>
+    RequestCpdlcLogon,
+
+    /// <summary>A tug asks to tow the aircraft.</summary>
+    RequestTow,
+
+    /// <summary>A vehicle asks to enter the runway for an inspection.</summary>
+    RequestRunwayInspection,
+
+    /// <summary>An IFR flight reports its position over a point.</summary>
+    ReportPosition,
+
     /// <summary>The pilot asks for a PAR or SRA radar approach.</summary>
     RequestRadarApproach,
     RequestApproach,

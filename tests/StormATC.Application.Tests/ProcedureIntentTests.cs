@@ -28,10 +28,16 @@ public class ProcedureIntentTests
         },
     };
 
-    private static PilotIntent Parse(string french, FlightRules rules = FlightRules.Vfr, bool transit = false)
+    private static PilotIntent Parse(string french, FlightRules rules = FlightRules.Vfr, bool transit = false, bool airborne = false)
     {
         string normalized = TranscriptNormalizer.Normalize(FrenchTranscriptCanonicalizer.Canonicalize(french));
-        return DeterministicPilotIntentParser.Parse(normalized, Session(rules, transit));
+        AtcSession session = Session(rules, transit);
+        if (airborne)
+        {
+            session = session with { AircraftState = session.AircraftState with { IsOnGround = false } };
+        }
+
+        return DeterministicPilotIntentParser.Parse(normalized, session);
     }
 
     [Theory]
@@ -49,6 +55,32 @@ public class ProcedureIntentTests
     [InlineData("Hôtel Alpha Sierra Tango, pas de contact visuel", PilotIntentType.ReportTrafficLookout)]
     public void A_french_request_of_the_manual_is_recognised(string french, PilotIntentType expected) =>
         Assert.Equal(expected, Parse(french).Type);
+
+    [Theory]
+    [InlineData("Contrôle, Hôtel Alpha Sierra Tango, demande une nouvelle route via KILOX", PilotIntentType.RequestRouteChange)]
+    [InlineData("Contrôle, Hôtel Alpha Sierra Tango, demande vitesse libre", PilotIntentType.RequestSpeed)]
+    [InlineData("Contrôle, Hôtel Alpha Sierra Tango, demande une attente sur KILOX", PilotIntentType.RequestHold)]
+    [InlineData("Contrôle, Hôtel Alpha Sierra Tango, prêt à quitter l'attente", PilotIntentType.ReportReadyToLeaveHold)]
+    [InlineData("Contrôle, Hôtel Alpha Sierra Tango, RVSM approuvé", PilotIntentType.ReportRvsm)]
+    [InlineData("Contrôle, Hôtel Alpha Sierra Tango, négatif RVSM", PilotIntentType.ReportRvsm)]
+    [InlineData("Contrôle, Hôtel Alpha Sierra Tango, contrôle SELCAL", PilotIntentType.RequestSelcalCheck)]
+    [InlineData("Contrôle, Hôtel Alpha Sierra Tango, logon CPDLC", PilotIntentType.RequestCpdlcLogon)]
+    [InlineData("Sol, Hôtel Alpha Sierra Tango, demandons le tractage", PilotIntentType.RequestTow)]
+    [InlineData("Tour, véhicule de piste, demande à pénétrer sur la piste pour inspection", PilotIntentType.RequestRunwayInspection)]
+    [InlineData("Contrôle, Hôtel Alpha Sierra Tango, position KILOX niveau cent vingt", PilotIntentType.ReportPosition)]
+    public void An_ifr_request_of_the_manual_is_recognised(string french, PilotIntentType expected) =>
+        Assert.Equal(expected, Parse(french, FlightRules.Ifr, airborne: true).Type);
+
+    [Fact]
+    public void A_speed_a_fix_and_an_approach_name_are_taken_from_the_request()
+    {
+        Assert.Equal(250, Parse("Contrôle, Hôtel Alpha Sierra Tango, demande vitesse deux cent cinquante", FlightRules.Ifr, airborne: true).Entities.SpeedKnots);
+        Assert.True(Parse("Contrôle, Hôtel Alpha Sierra Tango, demande vitesse libre", FlightRules.Ifr, airborne: true).Entities.FreeSpeed);
+
+        PilotIntent rnp = Parse("Approche, Hôtel Alpha Sierra Tango, demande l'approche RNP piste zéro sept", FlightRules.Ifr, airborne: true);
+        Assert.Equal(PilotIntentType.RequestApproach, rnp.Type);
+        Assert.Equal("RNP", rnp.Entities.ApproachName);
+    }
 
     [Fact]
     public void Cancelling_ifr_is_recognised()

@@ -15,7 +15,7 @@ public sealed partial class StormAtcStateEngine
     /// "Lognes Tour, F-GABC, VFR from Melun for a touch and go, estimate Echo at 05": the first
     /// call of an arriving VFR aircraft.
     /// </summary>
-    private static AtcDecision HandleVfrArrivalCall(AtcEvaluationContext context, PilotIntent intent)
+    private static AtcDecision HandleVfrArrivalCallCore(AtcEvaluationContext context, PilotIntent intent)
     {
         AtcSession session = context.Session;
 
@@ -124,7 +124,10 @@ public sealed partial class StormAtcStateEngine
                 Say(context).Unable(callsign, UnableReason.NoArrivalRunwayAvailable));
         }
 
-        return CircuitJoinDecision(context, callsign, runway, intent.Entities.TouchAndGo ? true : null, intent.Entities.Manoeuvre);
+        return WithSequence(
+            context,
+            callsign,
+            CircuitJoinDecision(context, callsign, runway, intent.Entities.TouchAndGo ? true : null, intent.Entities.Manoeuvre));
     }
 
     private static AtcDecision CircuitJoinDecision(

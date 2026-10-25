@@ -31,6 +31,7 @@ public class FlightFollowingIntentTests
     [InlineData("Paris Information, Fox-trot Hôtel Alpha Sierra Tango, demande suivi VFR")]
     [InlineData("Marseille Information, Fox-trot Hôtel Alpha Sierra Tango, suivi VFR")]
     [InlineData("Paris Information, Fox-trot Hôtel Alpha Sierra Tango, demain suivi VFR")]
+    [InlineData("Paris Information, Fox-trot Hôtel Alpha Sierra Tango, demandons un suivi VFR")]
     public void A_french_request_for_a_flight_following_is_recognised(string french) =>
         Assert.Equal(PilotIntentType.RequestFlightFollowing, Parse(french).Type);
 

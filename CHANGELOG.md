@@ -5,6 +5,20 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **Phraseology manual, second part**: a new route, a speed (a number of knots, a Mach number, or free speed), a hold over
+  a fix or at the present position and leaving it, RVSM (approved or negative), SELCAL and CPDLC, a tow, a runway
+  inspection by a vehicle, a position report, and approaches by name (RNP, VPT, circling/MVL, NDB).
+- A VFR arrival call that carries no ATIS letter now gets the aerodrome's conditions first (runway in use, wind, QNH); a
+  flight that joins behind other circuit traffic is told its number in the sequence; a takeoff clearance given while a
+  heavy aircraft (A380, B747, B777...) is close to the aerodrome carries a wake turbulence caution.
+
+### Fixed
+
+- The French rules for "demande" matched "demande" but never "demandons": "demandons un suivi", "demandons le break",
+  "demandons un marsa"... were not recognised through those rules. They now are.
+
 ## 0.16.0 - 2026-10-25
 
 ### Added

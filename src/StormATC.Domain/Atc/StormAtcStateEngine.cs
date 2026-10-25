@@ -164,6 +164,16 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             PilotIntentType.RequestMarsa => HandleMarsaRequest(context, intent),
             PilotIntentType.RequestTacticalPicture => HandleTacticalPicture(context, intent),
             PilotIntentType.RequestFlightFollowing => HandleFlightFollowingRequest(context, intent),
+            PilotIntentType.RequestRouteChange => HandleRouteChange(context, intent),
+            PilotIntentType.RequestSpeed => HandleSpeed(context, intent),
+            PilotIntentType.RequestHold => HandleHold(context, intent),
+            PilotIntentType.ReportReadyToLeaveHold => HandleLeaveHold(context),
+            PilotIntentType.ReportRvsm => HandleRvsm(context, intent),
+            PilotIntentType.RequestSelcalCheck => HandleSelcal(context),
+            PilotIntentType.RequestCpdlcLogon => HandleCpdlc(context),
+            PilotIntentType.RequestTow => HandleTow(context),
+            PilotIntentType.RequestRunwayInspection => HandleRunwayInspection(context),
+            PilotIntentType.ReportPosition => HandlePositionReport(context),
             PilotIntentType.RequestBacktrack => HandleBacktrack(context),
             PilotIntentType.RequestTimeCheck => HandleTimeCheck(context),
             PilotIntentType.ReportIdent => HandleIdent(context),
@@ -1495,14 +1505,16 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
                 "landing clearance",
                 "wind information unless supplied in approved facts",
             ],
-            FallbackPhraseology = context.Intent?.Entities.ReadyImmediate == true
-                ? Say(context).ImmediateTakeoffClearance(callsign, runway)
-                : Say(context).TakeoffClearance(
-                    callsign,
-                    runway,
-                    context.Weather?.WindDirection,
-                    context.Weather?.WindSpeedKnots,
-                    initialHeading: null),
+            FallbackPhraseology = WithWakeCaution(
+                context,
+                context.Intent?.Entities.ReadyImmediate == true
+                    ? Say(context).ImmediateTakeoffClearance(callsign, runway)
+                    : Say(context).TakeoffClearance(
+                        callsign,
+                        runway,
+                        context.Weather?.WindDirection,
+                        context.Weather?.WindSpeedKnots,
+                        initialHeading: null)),
         };
     }
 

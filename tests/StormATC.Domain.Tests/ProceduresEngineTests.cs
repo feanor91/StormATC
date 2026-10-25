@@ -149,6 +149,114 @@ public class ProceduresEngineTests
         Assert.Contains("immediate takeoff", decision.FallbackPhraseology, StringComparison.Ordinal);
     }
 
+    private AtcDecision RunTranscript(AtcSession session, PilotIntentType type, string transcript, IntentEntities? entities = null) =>
+        _engine.Evaluate(TestScenario.Context(session, TestScenario.Intent(type, transcript, entities: entities)));
+
+    [Fact]
+    public void A_route_a_speed_and_a_hold_are_given()
+    {
+        AtcDecision route = RunTranscript(InTheAir(FlightRules.Ifr), PilotIntentType.RequestRouteChange, "request new route via kilox");
+        Assert.Contains("new route approved via KILOX", route.FallbackPhraseology, StringComparison.Ordinal);
+
+        AtcDecision speed = RunTranscript(InTheAir(FlightRules.Ifr), PilotIntentType.RequestSpeed, "request speed 250", new IntentEntities { SpeedKnots = 250 });
+        Assert.Contains("maintain two five zero knots", speed.FallbackPhraseology, StringComparison.Ordinal);
+
+        AtcDecision free = RunTranscript(InTheAir(FlightRules.Ifr), PilotIntentType.RequestSpeed, "request speed free", new IntentEntities { FreeSpeed = true });
+        Assert.Contains("speed at your discretion", free.FallbackPhraseology, StringComparison.Ordinal);
+
+        AtcDecision hold = RunTranscript(InTheAir(FlightRules.Ifr), PilotIntentType.RequestHold, "request hold over kilox");
+        Assert.Contains("hold over KILOX, right-hand pattern", hold.FallbackPhraseology, StringComparison.Ordinal);
+        Assert.Contains("leave the hold", RunTranscript(InTheAir(FlightRules.Ifr), PilotIntentType.ReportReadyToLeaveHold, "ready to leave hold").FallbackPhraseology, StringComparison.Ordinal);
+
+        Assert.False(RunTranscript(OnGround(), PilotIntentType.RequestHold, "request hold").Accepted);
+    }
+
+    [Fact]
+    public void Rvsm_selcal_cpdlc_a_tow_and_a_runway_inspection_are_acknowledged()
+    {
+        Assert.Contains("RVSM approved", RunTranscript(InTheAir(FlightRules.Ifr), PilotIntentType.ReportRvsm, "rvsm approved").FallbackPhraseology, StringComparison.Ordinal);
+        Assert.Contains("negative RVSM", RunTranscript(InTheAir(FlightRules.Ifr), PilotIntentType.ReportRvsm, "negative rvsm").FallbackPhraseology, StringComparison.Ordinal);
+        Assert.Contains("SELCAL check received", RunTranscript(InTheAir(FlightRules.Ifr), PilotIntentType.RequestSelcalCheck, "selcal check").FallbackPhraseology, StringComparison.Ordinal);
+        Assert.Contains("CPDLC logon accepted", RunTranscript(InTheAir(FlightRules.Ifr), PilotIntentType.RequestCpdlcLogon, "cpdlc logon").FallbackPhraseology, StringComparison.Ordinal);
+        Assert.Contains("cleared to tow", RunTranscript(OnGround(), PilotIntentType.RequestTow, "request tow").FallbackPhraseology, StringComparison.Ordinal);
+        Assert.False(RunTranscript(InTheAir(), PilotIntentType.RequestTow, "request tow").Accepted);
+        Assert.Contains("for inspection", RunTranscript(OnGround(), PilotIntentType.RequestRunwayInspection, "request runway inspection").FallbackPhraseology, StringComparison.Ordinal);
+    }
+
+    private static AtcSession ArrivingVfr() => InTheAir() with
+    {
+        FlightPlan = TestScenario.SampleFlightPlan with { DestinationIcao = "STMR" },
+    };
+
+    [Fact]
+    public void An_arrival_call_without_the_atis_letter_gets_the_conditions_first()
+    {
+        AtcEvaluationContext context = TestScenario.Context(
+            ArrivingVfr(),
+            TestScenario.Intent(PilotIntentType.VfrArrivalCall, "vfr arrival", entities: new IntentEntities { DeclaresVfr = true }))
+            with { DestinationAirport = TestScenario.Departure_STMR, Weather = new WeatherSnapshot { QnhHectopascals = 1015 } };
+
+        AtcDecision withoutLetter = _engine.Evaluate(context);
+        AtcDecision withLetter = _engine.Evaluate(context with
+        {
+            Intent = TestScenario.Intent(PilotIntentType.VfrArrivalCall, "vfr arrival", entities: new IntentEntities { DeclaresVfr = true, InformationLetter = "B" }),
+        });
+
+        Assert.Contains("runway in use", withoutLetter.FallbackPhraseology, StringComparison.Ordinal);
+        Assert.Contains("QNH one zero one five", withoutLetter.FallbackPhraseology, StringComparison.Ordinal);
+        Assert.DoesNotContain("runway in use", withLetter.FallbackPhraseology, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void Joining_behind_circuit_traffic_gives_the_number_in_the_sequence()
+    {
+        AtcEvaluationContext context = TestScenario.Context(
+            ArrivingVfr(),
+            TestScenario.Intent(PilotIntentType.ReportAtPoint, "passing echo")) with
+        {
+            DestinationAirport = TestScenario.Departure_STMR,
+            Traffic =
+            [
+                new TrafficContact
+                {
+                    Callsign = "CIRCUIT",
+                    Position = TestScenario.Departure_STMR.ReferencePosition,
+                    AltitudeFeet = TestScenario.Departure_STMR.ElevationFeet + 800,
+                },
+            ],
+        };
+
+        AtcDecision decision = _engine.Evaluate(context);
+
+        Assert.Contains("number two, follow the circuit traffic", decision.FallbackPhraseology, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void A_takeoff_clearance_behind_a_heavy_aircraft_carries_a_wake_turbulence_caution()
+    {
+        AtcSession session = TestScenario.NewSession(TestScenario.AtHoldingPoint()) with
+        {
+            CurrentController = ControllerPosition.Tower,
+            CurrentFrequency = TestScenario.Tower,
+            Phase = FlightPhase.HoldingShort,
+        };
+        var heavy = new TrafficContact
+        {
+            Callsign = "HEAVY",
+            Position = TestScenario.Departure_STMR.ReferencePosition,
+            AltitudeFeet = TestScenario.Departure_STMR.ElevationFeet + 1200,
+            ModelTitle = "Airbus A380-800",
+        };
+
+        AtcDecision decision = _engine.Evaluate(TestScenario.Context(
+            session, TestScenario.Intent(PilotIntentType.ReadyForDeparture, "ready for departure"), traffic: [heavy])
+            with { DepartureAirport = TestScenario.Departure_STMR });
+
+        // The heavy aircraft is overhead the aerodrome, not on short final: the takeoff is cleared with the caution.
+        Assert.Equal(AtcResponseType.TakeoffClearance, decision.ResponseType);
+        Assert.Contains("Caution wake turbulence, Airbus A380-800", decision.FallbackPhraseology, StringComparison.Ordinal);
+    }
+
     private static AtcSession FollowedInTheAir() => InTheAir() with
     {
         CurrentController = ControllerPosition.Information,

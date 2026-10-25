@@ -61,9 +61,15 @@ verticale, 360, allonger la vent arrière, clôture du plan de vol, décollage i
 (« je surveille », « trafic en vue », « pas de contact visuel »), et l'information trafic donnée par le contrôleur.
 L'alignement conditionnel derrière un avion en finale existait déjà.
 
-Pas encore repris : les modifications de route, le contrôle de vitesse (réduire, Mach), les attentes, le RNP, le VPT et
-l'approche indirecte, le RVSM, le SELCAL et le CPDLC, l'entrée sans ATIS, le séquencement du circuit, la turbulence de
-sillage, le tractage et les véhicules d'inspection.
+Repris ensuite (version 0.17.0) : nouvelle route, vitesse (nœuds, Mach, libre), attente et sortie d'attente, RVSM,
+SELCAL, CPDLC, tractage, inspection de piste, compte rendu de position, approches RNP, VPT et indirecte, entrée sans ATIS
+(le contrôleur donne piste, vent et QNH), numéro dans le séquencement du circuit, turbulence de sillage derrière un gros
+porteur.
+
+Ce qui reste : ces situations sont déclenchées par la **demande du pilote**. Les instructions que le contrôleur donne de
+lui-même (réduire la vitesse à l'arrivée, ordonner une attente, modifier la route pour un trafic) ne sont pas encore
+générées spontanément ; il en va de même du refus de route pour régulation, de la route parallèle (offset), de la
+clarification CPDLC en cours de vol et du séquencement radar détaillé.
 
 ## Ce qu'on peut en faire
 

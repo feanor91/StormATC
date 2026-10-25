@@ -363,6 +363,73 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
         $"{callsign.ToSpoken()}, roger, good day.";
 
     /// <inheritdoc />
+    public string RouteChangeApproved(Callsign callsign, string? fix) =>
+        fix is null
+            ? $"{callsign.ToSpoken()}, new route approved, report the next fix."
+            : $"{callsign.ToSpoken()}, new route approved via {fix}, report the next fix.";
+
+    /// <inheritdoc />
+    public string SpeedInstruction(Callsign callsign, int? speedKnots, decimal? mach, bool free) =>
+        free
+            ? $"{callsign.ToSpoken()}, speed at your discretion."
+            : mach is decimal number
+                ? $"{callsign.ToSpoken()}, maintain Mach decimal {SpokenNumbers.DigitsIndividually(number.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)[2..])}."
+                : speedKnots is int knots
+                    ? $"{callsign.ToSpoken()}, maintain {SpokenNumbers.DigitsIndividually(knots.ToString(System.Globalization.CultureInfo.InvariantCulture))} knots."
+                    : $"{callsign.ToSpoken()}, maintain present speed.";
+
+    /// <inheritdoc />
+    public string HoldInstruction(Callsign callsign, string? fix) =>
+        $"{callsign.ToSpoken()}, hold {(fix is null ? "at present position" : $"over {fix}")}, right-hand pattern, one minute legs, report ready to leave the hold.";
+
+    /// <inheritdoc />
+    public string LeaveHoldInstruction(Callsign callsign) =>
+        $"{callsign.ToSpoken()}, leave the hold, resume own navigation.";
+
+    /// <inheritdoc />
+    public string RvsmAcknowledgement(Callsign callsign, bool approved) =>
+        approved
+            ? $"{callsign.ToSpoken()}, roger, RVSM approved."
+            : $"{callsign.ToSpoken()}, roger, negative RVSM, maintain below flight level two eight zero.";
+
+    /// <inheritdoc />
+    public string SelcalCheckAcknowledgement(Callsign callsign) =>
+        $"{callsign.ToSpoken()}, SELCAL check received.";
+
+    /// <inheritdoc />
+    public string CpdlcLogonAcknowledgement(Callsign callsign) =>
+        $"{callsign.ToSpoken()}, CPDLC logon accepted.";
+
+    /// <inheritdoc />
+    public string TowClearance(Callsign callsign) =>
+        $"{callsign.ToSpoken()}, cleared to tow, report towing completed.";
+
+    /// <inheritdoc />
+    public string RunwayInspectionClearance(Callsign callsign, RunwayIdentifier runway) =>
+        $"{callsign.ToSpoken()}, cleared to enter runway {SpeakRunway(runway)} for inspection, report runway clear.";
+
+    /// <inheritdoc />
+    public string ArrivalConditions(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots, int? qnhHectopascals) =>
+        $"{callsign.ToSpoken()}, runway in use {SpeakRunway(runway)}"
+        + (windDirection is Heading direction && windSpeedKnots is int speed
+            ? $", wind {direction.ToSpoken()} degrees {SpokenNumbers.DigitsIndividually(speed.ToString(System.Globalization.CultureInfo.InvariantCulture))} knots"
+            : string.Empty)
+        + (qnhHectopascals is int qnh
+            ? $", QNH {SpokenNumbers.DigitsIndividually(qnh.ToString(System.Globalization.CultureInfo.InvariantCulture))}"
+            : string.Empty)
+        + ".";
+
+    /// <inheritdoc />
+    public string SequenceNumber(Callsign callsign, int number) =>
+        $"{callsign.ToSpoken()}, number {SpokenNumbers.DigitsIndividually(number.ToString(System.Globalization.CultureInfo.InvariantCulture))}, follow the circuit traffic.";
+
+    /// <inheritdoc />
+    public string WakeTurbulenceCaution(string? aircraftType) =>
+        aircraftType is { Length: > 0 }
+            ? $"Caution wake turbulence, {aircraftType}."
+            : "Caution wake turbulence.";
+
+    /// <inheritdoc />
     public string BacktrackInstruction(Callsign callsign, RunwayIdentifier runway) =>
         $"{callsign.ToSpoken()}, backtrack runway {SpeakRunway(runway)}, report ready for departure.";
 

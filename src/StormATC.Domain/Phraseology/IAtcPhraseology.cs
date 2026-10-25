@@ -226,6 +226,66 @@ public interface IAtcPhraseology
     /// <summary>Acknowledges that the aircraft is leaving the circuit and the frequency.</summary>
     string LeaveFrequencyAcknowledgement(Callsign callsign);
 
+    /// <summary>The new route is approved.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="fix">The fix named in the request, or null.</param>
+    string RouteChangeApproved(Callsign callsign, string? fix);
+
+    /// <summary>A speed instruction: keep a speed, a Mach number, or free speed.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="speedKnots">The speed in knots, or null.</param>
+    /// <param name="mach">The Mach number, or null.</param>
+    /// <param name="free">True for free speed.</param>
+    string SpeedInstruction(Callsign callsign, int? speedKnots, decimal? mach, bool free);
+
+    /// <summary>Hold over a fix, or at the present position, right-hand, one minute legs.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="fix">The fix, or null for the present position.</param>
+    string HoldInstruction(Callsign callsign, string? fix);
+
+    /// <summary>Leave the hold.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    string LeaveHoldInstruction(Callsign callsign);
+
+    /// <summary>Acknowledges the RVSM status.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="approved">True when the aircraft is approved.</param>
+    string RvsmAcknowledgement(Callsign callsign, bool approved);
+
+    /// <summary>Acknowledges a SELCAL check.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    string SelcalCheckAcknowledgement(Callsign callsign);
+
+    /// <summary>Acknowledges a CPDLC logon.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    string CpdlcLogonAcknowledgement(Callsign callsign);
+
+    /// <summary>Cleared to tow the aircraft.</summary>
+    /// <param name="callsign">The aircraft or the tug.</param>
+    string TowClearance(Callsign callsign);
+
+    /// <summary>A vehicle may enter the runway to inspect it.</summary>
+    /// <param name="callsign">The vehicle.</param>
+    /// <param name="runway">The runway.</param>
+    string RunwayInspectionClearance(Callsign callsign, RunwayIdentifier runway);
+
+    /// <summary>The conditions an arriving aircraft without the ATIS needs: runway, wind and QNH.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="runway">The runway in use.</param>
+    /// <param name="windDirection">The wind direction, or null.</param>
+    /// <param name="windSpeedKnots">The wind speed, or null.</param>
+    /// <param name="qnhHectopascals">The QNH, or null.</param>
+    string ArrivalConditions(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots, int? qnhHectopascals);
+
+    /// <summary>The place in the sequence: number two or more, behind the circuit traffic.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="number">The number in the sequence, 2 or more.</param>
+    string SequenceNumber(Callsign callsign, int number);
+
+    /// <summary>A caution about wake turbulence behind a heavier aircraft.</summary>
+    /// <param name="aircraftType">The aircraft's type, or null.</param>
+    string WakeTurbulenceCaution(string? aircraftType);
+
     /// <summary>Backtrack the runway: taxi along it against the traffic direction.</summary>
     /// <param name="callsign">The aircraft.</param>
     /// <param name="runway">The runway to backtrack.</param>

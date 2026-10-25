@@ -349,6 +349,7 @@ public static class PhraseologyCatalog
                 new("Traverser une piste", $"{cs}, au point d'attente piste XX, demandons à traverser.", $"{cs}, traversez piste XX."),
                 new("Remonter la piste", $"{cs}, demandons la remontée de piste XX.", $"{cs}, remontez la piste XX, rappelez prêt au départ."),
                 new("Demander l'heure", $"{cs}, demandons l'heure exacte.", $"{cs}, il est un deux zéro zéro UTC."),
+                new("Tractage", $"{cs}, demandons le tractage.", $"{cs}, tractage autorisé, rappelez tractage terminé."),
             ]),
             PhraseologyStage.Departure => ("Point d'attente, alignement, décollage",
             [
@@ -372,6 +373,13 @@ public static class PhraseologyCatalog
                 new("Annuler l'IFR", $"{cs}, annulons l'IFR.", $"{cs}, annulation du plan de vol IFR enregistrée, bon vol."),
                 new("Ident", $"{cs}, ident.", $"{cs}, identifié."),
                 new("Parlez plus lentement", $"{cs}, parlez plus lentement s'il vous plaît.", $"Je répète lentement : …"),
+                new("Nouvelle route", $"{cs}, demandons une nouvelle route via KILOX.", $"{cs}, nouvelle route approuvée via KILOX, rappelez au point suivant."),
+                new("Vitesse", $"{cs}, demandons vitesse deux cent cinquante.", $"{cs}, maintenez vitesse deux cinq zéro nœuds."),
+                new("Attente", $"{cs}, demandons une attente sur KILOX.", $"{cs}, attendez sur KILOX, virages à droite, éloignement une minute."),
+                new("Quitter l'attente", $"{cs}, prêts à quitter l'attente.", $"{cs}, quittez l'attente, poursuivez votre route."),
+                new("Compte rendu de position", $"{cs}, position KILOX, niveau un deux zéro.", $"{cs}, reçu."),
+                new("RVSM", $"{cs}, RVSM approuvé.", $"{cs}, reçu, RVSM approuvé."),
+                new("SELCAL et CPDLC", $"{cs}, contrôle SELCAL.", $"{cs}, contrôle SELCAL reçu."),
             ]),
             PhraseologyStage.Descent => ("Descente et arrivée",
             [
@@ -454,6 +462,7 @@ public static class PhraseologyCatalog
                 new("Cross a runway", $"{cs}, holding short runway XX, request crossing.", $"{cs}, cross runway XX."),
                 new("Backtrack the runway", $"{cs}, request backtrack runway XX.", $"{cs}, backtrack runway XX, report ready for departure."),
                 new("Ask the time", $"{cs}, request time check.", $"{cs}, time one two zero zero UTC."),
+                new("Tow", $"{cs}, request tow.", $"{cs}, cleared to tow, report towing completed."),
             ]),
             PhraseologyStage.Departure => ("Holding point, line-up, take-off",
             [
@@ -477,6 +486,13 @@ public static class PhraseologyCatalog
                 new("Cancel IFR", $"{cs}, cancel IFR.", $"{cs}, IFR flight plan cancelled, good day."),
                 new("Ident", $"{cs}, squawk ident.", $"{cs}, identified."),
                 new("Speak slower", $"{cs}, speak slower please.", $"I say again, slowly: …"),
+                new("New route", $"{cs}, request new route via KILOX.", $"{cs}, new route approved via KILOX, report the next fix."),
+                new("Speed", $"{cs}, request speed two five zero.", $"{cs}, maintain two five zero knots."),
+                new("Hold", $"{cs}, request hold over KILOX.", $"{cs}, hold over KILOX, right-hand pattern, one minute legs."),
+                new("Leave the hold", $"{cs}, ready to leave the hold.", $"{cs}, leave the hold, resume own navigation."),
+                new("Position report", $"{cs}, position KILOX, level one two zero.", $"{cs}, roger."),
+                new("RVSM", $"{cs}, RVSM approved.", $"{cs}, roger, RVSM approved."),
+                new("SELCAL and CPDLC", $"{cs}, SELCAL check.", $"{cs}, SELCAL check received."),
             ]),
             PhraseologyStage.Descent => ("Descent and arrival",
             [

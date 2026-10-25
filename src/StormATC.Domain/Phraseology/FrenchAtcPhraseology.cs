@@ -678,6 +678,89 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
         Phrase(callsign).Add(Received()).Add(OneOf("au revoir", "bonne journée")).Build();
 
     /// <inheritdoc />
+    public string RouteChangeApproved(Callsign callsign, string? fix) =>
+        Phrase(callsign)
+            .Add(fix is null ? "nouvelle route approuvée" : $"nouvelle route approuvée via {fix}")
+            .Add("rappelez au point suivant")
+            .Build();
+
+    /// <inheritdoc />
+    public string SpeedInstruction(Callsign callsign, int? speedKnots, decimal? mach, bool free) =>
+        Phrase(callsign)
+            .Add(free
+                ? "vitesse libre"
+                : mach is decimal number
+                    ? $"maintenez mach {FrenchSpokenNumbers.DigitsIndividually(number.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture).Replace("0.", "décimale ", StringComparison.Ordinal))}"
+                    : speedKnots is int knots
+                        ? $"maintenez vitesse {FrenchSpokenNumbers.DigitsIndividually(knots.ToString(System.Globalization.CultureInfo.InvariantCulture))} nœuds"
+                        : "maintenez votre vitesse actuelle")
+            .Build();
+
+    /// <inheritdoc />
+    public string HoldInstruction(Callsign callsign, string? fix) =>
+        Phrase(callsign)
+            .Add(fix is null ? "attendez en position actuelle" : $"attendez sur {fix}")
+            .Add("virages à droite, éloignement une minute")
+            .Add("rappelez prêt à quitter l'attente")
+            .Build();
+
+    /// <inheritdoc />
+    public string LeaveHoldInstruction(Callsign callsign) =>
+        Phrase(callsign).Add("quittez l'attente").Add("poursuivez votre route").Build();
+
+    /// <inheritdoc />
+    public string RvsmAcknowledgement(Callsign callsign, bool approved) =>
+        Phrase(callsign)
+            .Add(approved ? "reçu, RVSM approuvé" : "reçu, négatif RVSM, maintenez un niveau inférieur au niveau deux huit zéro")
+            .Build();
+
+    /// <inheritdoc />
+    public string SelcalCheckAcknowledgement(Callsign callsign) =>
+        Phrase(callsign).Add("contrôle SELCAL reçu").Build();
+
+    /// <inheritdoc />
+    public string CpdlcLogonAcknowledgement(Callsign callsign) =>
+        Phrase(callsign).Add("connexion CPDLC acceptée").Build();
+
+    /// <inheritdoc />
+    public string TowClearance(Callsign callsign) =>
+        Phrase(callsign).Add("tractage autorisé").Add("rappelez tractage terminé").Build();
+
+    /// <inheritdoc />
+    public string RunwayInspectionClearance(Callsign callsign, RunwayIdentifier runway) =>
+        Phrase(callsign)
+            .Add($"autorisé à pénétrer piste {SpeakRunway(runway)} pour inspection")
+            .Add("rappelez piste dégagée")
+            .Build();
+
+    /// <inheritdoc />
+    public string ArrivalConditions(Callsign callsign, RunwayIdentifier runway, Heading? windDirection, int? windSpeedKnots, int? qnhHectopascals)
+    {
+        var builder = Phrase(callsign).Add($"piste en service {SpeakRunway(runway)}");
+        if (Wind(windDirection, windSpeedKnots) is string wind)
+        {
+            builder.Add(wind);
+        }
+
+        if (qnhHectopascals is int qnh)
+        {
+            builder.Add($"QNH {FrenchSpokenNumbers.DigitsIndividually(qnh.ToString(System.Globalization.CultureInfo.InvariantCulture))}");
+        }
+
+        return builder.Build();
+    }
+
+    /// <inheritdoc />
+    public string SequenceNumber(Callsign callsign, int number) =>
+        Phrase(callsign).Add($"numéro {FrenchSpokenNumbers.Cardinal(number)}").Add("suivez le trafic en circuit").Build();
+
+    /// <inheritdoc />
+    public string WakeTurbulenceCaution(string? aircraftType) =>
+        aircraftType is { Length: > 0 }
+            ? $"Attention turbulence de sillage, {aircraftType}."
+            : "Attention turbulence de sillage.";
+
+    /// <inheritdoc />
     public string BacktrackInstruction(Callsign callsign, RunwayIdentifier runway) =>
         Phrase(callsign).Add($"remontez la piste {SpeakRunway(runway)}").Add("rappelez prêt au départ").Build();
 

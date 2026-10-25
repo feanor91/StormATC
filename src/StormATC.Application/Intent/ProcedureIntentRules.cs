@@ -81,8 +81,79 @@ internal static partial class ProcedureIntentRules
             return (PilotIntentType.ReportTrafficLookout, 0.92);
         }
 
+        if (RouteChange().IsMatch(transcript))
+        {
+            return (PilotIntentType.RequestRouteChange, 0.92);
+        }
+
+        if (LeaveHold().IsMatch(transcript))
+        {
+            return (PilotIntentType.ReportReadyToLeaveHold, 0.93);
+        }
+
+        if (Hold().IsMatch(transcript))
+        {
+            return (PilotIntentType.RequestHold, 0.92);
+        }
+
+        if (Speed().IsMatch(transcript))
+        {
+            return (PilotIntentType.RequestSpeed, 0.92);
+        }
+
+        if (Rvsm().IsMatch(transcript))
+        {
+            return (PilotIntentType.ReportRvsm, 0.93);
+        }
+
+        if (Selcal().IsMatch(transcript))
+        {
+            return (PilotIntentType.RequestSelcalCheck, 0.93);
+        }
+
+        if (Cpdlc().IsMatch(transcript))
+        {
+            return (PilotIntentType.RequestCpdlcLogon, 0.93);
+        }
+
+        if (Tow().IsMatch(transcript))
+        {
+            return (PilotIntentType.RequestTow, 0.92);
+        }
+
+        if (RunwayInspection().IsMatch(transcript))
+        {
+            return (PilotIntentType.RequestRunwayInspection, 0.92);
+        }
+
+        // An IFR flight reporting its position over a fix.
+        if (session.FlightRules.IsInstrument() && !session.AircraftState.IsOnGround && PositionReport().IsMatch(transcript))
+        {
+            return (PilotIntentType.ReportPosition, 0.85);
+        }
+
         return null;
     }
+
+    /// <summary>The speed in knots a transmission names ("speed 250"), or null.</summary>
+    /// <param name="transcript">The canonical transcript.</param>
+    public static int? SpeedIn(string transcript) =>
+        SpeedValue().Match(transcript) is { Success: true } match
+        && int.TryParse(match.Groups["knots"].Value, System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out int knots)
+            ? knots
+            : null;
+
+    /// <summary>The Mach number a transmission names ("mach 0 78" or "mach 0.78"), or null.</summary>
+    /// <param name="transcript">The canonical transcript.</param>
+    public static decimal? MachIn(string transcript) =>
+        MachValue().Match(transcript) is { Success: true } match
+        && decimal.TryParse("0." + match.Groups["decimals"].Value, System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.CultureInfo.InvariantCulture, out decimal mach)
+            ? mach
+            : null;
+
+    /// <summary>True when the pilot asks for free speed.</summary>
+    /// <param name="transcript">The canonical transcript.</param>
+    public static bool IsFreeSpeed(string transcript) => FreeSpeed().IsMatch(transcript);
 
     /// <summary>True when the pilot says he is ready for an immediate departure.</summary>
     /// <param name="transcript">The canonical transcript.</param>
@@ -123,6 +194,45 @@ internal static partial class ProcedureIntentRules
 
     [GeneratedRegex(@"\b(looking out|traffic in sight|negative contact|no contact|traffic not in sight)\b")]
     private static partial Regex TrafficLookout();
+
+    [GeneratedRegex(@"\brequest (a )?(new )?route( change)?\b|\bnew route\b")]
+    private static partial Regex RouteChange();
+
+    [GeneratedRegex(@"\b(ready to leave|leaving|leave) (the )?hold(ing)?\b")]
+    private static partial Regex LeaveHold();
+
+    [GeneratedRegex(@"\brequest (a |the )?hold(ing)?\b")]
+    private static partial Regex Hold();
+
+    [GeneratedRegex(@"\brequest (the )?speed\b|\bspeed free\b|\bfree speed\b")]
+    private static partial Regex Speed();
+
+    [GeneratedRegex(@"\bspeed (?<knots>\d{2,3})\b")]
+    private static partial Regex SpeedValue();
+
+    [GeneratedRegex(@"\bmach\s*0?[. ]?(?<decimals>\d{2})\b")]
+    private static partial Regex MachValue();
+
+    [GeneratedRegex(@"\bspeed free\b|\bfree speed\b")]
+    private static partial Regex FreeSpeed();
+
+    [GeneratedRegex(@"\brvsm\b")]
+    private static partial Regex Rvsm();
+
+    [GeneratedRegex(@"\bselcal\b")]
+    private static partial Regex Selcal();
+
+    [GeneratedRegex(@"\bcpdlc\b")]
+    private static partial Regex Cpdlc();
+
+    [GeneratedRegex(@"\brequest tow(ing)?\b")]
+    private static partial Regex Tow();
+
+    [GeneratedRegex(@"\brunway inspection\b")]
+    private static partial Regex RunwayInspection();
+
+    [GeneratedRegex(@"\b(position|abeam)\s+[a-z]{3,5}\b")]
+    private static partial Regex PositionReport();
 
     [GeneratedRegex(@"\bready for departure immediate\b|\bready immediate\b|\bready for immediate (departure|takeoff)\b")]
     private static partial Regex ReadyImmediate();

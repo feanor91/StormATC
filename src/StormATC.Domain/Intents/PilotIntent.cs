@@ -176,6 +176,12 @@ public sealed record IntentEntities
     /// <summary>The pilot asked for, or is flying, a touch and go.</summary>
     public bool TouchAndGo { get; init; }
 
+    /// <summary>A Mach number the pilot mentions.</summary>
+    public decimal? Mach { get; init; }
+
+    /// <summary>The pilot asks for free speed.</summary>
+    public bool FreeSpeed { get; init; }
+
     /// <summary>The pilot is ready for an immediate departure.</summary>
     public bool ReadyImmediate { get; init; }
 
@@ -194,7 +200,7 @@ public sealed record IntentEntities
         && Heading is null && Taxiways.Count == 0 && Waypoint is null
         && ApproachName is null && Stand is null && PushbackDirection is null
         && SpeedKnots is null && !MentionsHoldShort
-        && !DeclaresVfr && DeclaredRegime is null && FlightSize is null && TrailMiles is null && !MarsaApproach && RadarApproach is null && !RunwayInSight && QfeHectopascals is null && !RequestsBreak && !GearDownAndLocked && !TouchAndGo && !ReadyImmediate && Manoeuvre == CircuitManoeuvre.None && CircuitSide is null && InformationLetter is null;
+        && !DeclaresVfr && DeclaredRegime is null && FlightSize is null && TrailMiles is null && !MarsaApproach && RadarApproach is null && !RunwayInSight && QfeHectopascals is null && !RequestsBreak && !GearDownAndLocked && !TouchAndGo && !ReadyImmediate && Mach is null && !FreeSpeed && Manoeuvre == CircuitManoeuvre.None && CircuitSide is null && InformationLetter is null;
 }
 
 /// <summary>A manoeuvre the pilot asks for on the runway, other than a full-stop landing or a touch and go.</summary>

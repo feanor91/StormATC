@@ -85,7 +85,7 @@ public sealed partial class DeterministicPilotIntentParser : IPilotIntentParser
         new(PilotIntentType.ReportEstablished, 0.95,
             ["established", "established on the", "localizer established", "on the localizer"]),
         new(PilotIntentType.RequestApproach, 0.93,
-            ["request approach", "request the ils", "request vectors for", "request the approach"]),
+            ["request approach", "request the ils", "request vectors for", "request the approach", "request rnp", "request vpt", "request circling", "request the rnp"]),
         new(PilotIntentType.RequestDirect, 0.93, ["request direct", "direct to", "can we go direct"]),
         new(PilotIntentType.RequestDeviation, 0.92,
             ["request deviation", "deviate", "request weather deviation", "deviation for weather"]),
@@ -699,6 +699,26 @@ public sealed partial class DeterministicPilotIntentParser : IPilotIntentParser
         if (transcript.Contains("vor", StringComparison.Ordinal))
         {
             return "VOR";
+        }
+
+        if (transcript.Contains("rnp", StringComparison.Ordinal))
+        {
+            return "RNP";
+        }
+
+        if (transcript.Contains("vpt", StringComparison.Ordinal))
+        {
+            return "VPT";
+        }
+
+        if (transcript.Contains("circling", StringComparison.Ordinal) || transcript.Contains("mvl", StringComparison.Ordinal))
+        {
+            return "Circling";
+        }
+
+        if (transcript.Contains("ndb", StringComparison.Ordinal))
+        {
+            return "NDB";
         }
 
         return null;
