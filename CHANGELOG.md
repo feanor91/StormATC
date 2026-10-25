@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.15.1 - 2026-10-25
+
 ### Fixed
 
 - The callsign is recognised from its last letters: "Alpha Sierra Tango" or "Sierra Tango" for F-HAST, and a few
