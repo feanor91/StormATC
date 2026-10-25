@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.17.0 - 2026-10-25
+
 ### Added
 
 - **Phraseology manual, second part**: a new route, a speed (a number of knots, a Mach number, or free speed), a hold over
