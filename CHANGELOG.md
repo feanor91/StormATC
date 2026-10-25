@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.19.0 - 2026-10-25
+
 ### Added
 
 - **A direct or a new route is refused when it cannot be given**: for flow control, when the arrival is saturated (a hold
