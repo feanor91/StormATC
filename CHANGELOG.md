@@ -5,6 +5,15 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **Start at the parking / cold and dark** (Settings > Live integrations > "Start of the flight"), two options, off by
+  default. When MSFS loads a flight that starts at the holding point or on the runway, StormATC can move the aircraft to a
+  free parking stand of the departure aerodrome (facing the way the stand points; a gate for an airliner, a ramp for a
+  light aircraft, a military apron on a military base) and/or shut it down (engines, battery, avionics and lights off,
+  parking brake set). They only act on a flight just loaded, with the aircraft on the ground and at rest within 5 nm of the
+  departure of the flight plan. Best effort: aircraft with their own systems may ignore part of the shutdown.
+
 ## 0.13.0 - 2026-10-25
 
 ### Added

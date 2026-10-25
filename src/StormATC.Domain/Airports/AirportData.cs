@@ -198,6 +198,18 @@ public sealed record StandData
 
     /// <summary>True when pushback is required to leave this stand.</summary>
     public bool RequiresPushback { get; init; } = true;
+
+    /// <summary>The true heading an aircraft parks on, when the simulator gives one.</summary>
+    public double? HeadingDegrees { get; init; }
+
+    /// <summary>The radius of the space the stand gives an aircraft, in metres; 0 when unknown.</summary>
+    public double RadiusMeters { get; init; }
+
+    /// <summary>
+    /// The simulator's kind of parking: 1 to 4 general-aviation ramps, 5 and 6 cargo, 7 military combat,
+    /// 8 to 10 gates, 11 dock, 12 fuel and 13 vehicle. 0 when unknown.
+    /// </summary>
+    public int ParkingType { get; init; }
 }
 
 /// <summary>The controller frequencies published for an aerodrome.</summary>

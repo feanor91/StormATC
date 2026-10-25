@@ -152,6 +152,9 @@ public static class ServiceCollectionExtensions
         services.AddOptions<SimFlightPlanOptions>()
             .Bind(configuration.GetSection(SimFlightPlanOptions.SectionName));
 
+        services.AddOptions<StartPositionOptions>()
+            .Bind(configuration.GetSection(StartPositionOptions.SectionName));
+
         services.AddOptions<ToolbarPanelOptions>()
             .Bind(configuration.GetSection(ToolbarPanelOptions.SectionName))
             .ValidateDataAnnotations();
@@ -296,6 +299,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<MockSimulatorConnector>();
         services.AddSingleton<MsfsSimConnectConnector>();
         services.AddSingleton<ISimulatorFlightPlanEvents>(
+            sp => sp.GetRequiredService<MsfsSimConnectConnector>());
+        services.AddSingleton<ISimulatorAircraftControl>(
             sp => sp.GetRequiredService<MsfsSimConnectConnector>());
         services.AddSingleton<IApproachProcedureSource>(
             sp => sp.GetRequiredService<MsfsSimConnectConnector>());

@@ -55,7 +55,7 @@ public enum SimulatorConnectionFailureKind
 /// facilities are read from the simulator; the only write is an explicit COM1 tuning event when
 /// a flight is loaded.
 /// </remarks>
-public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
+public sealed partial class MsfsSimConnectConnector : ISimulatorConnector, ISimulatorAircraftControl
 {
     private readonly ILogger<MsfsSimConnectConnector> _logger;
     private readonly SimulatorOptions _options;
@@ -267,6 +267,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         NearbyTraffic = 2,
         RouteClientData = 3,
         ApproachFacility = 4,
+        Placement = 5,
     }
 
     private enum Requests
@@ -294,6 +295,8 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         FlightLoaded = 4,
         OneSecond = 5,
         SimRunning = 6,
+        EngineAutoShutdown = 7,
+        ParkingBrakes = 8,
     }
 
     private enum NotificationGroups
@@ -377,6 +380,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         ("SEA LEVEL PRESSURE",              "millibars",        SIMCONNECT_DATATYPE.FLOAT64),
         ("AMBIENT VISIBILITY",              "meters",           SIMCONNECT_DATATYPE.FLOAT64),
         ("AMBIENT TEMPERATURE",             "celsius",          SIMCONNECT_DATATYPE.FLOAT64),
+        ("WING SPAN",                       "feet",             SIMCONNECT_DATATYPE.FLOAT64),
     ];
 
     private static readonly (string Variable, string? Unit, SIMCONNECT_DATATYPE Type)[]
@@ -433,6 +437,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
         public double SeaLevelPressure;
         public double AmbientVisibility;
         public double AmbientTemperature;
+        public double WingSpan;
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
@@ -839,6 +844,8 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
             Events.SelectCom1Transmitter,
             "COM1_TRANSMIT_SELECT");
 
+        RegisterAircraftControl(_simConnect);
+
         _simConnect.OnRecvSimobjectData += OnReceiveSimObjectData;
         _simConnect.OnRecvSimobjectDataBytype += OnReceiveNearbyTraffic;
         _simConnect.OnRecvFacilityData += OnReceiveFacilityData;
@@ -992,12 +999,12 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
     private PumpExitReason PumpConnectedSimulator(CancellationToken cancellationToken)
     {
         WaitHandle[] handles =
-            [_messageSignal!, _airportRequestSignal, _radioTuneSignal, cancellationToken.WaitHandle];
+            [_messageSignal!, _airportRequestSignal, _radioTuneSignal, _aircraftControlSignal, cancellationToken.WaitHandle];
 
         while (true)
         {
             int signalled = WaitHandle.WaitAny(handles, TimeSpan.FromSeconds(1));
-            if (signalled == 3)
+            if (signalled == 4)
             {
                 return PumpExitReason.Cancelled;
             }
@@ -1009,6 +1016,10 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
             else if (signalled == 2)
             {
                 ApplyPendingRadioTunes();
+            }
+            else if (signalled == 3)
+            {
+                ApplyPendingAircraftControl();
             }
             else if (signalled == 0)
             {
@@ -1227,6 +1238,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
             AltitudeAboveGroundFeet = double.IsFinite(raw.AltitudeAboveGround)
                 ? Math.Max(0, raw.AltitudeAboveGround)
                 : 0,
+            WingSpanFeet = double.IsFinite(raw.WingSpan) ? Math.Max(0, raw.WingSpan) : 0,
             AutopilotEngaged = raw.AutopilotMaster != 0,
             GearHandleDown = raw.GearHandlePosition != 0,
             FlapsHandleIndex = double.IsFinite(raw.FlapsHandleIndex)
@@ -1664,6 +1676,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
 
     private void CompletePendingRadioTunes(bool result)
     {
+        CompletePendingAircraftControl(result);
         while (_radioTuneQueue.TryDequeue(out RadioTuneRequest? request))
         {
             request.Completion.TrySetResult(result);

@@ -466,6 +466,25 @@ public sealed class SimFlightPlanOptions
     public bool ImportOnFlightLoaded { get; init; } = true;
 }
 
+/// <summary>Where and how the aircraft is when a flight starts in the simulator.</summary>
+public sealed class StartPositionOptions
+{
+    /// <summary>The configuration section name.</summary>
+    public const string SectionName = "StartPosition";
+
+    /// <summary>
+    /// When true, a flight that starts at the departure aerodrome's holding point or on its runway is moved
+    /// to a parking stand there instead. Off by default: it moves the aircraft.
+    /// </summary>
+    public bool StartAtParking { get; init; }
+
+    /// <summary>
+    /// When true, the aircraft of a flight that just started is shut down: engines, electrics, avionics and
+    /// lights off, parking brake set. Best effort: aircraft with their own systems may ignore parts of it.
+    /// </summary>
+    public bool ColdAndDark { get; init; }
+}
+
 /// <summary>SimBrief import settings.</summary>
 public sealed class SimBriefOptions
 {

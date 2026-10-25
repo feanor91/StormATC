@@ -159,6 +159,9 @@ internal static class MsfsAirportFacilityMapper
                 TaxiNodeName = nodeName,
                 SuitableFor = SuitableAircraft(parking.Type),
                 RequiresPushback = parking.Type is not 12 and not 13,
+                HeadingDegrees = parking.HeadingDegrees,
+                RadiusMeters = parking.RadiusMeters,
+                ParkingType = parking.Type,
             });
         }
 

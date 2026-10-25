@@ -70,6 +70,9 @@ public sealed record AircraftState
     /// <summary>Height above the surface directly below the aircraft, in feet.</summary>
     public double AltitudeAboveGroundFeet { get; init; }
 
+    /// <summary>The aircraft's wingspan in feet; 0 when the simulator did not say.</summary>
+    public double WingSpanFeet { get; init; }
+
     /// <summary>True when the autopilot master is engaged.</summary>
     public bool AutopilotEngaged { get; init; }
 

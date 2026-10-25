@@ -29,6 +29,7 @@ public static class DesktopServiceCollectionExtensions
         services.AddSingleton<StormATC.Application.Charts.IVacPageRenderer, WindowsPdfPageRenderer>();
         services.AddSingleton<SimFlightPlanService>();
         services.AddSingleton<ISimRouteReceiver>(sp => sp.GetRequiredService<SimFlightPlanService>());
+        services.AddSingleton<StartPositionService>();
         services.AddSingleton<AtisBroadcastService>();
         services.AddSingleton<ApplicationStartupService>();
 

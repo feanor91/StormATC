@@ -483,6 +483,25 @@
 
             <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
               <StackPanel>
+                <TextBlock Text="Start of the flight"
+                           Style="{StaticResource SectionHeaderStyle}" />
+                <TextBlock Text="When a flight starts in MSFS with a flight plan, the simulator can put you at the holding point or on the runway. These two options change that. They only act on a flight that has just been loaded, when the aircraft is on the ground and at rest near the departure aerodrome; both move or shut down your aircraft, so they are off by default."
+                           Style="{StaticResource SecondaryTextStyle}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,8" />
+                <CheckBox Content="Start at a parking stand instead of the holding point or the runway"
+                          IsChecked="{Binding StartAtParking}"
+                          ToolTip="StormATC moves the aircraft to a free parking stand of the departure aerodrome, facing the way the stand points."
+                          Margin="0,0,0,8" />
+                <CheckBox Content="Start cold and dark (engines, electrics, avionics and lights off)"
+                          IsChecked="{Binding ColdAndDark}"
+                          ToolTip="Best effort: the parking brake is set and the systems are switched off. Aircraft with their own systems may ignore part of it."
+                          Margin="0,0,0,0" />
+              </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
+              <StackPanel>
                 <Grid Margin="0,0,0,12">
                   <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
