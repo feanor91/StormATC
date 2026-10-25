@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.14.0 - 2026-10-25
+
 ### Added
 
 - **Start at the parking / cold and dark** (Settings > Live integrations > "Start of the flight"), two options, off by
