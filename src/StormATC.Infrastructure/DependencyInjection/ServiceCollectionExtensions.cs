@@ -80,6 +80,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IAirportDataProvider, MsfsAirportDataProvider>();
         services.AddSingleton<IVfrProfileProvider, JsonVfrProfileProvider>();
         services.AddSingleton<IAirspaceDataProvider, JsonAirspaceDataProvider>();
+        services.AddSingleton<IHazardAreaProvider, JsonHazardAreaProvider>();
         services.AddSingleton<MockTrafficProvider>();
         services.AddSingleton<MsfsTrafficProvider>();
         services.AddSingleton<ITrafficProvider>(sp => sp.GetRequiredService<MsfsTrafficProvider>());

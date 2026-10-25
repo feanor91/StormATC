@@ -68,6 +68,12 @@ public class ProcedureIntentTests
     [InlineData("Sol, Hôtel Alpha Sierra Tango, demandons le tractage", PilotIntentType.RequestTow)]
     [InlineData("Tour, véhicule de piste, demande à pénétrer sur la piste pour inspection", PilotIntentType.RequestRunwayInspection)]
     [InlineData("Contrôle, Hôtel Alpha Sierra Tango, position KILOX niveau cent vingt", PilotIntentType.ReportPosition)]
+    [InlineData("Contrôle, Hôtel Alpha Sierra Tango, demande un décalage de deux nautiques à droite", PilotIntentType.RequestOffset)]
+    [InlineData("Contrôle, Hôtel Alpha Sierra Tango, demandons une route parallèle", PilotIntentType.RequestOffset)]
+    [InlineData("Contrôle, Hôtel Alpha Sierra Tango, de retour sur la route", PilotIntentType.ReportBackOnRoute)]
+    [InlineData("Contrôle, Hôtel Alpha Sierra Tango, panne CPDLC", PilotIntentType.ReportCpdlcFailure)]
+    [InlineData("Contrôle, Hôtel Alpha Sierra Tango, CPDLC en panne", PilotIntentType.ReportCpdlcFailure)]
+    [InlineData("Contrôle, Hôtel Alpha Sierra Tango, confirmez par phonie", PilotIntentType.ReportCpdlcFailure)]
     public void An_ifr_request_of_the_manual_is_recognised(string french, PilotIntentType expected) =>
         Assert.Equal(expected, Parse(french, FlightRules.Ifr, airborne: true).Type);
 

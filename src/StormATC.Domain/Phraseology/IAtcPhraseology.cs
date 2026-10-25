@@ -1,3 +1,4 @@
+using StormATC.Domain.Airports;
 using StormATC.Domain.Intents;
 using StormATC.Domain.Sessions;
 using StormATC.Domain.ValueObjects;
@@ -298,6 +299,54 @@ public interface IAtcPhraseology
     /// <param name="callsign">The aircraft.</param>
     /// <param name="number">The number in the sequence, 2 or more.</param>
     string SequenceNumber(Callsign callsign, int number);
+
+    /// <summary>A request for a direct or a new route is turned down because the arrival is saturated.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    string FlowControlRefusal(Callsign callsign);
+
+    /// <summary>A request for a direct or a new route is turned down because the path crosses a hazard.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="area">The area.</param>
+    string RouteRefusedHazard(Callsign callsign, HazardArea area);
+
+    /// <summary>The controller turns the flight away from a hazard.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="heading">The heading to fly.</param>
+    /// <param name="turnRight">True for a turn to the right.</param>
+    /// <param name="area">The area.</param>
+    string HazardAvoidance(Callsign callsign, Heading heading, bool turnRight, HazardArea area);
+
+    /// <summary>The flight is clear of the hazard and resumes its own navigation.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="area">The area.</param>
+    string HazardCleared(Callsign callsign, HazardArea area);
+
+    /// <summary>The readback of a heading given to avoid a hazard.</summary>
+    /// <param name="heading">The heading.</param>
+    string ReadbackItemHeading(Heading heading);
+
+    /// <summary>A parallel offset is approved.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="miles">The distance from the route, in nautical miles.</param>
+    /// <param name="right">True for the right of the route.</param>
+    string OffsetApproved(Callsign callsign, int miles, bool right);
+
+    /// <summary>A parallel offset is turned down.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    string OffsetRefused(Callsign callsign);
+
+    /// <summary>The flight is back on its route: the offset ends.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    string OffsetEnded(Callsign callsign);
+
+    /// <summary>The CPDLC link has failed: the flight reverts to voice.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    string CpdlcFailureAcknowledgement(Callsign callsign);
+
+    /// <summary>The place in the radar sequence for the approach, behind other arrivals.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="number">The number in the sequence, 2 or more.</param>
+    string RadarSequence(Callsign callsign, int number);
 
     /// <summary>A caution about wake turbulence behind a heavier aircraft.</summary>
     /// <param name="aircraftType">The aircraft's type, or null.</param>

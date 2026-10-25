@@ -112,6 +112,21 @@ internal static partial class ProcedureIntentRules
             return (PilotIntentType.RequestSelcalCheck, 0.93);
         }
 
+        if (CpdlcFailure().IsMatch(transcript))
+        {
+            return (PilotIntentType.ReportCpdlcFailure, 0.93);
+        }
+
+        if (Offset().IsMatch(transcript))
+        {
+            return (PilotIntentType.RequestOffset, 0.93);
+        }
+
+        if (BackOnRoute().IsMatch(transcript))
+        {
+            return (PilotIntentType.ReportBackOnRoute, 0.92);
+        }
+
         if (Cpdlc().IsMatch(transcript))
         {
             return (PilotIntentType.RequestCpdlcLogon, 0.93);
@@ -218,6 +233,15 @@ internal static partial class ProcedureIntentRules
 
     [GeneratedRegex(@"\bcpdlc\b")]
     private static partial Regex Cpdlc();
+
+    [GeneratedRegex(@"\bcpdlc (failure|fail|inoperative|unable|lost)\b|\b(lost|loss of|unable) cpdlc\b|\bconfirm by voice\b")]
+    private static partial Regex CpdlcFailure();
+
+    [GeneratedRegex(@"\brequest (an |a )?(parallel )?offset\b")]
+    private static partial Regex Offset();
+
+    [GeneratedRegex(@"\bback (on )?(the )?route\b|\bresum(e|ing) (own )?navigation\b")]
+    private static partial Regex BackOnRoute();
 
     [GeneratedRegex(@"\brequest tow(ing)?\b")]
     private static partial Regex Tow();

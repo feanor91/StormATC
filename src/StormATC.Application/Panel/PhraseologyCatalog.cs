@@ -380,6 +380,9 @@ public static class PhraseologyCatalog
                 new("Compte rendu de position", $"{cs}, position KILOX, niveau un deux zéro.", $"{cs}, reçu."),
                 new("RVSM", $"{cs}, RVSM approuvé.", $"{cs}, reçu, RVSM approuvé."),
                 new("SELCAL et CPDLC", $"{cs}, contrôle SELCAL.", $"{cs}, contrôle SELCAL reçu."),
+                new("Panne CPDLC", $"{cs}, panne CPDLC.", $"{cs}, panne CPDLC reçue, poursuivez à la phonie."),
+                new("Décalage parallèle", $"{cs}, demande un décalage de deux nautiques à droite de la route.", $"{cs}, autorisé décalage deux nautiques à droite de la route, rappelez de retour sur la route."),
+                new("Retour sur la route", $"{cs}, de retour sur la route.", $"{cs}, reçu, fin du décalage, poursuivez votre navigation."),
             ]),
             PhraseologyStage.Descent => ("Descente et arrivée",
             [
@@ -493,6 +496,9 @@ public static class PhraseologyCatalog
                 new("Position report", $"{cs}, position KILOX, level one two zero.", $"{cs}, roger."),
                 new("RVSM", $"{cs}, RVSM approved.", $"{cs}, roger, RVSM approved."),
                 new("SELCAL and CPDLC", $"{cs}, SELCAL check.", $"{cs}, SELCAL check received."),
+                new("CPDLC failure", $"{cs}, CPDLC failure.", $"{cs}, CPDLC failure received, continue on voice."),
+                new("Parallel offset", $"{cs}, request offset two miles right of route.", $"{cs}, cleared to fly offset two miles right of route, report back on route."),
+                new("Back on route", $"{cs}, back on route.", $"{cs}, roger, offset cancelled, resume own navigation."),
             ]),
             PhraseologyStage.Descent => ("Descent and arrival",
             [

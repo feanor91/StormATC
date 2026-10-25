@@ -82,7 +82,12 @@ public static class FrenchTranscriptCanonicalizer
         ("(?:negatif|non) rvsm|rvsm (?:negatif|non approuve)", "negative rvsm"),
         ("rvsm (?:approuve|oui|affirme)|affirme rvsm", "rvsm approved"),
         ("(?:controle|verification|test) selcal", "selcal check"),
+        ("(?:panne|perte|defaillance) (?:de |du |de la )?(?:liaison )?cpdlc|cpdlc (?:en panne|inoperant|hs|perdu|ne fonctionne pas)|confirm(?:ez|ons)? (?:par|a la) (?:phonie|voix)", "cpdlc failure"),
         ("(?:logon|connexion|connectons|connecte) cpdlc|cpdlc (?:logon|connexion)", "cpdlc logon"),
+        ("(?:demand(?:e|ons)|demander) (?:un |une )?(?:decalage|offset|route parallele|parallele)(?: lateral| parallele)?(?: de)?", "request offset"),
+        // "Mille" alone is a thousand feet, so only the nautical mile is rewritten.
+        ("(?:milles? nautiques?|nautiques?)", "miles"),
+        ("(?:de )?retour (?:sur|en) (?:la )?route|reprenons (?:la )?route|route reprise|reprise de (?:la )?navigation|reprenons (?:notre )?navigation", "back on route"),
         ("(?:demand(?:e|ons)|demander) (?:le |un )?tractage", "request tow"),
         ("(?:demand(?:e|ons)|demander) (?:a )?(?:penetrer|entrer) (?:sur )?(?:la )?piste (?:pour )?inspection|inspection (?:de )?(?:la )?piste", "request runway inspection"),
         ("(?<!montee )(?:point initial|initiale|initial)", "initial"),

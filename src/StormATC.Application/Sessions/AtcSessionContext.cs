@@ -35,9 +35,12 @@ public sealed class AtcSessionContext(
     IWeatherProvider weatherProvider,
     IClock clock,
     ILogger<AtcSessionContext> logger,
-    IVfrProfileProvider? vfrProfileProvider = null)
+    IVfrProfileProvider? vfrProfileProvider = null,
+    IHazardAreaProvider? hazardAreaProvider = null)
 {
     private readonly IVfrProfileProvider? _vfrProfileProvider = vfrProfileProvider;
+
+    private readonly IHazardAreaProvider? _hazardAreaProvider = hazardAreaProvider;
 
     private readonly Dictionary<string, VfrAerodromeProfile?> _vfrProfileCache =
         new(StringComparer.OrdinalIgnoreCase);
@@ -489,8 +492,26 @@ public sealed class AtcSessionContext(
             }
         }
 
+        IReadOnlyList<HazardArea> hazards = [];
+        if (_hazardAreaProvider is not null)
+        {
+            try
+            {
+                hazards = await _hazardAreaProvider.GetActiveAreasAsync(cancellationToken).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Hazard area provider failed; continuing with no area.");
+            }
+        }
+
         return new AtcEvaluationContext
         {
+            Hazards = hazards,
             Session = session,
             AircraftState = session.AircraftState,
             FlightPlan = session.FlightPlan,

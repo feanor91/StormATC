@@ -1,3 +1,4 @@
+using StormATC.Domain.Airports;
 using StormATC.Domain.Intents;
 using StormATC.Domain.Sessions;
 using StormATC.Domain.ValueObjects;
@@ -436,6 +437,49 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
     /// <inheritdoc />
     public string SequenceNumber(Callsign callsign, int number) =>
         $"{callsign.ToSpoken()}, number {SpokenNumbers.DigitsIndividually(number.ToString(System.Globalization.CultureInfo.InvariantCulture))}, follow the circuit traffic.";
+
+    private static string AreaName(HazardArea area) => area.Kind == HazardKind.Weather
+        ? $"the weather area {area.Name}"
+        : $"military area {area.Name}";
+
+    /// <inheritdoc />
+    public string FlowControlRefusal(Callsign callsign) =>
+        $"{callsign.ToSpoken()}, unable, traffic flow restriction at destination, maintain present routing.";
+
+    /// <inheritdoc />
+    public string RouteRefusedHazard(Callsign callsign, HazardArea area) =>
+        $"{callsign.ToSpoken()}, unable, {AreaName(area)} is active on that routing, maintain present routing.";
+
+    /// <inheritdoc />
+    public string HazardAvoidance(Callsign callsign, Heading heading, bool turnRight, HazardArea area) =>
+        $"{callsign.ToSpoken()}, to avoid {AreaName(area)}, turn {(turnRight ? "right" : "left")} heading {heading.ToSpoken()}.";
+
+    /// <inheritdoc />
+    public string HazardCleared(Callsign callsign, HazardArea area) =>
+        $"{callsign.ToSpoken()}, clear of {AreaName(area)}, resume own navigation.";
+
+    /// <inheritdoc />
+    public string ReadbackItemHeading(Heading heading) => $"heading {heading.ToSpoken()}";
+
+    /// <inheritdoc />
+    public string OffsetApproved(Callsign callsign, int miles, bool right) =>
+        $"{callsign.ToSpoken()}, cleared to fly offset {SpokenNumbers.DigitsIndividually(miles.ToString(System.Globalization.CultureInfo.InvariantCulture))} miles {(right ? "right" : "left")} of route, report back on route.";
+
+    /// <inheritdoc />
+    public string OffsetRefused(Callsign callsign) =>
+        $"{callsign.ToSpoken()}, unable offset, maximum two zero miles, say again your request.";
+
+    /// <inheritdoc />
+    public string OffsetEnded(Callsign callsign) =>
+        $"{callsign.ToSpoken()}, roger, offset cancelled, resume own navigation.";
+
+    /// <inheritdoc />
+    public string CpdlcFailureAcknowledgement(Callsign callsign) =>
+        $"{callsign.ToSpoken()}, CPDLC failure received, continue on voice, instructions will be given on this frequency.";
+
+    /// <inheritdoc />
+    public string RadarSequence(Callsign callsign, int number) =>
+        $"{callsign.ToSpoken()}, number {SpokenNumbers.DigitsIndividually(number.ToString(System.Globalization.CultureInfo.InvariantCulture))} for the approach, expect radar vectors.";
 
     /// <inheritdoc />
     public string WakeTurbulenceCaution(string? aircraftType) =>

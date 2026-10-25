@@ -122,6 +122,9 @@ public sealed record AtcSession
     /// <summary>The hold the controller ordered, or null.</summary>
     public Approach.HoldState? Hold { get; init; }
 
+    /// <summary>The parallel offset the flight flies, in nautical miles, or null.</summary>
+    public int? OffsetMiles { get; init; }
+
     /// <summary>The instructions the controller already gave on its own initiative, so that each is given once.</summary>
     public IReadOnlyList<string> IssuedInstructions { get; init; } = [];
 
@@ -193,6 +196,10 @@ public sealed record AtcSession
     /// <summary>Starts or ends a hold.</summary>
     /// <param name="hold">The hold, or null to end it.</param>
     public AtcSession WithHold(Approach.HoldState? hold) => this with { Hold = hold };
+
+    /// <summary>Starts or ends a parallel offset.</summary>
+    /// <param name="miles">The offset in nautical miles, or 0 to end it.</param>
+    public AtcSession WithOffset(int miles) => this with { OffsetMiles = miles > 0 ? miles : null };
 
     /// <summary>Records an instruction the controller gave on its own initiative.</summary>
     /// <param name="key">The instruction.</param>

@@ -1,4 +1,5 @@
 using System.Text;
+using StormATC.Domain.Airports;
 using StormATC.Domain.Intents;
 using StormATC.Domain.Sessions;
 using StormATC.Domain.ValueObjects;
@@ -769,6 +770,67 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
     /// <inheritdoc />
     public string SequenceNumber(Callsign callsign, int number) =>
         Phrase(callsign).Add($"numéro {FrenchSpokenNumbers.Cardinal(number)}").Add("suivez le trafic en circuit").Build();
+
+    private static string AreaName(HazardArea area) => area.Kind == HazardKind.Weather
+        ? $"la zone de mauvais temps {area.Name}"
+        : $"la zone militaire {area.Name}";
+
+    /// <inheritdoc />
+    public string FlowControlRefusal(Callsign callsign) =>
+        Phrase(callsign)
+            .Add("négatif, régulation du trafic à l'arrivée")
+            .Add("maintenez votre route actuelle")
+            .Build();
+
+    /// <inheritdoc />
+    public string RouteRefusedHazard(Callsign callsign, HazardArea area) =>
+        Phrase(callsign)
+            .Add($"négatif, {AreaName(area)} est active sur cette route")
+            .Add("maintenez votre route actuelle")
+            .Build();
+
+    /// <inheritdoc />
+    public string HazardAvoidance(Callsign callsign, Heading heading, bool turnRight, HazardArea area) =>
+        Phrase(callsign)
+            .Add($"pour éviter {AreaName(area)}, virez à {(turnRight ? "droite" : "gauche")} cap {SpeakHeading(heading)}")
+            .Build();
+
+    /// <inheritdoc />
+    public string HazardCleared(Callsign callsign, HazardArea area) =>
+        Phrase(callsign).Add($"{AreaName(area)} est dégagée, reprenez votre navigation").Build();
+
+    /// <inheritdoc />
+    public string ReadbackItemHeading(Heading heading) => $"cap {SpeakHeading(heading)}";
+
+    /// <inheritdoc />
+    public string OffsetApproved(Callsign callsign, int miles, bool right) =>
+        Phrase(callsign)
+            .Add($"autorisé décalage {FrenchSpokenNumbers.Cardinal(miles)} nautiques à {(right ? "droite" : "gauche")} de la route")
+            .Add("rappelez de retour sur la route")
+            .Build();
+
+    /// <inheritdoc />
+    public string OffsetRefused(Callsign callsign) =>
+        Phrase(callsign).Add("négatif décalage, maximum vingt nautiques").Add("rappelez votre demande").Build();
+
+    /// <inheritdoc />
+    public string OffsetEnded(Callsign callsign) =>
+        Phrase(callsign).Add(Received()).Add("fin du décalage, poursuivez votre navigation").Build();
+
+    /// <inheritdoc />
+    public string CpdlcFailureAcknowledgement(Callsign callsign) =>
+        Phrase(callsign)
+            .Add("panne CPDLC reçue")
+            .Add("poursuivez à la phonie")
+            .Add("les instructions vous seront données sur cette fréquence")
+            .Build();
+
+    /// <inheritdoc />
+    public string RadarSequence(Callsign callsign, int number) =>
+        Phrase(callsign)
+            .Add($"numéro {FrenchSpokenNumbers.Cardinal(number)} pour l'approche")
+            .Add("attendez-vous à des vecteurs radar")
+            .Build();
 
     /// <inheritdoc />
     public string WakeTurbulenceCaution(string? aircraftType) =>

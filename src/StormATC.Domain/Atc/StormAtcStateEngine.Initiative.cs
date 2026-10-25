@@ -50,6 +50,12 @@ public sealed partial class StormAtcStateEngine
                 : null;
         }
 
+        // A military area or bad weather on the path: the controller turns the flight away by himself.
+        if (EvaluateHazards(context, callsign) is AtcDecision hazard)
+        {
+            return hazard;
+        }
+
         if (context.DestinationAirport is not AirportData destination)
         {
             return null;
@@ -96,12 +102,34 @@ public sealed partial class StormAtcStateEngine
             };
         }
 
+        // --- The place in the radar sequence, when other arrivals are ahead. ---------------------------------
+        if (session.CurrentController == ControllerPosition.Approach
+            && miles <= 40
+            && !session.IssuedInstructions.Contains("sequence")
+            && RadarSequenceNumber(context, destination, miles) is int number)
+        {
+            return new AtcDecision
+            {
+                Accepted = true,
+                ResponseType = AtcResponseType.Acknowledgement,
+                NewIssuedInstruction = "sequence",
+                ApprovedFacts = new Dictionary<string, string>(StringComparer.Ordinal)
+                {
+                    ["sequence"] = number.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                },
+                ProhibitedFacts = ["any clearance", "any altitude assignment"],
+                FallbackPhraseology = Say(context).RadarSequence(callsign, number),
+            };
+        }
+
         // --- A direct that shortens the route. -----------------------------------------------------------
         if (session.CurrentController == ControllerPosition.Center
             && session.Phase == FlightPhase.Enroute
             && miles > 60
             && !session.IssuedInstructions.Contains("direct")
-            && DirectFix(session, aircraft, destination, miles) is string direct)
+            && !ArrivalSaturated(context)
+            && DirectFix(session, aircraft, destination, miles) is string direct
+            && RefuseForHazard(context, callsign, direct) is null)
         {
             return new AtcDecision
             {

@@ -172,6 +172,9 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             PilotIntentType.ReportRvsm => HandleRvsm(context, intent),
             PilotIntentType.RequestSelcalCheck => HandleSelcal(context),
             PilotIntentType.RequestCpdlcLogon => HandleCpdlc(context),
+            PilotIntentType.ReportCpdlcFailure => HandleCpdlcFailure(context),
+            PilotIntentType.RequestOffset => HandleOffset(context, intent),
+            PilotIntentType.ReportBackOnRoute => HandleBackOnRoute(context),
             PilotIntentType.RequestTow => HandleTow(context),
             PilotIntentType.RequestRunwayInspection => HandleRunwayInspection(context),
             PilotIntentType.ReportPosition => HandlePositionReport(context),
@@ -1802,6 +1805,13 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             return AtcDecision.Reject(
                 $"Waypoint {waypoint} is not on the filed route.",
                 Say(context).Unable(callsign, UnableReason.WaypointNotOnRoute));
+        }
+
+        // A shorter route is turned down when the arrival is saturated or the path crosses an active area.
+        AtcDecision? blocked = RefuseForFlowControl(context, callsign) ?? RefuseForHazard(context, callsign, waypoint);
+        if (blocked is not null)
+        {
+            return blocked;
         }
 
         var clearance = new Clearance

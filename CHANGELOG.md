@@ -5,6 +5,21 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **A direct or a new route is refused when it cannot be given**: for flow control, when the arrival is saturated (a hold
+  is ordered, or three aircraft fly the circuit of the destination), and when the path to the fix crosses an active
+  military area or a weather area at the level of the flight.
+- **The controller turns a flight away from a military area or bad weather by himself**: a heading to avoid the area
+  (to be read back), then "resume own navigation" once past it. The areas come from the optional file
+  `hazard-areas.json` in the application data folder (see `docs/hazard-areas.md`); without it nothing changes. The
+  direct the controller gives by himself is not given through an area either.
+- **Parallel offset** ("demande un décalage de deux nautiques à droite"): approved up to twenty miles to an instrument
+  flight in the cruise; "de retour sur la route" ends it.
+- **CPDLC failure** ("panne CPDLC", "confirmez par phonie"): the controller takes note and continues by voice.
+- **Radar sequence**: Approach tells an arrival its number for the approach ("numéro deux pour l'approche, attendez-vous
+  à des vecteurs radar") when other arrivals are closer to the destination.
+
 ## 0.18.0 - 2026-10-25
 
 ### Added

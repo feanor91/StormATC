@@ -39,6 +39,14 @@ public interface IAirspaceDataProvider
     Task<IReadOnlyList<SectorDefinition>> ListSectorsAsync(CancellationToken cancellationToken);
 }
 
+/// <summary>Supplies the areas a flight must be kept out of: active military areas and bad weather.</summary>
+public interface IHazardAreaProvider
+{
+    /// <summary>Lists the areas that are active now. An empty list means none is known.</summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    Task<IReadOnlyList<HazardArea>> GetActiveAreasAsync(CancellationToken cancellationToken);
+}
+
 /// <summary>Supplies nearby traffic for the runway-occupancy and separation model.</summary>
 public interface ITrafficProvider
 {

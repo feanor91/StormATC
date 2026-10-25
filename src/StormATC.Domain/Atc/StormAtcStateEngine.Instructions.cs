@@ -39,7 +39,8 @@ public sealed partial class StormAtcStateEngine
         }
 
         string? fix = FixExtractor.Find(intent.SourceTranscript);
-        return Acknowledge(context, callsign, Say(context).RouteChangeApproved(callsign, fix), "new route approved");
+        AtcDecision? blocked = RefuseForFlowControl(context, callsign) ?? RefuseForHazard(context, callsign, fix);
+        return blocked ?? Acknowledge(context, callsign, Say(context).RouteChangeApproved(callsign, fix), "new route approved");
     }
 
     /// <summary>"Demande vitesse 250", "demande vitesse libre": the controller gives the speed.</summary>

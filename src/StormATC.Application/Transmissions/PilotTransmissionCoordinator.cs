@@ -406,6 +406,11 @@ public sealed class PilotTransmissionCoordinator(
             session = session.WithHold(null);
         }
 
+        if (decision.NewOffsetMiles is int offset)
+        {
+            session = session.WithOffset(offset);
+        }
+
         if (decision.NewIssuedInstruction is { Length: > 0 } issued)
         {
             session = session.WithIssuedInstruction(issued);

@@ -267,6 +267,15 @@ public enum PilotIntentType
     /// <summary>The pilot logs on to CPDLC.</summary>
     RequestCpdlcLogon,
 
+    /// <summary>The CPDLC link failed or cannot be trusted: the pilot asks to continue by voice.</summary>
+    ReportCpdlcFailure,
+
+    /// <summary>The pilot asks to fly a parallel offset from the route.</summary>
+    RequestOffset,
+
+    /// <summary>The pilot reports back on the route, which ends an offset.</summary>
+    ReportBackOnRoute,
+
     /// <summary>A tug asks to tow the aircraft.</summary>
     RequestTow,
 

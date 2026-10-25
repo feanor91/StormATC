@@ -69,8 +69,15 @@ porteur.
 Depuis la 0.18.0, le contrôleur radar donne aussi **de lui-même** une vitesse à l'arrivée (220 puis 180 nœuds), une
 attente quand l'arrivée est chargée, et un direct qui raccourcit la route, avec collationnement attendu.
 
-Ce qui reste : le refus de route pour régulation, la route parallèle (offset), la clarification CPDLC en cours de vol, le
-séquencement radar détaillé et les changements de route imposés par la météo ou une zone militaire.
+Depuis la 0.19.0 : le **refus d'un direct ou d'une route pour régulation** (arrivée saturée) ou parce que le chemin
+traverse une zone active, le **détournement par le contrôleur** d'un vol qui va entrer dans une zone militaire ou
+météo (cap à collationner, puis reprise de navigation), la **route parallèle** (offset), la **panne CPDLC** (retour à la
+phonie) et le **numéro dans le séquencement radar** à l'arrivée. Les zones viennent d'un fichier facultatif
+(`hazard-areas.json`, voir `docs/hazard-areas.md`) : le programme n'embarque aucune liste de zones, qui deviendrait vite
+fausse.
+
+Ce qui reste : un vrai séquencement radar (espacement en temps ou en distance, vecteurs successifs vers l'approche) et
+une clarification CPDLC message par message, qui supposerait de simuler la liaison de données.
 
 ## Ce qu'on peut en faire
 

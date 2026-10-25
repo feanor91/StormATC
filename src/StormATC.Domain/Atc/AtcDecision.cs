@@ -68,6 +68,9 @@ public sealed record AtcEvaluationContext
     /// <summary>Weather, where a provider supplied it. Null means no weather may be quoted.</summary>
     public WeatherSnapshot? Weather { get; init; }
 
+    /// <summary>The areas to keep flights out of: active military areas and weather. Empty when none is known.</summary>
+    public IReadOnlyList<HazardArea> Hazards { get; init; } = [];
+
     /// <summary>Time of evaluation. The engine must not read the system clock.</summary>
     public required DateTimeOffset CurrentTime { get; init; }
 
@@ -311,6 +314,9 @@ public sealed record AtcDecision
     /// <summary>True when the hold ends.</summary>
     public bool EndsHold { get; init; }
 
+    /// <summary>A parallel offset the controller approved, in nautical miles; 0 ends it. Null leaves it unchanged.</summary>
+    public int? NewOffsetMiles { get; init; }
+
     /// <summary>An instruction the controller gave on its own initiative, recorded so that it is not given again.</summary>
     public string? NewIssuedInstruction { get; init; }
 
@@ -399,6 +405,7 @@ public sealed record AtcDecision
         || NewAssignedSpeedKnots is not null
         || NewHold is not null
         || EndsHold
+        || NewOffsetMiles is not null
         || NewIssuedInstruction is not null
         || NewVfrTransit is not null
         || TrafficAdvisedAt is not null
