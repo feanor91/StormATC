@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.15.0 - 2026-10-25
+
 ### Added
 
 - **VFR flight following** ("suivi VFR"). A VFR flight in the air that tunes a flight information frequency is followed by
