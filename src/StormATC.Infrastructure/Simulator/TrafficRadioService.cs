@@ -114,6 +114,13 @@ public sealed class TrafficRadioService(
             return;
         }
 
+        // Nobody hears the radio while the simulator is in its menus.
+        if (sessionContext.CurrentSession.AircraftState.InSimulatorMenus)
+        {
+            Status = UiText.T("Traffic radio is silent while the simulator is in its menus.");
+            return;
+        }
+
         DateTimeOffset now = clock.UtcNow;
         if (!_wasEnabled)
         {

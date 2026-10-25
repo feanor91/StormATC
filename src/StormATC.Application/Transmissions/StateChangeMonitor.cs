@@ -53,7 +53,8 @@ public sealed class StateChangeMonitor
     /// <remarks>Never throws: a failing provider must not stop the flight.</remarks>
     public async Task<bool> EvaluateAsync(CancellationToken cancellationToken = default)
     {
-        if (_sessionContext.CurrentSession.Callsign is null)
+        // In the simulator's menus the aircraft's data is meaningless: the controller stays silent.
+        if (_sessionContext.CurrentSession.Callsign is null || _sessionContext.CurrentSession.AircraftState.InSimulatorMenus)
         {
             return false;
         }

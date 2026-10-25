@@ -67,6 +67,12 @@ public sealed record AircraftState
     /// </summary>
     public bool IsUserInAircraft { get; init; } = true;
 
+    /// <summary>
+    /// True when the simulator is in its menus (loading a flight, the world map, the main menu): its data is
+    /// meaningless and nothing may be said on the radio. False for the scripted aircraft, which has no menus.
+    /// </summary>
+    public bool InSimulatorMenus { get; init; }
+
     /// <summary>Height above the surface directly below the aircraft, in feet.</summary>
     public double AltitudeAboveGroundFeet { get; init; }
 

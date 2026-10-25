@@ -5,6 +5,11 @@ public releases.
 
 ## Unreleased
 
+### Fixed
+
+- StormATC no longer speaks while the simulator is in its menus (loading a flight, the world map, the main menu): the
+  controller's own calls (handoffs, warnings) and the background traffic chatter wait until you are in the aircraft.
+
 ## 0.14.0 - 2026-10-25
 
 ### Added

@@ -1228,6 +1228,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector, ISimu
                 ? raw.VerticalSpeed
                 : 0,
             IsUserInAircraft = IsUserInAircraft(raw.IndicatedAltitude),
+            InSimulatorMenus = !IsUserInAircraft(raw.IndicatedAltitude),
             IsOnGround = raw.OnGround != 0,
             ParkingBrakeSet = raw.ParkingBrake != 0,
             EnginesRunning = raw.EngineCombustion != 0,
