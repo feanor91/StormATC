@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.18.0 - 2026-10-25
+
 ### Added
 
 - **The radar controller gives instructions by himself** to an IFR flight (Departure, Centre, Approach), each once in a
