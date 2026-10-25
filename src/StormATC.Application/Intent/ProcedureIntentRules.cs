@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using StormATC.Domain;
+using StormATC.Domain.Intents;
 using StormATC.Domain.Sessions;
 
 namespace StormATC.Application.Intent;
@@ -137,11 +138,7 @@ internal static partial class ProcedureIntentRules
 
     /// <summary>The speed in knots a transmission names ("speed 250"), or null.</summary>
     /// <param name="transcript">The canonical transcript.</param>
-    public static int? SpeedIn(string transcript) =>
-        SpeedValue().Match(transcript) is { Success: true } match
-        && int.TryParse(match.Groups["knots"].Value, System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out int knots)
-            ? knots
-            : null;
+    public static int? SpeedIn(string transcript) => SpeedExtractor.Find(transcript);
 
     /// <summary>The Mach number a transmission names ("mach 0 78" or "mach 0.78"), or null.</summary>
     /// <param name="transcript">The canonical transcript.</param>
@@ -206,9 +203,6 @@ internal static partial class ProcedureIntentRules
 
     [GeneratedRegex(@"\brequest (the )?speed\b|\bspeed free\b|\bfree speed\b")]
     private static partial Regex Speed();
-
-    [GeneratedRegex(@"\bspeed (?<knots>\d{2,3})\b")]
-    private static partial Regex SpeedValue();
 
     [GeneratedRegex(@"\bmach\s*0?[. ]?(?<decimals>\d{2})\b")]
     private static partial Regex MachValue();

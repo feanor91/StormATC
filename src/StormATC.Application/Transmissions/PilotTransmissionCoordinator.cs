@@ -392,6 +392,25 @@ public sealed class PilotTransmissionCoordinator(
             session = session.WithMarsa(null);
         }
 
+        if (decision.NewAssignedSpeedKnots is int speed)
+        {
+            session = session.WithAssignedSpeed(speed);
+        }
+
+        if (decision.NewHold is Domain.Approach.HoldState hold)
+        {
+            session = session.WithHold(hold);
+        }
+        else if (decision.EndsHold)
+        {
+            session = session.WithHold(null);
+        }
+
+        if (decision.NewIssuedInstruction is { Length: > 0 } issued)
+        {
+            session = session.WithIssuedInstruction(issued);
+        }
+
         if (decision.NewVfrTransit is bool transit)
         {
             session = session.WithVfrTransit(transit);

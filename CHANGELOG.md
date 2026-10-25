@@ -5,6 +5,18 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **The radar controller gives instructions by himself** to an IFR flight (Departure, Centre, Approach), each once in a
+  flight and each to be read back (a readback that is wrong is corrected; one that is not given never blocks the flight):
+  - a **speed** on the way in: reduce to 220 knots inside 35 nm of the destination when above 250, then to 180 inside
+    18 nm when above 215;
+  - a **hold**, from Approach inside 30 nm when two or more aircraft are in the circuit of the destination, over the
+    route fix nearest the destination (or at the present position); it ends by itself after three minutes ("quittez
+    l'attente"), or when the pilot says he is ready to leave it;
+  - a **direct** from the Centre, in the cruise more than 60 nm from the destination, to a fix of the route that is ahead
+    and shortens it.
+
 ## 0.17.0 - 2026-10-25
 
 ### Added

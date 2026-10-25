@@ -302,6 +302,18 @@ public sealed record AtcDecision
     /// <summary>True when the MARSA ends with this decision.</summary>
     public bool EndsMarsa { get; init; }
 
+    /// <summary>A speed the controller assigned, in knots.</summary>
+    public int? NewAssignedSpeedKnots { get; init; }
+
+    /// <summary>A hold the controller ordered.</summary>
+    public Approach.HoldState? NewHold { get; init; }
+
+    /// <summary>True when the hold ends.</summary>
+    public bool EndsHold { get; init; }
+
+    /// <summary>An instruction the controller gave on its own initiative, recorded so that it is not given again.</summary>
+    public string? NewIssuedInstruction { get; init; }
+
     /// <summary>Starts (true) or ends (false) a transit across an aerodrome's zone.</summary>
     public bool? NewVfrTransit { get; init; }
 
@@ -384,6 +396,10 @@ public sealed record AtcDecision
         || NewRadarApproach is not null
         || NewMarsa is not null
         || EndsMarsa
+        || NewAssignedSpeedKnots is not null
+        || NewHold is not null
+        || EndsHold
+        || NewIssuedInstruction is not null
         || NewVfrTransit is not null
         || TrafficAdvisedAt is not null
         || NewFlightFollowing is not null

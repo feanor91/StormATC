@@ -30,6 +30,6 @@ public static partial class FixExtractor
         return null;
     }
 
-    [GeneratedRegex(@"\b(?:hold(?:ing)?(?: at| over)?|over|via|at|route)\s+(?=(?<fix>[a-z]{3,5})\b)")]
+    [GeneratedRegex(@"\b(?:hold(?:ing)?(?: at| over)?|attente|over|via|at|route|direct(?: to)?)\s+(?=(?<fix>[a-z]{3,5})\b)")]
     private static partial Regex AfterKeyword();
 }

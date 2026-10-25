@@ -363,6 +363,20 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
         $"{callsign.ToSpoken()}, roger, good day.";
 
     /// <inheritdoc />
+    public string SpeedReduction(Callsign callsign, int knots) =>
+        $"{callsign.ToSpoken()}, reduce speed {SpokenNumbers.DigitsIndividually(knots.ToString(System.Globalization.CultureInfo.InvariantCulture))} knots.";
+
+    /// <inheritdoc />
+    public string ReadbackItemSpeed(int knots) =>
+        $"speed {SpokenNumbers.DigitsIndividually(knots.ToString(System.Globalization.CultureInfo.InvariantCulture))} knots";
+
+    /// <inheritdoc />
+    public string ReadbackItemHold(string? fix) => fix is null ? "hold at present position" : $"hold over {fix}";
+
+    /// <inheritdoc />
+    public string ReadbackItemDirect(string fix) => $"direct {fix}";
+
+    /// <inheritdoc />
     public string RouteChangeApproved(Callsign callsign, string? fix) =>
         fix is null
             ? $"{callsign.ToSpoken()}, new route approved, report the next fix."

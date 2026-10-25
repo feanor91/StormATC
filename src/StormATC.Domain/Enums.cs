@@ -276,6 +276,9 @@ public enum PilotIntentType
     /// <summary>An IFR flight reports its position over a point.</summary>
     ReportPosition,
 
+    /// <summary>The pilot reads back a speed, a hold or a direct the controller gave.</summary>
+    InstructionReadback,
+
     /// <summary>The pilot asks for a PAR or SRA radar approach.</summary>
     RequestRadarApproach,
     RequestApproach,
@@ -334,6 +337,12 @@ public enum ClearanceType
     Descent,
     DirectTo,
     Heading,
+
+    /// <summary>The controller assigned a speed.</summary>
+    SpeedInstruction,
+
+    /// <summary>The controller ordered a hold.</summary>
+    HoldInstruction,
     ApproachClearance,
     LandingClearance,
     TaxiToStand,
@@ -359,6 +368,12 @@ public enum ReadbackItemType
     ApproachName,
     Speed,
     QnhAltimeter,
+
+    /// <summary>The fix of a hold.</summary>
+    HoldFix,
+
+    /// <summary>The fix of a direct or a new route.</summary>
+    RouteFix,
 }
 
 /// <summary>Severity of an ATC-generated warning or event.</summary>

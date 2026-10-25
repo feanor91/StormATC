@@ -66,10 +66,11 @@ SELCAL, CPDLC, tractage, inspection de piste, compte rendu de position, approche
 (le contrôleur donne piste, vent et QNH), numéro dans le séquencement du circuit, turbulence de sillage derrière un gros
 porteur.
 
-Ce qui reste : ces situations sont déclenchées par la **demande du pilote**. Les instructions que le contrôleur donne de
-lui-même (réduire la vitesse à l'arrivée, ordonner une attente, modifier la route pour un trafic) ne sont pas encore
-générées spontanément ; il en va de même du refus de route pour régulation, de la route parallèle (offset), de la
-clarification CPDLC en cours de vol et du séquencement radar détaillé.
+Depuis la 0.18.0, le contrôleur radar donne aussi **de lui-même** une vitesse à l'arrivée (220 puis 180 nœuds), une
+attente quand l'arrivée est chargée, et un direct qui raccourcit la route, avec collationnement attendu.
+
+Ce qui reste : le refus de route pour régulation, la route parallèle (offset), la clarification CPDLC en cours de vol, le
+séquencement radar détaillé et les changements de route imposés par la météo ou une zone militaire.
 
 ## Ce qu'on peut en faire
 

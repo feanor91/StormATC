@@ -329,6 +329,9 @@ public static class AtcGuidanceAdvisor
         ReadbackItemType.TaxiRoute => UiText.T("taxi route"),
         ReadbackItemType.DepartureProcedure => UiText.T("departure"),
         ReadbackItemType.ApproachName => UiText.T("approach"),
+        ReadbackItemType.Speed => UiText.T("speed"),
+        ReadbackItemType.HoldFix => UiText.T("hold fix"),
+        ReadbackItemType.RouteFix => UiText.T("fix"),
         _ => type.ToString(),
     };
 }

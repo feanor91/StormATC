@@ -226,6 +226,23 @@ public interface IAtcPhraseology
     /// <summary>Acknowledges that the aircraft is leaving the circuit and the frequency.</summary>
     string LeaveFrequencyAcknowledgement(Callsign callsign);
 
+    /// <summary>The controller assigns a speed: reduce to it and keep it.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="knots">The speed.</param>
+    string SpeedReduction(Callsign callsign, int knots);
+
+    /// <summary>The readback of a speed.</summary>
+    /// <param name="knots">The speed.</param>
+    string ReadbackItemSpeed(int knots);
+
+    /// <summary>The readback of a hold.</summary>
+    /// <param name="fix">The fix, or null for the present position.</param>
+    string ReadbackItemHold(string? fix);
+
+    /// <summary>The readback of a direct.</summary>
+    /// <param name="fix">The fix.</param>
+    string ReadbackItemDirect(string fix);
+
     /// <summary>The new route is approved.</summary>
     /// <param name="callsign">The aircraft.</param>
     /// <param name="fix">The fix named in the request, or null.</param>

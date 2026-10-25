@@ -678,6 +678,22 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
         Phrase(callsign).Add(Received()).Add(OneOf("au revoir", "bonne journée")).Build();
 
     /// <inheritdoc />
+    public string SpeedReduction(Callsign callsign, int knots) =>
+        Phrase(callsign)
+            .Add($"réduisez vitesse {FrenchSpokenNumbers.DigitsIndividually(knots.ToString(System.Globalization.CultureInfo.InvariantCulture))} nœuds")
+            .Build();
+
+    /// <inheritdoc />
+    public string ReadbackItemSpeed(int knots) =>
+        $"vitesse {FrenchSpokenNumbers.DigitsIndividually(knots.ToString(System.Globalization.CultureInfo.InvariantCulture))} nœuds";
+
+    /// <inheritdoc />
+    public string ReadbackItemHold(string? fix) => fix is null ? "attente en position actuelle" : $"attente sur {fix}";
+
+    /// <inheritdoc />
+    public string ReadbackItemDirect(string fix) => $"direct {fix}";
+
+    /// <inheritdoc />
     public string RouteChangeApproved(Callsign callsign, string? fix) =>
         Phrase(callsign)
             .Add(fix is null ? "nouvelle route approuvée" : $"nouvelle route approuvée via {fix}")

@@ -82,6 +82,44 @@ public class ProcedureIntentTests
         Assert.Equal("RNP", rnp.Entities.ApproachName);
     }
 
+    private static PilotIntent ParseWithPending(string french, ClearanceType type, ReadbackItemType item, string value)
+    {
+        AtcSession session = Session(FlightRules.Ifr);
+        session = session with
+        {
+            AircraftState = session.AircraftState with { IsOnGround = false },
+            PendingReadback = new PendingReadback
+            {
+                ClearanceId = Guid.CreateVersion7(),
+                ClearanceType = type,
+                IssuedAt = Fixture.Now,
+                IsMandatory = false,
+                ExpectedItems = [new ExpectedReadbackItem { Type = item, ExpectedValue = value, SpokenValue = value, IsCritical = true }],
+            },
+        };
+        string normalized = TranscriptNormalizer.Normalize(FrenchTranscriptCanonicalizer.Canonicalize(french));
+        return DeterministicPilotIntentParser.Parse(normalized, session);
+    }
+
+    [Fact]
+    public void A_french_readback_of_a_speed_a_hold_and_a_direct_is_a_readback_with_its_value()
+    {
+        PilotIntent speed = ParseWithPending(
+            "Contrôle, Hôtel Alpha Sierra Tango, réduisons vitesse deux deux zéro nœuds", ClearanceType.SpeedInstruction, ReadbackItemType.Speed, "220");
+        Assert.Equal(PilotIntentType.InstructionReadback, speed.Type);
+        Assert.Contains(speed.ReadbackItems, item => item.Type == ReadbackItemType.Speed && item.NormalizedValue == "220");
+
+        PilotIntent hold = ParseWithPending(
+            "Approche, Hôtel Alpha Sierra Tango, attente sur KILOX", ClearanceType.HoldInstruction, ReadbackItemType.HoldFix, "KILOX");
+        Assert.Equal(PilotIntentType.InstructionReadback, hold.Type);
+        Assert.Contains(hold.ReadbackItems, item => item.Type == ReadbackItemType.HoldFix && item.NormalizedValue == "KILOX");
+
+        PilotIntent direct = ParseWithPending(
+            "Contrôle, Hôtel Alpha Sierra Tango, direct NOVAR", ClearanceType.DirectTo, ReadbackItemType.RouteFix, "NOVAR");
+        Assert.Equal(PilotIntentType.InstructionReadback, direct.Type);
+        Assert.Contains(direct.ReadbackItems, item => item.Type == ReadbackItemType.RouteFix && item.NormalizedValue == "NOVAR");
+    }
+
     [Fact]
     public void Cancelling_ifr_is_recognised()
     {

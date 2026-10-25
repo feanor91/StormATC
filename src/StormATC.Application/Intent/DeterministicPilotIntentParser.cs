@@ -439,6 +439,8 @@ public sealed partial class DeterministicPilotIntentParser : IPilotIntentParser
             ClearanceType.ApproachClearance => PilotIntentType.LandingReadback,
             ClearanceType.Climb or ClearanceType.Descent => PilotIntentType.AltitudeReadback,
             ClearanceType.Heading => PilotIntentType.HeadingReadback,
+            ClearanceType.SpeedInstruction or ClearanceType.HoldInstruction or ClearanceType.DirectTo
+                => PilotIntentType.InstructionReadback,
             _ => PilotIntentType.Unknown,
         };
 
@@ -505,6 +507,9 @@ public sealed partial class DeterministicPilotIntentParser : IPilotIntentParser
                 ReadbackItemType.Frequency => entities.Frequency is not null,
                 ReadbackItemType.Heading => entities.Heading is not null,
                 ReadbackItemType.TaxiRoute => entities.Taxiways.Count > 0,
+                ReadbackItemType.Speed => SpeedExtractor.Find(transcript) is not null,
+                ReadbackItemType.HoldFix or ReadbackItemType.RouteFix =>
+                    FixExtractor.Find(transcript) is not null || entities.Waypoint is not null,
                 ReadbackItemType.Callsign =>
                     sessionCallsign?.MatchesTranscript(transcript) == true,
                 _ => false,
@@ -814,6 +819,24 @@ public sealed partial class DeterministicPilotIntentParser : IPilotIntentParser
                 NormalizedValue = altitude.ToComparisonValue(),
                 SourceText = transcript,
             });
+        }
+
+        if (SpeedExtractor.Find(transcript) is int speed)
+        {
+            items.Add(new ParsedReadbackItem
+            {
+                Type = ReadbackItemType.Speed,
+                NormalizedValue = speed.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                SourceText = transcript,
+            });
+        }
+
+        if ((FixExtractor.Find(transcript) ?? entities.Waypoint?.ToUpperInvariant()) is { Length: > 0 } fix)
+        {
+            foreach (ReadbackItemType fixType in new[] { ReadbackItemType.HoldFix, ReadbackItemType.RouteFix })
+            {
+                items.Add(new ParsedReadbackItem { Type = fixType, NormalizedValue = fix, SourceText = transcript });
+            }
         }
 
         if (entities.Squawk is SquawkCode squawk)

@@ -116,6 +116,15 @@ public sealed record AtcSession
     /// <summary>The MARSA in force for the flight, if any.</summary>
     public Approach.MarsaState? Marsa { get; init; }
 
+    /// <summary>The speed the controller assigned, in knots, or null.</summary>
+    public int? AssignedSpeedKnots { get; init; }
+
+    /// <summary>The hold the controller ordered, or null.</summary>
+    public Approach.HoldState? Hold { get; init; }
+
+    /// <summary>The instructions the controller already gave on its own initiative, so that each is given once.</summary>
+    public IReadOnlyList<string> IssuedInstructions { get; init; } = [];
+
     /// <summary>True while the flight crosses the zone of an aerodrome on a transit clearance.</summary>
     public bool VfrTransit { get; init; }
 
@@ -176,6 +185,19 @@ public sealed record AtcSession
 
     /// <summary>Starts or (with null) ends the MARSA.</summary>
     public AtcSession WithMarsa(Approach.MarsaState? state) => this with { Marsa = state };
+
+    /// <summary>Records a speed the controller assigned.</summary>
+    /// <param name="knots">The speed.</param>
+    public AtcSession WithAssignedSpeed(int? knots) => this with { AssignedSpeedKnots = knots };
+
+    /// <summary>Starts or ends a hold.</summary>
+    /// <param name="hold">The hold, or null to end it.</param>
+    public AtcSession WithHold(Approach.HoldState? hold) => this with { Hold = hold };
+
+    /// <summary>Records an instruction the controller gave on its own initiative.</summary>
+    /// <param name="key">The instruction.</param>
+    public AtcSession WithIssuedInstruction(string key) =>
+        IssuedInstructions.Contains(key) ? this : this with { IssuedInstructions = [.. IssuedInstructions, key] };
 
     /// <summary>Starts or ends a transit.</summary>
     /// <param name="transit">True while the flight is cleared to cross the zone.</param>

@@ -140,6 +140,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
                 or PilotIntentType.AltitudeReadback
                 or PilotIntentType.HeadingReadback
                 or PilotIntentType.FrequencyReadback
+                or PilotIntentType.InstructionReadback
                 or PilotIntentType.Correction => HandleReadback(context, intent),
             PilotIntentType.RequestPushback => HandlePushbackRequest(context, intent),
             PilotIntentType.RequestTaxi => DeclareRules(WithQfe(HandleTaxiRequest(context), context, intent), intent, context),
@@ -233,6 +234,13 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
         if (followed is not null)
         {
             return followed;
+        }
+
+        // --- What the controller orders by himself: speed, hold, direct. -------------------------------
+        AtcDecision? instruction = EvaluateInstructions(context);
+        if (instruction is not null)
+        {
+            return instruction;
         }
 
         // --- Traffic close to a flight a controller works in the air. ------------------------------
@@ -2490,6 +2498,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
         or PilotIntentType.AltitudeReadback
         or PilotIntentType.HeadingReadback
         or PilotIntentType.FrequencyReadback
+        or PilotIntentType.InstructionReadback
         or PilotIntentType.Correction
         or PilotIntentType.SayAgain;
 

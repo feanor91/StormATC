@@ -292,8 +292,28 @@ public sealed class DeterministicReadbackEvaluator : IReadbackEvaluator
         ReadbackItemType.TaxiRoute =>
             ExtractTaxiRoute(transcript),
 
+        ReadbackItemType.Speed =>
+            SpeedExtractor.Find(transcript)?.ToString(System.Globalization.CultureInfo.InvariantCulture),
+
+        ReadbackItemType.HoldFix or ReadbackItemType.RouteFix =>
+            FixExtractor.Find(transcript) ?? DirectFix(transcript),
+
         _ => null,
     };
+
+    /// <summary>The fix after "direct" ("direct kilox", "direct to kilox").</summary>
+    private static string? DirectFix(string transcript)
+    {
+        int index = transcript.IndexOf("direct", StringComparison.Ordinal);
+        if (index < 0)
+        {
+            return null;
+        }
+
+        string[] tokens = transcript[(index + "direct".Length)..].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        string? token = tokens.FirstOrDefault(word => word != "to");
+        return token is { Length: >= 3 and <= 5 } && token.All(char.IsLetter) ? token.ToUpperInvariant() : null;
+    }
 
     /// <summary>
     /// Pulls complete taxiway identifiers out of a transcript. "via apron, Alfa six" yields
