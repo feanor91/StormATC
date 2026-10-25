@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.14.1 - 2026-10-25
+
 ### Fixed
 
 - StormATC no longer speaks while the simulator is in its menus (loading a flight, the world map, the main menu): the
