@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.13.0 - 2026-10-25
+
 ### Added
 
 - **Suggested reply** in the panel: under the conversation of the Dialogue tab, what you have to say next (the readback
