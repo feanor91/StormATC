@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.16.0 - 2026-10-25
+
 ### Added
 
 - **More of the phraseology manual**, from the analysis of phraseo.aeronautique.xyz (see docs/analyse-phraseo.md):
