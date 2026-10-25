@@ -1,5 +1,6 @@
 using StormATC.Application.Localization;
 using StormATC.Domain;
+using StormATC.Domain.Airports;
 using StormATC.Domain.Phraseology;
 using StormATC.Domain.Sessions;
 using StormATC.Domain.ValueObjects;
@@ -240,6 +241,27 @@ public static class AtcGuidanceAdvisor
         string runway = session.AssignedArrivalRunway is RunwayIdentifier arrival
             ? say.SpeakRunway(arrival)
             : french ? "piste en service" : "runway in use";
+
+        // On a flight information frequency in the air: ask for the flight following, then stay on the frequency.
+        if (!session.AircraftState.IsOnGround && session.CurrentController == ControllerPosition.Information)
+        {
+            string service = session.CurrentFrequency is Frequency tuned
+                && FlightInformationRegions.FindByFrequency(tuned) is { } serving
+                    ? serving.ServiceName
+                    : "Information";
+
+            return session.FlightFollowing is null
+                ? new(
+                    UiText.T("Ask for a flight following"),
+                    UiText.T("Give your type, where you come from, where you go, your altitude, then ask to be followed."),
+                    Example(
+                        $"{service}, {spokenCallsign}, VFR from the departure to the destination, 2500 feet, request flight following",
+                        $"{service}, {spokenCallsign}, VFR du départ vers la destination, deux mille cinq cents pieds, demande de suivi"))
+                : new(
+                    UiText.T("Flight following in progress"),
+                    UiText.T("Stay on this frequency: you are told when to change. Report any change of your intentions."),
+                    string.Empty);
+        }
 
         return session.Phase switch
         {

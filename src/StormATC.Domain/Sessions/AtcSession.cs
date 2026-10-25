@@ -116,6 +116,9 @@ public sealed record AtcSession
     /// <summary>The MARSA in force for the flight, if any.</summary>
     public Approach.MarsaState? Marsa { get; init; }
 
+    /// <summary>The VFR flight following in force, or null.</summary>
+    public Approach.FlightFollowingState? FlightFollowing { get; init; }
+
     /// <summary>The leg of the aerodrome circuit the aircraft last reported.</summary>
     public CircuitLeg CircuitLeg { get; init; } = CircuitLeg.None;
 
@@ -167,6 +170,10 @@ public sealed record AtcSession
 
     /// <summary>Starts or (with null) ends the MARSA.</summary>
     public AtcSession WithMarsa(Approach.MarsaState? state) => this with { Marsa = state };
+
+    /// <summary>Starts, moves or ends a flight following.</summary>
+    /// <param name="state">The flight following, or null to end it.</param>
+    public AtcSession WithFlightFollowing(Approach.FlightFollowingState? state) => this with { FlightFollowing = state };
 
     /// <summary>Starts, updates or (with null) ends the radar approach.</summary>
     public AtcSession WithRadarApproach(Approach.RadarApproachState? state) => this with { RadarApproach = state };

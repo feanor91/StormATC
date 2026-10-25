@@ -165,6 +165,9 @@ public enum ControllerPosition
     Center,
     Approach,
     Atis,
+
+    /// <summary>A flight information service ("Paris Information"): the service a VFR flight asks for a flight following.</summary>
+    Information,
 }
 
 /// <summary>
@@ -206,6 +209,9 @@ public enum PilotIntentType
 
     /// <summary>A military pilot asks for the tactical picture: the contacts around, by bearing and range.</summary>
     RequestTacticalPicture,
+
+    /// <summary>A VFR pilot asks a flight information service for a flight following ("suivi VFR").</summary>
+    RequestFlightFollowing,
 
     /// <summary>The pilot asks for a PAR or SRA radar approach.</summary>
     RequestRadarApproach,

@@ -153,6 +153,7 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
         ControllerPosition.Departure => "Départ",
         ControllerPosition.Center => "Contrôle",
         ControllerPosition.Approach => "Approche",
+        ControllerPosition.Information => "Information",
         _ => "Contrôle",
     };
 
@@ -675,6 +676,32 @@ public sealed class FrenchAtcPhraseology : IAtcPhraseology
     /// <inheritdoc />
     public string LeaveFrequencyAcknowledgement(Callsign callsign) =>
         Phrase(callsign).Add(Received()).Add(OneOf("au revoir", "bonne journée")).Build();
+
+    /// <inheritdoc />
+    public string FlightFollowingAccepted(Callsign callsign, string serviceName, SquawkCode squawk) =>
+        Phrase(callsign)
+            .Add($"{serviceName}, suivi accordé")
+            .Add($"affichez {SpeakSquawk(squawk)}")
+            .Add("rappelez en cas de changement de vos intentions")
+            .Build();
+
+    /// <inheritdoc />
+    public string FlightFollowingHandoff(Callsign callsign, string serviceName, Frequency frequency) =>
+        Phrase(callsign).Add($"contactez {serviceName} {SpeakFrequency(frequency)}").Build();
+
+    /// <inheritdoc />
+    public string FlightFollowingEnded(Callsign callsign, string? nextController, Frequency? frequency) =>
+        nextController is not null && frequency is Frequency next
+            ? Phrase(callsign).Add("fin de suivi").Add($"contactez {nextController} {SpeakFrequency(next)}").Build()
+            : Phrase(callsign).Add("fin de suivi").Add(OneOf("bon vol", "bonne journée")).Build();
+
+    /// <inheritdoc />
+    public string FlightFollowingUnavailable(Callsign callsign) =>
+        Phrase(callsign).Add("aucun service d'information de vol n'est disponible dans cette région").Build();
+
+    /// <inheritdoc />
+    public string FlightFollowingCallService(Callsign callsign, string serviceName, Frequency frequency) =>
+        Phrase(callsign).Add($"pour un suivi, contactez {serviceName} {SpeakFrequency(frequency)}").Build();
 
     private static string Hand(CircuitSide? side) => side switch
     {

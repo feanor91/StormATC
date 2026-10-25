@@ -362,6 +362,28 @@ public sealed class EnglishAtcPhraseology : IAtcPhraseology
     public string LeaveFrequencyAcknowledgement(Callsign callsign) =>
         $"{callsign.ToSpoken()}, roger, good day.";
 
+    /// <inheritdoc />
+    public string FlightFollowingAccepted(Callsign callsign, string serviceName, SquawkCode squawk) =>
+        $"{callsign.ToSpoken()}, {serviceName}, flight following approved, squawk {SpeakSquawk(squawk)}, report any change of intentions.";
+
+    /// <inheritdoc />
+    public string FlightFollowingHandoff(Callsign callsign, string serviceName, Frequency frequency) =>
+        $"{callsign.ToSpoken()}, contact {serviceName} {SpeakFrequency(frequency)}.";
+
+    /// <inheritdoc />
+    public string FlightFollowingEnded(Callsign callsign, string? nextController, Frequency? frequency) =>
+        nextController is not null && frequency is Frequency next
+            ? $"{callsign.ToSpoken()}, flight following terminated, contact {nextController} {SpeakFrequency(next)}."
+            : $"{callsign.ToSpoken()}, flight following terminated, good day.";
+
+    /// <inheritdoc />
+    public string FlightFollowingUnavailable(Callsign callsign) =>
+        $"{callsign.ToSpoken()}, no flight information service is available in this area.";
+
+    /// <inheritdoc />
+    public string FlightFollowingCallService(Callsign callsign, string serviceName, Frequency frequency) =>
+        $"{callsign.ToSpoken()}, for flight following, contact {serviceName} {SpeakFrequency(frequency)}.";
+
     private static string Hand(CircuitSide? side) => side switch
     {
         CircuitSide.Left => "left-hand ",

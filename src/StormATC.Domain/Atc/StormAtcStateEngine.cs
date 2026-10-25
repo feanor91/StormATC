@@ -163,6 +163,7 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
             PilotIntentType.ReportInitial => HandleInitialReport(context, intent),
             PilotIntentType.RequestMarsa => HandleMarsaRequest(context, intent),
             PilotIntentType.RequestTacticalPicture => HandleTacticalPicture(context, intent),
+            PilotIntentType.RequestFlightFollowing => HandleFlightFollowingRequest(context, intent),
             PilotIntentType.RequestRadarApproach => HandleRadarApproachRequest(context, intent),
             PilotIntentType.RequestApproach => HandleApproachRequest(context, intent),
             PilotIntentType.ReportEstablished => HandleEstablishedReport(context, intent),
@@ -204,6 +205,13 @@ public sealed partial class StormAtcStateEngine(IReadbackEvaluator readbackEvalu
         if (radar is not null)
         {
             return radar;
+        }
+
+        // --- A VFR flight following: the service hands the flight on, or lets it go. ---------------
+        AtcDecision? followed = EvaluateFlightFollowing(context);
+        if (followed is not null)
+        {
+            return followed;
         }
 
         // --- Becoming airborne. ------------------------------------------------------------

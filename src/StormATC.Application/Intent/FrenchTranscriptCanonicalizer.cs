@@ -54,6 +54,7 @@ public static class FrenchTranscriptCanonicalizer
         ("trains? sortis? (?:et )?verrouilles?|train sorti", "gear down and locked"),
         ("dernier virage", "turning final"),
         ("demande(?:ons)? (?:le |un |l )?break|pour (?:le |un |l )?break", "request break"),
+        ("(?:demande(?:ons)?|demander|demain|demandez) (?:de |du |un |le |l )?(?:suivi|suivit)(?: vfr)?|(?:suivi|suivit) vfr", "request flight following"),
         ("(?<!montee )(?:point initial|initiale|initial)", "initial"),
         ("q f e|que f e|cue f e", "qfe"),
         // "par" is a French stop word, so a PAR request is rewritten to words that survive.

@@ -302,6 +302,12 @@ public sealed record AtcDecision
     /// <summary>True when the MARSA ends with this decision.</summary>
     public bool EndsMarsa { get; init; }
 
+    /// <summary>A flight following that starts, or moves to another sector.</summary>
+    public Approach.FlightFollowingState? NewFlightFollowing { get; init; }
+
+    /// <summary>True when the flight following ends.</summary>
+    public bool EndsFlightFollowing { get; init; }
+
     /// <summary>True when the radar approach ends with this decision.</summary>
     public bool EndsRadarApproach { get; init; }
 
@@ -372,6 +378,8 @@ public sealed record AtcDecision
         || NewRadarApproach is not null
         || NewMarsa is not null
         || EndsMarsa
+        || NewFlightFollowing is not null
+        || EndsFlightFollowing
         || EndsRadarApproach
         || NewTouchAndGoRequested is not null
         || NewManoeuvre is not null

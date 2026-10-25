@@ -226,6 +226,34 @@ public interface IAtcPhraseology
     /// <summary>Acknowledges that the aircraft is leaving the circuit and the frequency.</summary>
     string LeaveFrequencyAcknowledgement(Callsign callsign);
 
+    /// <summary>A flight information service takes a VFR flight: its transponder code and what to report.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="serviceName">The service, as named on the radio ("Paris Information").</param>
+    /// <param name="squawk">The transponder code given.</param>
+    string FlightFollowingAccepted(Callsign callsign, string serviceName, SquawkCode squawk);
+
+    /// <summary>The flight is passed to another sector of the flight information service, still followed.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="serviceName">The next service.</param>
+    /// <param name="frequency">Its frequency.</param>
+    string FlightFollowingHandoff(Callsign callsign, string serviceName, Frequency frequency);
+
+    /// <summary>The flight following ends, and the flight is passed on when there is a next controller.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="nextController">The next controller, as named on the radio, or null.</param>
+    /// <param name="frequency">Its frequency, or null.</param>
+    string FlightFollowingEnded(Callsign callsign, string? nextController, Frequency? frequency);
+
+    /// <summary>No flight information service is published where the aircraft is.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    string FlightFollowingUnavailable(Callsign callsign);
+
+    /// <summary>The pilot asked for a flight following on a frequency that is not the service's: tell which to call.</summary>
+    /// <param name="callsign">The aircraft.</param>
+    /// <param name="serviceName">The service that covers the position.</param>
+    /// <param name="frequency">Its frequency.</param>
+    string FlightFollowingCallService(Callsign callsign, string serviceName, Frequency frequency);
+
     // ---------------------------------------------------------------------------------
     // Conversation
     // ---------------------------------------------------------------------------------

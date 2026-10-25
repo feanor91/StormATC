@@ -393,6 +393,7 @@ public static class DeterministicPhraseology
         ControllerPosition.Departure => "Departure",
         ControllerPosition.Center => "Center",
         ControllerPosition.Approach => "Approach",
+        ControllerPosition.Information => "Information",
         _ => "Controller",
     };
 

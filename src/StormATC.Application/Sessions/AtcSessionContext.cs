@@ -262,6 +262,7 @@ public sealed class AtcSessionContext(
                     ClearedAltitude = null,
                     AssignedHeading = null,
                     HandoffState = HandoffState.None,
+                    FlightFollowing = null,
                     CircuitLeg = CircuitLeg.None,
                     TouchAndGoRequested = false,
                     RequestedManoeuvre = CircuitManoeuvre.None,
@@ -332,6 +333,27 @@ public sealed class AtcSessionContext(
                 && FollowTunedFrequency(updated, state, localPlan) is AtcSession followed)
             {
                 updated = followed;
+            }
+
+            // A VFR flight in the air is followed by whichever flight information service it tunes: Paris or
+            // Marseille Information, on the frequency of the sector it is in. Tuning anything else ends the
+            // following (the destination's tower is picked up below).
+            if (updated.FlightRules.IsVisual() && !state.IsOnGround)
+            {
+                if (FlightInformationRegions.FindByFrequency(state.Radio.ActiveTransmitFrequency) is { } serving)
+                {
+                    if (updated.CurrentController != ControllerPosition.Information
+                        || updated.CurrentFrequency is not Frequency now
+                        || !now.IsSameChannel(serving.Frequency))
+                    {
+                        updated = updated.WithController(ControllerPosition.Information, serving.Frequency);
+                    }
+                }
+                else if (updated.FlightFollowing is not null
+                    && !state.Radio.ActiveTransmitFrequency.IsSameChannel(updated.FlightFollowing.Frequency))
+                {
+                    updated = updated.WithFlightFollowing(null);
+                }
             }
 
             // A VFR arrival calls the destination tower directly; nobody hands it over. Once the

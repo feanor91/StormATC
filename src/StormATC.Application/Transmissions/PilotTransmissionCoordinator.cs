@@ -146,7 +146,8 @@ public sealed class PilotTransmissionCoordinator(
         // An aerodrome with no air traffic service has no controller: the pilot makes blind calls on the
         // air-air frequency and StormATC, which simulates controllers, has nobody to answer with.
         if (await _sessionContext.GetCurrentVfrProfileAsync(cancellationToken).ConfigureAwait(false)
-            is { HasNoAtc: true } uncontrolled)
+            is { HasNoAtc: true } uncontrolled
+            && session.CurrentController != ControllerPosition.Information)
         {
             totalStopwatch.Stop();
             return TransmissionProcessingResult.AerodromeWithoutAtc(
@@ -389,6 +390,15 @@ public sealed class PilotTransmissionCoordinator(
         else if (decision.EndsMarsa)
         {
             session = session.WithMarsa(null);
+        }
+
+        if (decision.NewFlightFollowing is Domain.Approach.FlightFollowingState following)
+        {
+            session = session.WithFlightFollowing(following);
+        }
+        else if (decision.EndsFlightFollowing)
+        {
+            session = session.WithFlightFollowing(null);
         }
 
         if (decision.NewTouchAndGoRequested is bool touchAndGo)

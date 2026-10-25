@@ -175,6 +175,26 @@ Un profil placé dans `%LOCALAPPDATA%\StormATC\vfr-profiles\<OACI>.json` est lu 
 avec StormATC : c'est le moyen d'essayer un profil sans réinstaller, ou de corriger un aérodrome pour soi. Il est
 utilisé au prochain chargement d'un vol, et une mise à jour ne le touche pas.
 
+## Le suivi VFR (service d'information de vol)
+
+En vol, un vol VFR peut demander à être suivi par le service d'information de vol de la région : *Paris Information* ou
+*Marseille Information*. Il suffit d'afficher la fréquence sur la radio et d'appeler :
+
+> « Paris Information, F-HAST, PA 28, VFR de Lognes vers Pontoise, deux mille cinq cents pieds, demande de suivi. »
+
+Le service répond avec son nom et un code transpondeur (« affichez deux trois quatre cinq »). Ensuite :
+
+- au passage d'un secteur à l'autre (Nord, Sud, Ouest), il vous donne la nouvelle fréquence (« contactez Paris Information
+  cent vingt-cinq décimale sept ») et le suivi continue ;
+- à moins de 15 nm de la destination, il met fin au suivi et vous passe l'approche ou la tour de l'aérodrome ;
+- si vous quittez la zone couverte, ou si vous affichez une autre fréquence, le suivi prend fin.
+
+Les fréquences sont celles de l'AIP France (GEN 3.4) : Paris Nord 125,700, Sud 126,100, Ouest 129,625 ; Marseille Nord
+124,500, Sud 120,550. L'AIP ne publie aucune fréquence d'information de vol pour l'ouest (Bretagne) ni le sud-ouest
+(Bordeaux) : là, StormATC répond qu'aucun service n'est disponible. Les limites des secteurs sont dessinées sur une carte
+de l'AIP (ENR 6.1), pas écrites : StormATC les approche par des latitudes et des longitudes. Elles ne servent pas à la
+navigation réelle.
+
 ## Limites
 
 - Pas de séquencement du trafic : jamais de « numéro deux, suivez… ». Chaque avion est « numéro

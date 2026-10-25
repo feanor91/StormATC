@@ -5,6 +5,16 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **VFR flight following** ("suivi VFR"). A VFR flight in the air that tunes a flight information frequency is followed by
+  that service: "Paris Information, F-HAST, VFR de Lognes vers Pontoise, demande de suivi" is answered with the service's
+  name and a transponder code. The service passes the flight to the next sector when it crosses a limit
+  (Paris Nord 125.700, Sud 126.100, Ouest 129.625; Marseille Nord 124.500, Sud 120.550, the frequencies of the French AIP,
+  GEN 3.4), lets it go when it leaves the area covered (the AIP publishes no flight information frequency for the west and
+  the south-west), and hands it to the destination's approach or tower 15 nm before it. The limits of the sectors are an
+  approximation: the AIP draws them on a chart.
+
 ## 0.14.3 - 2026-10-25
 
 ## 0.14.2 - 2026-10-25

@@ -28,6 +28,13 @@ internal static partial class VfrIntentRules
     /// </summary>
     public static (PilotIntentType Type, double Confidence)? TryMatch(string transcript, AtcSession session)
     {
+        // "Request flight following" asks a flight information service to follow the flight; it is not an
+        // arrival call even though it names a departure and a destination.
+        if (FlightFollowing().IsMatch(transcript))
+        {
+            return (PilotIntentType.RequestFlightFollowing, 0.95);
+        }
+
         bool saysVfr = VfrWord().IsMatch(transcript) || LocalFlight().IsMatch(transcript)
             || MilitaryIntentRules.RegimeIn(transcript) == FlightRules.CamV;
         if (!saysVfr && !session.FlightRules.IsVisual())
@@ -174,6 +181,9 @@ internal static partial class VfrIntentRules
 
         return PhoneticAlphabet.TryGetLetter(token, out char letter) ? char.ToUpperInvariant(letter) : null;
     }
+
+    [GeneratedRegex(@"\b(flight following|vfr following|radar following|flight information service)\b")]
+    private static partial Regex FlightFollowing();
 
     [GeneratedRegex(@"\bvfr\b")]
     private static partial Regex VfrWord();

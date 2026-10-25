@@ -393,6 +393,8 @@ public static class PhraseologyCatalog
             ]),
             PhraseologyStage.VfrCircuit => ("Circuit d'aérodrome VFR",
             [
+                new("En route : suivi VFR", $"Paris Information, {cs}, PA 28, VFR de Lognes vers Pontoise, deux mille cinq cents pieds, demande de suivi.", $"{cs}, Paris Information, suivi accordé, affichez deux deux trois quatre."),
+                new("En route : changer de secteur", $"{cs}, contactez Paris Information cent vingt-cinq décimale sept.", $"Cent vingt-cinq décimale sept, {cs}."),
                 new("Appel d'arrivée", $"Tour, bonjour, {cs}, PA 28, VFR de Melun pour un toucher, mille deux cents pieds, estimé Écho à zéro cinq, information India, demandons consignes d'intégration.", $"{cs}, reçu, rappelez Écho."),
                 new("Au point de report", $"Tour, {cs}, passe Écho.", $"{cs}, entrez vent arrière main gauche piste XX, rappelez vent arrière."),
                 new("Vent arrière", $"Tour, {cs}, vent arrière main gauche piste XX.", $"{cs}, rappelez base main gauche piste XX."),
@@ -485,6 +487,8 @@ public static class PhraseologyCatalog
             ]),
             PhraseologyStage.VfrCircuit => ("VFR aerodrome circuit",
             [
+                new("En route: flight following", $"Paris Information, {cs}, Cessna 172, VFR from Lognes to Pontoise, two thousand five hundred feet, request flight following.", $"{cs}, Paris Information, flight following approved, squawk two three four five."),
+                new("En route: change of sector", $"{cs}, contact Paris Information one two five decimal seven.", $"One two five decimal seven, {cs}."),
                 new("Arrival call", $"Tower, {cs}, Cessna 172, VFR from Melun for touch and go, one thousand two hundred feet, estimating Echo at zero five, information India, request joining instructions.", $"{cs}, roger, report Echo."),
                 new("At the reporting point", $"Tower, {cs}, passing Echo.", $"{cs}, join left-hand downwind runway XX, report downwind."),
                 new("Downwind", $"Tower, {cs}, downwind left hand runway XX.", $"{cs}, report base left hand runway XX."),
