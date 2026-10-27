@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.20.0 - 2026-10-27
+
 ### Added
 
 - **Start StormATC with MSFS**: a box in Settings (Live integrations, "Start with MSFS") that adds StormATC to the
