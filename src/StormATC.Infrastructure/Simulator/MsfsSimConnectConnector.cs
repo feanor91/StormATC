@@ -382,6 +382,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector, ISimu
         ("AMBIENT TEMPERATURE",             "celsius",          SIMCONNECT_DATATYPE.FLOAT64),
         ("WING SPAN",                       "feet",             SIMCONNECT_DATATYPE.FLOAT64),
         ("CIRCUIT COM ON:1",                "bool",             SIMCONNECT_DATATYPE.INT32),
+        ("CAMERA STATE",                    "enum",             SIMCONNECT_DATATYPE.INT32),
     ];
 
     private static readonly (string Variable, string? Unit, SIMCONNECT_DATATYPE Type)[]
@@ -440,6 +441,7 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector, ISimu
         public double AmbientTemperature;
         public double WingSpan;
         public int Com1Circuit;
+        public int CameraState;
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
@@ -1229,8 +1231,8 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector, ISimu
             VerticalSpeedFeetPerMinute = double.IsFinite(raw.VerticalSpeed)
                 ? raw.VerticalSpeed
                 : 0,
-            IsUserInAircraft = IsUserInAircraft(raw.IndicatedAltitude),
-            InSimulatorMenus = !IsUserInAircraft(raw.IndicatedAltitude),
+            IsUserInAircraft = IsUserInAircraft(raw.IndicatedAltitude) && !IsMenuCameraState(raw.CameraState),
+            InSimulatorMenus = !IsUserInAircraft(raw.IndicatedAltitude) || IsMenuCameraState(raw.CameraState),
             IsOnGround = raw.OnGround != 0,
             ParkingBrakeSet = raw.ParkingBrake != 0,
             EnginesRunning = raw.EngineCombustion != 0,
@@ -1286,8 +1288,12 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector, ISimu
                 aircraftState.Transponder.Code);
         }
 
+        _lastAircraftState = aircraftState;
         AircraftStateChanged?.Invoke(this, new AircraftStateChangedEventArgs(aircraftState));
     }
+
+    /// <summary>The last frame of aircraft data, kept to say "menus" when the simulator stops sending frames.</summary>
+    private volatile AircraftState? _lastAircraftState;
 
     private DateTimeOffset _nextTacticalLogAt = DateTimeOffset.MinValue;
 

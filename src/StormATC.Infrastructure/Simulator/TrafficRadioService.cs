@@ -114,8 +114,9 @@ public sealed class TrafficRadioService(
             return;
         }
 
-        // Nobody hears the radio while the simulator is in its menus, nor with the radio switched off.
-        if (sessionContext.CurrentSession.AircraftState.InSimulatorMenus)
+        // Nobody hears the radio while the simulator is in its menus (it then sends no data at all), nor with the
+        // radio switched off.
+        if (sessionContext.CurrentSession.AircraftState.InSimulatorMenus || IsStale(sessionContext.CurrentSession.AircraftState))
         {
             Status = UiText.T("Traffic radio is silent while the simulator is in its menus.");
             return;
@@ -158,19 +159,14 @@ public sealed class TrafficRadioService(
             return;
         }
 
-        // Chatter belongs on a busy regional frequency. On the aerodrome's own ATIS, Ground or
-        // Tower the pilot would hear nobody else's radar contacts, so stay silent there.
-        if (await IsOnOwnAerodromeFrequencyAsync(cancellationToken).ConfigureAwait(false))
-        {
-            Status = UiText.T("Traffic radio is silent: you are on your aerodrome's own frequency.");
-            _nextAllowedAt = now.AddSeconds(10);
-            return;
-        }
-
-        MsfsTrafficSnapshot? traffic = SelectTraffic();
+        // A pilot hears only the aircraft the controller of the tuned frequency works: the traffic of the
+        // flight information sector, or the airborne traffic near an Approach, Departure or Centre frequency
+        // of his aerodromes, or the surface traffic of their Ground and Tower. Anything else is silence.
+        Func<MsfsTrafficSnapshot, bool> heardOnFrequency = await BuildFrequencyFilterAsync(cancellationToken).ConfigureAwait(false);
+        MsfsTrafficSnapshot? traffic = SelectTraffic(heardOnFrequency);
         if (traffic is null)
         {
-            Status = UiText.T("Traffic radio is armed; no suitable nearby aircraft are visible.");
+            Status = UiText.T("Traffic radio is armed; no aircraft is working the frequency you are tuned to.");
             _nextAllowedAt = now.AddSeconds(30);
             return;
         }
@@ -200,7 +196,7 @@ public sealed class TrafficRadioService(
             this,
             new TrafficRadioExchangeEventArgs(exchange, traffic.IsFslTlModel, now));
 
-        if (options.SpeakChatter)
+        if (options.SpeakChatter && CanBeHeard())
         {
             await textToSpeech
                 .SpeakAsync(
@@ -209,7 +205,7 @@ public sealed class TrafficRadioService(
                     cancellationToken)
                 .ConfigureAwait(false);
 
-            if (!radioActivity.UserIsTransmitting)
+            if (!radioActivity.UserIsTransmitting && CanBeHeard())
             {
                 await textToSpeech
                     .SpeakAsync(
@@ -221,46 +217,80 @@ public sealed class TrafficRadioService(
         }
     }
 
-    /// <summary>
-    /// True when COM1 is tuned to a frequency the departure or destination aerodrome publishes:
-    /// ATIS, Delivery, Ground, Tower, Departure, Approach or Centre.
-    /// </summary>
-    private async Task<bool> IsOnOwnAerodromeFrequencyAsync(CancellationToken cancellationToken)
+    /// <summary>True when the simulator has sent no data for a while: it is in a menu, closed, or paused.</summary>
+    private bool IsStale(Domain.Aircraft.AircraftState state) =>
+        clock.UtcNow - state.Timestamp > TimeSpan.FromSeconds(15);
+
+    /// <summary>True while the pilot is in the aircraft with the radio powered: what he would still hear.</summary>
+    private bool CanBeHeard()
     {
-        AtcSession session = sessionContext.CurrentSession;
-        if (session.FlightPlan is not { } plan)
-        {
-            return false;
-        }
-
-        Frequency tuned = session.AircraftState.Radio.ActiveTransmitFrequency;
-        foreach (string icao in new[] { plan.DepartureIcao, plan.DestinationIcao }.Distinct(StringComparer.OrdinalIgnoreCase))
-        {
-            AirportData? airport = await sessionContext.GetAirportAsync(icao, cancellationToken).ConfigureAwait(false);
-            if (airport is null)
-            {
-                continue;
-            }
-
-            AirportFrequencies published = airport.Frequencies;
-            Frequency?[] own =
-            [
-                published.Atis, published.ClearanceDelivery, published.Ground, published.Tower,
-                published.Departure, published.Approach, published.Center,
-            ];
-
-            if (own.Any(frequency => frequency is Frequency candidate && tuned.IsSameChannel(candidate)))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        Domain.Aircraft.AircraftState state = sessionContext.CurrentSession.AircraftState;
+        return !state.InSimulatorMenus && state.Com1Powered && !IsStale(state);
     }
 
-    private MsfsTrafficSnapshot? SelectTraffic() =>
+    /// <summary>How far from an aerodrome the airborne traffic of its Approach, Departure or Centre is, in nautical miles.</summary>
+    private const double ControlledAirspaceMiles = 40;
+
+    /// <summary>How far from an aerodrome the surface traffic of its Ground and Tower is, in nautical miles.</summary>
+    private const double SurfaceMiles = 5;
+
+    /// <summary>
+    /// Builds the test of whether an aircraft is on the frequency COM1 is tuned to. Only the aerodromes of the flight plan
+    /// and the flight information sectors are known, so any other frequency hears nobody.
+    /// </summary>
+    private async Task<Func<MsfsTrafficSnapshot, bool>> BuildFrequencyFilterAsync(CancellationToken cancellationToken)
+    {
+        AtcSession session = sessionContext.CurrentSession;
+        var airports = new List<AirportData>();
+
+        if (session.FlightPlan is { } plan)
+        {
+            foreach (string icao in new[] { plan.DepartureIcao, plan.DestinationIcao }.Distinct(StringComparer.OrdinalIgnoreCase))
+            {
+                if (await sessionContext.GetAirportAsync(icao, cancellationToken).ConfigureAwait(false) is { } airport)
+                {
+                    airports.Add(airport);
+                }
+            }
+        }
+
+        return FrequencyFilter(session.AircraftState.Radio.ActiveTransmitFrequency, airports);
+    }
+
+    /// <summary>The test of whether an aircraft is on the frequency, given the aerodromes the pilot knows.</summary>
+    /// <param name="tuned">The frequency COM1 is tuned to.</param>
+    /// <param name="airports">The departure and destination aerodromes.</param>
+    internal static Func<MsfsTrafficSnapshot, bool> FrequencyFilter(Frequency tuned, IReadOnlyList<AirportData> airports)
+    {
+        FlightInformationSector? sector = FlightInformationRegions.FindByFrequency(tuned);
+        var zones = new List<(GeoPosition Center, double Miles, bool Surface)>();
+
+        foreach (AirportData airport in airports)
+        {
+            AirportFrequencies published = airport.Frequencies;
+            if (Matches(tuned, published.Approach, published.Departure, published.Center))
+            {
+                zones.Add((airport.ReferencePosition, ControlledAirspaceMiles, false));
+            }
+
+            if (Matches(tuned, published.Ground, published.Tower, published.ClearanceDelivery))
+            {
+                zones.Add((airport.ReferencePosition, SurfaceMiles, true));
+            }
+        }
+
+        return contact =>
+            (sector is not null && !contact.IsOnGround && FlightInformationRegions.Find(contact.Position) == sector)
+            || zones.Any(zone => contact.IsOnGround == zone.Surface && contact.Position.IsWithin(zone.Center, zone.Miles));
+    }
+
+    private static bool Matches(Frequency tuned, params Frequency?[] candidates) =>
+        candidates.Any(candidate => candidate is Frequency published && tuned.IsSameChannel(published));
+
+    private MsfsTrafficSnapshot? SelectTraffic(Func<MsfsTrafficSnapshot, bool> heardOnFrequency) =>
         connector.NearbyTraffic
             .Where(contact => contact.GroundSpeedKnots >= 2 || !contact.IsOnGround)
+            .Where(heardOnFrequency)
             .OrderByDescending(contact => contact.IsFslTlModel)
             .ThenBy(contact => string.Equals(
                 NormalizeCallsign(contact),

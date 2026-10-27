@@ -5,6 +5,18 @@ public releases.
 
 ## Unreleased
 
+### Fixed
+
+- **Traffic chatter in the simulator's menus**: the simulator sends no more data in its menus, so the last frame kept saying
+  the pilot was in the aircraft. StormATC now takes the "menus" signal at once when the simulator stops running a flight,
+  reads the camera state (world map, hangar, menu, cinematics, replay), and treats data older than fifteen seconds as
+  silence. Speech already queued is also dropped if the pilot is no longer in the aircraft or the radio has lost power.
+- **Traffic chatter on the wrong frequency**: the chatter is now heard only from the aircraft the tuned frequency works.
+  A flight information frequency (Paris/Marseille Information) hears the airborne traffic of its sector; the Approach,
+  Departure and Centre frequencies of the departure and destination aerodromes hear the airborne traffic within 40 nm of
+  them; their Ground, Tower and Delivery hear the surface traffic within 5 nm. Any other frequency hears nobody. The
+  old rule that kept the aerodrome's own frequencies silent is replaced by this one.
+
 ## 0.21.0 - 2026-10-27
 
 ### Added

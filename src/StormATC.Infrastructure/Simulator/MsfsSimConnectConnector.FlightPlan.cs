@@ -152,6 +152,14 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorFlightPlanEvents
     private bool IsUserInAircraft(double indicatedAltitudeFeet) =>
         Volatile.Read(ref _simRunning) != 0 && indicatedAltitudeFeet > -2000;
 
+    /// <summary>
+    /// True when the camera is on a screen of the simulator rather than on the aircraft: the world map, the hangar, the
+    /// menu and in-game cinematics, a replay. The aircraft can be loaded with real data behind them, so the position alone
+    /// does not tell that the pilot is in it.
+    /// </summary>
+    /// <param name="cameraState">The value of CAMERA STATE.</param>
+    internal static bool IsMenuCameraState(int cameraState) => cameraState is >= 11 and <= 17 or 19;
+
     private void OnReceiveSystemState(SimConnect sender, SIMCONNECT_RECV_SYSTEM_STATE data)
     {
         if ((Requests)data.dwRequestID == Requests.SimState)
@@ -167,6 +175,15 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorFlightPlanEvents
             if (value == 0)
             {
                 _logger.LogInformation("The simulator is not running a flight (menus): ATIS and the radio wait for the aircraft.");
+
+                // The simulator sends no more frames in its menus, so the last one would keep saying the pilot is in the
+                // aircraft. Say it now.
+                if (_lastAircraftState is { } last)
+                {
+                    StormATC.Domain.Aircraft.AircraftState inMenus = last with { Timestamp = DateTimeOffset.UtcNow, InSimulatorMenus = true, IsUserInAircraft = false };
+                    _lastAircraftState = inMenus;
+                    AircraftStateChanged?.Invoke(this, new AircraftStateChangedEventArgs(inMenus));
+                }
             }
             else
             {
