@@ -318,6 +318,9 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         StormATC.Application.Charts.IVacChartUpdater? chartUpdater = null,
         IOptions<StartPositionOptions>? startPositionOptions = null)
     {
+        _launchWithMsfsAvailable = StormATC.Infrastructure.Simulator.MsfsAutoLaunch.IsAvailable();
+        _launchWithMsfs = StormATC.Infrastructure.Simulator.MsfsAutoLaunch.IsEnabled();
+        KeepLaunchWithMsfsPathCurrent();
         _startAtParking = startPositionOptions?.Value.StartAtParking ?? false;
         _coldAndDark = startPositionOptions?.Value.ColdAndDark ?? false;
         _charts = charts;
@@ -927,6 +930,63 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         catch (System.ComponentModel.Win32Exception ex)
         {
             _logger.LogWarning(ex, "Could not open {Address}.", uri);
+        }
+    }
+
+    /// <summary>Whether StormATC starts with the simulator, through the entry it keeps in MSFS's EXE.xml.</summary>
+    [ObservableProperty]
+    private bool _launchWithMsfs;
+
+    /// <summary>False when no EXE.xml was found, so MSFS has not been run on this PC and the option cannot act.</summary>
+    [ObservableProperty]
+    private bool _launchWithMsfsAvailable;
+
+    /// <summary>The result of the last change of the option, shown under it.</summary>
+    [ObservableProperty]
+    private string _launchWithMsfsStatus = string.Empty;
+
+    partial void OnLaunchWithMsfsChanged(bool value)
+    {
+        string? exe = Environment.ProcessPath;
+        if (exe is null)
+        {
+            return;
+        }
+
+        try
+        {
+            int changed = StormATC.Infrastructure.Simulator.MsfsAutoLaunch.Apply(value, exe);
+            LaunchWithMsfsStatus = changed == 0
+                ? string.Empty
+                : value
+                    ? UiText.T("StormATC will start with MSFS from its next launch.")
+                    : UiText.T("StormATC will no longer start with MSFS.");
+        }
+        catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException)
+        {
+            _logger.LogWarning(ex, "The MSFS EXE.xml could not be changed.");
+            LaunchWithMsfsStatus = UiText.T("The MSFS add-on file could not be changed. Close MSFS and try again.");
+        }
+    }
+
+    /// <summary>Keeps the entry in EXE.xml pointing at the running executable, after the program was moved or reinstalled elsewhere.</summary>
+    private void KeepLaunchWithMsfsPathCurrent()
+    {
+        if (!LaunchWithMsfs || Environment.ProcessPath is not { } exe)
+        {
+            return;
+        }
+
+        try
+        {
+            if (!string.Equals(StormATC.Infrastructure.Simulator.MsfsAutoLaunch.EnabledPath(), exe, StringComparison.OrdinalIgnoreCase))
+            {
+                StormATC.Infrastructure.Simulator.MsfsAutoLaunch.Apply(enabled: true, exe);
+            }
+        }
+        catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException)
+        {
+            _logger.LogWarning(ex, "The MSFS EXE.xml could not be updated.");
         }
     }
 

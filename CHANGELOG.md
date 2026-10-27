@@ -5,6 +5,13 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **Start StormATC with MSFS**: a box in Settings (Live integrations, "Start with MSFS") that adds StormATC to the
+  `EXE.xml` file(s) of MSFS 2024 (Microsoft Store and Steam locations), and removes it when unticked. The entries of other
+  add-ons are not touched and a `.stormatc-backup` copy is kept the first time a file is changed. The entry follows the
+  program if it is moved.
+
 ## 0.19.0 - 2026-10-25
 
 ### Added

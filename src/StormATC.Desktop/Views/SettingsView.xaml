@@ -483,6 +483,25 @@
 
             <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
               <StackPanel>
+                <TextBlock Text="Start with MSFS"
+                           Style="{StaticResource SectionHeaderStyle}" />
+                <TextBlock Text="StormATC adds itself to the list of programs MSFS starts with the simulator (its EXE.xml file), and removes itself when you untick the box. The entries of your other add-ons are not touched; a copy of each file is kept the first time it is changed."
+                           Style="{StaticResource SecondaryTextStyle}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,8" />
+                <CheckBox Content="Start StormATC when MSFS starts"
+                          IsChecked="{Binding LaunchWithMsfs}"
+                          IsEnabled="{Binding LaunchWithMsfsAvailable}"
+                          ToolTip="Needs MSFS 2024 to have been run once on this PC, so that its EXE.xml file exists." />
+                <TextBlock Text="{Binding LaunchWithMsfsStatus}"
+                           Style="{StaticResource SecondaryTextStyle}"
+                           TextWrapping="Wrap"
+                           Margin="0,6,0,0" />
+              </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
+              <StackPanel>
                 <TextBlock Text="Start of the flight"
                            Style="{StaticResource SectionHeaderStyle}" />
                 <TextBlock Text="When a flight starts in MSFS with a flight plan, the simulator can put you at the holding point or on the runway. These two options change that. They only act on a flight that has just been loaded, when the aircraft is on the ground and at rest near the departure aerodrome; both move or shut down your aircraft, so they are off by default."
