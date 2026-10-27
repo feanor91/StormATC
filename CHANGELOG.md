@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.21.1 - 2026-10-27
+
 ### Fixed
 
 - **Traffic chatter in the simulator's menus**: the simulator sends no more data in its menus, so the last frame kept saying
