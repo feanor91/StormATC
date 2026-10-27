@@ -493,6 +493,10 @@
                           IsChecked="{Binding LaunchWithMsfs}"
                           IsEnabled="{Binding LaunchWithMsfsAvailable}"
                           ToolTip="Needs MSFS 2024 to have been run once on this PC, so that its EXE.xml file exists." />
+                <CheckBox Content="Close StormATC when MSFS stops"
+                          IsChecked="{Binding CloseWithMsfs}"
+                          ToolTip="StormATC closes about twenty seconds after MSFS has stopped. It only does so once it has seen MSFS running, so a StormATC opened on its own stays open."
+                          Margin="0,8,0,0" />
                 <TextBlock Text="{Binding LaunchWithMsfsStatus}"
                            Style="{StaticResource SecondaryTextStyle}"
                            TextWrapping="Wrap"

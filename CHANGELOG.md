@@ -5,6 +5,12 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **Close StormATC when MSFS stops**: a second box under "Start with MSFS" in Settings. StormATC closes about twenty
+  seconds after MSFS 2024 has stopped, only once it has seen MSFS running (a StormATC opened on its own stays open), and
+  not if MSFS comes back within those twenty seconds.
+
 ## 0.20.0 - 2026-10-27
 
 ### Added

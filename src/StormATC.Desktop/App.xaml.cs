@@ -74,6 +74,7 @@ public partial class App : System.Windows.Application
             // plan activated before any window opens is not missed.
             _host.Services.GetRequiredService<StormATC.Desktop.Services.SimFlightPlanService>();
             _host.Services.GetRequiredService<StormATC.Desktop.Services.StartPositionService>();
+            _host.Services.GetRequiredService<StormATC.Desktop.Services.CloseWithMsfsService>();
 
             _watchdog = new StormATC.Desktop.Services.UiResponsivenessWatchdog(
                 Dispatcher,

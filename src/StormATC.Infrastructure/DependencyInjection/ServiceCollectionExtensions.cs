@@ -156,6 +156,9 @@ public static class ServiceCollectionExtensions
         services.AddOptions<StartPositionOptions>()
             .Bind(configuration.GetSection(StartPositionOptions.SectionName));
 
+        services.AddOptions<SimulatorLifecycleOptions>()
+            .Bind(configuration.GetSection(SimulatorLifecycleOptions.SectionName));
+
         services.AddOptions<ToolbarPanelOptions>()
             .Bind(configuration.GetSection(ToolbarPanelOptions.SectionName))
             .ValidateDataAnnotations();

@@ -30,6 +30,7 @@ public static class DesktopServiceCollectionExtensions
         services.AddSingleton<SimFlightPlanService>();
         services.AddSingleton<ISimRouteReceiver>(sp => sp.GetRequiredService<SimFlightPlanService>());
         services.AddSingleton<StartPositionService>();
+        services.AddSingleton<CloseWithMsfsService>();
         services.AddSingleton<AtisBroadcastService>();
         services.AddSingleton<ApplicationStartupService>();
 

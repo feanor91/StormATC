@@ -316,8 +316,10 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         ILogger<SettingsViewModel> logger,
         StormATC.Application.Charts.IVacChartLibrary? charts = null,
         StormATC.Application.Charts.IVacChartUpdater? chartUpdater = null,
-        IOptions<StartPositionOptions>? startPositionOptions = null)
+        IOptions<StartPositionOptions>? startPositionOptions = null,
+        IOptions<SimulatorLifecycleOptions>? lifecycleOptions = null)
     {
+        _closeWithMsfs = lifecycleOptions?.Value.CloseWithMsfs ?? false;
         _launchWithMsfsAvailable = StormATC.Infrastructure.Simulator.MsfsAutoLaunch.IsAvailable();
         _launchWithMsfs = StormATC.Infrastructure.Simulator.MsfsAutoLaunch.IsEnabled();
         KeepLaunchWithMsfsPathCurrent();
@@ -940,6 +942,29 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     /// <summary>False when no EXE.xml was found, so MSFS has not been run on this PC and the option cannot act.</summary>
     [ObservableProperty]
     private bool _launchWithMsfsAvailable;
+
+    /// <summary>Whether StormATC closes itself a few seconds after MSFS has stopped.</summary>
+    [ObservableProperty]
+    private bool _closeWithMsfs;
+
+    partial void OnCloseWithMsfsChanged(bool value)
+    {
+        _ = SaveCloseWithMsfsAsync(value);
+    }
+
+    private async Task SaveCloseWithMsfsAsync(bool value)
+    {
+        try
+        {
+            await _userSettings
+                .SaveAsync(SimulatorLifecycleOptions.SectionName, nameof(SimulatorLifecycleOptions.CloseWithMsfs), JsonValue.Create(value), CancellationToken.None)
+                .ConfigureAwait(true);
+        }
+        catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException or JsonException)
+        {
+            _logger.LogWarning(ex, "The close-with-MSFS setting could not be saved.");
+        }
+    }
 
     /// <summary>The result of the last change of the option, shown under it.</summary>
     [ObservableProperty]

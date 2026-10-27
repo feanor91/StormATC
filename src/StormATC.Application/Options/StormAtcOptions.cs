@@ -485,6 +485,19 @@ public sealed class StartPositionOptions
     public bool ColdAndDark { get; init; }
 }
 
+/// <summary>What StormATC does when the simulator it works with stops.</summary>
+public sealed class SimulatorLifecycleOptions
+{
+    /// <summary>The configuration section name.</summary>
+    public const string SectionName = "SimulatorLifecycle";
+
+    /// <summary>
+    /// When true, StormATC closes itself some seconds after MSFS has stopped. It only does so once it has seen MSFS
+    /// running, so a StormATC opened on its own stays open. Off by default.
+    /// </summary>
+    public bool CloseWithMsfs { get; init; }
+}
+
 /// <summary>SimBrief import settings.</summary>
 public sealed class SimBriefOptions
 {
