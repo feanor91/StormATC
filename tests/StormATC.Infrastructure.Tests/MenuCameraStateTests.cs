@@ -20,5 +20,5 @@ public class MenuCameraStateTests
     [InlineData(19, true)]
     [InlineData(20, false)]
     public void The_camera_state_tells_a_menu_from_the_aircraft(int cameraState, bool expected) =>
-        Assert.Equal(expected, MsfsSimConnectConnector.IsMenuCameraState(cameraState));
+        Assert.Equal(expected, MsfsCameraState.IsMenu(cameraState));
 }

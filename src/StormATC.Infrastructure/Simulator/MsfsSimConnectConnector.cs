@@ -1231,8 +1231,8 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector, ISimu
             VerticalSpeedFeetPerMinute = double.IsFinite(raw.VerticalSpeed)
                 ? raw.VerticalSpeed
                 : 0,
-            IsUserInAircraft = IsUserInAircraft(raw.IndicatedAltitude) && !IsMenuCameraState(raw.CameraState),
-            InSimulatorMenus = !IsUserInAircraft(raw.IndicatedAltitude) || IsMenuCameraState(raw.CameraState),
+            IsUserInAircraft = IsUserInAircraft(raw.IndicatedAltitude) && !MsfsCameraState.IsMenu(raw.CameraState),
+            InSimulatorMenus = !IsUserInAircraft(raw.IndicatedAltitude) || MsfsCameraState.IsMenu(raw.CameraState),
             IsOnGround = raw.OnGround != 0,
             ParkingBrakeSet = raw.ParkingBrake != 0,
             EnginesRunning = raw.EngineCombustion != 0,
