@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.21.0 - 2026-10-27
+
 ### Added
 
 - **Close StormATC when MSFS stops**: a second box under "Start with MSFS" in Settings. StormATC closes about twenty
