@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.23.0 - 2026-10-30
+
 ### Added
 
 - **Frequencies from the VAC base on the weather card**: type only an ICAO code and the ATIS frequency is filled in when the
