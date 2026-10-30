@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.23.1 - 2026-10-30
+
 ### Fixed
 
 - **The ATIS of the weather card always names a runway**: when the simulator cannot say which runways an aerodrome has (from its
