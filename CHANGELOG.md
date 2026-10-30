@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.22.0 - 2026-10-30
+
 ### Added
 
 - **Weather and ATIS of any aerodrome, from the simulator's menus**: a new card on the Radio page. Type an ICAO code (and,
