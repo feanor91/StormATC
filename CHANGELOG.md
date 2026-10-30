@@ -5,6 +5,15 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **Weather and ATIS of any aerodrome, from the simulator's menus**: a new card on the Radio page. Type an ICAO code (and,
+  if you want, the ATIS frequency) and StormATC fetches the real METAR from aviationweather.gov, shows it as published and
+  decoded line by line (wind, visibility, weather, clouds, temperature, QNH, trend) in English or French, and can read out
+  the ATIS made from it. It needs neither the aircraft nor a flight plan. Only the ICAO code is sent, and only when you
+  click. The weather is the real one, so it can differ from the simulator's own weather once the flight has begun. The
+  departure aerodrome is filled in when a flight plan is loaded.
+
 ## 0.21.2 - 2026-10-27
 
 ## 0.21.1 - 2026-10-27

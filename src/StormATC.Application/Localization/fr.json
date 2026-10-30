@@ -938,5 +938,22 @@
   "The voice could not be set aside. See the Diagnostics page for details.": "La voix n'a pas pu être écartée. Voir la page Diagnostic pour les détails.",
   "Start this flight again each time StormATC opens with the simulator running": "Relancer ce vol à chaque ouverture de StormATC quand le simulateur tourne",
   "Tune the frequencies yourself in the aircraft, starting with {0}: StormATC follows the one you tune.": "Réglez les fréquences vous-même dans l'avion, en commençant par {0} : StormATC suit celle que vous réglez.",
-  "Traffic radio is silent: you are on your aerodrome's own frequency.": "La radio du trafic est muette : vous êtes sur une fréquence de votre aérodrome."
+  "Traffic radio is silent: you are on your aerodrome's own frequency.": "La radio du trafic est muette : vous êtes sur une fréquence de votre aérodrome.",
+  "Type an aerodrome to read its weather and listen to its ATIS, even from the simulator's menus.": "Saisissez un aérodrome pour lire sa météo et écouter son ATIS, même depuis les menus du simulateur.",
+  "That is not a frequency. Use 118.000 to 136.975, for example 127.825.": "Ce n'est pas une fréquence. Utilisez 118.000 à 136.975, par exemple 127.825.",
+  "Fetching the weather…": "Récupération de la météo…",
+  "Enter the four-letter ICAO code of the aerodrome, for example LFPO.": "Saisissez le code OACI à quatre lettres de l'aérodrome, par exemple LFPO.",
+  "The weather service could not be reached. Check your internet connection.": "Le service météo est injoignable. Vérifiez votre connexion internet.",
+  "No METAR is published for {0}.": "Aucun METAR n'est publié pour {0}.",
+  "The report for {0} could not be read.": "Le message de {0} n'a pas pu être lu.",
+  "METAR of {0} from {1}.": "METAR de {0} (source : {1}).",
+  "Weather and ATIS of any aerodrome": "Météo et ATIS de n'importe quel aérodrome",
+  "Works from the simulator's menus. The weather is the real METAR, fetched from the internet when you ask.": "Fonctionne depuis les menus du simulateur. La météo est le METAR réel, récupéré sur internet quand vous le demandez.",
+  "AERODROME (ICAO)": "AÉRODROME (OACI)",
+  "ATIS FREQUENCY (OPTIONAL)": "FRÉQUENCE ATIS (FACULTATIF)",
+  "Read the weather": "Lire la météo",
+  "Listen to the ATIS": "Écouter l'ATIS",
+  "Stop": "Arrêter",
+  "ATIS": "ATIS",
+  "METAR": "METAR"
 }

@@ -71,6 +71,24 @@ public interface IWeatherProvider
     Task<WeatherSnapshot?> GetAirportWeatherAsync(string icao, CancellationToken cancellationToken);
 }
 
+/// <summary>A METAR as the source published it.</summary>
+/// <param name="Raw">The report text.</param>
+/// <param name="Source">Where it came from, for display.</param>
+public sealed record MetarReport(string Raw, string Source);
+
+/// <summary>
+/// Supplies the real METAR of any aerodrome. It is used when the pilot asks for it on the Radio page, so it
+/// works from the simulator's menus, when the simulator can say nothing about that aerodrome's weather.
+/// </summary>
+public interface IMetarProvider
+{
+    /// <summary>Returns the latest report for an aerodrome, or null when there is none.</summary>
+    /// <param name="icao">The aerodrome's ICAO code.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <exception cref="HttpRequestException">The source could not be reached.</exception>
+    Task<MetarReport?> GetLatestAsync(string icao, CancellationToken cancellationToken);
+}
+
 /// <summary>Imports a flight plan from an external planning system.</summary>
 public interface IFlightPlanProvider
 {

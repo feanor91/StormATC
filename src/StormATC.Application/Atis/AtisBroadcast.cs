@@ -86,6 +86,54 @@ public static class AtisBroadcastBuilder
             return null;
         }
 
+        return BuildCore(
+            plan.DepartureIcao,
+            frequency,
+            session.AssignedDepartureRunway ?? plan.DepartureRunway,
+            session.Language,
+            airport,
+            weather,
+            now,
+            edition);
+    }
+
+    /// <summary>
+    /// Builds an edition for any aerodrome, with no flight plan or session behind it: the Radio page uses
+    /// it to let the pilot listen to the ATIS of an aerodrome from the simulator's menus.
+    /// </summary>
+    /// <param name="icao">The aerodrome.</param>
+    /// <param name="frequency">The frequency typed in, or null when none was.</param>
+    /// <param name="language">The language of the wording.</param>
+    /// <param name="airport">The aerodrome's data, when known: its name and runways.</param>
+    /// <param name="weather">The observation the edition is made of.</param>
+    /// <param name="now">The current time.</param>
+    public static AtisBroadcast BuildForAerodrome(
+        string icao,
+        Frequency? frequency,
+        PhraseologyLanguage language,
+        AirportData? airport,
+        WeatherSnapshot? weather,
+        DateTimeOffset now) =>
+        BuildCore(
+            icao,
+            (frequency ?? airport?.Frequencies.Atis).GetValueOrDefault(),
+            null,
+            language,
+            airport,
+            weather,
+            now,
+            GetEditionNumber(now));
+
+    private static AtisBroadcast BuildCore(
+        string icao,
+        Frequency frequency,
+        RunwayIdentifier? plannedRunway,
+        PhraseologyLanguage language,
+        AirportData? airport,
+        WeatherSnapshot? weather,
+        DateTimeOffset now,
+        long edition)
+    {
         DateTimeOffset utc = now.ToUniversalTime();
         long normalizedEdition = Math.Abs(edition % 26);
         char editionLetter = (char)('A' + normalizedEdition);
@@ -93,24 +141,23 @@ public static class AtisBroadcastBuilder
         string timeDigits = utc.ToString("HHmm", CultureInfo.InvariantCulture);
         string airportName = airport?.Name is { Length: > 0 } publishedName
             ? publishedName
-            : PhoneticAlphabet.SpellOut(plan.DepartureIcao);
+            : PhoneticAlphabet.SpellOut(icao);
         string airportDisplayName = airport?.Name is { Length: > 0 } displayName
             ? displayName
-            : plan.DepartureIcao;
+            : icao;
 
         WeatherSnapshot? atisWeather = NormalizeWeather(weather);
         RunwayIdentifier? runway =
-            session.AssignedDepartureRunway
-            ?? plan.DepartureRunway
+            plannedRunway
             ?? airport?.SelectActiveRunway(atisWeather?.WindDirection)?.Identifier;
 
         var spoken = new List<string>();
         var display = new List<string>();
 
-        if (session.Language == PhraseologyLanguage.French)
+        if (language == PhraseologyLanguage.French)
         {
             FrenchAtis.Compose(
-                airport?.Name is { Length: > 0 } ? airport.Name : FrenchSpokenNumbers.SpellOut(plan.DepartureIcao),
+                airport?.Name is { Length: > 0 } ? airport.Name : FrenchSpokenNumbers.SpellOut(icao),
                 airportDisplayName,
                 information,
                 utc,
@@ -135,11 +182,11 @@ public static class AtisBroadcastBuilder
 
         return new AtisBroadcast
         {
-            AirportIcao = plan.DepartureIcao,
+            AirportIcao = icao,
             InformationCode = information,
             EditionNumber = edition,
             OperationalSignature = BuildOperationalSignature(
-                plan,
+                icao,
                 airport,
                 frequency,
                 runway,
@@ -148,7 +195,7 @@ public static class AtisBroadcastBuilder
             SpokenText = string.Join(' ', spoken),
             DisplayText = string.Join(' ', display),
             WeatherSource = weather?.Source,
-            Language = session.Language,
+            Language = language,
         };
     }
 
@@ -245,14 +292,14 @@ public static class AtisBroadcastBuilder
     }
 
     private static string BuildOperationalSignature(
-        FlightPlan plan,
+        string icao,
         AirportData? airport,
         Frequency frequency,
         RunwayIdentifier? runway,
         WeatherSnapshot? weather) =>
         string.Join(
             '|',
-            plan.DepartureIcao.ToUpperInvariant(),
+            icao.ToUpperInvariant(),
             airport?.Name ?? string.Empty,
             frequency.ToDisplay(),
             runway?.ToDisplay() ?? string.Empty,

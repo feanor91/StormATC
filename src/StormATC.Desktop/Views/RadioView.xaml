@@ -167,6 +167,88 @@
                     Command="{Binding ReplayAtisCommand}" />
           </StackPanel>
         </Border>
+
+        <Border Style="{StaticResource CardStyle}">
+          <StackPanel>
+            <TextBlock Text="Weather and ATIS of any aerodrome" Style="{StaticResource SectionHeaderStyle}" />
+            <TextBlock Text="Works from the simulator's menus. The weather is the real METAR, fetched from the internet when you ask."
+                       Style="{StaticResource SecondaryTextStyle}"
+                       TextWrapping="Wrap"
+                       Margin="0,0,0,10" />
+
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="12" />
+                <ColumnDefinition Width="*" />
+              </Grid.ColumnDefinitions>
+              <StackPanel Grid.Column="0">
+                <TextBlock Text="AERODROME (ICAO)" Style="{StaticResource LabelTextStyle}" />
+                <TextBox Text="{Binding ListenIcao, UpdateSourceTrigger=PropertyChanged}"
+                         MaxLength="4"
+                         CharacterCasing="Upper" />
+              </StackPanel>
+              <StackPanel Grid.Column="2">
+                <TextBlock Text="ATIS FREQUENCY (OPTIONAL)" Style="{StaticResource LabelTextStyle}" />
+                <TextBox Text="{Binding ListenFrequency, UpdateSourceTrigger=PropertyChanged}" />
+              </StackPanel>
+            </Grid>
+
+            <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+              <Button Content="Read the weather"
+                      Style="{StaticResource BaseButtonStyle}"
+                      Command="{Binding ReadWeatherCommand}"
+                      Margin="0,0,8,0" />
+              <Button Content="Listen to the ATIS"
+                      Style="{StaticResource BaseButtonStyle}"
+                      Command="{Binding ListenToAtisCommand}"
+                      Margin="0,0,8,0" />
+              <Button Content="Stop"
+                      Style="{StaticResource BaseButtonStyle}"
+                      Command="{Binding StopListeningCommand}" />
+            </StackPanel>
+
+            <Border Background="{StaticResource SurfaceElevatedBrush}"
+                    CornerRadius="8"
+                    Padding="12,9"
+                    Margin="0,12,0,0">
+              <TextBlock Text="{Binding BriefingStatus}"
+                         Style="{StaticResource SecondaryTextStyle}"
+                         TextWrapping="Wrap" />
+            </Border>
+
+            <TextBlock Text="METAR" Style="{StaticResource LabelTextStyle}" Margin="0,12,0,0"
+                       Visibility="{Binding BriefingMetar, Converter={StaticResource StringToVisibility}}" />
+            <TextBlock Text="{Binding BriefingMetar}"
+                       FontFamily="Consolas"
+                       Style="{StaticResource BodyTextStyle}"
+                       TextWrapping="Wrap"
+                       Visibility="{Binding BriefingMetar, Converter={StaticResource StringToVisibility}}" />
+
+            <ItemsControl ItemsSource="{Binding BriefingLines}" Margin="0,8,0,0">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <Grid Margin="0,2">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="110" />
+                      <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="{Binding Label}" Style="{StaticResource SecondaryTextStyle}" />
+                    <TextBlock Grid.Column="1" Text="{Binding Value}" Style="{StaticResource BodyTextStyle}"
+                               TextWrapping="Wrap" />
+                  </Grid>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock Text="ATIS" Style="{StaticResource LabelTextStyle}" Margin="0,12,0,0"
+                       Visibility="{Binding BriefingAtisText, Converter={StaticResource StringToVisibility}}" />
+            <TextBlock Text="{Binding BriefingAtisText}"
+                       Style="{StaticResource BodyTextStyle}"
+                       TextWrapping="Wrap"
+                       Visibility="{Binding BriefingAtisText, Converter={StaticResource StringToVisibility}}" />
+          </StackPanel>
+        </Border>
       </StackPanel>
 
       <StackPanel Grid.Column="2">

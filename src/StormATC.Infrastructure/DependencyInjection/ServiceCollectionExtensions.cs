@@ -119,6 +119,11 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IToolbarPanelStateSource, SessionToolbarPanelStateSource>();
         services.AddSingleton<IVacChartLibrary, VacChartLibrary>();
         services.AddSingleton(TimeProvider.System);
+        services.AddHttpClient<IMetarProvider, Weather.AviationWeatherMetarProvider>(client =>
+        {
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("StormATC (flight simulation)");
+        });
+        services.AddSingleton<StormATC.Application.Weather.AirportBriefingService>();
         services.AddHttpClient<IVacChartUpdater, Charts.SiaVacChartUpdater>(client =>
         {
             client.Timeout = TimeSpan.FromSeconds(90);

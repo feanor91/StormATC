@@ -8,6 +8,7 @@ using StormATC.Application.Atis;
 using StormATC.Application.Localization;
 using StormATC.Application.Options;
 using StormATC.Application.Sessions;
+using StormATC.Application.Weather;
 using StormATC.Desktop.Services;
 using StormATC.Domain;
 using StormATC.Domain.Airports;
@@ -39,8 +40,28 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
     private readonly AtisBroadcastService _atisBroadcastService;
     private readonly UserSettingsService _userSettings;
     private readonly AudioOptions _audioOptions;
+    private readonly AirportBriefingService _briefingService;
 
     private bool _disposed;
+
+    [ObservableProperty]
+    private string _listenIcao = string.Empty;
+
+    [ObservableProperty]
+    private string _listenFrequency = string.Empty;
+
+    [ObservableProperty]
+    private string _briefingStatus = UiText.T(
+        "Type an aerodrome to read its weather and listen to its ATIS, even from the simulator's menus.");
+
+    [ObservableProperty]
+    private string _briefingMetar = string.Empty;
+
+    [ObservableProperty]
+    private string _briefingAtisText = string.Empty;
+
+    [ObservableProperty]
+    private bool _isReadingBriefing;
 
     [ObservableProperty]
     private string _sessionFrequency = "—";
@@ -111,8 +132,10 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
         ITextToSpeechService textToSpeech,
         AtisBroadcastService atisBroadcastService,
         UserSettingsService userSettings,
-        IOptions<AudioOptions> audioOptions)
+        IOptions<AudioOptions> audioOptions,
+        AirportBriefingService briefingService)
     {
+        _briefingService = briefingService ?? throw new ArgumentNullException(nameof(briefingService));
         _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
         _mockSimulator = mockSimulator ?? throw new ArgumentNullException(nameof(mockSimulator));
         _simulatorRouter = simulatorRouter ?? throw new ArgumentNullException(nameof(simulatorRouter));
@@ -141,6 +164,9 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
     /// <summary>Every published frequency at the departure aerodrome.</summary>
     public ObservableCollection<FrequencyEntry> AvailableFrequencies { get; }
 
+    /// <summary>The report of the typed aerodrome, line by line.</summary>
+    public ObservableCollection<MetarLine> BriefingLines { get; } = [];
+
     /// <summary>The push-to-talk key, shown so the binding is discoverable.</summary>
     public string PushToTalkKey => _audioOptions.PushToTalkKey;
 
@@ -158,6 +184,90 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
     {
         UpdateFromSession(_sessionContext.CurrentSession);
         await LoadFrequenciesAsync().ConfigureAwait(true);
+
+        // The aerodrome the pilot is about to leave is the one they most likely want to read.
+        if (string.IsNullOrEmpty(ListenIcao)
+            && _sessionContext.CurrentSession.FlightPlan?.DepartureIcao is { Length: > 0 } departure)
+        {
+            ListenIcao = departure;
+        }
+    }
+
+    /// <summary>Fetches the METAR of the typed aerodrome and decodes it.</summary>
+    [RelayCommand]
+    private Task ReadWeatherAsync() => LoadBriefingAsync(speak: false);
+
+    /// <summary>Reads out the ATIS of the typed aerodrome, made from its current METAR.</summary>
+    [RelayCommand]
+    private Task ListenToAtisAsync() => LoadBriefingAsync(speak: true);
+
+    /// <summary>Stops the ATIS being read out.</summary>
+    [RelayCommand]
+    private async Task StopListeningAsync() =>
+        await _textToSpeech.StopAsync(CancellationToken.None).ConfigureAwait(true);
+
+    private async Task LoadBriefingAsync(bool speak)
+    {
+        Frequency? frequency = null;
+        if (ListenFrequency.Trim() is { Length: > 0 } typed)
+        {
+            if (!decimal.TryParse(
+                    typed.Replace(',', '.'),
+                    System.Globalization.NumberStyles.Number,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    out decimal megahertz)
+                || !Frequency.TryFromMegahertz(megahertz, out Frequency parsed))
+            {
+                BriefingStatus = UiText.T("That is not a frequency. Use 118.000 to 136.975, for example 127.825.");
+                return;
+            }
+
+            frequency = parsed;
+        }
+
+        IsReadingBriefing = true;
+        BriefingStatus = UiText.T("Fetching the weather…");
+        try
+        {
+            AirportBriefing briefing = await _briefingService
+                .GetAsync(
+                    ListenIcao,
+                    frequency,
+                    _sessionContext.CurrentSession.Language,
+                    CancellationToken.None)
+                .ConfigureAwait(true);
+
+            ListenIcao = briefing.Icao;
+            BriefingStatus = briefing.Message;
+            BriefingMetar = briefing.RawMetar ?? string.Empty;
+            BriefingLines.Clear();
+            foreach (MetarLine line in briefing.Lines)
+            {
+                BriefingLines.Add(line);
+            }
+
+            BriefingAtisText = briefing.Atis?.DisplayText ?? string.Empty;
+
+            if (speak && briefing.Atis is { } atis)
+            {
+                bool played = await _textToSpeech
+                    .SpeakCachedAsync(
+                        $"manual-atis:{atis.AirportIcao}:{atis.SpokenText.GetHashCode(StringComparison.Ordinal)}",
+                        atis.SpokenText,
+                        VoiceConfiguration.For(atis.Language),
+                        CancellationToken.None)
+                    .ConfigureAwait(true);
+                if (!played)
+                {
+                    BriefingStatus = UiText.T(
+                        "ATIS text is ready, but voice audio is unavailable. Check Deepgram, mute, and cloud settings.");
+                }
+            }
+        }
+        finally
+        {
+            IsReadingBriefing = false;
+        }
     }
 
     /// <summary>Tunes the mock aircraft's COM1 to a published frequency.</summary>
