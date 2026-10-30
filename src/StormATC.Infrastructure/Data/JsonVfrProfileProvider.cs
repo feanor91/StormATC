@@ -16,8 +16,10 @@ namespace StormATC.Infrastructure.Data;
 /// </remarks>
 public sealed class JsonVfrProfileProvider(
     IStoragePaths storagePaths,
-    ILogger<JsonVfrProfileProvider> logger) : IVfrProfileProvider
+    ILogger<JsonVfrProfileProvider> logger) : IVfrProfileProvider, IVfrProfileDirectory
 {
+    private IReadOnlyList<VfrAerodromeProfile>? _all;
+
     private static readonly JsonDocumentOptions DocumentOptions = new()
     {
         CommentHandling = JsonCommentHandling.Skip,
@@ -62,6 +64,51 @@ public sealed class JsonVfrProfileProvider(
             logger.LogError(ex, "The VFR profile of {Icao} is invalid and was not loaded.", icao);
             return null;
         }
+    }
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyList<VfrAerodromeProfile>> ListProfilesAsync(CancellationToken cancellationToken)
+    {
+        if (_all is not null)
+        {
+            return _all;
+        }
+
+        // The pilot's folder is read last so that its profiles replace the bundled ones.
+        var byIcao = new Dictionary<string, VfrAerodromeProfile>(StringComparer.OrdinalIgnoreCase);
+        foreach (string directory in new[]
+        {
+            Path.Combine(storagePaths.DataDirectory, "vfr-profiles"),
+            Path.Combine(storagePaths.ApplicationDataDirectory, "vfr-profiles"),
+        })
+        {
+            if (!Directory.Exists(directory))
+            {
+                continue;
+            }
+
+            foreach (string file in Directory.EnumerateFiles(directory, "*.json"))
+            {
+                try
+                {
+                    await using FileStream stream = File.OpenRead(file);
+                    using JsonDocument document = await JsonDocument
+                        .ParseAsync(stream, DocumentOptions, cancellationToken)
+                        .ConfigureAwait(false);
+                    if (Parse(document.RootElement) is { } profile)
+                    {
+                        byIcao[profile.Icao] = profile;
+                    }
+                }
+                catch (Exception ex) when (ex is JsonException or IOException or InvalidOperationException)
+                {
+                    logger.LogError(ex, "The VFR profile {File} is invalid and was skipped.", file);
+                }
+            }
+        }
+
+        _all = [.. byIcao.Values];
+        return _all;
     }
 
     /// <summary>Reads a profile document. Only the fields the engine uses are taken.</summary>

@@ -5,6 +5,13 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **Frequencies from the VAC base on the weather card**: type only an ICAO code and the ATIS frequency is filled in when the
+  chart prints one (52 aerodromes of the 426 in the base), and the aerodrome's frequencies are listed under its weather. Type
+  only a frequency and StormATC finds the aerodrome and the service that uses it; a frequency several aerodromes share (an
+  air-to-air one) says so and asks for the ICAO code.
+
 ## 0.22.0 - 2026-10-30
 
 ### Added

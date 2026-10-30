@@ -78,7 +78,9 @@ public static class ServiceCollectionExtensions
         // --- Data providers -----------------------------------------------------------------
         services.AddSingleton<JsonAirportDataProvider>();
         services.AddSingleton<IAirportDataProvider, MsfsAirportDataProvider>();
-        services.AddSingleton<IVfrProfileProvider, JsonVfrProfileProvider>();
+        services.AddSingleton<JsonVfrProfileProvider>();
+        services.AddSingleton<IVfrProfileProvider>(sp => sp.GetRequiredService<JsonVfrProfileProvider>());
+        services.AddSingleton<IVfrProfileDirectory>(sp => sp.GetRequiredService<JsonVfrProfileProvider>());
         services.AddSingleton<IAirspaceDataProvider, JsonAirspaceDataProvider>();
         services.AddSingleton<IHazardAreaProvider, JsonHazardAreaProvider>();
         services.AddSingleton<MockTrafficProvider>();

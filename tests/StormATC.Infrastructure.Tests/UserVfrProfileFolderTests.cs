@@ -74,3 +74,59 @@ public sealed class UserVfrProfileFolderTests : IDisposable
         Assert.Null(await Provider().GetProfileAsync("LFXX", CancellationToken.None));
     }
 }
+
+/// <summary>The directory of every VFR profile, used to find an aerodrome from a frequency.</summary>
+public sealed class VfrProfileDirectoryTests : IDisposable
+{
+    private readonly string _root = Path.Combine(Path.GetTempPath(), "stormatc-directory-" + Guid.NewGuid().ToString("N"));
+
+    public VfrProfileDirectoryTests()
+    {
+        Directory.CreateDirectory(Path.Combine(_root, "data", "vfr-profiles"));
+        Directory.CreateDirectory(Path.Combine(_root, "appdata", "vfr-profiles"));
+    }
+
+    public void Dispose() => Directory.Delete(_root, recursive: true);
+
+    private sealed class Paths(string root) : IStoragePaths
+    {
+        public string ApplicationDataDirectory => Path.Combine(root, "appdata");
+
+        public string DatabasePath => Path.Combine(root, "test.db");
+
+        public string LogDirectory => root;
+
+        public string FlightPlanCacheDirectory => root;
+
+        public string PromptDirectory => root;
+
+        public string DataDirectory => Path.Combine(root, "data");
+
+        public void EnsureCreated()
+        {
+        }
+    }
+
+    [Fact]
+    public async Task Every_profile_is_listed_and_the_users_own_replaces_the_bundled_one()
+    {
+        File.WriteAllText(
+            Path.Combine(_root, "data", "vfr-profiles", "LFAT.json"),
+            """{ "icao": "LFAT", "name": "Bundled", "frequencies": { "atis": 123.13 } }""");
+        File.WriteAllText(
+            Path.Combine(_root, "data", "vfr-profiles", "LFAB.json"),
+            """{ "icao": "LFAB", "name": "Dieppe", "frequencies": { "airAir": 119.005 } }""");
+        File.WriteAllText(
+            Path.Combine(_root, "appdata", "vfr-profiles", "LFAT.json"),
+            """{ "icao": "LFAT", "name": "Mine", "frequencies": { "atis": 124.5 } }""");
+
+        var provider = new JsonVfrProfileProvider(new Paths(_root), NullLogger<JsonVfrProfileProvider>.Instance);
+        IReadOnlyList<VfrAerodromeProfile> all = await provider.ListProfilesAsync(CancellationToken.None);
+
+        Assert.Equal(["LFAB", "LFAT"], all.Select(p => p.Icao).Order());
+        Assert.Equal("Mine", all.Single(p => p.Icao == "LFAT").Name);
+        Assert.Equal(
+            "ATIS 124.500",
+            StormATC.Application.Weather.AerodromeFrequencyLookup.Summarize(all.Single(p => p.Icao == "LFAT")));
+    }
+}

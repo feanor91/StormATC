@@ -25,6 +25,9 @@ public sealed record AirportBriefing
     /// <summary>The report line by line, in plain words.</summary>
     public IReadOnlyList<MetarLine> Lines { get; init; } = [];
 
+    /// <summary>The frequency the ATIS is on: the one typed, or the one the chart prints.</summary>
+    public Frequency? Frequency { get; init; }
+
     /// <summary>The ATIS made from the report, or null when there is no report to make it from.</summary>
     public AtisBroadcast? Atis { get; init; }
 
@@ -42,12 +45,16 @@ public sealed record AirportBriefing
 /// </remarks>
 public sealed class AirportBriefingService(
     IMetarProvider metarProvider,
+    IVfrProfileDirectory profileDirectory,
     AtcSessionContext sessionContext,
     IClock clock,
     ILogger<AirportBriefingService> logger)
 {
     private readonly IMetarProvider _metarProvider =
         metarProvider ?? throw new ArgumentNullException(nameof(metarProvider));
+
+    private readonly IVfrProfileDirectory _profileDirectory =
+        profileDirectory ?? throw new ArgumentNullException(nameof(profileDirectory));
 
     private readonly AtcSessionContext _sessionContext =
         sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
@@ -74,6 +81,35 @@ public sealed class AirportBriefingService(
         CancellationToken cancellationToken)
     {
         string code = (icao ?? string.Empty).Trim().ToUpperInvariant();
+        IReadOnlyList<VfrAerodromeProfile> profiles = await _profileDirectory
+            .ListProfilesAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        // Only a frequency was typed: the charts say which aerodrome uses it.
+        string? found = null;
+        if (code.Length == 0 && frequency is Frequency typed)
+        {
+            IReadOnlyList<AerodromeFrequencyMatch> matches = AerodromeFrequencyLookup.FindByFrequency(profiles, typed);
+            List<AerodromeFrequencyMatch> atisMatches = [.. matches.Where(m => m.Service == AerodromeFrequencyLookup.AtisService)];
+            IReadOnlyList<AerodromeFrequencyMatch> single = atisMatches.Count == 1 ? atisMatches : matches;
+            if (single.Count != 1)
+            {
+                return new AirportBriefing
+                {
+                    Icao = code,
+                    Message = matches.Count == 0
+                        ? UiText.T($"No aerodrome of the VAC base uses {typed.ToDisplay()}. Type its ICAO code.")
+                        : UiText.T(
+                            $"{typed.ToDisplay()} is shared by {matches.Count} aerodromes, for example "
+                            + $"{string.Join(", ", matches.Take(4).Select(m => m.Icao))}. Type the ICAO code."),
+                };
+            }
+
+            code = single[0].Icao;
+            found = UiText.T(
+                $"Frequency {typed.ToDisplay()} is the {single[0].Service} service of {single[0].Name} ({code}).");
+        }
+
         if (!IsValidIcao(code))
         {
             return new AirportBriefing
@@ -82,6 +118,9 @@ public sealed class AirportBriefingService(
                 Message = UiText.T("Enter the four-letter ICAO code of the aerodrome, for example LFPO."),
             };
         }
+
+        VfrAerodromeProfile? profile = profiles.FirstOrDefault(p => p.Icao == code);
+        frequency ??= AerodromeFrequencyLookup.AtisOf(profile);
 
         MetarReport? report;
         try
@@ -124,14 +163,24 @@ public sealed class AirportBriefingService(
             metar.ToWeatherSnapshot(report.Source),
             _clock.UtcNow);
 
+        var lines = new List<MetarLine>(MetarDescriber.Describe(metar, language));
+        if (profile is { Frequencies.Count: > 0 })
+        {
+            lines.Add(new MetarLine(
+                language == PhraseologyLanguage.French ? "Fréquences" : "Frequencies",
+                AerodromeFrequencyLookup.Summarize(profile)));
+        }
+
+        string message = UiText.T($"METAR of {code} from {report.Source}.");
         return new AirportBriefing
         {
             Icao = code,
             RawMetar = metar.Raw,
             Source = report.Source,
-            Lines = MetarDescriber.Describe(metar, language),
+            Lines = lines,
+            Frequency = frequency,
             Atis = atis,
-            Message = UiText.T($"METAR of {code} from {report.Source}."),
+            Message = found is null ? message : $"{found} {message}",
         };
     }
 }

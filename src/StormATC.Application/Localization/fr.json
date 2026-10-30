@@ -955,5 +955,8 @@
   "Listen to the ATIS": "Écouter l'ATIS",
   "Stop": "Arrêter",
   "ATIS": "ATIS",
-  "METAR": "METAR"
+  "METAR": "METAR",
+  "Frequency {0} is the {1} service of {2} ({3}).": "La fréquence {0} est celle du service {1} de {2} ({3}).",
+  "No aerodrome of the VAC base uses {0}. Type its ICAO code.": "Aucun aérodrome de la base VAC n'utilise {0}. Saisissez son code OACI.",
+  "{0} is shared by {1} aerodromes, for example {2}. Type the ICAO code.": "{0} est partagée par {1} aérodromes, par exemple {2}. Saisissez le code OACI."
 }

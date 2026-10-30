@@ -238,6 +238,11 @@ public sealed partial class RadioViewModel : ObservableObject, IRefreshablePage,
                 .ConfigureAwait(true);
 
             ListenIcao = briefing.Icao;
+            if (briefing.Frequency is Frequency resolved)
+            {
+                ListenFrequency = resolved.ToDisplay();
+            }
+
             BriefingStatus = briefing.Message;
             BriefingMetar = briefing.RawMetar ?? string.Empty;
             BriefingLines.Clear();

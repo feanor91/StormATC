@@ -26,6 +26,14 @@ public interface IVfrProfileProvider
     Task<VfrAerodromeProfile?> GetProfileAsync(string icao, CancellationToken cancellationToken);
 }
 
+/// <summary>Lists every VFR profile known, so an aerodrome can be found from one of its frequencies.</summary>
+public interface IVfrProfileDirectory
+{
+    /// <summary>Returns every profile, the pilot's own ones replacing the bundled ones.</summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    Task<IReadOnlyList<VfrAerodromeProfile>> ListProfilesAsync(CancellationToken cancellationToken);
+}
+
 /// <summary>Supplies en-route sector definitions.</summary>
 public interface IAirspaceDataProvider
 {
