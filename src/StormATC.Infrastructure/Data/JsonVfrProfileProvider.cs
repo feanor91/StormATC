@@ -187,8 +187,24 @@ public sealed class JsonVfrProfileProvider(
             }
         }
 
+        var runways = new List<VfrRunwayDirection>();
+        if (root.TryGetProperty("runways", out JsonElement runwayList) && runwayList.ValueKind == JsonValueKind.Array)
+        {
+            foreach (JsonElement runway in runwayList.EnumerateArray())
+            {
+                AddRunway(runways, runway);
+            }
+        }
+
+        double? variation = root.TryGetProperty("magneticVariationDegrees", out JsonElement variationElement)
+            && variationElement.ValueKind == JsonValueKind.Number
+                ? variationElement.GetDouble()
+                : null;
+
         return new VfrAerodromeProfile
         {
+            Runways = runways,
+            MagneticVariationDegrees = variation,
             Frequencies = listed,
             ServiceKind = serviceKind,
             AirAirFrequency = airAir,
@@ -199,6 +215,31 @@ public sealed class JsonVfrProfileProvider(
             PreferredQfu = Integer(root, "preferredQfu"),
             CircuitSideBearing = sideBearing,
         };
+    }
+
+    /// <summary>A runway written as <c>{ "id": "13/31", "qfu": [126, 306] }</c>: one designator per heading.</summary>
+    private static void AddRunway(List<VfrRunwayDirection> into, JsonElement runway)
+    {
+        if (!runway.TryGetProperty("id", out JsonElement idElement) || idElement.GetString() is not { } id
+            || !runway.TryGetProperty("qfu", out JsonElement qfuElement) || qfuElement.ValueKind != JsonValueKind.Array)
+        {
+            return;
+        }
+
+        string[] designators = id.Split('/', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+        int[] headings = [.. qfuElement.EnumerateArray().Where(q => q.ValueKind == JsonValueKind.Number).Select(q => q.GetInt32())];
+        if (designators.Length != headings.Length)
+        {
+            return;
+        }
+
+        for (int i = 0; i < designators.Length; i++)
+        {
+            if (RunwayIdentifier.TryCreate(designators[i], out RunwayIdentifier identifier))
+            {
+                into.Add(new VfrRunwayDirection(identifier, headings[i]));
+            }
+        }
     }
 
     /// <summary>A frequency written as a number or as <c>{ "mhz": 122.1, "remark": "..." }</c>.</summary>

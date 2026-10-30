@@ -71,6 +71,22 @@ public class AirportBriefingTests
     }
 
     [Fact]
+    public void The_atis_names_the_runway_it_is_given_when_the_aerodrome_data_has_none()
+    {
+        AtisBroadcast atis = AtisBroadcastBuilder.BuildForAerodrome(
+            "LFAB",
+            frequency: null,
+            PhraseologyLanguage.English,
+            airport: null,
+            Decoded().ToWeatherSnapshot("test"),
+            Now,
+            RunwayIdentifier.Create("31"));
+
+        Assert.Contains("Runway in use 31", atis.DisplayText);
+        Assert.DoesNotContain("unavailable", atis.DisplayText);
+    }
+
+    [Fact]
     public void The_atis_can_be_made_in_french_with_no_flight_plan_and_no_frequency()
     {
         AtisBroadcast atis = AtisBroadcastBuilder.BuildForAerodrome(

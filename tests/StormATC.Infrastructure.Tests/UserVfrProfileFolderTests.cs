@@ -115,7 +115,7 @@ public sealed class VfrProfileDirectoryTests : IDisposable
             """{ "icao": "LFAT", "name": "Bundled", "frequencies": { "atis": 123.13 } }""");
         File.WriteAllText(
             Path.Combine(_root, "data", "vfr-profiles", "LFAB.json"),
-            """{ "icao": "LFAB", "name": "Dieppe", "frequencies": { "airAir": 119.005 } }""");
+            """{ "icao": "LFAB", "name": "Dieppe", "magneticVariationDegrees": 1.0, "runways": [ { "id": "13/31", "qfu": [126, 306] } ], "frequencies": { "airAir": 119.005 } }""");
         File.WriteAllText(
             Path.Combine(_root, "appdata", "vfr-profiles", "LFAT.json"),
             """{ "icao": "LFAT", "name": "Mine", "frequencies": { "atis": 124.5 } }""");
@@ -124,6 +124,11 @@ public sealed class VfrProfileDirectoryTests : IDisposable
         IReadOnlyList<VfrAerodromeProfile> all = await provider.ListProfilesAsync(CancellationToken.None);
 
         Assert.Equal(["LFAB", "LFAT"], all.Select(p => p.Icao).Order());
+        VfrAerodromeProfile dieppe = all.Single(p => p.Icao == "LFAB");
+        Assert.Equal(
+            [("13", 126), ("31", 306)],
+            dieppe.Runways.Select(r => (r.Identifier.ToDisplay(), r.QfuDegrees)));
+        Assert.Equal(1.0, dieppe.MagneticVariationDegrees);
         Assert.Equal("Mine", all.Single(p => p.Icao == "LFAT").Name);
         Assert.Equal(
             "ATIS 124.500",

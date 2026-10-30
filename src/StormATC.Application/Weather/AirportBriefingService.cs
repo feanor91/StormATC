@@ -155,13 +155,20 @@ public sealed class AirportBriefingService(
             .GetAirportAsync(code, cancellationToken)
             .ConfigureAwait(false);
 
+        // An ATIS always names a runway. The simulator's data comes first; from the menus it may be absent, and then the
+        // runways printed on the chart are used.
+        RunwayIdentifier? runway = airport is { Runways.Count: > 0 }
+            ? null
+            : profile?.SelectRunway(metar.WindDirectionDegrees, metar.WindSpeedKnots);
+
         AtisBroadcast atis = AtisBroadcastBuilder.BuildForAerodrome(
             code,
             frequency,
             language,
             airport,
             metar.ToWeatherSnapshot(report.Source),
-            _clock.UtcNow);
+            _clock.UtcNow,
+            runway);
 
         var lines = new List<MetarLine>(MetarDescriber.Describe(metar, language));
         if (profile is { Frequencies.Count: > 0 })

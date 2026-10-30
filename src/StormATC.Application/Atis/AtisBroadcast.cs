@@ -107,17 +107,19 @@ public static class AtisBroadcastBuilder
     /// <param name="airport">The aerodrome's data, when known: its name and runways.</param>
     /// <param name="weather">The observation the edition is made of.</param>
     /// <param name="now">The current time.</param>
+    /// <param name="runway">The runway to announce, when the caller knows better than the aerodrome data.</param>
     public static AtisBroadcast BuildForAerodrome(
         string icao,
         Frequency? frequency,
         PhraseologyLanguage language,
         AirportData? airport,
         WeatherSnapshot? weather,
-        DateTimeOffset now) =>
+        DateTimeOffset now,
+        RunwayIdentifier? runway = null) =>
         BuildCore(
             icao,
             (frequency ?? airport?.Frequencies.Atis).GetValueOrDefault(),
-            null,
+            runway,
             language,
             airport,
             weather,

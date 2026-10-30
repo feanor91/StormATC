@@ -38,6 +38,11 @@ public sealed record VfrReportingPoint(string Name, string SpokenFrench, string 
 /// <param name="Remark">What the aerodrome says about it (transit, recovery, particular…), or empty.</param>
 public sealed record AerodromeFrequency(string Service, Frequency Frequency, string Remark);
 
+/// <summary>One direction of a runway as the chart prints it.</summary>
+/// <param name="Identifier">The designator, such as <c>13</c> or <c>31R</c>.</param>
+/// <param name="QfuDegrees">The magnetic heading of that direction.</param>
+public sealed record VfrRunwayDirection(RunwayIdentifier Identifier, int QfuDegrees);
+
 public sealed record VfrAerodromeProfile
 {
     /// <summary>The ICAO code.</summary>
@@ -72,6 +77,42 @@ public sealed record VfrAerodromeProfile
 
     /// <summary>The circuit height in feet above mean sea level, when published.</summary>
     public int? CircuitHeightFeetAmsl { get; init; }
+
+    /// <summary>Every runway direction the chart prints, each with its magnetic heading.</summary>
+    public IReadOnlyList<VfrRunwayDirection> Runways { get; init; } = [];
+
+    /// <summary>The magnetic variation in degrees, positive east, when the profile gives it.</summary>
+    public double? MagneticVariationDegrees { get; init; }
+
+    /// <summary>
+    /// The runway direction to use: the one most into the wind, or the preferred one (otherwise the first listed) when
+    /// the wind is light or not known. This is what a controller would pick with no other constraint: it is not the
+    /// runway really in use.
+    /// </summary>
+    /// <param name="windFromDegreesTrue">Where the wind blows from, in degrees true as a METAR gives it.</param>
+    /// <param name="windSpeedKnots">The wind speed.</param>
+    public RunwayIdentifier? SelectRunway(int? windFromDegreesTrue, int? windSpeedKnots)
+    {
+        if (Runways.Count == 0)
+        {
+            return null;
+        }
+
+        if (windFromDegreesTrue is int from && windSpeedKnots is > LightWindKnots)
+        {
+            double magnetic = from - (MagneticVariationDegrees ?? 0);
+            return Runways
+                .MaxBy(r => Math.Cos((magnetic - r.QfuDegrees) * Math.PI / 180))!
+                .Identifier;
+        }
+
+        VfrRunwayDirection? preferred = PreferredQfu is int qfu
+            ? Runways.FirstOrDefault(r => r.QfuDegrees == qfu)
+            : null;
+        return (preferred ?? Runways[0]).Identifier;
+    }
+
+    private const int LightWindKnots = 3;
 
     /// <summary>The runway direction preferred when the wind allows either, in degrees magnetic.</summary>
     public int? PreferredQfu { get; init; }

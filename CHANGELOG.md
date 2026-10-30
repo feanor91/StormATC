@@ -5,6 +5,13 @@ public releases.
 
 ## Unreleased
 
+### Fixed
+
+- **The ATIS of the weather card always names a runway**: when the simulator cannot say which runways an aerodrome has (from its
+  menus), the runways printed on the VAC chart are used: the one most into the wind (the METAR wind is turned from true to
+  magnetic), or the preferred direction when the wind is light or not reported. Only the 36 profiles with no runway on
+  their chart still say the runway is unavailable.
+
 ## 0.23.0 - 2026-10-30
 
 ### Added
