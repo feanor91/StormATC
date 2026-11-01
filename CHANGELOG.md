@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.27.1 - 2026-11-01
+
 ### Changed
 
 - **The Map tab now shows NavVFR's own base map**: the same tiles as NavVFR (light grey, CARTO, relief or streets, whichever
