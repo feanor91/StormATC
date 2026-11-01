@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.28.1 - 2026-11-01
+
 ### Removed
 
 - **"Start at a parking stand" and "Start cold and dark"** (Settings > "Start of the flight"): both options, the code that
