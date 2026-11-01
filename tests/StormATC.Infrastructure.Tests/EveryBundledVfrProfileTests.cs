@@ -70,6 +70,19 @@ public sealed class EveryBundledVfrProfileTests
             }
         }
 
+        // The French of the procedures has the same tree as the English: nothing in "fr" may lack its English twin.
+        if (french.ValueKind == JsonValueKind.Object)
+        {
+            foreach (string part in new[] { "circuit", "withAts", "withoutAts" })
+            {
+                if (french.TryGetProperty(part, out JsonElement frenchPart))
+                {
+                    Assert.True(root.TryGetProperty(part, out JsonElement englishPart), $"{icao}: fr.{part} has no English twin.");
+                    AssertSameTree(icao + "." + part, englishPart, frenchPart);
+                }
+            }
+        }
+
         if (french.ValueKind == JsonValueKind.Object && french.TryGetProperty("reportingPoints", out JsonElement frenchPoints)
             && root.TryGetProperty("reportingPoints", out JsonElement englishPoints))
         {
@@ -136,6 +149,32 @@ public sealed class EveryBundledVfrProfileTests
                     distance <= MaximumPointDistanceNauticalMiles,
                     $"{icao}: the reporting point {name} lies {distance:F0} NM from the aerodrome; check its coordinates.");
             }
+        }
+    }
+
+    private static void AssertSameTree(string where, JsonElement english, JsonElement french)
+    {
+        if (french.ValueKind == JsonValueKind.Object)
+        {
+            Assert.Equal(JsonValueKind.Object, english.ValueKind);
+            foreach (JsonProperty property in french.EnumerateObject())
+            {
+                Assert.True(english.TryGetProperty(property.Name, out JsonElement twin), $"{where}.{property.Name} is not in the English.");
+                AssertSameTree(where + "." + property.Name, twin, property.Value);
+            }
+        }
+        else if (french.ValueKind == JsonValueKind.Array)
+        {
+            Assert.Equal(JsonValueKind.Array, english.ValueKind);
+            Assert.True(french.GetArrayLength() <= english.GetArrayLength(), $"{where}: longer than the English.");
+            for (int i = 0; i < french.GetArrayLength(); i++)
+            {
+                AssertSameTree($"{where}[{i}]", english[i], french[i]);
+            }
+        }
+        else
+        {
+            Assert.Equal(JsonValueKind.String, french.ValueKind);
         }
     }
 

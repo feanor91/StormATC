@@ -6,7 +6,8 @@
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "No circuit height or circuit side is printed on this chart, so none is recorded. The chart is titled ALBERT BRAY.",
     "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
-    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio.",
+    "The French of \"circuit\", \"withAts\" and \"withoutAts\" is in \"fr\": same tree as the English, text values only, written by hand from the French column of the chart where it was read, and translated from the English text otherwise; point and runway identifiers are repeated unchanged."
   ],
   "icao": "LFAQ",
   "name": "International Amiens Henry Potez",
@@ -14,7 +15,7 @@
     "publication": "AIP France AD 2 LFAQ",
     "chartDate": "2025-05-15",
     "extraction": "manual, from the chart text and images",
-    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
+    "frenchExtraction": "French column of the chart text read by script for the notes; procedures written in French by hand"
   },
   "referencePosition": {
     "latitude": 49.97,
@@ -151,6 +152,11 @@
       "",
       "",
       ""
-    ]
+    ],
+    "withAts": {
+      "radio": {
+        "arrival": "arrivées et transits dans la CTR : premier contact avec ALBERT TWR au moins 3 minutes avant d'entrer dans la CTR"
+      }
+    }
   }
 }

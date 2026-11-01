@@ -5,6 +5,13 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **French of the structured procedures**: the 23 profiles that have `circuit`, `withAts` or `withoutAts` (the 16 read by hand
+  before and the 7 large aerodromes) now carry their French in `fr.circuit`, `fr.withAts` and `fr.withoutAts`: same tree as
+  the English, text values only, identifiers (points, runways) repeated unchanged. Written from the French column of the chart
+  where it was read, translated from the English otherwise. A test checks that nothing in `fr` lacks its English twin.
+
 ## 0.28.5 - 2026-11-01
 
 ### Fixed

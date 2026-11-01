@@ -5,7 +5,8 @@
     "were first extracted automatically from the chart text; the reporting points, rules and notes were added by hand.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "The circuit side is not printed on this chart, so none is recorded. No reporting points are printed on this chart.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded.",
+    "The French of \"circuit\", \"withAts\" and \"withoutAts\" is in \"fr\": same tree as the English, text values only, written by hand from the French column of the chart where it was read, and translated from the English text otherwise; point and runway identifiers are repeated unchanged."
   ],
   "icao": "LFEB",
   "name": "Dinan - Trélivan",
@@ -13,7 +14,7 @@
     "publication": "AIP France AD 2 LFEB",
     "chartDate": "2026-02-19",
     "extraction": "manual, from the chart text and images",
-    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
+    "frenchExtraction": "French column of the chart text read by script for the notes; procedures written in French by hand"
   },
   "referencePosition": {
     "latitude": 48.44333,
@@ -70,6 +71,15 @@
       "",
       "",
       ""
-    ]
+    ],
+    "circuit": {
+      "lowHeight": "vols d'entraînement uniquement, avec instructeur à bord : 300 ft AAL minimum",
+      "restrictions": "tours de piste des aéronefs non basés uniquement de 0900 à 1100 et de 1300 à 1700 (été : 1 h plus tôt) ; aéronefs à voilure tournante : 1000 ft ASFC minimum"
+    },
+    "withoutAts": {
+      "departures": {
+        "note": "QFU 070 : virer au plus tard à la verticale de l'hippodrome. QFU 250 : poursuivre dans l'axe pour éviter le survol de Trélivan."
+      }
+    }
   }
 }

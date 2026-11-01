@@ -7,7 +7,8 @@
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded.",
     "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
-    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio.",
+    "The French of \"circuit\", \"withAts\" and \"withoutAts\" is in \"fr\": same tree as the English, text values only, written by hand from the French column of the chart where it was read, and translated from the English text otherwise; point and runway identifiers are repeated unchanged."
   ],
   "icao": "LFBD",
   "name": "Bordeaux - Mérignac",
@@ -15,7 +16,7 @@
     "publication": "AIP France AD 2 LFBD",
     "chartDate": "2026-09-03",
     "extraction": "chart text, table and English column read by script, procedures structured by hand",
-    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
+    "frenchExtraction": "French column of the chart text read by script for the notes; procedures written in French by hand"
   },
   "referencePosition": {
     "latitude": 44.82861,
@@ -222,6 +223,51 @@
       "Activité parachutage N°312 : voir AIP ENR 5.5 Activités AEM N° 9011, 9026, 9380 et 9497 : voir AIP ENR 5.5 Activité treuillage de vol libre N°905 : voir AIP ENR 5.5 Procédures et consignes particulières",
       "",
       ""
-    ]
+    ],
+    "withAts": {
+      "arrivals": [
+        {
+          "note": "les aéronefs à destination de LFBD et évoluant en espace aérien non contrôlé doivent contacter MERIGNAC TWR 3 minutes avant le survol des points d'entrée"
+        },
+        {
+          "note": "transit dans le SIV Aquitaine : le service d'information de vol rendu sur la fréquence Aquitaine Information aux aéronefs évoluant en VFR à l'intérieur des espaces de classe E et G peut être interrompu sans préavis ; dans ce cas, tout transit en espace de classe D doit faire l'objet d'une demande de clairance sur les fréquences Aquitaine Approche, secteur BW 129.880 ou secteur BE 119.275"
+        },
+        {
+          "note": "dégagement par la piste inactive : considéré effectif dès que l'ACFT a dépassé le chemin de péril animalier ; il est soumis à l'autorisation du contrôle et interdit de nuit ou de jour par RVR inférieure à 800 m"
+        }
+      ],
+      "departures": [
+        {
+          "note": "pour les vols vers le sud-ouest, en raison de la présence de la TMA 1.1 dont le plancher est à 1000 ft AMSL, le point de sortie par défaut est le point S ; la sortie par SW est possible sur demande et autorisation du contrôle uniquement, à l'altitude donnée par le contrôle"
+        },
+        {
+          "note": "l'attention des pilotes est attirée sur la proximité de la zone LF P 5 du Barp ; il est nécessaire d'adapter la navigation en conséquence"
+        }
+      ],
+      "routes": {
+        "use": "sauf clairance particulière du contrôle, ces itinéraires sont suivis en situation de VFR spécial et en VMC dans le cadre du respect de l'environnement ; ils sont à double sens, utilisables pour les départs, les arrivées et les transits",
+        "altitudeNote": "sauf clairance particulière, une altitude de survol de 1500 ft AMSL sera respectée sur tous les itinéraires (excepté la sortie par SW, voir la procédure de départ)",
+        "legend": "-- VIS ≥ 1500 m ; == VIS ≥ 3000 m",
+        "tracks": [
+          {
+            "runway": "23/05",
+            "tracks": "NA -- NW; NA == N; NA == NE; SA -- SW; SA -- S; SA == SE"
+          },
+          {
+            "runway": "29",
+            "tracks": "EA -- N; EA == NE; SA -- SW; SA -- S; SA == SE"
+          },
+          {
+            "runway": "11",
+            "tracks": "EA -- N; EA == NE; OA -- SW; OA == S"
+          }
+        ]
+      },
+      "nightVfr": "contact radio obligatoire avec Aquitaine Approche avant de pénétrer en espace D",
+      "radio": {
+        "failureOnArrival": "si la panne survient avant d'avoir reçu l'autorisation de pénétrer en CTR, l'aéronef ne devra pas y pénétrer ; à l'intérieur de la CTR, avant d'avoir reçu la clairance d'entrée dans le circuit de piste : sortir de la CTR par l'itinéraire VFR le plus approprié ; après avoir reçu la clairance d'entrée dans le circuit de piste : poursuivre son atterrissage comme indiqué dans la clairance",
+        "failureOnDeparture": "avant décollage : ne pas décoller ; après décollage : quitter la CTR en respectant la dernière clairance (itinéraire et altitude)"
+      }
+    }
   }
 }

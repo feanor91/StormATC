@@ -6,14 +6,16 @@
     "simulator at run time; this file holds what the simulator does not know: services, circuit",
     "rules and reporting points. Flight simulation only: never use for real navigation.",
     "The circuit side was read off the landing chart drawing, not from a text, and is worth a second look.",
-    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio.",
+    "The French of \"circuit\", \"withAts\" and \"withoutAts\" is in \"fr\": same tree as the English, text values only, written by hand from the French column of the chart where it was read, and translated from the English text otherwise; point and runway identifiers are repeated unchanged."
   ],
   "icao": "LFPL",
   "name": "Lognes-Émerainville",
   "source": {
     "publication": "AIP France AD 2 LFPL",
     "amendment": "AMDT 03/26",
-    "effective": "2026-02-19"
+    "effective": "2026-02-19",
+    "frenchExtraction": "French column of the chart text read by script for the notes; procedures written in French by hand"
   },
   "referencePosition": {
     "latitude": 48.82194,
@@ -177,5 +179,66 @@
       "floor": "SFC",
       "ceilingFeetAmsl": 2000
     }
-  ]
+  ],
+  "fr": {
+    "circuit": {
+      "sideOfRunways": "nord",
+      "handNote": "le circuit est au nord des pistes : main gauche pour la piste 08 et main droite pour la piste 26 (lu sur la carte d'atterrissage, AD 2 LFPL ATT 01)",
+      "lowHeight": "uniquement avec instructeur à bord, dans le sens publié, après autorisation de l'ATS",
+      "restrictedWeekendsAndHolidays": "samedi, dimanche et jours fériés : circuits réservés aux aéronefs basés ou autorisés par l'ATS",
+      "landmark": {
+        "description": "damier rouge et blanc sur le toit d'un bâtiment en forme de H",
+        "use": "survoler en étape de base piste 08 ou en vent traversier piste 26"
+      }
+    },
+    "withAts": {
+      "arrivals": [
+        {
+          "from": "Est",
+          "instruction": "contacter la tour au moins 2 minutes avant le point E, à 1200 ft AMSL",
+          "via": "E"
+        },
+        {
+          "from": [
+            "Sud-Est",
+            "Sud"
+          ]
+        },
+        {
+          "note": "piste 08 en service : éviter d'arriver par le sud-est, pour rester à l'écart de la montée initiale"
+        }
+      ],
+      "arrivalUnlessImpossible": "feux de circuit allumés et vitesse inférieure à 100 kt",
+      "departures": [
+        {
+          "runway": "08",
+          "note": "en quittant le circuit 08, ne pas gêner la trajectoire d'arrivée par E"
+        },
+        {
+          "runway": "26",
+          "note": "l'atteindre avant la mi-vent arrière si possible"
+        },
+        {
+          "note": "ne pas gêner la trajectoire d'arrivée par E"
+        }
+      ],
+      "radio": {
+        "arrival": "une fois la piste dégagée, contacter directement Lognes Sol",
+        "departure": "au point d'attente, sur clairance de Sol, attendre et écouter la fréquence de la tour jusqu'à l'appel de Lognes Tour"
+      }
+    },
+    "withoutAts": {
+      "arrivals": {
+        "contactBefore": "à la verticale des installations ou intégration dans le circuit de piste",
+        "enterFrom": [
+          "Est",
+          "Sud"
+        ]
+      },
+      "departures": {
+        "runway26": "monter dans le circuit jusqu'à 1500 ft avant la mi-vent arrière si possible",
+        "afterHalfDownwind": "rejoindre la verticale de l'aérodrome pour un départ au cap magnétique 120"
+      }
+    }
+  }
 }

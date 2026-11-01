@@ -7,7 +7,8 @@
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded.",
     "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
-    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio.",
+    "The French of \"circuit\", \"withAts\" and \"withoutAts\" is in \"fr\": same tree as the English, text values only, written by hand from the French column of the chart where it was read, and translated from the English text otherwise; point and runway identifiers are repeated unchanged."
   ],
   "icao": "LFRS",
   "name": "Nantes Atlantique",
@@ -15,7 +16,7 @@
     "publication": "AIP France AD 2 LFRS",
     "chartDate": "2026-07-09",
     "extraction": "chart text, table and English column read by script, procedures structured by hand",
-    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
+    "frenchExtraction": "French column of the chart text read by script for the notes; procedures written in French by hand"
   },
   "referencePosition": {
     "latitude": 47.15694,
@@ -239,6 +240,35 @@
       "Activité de voltige (N° 6380) 12 km à l'Ouest de l'AD ; activités sur RD 723 ; 1700 ft AMSL / FL 055.",
       "Activité réservée aux usagers autorisés par AVA.",
       ""
-    ]
+    ],
+    "circuit": {
+      "trainingPatterns": "ACFT < 5,7 t : interdits 2230-0600 locale, hauteur minimale 1000 ft AAL ; ACFT ≥ 5,7 t : interdits LUN-VEN 1200-1400 locale et 1800-0800 locale, SAM, DIM et JF, hauteur minimale 1500 ft AAL ; les vols d'entraînement de maniabilité sur l'AD en VFR sont soumis à autorisation préalable du contrôle ; pour les ACFT ≥ 5,7 t, les demandes sont faites auprès de la subdivision contrôle du SNA Ouest par mail (sna-o-e-ct-ld@aviation-civile.gouv.fr), sur PPR 72 HR",
+      "lowHeight": "uniquement pour vols d'entraînement en VFR, avec instructeur et sur autorisation du contrôle ; ACFT < 5,7 t : hauteur minimale 500 ft AAL ; ACFT ≥ 5,7 t : hauteur minimale 800 ft AAL ; RWY 03 : circuit main gauche uniquement ; RWY 21 : circuit main droite uniquement ; limités à un seul appareil à la fois",
+      "restrictions": "plate-forme sensible au bruit : compte tenu de l'environnement, respecter les circuits publiés dans la mesure du possible ; les circuits Est ne sont possibles que sur autorisation du contrôle"
+    },
+    "withAts": {
+      "arrivals": [
+        {
+          "note": "premier contact sur NANTES Information 130.275"
+        },
+        {
+          "note": "l'autorisation de pénétrer dans l'espace de classe D sera demandée 5 minutes au moins avant l'arrivée aux points d'entrée, sauf autorisation ou instructions particulières ; points NE, E, SW, W et NW : 1500 ft AMSL"
+        },
+        {
+          "note": "sur demande du pilote et autorisation du contrôle, des itinéraires différents de ceux publiés sur la carte APP 01 pourront être suivis ; en cas de clairance de route directe vers l'AD, le survol de l'agglomération nantaise sera systématiquement évité ; approche à vue : voir atlas IAC page AD 2 LFRS ENV 01"
+        },
+        {
+          "note": "le stationnement dans les zones d'aviation de loisir et d'aviation générale se fait en autoguidage ; à l'intérieur des aires de trafic, la position de stationnement est au choix du pilote en fonction de la place disponible ; la surveillance du maintien des marges de sécurité lors de la manœuvre de stationnement relève de la responsabilité du pilote"
+        }
+      ],
+      "departures": [
+        {
+          "note": "au premier contact avec la TWR, préciser le point de sortie demandé ; points NE, E, SW, W et NW : 1000 ft AMSL ; sur demande du pilote et autorisation du contrôle, des itinéraires différents de ceux publiés sur carte APP 01 pourront être suivis, mais le survol de l'agglomération nantaise sera systématiquement évité"
+        }
+      ],
+      "transit": "premier contact sur NANTES Information 130.275 ; les points E1, E2, E3 et W1, W2, W3, W4 publiés sur la carte APP 01 peuvent être imposés en tant que points de reports par le contrôle ; possibilité de perte de contact radio aux limites Est du SIV en dessous de 2500 ft",
+      "specialVfr": "en cas de trafic IFR dans la CTR, VFR spécial non autorisé",
+      "nightVfr": "avions de tous types : le QFU 028° est recommandé jusqu'à un vent arrière de 5 kt, sauf si l'état de la piste rend son utilisation impossible"
+    }
   }
 }

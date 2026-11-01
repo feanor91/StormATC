@@ -7,7 +7,8 @@
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded.",
     "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
-    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio.",
+    "The French of \"circuit\", \"withAts\" and \"withoutAts\" is in \"fr\": same tree as the English, text values only, written by hand from the French column of the chart where it was read, and translated from the English text otherwise; point and runway identifiers are repeated unchanged."
   ],
   "icao": "LFKJ",
   "name": "Ajaccio Napoléon Bonaparte",
@@ -15,7 +16,7 @@
     "publication": "AIP France AD 2 LFKJ",
     "chartDate": "2026-01-22",
     "extraction": "chart text, table and English column read by script, procedures structured by hand",
-    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
+    "frenchExtraction": "French column of the chart text read by script for the notes; procedures written in French by hand"
   },
   "referencePosition": {
     "latitude": 41.92361,
@@ -254,6 +255,47 @@
       "Conditions météo : Visi > 5 km - Plafond > 5000 ft.",
       "AEM (N° 9621) : 300 AAL ; activité autorisée selon le protocole applicable aux associations.",
       "Information des usagers sur ATIS ou FREQ ATC."
-    ]
+    ],
+    "circuit": {
+      "lowHeight": "500 ft AMSL ; vols d'entraînement avec un instructeur uniquement ; vent arrière à l'est de la piste ; piste 20 : utiliser comme point de visée les marques de point cible et non les marques de seuil décalé",
+      "restrictions": "phare d'atterrissage obligatoire dans la CTR"
+    },
+    "withAts": {
+      "arrivals": [
+        {
+          "note": "traversée maritime continent / Ajaccio : il est recommandé aux aéronefs en provenance de LONSU de conduire leur vol pour atteindre ou passer NW à 2000 ft AMSL ; en traversée maritime, la trajectoire obligatoire arrivée / départ est NW <---> W"
+        },
+        {
+          "transit": "W <-> SA",
+          "note": "sauf clairance contraire, altitude préconisée 2000 ft AMSL MAX ; sens W --> SA : altitude préférentielle 2000 AMSL ; sens SA --> W : altitude préférentielle 1500 AMSL"
+        },
+        {
+          "transit": "N <-> SC <-> SEA",
+          "note": "sauf clairance contraire, niveaux de vol préconisés au-dessus du FL 055 ; sens N --> SEA : FL 075 préférentiel ; sens SEA --> N : FL 065 préférentiel"
+        },
+        {
+          "note": "itinéraires de départ et d'arrivée des autres vols : vers le nord WA <---> W <---> NW ; vers le sud SB <---> SA <---> S ; altitude minimale 3000 ft AMSL ; VIS supérieure ou égale à 5 km sous FL100 ; sur demande du pilote et après clairance accordée, le pilote responsable du franchissement des obstacles peut déroger au suivi de ces itinéraires"
+        }
+      ],
+      "departures": [
+        {
+          "runway": "02",
+          "note": "TKOF 02 et LDG manqués RWY 02 : monter dans l'axe de piste, atteindre 1000 ft AMSL MNM au plus tard 2 NM après le DTHR RWY 20, puis virer à gauche en poursuivant la montée"
+        }
+      ],
+      "waiting": "attente possible en vol à SA et W entre 3000 ft et 5000 ft pour éviter interférence avec vol IFR",
+      "specialVfr": "en présence d'aéronefs IFR dans la CTR : VIS 3000 m - plafond 1000 ft AAL",
+      "nightVfr": {
+        "restrictions": "atterrissage RWY 20 interdit ; activité interdite si le feu de danger Mont Sant'Angelo est hors service ; les vols locaux sont limités à 1 seul aéronef maximum",
+        "circuit": "à l'ouest de la 02/20, altitude 1500 AMSL",
+        "flightInTheCtr": "hauteur de la base des nuages supérieure ou égale à 3500 ft AAL ; VIS supérieure ou égale à 5 km ; altitude minimale 3000 ft AMSL",
+        "helicopters": "FATO non utilisable de nuit : atterrissages/décollages sur piste obligatoires ; minima VFRs de nuit : VIS 4000 m et plafond 1000 ft AAL pour hélicoptères sur itinéraire SB-SA et WA-W sans présence d'IFR dans la CTR ni autre VFRs hélicoptère (attente possible) ; VFR spécial de nuit hélicoptères : attente possible en présence d'aéronefs IFR dans la CTR"
+      },
+      "radio": {
+        "failure": "si possible, utiliser un téléphone portable pour appeler la tour au (+33) 4 95 23 59 60",
+        "failureOnArrival": "avant d'avoir reçu la clairance de pénétrer dans l'espace D : ne pas pénétrer ; après avoir reçu la clairance de pénétrer dans la CTR : suivre la dernière clairance, ne pas interférer avec la piste 02/20, se conformer aux signaux optiques ; tenter d'appeler le chef de tour : 04 95 20 11 95 (numéro d'urgence uniquement)",
+        "failureOnDeparture": "avant TKOF : annuler le départ et retourner au PRKG ; après TKOF : faire demi-tour, rejoindre la vent-arrière de la piste en service, ne pas interférer avec la piste 02/20, se conformer aux signaux optiques"
+      }
+    }
   }
 }

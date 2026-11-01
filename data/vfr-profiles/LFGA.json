@@ -5,7 +5,8 @@
     "were first extracted automatically from the chart text; the reporting points, rules and notes were added by hand.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "No reporting points, circuit height or circuit side are printed on this chart, so none is recorded.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded.",
+    "The French of \"circuit\", \"withAts\" and \"withoutAts\" is in \"fr\": same tree as the English, text values only, written by hand from the French column of the chart where it was read, and translated from the English text otherwise; point and runway identifiers are repeated unchanged."
   ],
   "icao": "LFGA",
   "name": "Colmar - Houssen",
@@ -13,7 +14,7 @@
     "publication": "AIP France AD 2 LFGA",
     "chartDate": "2026-08-06",
     "extraction": "manual, from the chart text and images",
-    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
+    "frenchExtraction": "French column of the chart text read by script for the notes; procedures written in French by hand"
   },
   "referencePosition": {
     "latitude": 48.11028,
@@ -86,6 +87,9 @@
       "Panne de radiocommunication Appliquer la règlementation nationale et si possible, utiliser le téléphone portable pour contacter la TWR.",
       "",
       ""
-    ]
+    ],
+    "circuit": {
+      "lowHeight": "circuits basse hauteur sur PPR auprès de COLMAR TWR : circuits ouest 300 ft AAL minimum, circuits est 500 ft AAL minimum"
+    }
   }
 }

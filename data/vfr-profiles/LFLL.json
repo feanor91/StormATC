@@ -7,7 +7,8 @@
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded.",
     "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
-    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio.",
+    "The French of \"circuit\", \"withAts\" and \"withoutAts\" is in \"fr\": same tree as the English, text values only, written by hand from the French column of the chart where it was read, and translated from the English text otherwise; point and runway identifiers are repeated unchanged."
   ],
   "icao": "LFLL",
   "name": "Lyon-Saint-Exupéry",
@@ -15,7 +16,7 @@
     "publication": "AIP France AD 2 LFLL",
     "chartDate": "2025-03-20",
     "extraction": "chart text, table and English column read by script, procedures structured by hand",
-    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
+    "frenchExtraction": "French column of the chart text read by script for the notes; procedures written in French by hand"
   },
   "referencePosition": {
     "latitude": 45.72556,
@@ -210,6 +211,39 @@
       "PAPI 35L : pour les avions avec une hauteur oeil/roue supérieure à 12 mètres, la marge de franchissement du seuil est inférieure à 6 mètres.",
       "",
       "LYON SAINT EXUPERY Équipement de surveillance du trafic : AD équipé d'un radar secondaire (voir AD 1.0)."
-    ]
+    ],
+    "withAts": {
+      "arrivals": [
+        {
+          "transit": "sens Ouest-Est",
+          "note": "une autorisation explicite de SAINT EX TWR doit être obtenue pour transiter dans la CTR Saint Exupéry ; à défaut, une attente est effectuée sur MS qui constitue un point de clairance limite ; si le contact ne peut être établi avec SAINT EX TWR, le pilote contacte à nouveau BRON TWR pour instructions ; une autorisation explicite de SAINT EX TWR doit être obtenue pour croiser les axes des pistes, à défaut une attente est exécutée à l'Ouest de TW"
+        },
+        {
+          "transit": "sens Est-Ouest",
+          "note": "une autorisation explicite de SAINT EX TWR doit être obtenue pour croiser les axes des pistes ; à défaut, une attente est exécutée à l'Est de TE"
+        },
+        {
+          "note": "en cas de mise en attente, les pilotes, en VFR ou VFR spécial, veillent à assurer leur propre espacement vis-à-vis de la présence éventuelle d'autres aéronefs VFR qui seraient amenés à effectuer la même manœuvre"
+        },
+        {
+          "note": "à l'arrivée, les aéronefs contactent la fréquence assignée par la tour de contrôle qui leur indique les éventuelles consignes et informations pour rejoindre leur poste de stationnement ; seule l'information des aéronefs en mouvement connus de la tour de contrôle peut être fournie ; les postes de stationnement sont attribués par le gestionnaire et cette information est relayée par la tour de contrôle"
+        }
+      ],
+      "departures": [
+        {
+          "note": "au départ et préalablement à tous déplacements, les aéronefs doivent obligatoirement contacter la fréquence « SAINT EXUPERY Prévol » ; la tour de contrôle organise la séquence de roulage pour l'entrée sur l'aire de manœuvre"
+        }
+      ],
+      "routes": "cheminements VFR dans les espaces de classe C et D : il est recommandé à tous les aéronefs de transiter phares allumés ; des conditions particulières d'utilisation de certains itinéraires pourront être précisées par NOTAM ; l'altitude de 2000 ft est susceptible d'être imposée sur tous les cheminements VFR publiés sur les volets VAC",
+      "nightVfr": {
+        "departure": "départ : monter verticale aérodrome à l'altitude minimale du tronçon à emprunter",
+        "arrival": "arrivée : l'altitude du segment utilisé sera maintenue jusqu'à être en vue et dans les 5 NM de l'AD, puis rejoindre le circuit"
+      },
+      "radio": {
+        "failureInTransit": "si la panne intervient avant d'avoir reçu l'autorisation de pénétrer dans l'espace de classe C ou D, ne pas y pénétrer ; si la panne intervient après avoir été autorisé à pénétrer dans l'espace de classe C ou D, quitter la TMA pour repasser le plus rapidement possible en espace de classe G, sans couper les axes de pistes de ST EXUPERY",
+        "failureOnArrival": "si la panne intervient avant d'avoir reçu l'autorisation de pénétrer dans la CTR, ne pas y pénétrer, quitter la TMA pour repasser le plus rapidement possible en espace de classe G ; après avoir été autorisé à pénétrer dans la CTR, quitter la CTR par l'itinéraire le plus approprié sans couper les axes de pistes de ST EXUPERY ; ne pas pénétrer dans la CTR de LYON BRON à l'ouest",
+        "failureOnDeparture": "maintenir une altitude inférieure à 2500 ft et quitter la CTR, sans pénétrer dans la CTR de LYON BRON à l'ouest"
+      }
+    }
   }
 }

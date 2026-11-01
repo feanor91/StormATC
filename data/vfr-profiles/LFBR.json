@@ -6,7 +6,8 @@
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "No circuit height or circuit side is printed on this chart, so none is recorded.",
     "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
-    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio.",
+    "The French of \"circuit\", \"withAts\" and \"withoutAts\" is in \"fr\": same tree as the English, text values only, written by hand from the French column of the chart where it was read, and translated from the English text otherwise; point and runway identifiers are repeated unchanged."
   ],
   "icao": "LFBR",
   "name": "Muret - Lherm",
@@ -14,7 +15,7 @@
     "publication": "AIP France AD 2 LFBR",
     "chartDate": "2026-10-01",
     "extraction": "manual, from the chart text and images",
-    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
+    "frenchExtraction": "French column of the chart text read by script for the notes; procedures written in French by hand"
   },
   "referencePosition": {
     "latitude": 43.44917,
@@ -127,6 +128,15 @@
       "",
       "",
       ""
-    ]
+    ],
+    "circuit": {
+      "restrictions": "circuit avion interdit en dessous de 500 ft AAL",
+      "overheadTransit": "intégration des ULM dans le circuit : passer à la verticale de l'aérodrome, au-dessus du circuit avion, sauf clairance de l'ATC ; un seul ULM dans le circuit, hors arrivées et départs"
+    },
+    "withAts": {
+      "radio": {
+        "arrival": "RMZ (procédure et circuit d'aérodrome), active pendant les horaires publiés de MURET TWR : contact radio avec MURET TWR obligatoire 5 minutes avant d'y entrer"
+      }
+    }
   }
 }

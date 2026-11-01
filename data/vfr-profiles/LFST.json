@@ -7,7 +7,8 @@
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded.",
     "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
-    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio.",
+    "The French of \"circuit\", \"withAts\" and \"withoutAts\" is in \"fr\": same tree as the English, text values only, written by hand from the French column of the chart where it was read, and translated from the English text otherwise; point and runway identifiers are repeated unchanged."
   ],
   "icao": "LFST",
   "name": "Strasbourg-Entzheim",
@@ -15,7 +16,7 @@
     "publication": "AIP France AD 2 LFST",
     "chartDate": "2025-06-12",
     "extraction": "chart text, table and English column read by script, procedures structured by hand",
-    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
+    "frenchExtraction": "French column of the chart text read by script for the notes; procedures written in French by hand"
   },
   "referencePosition": {
     "latitude": 48.54194,
@@ -235,6 +236,47 @@
       "HEL équipés de roues : tous les mouvements doivent se faire au roulage au sol entre les TWY K, M, N, Q et le poste désigné et vice versa.",
       "Équipement de surveillance des trafics : aérodrome équipé d'un radar primaire et secondaire.",
       ""
-    ]
+    ],
+    "circuit": {
+      "trainingPatterns": "les vols d'entraînement des ACFT en régime IFR ou VFR sont interdits tous les jours entre 2100 et 0700 (été : -1 HR) ; les vols d'entraînement en régime IFR ou VFR sont interdits pour les ACFT d'un poids supérieur à 6 tonnes les SAM après 1500, les DIM et jours fériés (y compris jours fériés en droit local) (été : -1 HR) ; en dehors de ces interdictions, tous les vols d'entraînement sont soumis à l'autorisation préalable du chef de quart de la tour (TEL : 03 88 59 63 13) pour les ACFT en régime IFR de moins de 6 tonnes, de l'exploitant de l'AD pour les ACFT d'un poids de 6 tonnes ou plus"
+    },
+    "withAts": {
+      "arrivals": [
+        {
+          "note": "la clairance de pénétration dans la CTR est demandée à STRASBOURG TWR 2 min avant d'y entrer ; sauf clairance contraire, les ACFT suivront les itinéraires suivants"
+        },
+        {
+          "from": "provenance de l'EST ou du SUD",
+          "route": "E - EB - EA"
+        },
+        {
+          "from": "provenance de l'OUEST",
+          "route": "W - WB - WA"
+        },
+        {
+          "from": "provenance du NORD",
+          "route": "N - WB - WA"
+        },
+        {
+          "note": "transit VFR : sauf clairance contraire, les VFR en transit entre N1 et NE doivent voler à une altitude de 1500 ft"
+        }
+      ],
+      "departures": [
+        {
+          "note": "sauf clairance contraire, les aéronefs suivront les itinéraires publiés"
+        }
+      ],
+      "specialVfr": "les ARR et DEP se font uniquement par W et E ; EB et WB seront les points de clairance limite pour les arrivées de VFR spécial ; en présence de trafic IFR : VIS 3000 m MNM, plafond 700 ft",
+      "nightVfr": {
+        "departureViaW": "via W : monter à 2000 ft AMSL dans le circuit de piste, puis rejoindre W en montée vers 3200 ft AMSL MNM ; atteindre 4300 ft AMSL à SAVERNE",
+        "departureViaS": "via S : monter à 2000 ft AMSL dans le circuit de piste ; atteindre S à 4700 ft AMSL",
+        "arrivalFromWest": "par l'OUEST : contacter STRASBOURG APP avant SAVERNE ; rejoindre W à 3200 ft AMSL MNM, rejoindre WB puis WA en descente vers 2000 ft AMSL",
+        "arrivalFromSouth": "par le SUD : contacter STRASBOURG APP à S à 4700 ft AMSL MNM, rejoindre EB puis EA en descente vers 2000 ft AMSL"
+      },
+      "radio": {
+        "beforeEnteringCtr2": "avant pénétration dans la CTR 2 STRASBOURG, contacter STRASBOURG TOUR 119.250 MHz pour une altitude inférieure ou égale à 2500 ft, STRASBOURG Approche 120.410 MHz pour une altitude supérieure à 2500 ft",
+        "failure": "VFR de jour et VFR de nuit : essayer de contacter la TWR par téléphone au 03 88 59 63 13 et appliquer la réglementation nationale"
+      }
+    }
   }
 }

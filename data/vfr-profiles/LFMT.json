@@ -7,7 +7,8 @@
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded.",
     "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
-    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio.",
+    "The French of \"circuit\", \"withAts\" and \"withoutAts\" is in \"fr\": same tree as the English, text values only, written by hand from the French column of the chart where it was read, and translated from the English text otherwise; point and runway identifiers are repeated unchanged."
   ],
   "icao": "LFMT",
   "name": "Montpellier-Méditerranée",
@@ -15,7 +16,7 @@
     "publication": "AIP France AD 2 LFMT",
     "chartDate": "2026-01-22",
     "extraction": "chart text, table and English column read by script, procedures structured by hand",
-    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
+    "frenchExtraction": "French column of the chart text read by script for the notes; procedures written in French by hand"
   },
   "referencePosition": {
     "latitude": 43.58333,
@@ -297,6 +298,68 @@
       "Station automatique AVGAS 100 LL utilisable uniquement pour les avions dont l'envergure est inférieure à 12 m.",
       "Équipement de surveillance du trafic : AD équipé d'un radar secondaire (voir AD 1.0).",
       ""
-    ]
+    ],
+    "circuit": {
+      "heightNote": "vent arrière à une altitude minimale de 1000 ft en piste 12L et en piste secondaire 12R/30L",
+      "handNote": "en piste 12L/30R, les circuits se font au Nord-Est de la piste ; en piste 12R/30L, les circuits se font au Sud-Ouest de la piste ; en piste 30R, au décollage lors d'un entraînement en tour de piste, le virage initial se fera impérativement à 1,4 NM FJR pour rejoindre le segment vent arrière main droite ; le circuit ne doit pas dépasser l'autoroute A9 sauf indication contraire du contrôle aérien ; en piste secondaire, prudence recommandée dans le dernier virage afin de ne pas interférer avec l'axe de la piste principale 12L / 30R ; il est recommandé à tous les aéronefs d'allumer le phare d'atterrissage en finale",
+      "restrictions": "la configuration « face au nord » - pistes 30R et 30L - est privilégiée pour raison environnementale ; les appareils doivent veiller à éviter le survol de Mauguio et de la Grande Motte, sauf indications contraires du contrôle aérien ; en piste secondaire, les tours de piste sont interdits aux aéronefs non basés quand la configuration 12R est en service",
+      "trainingPatterns": "les vols d'entraînement autour de l'aérodrome (tours de piste, simulations de panne ou de remise des gaz, posé-décollé…) sont interdits aux aéronefs des groupes acoustiques 1, 2 et 3, autorisés aux aéronefs des groupes acoustiques 4 et 5 du 1er octobre au 15 juin inclus, du LUN au SAM sauf jours fériés, de 0700 à 2000 (ETE - 1 HR), autorisés toute l'année aux aéronefs à moteurs à pistons de 0700 à 2000 (ETE - 1 HR) ; des restrictions de créneaux s'appliquent en piste secondaire 12R/30L, du 21 juin au 21 septembre, les samedis, dimanches et jours fériés, pour les vols d'entraînement : éviter les tours de piste entre 12h00 et 15h00 locale, et entre 15h00 et 17h00 locale sauf pour les appareils à faible nuisance (Catégorie CALIPSO A) ; l'accord préalable de l'exploitant d'aérodrome ainsi que du service de la navigation aérienne est indispensable pour tout entraînement d'aéronef non basé sur l'Aéroport Montpellier Méditerranée, demande à envoyer au moins 48h à l'avance (jours ouvrés) à montpellier-subdivision-ctl@aviation-civile.gouv.fr en mentionnant le type d'appareil, son immatriculation, la date, la durée et la nature de l'entraînement souhaité"
+    },
+    "withAts": {
+      "arrivals": [
+        {
+          "note": "le premier contact doit être établi au moins 3 minutes avant le survol des points d'entrée en attente d'une clairance ; sauf autorisation ou instruction particulière, survol des points d'entrée aux altitudes maximales indiquées ci-après"
+        },
+        {
+          "via": "AM",
+          "contact": "118.775"
+        },
+        {
+          "via": "ES",
+          "contact": "118.775"
+        },
+        {
+          "via": "NF",
+          "contact": "118.775"
+        },
+        {
+          "via": "NE",
+          "contact": "118.775"
+        },
+        {
+          "via": "SF",
+          "contact": "118.200"
+        },
+        {
+          "via": "WT",
+          "contact": "118.200"
+        },
+        {
+          "via": "WF",
+          "contact": "118.200"
+        }
+      ],
+      "departures": [
+        {
+          "note": "respecter le sens du virage des circuits d'aérodrome ; dérogation possible sur clairance de contrôle"
+        },
+        {
+          "runway": "30L",
+          "note": "en configuration 30L, les aéronefs au départ suivront le cap 283° après l'envol, sauf instruction contraire du contrôle"
+        },
+        {
+          "runway": "12R",
+          "note": "en configuration 12R, les aéronefs en montée vers l'ouest contourneront les habitations du sud de Pérols afin de survoler à la verticale le canal du Rhône à Sète"
+        }
+      ],
+      "transit": "les itinéraires publiés sur la carte VAC sont susceptibles d'être imposés par le contrôle, en particulier le transit SW-ES à 1000 ft lorsque VIS > 4500 m ; il est rappelé aux usagers leur responsabilité en matière d'emport de gilets de sauvetage pour tout survol maritime",
+      "specialVfr": "VIS 1500 m",
+      "nightVfr": "itinéraires VFR de nuit : voir AIP ENR 3.3 § 5.3.6 MONTPELLIER et carte ENR 3.3 LFMM SOUTH ITI NIGHT VFR",
+      "radio": {
+        "failureOnArrival": "afficher A7600 ; en dehors de la CTR : ne pas y pénétrer ; à l'intérieur de la CTR, avant d'avoir reçu la clairance d'entrée dans le circuit de piste : sortir de la CTR par l'itinéraire VFR le plus approprié sans couper les axes de pistes ; après avoir reçu la clairance d'entrée dans le circuit de piste : s'intégrer dans le circuit comme autorisé, puis atterrir et dégager en bout de piste, attendre puis suivre le véhicule « follow me »",
+        "failureOnDeparture": "avant pénétration de piste : ne pas décoller, attendre et suivre le véhicule « follow me » ; avant décollage après pénétration : dégager la piste à la première sortie, attendre puis suivre le véhicule « follow me » ; après décollage : afficher A7600 et respecter la dernière clairance jusqu'à la sortie de l'espace aérien contrôlé",
+        "failureInTransit": "avant de recevoir la clairance d'entrée dans l'espace aérien contrôlé : ne pas y pénétrer ; dans l'espace aérien contrôlé : quitter l'espace aérien contrôlé, sans couper l'axe de piste dans la CTR"
+      }
+    }
   }
 }
