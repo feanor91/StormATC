@@ -12,7 +12,8 @@
   "source": {
     "publication": "AIP France AD 2 LFBL",
     "chartDate": "2026-07-09",
-    "extraction": "manual, from the chart text and images"
+    "extraction": "manual, from the chart text and images",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 45.86083,
@@ -128,5 +129,17 @@
     "Special VFR meteorological conditions with IFR traffic, visibility on the routes: NW-WA 2000 m; W-WA 1500 m, following the Vienne river; E-EA 2000 m; EA-LFBL 1500 m, following the west Limoges loop road; S-SA 1500 m, following the Briance valley; SA-LFBL 2500 m.",
     "Radio failure: squawk 7600, continue in visual meteorological conditions, land at the nearest suitable aerodrome and report the arrival to the ATS concerned by the quickest means.",
     "Aerobatics no. 6591: see AIP ENR 5.5."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Conditions météorologiques en présence IFR : NW <----->WA : 2000 m ; W <-----> WA : 1500 m, suivre le cours de la Vienne ; E <-----> EA : 2000 m.",
+      "",
+      ""
+    ]
+  }
 }

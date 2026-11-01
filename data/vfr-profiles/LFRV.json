@@ -76,15 +76,15 @@
   ],
   "fr": {
     "notes": [
+      "AD réservé aux ACFT munis de radio.",
+      "En dehors des horaires programmés : le service AFIS peut être rendu à tout moment sans.",
       "",
       "",
-      "",
-      "",
-      "",
-      "",
+      "Activité IFR possible.",
+      "Interdiction d'utilisation simultanée des deux pistes hors HOR AFIS.",
       "Demande par E-mail AFIS Pendant l'activité parachutage, piste 08/26 réservée aux appareils utilisés par les entités signataires du protocole parachutage 274 et aux appareils autorisés par l'exploitant.",
       "Information disponible AFIS ou A/A.",
-      "",
+      "Roulage interdit hors RWY et TWY.",
       "PAPI en fonctionnement obligatoire pour toute approche de nuit RWY 22.",
       "Circuits « basse hauteur » autorisés dans le cadre des vols d'entraînement avec instructeur uniquement : minimum 500 ft AAL, au SE RWY 04/22.",
       "Les pilotes sont invités à utiliser les points de report VFR notamment dans les trajectoires de contournement des LF-R 278 et R 279.",
@@ -94,12 +94,12 @@
       "ACFT largueurs de parachutistes",
       "ACFT assurant des missions d'assistance, de sauvetage ou de sécurité publique, lorsque leur mission ne permet pas le contournement de la zone.",
       "Demande de mise en route obligatoire pour tout hélicoptère.",
+      "Pendant l'activité parachutage, les appareils au départ/arrivée de Vannes, éviter le survol des secteurs Nord et Nord-Ouest des installations.",
+      "Pendant l'activité de parachutage, les appareils effectuant une arrivée suivie d'un départ, ne pas virer avant le survol du seuil opposé.",
       "",
       "",
-      "",
-      "",
-      "",
-      "",
+      "Importante activité de parachutage.",
+      "TWY B non utilisable.",
       "Activité parachutage (N°274) sur AD : voir AIP ENR 5.5 Voltige (N° 6358) sur AD : voir AIP ENR 5.5 Activité simultanée de voltige et de parachutage interdite."
     ]
   }

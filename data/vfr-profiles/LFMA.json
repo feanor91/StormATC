@@ -137,17 +137,17 @@
   ],
   "fr": {
     "notes": [
-      "",
+      "AD réservé aux ACFT munis de radio.",
       "AD interdit aux planeurs.",
       "Utilisable pour ULM : seuls les ULM de classes 3 et 6 sont autorisés.",
       "Port d'un gilet haute visibilité obligatoire côté piste.",
-      "",
+      "RWY 32 préférentielle : cause conditions météorologiques locales.",
       "ENVIRONNEMENT - LIMITATION DES NUISANCES : Hors cas de sécurité immédiate ou instruction du contrôle de la circulation aérienne, respecter strictement les circuits publiés figurant sur le volet atterrissage à vue.",
       "Essais moteurs autres que ceux inclus dans la procédure de décollage interdits : la nuit de 1900 à 0700 (ETE : - 1 HR) ; SAM de 1100 à 1500 et de 1630 à 1900 (ETE : - 1 HR). DIM et JF.",
       "RWY 14 : Entre l'extrémité physique de la piste et le THR 32 : longueur de roulement de 232 m utilisable au décollage.",
       "RWY 32 : Entre l'extrémité physique de la piste et le THR 14 : longueur de roulement de 123 m utilisable au décollage.",
       "",
-      "",
+      "Équipement de surveillance du trafic : AD équipé d'une visualisation radar (voir AD 1.0).",
       "PCL en service en dehors HOR ATS : 3 coups d'alternat : brillance 2/4.",
       "Balisage disponible : balisage latéral de piste,TWY C, PAPI RWY 14, PAPI RWY 32, aire de trafic NW et SW.",
       "5 coups d'alternat : brillance 4/4.",
@@ -163,7 +163,7 @@
       "",
       "",
       "",
-      ""
+      "L'utilisation de l'aire d'essai relève de la responsabilité de l'opérateur et/ou du commandant de bord."
     ]
   }
 }

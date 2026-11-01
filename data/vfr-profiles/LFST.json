@@ -224,18 +224,18 @@
   ],
   "fr": {
     "notes": [
-      "",
+      "FATO à usage exclusif de la Sécurité Civile et suivant instructions de Strasbourg TWR.",
       "Interdit aux planeurs, motoplaneurs, aérostats et ULM.",
       "ACFT du chapitre 2 de l'annexe 16 OACI : interdit H24.",
       "Autres aéronefs : TKOF interdits entre 2230 et 0500.",
-      "",
+      "LDG interdits entre 2300 et 0500.",
       "En cas de retard d'un vol commercial passager programmé, dont la marge cumulée est inférieure à 10 EPNdB, au-delà des horaires précitées, la compagnie aérienne ou son représentant transmet sa demande à l'exploitant de l'AD (superviseur de service de la SASE joignable au 03 88 64 69 85) qui traite sa demande.",
       "A l'ARR sur le parking Bravo notamment, les pilotes sont invités à vérifier qu'ils arrêtent correctement leur ACFT sur une barre d'arrêt visible depuis la gauche du cockpit.",
       "Présence d'un obstacle de type clôture balisée d'une hauteur de 2,5 m dans la bande de piste à 120 m du seuil 05 entre les RDL 179° et 209° et entre les RDL 249° et 279°.",
       "Procédure \"réduction des séparations sur piste\" applicable sur la piste 05/23 aux seuls aéronefs monomoteurs à hélice en vol VFR dans les conditions fixées par la réglementation nationale.",
       "HEL équipés de roues : tous les mouvements doivent se faire au roulage au sol entre les TWY K, M, N, Q et le poste désigné et vice versa.",
       "Équipement de surveillance des trafics : aérodrome équipé d'un radar primaire et secondaire.",
-      ""
+      "Vol libre et AEM à Mundolsheim jusqu'à 500 ft ASFC."
     ],
     "circuit": {
       "trainingPatterns": "les vols d'entraînement des ACFT en régime IFR ou VFR sont interdits tous les jours entre 2100 et 0700 (été : -1 HR) ; les vols d'entraînement en régime IFR ou VFR sont interdits pour les ACFT d'un poids supérieur à 6 tonnes les SAM après 1500, les DIM et jours fériés (y compris jours fériés en droit local) (été : -1 HR) ; en dehors de ces interdictions, tous les vols d'entraînement sont soumis à l'autorisation préalable du chef de quart de la tour (TEL : 03 88 59 63 13) pour les ACFT en régime IFR de moins de 6 tonnes, de l'exploitant de l'AD pour les ACFT d'un poids de 6 tonnes ou plus"

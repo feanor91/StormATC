@@ -170,12 +170,12 @@
   ],
   "fr": {
     "notes": [
-      "",
+      "AD réservé aux ACFT munis de radio.",
       "Piste non revêtue 09/27 inutilisable en dehors HOR ATS.",
       "Piste revêtue et non revêtue non utilisables simultanément.",
       "L'attention des pilotes est attirée sur la présence : d'une route au seuil 27 (gabarit routier : 1334 ft) ; d'une antenne (altitude au sommet : 1871 ft) à proximité du point NW.",
       "Il est conseillé de rester à l'Ouest de la voie TGV. AEM N° 9552 : voir AIP ENR 5.5, connue de TWR ; AEM N° 9748 : voir AIP ENR 5.5 ; AEM N° 9582 : voir AIP ENR 5.5 ; AEM N° 9556 : voir AIP ENR 5.5 ; AEM N° 9586 : voir AIP ENR 5.5 ; AEM N° 9640 : voir AIP ENR 5.5.",
-      "",
+      "QFU 088° préférentiel cause procédure IFR.",
       "Atterrissage en piste 27 interdit si PAPI 27 inutilisable.",
       "TWY T, S1, S2, S3, S4 et S5 limités aux aéronefs de code inférieur ou égal à D avec largeur hors tout du train principal (OMGWS) de moins de 9 m.",
       "Taxiway N7 : utilisation de jour uniquement.",
@@ -197,11 +197,11 @@
       "Arrivée de l'Ouest : après Beaurepaire, maintenir 2500 ft jusqu'à être en vue et dans les 5 NM de l'aérodrome, puis rejoindre le circuit.",
       "Autres arrivées : l'altitude du dernier segment utilisé sera maintenue jusqu'à la vue et dans les 5 NM de l'aérodrome, puis rejoindre le circuit.",
       "Panne radio : se présenter perpendiculairement à la piste 2800 ft AMSL, phares allumés et se conformer aux signaux optiques de la TWR.",
+      "Équipement de surveillance du trafic : Aérodrome équipé d'un radar secondaire (voir AD 1.0).",
+      "Voltige N° 6821 : voir AIP ENR 5.5 Parachutage N° 420 : voir AIP ENR 5.5 Panne de radiocommunication à l'arrivée pendant les HOR ATS : Afficher le code transpondeur 7600 ; Se conformer aux dernières instructions de contrôle reçues, ou se présenter face à la TWR par le Nord ou.",
       "",
-      "",
-      "",
-      "",
-      ""
+      "S'intégrer phares allumés en vent arrière en assurant une séparation visuelle avec les autres appareils puis atterrir.",
+      "Signaux visuels et moyens pyrotechniques inopérants."
     ]
   }
 }

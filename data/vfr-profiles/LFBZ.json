@@ -189,7 +189,7 @@
     "notes": [
       "",
       "AD interdit aux planeurs.",
-      "",
+      "Site susceptible d'être envahi en quelques minutes par la brume de mer.",
       "Voltige N° 6683 : voir AIP ENR 5.5 AEM N° 9113, 9130, 9460 : voir AIP ENR 5.5 Parachutage N° 302, 329, 366, 376 : voir AIP ENR 5.5 Drone N° 40-001 : voir AIP ENR 5.5 Procédures et consignes particulières Mise en route avec PPR 5 min.",
       "Tour de piste à basse hauteur réservé aux aéronefs basés à 500 ft AAL.",
       "L'usage du VOR est recommandé.",
@@ -197,7 +197,7 @@
       "",
       "",
       "",
-      "",
+      "La trajectoire de rejointe des itinéraires de départ après le décollage et la trajectoire de rejointe du circuit de piste depuis les itinéraires publiés s'effectueront sur instruction du contrôle.",
       "",
       "Voies de circulation : S1 interdit la nuit ; S1 interdit le jour par RVR < 800 m ; T1 réservé aux HEL de LHT ≤ 13 m.",
       "Conditions d'utilisation du PRKG Sud : avions d'envergure maximale de 15 m.",
@@ -205,13 +205,13 @@
       "Itinéraires Points cheminement Altitude de vol avion/hélicoptère (AMSL) N1 NC-NA NE1 NE-NA S1 SE-S SW1 SW-SB TS1 S-SB TW1 NA-SB Ces itinéraires sont suivis : obligatoirement en CTR, en situation de VFR spécial ; en VMC sur instruction du contrôle.",
       "BIARRITZ PAYS BASQUE Transit \"côtier\" TW1 : Une autorisation explicite de Biarritz ATS doit être obtenue pour croiser l'axe de piste.",
       "",
-      "",
+      "VFR spécial : minima MTO Avions Équipement de surveillance du trafic : AD équipé d'un radar secondaire (voir AD 1.0).",
       "",
       "Contacter 5 mn avant le survol des points d'entrée.",
       "",
-      "",
-      "",
-      ""
+      "Panne de radiocommunication : Afficher transpondeur 7600.",
+      "Si la panne survient après pénétration dans la CTR : avant d'avoir reçu la clairance d'intégration dans la ; circulation d'aérodrome : se mettre en attente. Si possible contacter la TWR (n° d'urgence uniquement) au 05 59 22 43 92.",
+      "Sinon quitter la CTR dès que possible. après avoir reçu la clairance d'entrée dans le circuit de piste : poursuivre son atterrissage comme indiqué dans la clairance."
     ]
   }
 }

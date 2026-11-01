@@ -75,7 +75,7 @@
   ],
   "fr": {
     "notes": [
-      "",
+      "AD réservé aux aéronefs (ACFT) munis de radio.",
       "Activité ULM de classe 2, 3, 4 et 6 autorisée selon les dispositions de l'arrêté du 12 juillet 2019 relatif aux procédures générales de circulation aérienne pour l'utilisation des aérodromes par les aéronefs.",
       "Activité ULM de classe 1 et 5 interdite.",
       "",
@@ -92,13 +92,13 @@
       "Circuit 500 ft AAL utilisable uniquement sur autorisation du contrôle (ULM et hélicoptères exclusivement).",
       "Circuit 400 ft AAL utilisable par ULM lents et par hélicoptères et avions lents uniquement sur autorisation du contrôle.",
       "C - Consignes particulières en l'absence des services ATS.",
-      "",
+      "RMZ inactive.",
       "Pistes préférentielles QFU préférentiel 335° cause meilleurs dégagements des axes d'APP et de DEP.",
       "En configuration 07/25 : Circuit 500 ft AAL réservé aux ULM lents ; Circuit 400 ft AAL inutilisable.",
       "En configuration 16/34 : Circuit 400 ft AAL réservé aux ULM lents ; Circuit 500 ft AAL inutilisable.",
       "Activité réservée aux pilotes basés autorisés selon consignes locales.",
       "Équipement de surveillance du trafic : Aérodrome équipé d'une visualisation radar (voir AD 1.0).",
-      ""
+      "Panne de l'équipement de radiocommunication : AD accessible aux usagers basés selon consignes locales quand l'organisme de contrôle est en activité."
     ]
   }
 }

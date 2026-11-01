@@ -49,12 +49,12 @@
   ],
   "fr": {
     "notes": [
-      "",
+      "Activité IFR possible.",
       "AD réservé aux ACFT munis de radio.",
-      "",
+      "Roulage interdit hors RWY et TWY.",
       "Voies de circulation desservant les hangars réservées aux avions basés.",
       "Atterrissage en piste 33 interdit en l'absence de service ATS ou si PAPI hors service.",
-      ""
+      "PCL : n'allume pas le PAPI."
     ]
   }
 }

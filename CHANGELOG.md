@@ -5,6 +5,14 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **More French notes**: `fr.notes` goes from 3 418 to 4 417 filled notes out of 5 165 (86 %). The French is now read at the
+  height of the English note on the page (the two columns are side by side), instead of being paired sentence by sentence;
+  a note is refused when the French found does not end like a sentence, starts in lower case, is much longer or shorter, or
+  shares no number or code with the English. The 748 notes still empty are mostly notes the English reader had cut or merged
+  badly (table lines, sentence tails), which have no clean French twin.
+
 ## 0.28.6 - 2026-11-01
 
 ### Added

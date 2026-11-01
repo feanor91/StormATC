@@ -12,7 +12,8 @@
   "source": {
     "publication": "AIP France AD 2 LFRJ",
     "chartDate": "2024-11-28",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.53028,
@@ -165,5 +166,12 @@
       "longitude": -4.2,
       "location": "Sud antennes de Pencran"
     }
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "L'itinéraire Sud peut être interdit en fonction de l'activité IFR ou CAM contrôlée en cours ou prévue. VFR VIS : 5 km ACFT VIS : 4000 m VFR spécial HEL L'autorisation de pénétrer dans la zone est demandée à LANDIVISIAU APP 5 min avant NEL, NWL, EL ou SWL.",
+      "Si la panne se produit avant d'avoir reçu la CLR de pénétrer dans la CTR, l'ACFT doit contourner la zone.",
+      "Si la panne se produit à l'intérieur de la CTR, suivre les dernières instructions du CTL."
+    ]
+  }
 }

@@ -135,22 +135,22 @@
   ],
   "fr": {
     "notes": [
-      "",
+      "AD réservé aux ACFT munis de radio.",
       "AD interdit aux planeurs et aux ULM (Classe 1, 2, 4, 5 et 6).",
       "Auto-information réservée aux ACFT basés.",
       "Panne de radiocommunication Aérodrome accessible selon les consignes locales.",
       "Tous QFU : limitation vent traversier maximum (calculée sur le vent moyen) : 25kt piste sèche / 20kt piste mouillée.",
-      "",
+      "Roulage interdit hors RWY et TWY.",
       "Utilisation du TWY B limitée aux appareils dont l'envergure est inférieure à 24 m.",
       "Utilisation du TWY C interdite si celui-ci est déjà utilisé ≥ par un aéronef d'envergure 24 m.",
       "Décollage depuis bretelle B interdit en piste 02.",
       "Utilisation du TWY C1 limitée aux appareils dont l'envergure est inférieure à 15 m.",
       "Toute pénétration RWY via le TWY C est interdite de jour comme de nuit.",
-      "",
-      "",
-      "",
-      "",
-      "",
+      "Réacteurs Avions : VIS 5 km, plafond 1000 ft.",
+      "HEL : VIS 800 m, plafond 600 ft. PPR PN 24HR auprès de l'exploitant.",
+      "Réservé aux ACFT basés.",
+      "Approche piste 02 interdite si PAPI 02 H/S.",
+      "Approche piste 20 interdite si PAPI 20 H/S.",
       "IFR de nuit IFR de nuit autorisé avec les restrictions suivantes : Sur autorisation de l'exploitant ; Procédure IFR RWY 02 interdite si PAPI 02 H/S ; Procédure IFR RWY 20 interdite si PAPI 20 H/S."
     ]
   }

@@ -60,12 +60,12 @@
   ],
   "fr": {
     "notes": [
-      "",
+      "AD interdit aux paramoteurs.",
       "AD réservé aux ACFT munis de radio.",
       "Dangers à la navigation aérienne L'attention des pilotes est attirée sur la proximité des CTR SAINT NAZAIRE afin d'éviter toute pénétration en espace D sans clairance.",
       "AD susceptible d'être envahi en quelques minutes par la brume de mer.",
       "Présence obstacle (mât météo) balisé H24, 140 ft AMSL, R 090 / 210 m de la tour.",
-      "",
+      "Contact radio obligatoire dans le volume AFIS 3 NM / 2000 ft.",
       "Roulage interdit hors piste et TWY.",
       "Circulation des ACFT de CAT B restreinte au-delà des postes d'AVT.",
       "Postes de stationnement avec câbles, numérotés de 1 à 14 sur P1 réservés aux ACFT de CAT A.",
@@ -75,9 +75,9 @@
       "AD sensible au bruit.",
       "Procédure moindre bruit : afin de limiter les nuisances, décollage QFU 106° et atterrissage QFU 286° préféré si conditions météo et trafic compatibles.",
       "Tour de piste : en QFU 106° et 286° se font uniquement au Nord de la piste. interdit de 1100 à 1300 et après 1800 (ETE : - 1 HR) ; Interdit le DIM et JF pour ACFT non basés.",
-      "",
+      "Pour les hélicoptères, messages radio obligatoires avant la mise en route.",
       "TWY B1 utilisable uniquement en sortie de piste.",
-      ""
+      "Parachutage sur AD (N° 277) : voir AIP ENR 5.5"
     ]
   }
 }

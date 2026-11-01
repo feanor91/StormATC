@@ -64,15 +64,15 @@
   ],
   "fr": {
     "notes": [
-      "",
+      "Activité IFR possible.",
       "AD réservé aux ACFT munis de radio.",
       "Limitations vent traversier RWY 18/36 : 25 kt sur piste sèche ; 20 kt dans les autres cas.",
       "TWY A : largeur 15 m, utilisable par ACFT dont l'empattement est inférieur à 18 m.",
       "TWY B : à usage privé non ouvert à la CAP ; utilisable de jour uniquement ; largeur 5,5 m, utilisable par ACFT dont la largeur hors tout du train principal est inférieure à 2,2 m.",
+      "QFU 184° préférentiel à l'atterrissage cause procédure IFR.",
       "",
-      "",
-      "",
-      "",
+      "Roulage interdit hors RWY et TWY.",
+      "Environnement très sensible au bruit.",
       "Environnement très sensible au bruit. ≥ Pour les aéronefs 3 t et HEL avec PAX, assistance obligatoire avec PPR PN 48HR.",
       "E-mail : voir ATS.",
       "Plateforme d'attente après le point d'attente utilisable sur proposition de l'AFIS pour le croisement d'ACFT au roulage et à vitesse contrôlée.",
@@ -80,7 +80,7 @@
       "Entraînement interdit en tour de piste entre 2130 et 0630 (ETE : - 1 HR).",
       "Tours de piste basse hauteur interdits.",
       "Après décollage, monter dans l'axe à 1000 ft AAL avant de virer en branche vent traversier en évitant le survol des zones sensibles au bruit.",
-      "",
+      "PCL : pour balisage et PAPIs.",
       "Possibilité d'éteindre le balisage en donnant 7 coups d'alternat en moins de 5 secondes.",
       "",
       "Information des usagers sur FREQ AUXERRE INFO, SEINE APP/INFO, PARIS INFO ou PARIS ACC."
