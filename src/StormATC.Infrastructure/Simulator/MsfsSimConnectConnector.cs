@@ -848,8 +848,6 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
             Events.SelectCom1Transmitter,
             "COM1_TRANSMIT_SELECT");
 
-        RegisterAircraftControl(_simConnect);
-
         _simConnect.OnRecvSimobjectData += OnReceiveSimObjectData;
         _simConnect.OnRecvSimobjectDataBytype += OnReceiveNearbyTraffic;
         _simConnect.OnRecvFacilityData += OnReceiveFacilityData;
@@ -1003,12 +1001,12 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
     private PumpExitReason PumpConnectedSimulator(CancellationToken cancellationToken)
     {
         WaitHandle[] handles =
-            [_messageSignal!, _airportRequestSignal, _radioTuneSignal, _aircraftControlSignal, cancellationToken.WaitHandle];
+            [_messageSignal!, _airportRequestSignal, _radioTuneSignal, cancellationToken.WaitHandle];
 
         while (true)
         {
             int signalled = WaitHandle.WaitAny(handles, TimeSpan.FromSeconds(1));
-            if (signalled == 4)
+            if (signalled == 3)
             {
                 return PumpExitReason.Cancelled;
             }
@@ -1020,10 +1018,6 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
             else if (signalled == 2)
             {
                 ApplyPendingRadioTunes();
-            }
-            else if (signalled == 3)
-            {
-                ApplyPendingAircraftControl();
             }
             else if (signalled == 0)
             {
@@ -1686,7 +1680,6 @@ public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
 
     private void CompletePendingRadioTunes(bool result)
     {
-        CompletePendingAircraftControl(result);
         while (_radioTuneQueue.TryDequeue(out RadioTuneRequest? request))
         {
             request.Completion.TrySetResult(result);
