@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.28.6 - 2026-11-01
+
 ### Added
 
 - **French of the structured procedures**: the 23 profiles that have `circuit`, `withAts` or `withoutAts` (the 16 read by hand
