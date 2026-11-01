@@ -180,10 +180,10 @@
       "Départ 04 : monter dans l'axe 036°, ne pas virer avant d'avoir dépassé l'usine au Nord-Est des installations.",
       "Départ 04 avec virage avant l'usine : uniquement sur clairance ATS, virer à droite et suivre la trajectoire au sud de la voie ferrée.",
       "QFU préférentiel 216° cause procédure ILS.",
-      "MERVILLE CALONNE Equipement AD PCL hors HOR ATS sur PPR exploitant d'AD.",
+      "MERVILLE CALONNE Équipement AD PCL hors HOR ATS sur PPR exploitant d'AD.",
       "PCL inactive 0000-0500 (ETE : -1 HR).",
       "Activation sur PPR 48 HR.",
-      "Equipement de surveillance du trafic : Aérodrome équipé d'une visualisation radar (voir AD 1.0).",
+      "Équipement de surveillance du trafic : Aérodrome équipé d'une visualisation radar (voir AD 1.0).",
       "",
       "",
       "",
@@ -200,7 +200,7 @@
       },
       {
         "name": "NE",
-        "location": "Echangeur autoroutier à l'Ouest d'Armentières"
+        "location": "Échangeur autoroutier à l'Ouest d'Armentières"
       },
       {
         "name": "EA",
@@ -208,7 +208,7 @@
       },
       {
         "name": "S",
-        "location": "Echangeur autoroutier à Liévin"
+        "location": "Échangeur autoroutier à Liévin"
       },
       {
         "name": "SA",

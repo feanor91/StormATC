@@ -5,6 +5,14 @@ public releases.
 
 ## Unreleased
 
+### Fixed
+
+- **French text of the VFR profiles (`fr`)**: accents on capitals the charts print without them ("Equipement", "Eviter",
+  "Echangeur", "Etat", "Ecole"...) and a few typos of the charts ("reservée", "aeroport", "entrainement"), a space before ";"
+  and none before "," or ".", the leftovers of the reader's list handling ("tonnes,; les", "NW.; Circulation", "05/23 :;"),
+  headings glued in front of notes ("COGNAC CHATEAUBERNARD Consignes particulières / ..."), "sur- Mer". Notes that were only
+  a sentence tail or an introduction whose list was lost are left empty (their English twin stays).
+
 ## 0.28.2 - 2026-11-01
 
 ## 0.28.1 - 2026-11-01

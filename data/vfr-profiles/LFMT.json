@@ -282,7 +282,7 @@
   "fr": {
     "notes": [
       "",
-      "Utilisation de la piste 12R/30L interdite aux aéronefs dont l'une au moins des conditions ci-dessous est remplie : Masse supérieure à 5.7 t,; Turboréacteur,; Envergure supérieure à 24 mètres,; Largeur hors tout du train supérieure à 6 mètres,; Distance de référence au décollage supérieure à 800 m.",
+      "Utilisation de la piste 12R/30L interdite aux aéronefs dont l'une au moins des conditions ci-dessous est remplie : Masse supérieure à 5.7 t ; Turboréacteur ; Envergure supérieure à 24 mètres ; Largeur hors tout du train supérieure à 6 mètres ; Distance de référence au décollage supérieure à 800 m.",
       "TWY L1, L2, K, Q, R et S interdits aux ACFT d'une masse supérieure à 5.7 t.",
       "L'attention des usagers est attirée sur les effets visuels trompeurs du trait de côte non perpendiculaire aux axes de piste.",
       "AD susceptible d'être envahi en quelques minutes par la brume de mer.",
@@ -294,7 +294,7 @@
       "En situation de croisement une attention particulière doit être portée par les usagers sur le marquage au sol et la signalisation.",
       "Envergure maximum pour les croisements à l'intersection : 13,45 m (Cessna 425).",
       "Station automatique AVGAS 100 LL utilisable uniquement pour les avions dont l'envergure est inférieure à 12 m.",
-      "Equipement de surveillance du trafic : AD équipé d'un radar secondaire (voir AD 1.0).",
+      "Équipement de surveillance du trafic : AD équipé d'un radar secondaire (voir AD 1.0).",
       ""
     ],
     "reportingPoints": [
@@ -328,11 +328,11 @@
       },
       {
         "name": "WF",
-        "location": "Echangeur St Georges d'Orques (Circuit Karting)"
+        "location": "Échangeur St Georges d'Orques (Circuit Karting)"
       },
       {
         "name": "PF",
-        "location": "Echangeur D17 Prades Le Lez – St Mathieu de Tréviers"
+        "location": "Échangeur D17 Prades Le Lez – St Mathieu de Tréviers"
       },
       {
         "name": "SW",

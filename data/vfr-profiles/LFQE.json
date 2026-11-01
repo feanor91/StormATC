@@ -108,8 +108,8 @@
   ],
   "fr": {
     "notes": [
-      "ETAIN ROUVRES Consignes particulières / Conditions d'utilisation de l'AD Code de référence AD (OACI) : 4C AD à usage restreint et interdit aux ACFT sans radio Pour les ACFT évoluant suivant les règles de la CAG : AD strictement réservé aux ACFT basés dans un rayon de 40 NM centré sur Etain et dont l'immatriculation est listée dans les protocoles d'accord entre le 3ième RHC et l'ACB d'appartenance.",
-      "L'accès au terrain d'Etain est possible uniquement pendant les horaires d'activités des ATS, de jour et en condition VMC ACFT civils : L'utilisation de la plateforme est strictement limitée à la RWY et au TWY Inutilisable hors TWY et RWY Survol AD interdit H24 au-dessous de 1000 ft ASFC Survol ville d'Etain interdit en-dessous de 3300 ft ASFC FPL obligatoire à l'ARR : en dehors des HOR ATS pour les ACFT basés et H24 pour ceux non basés PPR obligatoire pour les ACFT non basés 03 29 87 82 34 (OFF/OPS)   AEM (NR 8206) : SFC - 500 ft ASFC VEN : ETE : 1100 - SS, HIV : 1200 - SS SAM, DIM et JF : SR - SS"
+      "Code de référence AD (OACI) : 4C AD à usage restreint et interdit aux ACFT sans radio Pour les ACFT évoluant suivant les règles de la CAG : AD strictement réservé aux ACFT basés dans un rayon de 40 NM centré sur Étain et dont l'immatriculation est listée dans les protocoles d'accord entre le 3ième RHC et l'ACB d'appartenance.",
+      "L'accès au terrain d'Étain est possible uniquement pendant les horaires d'activités des ATS, de jour et en condition VMC ACFT civils : L'utilisation de la plateforme est strictement limitée à la RWY et au TWY Inutilisable hors TWY et RWY Survol AD interdit H24 au-dessous de 1000 ft ASFC Survol ville d'Étain interdit en-dessous de 3300 ft ASFC FPL obligatoire à l'ARR : en dehors des HOR ATS pour les ACFT basés et H24 pour ceux non basés PPR obligatoire pour les ACFT non basés 03 29 87 82 34 (OFF/OPS)   AEM (NR 8206) : SFC - 500 ft ASFC VEN : ETE : 1100 - SS, HIV : 1200 - SS SAM, DIM et JF : SR - SS"
     ],
     "reportingPoints": [
       {
@@ -118,7 +118,7 @@
       },
       {
         "name": "S",
-        "location": "Etang de / Doncourt aux Templiers"
+        "location": "Étang de / Doncourt aux Templiers"
       }
     ]
   }

@@ -130,19 +130,19 @@
       "",
       "Roulage interdit hors RWY et TWY.",
       "Alignement et décollage interdits depuis A3.",
-      "Entraînement vol à vue : Tous les avions dont la MTOW ≥ 20 t, et tout avion équipé de turboréacteurs devra effectuer les circuits de vol à vue dans les conditions suivantes : altitude du circuit standard : 2100 ft AMSL; monter 1000 ft AMSL minimum dans l'axe avant de virer en vent arrière Nord ou Sud.; Altitude minimale pour effectuer un circuit \"basse hauteur\" : 1300 ft AMSL.",
+      "Entraînement vol à vue : Tous les avions dont la MTOW ≥ 20 t, et tout avion équipé de turboréacteurs devra effectuer les circuits de vol à vue dans les conditions suivantes : altitude du circuit standard : 2100 ft AMSL ; monter 1000 ft AMSL minimum dans l'axe avant de virer en vent arrière Nord ou Sud. Altitude minimale pour effectuer un circuit \"basse hauteur\" : 1300 ft AMSL.",
       "",
       "En présence de vol IFR dans la CTR, VH ≥ 3500",
       "De nuit, le parking W est accessible uniquement : Suite à un atterrissage en piste 10, après un dégagement de piste via les bretelles A4 ou A5.",
       "Suite à un atterrissage en piste 28, après un dégagement de piste via la bretelle A2.",
-      "Equipement de surveillance du trafic : AD équipé d'une visualisation radar (voir AD 1.0).",
+      "Équipement de surveillance du trafic : AD équipé d'une visualisation radar (voir AD 1.0).",
       "",
       ""
     ],
     "reportingPoints": [
       {
         "name": "N",
-        "location": "Echangeur autoroutier A26 et D5"
+        "location": "Échangeur autoroutier A26 et D5"
       },
       {
         "name": "N1",

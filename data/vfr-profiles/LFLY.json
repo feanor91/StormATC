@@ -188,11 +188,11 @@
       "Arrivée : l'altitude du dernier segment utilisé sera maintenue jusqu'à être en vue et dans les 5 NM de l'aérodrome, puis rejoindre le circuit.",
       "PAPI RWY 16 obligatoire de nuit.",
       "",
-      "Equipement de surveillance du trafic : aérodrome équipé d'une visualisation radar (voir AD 1.0).",
+      "Équipement de surveillance du trafic : aérodrome équipé d'une visualisation radar (voir AD 1.0).",
       "Activation de la télécommande balisage (PCL) : 5 coups d'alternat = brillance 3 sur 4.",
-      "LYON BRON 9 - Douanes françaises (PPR 24HR) : VOL INTRA SCHENGEN ET UE, ou VOL HORS SCHENGEN ET INTRA UE : (Irlande, Chypre) autorisé sous conditions de franchises (capitaux et marchandises), se référer : www.douane.gouv.fr; VOL HORS SCHENGEN ET HORS UE, ou VOL INTRA SCHENGEN ET HORS UE: (Suisse, Liechtenstein, Islande, Norvège).",
+      "LYON BRON 9 - Douanes françaises (PPR 24HR) : VOL INTRA SCHENGEN ET UE, ou VOL HORS SCHENGEN ET INTRA UE : (Irlande, Chypre) autorisé sous conditions de franchises (capitaux et marchandises), se référer : www.douane.gouv.fr ; VOL HORS SCHENGEN ET HORS UE, ou VOL INTRA SCHENGEN ET HORS UE: (Suisse, Liechtenstein, Islande, Norvège).",
       "LUN - VEN : HX O/R PN 24 HR.",
-      "SAM , DIM et JF : le dernier jour ouvrable avant 1700.",
+      "SAM, DIM et JF : le dernier jour ouvrable avant 1700.",
       "TEL : 09 70 27 30 28 E-mail : codt-lyon@douane.finances.gouv.fr Police aux Frontières (Immigration et Schengen) : Voir avec le service PAF de Lyon Saint-Exupéry.",
       "",
       "",
@@ -211,7 +211,7 @@
       },
       {
         "name": "S",
-        "location": "Echangeur routier de CHASSE SUR RHONE"
+        "location": "Échangeur routier de CHASSE SUR RHONE"
       },
       {
         "name": "MS",

@@ -157,7 +157,7 @@
       "Interdit au VAV.",
       "Interdit aux ULM.",
       "Une dérogation peut être accordée par la tour lorsque les conditions de circulation aérienne et les caractéristiques de l'ACFT le permettent.",
-      "Hors horaires ATS : DEC et ATT simultanés sur RWY 12/30 et 04/22 interdits.; Lors du roulage sur la RWY 12/30, en cas d'exploitation simultanée de la RWY 04/22 par un autre.",
+      "Hors horaires ATS : DEC et ATT simultanés sur RWY 12/30 et 04/22 interdits. Lors du roulage sur la RWY 12/30, en cas d'exploitation simultanée de la RWY 04/22 par un autre.",
       "",
       "",
       "Piste 04/22 : DEC et ATT interdits de nuit (absence de balisage lumineux).",
@@ -187,9 +187,9 @@
       "Dès l'arrivée au poste de stationnement, contact obligatoire avec Beauvais OPS 131.540 MHz, ne pas quitter l'aéronef sans avoir été inspecté filtré par un agent de sûreté.",
       "Au départ et préalablement à tous les déplacements, contact obligatoire avec la TWR.",
       "Lorsqu'un itinéraire passe par une agglomération ou une installation isolée, celles-ci devront être contournées afin de respecter les règles de survol décrites dans l'arrêté du 10 octobre 1957.",
-      "Equipement de surveillance du trafic : Aérodrome équipé d'une visualisation radar (voir AD 1.0).",
+      "Équipement de surveillance du trafic : Aérodrome équipé d'une visualisation radar (voir AD 1.0).",
       "",
-      "BEAUVAIS TILLE 18 - Des informations complémentaires pour la préparation des vols appelées l'adresse https://www.ecologique-solidaire.gouv.fr/collaborative-aerodrome-safetyhighlights-cash Ces données sont publiées uniquement à titre indicatif et informatif, et ne sont pas exhaustives.",
+      "BEAUVAIS TILLE 18 - Des informations complémentaires pour la préparation des vols appelées l'adresse https://www.écologique-solidaire.gouv.fr/collaborative-aérodrome-safetyhighlights-cash Ces données sont publiées uniquement à titre indicatif et informatif, et ne sont pas exhaustives.",
       "Elles ne se substituent en aucun cas à l'information aéronautique de référence diffusée au travers de l'AIP France, des NOTAM et des SUP AIP."
     ],
     "reportingPoints": [
@@ -211,7 +211,7 @@
       },
       {
         "name": "S",
-        "location": "Echangeur de l'A16 à Allone"
+        "location": "Échangeur de l'A16 à Allone"
       }
     ]
   }

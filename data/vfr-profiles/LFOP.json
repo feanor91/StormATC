@@ -154,11 +154,11 @@
       "Au décollage RWY 04 ou RWY 22, monter à 1000 ft AAL dans l'axe avant de virer.",
       "Circuits \"basse hauteur\" : minimum 300 ft AAL uniquement sur clairance ATC et dans le cadre des vols d'entraînement avec instructeur à bord.",
       "ROUEN VALLEE DE SEINE VFR Spécial STAP : paramètres disponibles :Vent, base des nuages, VIS, RVR, T°, DP, QNH, QFE, et Infos particulières éventuelles.",
-      "Equipement de surveillance du trafic : AD équipé de visualisation radar (voir AD 1.0).",
+      "Équipement de surveillance du trafic : AD équipé de visualisation radar (voir AD 1.0).",
       "",
       "",
       "ROUEN VALLEE DE SEINE 10 - AVT : HOR : LUN-VEN : 0745-1630, SAM et DIM : 0845-1730.",
-      "Cartes VISA, WORLD FUEL SVC, paiement comptant .",
+      "Cartes VISA, WORLD FUEL SVC, paiement comptant.",
       "11 - RFFS : Niveau 5 : LUN-VEN : 0700-1700, SAM et DIM : 0800-1800.",
       "TEL : 02 35 79 41 03 - FAX : 02 35 79 41 22.",
       "Niveau 1 pour piste non-revêtue 05/23.",
@@ -176,11 +176,11 @@
       },
       {
         "name": "N",
-        "location": "Echangeur autoroutier d'ISNEAUVILLE"
+        "location": "Échangeur autoroutier d'ISNEAUVILLE"
       },
       {
         "name": "S",
-        "location": "Ecluses Etangs de POSES"
+        "location": "Écluses Étangs de POSES"
       },
       {
         "name": "W",

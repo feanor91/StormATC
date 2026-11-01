@@ -301,7 +301,7 @@
       "Pylône balisé jour et nuit sur AD, au Nord-Est des axes entre étang et Terminal Aviation Générale (voir AD 2 LFML ATT 01).",
       "",
       "",
-      "Equipement de surveillance du trafic : aérodrome équipé d'un radar primaire et secondaire."
+      "Équipement de surveillance du trafic : aérodrome équipé d'un radar primaire et secondaire."
     ],
     "reportingPoints": [
       {
@@ -314,7 +314,7 @@
       },
       {
         "name": "EA",
-        "location": "Echangeur autoroutier de Cabriés"
+        "location": "Échangeur autoroutier de Cabriés"
       },
       {
         "name": "EB",

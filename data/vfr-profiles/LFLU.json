@@ -156,7 +156,7 @@
       "Circuits en vol : avions, à l'Est des Bérards.",
       "Pour les avions de plus de 30 t, retournement obligatoire sur les raquettes.",
       "TWY parallèle à RWY, utilisable par les ACFT légers.",
-      "Accès au parking GAMSTAT : .",
+      "",
       "Portail N : largeur 23.4 m.",
       "Portail M : largeur 23.5 m.",
       "Portail interne : largeur 23 m.",
@@ -199,7 +199,7 @@
       },
       {
         "name": "S",
-        "location": "Echangeur voie ferrée Livron"
+        "location": "Échangeur voie ferrée Livron"
       }
     ]
   }

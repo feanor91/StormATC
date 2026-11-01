@@ -251,17 +251,17 @@
       "5) Arrivée hélicoptère depuis l'Ouest en présence ATC : privilégier circuit NW ou W/Grand Epagny (bâtiment rouge SDIS), arrivée haute au-dessus de la voie rapide puis atterrissage piste gazonnée.",
       "6) Départ hélicoptère vers l'Ouest en présence ATC : privilégier départ piste gazonnée depuis TWY G3 face NW (bâtiment rouge SDIS), montée rapide au-dessus de la voie rapide puis direction NW ou W.",
       "7) Vol technique : respecter HOR des tours de piste pour le travail sol sur bande gazonnée ; privilégier les vols vers l'Ouest en respectant les points 4) et 5).",
-      "C) CIRCUIT AVION 1) TKOF 04 : maintenir l'axe de piste, survoler la voie rapide et ne pas virer avant l'autoroute.; DEP vers l'Ouest : privilégier NW; DEP vers l'Est ou vers le lac : privilégier E (éviter SA).",
+      "C) CIRCUIT AVION 1) TKOF 04 : maintenir l'axe de piste, survoler la voie rapide et ne pas virer avant l'autoroute. DEP vers l'Ouest : privilégier NW ; DEP vers l'Est ou vers le lac : privilégier E (éviter SA).",
       "Bien survoler l'échangeur des Glaisins.",
       "",
       "",
-      "ANNECY MEYTHET 4) ARR 22 : de l'Est : arriver E vers la base publiée ou via verticale hors ATC.; de l'Ouest : arriver verticale installations vers la vent arrière.; du Nord : arriver N vers la verticale installations puis la vent arrière.; du Sud : Arriver SA vers la vent arrière ou via verticale hors ATC.",
+      "ANNECY MEYTHET 4) ARR 22 : de l'Est : arriver E vers la base publiée ou via verticale hors ATC. de l'Ouest : arriver verticale installations vers la vent arrière. du Nord : arriver N vers la verticale installations puis la vent arrière. du Sud : Arriver SA vers la vent arrière ou via verticale hors ATC.",
       "D) CIRCUIT HÉLICOPTÈRE Le circuit avion est utilisable aussi par les hélicoptères.",
       "Entre le point HM et la piste non revêtue, survoler le CD 14 à une altitude supérieure ou égale à 1850 ft.",
       "E) ITINÉRAIRE VFR Ils ne sont obligatoires que sur instruction du contrôle, notamment en VFR Spécial avec présence d'IFR.",
-      "1) Itinéraire ALBY - SA : Rester à l'Est de l'autoroute A41; Une attente pourra être imposée à SA 2) Itinéraires N - NA et NE - NA :; Rester au Nord des autoroutes A41 et A410; Une attente pourra être imposée à NA.",
+      "1) Itinéraire ALBY - SA : Rester à l'Est de l'autoroute A41 ; Une attente pourra être imposée à SA 2) Itinéraires N - NA et NE - NA : Rester au Nord des autoroutes A41 et A410 ; Une attente pourra être imposée à NA.",
       "F) La procédure « réduction des séparations sur piste » est applicable sur la piste revêtue pour les aéronefs monomoteurs à hélice en VFR dans les conditions fixées par la réglementation nationale.",
-      "ANNECY MEYTHET Equipement AD AD équipé de visualisation radar (couverture partielle) : voir AD 1.0.",
+      "ANNECY MEYTHET Équipement AD AD équipé de visualisation radar (couverture partielle) : voir AD 1.0.",
       "",
       "",
       "",
@@ -279,7 +279,7 @@
     "reportingPoints": [
       {
         "name": "NA",
-        "location": "Echangeur A41 / A410"
+        "location": "Échangeur A41 / A410"
       },
       {
         "name": "W",

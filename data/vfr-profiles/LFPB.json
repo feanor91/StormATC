@@ -161,7 +161,7 @@
       "",
       "RWY 27 utilisable exclusivement à l'atterrissage des aéronefs d'envergure inférieure à 52 m.",
       "RWY 09 utilisable exclusivement au décollage des aéronefs d'envergure inférieure à 52 m.",
-      "L'AD est interdit au trafic commercial régulier et charter, réservé aux ACFT obligatoirement munis des FREQ de ‘'DE GAULLE APP'' (IFR) et ‘'LE BOURGET TOUR''.",
+      "L'AD est interdit au trafic commercial régulier et charter, réservé aux ACFT obligatoirement munis des FREQ de \"DE GAULLE APP'' (IFR) et \"LE BOURGET TOUR''.",
       "ACFT tous types aucun vol local d'entraînement n'est admis de jour comme de nuit (Exceptionnel et sur PPR pour ACFT à hélice).",
       "",
       "",
@@ -189,7 +189,7 @@
       "Procédure d'arrivée Entrée dans la CTR PARIS.",
       "L'autorisation d'entrée dans la CTR PARIS sera demandée sur FREQ LE BOURGET Tour avant d'atteindre ses limites.",
       "Elle comportera de plus : indicatif, type d'appareil, provenance, position, altitude.",
-      "Sauf autorisation particulière du contrôle, l'entrée dans la CTR PARIS s'effectuera à l'un des points suivants : Entrée Nord/Ouest : W1 (RDL 133° /PON) ;; Entrée Sud/Est : E1 (RDL 119° /PON) .",
+      "Sauf autorisation particulière du contrôle, l'entrée dans la CTR PARIS s'effectuera à l'un des points suivants : Entrée Nord/Ouest : W1 (RDL 133° /PON) ; ; Entrée Sud/Est : E1 (RDL 119° /PON).",
       "Itinéraire à l'intérieur de la CTR PARIS Sauf autorisation contraire de la TWR, les ACFT en vue du sol suivront les routes magnétiques ci-après.",
       "Entrée Nord/Ouest :W1 RM 133° (RDL 133° /PON) puis RM 089° (RDL 269° /BT) jusqu'à W2.",
       "",
@@ -197,7 +197,7 @@
       "Attente Sauf autorisation contraire de la TWR, l'attente initiale éventuelle sera effectuée en vol circulaire à la verticale de W1 à l'altitude de 1500 ft ou à la verticale de E1 à l'altitude de 1300 ft Altitude en vol L'altitude MAX de vol à l'intérieur de la CTR PARIS est limitée à 1500 ft.",
       "",
       "",
-      "après W2 ou après E2 : se conformer aux instructions",
+      "",
       "Dans le cas contraire se diriger vers le seuil 03 pour effectuer un atterrissage sur la piste 03 sans interférer avec la piste 09/27.",
       "",
       "",
@@ -210,11 +210,11 @@
       "",
       "Plafond 1500 ft.",
       "",
-      "PARIS LE BOURGET Procédure de radiocommunication A l'arrivée, pour pénétrer sur l'itinéraire : écouter l'ATIS du BOURGET; contacter LE BOURGET 3 mn au moins avant la gare de VAIRES pour obtenir la clairance.; maintenir ensuite la veille radio.",
+      "PARIS LE BOURGET Procédure de radiocommunication A l'arrivée, pour pénétrer sur l'itinéraire : écouter l'ATIS du BOURGET ; contacter LE BOURGET 3 mn au moins avant la gare de VAIRES pour obtenir la clairance. maintenir ensuite la veille radio.",
       "Atterrissage de nuit RWY 03 PAPI obligatoire.",
-      "Panne de radiocommunication A l'arrivée : avant la gare de VAIRES se dérouter sur l'AD de dégagement prévu.; après la gare de VAIRES, suivre les dernières instructions reçues.",
-      "Au Départ : avant la gare de VAIRES, faire demi tour; après la gare de VAIRES poursuivre le vol et appliquer la règlementation générale.",
-      "Equipement de surveillance de trafic : AD équipé d'un radar secondaire (voir AD 1.0)."
+      "Panne de radiocommunication A l'arrivée : avant la gare de VAIRES se dérouter sur l'AD de dégagement prévu. après la gare de VAIRES, suivre les dernières instructions reçues.",
+      "Au Départ : avant la gare de VAIRES, faire demi tour ; après la gare de VAIRES poursuivre le vol et appliquer la règlementation générale.",
+      "Équipement de surveillance de trafic : AD équipé d'un radar secondaire (voir AD 1.0)."
     ],
     "reportingPoints": [
       {

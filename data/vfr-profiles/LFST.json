@@ -232,13 +232,13 @@
       "Présence d'un obstacle de type clôture balisée d'une hauteur de 2,5 m dans la bande de piste à 120 m du seuil 05 entre les RDL 179° et 209° et entre les RDL 249° et 279°.",
       "Procédure \"réduction des séparations sur piste\" applicable sur la piste 05/23 aux seuls aéronefs monomoteurs à hélice en vol VFR dans les conditions fixées par la réglementation nationale.",
       "HEL équipés de roues : tous les mouvements doivent se faire au roulage au sol entre les TWY K, M, N, Q et le poste désigné et vice versa.",
-      "Equipement de surveillance des trafics : aérodrome équipé d'un radar primaire et secondaire.",
+      "Équipement de surveillance des trafics : aérodrome équipé d'un radar primaire et secondaire.",
       ""
     ],
     "reportingPoints": [
       {
         "name": "N",
-        "location": "Echangeur autoroutier Brumath Nord A4/A340"
+        "location": "Échangeur autoroutier Brumath Nord A4/A340"
       },
       {
         "name": "N1",
