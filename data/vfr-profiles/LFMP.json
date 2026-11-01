@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFMP",
   "name": "Perpignan-Rivesaltes",
   "source": {
     "publication": "AIP France AD 2 LFMP",
     "chartDate": "2025-10-02",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 42.74083,
@@ -186,5 +188,93 @@
     "HOR de modulation au Niveau 5 publiés par NOTAM. / Other SKED on request to AD operator: operations.perpignan@aeroports-laregion.fr - Modulation SKED at Level 5 published by NOTAM.",
     "Moyens de sauvetage / Rescue equipement: 1 VIM 90 P2.5 - 1 VIM 75 P2.5 - 1 VIM 60 P2.5 - 1 véhicule de commandement / command vehicle",
     "Poudre / Powder 250 kg Péril animalier / Wildlife strike hazard: Assuré pendant HOR RFFS / Provided during RFFS SKED."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD réservé aux ACFT munis de radio.",
+      "VAV interdit .",
+      "Utilisable par les ULM multiaxes.",
+      "Piste 15/33 limitée par vent traversier : Supérieur à 25 kt (piste sèche); Supérieur à 20 kt (piste mouillée).",
+      "",
+      "L'attention des pilotes est attirée par la présence d'une hélistation hospitalière en terrasse, située sous la finale 33, utilisable de jour et de nuit (activité annoncée sur A/A 118.3).",
+      "Forte concentration d'oiseaux aux abords et sur l'aérodrome du 15 septembre au 1er février.",
+      "Survol de la \"La Narède\" dangereux en dessous de 3600 ft AMSL (2600 ft ASFC) : tirs d'explosifs.",
+      "Pour tous les hot spots : Afin d'éviter les incursions sur piste, vigilance visuelle et écoute fréquences accrues, collationnement exigé avant de pénétrer sur piste.",
+      "HS1 renforcé : Après virage à droite en bout de LIMA, temps de roulage sur TWY ROMEO très court.",
+      "HS2 et HS3 : Points d'attente situés sur un TWY très court, réduisant le temps de roulage.",
+      "",
+      "L'autorisation d'utiliser la RWY 13/31 est donnée par le CTL en fin de vent arrière.; Circuit dans l'Ouest sur clairance ATC :; En basse hauteur, 500 ft MNM, sur clairance ATC; Sauf clairance contraire du contrôle les virages après décollages s'effectuent dans le sens du circuit d'aérodrome.",
+      "PERPIGNAN RIVESALTES Roulage : Attention particulière : être très attentif aux clairances de remontée de piste.",
+      "Le collationnement de toute instruction avant une remontée de piste est exigé.",
+      "Taxiway C et Taxiway K entre C et G interdits aux ACFT d'envergure supérieure à 36 m.",
+      "Taxiway D interdit aux ACFT dont la MTOW est supérieure à 5,7 t.",
+      "ACFT de code D et supérieurs : demi-tours sur RWY 15/33 interdits sauf sur aire de demi-tours seuil 33.",
+      "Limitation de circulation sur les TWY Q, T et V, aux aéronefs dont la largeur hors tout du train d'atterrissage est inférieure à 4.5 m.",
+      "TWY F et P fermés à la circulation des aéronefs.",
+      "TWY L interdit aux ACFT d'envergure > ou égale à 52 m et/ou à une largeur hors-tout du train principal > ou égale à 14 m.",
+      "TWY L interdit aux ACFT d'envergure > à 46 m en cas de trafic IFR sur RWY 15/33.",
+      "Aire de compensation : sur TWY B.",
+      "Essais moteurs : Est considérée comme \"essai moteurs\" toute opération effectuée sur un aéronef à l'arrêt au cours de laquelle le ou les moteurs fonctionnent plus de 5 minutes ou à une puissance supérieure à celle utilisée pour les séquences de mise en route ou de roulage.",
+      "",
+      "",
+      "Les demandes d'entraînement pour les aéronefs de code supérieur à B doivent être transmises à l'exploitant d'aérodrome avec préavis minimal de 24 heures, exclusivement à : operations.perpignan@aeroports.laregion.fr ou par téléphone au 04 68 52 60 73.",
+      "",
+      "",
+      "Contacter MONTPELLIER APP 130.855, 5 min avant d'entrer dans la TMA.",
+      "Il est préconisé d'effectuer les autres transits côtiers à 1000 ft QNH en laissant le littoral sur le travers gauche de l'appareil.",
+      "",
+      "PERPIGNAN RIVESALTES Equipement AD PAPI calibrés selon ACFT de référence A320.",
+      "PCL : PPR auprès de l'exploitant d'aérodrome de l'AD.",
+      "La mise en route du balisage s'effectue en donnant 3 coups d'alternat en moins de 5 secondes sur la fréquence Tour, le passage en brillance haute intensité en donnant 5 coups d'alternat, l'extinction en donnant 7 coups d'alternat.",
+      "STAP : paramètres disponibles : vent, RVR, base des nuages , VISI , T, DP, QNH, QFE.",
+      "Autre accès au STAP TEL : 04 68 63 75 25.",
+      "Absence ATS, PPR à l'exploitant d'aérodrome.",
+      "FR : 0430-0000 - EN : 0000-0430 ETE - 1HR Equipement de surveillance du trafic : aérodrome équipé d'une visualisation radar (voir AD 1.0).",
+      "Consignes particulières de radiocommunication Panne de radiocommunication Au départ : a) avant le décollage, ne pas décoller. b) après décollage, afficher 7600 au transpondeur, se conformer à la clairance départ pour sortir de la CTR.",
+      "A l'arrivée : a) afficher 7600, b) hors CTR (D) ne pas rentrer. c) ne pas s'intégrer dans la circulation d'aérodrome sauf cas d'urgence : dans ce cas se présenter phares allumés face à la tour venant de l'est, puis, après passage à la verticale de l'aérodrome à l'altitude de 1700 ft, possibilité de s'intégrer comme sur un terrain non contrôlé dans le circuit d'aérodrome 15/33 dans l'est.",
+      "PERPIGNAN RIVESALTES 11 - RFFS : Autres HOR sur demande auprès de l'exploitant AD : operations.perpignan@aeroports-laregion.fr - 12 - 13 - 14 - Entretien, réparations (petits avions, hélicoptères).",
+      "AEROSMITH66 : TEL : 04 68 63 27 60 - E-mail : technicaloffice@aerosmith66.com Aéro Service Roussillon : TEL / FAX : 04 68 52 37 93.",
+      "AEROFUTUR MAINTENANCE : TEL : 04 68 84 43 64 - E-mail : contact@aerofutur-maintenance.fr 15 - ACB : du Roussillon TEL : 04 68 73 48 18.",
+      "Perpignan Hélico TEL : 06 16 37 14 98."
+    ],
+    "reportingPoints": [
+      {
+        "name": "NL",
+        "location": "Phare maritime de Cap Leucate"
+      },
+      {
+        "name": "NF",
+        "location": "Presqu'île de Port Fitou"
+      },
+      {
+        "name": "E",
+        "location": "Embouchure de l'Agly"
+      },
+      {
+        "name": "EA",
+        "location": "Pont sur l'Agly entre Saint Laurent et Torreilles"
+      },
+      {
+        "name": "PC",
+        "location": "Entrée Port de Canet"
+      },
+      {
+        "name": "SC",
+        "location": "Entrée Port de Saint-Cyprien"
+      },
+      {
+        "name": "MS",
+        "location": "Mas Sabola échangeur D900/D612"
+      },
+      {
+        "name": "WS",
+        "location": "Plan d'eau de Bosigues entre le Soler et Saint Feliu"
+      },
+      {
+        "name": "WN",
+        "location": "Pont de la D117 sur le Maury, Mas Camps"
+      }
+    ]
+  }
 }

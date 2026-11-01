@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFMQ",
   "name": "Castellet",
   "source": {
     "publication": "AIP France AD 2 LFMQ",
     "chartDate": "2026-03-19",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.25222,
@@ -70,5 +72,39 @@
     "Niveau 1 / Level 1 hors HOR ATS / outside ATS SKED.",
     "Lake rescue 1 boat + 2 lifeboats (60 seats).",
     "Péril animalier / Wildlife strike hazard: Occasionnel / Random."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD interdit aux planeurs.",
+      "AD interdit aux aéronefs (hors hélicoptères) par composante traversière supérieure à 15 kt.",
+      "Activité IFR possible.",
+      "Sauf ACFT basés autorisés par l'exploitant AD, utilisation de la piste 12/30 interdite hors HOR AFIS.",
+      "Port d'un gilet haute visibilité obligatoire côté piste.",
+      "Inspection de piste uniquement pendant les HOR ATS.",
+      "Possibles restrictions des activités aériennes à prévoir lors des évènements prévus sur le circuit Paul Ricard.",
+      "Déclaration de vol pour les ACFT sous plan de vol obligatoire via : vols d'aviation d'affaires : https://cy.myhandlingsoftware.com; vols d'aviation générale : https://www.touchngo.fr.",
+      "",
+      "Par régime de brise de mer (vent du SSW) et en cas d'indication douteuse de la manche à vent utiliser RWY 30.",
+      "AD susceptible d'être envahi en quelques minutes par la brume de mer.",
+      "Risque d'effet de voile brun dû au souffle des hélices et pales (présence possible de poussières sur l'ensemble de la plateforme).",
+      "Présence possible d'oiseaux sur la plateforme et aux abords immédiats de celle-ci.",
+      "",
+      "Tours de piste sur demande préalable par TEL : +33 4 94 98 39 35.",
+      "Entrainements, remises des gaz, touch and go et tours de piste interdits hors HOR ATS et entre 1100-1200 (ETE : - 1 HR).",
+      "Entraînement IFR : se référer à l'eAIP.",
+      "Survol du circuit automobile interdit en dessous de 1500 ft AAL.",
+      "La protection contre les obstacles est limitée à 7 km pour les PAPI des RWY 12 et 30.",
+      "Pour toute procédure en piste 30 , utilisation obligatoire du PAPI 30.",
+      "PAPI 30 en service uniquement en présence agent AFIS.",
+      "RWY 12 et 30 : Décollage à partir du seuil obligatoire.",
+      "LE CASTELLET 10 - AVT : Automate H24 JET A1-AVGAS 100LL : paiement par badge exploitant ou CB uniquement.",
+      "Camion avitailleur JET A1 HOR ATS : paiement par CB ou espèces.",
+      "",
+      "",
+      "",
+      "11 - RFFS : Sauvetage sur lac 1 embarcation + 2 canots de sauvetage (60 places).",
+      ""
+    ]
+  }
 }

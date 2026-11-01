@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFKC",
   "name": "Calvi-Sainte-Catherine",
   "source": {
     "publication": "AIP France AD 2 LFKC",
     "chartDate": "2026-03-19",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 42.52444,
@@ -160,5 +162,35 @@
     "Report on E, W at 1200 ft AMSL (1000 ft ASFC).",
     "OVERSEAS FLIGHTS: CALVI / CONTINENT / CALVI: see AIP FRANCE and additional book to aeronautical charts.",
     "Traffic surveillance equipment: AD equipped with a radar display (see AD 1.0)."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "La piste 18/36 n'est pas exploitable par vents traversiers supérieurs ou égaux à 20 kt si la piste est mouillée.",
+      "Activité ULM : ULM de classe 2, 3, 4 et 6 muni de radio et transpondeur mode C :; utilisation de l'aérodrome subordonnée à la justification par le pilote de son aptitude à s'intégrer dans la circulation d'aérodrome.",
+      "Utilisation d'une hélisurface dans un rayon de 8 km / ARP AD : PPR ATS pour obtention du formulaire de demande d'accord (voir ATS).",
+      "Point de vigilance pilote : en approche RWY 36, proximité d'une voie routière.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "QFU 177° préférentiel cause procédure IFR.",
+      "Piste déscendante 2 % à partir du THR 36.",
+      "Roulage interdit hors RWY et TWY.",
+      "TWY A (largeur 13,5 m) limité aux appareils de code B dont la hauteur de dérive est inférieure à 11 m.",
+      "TWY B (largeur 23 m) limité aux appareils de code D dont la largeur hors tout du train principal est inférieure à 9 m.",
+      "TWY C (largeur 11 m) limité aux appareils de code A (envergure < 12 m).",
+      "CALVI SAINTE CATHERINE PRKG D : Les aéronefs évoluant sur le parking D sont placés sous la responsabilité de l'Assistant en escale.",
+      "La circulation sur le parking D s'effectue dans le sens horaire.",
+      "Les cheminements piétons sont interdits, les déplacements sont assurés uniquement avec le véhicule de l'Assistant en escale. des points d'entrée.",
+      "Arrivée S : Altitude préférentielle avant contact radio 1500 ft AMSL minimum.",
+      "Qualité du contact radio aléatoire en dessous de 1500 ft AMSL.",
+      "Présentation aux points E, W à 1200 ft AMSL (1000 ft ASFC).",
+      "TRAVERSEES MARITIMES : CALVI / CONTINENT / CALVI : voir AIP FRANCE et complément aux cartes aéronautiques.",
+      "AD Equipement Equipement de surveillance du trafic : AD équipé d'une visualisation radar (voir AD 1.0)."
+    ]
+  }
 }

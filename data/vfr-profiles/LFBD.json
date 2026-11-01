@@ -5,14 +5,16 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded."
+    "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFBD",
   "name": "Bordeaux - Mérignac",
   "source": {
     "publication": "AIP France AD 2 LFBD",
     "chartDate": "2026-09-03",
-    "extraction": "chart text, table and English column read by script, procedures structured by hand"
+    "extraction": "chart text, table and English column read by script, procedures structured by hand",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 44.82861,
@@ -206,5 +208,19 @@
     "Paradropping activity NR 312: see AIP ENR 5.5 AEM activity NR 9011, 9026, 9380 and 9497: see AIP ENR 5.5 Free flying winch launch activity NR 905: see AIP ENR 5.5 special VFR conditions.",
     "Niveau / Level 8.",
     "Voir / see AIP AD 2 LFBD.6 Péril animalier / Wildlife strike hazard: de / from SR-30 à / to SS+30."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Aires K/J : Les aéronefs au départ en régime de vol VFR contactent également l'ATC pour demande de mise en route incluant potentiellement une attente au roulage, avant de quitter leur poste de stationnement ou la station d'avitaillement.",
+      "Du 1er avril au 31 octobre, cause saturation des postes de stationnement, l'obtention d'un poste est soumise à la demande avant le départ auprès de l'exploitant aéroportuaire SA-ADBM via l'assistant.",
+      "Cette procédure ne s'applique pas aux ACFT basés, aux ACFT d'Etat, ni aux SMUH.",
+      "Vols de planeurs et d'ULM interdits dans la CTR.",
+      "Les vols d'entraînement sont soumis à restriction (voir AIP : AD 2 LFBD.21.4.1.3).",
+      "Danger à la navigation Risque de confusion des seuils 05 et 11 du fait de leur proximité.",
+      "Activité parachutage N°312 : voir AIP ENR 5.5 Activités AEM N° 9011, 9026, 9380 et 9497 : voir AIP ENR 5.5 Activité treuillage de vol libre N°905 : voir AIP ENR 5.5 Procédures et consignes particulières",
+      "",
+      ""
+    ]
+  }
 }

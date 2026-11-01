@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFOF",
   "name": "Alençon - Valframbert",
   "source": {
     "publication": "AIP France AD 2 LFOF",
     "chartDate": "2025-12-25",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.44667,
@@ -59,5 +61,20 @@
     "Training patterns reserved for home based ACFT and low height circuits only for training instruction flights.",
     "Aerobatics (NR 6330): See AIP ENR 5.5 AEM over AD (NR 8398): See AIP ENR 5.5 Glider winching activity on unpaved RWY, vertical limit up to 1650 ft AAL, from SR to SS, announced by flashing light on the winch.",
     "Information on FREQ A/A ALENÇON."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Utilisation simultanées des deux pistes parallèles interdite.",
+      "L'attention des pilotes est attirée sur la faible longueur de la piste revêtue.",
+      "",
+      "La RWY non revêtue est réservée aux planeurs et aux avions de servitude.",
+      "QFU préférentiel 068°, cause sécurité et nuisances sonores au décollage.",
+      "Après TKOF RWY 25, altération de route à 30° à droite dès que possible.",
+      "Plate forme très sensible au bruit, éviter le survol d'Alençon et des communes environnantes.",
+      "Entraînements tours de piste réservés aux ACFT basés et circuits basse hauteur uniquement dans le cadre des vols d'entraînements d'instruction.",
+      "Activité de voltige (N° 6330) : Voir AIP ENR 5.5 AEM sur AD (N° 8398) : Voir AIP ENR 5.5 Activité de treuillage planeurs sur la piste non revêtue, limite verticale jusqu'à 1650 ft AAL, de SR à SS, signalée par le gyrophare situé sur le treuil et information sur la fréquence A/A ALENÇON.",
+      ""
+    ]
+  }
 }

@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFAS",
   "name": "Falaise-Mont d'Eraines",
   "source": {
     "publication": "AIP France AD 2 LFAS",
     "chartDate": "2025-12-25",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.92694,
@@ -48,5 +50,20 @@
     "Aerobatics on AD (NR 6293): See AIP ENR 5.5.",
     "From March to October: intense gliding activity from late morning to SS.",
     "AEM (N° 8463): See AIP ENR 5.5 (1) AD voisins / neighbouring AD: ALENÇON - ARGENTAN - AVRANCHES - BAGNOLES- BERNAY- CAEN -"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD réservé aux ACFT basés et à ceux basés sur les AD voisins (1) ou autorisés par l'exploitant.",
+      "Activité ULM réservée aux ULM basés et à ceux des classes 3, 4 et 6.",
+      "",
+      "Le seuil opposé n'étant pas visible depuis les points d'attente une attention particulière est recommandée avant de pénétrer sur la piste.",
+      "",
+      "Compte tenu de l'environnement et des nuisances sonores, éviter le survol des zones urbaines sensibles (Damblainville, Eraines, Versainville).",
+      "",
+      "Activité voltige (N° 6293) sur AD : Voir AIP ENR 5.5.",
+      "De mars à octobre : activité vélivole intense de la fin de matinée au SS.",
+      ""
+    ]
+  }
 }

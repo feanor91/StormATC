@@ -4,14 +4,16 @@
     "Only what the chart states is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text; the reporting points, rules and notes were added by hand.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "No circuit height or circuit side is printed on this chart, so none is recorded."
+    "No circuit height or circuit side is printed on this chart, so none is recorded.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFBR",
   "name": "Muret - Lherm",
   "source": {
     "publication": "AIP France AD 2 LFBR",
     "chartDate": "2026-10-01",
-    "extraction": "manual, from the chart text and images"
+    "extraction": "manual, from the chart text and images",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.44917,
@@ -105,5 +107,25 @@
     "Night VFR is approved; PAPI is mandatory on runway 30. At night only one movement is allowed on the manoeuvring area, so the holding point is the white safety line marking the aprons and taxiways.",
     "Pilot-controlled lighting (low and high intensity) is usable outside ATS hours, for travel flights only.",
     "Aerobatics no. 6702: see AIP ENR 5.5. Unmanned aircraft activity Muret-Rayat 31-003 and AEM no. 9230: see AIP ENR 5.5."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Risque aviaire : d'octobre à mai.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  }
 }

@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFNC",
   "name": "Mont-Dauphin - Saint-Crépin",
   "source": {
     "publication": "AIP France AD 2 LFNC",
     "chartDate": "2023-02-23",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 44.70056,
@@ -62,5 +64,27 @@
     "Users information on A/A.",
     "During winch activity, do not perform recognition flight below 5000 ft AMSL.",
     "Loss of altitude area for gliders to join circuit: MontDauphin Vauban fort."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "L'utilisation simultanée piste revêtue avions et piste non revêtue planeurs est interdite.",
+      "",
+      "Déneigement : confirmation auprès de l'exploitant.",
+      "En été brise et turbulence forte.",
+      "Hors communications liées à des impératifs de sécurité, il est demandé aux aéronefs entrant dans le circuit d'aérodrome, d'effectuer une écoute d'au moins deux minutes de la fréquence afin de s'assurer qu'il n'y a pas d'opération de treuillage en cours, l'utilisation de la fréquence pouvant gêner la communication entre l'opérateur et le pilote planeur.",
+      "Présence d'un tiroir en herbe de 200 x 50 m sur RWY 16 revêtue utilisable uniquement pour les décollages sur RWY 16 revêtue.",
+      "Point d'attente RWY 16 : absence de panneau d'obligation.",
+      "Prudence recommandée pour le roulage hors pistes.",
+      "Pas de roulage à l'Ouest de la piste revêtue.",
+      "PRKG Novembre (herbe) : Respecter le marquage sol de limite côté TWY (plots jaunes) à ne pas dépasser.",
+      "",
+      "Voltige (n° 6935) : Axe 159°/339° de 2000 m centré sur l'ARP, 4000 ft AMSL/8200 ft AMSL, HJ, activité réservée aux planeurs.",
+      "Activité de treuillage planeurs (N° 994) à l'Ouest de la piste revêtue 16/34 ALT maximale câble : 5000 ft AMSL (non balisé).",
+      "Treuil équipé de gyrophare.",
+      "Information des usagers sur A/A.",
+      "Pendant les périodes de treuillage, ne pas effectuer la reconnaissance de site à une hauteur < 5000 ft AMSL.",
+      "Zone de perte d'altitude des planeurs pour intégration : fort Vauban de Mont-Dauphin."
+    ]
+  }
 }

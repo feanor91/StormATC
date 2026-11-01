@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFNG",
   "name": "Montpellier - Candillargues",
   "source": {
     "publication": "AIP France AD 2 LFNG",
     "chartDate": "2024-08-08",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.61028,
@@ -84,5 +86,34 @@
     "Cross-wind leg QFU 322° or base leg QFU 142° is located midway between built-up areas of Mudaison and Candillargues.",
     "Downwind leg exclusively East of Berange river.",
     "Preferred QFU: 142° due to environment."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Voie de circulation parallèle inutilisable après fortes précipitations.",
+      "",
+      "Une attention particulière doit être observée par les usagers de LFNG sur la forte activité IFR commerciale et d'entraînement dans la CTR MONTPELLIER.",
+      "Une demande de clairance auprès de MONTPELLIER TOUR 118.775 est obligatoire avant de pénétrer dans la CTR Montpellier.",
+      "Après décollage, risque d'intrusion dans la CTR de Montpellier, du fait de sa proximité : Décollage en QFU 322 ° : virer à droite et éviter les communes de Mudaison et Baillargues.",
+      "Décollage en QFU 142° : virer à gauche, et rester au nord du canal du Rhône à.",
+      "",
+      "La branche vent traversier QFU 322° ou base QFU 142° se fera à mi-distance entre l'agglomération de Mudaison et celle de Candillargues.",
+      "La branche vent arrière se fera exclusivement à l'Est de la rivière Berange.",
+      "QFU 142° préférentiel cause environnement."
+    ],
+    "reportingPoints": [
+      {
+        "name": "AM",
+        "location": "- Reporting points Remparts de la cite médéviale d'Aigues Mortes"
+      },
+      {
+        "name": "ER",
+        "location": "Nord échangeur routier D62/D61 au nord de la Grande Motte"
+      },
+      {
+        "name": "NC",
+        "location": "Château d'eau de Mauguio"
+      }
+    ]
+  }
 }

@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFBX",
   "name": "Périgueux-Bassillac",
   "source": {
     "publication": "AIP France AD 2 LFBX",
     "chartDate": "2026-07-09",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 45.1975,
@@ -70,5 +72,31 @@
     "VFR MTOW < 1.9 t: PPR 48HR.",
     "IFR and VFR MTOW > 1.9 t: PPR 48HR and ATS presence mandatory and handling assistance mandatory request on portal MyHandling (https://cy.myhandlingsoftware.com).",
     "FBO EDEIS: perigueux.afis@edeis.com PCL: PPR 48HR, instructions provided by AD operator during the request."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD réservé aux ACFT munis de radio.",
+      "Utilisation simultanée des pistes interdite.",
+      "TORA, ASDA et LDA RWY 29 réduites cause RESA.",
+      "RWY non revêtue réservée aux ACFT basés et aux pilotes de planeurs autorisés.",
+      "En HOR ATS, les redevances sont payables à la tour.",
+      "",
+      "Par fort vent de travers, turbulences modérées à fortes aux seuils 11 et 29.",
+      "Cause relief, le terrain se trouve dans la pénombre à CS+15 MIN.",
+      "",
+      "QFU 112° préférentiel cause nuisances.",
+      "Décollage depuis TWY A : autorisé uniquement de jour et en piste 11.",
+      "",
+      "",
+      "",
+      "Arrivée verticale AD à 1800 ft AMSL pour tout aéronef avant intégration dans le circuit de piste.",
+      "Circuit basse hauteur à 500 ft MNM possible avec instructeur à bord.",
+      "Résistance TWY et PRKG : 26 F/C/W/T.",
+      "Décollage piste 29 revêtue : de nuit, en raison de la trouée courbe, passant l'extrémité de piste, prendre 242°.",
+      "Vols VFR MTOW < 1.9 t : PPR 48HR.",
+      "Vols IFR et VFR MTOW > 1.9 t : PPR 48HR et présence ATS obligatoire et demande d'assistance obligatoire sur le portail MyHandling (https://cy.myhandlingsoftware.com).",
+      "FBO EDEIS : perigueux.afis@edeis.com PCL : PPR 48HR, consignes fournies par l'exploitant lors de la demande."
+    ]
+  }
 }

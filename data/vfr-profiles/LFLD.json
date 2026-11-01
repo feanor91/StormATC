@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFLD",
   "name": "Bourges",
   "source": {
     "publication": "AIP France AD 2 LFLD",
     "chartDate": "2024-11-28",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 47.06083,
@@ -60,5 +62,37 @@
     "Level 2: AFIS SKED.",
     "Level 3: PPR PN 24HR, except emergency.",
     "Péril animalier / Wildlife strike hazard: Occasionnel / Random."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "QFU 238° préférentiel cause environnement.",
+      "Tout TKOF ou LDG sur la piste revêtue doit être suspendu si un planeur est immobilisé sur la demilargeur contigüe à la piste revêtue.",
+      "Manche à air : possibilité d'indications erronées par vent de Nord et de Nord-Ouest.",
+      "Les décollages en piste 06 doivent s'effectuer depuis le seuil 06.",
+      "En cas de RVR < 550 m, décollage interdit.",
+      "Consignes applicables en cas d'utilisation de la PCL : prévoir AD de dégagement accessible et doté d'un service ATS ou disposer de 2 E/R VHF.; VFR de nuit local uniquement dans les conditions du.",
+      "de voyage.",
+      "PAPI RWY 24 obligatoire pour l'atterrissage IFR et VFR de nuit.",
+      "PCL : PAPI allumés en permanence; sur PPR AFIS avant 1100 le dernier jour ouvrable.",
+      "",
+      "Selon protocole.",
+      "Voltige (N°6409) : Axe 045°/225° de longueur 2630 m centré sur ARP , 2000 ft AMSL/4500 ft AMSL.",
+      "Avions : LUN-SAM, sauf jour férié : 0800-1100 et 1400-1700 (ETE -1HR).",
+      "Planeur : 1100-CS.",
+      "Activité réservée aux aéronefs autorisés par l'exploitant d'aérodrome.",
+      "Information des usagers : BOURGES INFO, AVORD APP, PARIS INFO.",
+      "BOURGES 11 - RFFS : Niveau 1 : En dehors HOR AFIS.",
+      "Niveau 2 : HOR AFIS.",
+      "Niveau 3 : PPR PN 24HR, sauf cas d'urgence.",
+      "12 - 13 - 14 - 01 Aviation TEL : 09 50 49 19 80."
+    ]
+  }
 }

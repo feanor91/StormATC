@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFBU",
   "name": "international Angoulême-Cognac",
   "source": {
     "publication": "AIP France AD 2 LFBU",
     "chartDate": "2026-07-09",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 45.72944,
@@ -123,5 +125,50 @@
     "Niveau 4 / Level 4: LUN-VEN / MON-FRI: 0800-1130 1230-1730 Niveau 5 sur demande / Level 5 on request.",
     "Public HOL and outside these SKED: Level 1 Opening and extension possible level 4 or 5 on request.",
     "Péril animalier / Wildlife strike hazard: Occasionnel / Random: HOR / SKED RFFS"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Activité IFR possible.",
+      "AD réservé aux ACFT munis de radio.",
+      "Proximité immédiate LF-R 102 à l'Est de l'aérodrome.",
+      "Activité connue d'ANGOULEME, COGNAC et LIMOGES Information.",
+      "Restrictions d'exploitation",
+      "Limitation à 4 aéronefs simultanés en entraînement tour de piste.",
+      "Utilisation de la FATO : réservée aux hélicoptères basés, signataires d'un protocole avec l'exploitant.",
+      "Circuit basse hauteur inférieur à 500 ft AAL : avec instructeur uniquement et hors DIM et JF.",
+      "Interdit entre 1200 et 1400 locales.",
+      "",
+      "",
+      "RWY 28 : poursuivre dans l'axe jusqu'à la RN10 avant le virage à droite.",
+      "En cas d'activité dense, utiliser prioritairement le circuit long défini ci-dessous : RWY10 : rejoindre le point NA puis NE, et réintégrer ensuite le circuit de piste, à 1400 ft AMSL, si les conditions météo le permettent.",
+      "RWY28 : rejoindre le point NE puis NA, et réintégrer ensuite le circuit de piste, à 1400 ft AMSL, si les conditions météo le permettent.",
+      "Circulation à sens unique sur le TWY GOLF, sur la partie Ouest du TWY FOX et sur la partie Sud du TWY WHISKY (voir AD 2 LFBU GMC 01).",
+      "",
+      "ANGOULEME BRIE CHAMPNIERS 11 - RFFS : JF et en dehors de ces HOR : Niveau 1 Ouverture et extension possible niveau 4 ou 5 sur demande.",
+      ""
+    ],
+    "reportingPoints": [
+      {
+        "name": "NW",
+        "location": "Intersection N 10 et D 15"
+      },
+      {
+        "name": "NA",
+        "location": "Entrepôts de la Poutardière"
+      },
+      {
+        "name": "NE",
+        "location": "Carrière au Nord de la forêt de la Braconne"
+      },
+      {
+        "name": "SE",
+        "location": "Echangeur N 141 + Antenne"
+      },
+      {
+        "name": "SA",
+        "location": "Nord du plan d'eau de Saint-Yriex"
+      }
+    ]
+  }
 }

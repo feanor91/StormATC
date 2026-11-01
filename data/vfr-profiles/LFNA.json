@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFNA",
   "name": "Gap - Tallard",
   "source": {
     "publication": "AIP France AD 2 LFNA",
     "chartDate": "2026-04-16",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 44.45389,
@@ -136,5 +138,34 @@
     "Non-based ACFT: circuit pattern prohibited, except AD operator's agreement.",
     "Gathering of more than 6 ACFT, PPR 2 months to AD operator.",
     "GROUND TAXIING:"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Hélistation réservée aux HEL basés.",
+      "L'utilisation simultanée piste revêtue et piste non revêtue accolées interdite.",
+      "Tout LDG et TKOF d'avions est suspendu si un planeur ou un attelage se trouve à moins de 40 m de la limite commune.",
+      "L'atterrissage ou le décollage d'un aéronef sur l'une des pistes (revêtues ou non) pourra avoir lieu à condition que, sur l'autre piste, l'autre aéronef soit à l'arrêt ou ait annoncé \"vitesse contrôlée\".",
+      "Utilisation simultanée de la piste non revêtue (20R/02L) 700 x 80 m et de la bande recueil planeur (20L/02R) 400 x 60 m interdite.",
+      "Bande recueil planeur (20L/02R) 400 x 60 m réservée uniquement à l'atterrissage des planeurs et à l'entrainement des hélicoptères sur autorisation du gestionnaire.",
+      "Utilisation simultanée de la bande recueil planeur 400 x 60 m et de la FATO hélicoptère interdite.",
+      "Bande d'accélération planeur 443 x 10 m réservée à l'activité planeurs et autres ACFT hors activité planeurs.",
+      "L'attention des pilotes est attirée sur la déclivité de la RWY 20 à l'atterrissage.",
+      "",
+      "",
+      "Eviter le survol des zones habitées avoisinantes.",
+      "A l'Ouest des pistes zone réservée au parachutisme.",
+      "Pour la reconnaissance de la manche à air, rester à l'Est de la piste en dur.",
+      "Pas de verticale terrain.",
+      "QFU 203° préférentiel au décollage par vent de secteur Nord inférieur à 5 m/s.",
+      "Durant les heures d'activité du parachutage ou du vol à voile, les avions de servitude (avions largueurs ou remorqueurs) peuvent utiliser le QFU 023° à l'atterrissage alors que le QFU préférentiel est le 203°.",
+      "Pour les aéronefs intégrant le circuit de piste au 203°, s'annoncer obligatoirement en début d'étape de base.",
+      "Zone de perte d'altitude (ZPA) des planeurs pour intégration.",
+      "ALT d'arrivée 3000 ft (1000 m) AMSL.",
+      "Aéronefs basés: tours de piste limités à 4 par aéronef dans la limite de 2 aéronefs maximum en entraînement sauf autorisation de l'exploitant.",
+      "Aéronefs non-basés : tour de piste interdit sauf autorisation de l'exploitant.",
+      "Rassemblement d'aéronefs supérieur à 6, contact exploitant obligatoire avec PPR 2 mois.",
+      ""
+    ]
+  }
 }

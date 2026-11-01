@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFNW",
   "name": "Puivert",
   "source": {
     "publication": "AIP France AD 2 LFNW",
     "chartDate": "2022-12-29",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 42.91028,
@@ -55,5 +57,27 @@
     "AEM activity on AD: 500 ft ASFC, on Wednesday excluding glider activities, monitoring A/A FREQ mandatory.",
     "AEM activity (NR 9770) 0.5 NM South-West ARP: 500 ft ASFC, SR-SS, as per protocol.",
     "Gliders winching activity on AD (NR 987): SFC-3600 ft AMSL, SR-SS, rotating yellow light, unmarked cable."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Lors des opérations de treuillage planeurs et durant toute leur durée, le silence radio est obligatoire.",
+      "L'attention des usagers est attirée sur la présence d'obstacles à proximité de l'AD, une vérification des performances de l'aéronef est nécessaire.",
+      "Approches délicates (reliefs et turbulences).",
+      "Par vent de secteur S à SE < 15 kt, il est recommandé de décoller au QFU 317° (pente descendante 2 %) sauf dispositions contraires du manuel de vol.",
+      "Par vent de secteur S à SE > 15 kt, il est recommandé de décoller au QFU 137°.",
+      "Il est recommandé de commencer le virage à gauche avant Camp Gast pour suivre la trajectoire figurant sur la carte.",
+      "Présence de vents rabattants dans ce secteur.",
+      "Par vents forts de secteur NW ou SE : de fortes turbulences peuvent être rencontrées à la verticale et aux abords de l'aérodrome.",
+      "Précaution à prendre : le même sens n'est pas forcément utilisé pour le décollage et l'atterrissage.",
+      "",
+      "Présence de zones latérales de dégagement planeur, adjacentes aux bords de piste sur une largeur de 20 m.",
+      "Bande d'accélération pour attelages planeurs de 100 x 100 m au seuil 14 utilisable uniquement pour les décollages en 14.",
+      "Bande d'accélération pour attelages planeurs de 190 x 40 m au seuil 32 utilisable uniquement pour les décollages en 32.",
+      "Piste descendante dans le sens 32 (dénivelé de 15 m (51 ft) sur 720 m).",
+      "Activité AEM sur AD : 500 ft ASFC, le mercredi hors activité vol à voile, veille FREQ A/A obligatoire.",
+      "Activité AEM (N° 9770) 0,5 NM Sud-Ouest ARP : 500 ft ASFC, SR-SS, selon protocole.",
+      "Treuillage planeurs sur AD (N° 987) : SFC-3600 ft AMSL, SR-SS, feu tournant jaune sur treuil, câble non balisé."
+    ]
+  }
 }

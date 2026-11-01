@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFLH",
   "name": "Chalon - Champforgeuil",
   "source": {
     "publication": "AIP France AD 2 LFLH",
     "chartDate": "2026-08-06",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 46.82833,
@@ -65,5 +67,27 @@
     "PCL: SS+30 to SR-30.",
     "PCL switches on with 3 alternate buttom clicks and activates the RWY, the PAPI RWY 35 and switches off with 7 alternate buttom clicks or switches off automatically after 15 minutes.",
     "Parachuting activity NR 202: see AIP ENR 5.5 Aerobatics NR 6495: see AIP ENR 5.5"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "RWY revêtue 17/35 : accotements en pierre inutilisables.",
+      "RWY non revêtue 17/35 et TWY B réservés aux aéronefs basés et aux HEL.",
+      "Utilisation possible par des ACFT non basés sur PPR AFIS uniquement.",
+      "Inutilisable après fortes pluies.",
+      "Largeur des TWY : A : 10.5 m ; B : 12 m.",
+      "Activité IFR possible.",
+      "",
+      "Voltige N° 6464 : voir AIP ENR 5.5 Selon protocole avec l'exploitant d'aérodrome.",
+      "A l'aller comme au retour de la piste revêtue, marquer obligatoirement l'arrêt en A1 et A2 et vérifier l'absence de trafic conflictuel à l'atterrissage ou au décollage avant de couper l'axe de la bande gazonnée.",
+      "QFU 348° préférentiels cause procédure IFR et nuisances sonores.",
+      "Roulage interdit hors RWY et TWY.",
+      "HEL : durant l'activité de parachutisme, vérifier toutes voiles au sol avant mise en route.",
+      "DEP piste 35 : route départementale RD 336 perçant le bord de la trouée de décollage.",
+      "PCL sur PPR AFIS.",
+      "PCL : SS+30 à SR-30.",
+      "La PCL s'allume avec 3 coups d'alternat et met en service RWY, le PAPI RWY 35 et s'éteint avec 7 coups d'alternat ou s'éteint automatiquement après 15 minutes.",
+      "Parachutage N° 202 : voir AIP ENR 5.5 Voltige N° 6495 : voir AIP ENR 5.5"
+    ]
+  }
 }

@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFCY",
   "name": "Royan - Médis",
   "source": {
     "publication": "AIP France AD 2 LFCY",
     "chartDate": "2026-07-09",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 45.63111,
@@ -121,5 +123,29 @@
     "No holding point on unpaved RWY: After LDG on unpaved RWY, stay along the edge of RWY on the South side, before crossing the paved RWY.",
     "TWY B prohibited by night.",
     "Aerobatics NR 6500: see AIP ENR 5.5 Parachuting NR 388: see AIP ENR 5.5"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Utilisation simultanée des deux RWY interdite.",
+      "Activité IFR possible.",
+      "Distances déclarées utilisables : Longueur de piste réduite afin de disposer d'une bande aménagée de 60 m au THR 28 revêtue.",
+      "QFU 10 : limitation d'exploitation piste revêtue mouillée par vent de 20 kts établi venant du 180°.",
+      "",
+      "Par vent de secteur SE à S supérieur à 20 kt, risque de turbulences en finale au QFU 100° .",
+      "AEM N° 9189 : voir AIP ENR 5.5 Activité AEM interfère avec les tours de piste basse hauteur.",
+      "",
+      "QFU 280° préférentiel cause procédure IFR et nuisances sonores.",
+      "Décollage RWY 28 revêtue : adapter une vitesse minimale lors de la manoeuvre sur l'aire de retournement et avancer au minimum jusqu'à la deuxième flèche blanche.",
+      "Après décollage QFU 280° , maintenir l'axe pour éviter le survol de la zone AEM puis débuter virage à droite à 500 ft AAL minimum.",
+      "Circuit Sud réservé aux ACFT basés.",
+      "Circuits basse hauteur réservés aux vols en instruction, hauteur minimale 500 ft ASFC.",
+      "Le seuil RWY 28 n'étant pas visible des points d'attente A et B, une extrême prudence est recommandée avant de pénétrer sur la piste.",
+      "Pendant l'activité largage para ou de fort trafic, dans la mesure du possible, faire les essais moteur sur le PRKG afin de diminuer le temps d'occupation du TWY.",
+      "TWY B interdit de nuit et réservé aux ACFT de largeur hors tout train principal inférieur à 4,50 m.",
+      "Absence de point d'attente sur RWY non revêtue : Après LDG sur RWY non revêtue, maintenir le bord de RWY côté Sud, avant de traverser la RWY revêtue.",
+      "",
+      ""
+    ]
+  }
 }

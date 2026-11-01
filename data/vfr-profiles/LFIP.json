@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFIP",
   "name": "Peyresourde-Balestas",
   "source": {
     "publication": "AIP France AD 2 LFIP",
     "chartDate": "2023-11-02",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 42.79694,
@@ -98,5 +100,43 @@
     "No ACFT will line up and take off if another ACFT has reported turning final.",
     "After take-off, turn right to DEP N1 or DEP E or to join downwind leg (see chart).",
     "Caution with traffic transiting via Peyresourde pass."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD à caractéristiques spéciales, réservé aux pilotes titulaires : soit de la qualification montagne (roues et/ou skis); en état de validité,; soit de l'autorisation d'accès à l'altiport en état de; validité.",
+      "Pilotes d'ULM : label montagne FFPLUM (FNVM) fortement recommandé.",
+      "AD utilisable sans restriction par les HEL.",
+      "AD non contrôlé : une seule trouée d'envol.",
+      "Itinéraires et circuits en vol figurés sur la carte.",
+      "Utilisable par avions sur roues : performances compatibles avec les caractéristiques du terrain (déneigement non assuré).",
+      "Interdit aux aéronefs non munis de la fréquence A/A.",
+      "AD inutiisable hors piste et plateforme de stationnement.",
+      "Transmission obligatoire des messages de position sur la fréquence A/A.",
+      "Présence possible de talus de neige, de hauteur importante, en bordure de piste et à proximité du seuil de piste 09.",
+      "Forte activité parapente dans la vallée à 3 km à l'Ouest dans l'axe de piste sur versant Est du col d'Azet et sur la crête de Penaube.",
+      "",
+      "",
+      "ARR de l'Est : Col de Peyresourde (E) jusqu'à N2 à 5800 ft.",
+      "A partir de N2, débuter la descente vers le point S en suivant le tracé figuré sur la carte.",
+      "ARR de l'Ouest : par la centrale électrique (S) à 6000 ft.",
+      "Au point S, virage au cap 070° en descente et intégration suivant le tracé figurant sur la carte.",
+      "Sorties Suivre les itinéraires figurant sur la carte et signaler position et intentions aux points de report sur la fréquence A/A : Départ vers le Nord : suivre \"DEP N1\" avec cheminement côté est de la vallée.; Départ vers l'Est : ne pas virer à droite vers E, suivre \"DEP E\" en montée continue au-dessus du tour de piste et revenir verticale altiport à 6300 ft vers E.",
+      "Atterrissage RWY 09 obligatoire.",
+      "Passage verticale le seuil de piste 09 à la hauteur de la plateforme supérieure pour relevé altimétrique (5200 ft) et vérification de l'état de la piste et de son déneigement.",
+      "Tour de piste à 5300 ft.",
+      "Interrompre l'approche finale si un ACFT est aligné pour décoller sur la piste ou si un ACFT en mouvement sur la plateforme supérieure n'a pas annoncé son intention d'attendre l'atterrissage de l'ACFT en approche.",
+      "Décollage et départ RWY 27 obligatoire.",
+      "Avant l'alignement, faire un guet de 30 secondes au point d'attente avant piste.",
+      "Aucun aéronef ne s'alignera et décollera si un autre aéronef s'est annoncé en dernier virage.",
+      "Après le décollage, virer à droite vers le départ N1, le départ E ou vers la branche vent arrière (cf carte).",
+      "Attention au trafic en transit passant par le col de Peyresourde."
+    ],
+    "reportingPoints": [
+      {
+        "name": "N2",
+        "location": "Pont au Nord du lac de Loudenvielle"
+      }
+    ]
+  }
 }

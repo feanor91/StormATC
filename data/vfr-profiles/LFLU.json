@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFLU",
   "name": "Valence-Chabeuil",
   "source": {
     "publication": "AIP France AD 2 LFLU",
     "chartDate": "2024-11-28",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 44.91556,
@@ -139,5 +141,66 @@
     "Squawk 7600.",
     "Descend at 2500 AMSL in sight of VALENCE, fly overhead TWR at 2500 AMSL with lights on.",
     "Informations diverses / Miscellaneous Jet Systems (Hélicoptères / Helicopters ) TEL: 04 75 85 43 20 Taxis et locations de voiture sur demande / Taxis and car rental on request."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Utilisation simultanée de la piste revêtue et de la piste non revêtue 01L/19R interdite.",
+      "Utilisation simultanée des pistes non revêtues interdite.",
+      "Piste non revêtue 01R/19L réservée uniquement à l'atterrissage des planeurs et à l'entraînement des hélicoptères basés selon consigne locale.",
+      "ULM non basés : pendant les HOR ATS, contacter TWR par TEL avant le vol.",
+      "ACFT MIL à destination du GAMSTAT : PPR PN 24HR au 04 75 79 76 41.",
+      "",
+      "TORA et TODA piste 19 réduites de 90 m en raison de la présence du gabarit routier dans la trouée de décollage 19.",
+      "",
+      "Circuits en vol : avions, à l'Est des Bérards.",
+      "Pour les avions de plus de 30 t, retournement obligatoire sur les raquettes.",
+      "TWY parallèle à RWY, utilisable par les ACFT légers.",
+      "Accès au parking GAMSTAT : .",
+      "Portail N : largeur 23.4 m.",
+      "Portail M : largeur 23.5 m.",
+      "Portail interne : largeur 23 m.",
+      "Roulage de précaution requis pour les ACFT extérieurs.",
+      "QFU 006° préférentiel cause procédure IFR.",
+      "Circuits basse hauteur : aéronef à l'entraînement avec instructeur uniquement (circuit à l'Est).",
+      "Un circuit basse hauteur possible par tranche de 15 minutes.",
+      "En dehors des horaires ATS un circuit basse hauteur possible par tranche de 30 minutes, jusqu'à 2200 locale.",
+      "Aucun circuit basse hauteur possible sans instructeur, ni en dessous de 500 ft ASFC, ni au-delà de 2200 locale, ni le dimanche.",
+      "Atterrissage RWY 19 : PAPI obligatoire, de jour pour les avions à réacteur ou pour les avions de transport commercial, de nuit pour tous les types d'avion.",
+      "Voies de circulation L, M, N et S utilisables de jour ≥ uniquement et pour RVR 800 m.",
+      "Voie de circulation M utilisable uniquement par les hélicoptères militaires en translation dans l'effet de sol et les aéronefs basés dont la largeur hors tout du train principal est inférieure à 2,2 m.",
+      "Voies de circulation L et N réservées aux aéronefs dont la largeur hors tout du train principal est inférieure à 4,5 m.",
+      "VALENCE CHABEUIL Si pélicandrome activé, TWY S fermé.",
+      "Zones de perte d'altitude planeur (ZPA) : En complément de la ZPA QFU 19 en page ATT 01, ZPA QFU 01 : radial 021°/ 2,10 NM de l'ARP. du tronçon emprunté.",
+      "ARR : l'altitude du dernier segment utilisé sera maintenue jusqu'à être en vue dans les 5 NM de l'aérodrome puis rejoindre le circuit.",
+      "Hors HOR ATS : En cas d'utilisation du PCL, l'activité en vol local est limitée à deux avions dans le circuit et ce jusqu'à 2230 locales.",
+      "Au-delà de cet horaire, uniquement pour les arrivées et départs (voyages).",
+      "STAP : paramètres disponibles : vent, base des nuages, visibilité instrumentale, T, DP, QNH, QFE.",
+      "PCL : n'allume pas les PAPI.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Descendre à 2500 AMSL en vue de Valence, passage verticale TWR à 2500 AMSL, phares allumés.",
+      ""
+    ],
+    "reportingPoints": [
+      {
+        "name": "NE",
+        "location": "Péage autoroutier de Chatuzange le Goubet"
+      },
+      {
+        "name": "SA",
+        "location": "Gare de triage Porte-lès-Valence"
+      },
+      {
+        "name": "S",
+        "location": "Echangeur voie ferrée Livron"
+      }
+    ]
+  }
 }

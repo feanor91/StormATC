@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFHN",
   "name": "Bellegarde - Vouvray",
   "source": {
     "publication": "AIP France AD 2 LFHN",
     "chartDate": "2026-08-06",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 46.12333,
@@ -56,5 +58,26 @@
     "SAT, SUN and public HOL: traffic pattern reserved for home-based aircraft.",
     "ULM: High approach recommended for LDG on QFU 003°; Traffic pattern: avoid overflight of motorway A40.",
     "Aerobatics NR 6807: see AIP ENR 5.5"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Possibilité de dérogation pour les aéronefs basés.",
+      "Activité VAV réservée aux planeurs autorisés par l'exploitant AD.",
+      "TORA et TODA RWY 36 réduites cause gabarit routier dans la bande de piste.",
+      "Accès aux hangars Sud : l'espace entre les deux bâtiments face au hangar 5 étant de 17 m seulement, un seul appareil à la fois peut y manoeuvrer moteur tournant.",
+      "Activité d'entraînement en autogyre et hélicoptère soumise à l'accord de l'exploitant AD.",
+      "",
+      "Forte activité parapente au NE et SW de l'AD.",
+      "Conditions aérologiques particulières : cisaillement et rabattants par vents de secteur Nord, notamment en QFU 003° au décollage et à l'atterrissage.",
+      "Cause topographie, longueur des pistes et pente montante moyenne de 1,5 %, risques de faibles performances nécessitant des limitations de masse pour la plupart des avions légers, notamment en QFU 003°.",
+      "",
+      "Roulage interdit hors RWY et TWY.",
+      "Profil en travers : pente descendante moyenne 3% d'Ouest en Est.",
+      "Sauf urgences, éviter les remises de gaz en finale RWY 36 au-dessus du lotissement.",
+      "",
+      "",
+      "Voltige N° 6807 : voir AIP ENR 5.5"
+    ]
+  }
 }

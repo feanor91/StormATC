@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFMH",
   "name": "Saint-Étienne-Loire",
   "source": {
     "publication": "AIP France AD 2 LFMH",
     "chartDate": "2024-12-26",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 45.53417,
@@ -137,5 +139,44 @@
     "Niveau 7 / Level 7.",
     "Level 5: MON-FRI 0700-1800; Level 1: SAT-SUN and public HOL Outside this SKED: for medical and HEMS flights: levels 2, 3, 4, 5 provided with PPR PN 1HR30 (TEL: 06 74 32 11 99); for other aircrafts: levels 2, 3, 4, 5 possible (MON-FRI: with PPR PN 24HR; SAT-SUN and public HOL: with PPR PN 48HR); Levels 6-7 provided with PPR PN 30 days by E-mail to: operations@saint-etienne.aeroport.fr.",
     "Péril animalier / Wildlife strike hazard: Occasionnel / Random."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Décollage RWY 35 : présence d'une route immédiatement après la piste.",
+      "Vérifier que les performances de décollage permettent le franchissement de son gabarit (H = 5m) en passant l'extrémité de piste.",
+      "TWY D non balisé de nuit utilisable uniquement de jour par avions monomoteurs légers et sur instruction ATS.",
+      "Vols d'entraînements en tours de piste.",
+      "Circuits basse hauteur possibles pour vols d'entraînement (2 tours de piste MAX) dans les conditions suivantes : instructeur à bord; uniquement de jour; ALT MNM 1800 ft AMSL.",
+      "La procédure « réduction des séparations sur piste » est applicable sur la piste revêtue 17/35 dans les Uniquement en présence du service ATC.",
+      "",
+      "HEL : HJ : VIS > = 800 m, plafond > = 600 ft.",
+      "HN :VIS > = 4000 m, plafond > 1000 ft hors des nuages en vue du sol.",
+      "A l'arrivée : à l'entrée sur l'un des points de report obligatoires, contacter SAINT ETIENNE TWR en fournissant les éléments de vol et suivre instructions du CTL.",
+      "Au départ : sortie de la CTR, avant TKOF fournir à SAINT ETIENNE TWR la destination, après TKOF suivre itinéraires prescrits.",
+      "En transit : Contacter SAINT ETIENNE TWR aux points d'entrée de la CTR afin de recevoir instructions.",
+      "DEP : monter verticale aérodrome à l'altitude minimale du tronçon emprunté.",
+      "ARR : l'altitude du dernier segment utilisé sera maintenue jusqu'à être en vue dans les 5 NM de l'aérodrome puis rejoindre le circuit.",
+      "Atterrissage en RWY 35 interdit en l'absence de service ATS ou si PAPI 35 U/S.",
+      "",
+      "",
+      "Voltige sur AD (N° 6811) 3000 AMSL/ 5500 AMSL tous les jours 0800-1900 (ETE : - 1 HR) sur autorisation ST ETIENNE TWR/INFORMATION et CLERMONT APP.",
+      "",
+      "Si les instructions du CTL ont déjà été reçues, poursuivre le vol se reporter verticale 3000 ft AMSL puis intégrer le circuit.",
+      "En cas de service AFIS activé : Si la panne a lieu avant l'entrée dans le circuit d'aérodrome et avant d'avoir reçu les informations de l'AFIS, l'aéronef ne poursuit pas son vol à destination de LFMH.; Si les informations de l'AFIS ont déjà été reçues, le pilote poursuit le vol en se reportant verticale 3000 ft.",
+      "SAINT ETIENNE LOIRE 10 - AVT : HOR : LUN-VEN 0815-1730 ; SAM-DIM et JF : avitaillement non assuré.",
+      "Avitaillement JET A1 : en dehors de ces horaires, avitaillement possible sur PPR (LUN-VEN : PPR PN 24HR ; SAM-DIM et JF : PPR PN 48HR).",
+      "Par E-mail : operations@saint-etienne.aeroport.fr",
+      "",
+      "",
+      "",
+      "",
+      "11 - RFFS : Niveau 5 : LUN-VEN 0700-1800 ; Niveau 1 : SAM-DIM et JF En dehors de ces horaires : pour vols sanitaires et SMUH : niveaux 2, 3, 4, 5 assurés sur PPR PN 1HR30 (TEL : 06 74 32 11 99); pour autres aéronefs : niveaux 2, 3, 4, 5 possibles (LUN-VEN : sur PPR PN 24HR ; SAM-DIM et JF : sur PPR PN 48HR); Niveaux 6-7 assurés sur PPR PN 30 jours par E-mail à : operations@saint-etienne.aeroport.fr 12 - 13 - 14 -.",
+      ""
+    ]
+  }
 }

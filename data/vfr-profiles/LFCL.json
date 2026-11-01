@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFCL",
   "name": "Toulouse - Lasbordes",
   "source": {
     "publication": "AIP France AD 2 LFCL",
     "chartDate": "2026-07-09",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.58778,
@@ -118,5 +120,28 @@
     "This limitation doesn't apply to next generation aircraft with innovative and quiet propulsion (electrics ones for.",
     "Site web / Website: https://auatbl.wixsite.com/lasbordes Bus à proximité / Bus in the vicinity.",
     "Sur AD l'été ou à proximité toute l'année / On AD in summer or in the vicinity all year."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "L'utilisation de l'AD est soumise au respect de la Charte de Qualité de l'Environnement (cf site web Exploitant : https://metropole.toulouse.fr/sites/toulouse-fr/files/202511/charte_environnement_lasbordes_2025_signee.pdf) AD interdit aux ULM de classe 5.",
+      "",
+      "Forte activité de planeurs aux abords de l'aérodrome de Toulouse - Bourg Saint Bernard.",
+      "",
+      "",
+      "Après décollage, monter vers 2000 ft AMSL en restant en bordure Est de l'autoroute A61, puis virer sur le centre commercial, survoler l'autoroute A68 et poursuivre sur l'autoroute jusqu'au point DN au Nord de l'agglomération de Montrabé.",
+      "RWY 15 : Après décollage, monter vers 2000 ft AMSL, virer après le centre commercial vers le point DS.",
+      "2) A l'arrivée Pour tout QFU, arrivées par le point AE.",
+      "3) Entraînements en tour de piste",
+      "RWY 33 : Après branche vent traversier, intégration en vent arrière par la verticale du Hangar Sironis.",
+      "Dernier virage à la verticale du centre commercial.",
+      "RWY 15 : Après branche vent traversier, intégration en vent arrière par le travers du château de Pechestier.",
+      "Dernier virage à la verticale du CEAT.",
+      "Circuits basse hauteur interdits sauf urgence.",
+      "Les entraînements en tour de piste sont autorisés uniquement (ETE : - 1HR) : en semaine de 0800 à 1900; le samedi de 0800 à 1100 et de 1400 à 1800; le dimanche de 0800 à 1100; les jours fériés : entre le 01/10 et 30/04 de 0800 à 1100 et de 1400 à 1900. entre le 01/05 et 30/09 : de 0800 à 1100.; Limitation à 4 avions simultanés en entraînement tour de piste.",
+      "Cette limitation ne concerne pas les aéronefs de nouvelle génération à propulsion innovante et.",
+      "",
+      ""
+    ]
+  }
 }

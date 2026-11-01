@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFQT",
   "name": "Merville - Calonne",
   "source": {
     "publication": "AIP France AD 2 LFQT",
     "chartDate": "2026-09-03",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 50.61667,
@@ -164,5 +166,62 @@
     "After ATC clearance, comply with the latest clearance received.",
     "ARR/DEP: Join the nearest compulsory WPT and turn back to AD by the mandatory route, proceed overhead higher than the circuit and join published downwind leg.",
     "Adhere to possible visual signals."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Utilisation simultanée de la bande gazonnée et de la piste principale 04-22 interdite.",
+      "Activité ULM : réservée aux ULM équipés de radio et transpondeur, affiliés aux associations basées signataires d'un protocole avec les services de la CA.",
+      "Distances déclarées utilisables : TORA, TODA, ASDA et LDA, RWY 22 réduites en raison de la présence du shelter du LOC 22 non frangible à 180 m de l'extrémité de piste.",
+      "",
+      "A l'arrivée et en transit, contact radio recommandé avec MERVILLE TWR au moins 5 min avant pénétration dans la CTR.",
+      "Circuits basse hauteur : uniquement sur clairance ATS et à une hauteur MNM de 300 ft AAL.",
+      "Entraînements tours de piste de nuit interdits en dehors des horaires de contrôle d'aérodrome sauf autorisation exploitant d'AD sur circuit standard et à une hauteur MNM de 1500 ft.",
+      "Départ 04 : monter dans l'axe 036°, ne pas virer avant d'avoir dépassé l'usine au Nord-Est des installations.",
+      "Départ 04 avec virage avant l'usine : uniquement sur clairance ATS, virer à droite et suivre la trajectoire au sud de la voie ferrée.",
+      "QFU préférentiel 216° cause procédure ILS.",
+      "MERVILLE CALONNE Equipement AD PCL hors HOR ATS sur PPR exploitant d'AD.",
+      "PCL inactive 0000-0500 (ETE : -1 HR).",
+      "Activation sur PPR 48 HR.",
+      "Equipement de surveillance du trafic : Aérodrome équipé d'une visualisation radar (voir AD 1.0).",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "reportingPoints": [
+      {
+        "name": "N",
+        "location": "Relais hertzien 2 NM Sud Steenvoorde"
+      },
+      {
+        "name": "NE",
+        "location": "Echangeur autoroutier à l'Ouest d'Armentières"
+      },
+      {
+        "name": "EA",
+        "location": "Château d'eau à l'Est d'Estaires"
+      },
+      {
+        "name": "S",
+        "location": "Echangeur autoroutier à Liévin"
+      },
+      {
+        "name": "SA",
+        "location": "Rond-point au Nord-Est de Béthune"
+      },
+      {
+        "name": "W",
+        "location": "Silos à l'Est d'Aires-sur-la-Lys"
+      },
+      {
+        "name": "WA",
+        "location": "Intersection RD 916 et rivière Lys"
+      }
+    ]
+  }
 }

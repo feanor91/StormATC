@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFJR",
   "name": "Angers Loire",
   "source": {
     "publication": "AIP France AD 2 LFJR",
     "chartDate": "2026-10-01",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 47.56028,
@@ -84,5 +86,39 @@
     "Level 1: SAT: 2300-2359, SUN: 0000-2259 During week-end, outside these SKED, possible extension or reopening level 2 or 5 O/R AD operator, the last working day before 1530 on website: MyHandling.",
     "Level 1: 5 wheeled fire extinguishers in front of the terminal, the ACB and the 3 hangars East of the ACB.",
     "Péril animalier / Wildlife strike hazard: Occasionnel / Random."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Activité IFR possible.",
+      "Piste non revêtue Sud réservée vol à voile et avions de servitudes.",
+      "Utilisation simultanée des pistes accolées revêtue et non revêtue Nord interdite.",
+      "Pistes et voies de circulation non revêtues inutilisables après pluies prolongées.",
+      "",
+      "Pour raisons environnementales, les circuits ACFT doivent impérativement éviter le survol de Marcé et de Seiches sur le Loir.",
+      "Tours de piste interdits 2100-0700 (ETE - 1 HR).",
+      "Circuits \"basse hauteur\" 500 ft AAL MNM autorisés dans le cadre des vols d'entraînement avec instructeur uniquement.",
+      "Roulage interdit hors RWY et TWY.",
+      "TWY A, C et S utilisables uniquement par aviation légère.",
+      "Activité de treuillage suspendue après le passage des 6,2 NM THR 26 et 4,5 NM THR 08 en phase d'approche finale IFR.",
+      "Activités de treuillage et de voltige simultanées selon les conditions protocolaires.",
+      "La largeur du portail d'accès à la zone du Musée ne permet pas l'entrée et la sortie autonomes des aéronefs.",
+      "Aucun point d'amarrage aéronef n'est prévu sur la plateforme.",
+      "Sortie libre par un tourniquet entre la Tour et l'aérogare.",
+      "Code individuel et unique à demander pour l'accès côté piste en dehors des horaires d'ouverture.",
+      "PAPI piste 08 et piste 26 obligatoires pour atterrissage de nuit.",
+      "ANGERS MARCE Equipement AD PCL sur PPR 1HR auprès exploitant : TEL : 02 41 33 50 01 afis.angers@edeis.com",
+      "3 coups d'alternat : basse intensité,",
+      "5 coups d'alternat : haute intensité,",
+      "7 coups d'alternat : coupure PCL.",
+      "",
+      "La prudence est recommandée et les transits par la verticale du terrain sont à éviter endessous de 3000 ft AMSL.",
+      "",
+      "La semaine en dehors de ces HOR, extension ou réouverture possible en niveau 2 sur demande avant 1530 sur le site MyHandling.",
+      "Niveau 2 : SAM : 0800-1645.",
+      "Niveau 1 : SAM : 2300-2359, DIM : 0000-2259 Le week-end en dehors de ces HOR, extension ou réouverture possible en niveau 2 ou 5 sur demande le dernier jour ouvrable avant 1530 sur le site MyHandling.",
+      "Niveau 1 : 5 extincteurs sur roues disposés devant le terminal, l'ACB et les 3 hangars à l'Est de l'ACB.",
+      ""
+    ]
+  }
 }

@@ -4,14 +4,16 @@
     "Only what the chart states is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text; the reporting points, rules and notes were added by hand.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "No reporting points, circuit height or circuit side are printed on this chart, so none is recorded."
+    "No reporting points, circuit height or circuit side are printed on this chart, so none is recorded.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFGA",
   "name": "Colmar - Houssen",
   "source": {
     "publication": "AIP France AD 2 LFGA",
     "chartDate": "2026-08-06",
-    "extraction": "manual, from the chart text and images"
+    "extraction": "manual, from the chart text and images",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.11028,
@@ -67,5 +69,23 @@
     "Radio failure: apply the national regulation and, if possible, use a mobile phone to contact the TWR.",
     "Pilot-controlled lighting and STAP are available on PPR to the aerodrome operator by e-mail before 1500: 3 clicks within 5 seconds, information and low-intensity lighting; 5 clicks within 5 seconds, information and high-intensity lighting; 7 clicks within 5 seconds, lights off.",
     "Aerobatics out of the aerodrome no. 6160 and paradropping no. 221: see AIP ENR 5.5."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Panne de radiocommunication Appliquer la règlementation nationale et si possible, utiliser le téléphone portable pour contacter la TWR.",
+      "",
+      ""
+    ]
+  }
 }

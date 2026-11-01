@@ -5,14 +5,16 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded."
+    "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFLL",
   "name": "Lyon-Saint-Exupéry",
   "source": {
     "publication": "AIP France AD 2 LFLL",
     "chartDate": "2025-03-20",
-    "extraction": "chart text, table and English column read by script, procedures structured by hand"
+    "extraction": "chart text, table and English column read by script, procedures structured by hand",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 45.72556,
@@ -194,5 +196,37 @@
     "PAPI 35L: for ACFT with eye/wheel height greater than 12 metres, TCH is less than 6 metres.",
     "Disregard the PAPI signal.",
     "Traffic surveillance equipment: AD equipped with a secondary surveillance radar (see AD 1.0)."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Les vols d'entraînement IFR/VFR et VFR de nuit sont soumis à restrictions (AD 2 LFLL).",
+      "Les services d'assistance sont obligatoires pour tous les aéronefs privés ou commerciaux.",
+      "",
+      "",
+      "Demi-tour interdit sur les pistes pour les aéronefs d'envergure supérieure à 36 m.",
+      "Après avoir dégagé la piste 17R/35L, les aéronefs attendent les instructions de SAINT-EX SOL avant de pénétrer sur le TWY T.",
+      "PAPI 35L : pour les avions avec une hauteur oeil/roue supérieure à 12 mètres, la marge de franchissement du seuil est inférieure à 6 mètres.",
+      "",
+      "LYON SAINT EXUPERY Equipement de surveillance du trafic : AD équipé d'un radar secondaire (voir AD 1.0)."
+    ],
+    "reportingPoints": [
+      {
+        "name": "N",
+        "location": "Gare de triage de SAINT GERMAIN AU MONT D'OR /"
+      },
+      {
+        "name": "S",
+        "location": "Échangeur routier de CHASSE SUR RHONE /"
+      },
+      {
+        "name": "MS",
+        "location": "Rond point routier Sud-Est de GENAS /"
+      },
+      {
+        "name": "TW",
+        "location": "Rond point de l'EUROPE /"
+      }
+    ]
+  }
 }

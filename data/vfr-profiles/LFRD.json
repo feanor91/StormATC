@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFRD",
   "name": "Dinard Saint-Malo",
   "source": {
     "publication": "AIP France AD 2 LFRD",
     "chartDate": "2026-06-11",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.58778,
@@ -163,5 +165,34 @@
     "On segment between intermediate holding points S1 and E1, code C ACFT are authorized under towing condition only.",
     "TWY U: ULM only.",
     "Traffic surveillance equipment: AD equipped with radar display (see AD 1.0)."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "RWY 17R/35L réservée aux ULM autorisés par l'organisme.",
+      "",
+      "Possibilité de présence de montgolfières dans la CTR.",
+      "Possibilité de présence d'activité Parapente sur la côte entre Saint-Jacut de la Mer et La Guimorais.",
+      "AD susceptible d'être envahi en quelques minutes par la brume de mer.",
+      "",
+      "Vols d'entraînement réacteurs ou d'aéronefs militaires possibles après autorisation ATC : LUN-VEN 0700-1100 et 1300-1800, SAM 0700-1100 (ETE : -1 HR).",
+      "La tour de contrôle organise la séquence de roulage pour l'entrée sur l'aire de manoeuvre.",
+      "Au départ et à l'arrivée, seule l'information sur les aéronefs en mouvement connus des services ATS peut être fournie.",
+      "Le pilote assure la prévention des abordages et des collisions, sa propre séparation et la sécurité des tiers.",
+      "Au dessous de 2500 ft AMSL, contact radio obligatoire 3 min avant le survol des points d'entrée de la CTR, fréquence TWR.",
+      "Circuits \"basse hauteur\" autorisés dans le cadre des vols d'entrainement avec instructeur uniquement et sur autorisation du CTL : minimum 300 ft AAL sur les circuits préférentiels.",
+      "Lors des circuits, il est interdit de survoler les installations SABENA.",
+      "RWY 17R/35L non revêtue : Fermée du 1er novembre au 31 mars.",
+      "RWY 11/29 : inutilisable hors HOR ATS; utilisable uniquement à vue, de jour; utilisable comme voie de circulation sous contrôle de la tour et en auto-information.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Réservé aux ACFT d'envergure < 24 m sauf sur le tronçon de la piste 11/29 vers hangar peinture avion (ACFT de code C acceptés sur ce tronçon).",
+      "Sur le tronçon entre points d'attente intermédiaires S1 et E1, les ACFT code C sont autorisés sous conditions de tractage uniquement.",
+      "TWY U : Réservé aux ULM.",
+      "Equipement de surveillance de trafic : Aérodrome équipé d'une visualisation radar (voir AD 1.0)."
+    ]
+  }
 }

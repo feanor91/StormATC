@@ -4,14 +4,16 @@
     "Only what the chart states is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text; the reporting points, rules and notes were added by hand.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "No circuit height or circuit side is printed on this chart, so none is recorded."
+    "No circuit height or circuit side is printed on this chart, so none is recorded.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFBI",
   "name": "Poitiers-Biard",
   "source": {
     "publication": "AIP France AD 2 LFBI",
     "chartDate": "2026-02-19",
-    "extraction": "manual, from the chart text and images"
+    "extraction": "manual, from the chart text and images",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 46.5875,
@@ -168,5 +170,24 @@
     "Heavy rain: risk of low adhesion, particularly at the runway 21 threshold. Taxiing prohibited except on runways and taxiways; taxiway D only with the operator's agreement, PN 24 HR.",
     "Hot spot: exit of taxiway Alpha towards apron Sierra; beware of an aircraft coming the other way towards holding point A2. Holding points A3 and C are usable by day in VMC only.",
     "AEM no. 9420 and winch glider activity no. 963: see AIP ENR 5.5."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "TORA RWY 21 réduite à 2345 m.",
+      "Entraînements de jets MIL, circuit à l'ouest, 1500 ft ASFC.",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "reportingPoints": [
+      {
+        "name": "EA",
+        "location": "Usine Buxerolles (cheminée blanche, route)"
+      }
+    ]
+  }
 }

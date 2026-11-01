@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFEY",
   "name": "Île-d'Yeu",
   "source": {
     "publication": "AIP France AD 2 LFEY",
     "chartDate": "2023-07-13",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 46.7175,
@@ -61,5 +63,26 @@
     "ARR RWY 32 avoid overflying the island, entering by \"la pointe du But\" (North point).",
     "Péril animalier / Wildlife strike hazard: Occasionnel / Random.",
     "Pendant les HOR RFFS niveau 2 / During RFFS SKED level 2."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "AD interdit aux ULM de classe 1 (paramoteurs).",
+      "Bande gazonnée 04/22 conseillée par vent traversier supérieur à 15 kt sur la piste 14/32.",
+      "Activité IFR possible.",
+      "Dangers à la navigation aérienne Risque aviaire important autour et sur l'AD.",
+      "AD susceptible d'être envahi en quelques minutes par la brume de mer.",
+      "Les informations concernant les activités dangereuses aux abords de l'ILE D'YEU et sur le continent dans les limites de la LF-D18 sont disponibles auprès du CCMAR ATLANTIQUE (indicatif ARMOR) fréquence 124.725.",
+      "",
+      "MNM 500 ft à l'Ouest de la piste 14/32.",
+      "AD très sensible au bruit.",
+      "Contact radio 3 minutes avant intégration dans le circuit de piste.",
+      "Roulage interdit hors RWY et TWY.",
+      "mise de cap sur les Chiens Perrins puis le continent en évitant le survol de l'île.",
+      "éviter le survol de l'île, intégration par la pointe du But (pointe Nord).",
+      "",
+      ""
+    ]
+  }
 }

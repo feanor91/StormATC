@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFPK",
   "name": "Coulommiers - Voisins",
   "source": {
     "publication": "AIP France AD 2 LFPK",
     "chartDate": "2024-10-31",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.8375,
@@ -87,5 +89,44 @@
     "Activity reserved for AACM members according to local instructions.",
     "Unmarked cable.",
     "Activity AEM NR 8690, NW of the airfield, SR-SS, SFC300 ft ASFC."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "AD interdit aux aéronefs dont la masse maximale au décollage (MTOW) est supérieure à 5,7t.",
+      "Piste non revêtue 09R-27L réservée uniquement aux planeurs et aux aéronefs de servitude, avec priorité aux planeurs à l'atterrissage.",
+      "",
+      "Hot spots : les ACFT positionnés à ces points ne peuvent apercevoir les appareils circulant au-delà de l'ARP, notamment ceux qui croisent ou qui dégagent entre B1 et B, ainsi que ceux au seuil RWY 09C.",
+      "Voir GMC 01.",
+      "",
+      "L'utilisation des TWY est limitée aux ACFT d'envergure 15 m MAX.",
+      "Voie de circulation A1 réservée aux ULM.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Maintien de l'axe de piste en cas de remise de gaz sur RWY 09C/27C.",
+      "",
+      "",
+      "",
+      "",
+      "Si croisement au roulage sur S possibilité d'utiliser S2.",
+      "Planeurs : tractage via S2.",
+      "Configuration Est : Avions :.",
+      "Roulage au départ via S puis A.",
+      "Roulage à l'arrivée via S.",
+      "Si croisement au roulage sur S possibilité d'utiliser S2.",
+      "Hot spots : voir GMC 01.",
+      "Conditions particulières de radiocommunication L'attention des usagers est attirée sur la présence d'ULM basés, exploités par l'Aéroclub des Sourds de France, évoluant sans équipement radio dans les circuits ULM selon les conditions définies par la DSAC Nord.",
+      "Treuillage planeurs (N° 939) : 2200 ft AMSL, SR-30 - SS+30.",
+      "",
+      "",
+      ""
+    ]
+  }
 }

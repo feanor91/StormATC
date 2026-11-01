@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFFG",
   "name": "Ferté-Gaucher",
   "source": {
     "publication": "AIP France AD 2 LFFG",
     "chartDate": "2023-03-23",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.7575,
@@ -49,5 +51,21 @@
     "Users information on FREQ A/A.",
     "AEM activity (NR 8294): 550 ft.",
     "As per protocol."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Contacter l'exploitant d'aérodrome.",
+      "",
+      "Activité de voltige (N° 6217) : 2300 ft AMSL/3500 ft AMSL axe RWY 04/22, longueur 1100 m.",
+      "HIV : du LUN au SAM : 0930-1130 et 1300-1630.",
+      "DIM et JF : semaines impaires, 0900-1130 et 14001630.",
+      "ETE : du LUN au SAM : 0830-1030 et 1200-1800.",
+      "DIM et JF : semaines impaires, 0800-1030 et 13001730.",
+      "Activité réservée aux pilotes autorisés par la DSAC-N et selon protocole.",
+      "Information des usagers sur FREQ A/A.",
+      "Activité AEM (N° 8294) : 550 ft.",
+      "Selon protocole."
+    ]
+  }
 }

@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFNE",
   "name": "Salon - Eyguières",
   "source": {
     "publication": "AIP France AD 2 LFNE",
     "chartDate": "2024-09-05",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.6575,
@@ -100,5 +102,50 @@
     "AEM (NR 9925) 500 ASFC.",
     "SR-SS, bypassing is mandatory.",
     "When performing low height pattern or idle engine exercise on RWY 15, remain North of wooded area located NW of AEM area."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Auto-information obligatoire, excepté pour les paramoteurs sous la responsabilité du club concerné.",
+      "Utilisation d'avions lourds (MTOW > 5,7t) interdite sur l'aérodrome sans autorisation préalable de CAA.",
+      "Les avions lourds autorisés devront privilégier l'utilisation des bandes non revêtues.",
+      "Distances déclarées utilisables : TORA, TODA et LDA RWY 33L réduites à 1050 m cause obstacles.",
+      "TORA, TODA et LDA RWY 09 réduites à 930 m cause gabarit routier et obstacles.",
+      "",
+      "L'attention des pilotes est attirée sur la proximité des avions d'armes de la Base Aérienne de Salon et sur l'activité IFR de Salon et Marseille Provence.",
+      "L'aérodrome se situe sur un axe de migration aviaire.",
+      "Les utilisateurs doivent être particulièrement vigilants, en particulier au quatrième trimestre où des migrateurs peuvent être en repos au sol.",
+      "Le terrain comporte deux aires de pacage à l'ouest de la piste 15R/33L et de part et d'autre de la piste 09/27.",
+      "Attention aux exceptionnelles intrusions des ovins en dehors de ces aires.",
+      "",
+      "Pour des tours de piste sans limitation (aéroclubs voisins), contacter l'exploitant AD (voir AD 2 LFNE TXT 03).",
+      "Roulage interdit hors RWY et TWY.",
+      "LDG ou TKOF simultanés interdits.",
+      "Exceptionnellement, les planeurs, pour rejoindre les pistes ou hangars en début de séance de vol ou à la fin de journée de vol peuvent, emprunter des circuits autres que les TWY.",
+      "Dans ce cas les déplacements doivent être encadrés par un moniteur équipé d'une radio et laisser la priorité aux appareils en vol à l'atterrissage ou au décollage.",
+      "Les planeurs attendent en dehors de la bande aménagée, sur les aires prévues à cet effet.",
+      "Seuls les planeurs à l'atterrissage ou liés au remorqueur (en attente de décollage) peuvent être sur la bande aménagée.",
+      "LDG et TKOF suspendus si attelage planeur immobilisé sur la piste.",
+      "Deux mini bandes installées sur la partie ouest de la 15R/33L sont exclusivement réservées à l'accélération des attelages avion-planeur pour le décollage.",
+      "SALON EYGUIERES Une bande revêtue de 800 x 15 m destinée aux avions est située sur la moitié Est de la piste 15R/33L.",
+      "Circuit avions/planeurs : en cas de présence simultanée d'avions et de planeurs dans le circuit d'aérodrome, les avions effectueront leur circuit à l'extérieur de celui des planeurs.",
+      "TWY C : décollage interdit.",
+      "Décollage et atterrissage avions, planeurs et ULM interdits en dehors des pistes.",
+      "Une bande revêtue de 350 x 10 m destinée aux ULM est située sur la moitié EST de la piste ULM 15L/33R.",
+      "Les ULM peuvent également utiliser les pistes principales 15R /33L et 09/27.",
+      "Base 33 avion : ne pas dépasser l'autoroute A 54 (activité militaire R77B SFC à 2000 ft ASFC).",
+      "Décollage 10 et 28 ULM : dès que possible, route Nord (riverains en 10 et zone AEM en 28).",
+      "Dernier virage court en 27 Avion et 28 ULM (zone militaire de Salon).",
+      "Points d'attente intermédiaires C1, C2 et G1 sur TWY C et G, et A1 et A2 sur TWY A : contact radio obligatoire sur la fréquence A/A pour traverser l'axe de piste 15L/33R ULM et 09/27. Éviter les points fixes sur le parking principal sud et privilégier les points d'attente avant les points d'attente pour pénétrer sur les pistes.",
+      "",
+      "Point de report : EG (point de Salon de Provence LFMY) est AMSL/3250 AMSL.",
+      "Activité réservée selon conditions fixées par protocole avec le SNA-SSE.",
+      "Activité connue de PROVENCE Info.",
+      "Annoncer début et fin d'utilisation à PROVENCE Info.",
+      "Information des usagers sur A/A.",
+      "AEM (N° 9925) 500 ASFC.",
+      "SR-SS, contournement obligatoire .",
+      "En circuit basse hauteur ou exercice moteur réduit RWY 15 : rester au nord du bosquet de la pointe NW de la zone AEM."
+    ]
+  }
 }

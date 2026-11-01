@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFMI",
   "name": "Istres - Le Tubé",
   "source": {
     "publication": "AIP France AD 2 LFMI",
     "chartDate": "2024-05-16",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.5225,
@@ -198,5 +200,58 @@
     "HEL: VIS: 800 m Routing subject to CLR entrance/exit Routing mandatory between S-SW-SD-SL-SB A Special VFR clearance is required to enter CTR ISTRES Meteorological conditions of special VFR: ACFT: 3000 m 5000 m - 1000 ft Ceilling 1500 ft HEL: 800 m 5000 m - 600 ft Ceilling 1500 ft In order to provide separation from IFR traffic, holding may be requested FREQ to call: CAMARGUE CTL CTR Istres: No clouds below 2500 ft AMSL; VIS 5 km.",
     "Holding sectors: comply with ATC instructions Reporting points (ALT in ft) Routes 2500 2500 1500 AEM (NR 9895): SFC - 500 ft ASFC SR - SS.",
     "Remote controlled flights according to protocol Due to particular activity test and acceptance flights and activation of LF-R 108A F1, LF-R 108A F2 areas, radio contact mandatory 5 MIN before entering Istres CTR, comply with Istres APP, Istres TWR instructions or Rhone CTL or Camargue CTL P 41: 3 NM radius circle centered on ARP LFMI SFC - 4500 ft AMSL Squawk 7600 DEP: radiocommunication failure before having closed with AD of DEP, proceed to turn round and fly to 1000 ft AAL, facing TWR, bound to East, lighting on, then wait for air traffic light gun signals ARR: maintain MNM cruise level and start to descend according to the relief and possible obstacles to proceed ETA at 1000 ft AAL, facing TWR, flying Eastbound, lighting on, then wait for air traffic light gun signals"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "ISTRES LE TUBE Consignes particulières / Conditions d'utilisation de l'AD AD agréé à usage restreint AD interdit aux ACFT non munis de radio, aux planeurs et ULM LDG soumis à PPR : LUN-VEN : avant 1500 la veille (ETE -1 HR) SAM, DIM, JF : avant 1430 (ETE -1 HR) le dernier jour ouvrable 04 42 56 13 49 ou LFMIZPZX ou  E-mail : ba125.dv.fct@intradef.gouv.fr Le NR PPR figurera obligatoirement case 18 du FPL FPL obligatoire pour tous les vols à destination ou au départ d'Istres Tous les LUN de 0545 à 0715 (ETE -1 HR), AD fermé pour maintenance Inutilisable hors RWY et TWY RWY SESLA : LDG interdit.",
+      "",
+      "L'entrée dans le circuit n'est pas autorisée si le contact radio n'est pas établi avec ISTRES TWR avant les points W3 et NE pour les ACFT légers HEL : se présenter à 500 ft AAL aux points NE, W3 ou S3 et rejoindre le circuit en vol Pour les ACFT légers : DEP-ARR par NE à 600 ft ou 1100 AMSL sur instruction TWR - Particularité : DEP QFU 15 ou ARR QFU 33 en laissant la ville d'Istres à l'Est, suivre la N1569 Itinéraires VFR côtiers : FREQ à contacter : CAMARGUE CTL",
+      "",
+      "",
+      "",
+      "Vols radiocommandés selon protocole En raison d'activités particulières CER et activation à bref délai des zones LF-R 108A F1, LF-R 108A F2 contact radio obligatoire 5 MIN avant de pénétrer dans les CTR d'Istres, se conformer aux instructions d'Istres APP, Istres TWR ou Rhône CTL, Camargue CTL P 41 : cercle de 3NM de rayon centré sur ARP LFMI SFC - 4500 ft AMSL Consignes particulières de radiocommunication Afficher code transpondeur 7600 DEP : panne de radiocommunication avant d'avoir clôturé avec l' AD de DEP, faire demi-tour et se présenter à 1000 ft AAL, face à la tour, cap à l'Est, phares allumés, puis attendre les signaux optiques ARR : maintenir le niveau MNM de croisière et débuter la descente en fonction du relief et des obstacles éventuels pour se présenter à l'ETA à 1000 ft AAL, face à la tour, cap à l'Est, phares allumés, puis attendre les signaux optiques"
+    ],
+    "reportingPoints": [
+      {
+        "name": "N4",
+        "location": "Nom / Travers / Le Grand Mas"
+      },
+      {
+        "name": "NE",
+        "location": "Autodrome de / Miramas"
+      },
+      {
+        "name": "S",
+        "location": "Sud / Carry le Rouet"
+      },
+      {
+        "name": "SB",
+        "location": "1500 m Travers Sud / Saintes Maries de la Mer"
+      },
+      {
+        "name": "SL",
+        "location": "Ouest / Salin de Giraud"
+      },
+      {
+        "name": "SC",
+        "location": "1 NM Ouest / Cap Croisette"
+      },
+      {
+        "name": "SD",
+        "location": "Travers Sud / Port St Louis du Rhône"
+      },
+      {
+        "name": "S4",
+        "location": "Verticale étang de / Levalduc"
+      },
+      {
+        "name": "SW",
+        "location": "Sud / Carro"
+      },
+      {
+        "name": "W3",
+        "location": "Travers / Le Radeau"
+      }
+    ]
+  }
 }

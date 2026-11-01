@@ -5,14 +5,16 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded."
+    "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFMT",
   "name": "Montpellier-Méditerranée",
   "source": {
     "publication": "AIP France AD 2 LFMT",
     "chartDate": "2026-01-22",
-    "extraction": "chart text, table and English column read by script, procedures structured by hand"
+    "extraction": "chart text, table and English column read by script, procedures structured by hand",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.58333,
@@ -276,5 +278,78 @@
     "AVGAS 100LL automatique dispenser to be used only by ACFT whose wingspan is less than 12 m.",
     "Traffic surveillance equipment: AD equipped with secondary surveillance radar (see AD 1.0).",
     "Péril animalier / Wildlife strike hazard: Continu pendant la journée aéronautique / Continuous during the aeronautical day."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Utilisation de la piste 12R/30L interdite aux aéronefs dont l'une au moins des conditions ci-dessous est remplie : Masse supérieure à 5.7 t,; Turboréacteur,; Envergure supérieure à 24 mètres,; Largeur hors tout du train supérieure à 6 mètres,; Distance de référence au décollage supérieure à 800 m.",
+      "TWY L1, L2, K, Q, R et S interdits aux ACFT d'une masse supérieure à 5.7 t.",
+      "L'attention des usagers est attirée sur les effets visuels trompeurs du trait de côte non perpendiculaire aux axes de piste.",
+      "AD susceptible d'être envahi en quelques minutes par la brume de mer.",
+      "AD situé sur une ZICO (Zone Importante pour la Conservation des Oiseaux).",
+      "Forte concentration d'oiseaux : passages importants d'oiseaux de toutes espèces et de chauves-souris, sur l'AD et ses alentours, de jour ou bien de nuit.",
+      "Risque de turbulences sur la piste 12R / 30L par fort vent de secteur SW.",
+      "",
+      "Précautions au roulage à l'intersection des TWY L1, L2 et S1 : aire de croisement arrivée/départ des parkings ENAC, ESMA et Aéroclubs.",
+      "En situation de croisement une attention particulière doit être portée par les usagers sur le marquage au sol et la signalisation.",
+      "Envergure maximum pour les croisements à l'intersection : 13,45 m (Cessna 425).",
+      "Station automatique AVGAS 100 LL utilisable uniquement pour les avions dont l'envergure est inférieure à 12 m.",
+      "Equipement de surveillance du trafic : AD équipé d'un radar secondaire (voir AD 1.0).",
+      ""
+    ],
+    "reportingPoints": [
+      {
+        "name": "AM",
+        "location": "Remparts de la cité médiévale d'Aigues Mortes"
+      },
+      {
+        "name": "ES",
+        "location": "Sud phare de l'Espiguette"
+      },
+      {
+        "name": "ER",
+        "location": "Nord échangeur routier D62 / D61 Au Nord de La Grande Motte"
+      },
+      {
+        "name": "SA",
+        "location": "Embouchure du canal de Recul"
+      },
+      {
+        "name": "N",
+        "location": "Nord ville de Sommières"
+      },
+      {
+        "name": "NC",
+        "location": "Château d'eau de Mauguio"
+      },
+      {
+        "name": "NE",
+        "location": "Château d'eau de Castries"
+      },
+      {
+        "name": "WF",
+        "location": "Echangeur St Georges d'Orques (Circuit Karting)"
+      },
+      {
+        "name": "PF",
+        "location": "Echangeur D17 Prades Le Lez – St Mathieu de Tréviers"
+      },
+      {
+        "name": "SW",
+        "location": "Cathédrale de Maguelone"
+      },
+      {
+        "name": "WT",
+        "location": "Aire d'autoroute \"Montpellier Fabrègues SUD\""
+      },
+      {
+        "name": "W",
+        "location": "Péage autoroutier de St jean de Vedas"
+      },
+      {
+        "name": "SF",
+        "location": "Pont de la D114 entre l'étang de Vic et l'étang d'Ingril"
+      }
+    ]
+  }
 }

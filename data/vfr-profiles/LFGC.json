@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFGC",
   "name": "Strasbourg-Neuhof",
   "source": {
     "publication": "AIP France AD 2 LFGC",
     "chartDate": "2024-11-28",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.55361,
@@ -66,5 +68,34 @@
     "Activity according to protocol.",
     "Glider lauching up to 1800 ft AAL.",
     "Glider activity announced on FREQ A/A and by orange rotating light."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "Voie de circulation revêtue : largeur 5 m.",
+      "AD réservée aux ACFT munis de radio.",
+      "",
+      "Arrivée par le Nord : transit en CTR STRASBOURG obligatoire sur l'itinéraire NE (Gambsheim) puis le long du Rhin vers N1 (pont de Kehl) pour intégration dans le circuit, contact radio obligatoire avec STRASBOURG TWR.",
+      "Départ vers le Nord : transit en CTR STRASBOURG obligatoire sur l'itinéraire N1 (pont de Kehl) puis le long du Rhin vers NE (Gambsheim), contact radio obligatoire avec STRASBOURG TWR.",
+      "Altitude de vol : 1500 ft.",
+      "QFU 173° préférentiel cause nuisances.",
+      "Avions : tours de piste basse hauteur interdits en dessous de 500 ft.",
+      "Hélicoptères : tours de piste interdits.",
+      "ULM : tours de piste interdits pendant toute activité PJE.",
+      "Respecter dans la mesure du possible les circuits d'aérodrome publiés.",
+      "Le contact radio avec STRASBOURG est obligatoire dans la CTR de classe D, sauf dans le cadre du respect strict du circuit d'aérodrome de STRASBOURG NEUHOF.",
+      "Survol des immeubles au Nord du terrain interdit.",
+      "Pendant les activités parachutages ou planeur, rester à l'Est de l'AD pour la reconnaissance de l'ASI.",
+      "Demande d'autorisation vol drone à proximité des installations.",
+      "Formulaire disponible sur le lien suivant : https://atap-polygone.fr/autorisation-drone/ Activités diverses Parachutages sur AD (N° 222) : FL 195 .",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Treuillage planeurs jusqu'à 1800 ft AAL.",
+      "Activité annoncée sur FREQ A/A et par feu orange tournant."
+    ]
+  }
 }

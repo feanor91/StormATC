@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFSB",
   "name": "Européen de Bâle-Mulhouse-Fribourg (EuroAirPort)",
   "source": {
     "publication": "AIP France AD 2 LFSB",
     "chartDate": "2026-08-06",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 47.59,
@@ -182,5 +184,98 @@
     "It is mandatory to contact the airport operator (EuroAirport 00 33 (0)3 89 90 33 33) before the departure from the origin airport for prior agreement (See AD 2 LFSB 4).",
     "Pilots and passengers have to be transported to remote aircraft positions by the airport operator's bussing department (1) website: www.euroairport.com E-mail: ppr-lfsb@euroairport.com TEL: 00 33 (0)3 89 90 33 33 (France) - 00 41 (0)61 325 33 33 (Swiss).",
     "GRF (service d'évaluation et de report de l'état de surface de piste / Global reporting format): H24."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "RWY 07 : utilisable uniquement au décollage en VFR de jour et réservée aux avions basés.",
+      "Piste interdite à l'atterrissage.",
+      "RWY 25 : approche interdite en cas de panne du PAPI ou des feux d'identification de seuil de piste.",
+      "Aéroport interdit aux planeurs.",
+      "Aéroport interdit aux ULM, sauf aux ULM basés.",
+      "HEL : voir AD 3 LFSB TXT.",
+      "Piste 33 en service : l'itinéraire N° 3 W-WA-WB est soumis à restrictions d'utilisation.",
+      "",
+      "Sauf clairance particulière du contrôle, les avions suivront les itinéraires suivants : Itinéraire N° 1 : N - NE - E,; Itinéraire N° 2 : S - E,; Itinéraire N° 3 : W - WA - WB; Routing NR 3 : W - WA - WB 3 - PROCEDURES DE DEPART.",
+      "Au premier contact, indiquer le nombre de personnes à bord.",
+      "Sauf clairance particulière du contrôle, les avions suivront les itinéraires suivants : sortie N : itinéraire N° 1 : E - NE - N,; sortie S : itinéraire N° 2 : E - S,; sortie W : itinéraire N° 3 : WB - WA - W.",
+      "Après décollage en piste 25 , se reporter sur le point WB, sauf instruction contraire du contrôle.",
+      "4 - PROCEDURES DE TRANSIT Premier contact sur la fréquence de BALE TWR 3 min avant le premier point de report.",
+      "5 - CONSIGNES DIVERSES 07/25 par le N.",
+      "Survol petite Camargue Alsacienne altitude minimale : Afin de diminuer les nuisances sonores, les circuits basse hauteur sont interdits (inférieurs à 1000 ft AAL).",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Piste 33 : LDG DTHR 33 : LDA : 2780 m.",
+      "TKOF travers TWY E : TORA / ASDA : 2400 m, TODA : 2500 m.",
+      "6 - SECTEURS TMA BALE T1-T2-T3 Les secteurs T1-T2-T3 ont un statut HX.",
+      "Se référer à AIP Suisse ENR 1.4 et AIP France ENR 2.1.",
+      "Activables H24.",
+      "Vérification du statut de l'espace obligatoire avant pénétration.",
+      "Activation/désactivation annoncée par : RAI 134.",
+      "680 - Veille permanente obligatoire.",
+      "BALE MULHOUSE TEL : 00 33 (0)3 89 90 34 67 depuis la France.",
+      "00 41 (0)61 325 34 67 depuis la Suisse.",
+      "7 - RESTRICTIONS D'EXPLOITATION (Arrêté du 06/08/2021).",
+      "Voir AD 2 LFSB 21.",
+      "Heures de départ : poste de stationnement.",
+      "",
+      "Des dérogations à ces restrictions peuvent être accordées à titre exceptionnel par le Ministre chargé de l'Aviation Civile.",
+      "Les formulaires de demande de dérogation peuvent être demandés au 00 33 (0)3 89 90 33 33. d) Vols d'entraînement soumis à autorisation téléphonique préalable du Chef de quart.",
+      "Ils sont interdits aux ACFT IFR ainsi qu'aux ACFT en VFR d'un poids supérieur à 5,7 t : tous les jours : 1900 - 0700 (ETE : - 1 HR); DIM et JF français (y compris Vendredi Saint et 26 décembre) et DIM et JF suisses.; SAM : 1100 - 1900 (ETE : - 1 HR) 8 - EXPLOITATION TWY C-C1-J ET AIRE DE.",
+      "MAINTENANCE SUD-OUEST (HS 1-2-3) HS : Hot spot (point chaud).",
+      "Etre très attentif aux clairances de traversée, alignement et roulage.",
+      "La traversée ou l'alignement piste, ainsi que le roulage sur les TWY ne s'effectuent que sur clairance explicite de contrôle.",
+      "Le collationnement de toute instruction est exigé.",
+      "HS1 : L'exploitation de l'aire Sud-Ouest fait l'objet d'un protocole définissant les conditions de gestion des entrées et sorties de cette aire de maintenance.",
+      "Prendre contact préalablement avec Jet-Aviation, AMAC ou ASB avant de rejoindre cette aire.",
+      "BALE MULHOUSE HS2 : En raison du manque de visibilité, et malgré l'utilisation de moyens vidéo la surveillance de l'accès et de la sortie de l'aire d'entretien Jet-Aviation / Swiss reste difficile.",
+      "Même remarque pour l'accès et la sortie de la piste 07/25, via le TWY C1.",
+      "HS3 : En raison du manque de visibilité, et malgré l'utilisation de moyens vidéo, la surveillance de l'alignement ou de la sortie de la piste 07/25, via les TWY C et J, reste difficile.",
+      "Même remarque pour les traversées de piste via ces deux TWY.",
+      "9 - ARRIVEES / DEPARTS BASE HELICOPTERE REGA (EC145 de la garde aérienne Suisse de sauvetage) L'aide médicale d'urgence apportée par l'hélicoptère de la REGA peut entrainer des mouvements à contre QFU sur cette plateforme.",
+      "Le service de contrôle de BALE MULHOUSE assure les espacements entre cet hélicoptère et les avions au roulage sur le TWY B, ou présents aux divers points d'attente.",
+      "Une information de trafic sera faite aux équipages sur tous mouvements sur cette plateforme.",
+      "En l'absence de trafic IFR : VIS : 1500 m - Plafond : 600 ft.",
+      "En l'absence de trafic IFR : VIS : 1500 m - Plafond : 600 ft.",
+      "Equipement de surveillance du trafic : aérodrome équipé d'un radar secondaire (voir AD 1.0).",
+      "",
+      "A l'arrivée : a) Avant réception de la clairance d'entrée dans le circuit de piste, sortir de la CTR par l'itinéraire VFR le plus approprié. b) Après réception de la clairance d'entrée dans le circuit de piste, poursuivre son atterrissage sur la piste en service.",
+      "Au départ : a) Avant la réception de la clairance de décollage : ne pas décoller. b) Après la réception de la clairance de décollage : décoller et sortir de la CTR suivant les autorisations reçues.",
+      "BALE MULHOUSE 18 - Tout vol VFR non basé et souhaitant stationner à l'Aéroport de Bâle-Mulhouse est subordonné à une demande de PPR et au dépôt d'un plan de vol.",
+      "Le PPR (disponible sur le site web) doit être adressé au service Apron Control entre 0700 et 1600 (ETE : - 1 HR) 24 heures avant l'horaire du vol (1).",
+      "Pour des raisons de sûreté et de sécurité, l'assistance est obligatoire pour l'aviation générale non basée.",
+      "Il est impératif de prendre contact avec le gestionnaire aéroportuaire (EuroAirport 00 33 (0)3 89 90 33 33) avant le départ de l'aéroport d'origine pour accord préalable.",
+      "",
+      ""
+    ],
+    "reportingPoints": [
+      {
+        "name": "E",
+        "location": "Barrage (pointe Sud îlot sur le Rhin) N de Huningue"
+      },
+      {
+        "name": "N",
+        "location": "Pont de Chalampé sur le Rhin"
+      },
+      {
+        "name": "NE",
+        "location": "Intersection routes nationales N3 et K 6345"
+      },
+      {
+        "name": "S",
+        "location": "Pont sur autoroute au NE de Pratteln"
+      },
+      {
+        "name": "W",
+        "location": "Cimenterie N d'Altkirch"
+      },
+      {
+        "name": "WA",
+        "location": "Entre les 2 lignes HT sur la route de crête"
+      }
+    ]
+  }
 }

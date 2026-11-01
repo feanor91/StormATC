@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFTB",
   "name": "Hydroaérodrome de Marignane - Berre",
   "source": {
     "publication": "AIP France AD 2 LFTB",
     "chartDate": "2018-06-21",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.45,
@@ -34,5 +36,13 @@
     "HEL routing: see VACs MARSEILLE-PROVENCE.",
     "Intense HEL traffic between HB and HD.",
     "Training flights subject to prior authorization by ATS with a 5 working day PN."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Cheminements HEL : voir cartes VAC de MARSEILLE PROVENCE.",
+      "Présence d'une intense activité HEL entre HB et HD.",
+      ""
+    ]
+  }
 }

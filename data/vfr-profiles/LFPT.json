@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFPT",
   "name": "Paris- Pontoise",
   "source": {
     "publication": "AIP France AD 2 LFPT",
     "chartDate": "2026-10-01",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 49.09667,
@@ -125,5 +127,44 @@
     "Paiement / Payment: Carte TOTAL / TOTAL card H24 ou espèces / or cash: 0800-1100 / 1300-1700 Niveau 4 / Level 4: HOR RFFS si ATS assurés / RFFS SKED if ATS provided.",
     "Niveau 1 / Level 1: Absence ATS ou hors HOR RFFS / Absence ATS or out of RFFS SKED.",
     "Péril animalier / Wildlife strike hazard: Occasionnel / Random."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD réservé aux ACFT munis de radio.",
+      "Activité ULM de classes 1, 2, 4 et 5 interdite.",
+      "Activité ULM de classes 3 et 6 autorisée selon les dispositions de l'arrêté du 12 juillet 2019.",
+      "Activité vols à sensations / baptêmes de l'air en avion à réaction réservée aux opérateurs autorisés par l'exploitant selon consignes locales.",
+      "Distances déclarées utilisables : TORA, TODA et LDA RWY 04 réduites : cause gabarit routier dans la trouée de décollage.",
+      "TORA et TODA RWY 12 réduites : cause gabarit routier situé dans la trouée de décollage.",
+      "TORA et TODA RWY 30 réduites : cause présence potentielle d'un obstacle (engin agricole) en limite de clôture.",
+      "",
+      "Effectuer le décollage à pente MAX RWY 12.",
+      "Hélicoptères : Vols d'école et d'entraînement HEL réservés aux HEL basés ≤ 5 t.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Circuit 04/22 1000 ft (700 ft AAL ) : Sur clairance ATC; En l'absence des services ATS : utilisable si VIS < 5 km ou plafond < 1500 ft.",
+      "Respecter les circuits publiés dans la mesure du possible ainsi que les cercles bleus.",
+      "PONTOISE CORMEILLES EN VEXIN Au décollage piste 22 , continuer dans l'axe de piste jusqu'à atteindre le bosquet du « bois de Chante-Coq ».",
+      "A ce point, matérialisé par l'église de « Boissy l'Aillerie » sur le travers gauche, prendre 199°.",
+      "Au travers gauche de l'entrepôt logistique, virer à droite pour rejoindre le circuit publié.",
+      "Carte pédagogique de l'aérodrome disponible à l'adresse suivante : https://entrevoisins.groupeadp.fr/pontoise-cormeillesen-vexin/",
+      "",
+      "Panne de communication à l'arrivée : suivre les dernières instructions reçues et/ou respecter les consignes générales de panne radio, en se présentant à la verticale de l'aérodrome à 1500 ft (1200 ft AAL).",
+      "effectué dans les limites de la TMA LE BOURGET : Sur autorisation des services ATS LE BOURGET; Dispense du respect du niveau minimal (SERA 5005C) : les évolutions à 2000 ft AMSL sont possibles dans toute la TMA LE BOURGET à l'exception de la protection de l'antenne de Mantes.",
+      "Au décollage piste 22 , prendre 199° 0.5 NM après avoir franchi l'extrémité de la piste.",
+      "Au travers gauche de la route départementale D14, virer à droite pour rejoindre le circuit publié.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  }
 }

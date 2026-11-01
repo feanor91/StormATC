@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFNT",
   "name": "Avignon - Pujaut",
   "source": {
     "publication": "AIP France AD 2 LFNT",
     "chartDate": "2024-02-22",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.99611,
@@ -73,5 +75,30 @@
     "Activity announced on PUJAUT A/A.",
     "AEM (NR 9557): 650 ft ASFC, HJ.",
     "Activity: paramotor school only."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "Atterrissage pour les usagers extérieurs interdit sauf autorisation donnée par l'exploitant d'AD.",
+      "AD réservé au vol à voile, au parachutisme, aux avions de servitude et à l'école de paramoteur.",
+      "Piste 16L/34R exclusivement réservée à l'activité vélivole.",
+      "Utilisation simultanée des pistes 16L/34R et 12/30 interdite.",
+      "Tour de piste et remise des gaz interdits aux ACFT non précédemment cités.",
+      "TODA pistes 16R, 12 et 30 réduites cause présence d'arbres en bout de piste.",
+      "TODA piste 34L réduite en raison d'un chemin agricole en bout de piste.",
+      "",
+      "L'attention des usagers est attirée sur la possible traversée des RWY par des parachutistes et des planeurs en attelage.",
+      "Présence d'un bâtiment (soufflerie) d'une hauteur de 10m à proximité du seuil de piste 16L.",
+      "",
+      "Parachutage sur AD (N° 402) tous les jours SR-SS, FL 135, activité réelle connue de ORANGE APP et AVIGNON TWR.",
+      "Autres HOR et au-dessus du FL 135, activité annoncée par NOTAM.",
+      "A l'ouest des pistes zone réservée au parachutisme.",
+      "Treuillage sur AD (N°986), SFC-2350 AMSL, SR - SS câble non balisé.",
+      "Balisage lumineux au sol (feu tournant).",
+      "Activité annoncée sur PUJAUT A/A.",
+      "AEM (N° 9557) : 650 ft ASFC, HJ.",
+      "Activité \"Ecole de Paramoteur\" exclusivement."
+    ]
+  }
 }

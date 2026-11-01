@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFLC",
   "name": "Clermont-Ferrand Auvergne",
   "source": {
     "publication": "AIP France AD 2 LFLC",
     "chartDate": "2026-03-19",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 45.78611,
@@ -142,5 +144,39 @@
     "Taxis sur AD, bus et train à proximité / Taxis on AD, bus and train in the vicinity.",
     "Sur / On AD.",
     "Service d'évaluation et de report de l'état de surface de piste / Global Reporting Format: 0600-2330"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Service assistance aéroportuaire obligatoire sur tous les postes de stationnement : Attendre prise en charge par service spécialisé au pied de l'aéronef.",
+      "Paiement des taxes directement à l'agent, si client non en compte.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Entrainements : Entraînements VFR/IFR interdits tous les jours de 2200 à 0700 (ETE : - 1HR).",
+      "En dehors de ces périodes, entraînements IFR soumis à l'autorisation préalable des services ATS.",
+      "Tours de piste à vue limités à 3 consécutifs pour les aéronefs de masse maximale autorisée au décollage > 2 tonnes les SAM, DIM et JF.",
+      "Circuits basse hauteur au Nord de la piste (300 ft ASFC MNM) pour les aéronefs basés avec instructeur à bord.",
+      "CLERMONT FERRAND AUVERGNE VFR spécial Minimums météorologiques : En l'absence d'IFR, VIS 1500 m.",
+      "En présence d'IFR, VIS 3000 m.",
+      "Itinéraires : S1 : S - SA - 1000 ft ASFC MNM, puis intégration dans les circuits.",
+      "",
+      "Panne radio : rejoindre la verticale de l'AD à 3000 ft AMSL, phares allumés, effectuer ensuite un passage dans l'axe de la piste 26 à 1700 ft AMSL avec appels au phare d'atterrissage.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Si aucun élément déterminant, utiliser le QFU 261° et s'intégrer phares allumés en début de vent arrière en assurant une séparation visuelle avec les autres appareils puis atterrir.",
+      "Signaux visuels et moyens pyrotechniques inopérants.",
+      "",
+      "",
+      ""
+    ]
+  }
 }

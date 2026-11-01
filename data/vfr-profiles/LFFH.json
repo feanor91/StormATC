@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFFH",
   "name": "Château-Thierry - Belleau",
   "source": {
     "publication": "AIP France AD 2 LFFH",
     "chartDate": "2022-04-21",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 49.06667,
@@ -51,5 +53,22 @@
     "Aerobatics activity (NR 6090) following centerline 1700 AMSL / 3500 AMSL, daytime only SUM 0800-1000, 1330-1730, WIN 0900-1100, 1300-1700.",
     "Activity reserved for users authorized by CAA.",
     "Activity announced on A/A CHATEAU THIERRY."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "(1) Distances déclarées utilisables : TODA RWY 03 réduite cause gabarit routier RD10; TODA RWY 21 réduite cause gabarit routier RD9.",
+      "",
+      "",
+      "Arrivée au QFU 214° : ne pas dépasser l'axe de finale.",
+      "Environnement sensible au bruit, éviter les survols des villages et hameaux environnants.",
+      "Activité de voltige (N° 6090) suivant axe de piste, 1700 AMSL / 3500 AMSL, HJ uniquement ETE 0800-1000, 1330-1730, HIV 0900-1100, 1300-1700.",
+      "Activité réservée aux usagers autorisés par CAA.",
+      "Activité annoncée sur A/A CHATEAU THIERRY."
+    ]
+  }
 }

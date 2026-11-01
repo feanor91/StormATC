@@ -4,14 +4,16 @@
     "Only what the chart states is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text; the reporting points, rules and notes were added by hand.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "The circuit side is not printed on this chart, so none is recorded. No reporting points are printed on this chart."
+    "The circuit side is not printed on this chart, so none is recorded. No reporting points are printed on this chart.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFEB",
   "name": "Dinan - Trélivan",
   "source": {
     "publication": "AIP France AD 2 LFEB",
     "chartDate": "2026-02-19",
-    "extraction": "manual, from the chart text and images"
+    "extraction": "manual, from the chart text and images",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.44333,
@@ -57,5 +59,17 @@
     "Taxiing prohibited except on runways and taxiways. Taxiway B is usable only by aircraft whose main gear overall width is under 3 m.",
     "Transient aircraft: use the grass apron except in periods of heavy rain. The first 3 stands of the paved apron near the hangar are reserved for the flying club.",
     "AEM no. 8971 and parachuting no. 275: see ENR 5.5."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "Ne pas rentrer dans la CTR 2 DINARD sans clairance.",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  }
 }

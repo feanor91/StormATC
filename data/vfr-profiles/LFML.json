@@ -5,14 +5,16 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded."
+    "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFML",
   "name": "Marseille Provence",
   "source": {
     "publication": "AIP France AD 2 LFML",
     "chartDate": "2026-01-22",
-    "extraction": "chart text, table and English column read by script, procedures structured by hand"
+    "extraction": "chart text, table and English column read by script, procedures structured by hand",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.43667,
@@ -288,5 +290,56 @@
     "Taxiing prohibited except on RWY and TWY.",
     "AEM activity (NR 9510): SR-SS, 650 ft ASFC.",
     "Traffic surveillance equipment: aerodrome equipped with primary and secondary surveillance radar."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Pour des raisons de sécurité et de sûreté l'assistance est obligatoire pour tous les ACFT, y compris les ACFT à destination du site AIRBUS HELICOPTERS.",
+      "Liste des assistants à contacter impérativement avant le départ du terrain d'origine : voir AD 2 LFML TXT 06.",
+      "Les décollages QFU 31L sont interdits lorsque la composante traversière du vent (y compris en rafales) est supérieure à 12 kt sur piste mouillée.",
+      "",
+      "Pylône balisé jour et nuit sur AD, au Nord-Est des axes entre étang et Terminal Aviation Générale (voir AD 2 LFML ATT 01).",
+      "",
+      "",
+      "Equipement de surveillance du trafic : aérodrome équipé d'un radar primaire et secondaire."
+    ],
+    "reportingPoints": [
+      {
+        "name": "NB",
+        "location": "Antenne du radar de Vitrolles"
+      },
+      {
+        "name": "E",
+        "location": "Terril au Sud Ouest de Gardanne"
+      },
+      {
+        "name": "EA",
+        "location": "Echangeur autoroutier de Cabriés"
+      },
+      {
+        "name": "EB",
+        "location": "Carrefour routier aménagé à l'Est des Pennes Mirabeau"
+      },
+      {
+        "name": "SW",
+        "location": "Sud de Carro"
+      },
+      {
+        "name": "S",
+        "location": "Sud de Carry-le-Rouet"
+      },
+      {
+        "name": "SA",
+        "location": "Est de Chateauneuf les Martigues"
+      },
+      {
+        "name": "SB",
+        "location": "Convergence étang de Bolmon et canal de Marseille"
+      },
+      {
+        "name": "SR",
+        "location": "1 NM Sud des îles du Riou"
+      }
+    ]
+  }
 }

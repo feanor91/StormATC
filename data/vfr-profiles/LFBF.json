@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFBF",
   "name": "Toulouse-Francazal",
   "source": {
     "publication": "AIP France AD 2 LFBF",
     "chartDate": "2026-03-19",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.54917,
@@ -75,5 +77,30 @@
     "Avoidance mandatory except for: ACFT on DEP or inbound to Toulouse Francazal, authorized by AD operator (https://cy.myhandlingsoftware.com).; rescue, assistance, police or customs missions.",
     "PJE (NR 333) on AD: see AIP ENR 5.5 Radio guided ACFT flights authorized (AD operator's agreement mandatory).",
     "User's information on TOULOUSE Information and FRANCAZAL Information."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD réservé aux aéronefs ayant reçu l'autorisation et les conditions d'utilisation par l'exploitant d'aérodrome.",
+      "AD ouvert uniquement lorsque le service AFIS est actif.",
+      "AD interdit aux vols d'entrainement de l'aviation légère et sportive.",
+      "AD réservé aux ACFT munis de radio.",
+      "",
+      "LUN-VEN : 05 62 11 42 43 / 1rtp.boi-ops conduite.fct@intradef.gouv.fr 05 62 11 42 09 / 1rtp-boi.off-operations.fct@intradef.gouv.fr SAM, DIM, JF : 05 62 11 42 40 Tous les jours: 06 75 33 85 53.",
+      "Roulage interdit hors RWY et TWY.",
+      "Demi-tour interdit sur piste pour les aéronefs de catégorie D.",
+      "Circuit à vue uniquement au Sud de l'AD à 1600 ft.",
+      "Circuit Nord possible seulement pour missions de Visibilité avion : 3000 m ; HEL : 800 m.",
+      "Plafond : 1000 ft ASFC.",
+      "Contournement obligatoire, sauf pour : les aéronefs au départ et à destination de Toulouse.",
+      "Parachutage (N° 333) sur AD : voir AIP ENR 5.5 Vols d'aéronefs télépilotés autorisés (convention obligatoire avec l'exploitant).",
+      "Information des usagers sur TOULOUSE Information et FRANCAZAL Information."
+    ],
+    "reportingPoints": [
+      {
+        "name": "SE",
+        "location": "Venerque"
+      }
+    ]
+  }
 }

@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFLX",
   "name": "Châteauroux - Centre",
   "source": {
     "publication": "AIP France AD 2 LFLX",
     "chartDate": "2026-02-19",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 46.86028,
@@ -133,5 +135,29 @@
     "ACFT: VIS 1500 m.",
     "HEL: VIS 800 m.",
     "Traffic surveillance equipment: AD equipped with a radar display (see AD 1.0)."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD interdit aux planeurs.",
+      "AD utilisable par ULM : HOR ATS de jour avec PPR 2HR auprès de l'exploitant d'aérodrome.",
+      "",
+      "Activité treuillage (N° 867) : voir AIP ENR 5.5.",
+      "Activité AEM (N° 8830) : voir AIP ENR 5.5.",
+      "Activité voltige (N° 6400) : voir AIP ENR 5.5.",
+      "",
+      "Tout vol d'entraînement est soumis à accord préalable de l'exploitant d'aérodrome.",
+      "Les services ATS communiqueront les consignes et les éventuelles restrictions d'utilisation.",
+      "Tour de piste au QFU 032°, 1500 AMSL/1000 ft AAL pour ACFT de catégorie de turbulences de sillage H.",
+      "Accès et circulation sur l'aire de trafic Est interdits sauf sur autorisation des services ATS.",
+      "Les postes de stationnement sur les aires de trafic et les aires de service sont attribués par l'exploitant d'aérodrome et l'information est relayée par les services ATS aux ACFT.",
+      "ACL sur l'aire de stationnement.",
+      "",
+      "Pas de transit VFR Spécial.",
+      "",
+      "",
+      "",
+      "Equipement de surveillance du trafic : AD équipé d'une visualisation radar (Voir AD 1.0)."
+    ]
+  }
 }

@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFTN",
   "name": "Grand'Combe",
   "source": {
     "publication": "AIP France AD 2 LFTN",
     "chartDate": "2025-12-25",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 44.24306,
@@ -51,5 +53,20 @@
     "QFU 346°: cause of movable nature of the North-East part of runway, preferably use West part during bad weather.",
     "AEM (NR 9537): See AIP ENR 5.5 Use of either AEM areas depending on MET conditions.",
     "Users permanently monitoring FREQ (1) AD voisins / Neighbouring AD: AIX - ALES - AUBENAS - AVIGNON - LANGOGNE - MENDE - MONTELIMAR -"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Les pilotes titulaires de la qualification \"Montagne\" peuvent également se poser sur l'AD.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Activités particulières AEM (N° 9537) : Voir AIP ENR 5.5 Utilisation de l'une ou l'autre des zones AEM en fonction des conditions MTO.",
+      ""
+    ]
+  }
 }

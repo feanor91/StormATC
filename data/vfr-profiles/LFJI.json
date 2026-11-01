@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFJI",
   "name": "Marennes",
   "source": {
     "publication": "AIP France AD 2 LFJI",
     "chartDate": "2025-09-04",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 45.82389,
@@ -48,5 +50,18 @@
     "Taxiing prohibited except on RWY and TWY.",
     "Low height circuits below 500 ft AAL: only with instructor on board.",
     "Absence of RWY holding point marking sign: All ACFT must hold short off RWY at least 30 m from RWY edge (1) AD voisins/ Neighbouring AD:"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD réservé aux ACFT munis de radio Utilisation simultanée de la piste et du TWY accolé interdite.",
+      "Taxiway inutilisable par forte pluie.",
+      "",
+      "L'attention de l'utilisateur est spécialement attirée sur la présence d'arbres qui percent les surfaces de dégagement aéronautiques dans la trouée d'atterrissage au sud-ouest : Bosquet 360 m en amont du seuil décalé 04 altitude 110 ft AMSL.",
+      "",
+      "Roulage interdit hors RWY et TWY.",
+      "Circuits basse hauteur inférieurs à 500 ft AAL : avec instructeur uniquement.",
+      ""
+    ]
+  }
 }

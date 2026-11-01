@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFNR",
   "name": "Berre - La Fare",
   "source": {
     "publication": "AIP France AD 2 LFNR",
     "chartDate": "2021-12-30",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.53667,
@@ -58,5 +60,23 @@
     "Contact PROVENCE Tower (southbound) or SALON Approach (northbound) before leaving R88.",
     "Arrivals Plan overhead join at 1300 ft AMSL, not above 900 ft AMSL North of RWY 08-26.",
     "AEM on AD (NR 9885): 1100 ft AMSL (1000 ft ASFC) SR-SS."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "AD utilisable par les hélicoptères d'«Airbus Helicopters».",
+      "AD utilisable par ULM : seuls les ULM de classe 3 et 6, équipés de radio et de transpondeur, sont autorisés.",
+      "La connaissance des dispositions prévues par protocoles (non publiés) entre Salon, Marseille Provence et Berre-la-Fare est indispensable pour utiliser l'AD.",
+      "A ce titre, l'utilisation du terrain par des usagers nonbasés est soumise à l'autorisation de DSAC/SE (voir AD 1.1) et de l'exploitant d'AD.",
+      "",
+      "QFU préférentiel : 338° cause vents dominants, conditions d'éclairement et relief.",
+      "",
+      "Les décollages, cause obstacles dans la trouée, doivent débuter impérativement à partir de l'extrémité opposée.",
+      "Départs Monter au-dessus des circuits de piste publiés, sans dépasser 900 ft AMSL au nord de la piste 08-26.",
+      "Contacter PROVENCE Tour (départ vers le sud) ou SALON Approche (départ vers le nord) avant de quitter la R88.",
+      "Arrivées Prévoir la verticale AD à 1300 ft AMSL, ne pas dépasser 900 ft AMSL au Nord de la piste 08-26.",
+      ""
+    ]
+  }
 }

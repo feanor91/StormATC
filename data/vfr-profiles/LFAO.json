@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFAO",
   "name": "Bagnoles-de-l'Orne - Couterne",
   "source": {
     "publication": "AIP France AD 2 LFAO",
     "chartDate": "2022-09-08",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.54472,
@@ -65,5 +67,27 @@
     "Aerobatic activity (N° 6303) FL 055 - 2500 AMSL.",
     "RWY axis 12/30 length 1500 m, 1300-SS (SUM: -1HR).",
     "Activity according to protocole reserved for pilots authorized by DSAC-West."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Piste non revêtue réservée à l'usage exclusif des planeurs.",
+      "Atterrissages et décollages suspendus si un planeur est immobilisé sur la piste non revêtue à moins d'une demilargeur de la limite commune.",
+      "",
+      "Roulage interdit hors RWY et TWY.",
+      "Départs avions RWY 30 : en fin de piste altération de route de 15° à droite ou 90° à gauche avant la ville (tours de piste notamment).",
+      "",
+      "",
+      "",
+      "",
+      "Planeur non basé : se renseigner en amont sur l'état de la piste auprès d'Elan Planeur.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Axe de piste 12/30 longueur 1500 m, 1300-SS (ETE : -1HR).",
+      "Activité selon protocole réservée aux pilotes autorisés par la DSAC Ouest."
+    ]
+  }
 }

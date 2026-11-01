@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFOV",
   "name": "Laval - Entrammes",
   "source": {
     "publication": "AIP France AD 2 LFOV",
     "chartDate": "2025-01-23",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.03222,
@@ -80,5 +82,42 @@
     "Winch equipped with flashing lights.",
     "Activity reserved for users authorized by CAA.",
     "Users information: LAVAL INFO or RENNES INFO."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Activité IFR possible.",
+      "Bande gazonnée inutilisable par temps de pluie.",
+      "Utilisation simultanée des deux pistes parallèles interdite.",
+      "ULM : accès autorisé uniquement sur accord écrit O/R exploitant par E-mail : contact@aeroport-laval.fr, PPR PN 24 HR ou le dernier jour ouvrable pendant HOR ATS.",
+      "",
+      "Circuits \"basse hauteur\" dans le cadre des vols d'entraînement avec instructeur : à l'Ouest de la piste 14/32 en évitant le survol de St Pierre le Potier par le Nord.",
+      "Circuit \"basse hauteur\" à l'Est de la piste 500 AAL.",
+      "QFU 322° préférentiel cause procédure IFR et conditions météo.",
+      "ULM pendulaire : circuit Est obligatoire.",
+      "A l'arrivée, s'annoncer au moins 3 minutes avant la verticale terrain en raison activité possible de treuillage planeur annoncée sur FREQ A/A.",
+      "Pendant l'activité treuillage annoncée sur FREQ A/A, reconnaissance du site au-dessus de 2300 AMSL.",
+      "Roulage interdit hors RWY et TWY.",
+      "TWY B interdit en période d'activité planeur.",
+      "TWY C interdit si MTOW > 2,5 t.",
+      "Piste non revêtue mixte vol à moteur/vol à voile avec balisage de type planeur.",
+      "Consignes particulières de radiocommunication Hors communications liées à des impératifs de sécurité, il est demandé aux aéronefs passant sur la fréquence de LAVAL d'effectuer une écoute d'au moins 2 minutes de la fréquence afin de s'assurer qu'il n'y a pas d'opérations de treuillage en cours, l'utilisation de la fréquence pouvant gêner la communication entre l'opérateur treuil et le pilote planeur.",
+      "",
+      "Activité selon protocole.",
+      "Information des usagers pendant HOR ATS sur LAVAL INFO ou A/A, sur RENNES INFO/APP, ou sur NANTES APP.",
+      "Activité de voltige sur AD (N° 6353) : SR-SS, 2000 ft AMSL / FL 055 sur axe de piste revêtue.",
+      "Activité réservée aux usagers autorisés par CAA.",
+      "Information des usagers pendant HOR ATS sur LAVAL INFO.",
+      "Activité de treuillage planeurs sur AD (N° 924-1) : SFC",
+      "",
+      "Sur bande non revêtue 14L/32R.",
+      "Câble équipé d'un parachute de descente.",
+      "Treuil équipé d'un feu à éclat et d'une radio.",
+      "Information des usagers : LAVAL INFO ou A/A ou RENNES INFO.",
+      "Activité de treuillage parachutisme sur AD (N° 924-2) : SFC-1800 ft AMSL.",
+      "Treuil équipé de feux à éclats.",
+      "Activité réservée aux usagers autorisés par CAA.",
+      "Information des usagers : LAVAL INFO ou RENNES INFO."
+    ]
+  }
 }

@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFDN",
   "name": "Rochefort - Charente-Maritime",
   "source": {
     "publication": "AIP France AD 2 LFDN",
     "chartDate": "2026-07-09",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 45.88944,
@@ -54,5 +56,21 @@
     "TWY A and E not usable.",
     "Parachuting on AD (NR 354): see AIP ENR 5.5.",
     "Aerobatics over AD (NR 6502): see AIP ENR 5.5."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD interdit aux paramoteurs et aérostats légers (ULM Classes 1 et 5).",
+      "Activité IFR possible.",
+      "",
+      "Ligne axiale d'aire de demi-tour, sur piste ainsi que les TWY A et B conçus pour des aéronefs disposant d'une envergure de moins de 36 m et d'une largeur hors tout du train principal de moins de 9 m.",
+      "Roulage interdit hors RWY et TWY.",
+      "QFU 302° préférentiel cause procédure IFR.",
+      "Circuits en dessous de 500 ft AAL autorisés avec un instructeur uniquement.",
+      "Vols école MIL, jours ouvrables.",
+      "",
+      "",
+      "Activité voltige sur AD (N° 6502) : voir AIP ENR 5.5."
+    ]
+  }
 }

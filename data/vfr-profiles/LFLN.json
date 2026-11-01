@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFLN",
   "name": "Saint-Yan",
   "source": {
     "publication": "AIP France AD 2 LFLN",
     "chartDate": "2026-08-06",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 46.40667,
@@ -162,5 +164,46 @@
     "Parascending activity (NR 1006): see AIP ENR 5.5.",
     "Aerobatics (NR 6458) see AIP ENR 5.5.",
     "AEM (NR 8069) see AIP ENR 5.5."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD interdit aux planeurs sauf autorisés par l'exploitant les WE et JF.",
+      "RWY revêtue 15R/33L réservée aux aéronefs autorisés par l'exploitant d'aérodrome ou les services ATS.",
+      "Piste revêtue 15R/33L fermée WE et JF.",
+      "",
+      "Circuits basse hauteur : uniquement à l'ouest dans le cadre des vols d'entraînement avec instructeur à bord.",
+      "",
+      "AD sensible au bruit - Eviter le survol des zones habitées avoisinantes.",
+      "Essais moteur avant décollage en T1, T3 et T5.",
+      "Demi-tour interdit hors HOR ATS sur piste 15/33 non revêtue.",
+      "",
+      "En présence de trafic IFR, MNM MTO pour ACFT et radar secondaire.",
+      "STAP et PCL hors HOR ATS.",
+      "PCL sur celule photoélectrique.",
+      "Possibilité d'éteindre le balisage en donnant 7 coups d'alternat en moins de 5 secondes.",
+      "STAP : paramètres disponibles (FR uniquement) : vent, VIS, base des nuages, T, DP, QNH, QFE.",
+      "Si PAPI 15 HS sous fonctionnement PCL, atterrissage interdit.",
+      "",
+      "La partie 2 de la CTR peut être déclassée en G au profit de certaines activités spécifiques selon les modalités décrites par le protocole entre les bénéficiaires et le centre de contrôle d'approche de ST YAN.",
+      "Activité réelle connue de SAINT YAN APP et CLERMONT INFO.",
+      "Treuillage parachutisme ascensionnel (N° 1006) : voir AIP ENR 5.5.",
+      "Voltige (N° 6458): voir AIP ENR 5.5.",
+      "AEM (N° 8069) voir AIP ENR 5.5."
+    ],
+    "reportingPoints": [
+      {
+        "name": "EA",
+        "location": "Paray le Monial, embranchement ferroviaire au SE de la ville"
+      },
+      {
+        "name": "SA",
+        "location": "ABM W ville d'Avrilly, ABM E château d'eau d'Avrilly"
+      },
+      {
+        "name": "WA",
+        "location": "Le Pin, château d'eau au SE de la localité"
+      }
+    ]
+  }
 }

@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFPQ",
   "name": "Fontenay-Trésigny",
   "source": {
     "publication": "AIP France AD 2 LFPQ",
     "chartDate": "2026-04-16",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.70611,
@@ -64,5 +66,27 @@
     "PCL coupled with PAPI RWY 12 on A/A FREQ.",
     "Windsock lighting switched on by PCL.",
     "PCL operating hours: SS + 30 / SR-30."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "Activité ULM de classe 1, 2, 4, 5 interdite.",
+      "Entrainement HEL interdit.",
+      "",
+      "Utilisation de la piste non revêtue : en raison de sa proximité avec la manche à vent, l'utilisation de la piste non revêtue est interdite lorsque la composante traversière du vent est supérieure à 20 kts.",
+      "Présence d'une hélisurface à usage restreint (centre d'incendie et de secours) située dans le 282° / 2 NM ARP.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Manche à air éclairée par PCL.",
+      "Plage horaire de fonctionnement PCL : CS + 30 / LS-30."
+    ]
+  }
 }

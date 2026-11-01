@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFOO",
   "name": "Sables-d'Olonne - Talmont",
   "source": {
     "publication": "AIP France AD 2 LFOO",
     "chartDate": "2024-08-08",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 46.47556,
@@ -63,5 +65,27 @@
     "PJE activity (NR 520): SKED: APR-OCT: 0800-1130 and 1300-SS MAX 2000 (SUM: -1 HR), NOV-MAR: 0800-1200 and 1300-SS; FL 145.",
     "Activity acording to protocol.",
     "User information on NANTES INFO/APP."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Utilisation simultanée piste non revêtue et piste revêtue accolée interdite.",
+      "Vérifier les performances de l'ACFT en fonction des obstacles publiés.",
+      "Présence d'une route située à 70 m à l'extrémité de la piste 24 revêtue.",
+      "Présence d'un massif boisé d'altitude 140 ft environ, situé entre 90 m et 190 m de l'extrémité de la piste 24 revêtue.",
+      "",
+      "Risque aviaire autour et sur l'AD.",
+      "Présence d'arbres aux seuils des pistes.",
+      "",
+      "Roulage interdit hors RWY, TWY et parking.",
+      "RWY, TWY et parking non revêtus inutilisables après fortes pluies et interdits aux ACFT non autorisés du 01/10 au 31/05.",
+      "Aéronefs de passage : parking non revêtu obligatoire du 01/06 au 30/09.",
+      "Parking bitumé utilisable uniquement du 01/10 au 31/05 ou avec autorisation de l'exploitant.",
+      "Aires A, B réservées aux avions basés.",
+      "AD très sensible au bruit ; éviter le survol des zones habitées avoisinantes.",
+      "Activité parachutisme (N° 520) : HOR : APR-OCT : 0800-1130 et 1300-SS MAX 2000 (SUM : -1 HR), NOVMAR : 0800-1200 et 1300-SS ; FL 145.",
+      "Activité selon protocole.",
+      "Information des usagers sur NANTES INFO/APP."
+    ]
+  }
 }

@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFNH",
   "name": "Carpentras",
   "source": {
     "publication": "AIP France AD 2 LFNH",
     "chartDate": "2024-11-28",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 44.0225,
@@ -50,5 +52,27 @@
     "Preferred QFU 310° due to environment.",
     "Non home-based ACFT trainings: tours de piste inférieurs à 1400 (1000) interdits, patterns below 1400 (1000) prohibited,",
     "2 circuit patterns maximum."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "QFU 310° : éviter le survol de la colline de la Lègue située au Nord-Est de l'aérodrome.",
+      "",
+      "QFU 310° préférentiel cause environnement.",
+      "",
+      ""
+    ]
+  }
 }

@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFDU",
   "name": "Lesparre - Saint-Laurent-Médoc",
   "source": {
     "publication": "AIP France AD 2 LFDU",
     "chartDate": "2025-02-20",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 45.19639,
@@ -51,5 +53,20 @@
     "Limitations: to home-based ACFT AEM (NR 9139) Activity 700 ft ASFC / 810 ft AMSL, SRSS except NOTAM.",
     "As per protocol.",
     "Parachute activity (NR 358): SFC-FL 100, SR-SS, activation known by AQUITAINE INFO/APP."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "QFU préférentiel 063° cause éblouissement important en fin de journée Circuit basse hauteur limité à « l'instruction avec instructeur à bord ».",
+      "",
+      "Absence de voie de circulation parallèle à la piste : remonter obligatoirement la piste depuis le point d'attente 24-06.",
+      "",
+      "",
+      "Risque de péril aviaire en finale RWY 06.",
+      "",
+      "Selon protocole.",
+      "Parachutage (N° 358) : SFC-FL 100, SR-SS, activité réelle connue de AQUITAINE INFO/APP."
+    ]
+  }
 }

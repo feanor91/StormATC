@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFSM",
   "name": "Montbéliard - Courcelles",
   "source": {
     "publication": "AIP France AD 2 LFSM",
     "chartDate": "2024-05-16",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 47.48667,
@@ -55,5 +57,32 @@
     "Hot air balloon flight near the AD: activity announced on A/A FREQ.",
     "Informations diverses / Miscellaneous A proximité/ In the vicinity.",
     "Divers / Miscellaneous: GRF: Service d'évaluation et de report de l'état de surface de piste / Global Reporting Format: HOR ATS / ATS SKED"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD réservé aux ACFT munis de radio.",
+      "Utilisation simultanée des pistes interdite.",
+      "",
+      "QFU 257° préférentiel cause procédure aux instruments.",
+      "En raison des obstacles, APCH courbe par le sud au QFU 077°.",
+      "AD très sensible au bruit, éviter impérativement le survol des zones d'habitations voisines.",
+      "Après le décollage RWY 26, virer à gauche pour survol de la zone située entre le Doubs et le canal du Rhône au Rhin.",
+      "Après décollage à vue RWY 08, tourner à droite en raison de l'arbre, ALT 1234 ft, 078° / 1 NM ARP.",
+      "Les voies de circulation A et B sont limitées aux aéronefs dont la largeur hors-tout du train d'atterrissage est inférieure à 5 m.",
+      "De nuit, seule la trouée Est est utilisable au décollage et à l'atterrissage.",
+      "Utilisation de nuit interdite en cas d'indisponibilité du PAPI.",
+      "L'entraînement de nuit est réservé aux pilotes autorisés par l'exploitant d'aérodrome.",
+      "",
+      "Extinction automatique 13 min 40 s.",
+      "",
+      "PPR BALE INFO au dessus de 6500 ft AMSL.",
+      "Voltige sur AD (N° 6470) : 0730-1800 (ETE : -1HR), de jour uniquement ; axe RWY 08/26 sur 1700 m ; 1650 ft ASFC/5500 ft AMSL ; utilisable uniquement par les pilotes autorisés par l'exploitant de l'aérodrome.",
+      "AEM (N° 8056) : 500 ft ASFC.",
+      "ETE : 0600-1800, HIV : 0700-SS.",
+      "Vol de montgolfière à proximité de l'AD : activité annoncée sur FREQ A/A.",
+      "",
+      ""
+    ]
+  }
 }

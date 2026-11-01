@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFKA",
   "name": "Albertville",
   "source": {
     "publication": "AIP France AD 2 LFKA",
     "chartDate": "2025-09-04",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 45.62639,
@@ -52,5 +54,22 @@
     "Restricted to 2 traffic patterns.",
     "Traffic patterns prohibited before 0800, between 1100 and 1300, WE and public HOL.",
     "Low height patterns prohibited."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "Par sol enneigé, utilisation AD par ACFT basés uniquement sous la responsabilité du commandant de bord.",
+      "",
+      "Décollage RWY 23 : 1er virage à 1700 ft AMSL minimum.",
+      "Décollage RWY 05 : dès que possible, virage à gauche et montée secteur Nord.",
+      "Approche hélicoptère RWY 05 ou 23 : viser le centre de la piste.",
+      "",
+      "",
+      "Limité à 2 tours de piste.",
+      "Tours de piste interdits avant 0800, entre 1100 et",
+      ""
+    ]
+  }
 }

@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFSA",
   "name": "Besançon - Thise",
   "source": {
     "publication": "AIP France AD 2 LFSA",
     "chartDate": "2025-12-25",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 47.27361,
@@ -58,5 +60,21 @@
     "Check the performance of the aircraft according to published obstacles.",
     "Short field take-off procedure recommended.",
     "Glider aerobatic activity (NR 6496): see AIP ENR 5.5 AEM activity (NR 8048): see AIP ENR 5.5 Paramotor activity reserved for home-based school and for USACD (ACB) members."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "RWY 06R/24L réservée aux planeurs et moto-planeurs.",
+      "RWY 06L/24R réservée aux autres aéronefs.",
+      "",
+      "Roulage interdit hors RWY et TWY.",
+      "Terrain mou après pluies prolongées, inondable en période de crue.",
+      "TWY revêtu en surélévation par rapport au terrain traversé.",
+      "DEP 06 : forêt au Nord-Est dans la trouée de décollage constituant un obstacle perçant pouvant atteindre 30 m.",
+      "Montée pente Max.",
+      "Vérifier les performances de l'aéronef en fonction des obstacles publiés.",
+      "Procédure départ court recommandée.",
+      "Activité de voltige planeurs (N° 6496) : voir AIP ENR 5.5 Activité AEM (N° 8048) : voir AIP ENR 5.5 Activité paramoteur réservée à l'école basée et aux membres de l'ACB (USACD)."
+    ]
+  }
 }

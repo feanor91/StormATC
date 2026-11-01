@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFIX",
   "name": "Itxassou",
   "source": {
     "publication": "AIP France AD 2 LFIX",
     "chartDate": "2024-02-22",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.33639,
@@ -54,5 +56,28 @@
     "Douanes / Customs: Carburant / Fuel: 100LL - Lubrifiant / Lubricant: 100.",
     "Niveau 1 / Level 1.",
     "Péril animalier / Wildlife strike hazard:"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD réservé au vol à voile et aux ACFT de servitude.",
+      "AD interdit aux hélicoptères.",
+      "",
+      "L'attention des pilotes est spécialement attirée sur les conditions aérologiques très particulières, notamment en cas de vent du sud.",
+      "",
+      "Aménagement de deux bandes revêtues (150 x 5 m) incluses dans la piste en herbe.",
+      "Utilisation des 2 bandes revêtues réservée aux ACFT de servitude.",
+      "Voltige planeurs (N° 6690) : axe RWY, longueur 1000 m, centrée sur ARP ; SR-SS ; 2000 ft AMSL / 4500 ft AMSL, information assurée sur FREQ A/A.",
+      "Parachutage (N° 366) : centré sur 432015N, 0012525W; ETE : SR-2100 ; HIV : SR-2200.",
+      "",
+      "AEM (N° 9136) : 330 ft AAL.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  }
 }

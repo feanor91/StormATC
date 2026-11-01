@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFGT",
   "name": "Sarrebourg - Buhl",
   "source": {
     "publication": "AIP France AD 2 LFGT",
     "chartDate": "2026-07-09",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.71833,
@@ -63,5 +65,24 @@
     "Follow indicated AD circuit as much as possible.",
     "Radio contact with PHALSBOURG is required in D class CTR except if strictly following published AD circuit of SARREBOURG BUHL.",
     "AEM NR 8053: see AIP ENR 5.5"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Utilisation simultanée des pistes interdite.",
+      "Tout TKOF ou LDG d'ACFT est suspendu si un planeur est immobilisé sur la piste non revêtue à moins d'une demi-largeur de la limite SE de celle-ci.",
+      "Proximité de la base aérienne de PHALSBOURG BOURSCHEID et ses procédures IFR associées, notamment si piste 06 en service.",
+      "Très forte sensibilité de la piste non revêtue aux intempéries et précipitations.",
+      "Présence fréquente de taupinières sur piste non revêtue.",
+      "Se renseigner sur la praticabilité de la piste auprès d'un des ACB.",
+      "Piste bombée : pas de visibilité d'un seuil à l'autre.",
+      "Activité vol à voile possible sur la piste revêtue.",
+      "",
+      "QFU 220° préférentiel cause nuisances sonores.",
+      "ACL : ALT parking devant manche à air : 853 ft.",
+      "Respecter dans la mesure du possible le circuit d'aérodrome publié.",
+      "Le contact radio avec PHALSBOURG est obligatoire dans la CTR de classe D, sauf dans le cadre du respect strict du circuit d'aérodrome de SARREBOURG BUHL.",
+      ""
+    ]
+  }
 }

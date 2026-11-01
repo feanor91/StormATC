@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFKF",
   "name": "Figari Sud Corse",
   "source": {
     "publication": "AIP France AD 2 LFKF",
     "chartDate": "2025-08-07",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 41.50222,
@@ -173,5 +175,29 @@
     "FATO use: The FATO is located North-East of the General Aviation Helicopters flying to FIGARI or transiting in the CTR must contact TWR 3 minutes before entering the class D airspace, and fly over the compulsory reporting points.",
     "Radiocommunication failure If failure occurs before receiving the clearance to enter the CTR, the helicopter shall not enter the airspace.",
     "If failure occurs within the CTR: before receiving the clearance to join the traffic pattern: leave the CTR the shortest way,; after receiving the clearance to join the traffic pattern: continue according to the latest clearance."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Accessibilité AD : pour l'Aviation Générale, PPR obligatoire avant le départ auprès de l'exploitant (CCI) par E-mail : fsc.ppr@cci.corsica Activité ULM : ULM de classe 2, 3, 4 et 6 muni de radio et transpondeur mode C.; Activité interdite entre le 1er juin et le 30 septembre les SAM, DIM et JF.; En dehors de ces périodes utilisation AD uniquement après acceptation PPR par l'exploitant.",
+      "Limitation à 20 kt de vent traversier sur piste mouillée.",
+      "Turbulences en approche : Par vent moyen et fort (> 15 kt), plus particulièrement de secteur W/NW, de fortes à très fortes turbulences sont susceptibles d'être rencontrées aux abords de l'aérodrome.",
+      "Turbulences en finale : Attention possibilité de cisaillement en finale RWY 23.",
+      "HS (hot spot) : distance de roulage très courte entre les sorties de PRKG et le point d'attente \"C\".",
+      "En approche en piste 05, la présence d'une toiture photovoltaïque sur un hangar agricole, à environ 900 mètres avant le seuil 05 et 70 mètres sur la droite de l'axe de piste, est susceptible d'entraîner un éblouissement peu avant le passage travers hangar.",
+      "",
+      "En finale 05 le PAPI assure le franchissement du Mont CALDARELLO (388 ft).",
+      "Circuit basse hauteur : circuit préférentiel par le Nord 300 ft minimum réservé aux besoins de l'instruction.",
+      "Utilisation obligatoire des raquettes (intermédiaires ou de fin de piste) , pour demi-tour sur piste.",
+      "FIGARI SUD CORSE A l'Est de la CTR, itinéraire recommandé de transit dans les deux sens par AS, EAF, EF à 2500 ft AMSL MAX cause activité IFR.",
+      "Contact radio non garanti avec Ajaccio INFO à l'Est et au Nord-Est de la CTR cause couverture VHF défectueuse.",
+      "Sans clairance, rester en classe G.",
+      "Equipement de surveillance du trafic : Aérodrome équipé d'une visualisation radar (voir AD 1.0).",
+      "Conditions d'utilisation de la FATO Services d'assistance aéroportuaire : voir TXT 03.",
+      "Cause saturation des postes de stationnement, l'obtention d'un poste est soumise à la demande 12 heures avant le départ auprès de l'exploitant (CCI) par E-mail : fsc.ppr@cci.corsica Cette procédure ne s'applique pas aux hélicoptères basés, aux hélicoptères d'Etat ni aux SMUH.",
+      "",
+      "Panne de radiocommunication Si la panne survient avant d'avoir reçu l'autorisation de pénétrer dans la CTR, l'hélicoptère ne devra pas y pénétrer.",
+      "Si la panne survient à l'intérieur de la CTR : avant d'avoir reçu la clairance d'entrée dans le circuit de piste : sortir de la CTR par le trajet le plus court,; après avoir reçu la clairance d'entrée dans le circuit de piste : poursuivre selon la dernière clairance."
+    ]
+  }
 }

@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFNB",
   "name": "Mende - Brenoux",
   "source": {
     "publication": "AIP France AD 2 LFNB",
     "chartDate": "2026-04-16",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 44.50417,
@@ -54,5 +56,25 @@
     "Heavy turbulence generated in the vicinity.",
     "AEM NR 9643: see AIP ENR 5.5 Towing glider activity RWY 12/30.",
     "Hot-air balloons activity."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Activité IFR possible.",
+      "Aérodrome interdit aux ULM de classe 1 et 5 sauf autorisation de l'exploitant.",
+      "Bande ULM réservée aux ULM basés et aux aéronefs autorisés par l'exploitant.",
+      "Utilisation bande ULM interdite en cas de stationnement planeurs et remorqueur parking extrémité piste 30.",
+      "Utilisation bande ULM interdite en cas de présence montgolfière.",
+      "Utilisation simultanée bande ULM et RWY 12/30 interdite.",
+      "",
+      "Atterrissage RWY 12 ULM : attention, végétation située à l'Est de la Bande ULM près du seuil RWY 12 ULM.",
+      "",
+      "Largeur TWY A : 9.3 m.",
+      "Survol du Truc de Balduc à éviter pour la quiétude des rapaces.",
+      "De juillet à août, hélicoptère de la sécurité civile basé sur l'aérodrome : les postes de stationnement côté droit de la station d'avitaillement et côté aire à signaux sont réservés à la sécurité civile.",
+      "Fortes turbulences générées à proximité.",
+      "",
+      "Activité montgolfières."
+    ]
+  }
 }

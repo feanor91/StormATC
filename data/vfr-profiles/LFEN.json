@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFEN",
   "name": "Tours - Sorigny",
   "source": {
     "publication": "AIP France AD 2 LFEN",
     "chartDate": "2022-11-03",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 47.26639,
@@ -57,5 +59,22 @@
     "PJE on AD (NR 255): SFC-FL 130.",
     "15 MAR-15 NOV: SR-SS; according to protocol reserved for users authorized by AD operator.",
     "Users' information on SEINE APP/INFO or TOURS TWR/INFO.."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Piste en herbe 04R/22L réservée aux ULM.",
+      "",
+      "",
+      "DEC et/ou ATT simultanés sur les 2 pistes interdits.",
+      "",
+      "Activité voltige (N° 6404) sur AD : axe RWY 04/22 ; 2100 ft ASFC / 2400 ft AMSL - 4400 ft AMSL ; SR-SS en dehors des activités CTR TOURS VAL DE LOIRE.",
+      "Réservée aux ACFT autorisés et selon protocole.",
+      "Notification début et fin d'activité à SEINE APP/INFO.",
+      "Veille de la FREQ SORIGNY A/A par les ACFT en évolution.",
+      "Activité parachutage sur AD (N° 255) : SFC-FL 130.",
+      "15 MAR-15 NOV : SR-SS ; selon protocole réservé aux usagers autorisés par l'exploitant d'aérodrome.",
+      "Information des usagers sur SEINE APP/INFO ou TOURS TWR/INFO."
+    ]
+  }
 }

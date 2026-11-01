@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFRF",
   "name": "Granville-Mont-Saint-Michel",
   "source": {
     "publication": "AIP France AD 2 LFRF",
     "chartDate": "2023-12-28",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.88278,
@@ -50,5 +52,21 @@
     "PJE on AD (NR 540): SR-SS, SFC-FL155.",
     "Activity according to protocol.",
     "Information on RENNES INFO / APP."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Largeur TWY revêtu : 9,30 m.",
+      "Bande gazonnée réservée aux ULM basés et déclarés auprès de l'exploitant par ULM Air Cotentin.",
+      "",
+      "",
+      "Voie de circulation gazonnée réservée aux ACFT légers.",
+      "Voie de circulation Z utilisable uniquement pour dégager la piste.",
+      "",
+      "PCL utilisable sur PPR le dernier jour ouvrable avant le vol avant 1600 locales à l'exploitant AD.",
+      "",
+      "Activité selon protocole.",
+      "Information aux usagers sur RENNES INFO / APP."
+    ]
+  }
 }

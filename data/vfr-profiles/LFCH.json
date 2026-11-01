@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFCH",
   "name": "Arcachon - La Teste-de-Buch",
   "source": {
     "publication": "AIP France AD 2 LFCH",
     "chartDate": "2025-04-17",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 44.59694,
@@ -114,5 +116,29 @@
     "Aerobatics over AD (NR 6650): 3000 ft ASFC / FL 100.",
     "SUM: 0700-SS, WIN: 0800-SS, PPR CAZAUX APP.",
     "AEM activity on AD (NR 9148): Daytime, 330 ft ASFC."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD interdit aux paramoteurs.",
+      "Utilisation simultanée des pistes interdite.",
+      "Tout DEC ou ATT est suspendu si un ACFT est immobilisé sur la piste non revêtue à moins d'une demilargeur de la limite commune.",
+      "",
+      "Voltige Le Teich \"Taures\" (N° 6645).",
+      "Activité AEM Dune du Pyla (N° 9115).",
+      "Activité particulière La Teste de Buch (N° 33-001).",
+      "",
+      "",
+      "",
+      "QFU 252° préférentiel en raison de la proximité des résidences du golf à l'Est de l'aérodrome.",
+      "",
+      "Activités particulières Activité de treuillage planeurs sur AD (N° 972) : SFC / 2500 ft AMSL , SR-SS, annoncée sur ARCACHON Info.",
+      "Parachutage sur AD (N° 306) : SFC / FL 140, hors activité Cazaux.",
+      "Selon protocole.",
+      "Activité réelle connue par AQUITAINE INFO / APP, ARCACHON INFO, CAZAUX APP.",
+      "Voltige sur AD (N° 6650) : 3000 ft ASFC / FL 100.",
+      "ETE : 0700-SS, HIV : 0800-SS, PPR CAZAUX APP.",
+      "Activité AEM sur AD (N° 9148) : HJ, 330 ft ASFC."
+    ]
+  }
 }

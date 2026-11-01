@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFOB",
   "name": "Paris Beauvais",
   "source": {
     "publication": "AIP France AD 2 LFOB",
     "chartDate": "2026-09-03",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 49.45444,
@@ -147,5 +149,70 @@
     "Radiocommunication failure: Visual signals and pyrotechnic means are inoperative.",
     "Informations diverses / Miscellaneous Divers / Miscellaneous: GRF: Service d'évalution et de report de l'état de surface de piste / Global Reporting Format: HOR RFFS / RFFS SKED Sûreté / Security H24 - TEL: 06 78 98 88 39 ou / or 06 17 65 55 71. « COLLABORATIVE AERODROME SAFETY HIGHLIGHTS » sont disponibles à Additional information for the preparation of flights called \"COLLABORATIVE AERODROME SAFETY HIGHLIGHTS\" is available at https://www.ecologiquesolidaire.gouv.fr/collaborative-aerodrome-safety-highlights-cash These data are published for information purposes only, and are not exhaustive.",
     "They are in no way a substitute for the reference aeronautical information disseminated through AIP France, NOTAMs and SUP AIPs."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "En raison d'accotements partiellement revêtus de la piste 12-30, l'aérodrome n'est pas utilisable par les aéronefs quadrimoteurs d'envergure supérieure ou égale à 36 m et dont la largeur hors-tout du train principal est supérieure ou égale à 9 m.",
+      "Interdit au VAV.",
+      "Interdit aux ULM.",
+      "Une dérogation peut être accordée par la tour lorsque les conditions de circulation aérienne et les caractéristiques de l'ACFT le permettent.",
+      "Hors horaires ATS : DEC et ATT simultanés sur RWY 12/30 et 04/22 interdits.; Lors du roulage sur la RWY 12/30, en cas d'exploitation simultanée de la RWY 04/22 par un autre.",
+      "",
+      "",
+      "Piste 04/22 : DEC et ATT interdits de nuit (absence de balisage lumineux).",
+      "Circulation des aéronefs interdite par visibilité < 1500m.",
+      "TWY A : limité aux aéronefs d'envergure < 15 m avec OMGWS < 4.5m.",
+      "Circulation des aéronefs interdite par visibilité < 1500 m.",
+      "TWY A : limité aux aéronefs d'envergure < 15 m avec OMGWS < 4.5m.",
+      "Circulation des aéronefs interdite par visibilité < 1500 m.",
+      "TWY N : limité aux aéronefs d'envergure < 52 m avec OMGWS < 15m.",
+      "TWY P : limité aux aéronefs d'envergure < 15 m avec OMGWS < 4.5m.",
+      "Circulation des aéronefs interdite par visibilité < 1500 m.",
+      "TWY R : limité aux aéronefs d'empattement < 18m.",
+      "Circulation des aéronefs interdite par RVR < 550 m.",
+      "TWY T : limité aux aéronefs d'envergure < 24 m avec OMGWS < 6m.",
+      "Circulation des aéronefs interdite par RVR < 350 m.",
+      "BEAUVAIS TILLE RWY TORA TODA 04 708 708 22 708 708 12 2429 2429 TWY N 1653 1653 TWY T 1925 1925 TWY W 2033 2033 30 2429 2429 TWY N 799 799 Gestion des aires de trafic Sur les aires de trafic, les pilotes assurent la prévention des abordages et des collisions, leur propre séparation et la sécurité des tiers.",
+      "La tour de contrôle organise les séquences de roulage pour l'entrée sur l'aire de manoeuvre.",
+      "BEAUVAIS TILLE La responsabilité de la TWR cesse à l'arrivée, lorsque l'aéronef pénètre sur l'aire de trafic (délimitée par la ligne de sécurité) et, au départ, commence dès qu'il entre sur l'aire de manoeuvre.",
+      "L'établissement d'un contact radio est obligatoire avant la pénétration sur cette aire.",
+      "Pentes sur postes de stationnement entre 1% et 1,8% : calage obligatoire.",
+      "PRKG Principal affecté prioritairement aux ACFT commerciaux.",
+      "PRKG Aviation Légère affecté prioritairement aux ACFT légers de passage.",
+      "PRKG Nord affecté prioritairement aux ACFT basés.",
+      "PRKG IGN réservé aux ACFT autorisés par l'IGN.",
+      "PARKING PRINCIPAL : A l'arrivée, les postes de stationnement sont attribués par Beauvais OPS, cette information est relayée aux aéronefs par la TWR.",
+      "Aucun dispositif de guidage, placeur obligatoire sur tous les postes de stationnement.",
+      "Dès l'arrivée au poste de stationnement, contact obligatoire avec Beauvais OPS 131.540 MHz, ne pas quitter l'aéronef sans avoir été inspecté filtré par un agent de sûreté.",
+      "Au départ et préalablement à tous les déplacements, contact obligatoire avec la TWR.",
+      "Lorsqu'un itinéraire passe par une agglomération ou une installation isolée, celles-ci devront être contournées afin de respecter les règles de survol décrites dans l'arrêté du 10 octobre 1957.",
+      "Equipement de surveillance du trafic : Aérodrome équipé d'une visualisation radar (voir AD 1.0).",
+      "",
+      "BEAUVAIS TILLE 18 - Des informations complémentaires pour la préparation des vols appelées l'adresse https://www.ecologique-solidaire.gouv.fr/collaborative-aerodrome-safetyhighlights-cash Ces données sont publiées uniquement à titre indicatif et informatif, et ne sont pas exhaustives.",
+      "Elles ne se substituent en aucun cas à l'information aéronautique de référence diffusée au travers de l'AIP France, des NOTAM et des SUP AIP."
+    ],
+    "reportingPoints": [
+      {
+        "name": "N",
+        "location": "Croisement de l'A16 sur la RD 1001 au lieu dit \" Le bois Saint Martin \""
+      },
+      {
+        "name": "W",
+        "location": "Hameau \" le pont qui penche \", sur la N31"
+      },
+      {
+        "name": "SW",
+        "location": "Travers Ouest d'un relais de télévision près de l'A16, au lieu dit \" Le bois de Molle \""
+      },
+      {
+        "name": "SE",
+        "location": "Croisement de la RD 1001 avec les D2 et D44 à Noailles"
+      },
+      {
+        "name": "S",
+        "location": "Echangeur de l'A16 à Allone"
+      }
+    ]
+  }
 }

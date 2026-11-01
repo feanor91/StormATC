@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFRO",
   "name": "Lannion",
   "source": {
     "publication": "AIP France AD 2 LFRO",
     "chartDate": "2025-08-07",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.75444,
@@ -80,5 +82,25 @@
     "TEL: 02 96 05 82 18",
     "Airport's website: http://www.lannion.aeroport.fr/demande-de-PCL PJE (NR 280): see AIP ENR 5.5 Unmanned aircraft activity (NR 22-001): see AIP ENR 5.5 Péril animalier / Wildlife strike hazard: Occasionnel / Random.",
     "HOR / SKED RFFS HJ /OR."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Activité IFR possible.",
+      "",
+      "Présence d'une ligne d'arbres d'altitude 403 ft, dans le 295° du THR 11, à 956 m.",
+      "",
+      "TWY Nord entre station AVT et hangars limité aux aéronefs dont l'envergure est inférieure à 15 m.",
+      "QFU 288° préférentiel cause environnement et procédure IFR jusqu'à vent arrière de 5 kt, sauf si l'état de la piste rend son utilisation impossible.",
+      "Circuit Nord réservé aux ACFT largueurs parachutistes.",
+      "Circuits \"basse hauteur\" dans le cadre des vols d'entraînement avec instructeur uniquement.",
+      "MNM 500 ft AAL au Nord de la piste 11/29.",
+      "Stand L1 réservé en priorité aux ACFT électriques.",
+      "Tours de piste au Nord.",
+      "PCL utilisable sur PPR auprès de l'exploitant d'AD pendant HOR RFFS : .",
+      "",
+      "",
+      ""
+    ]
+  }
 }

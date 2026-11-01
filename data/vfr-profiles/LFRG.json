@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFRG",
   "name": "Deauville - Normandie",
   "source": {
     "publication": "AIP France AD 2 LFRG",
     "chartDate": "2026-02-19",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 49.36333,
@@ -139,5 +141,36 @@
     "GRF unavailability in case of RFFS triggering.",
     "RCR (Runway Condition Report) updated and transmitted at each RWY inspection.",
     "AIREP transmission to the services of the Operator and the Local SNA: aerosgs@deauville.aeroport.fr / sna-o-cca-lfrg-ld@aviation-civile.gouv.fr"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "PRKG en herbe susceptible d'être fermé en cas d'intempéries.",
+      "Port du gilet fluorescent obligatoire sur les aires.",
+      "Accès côté piste par l'aéroclub strictement réservé aux usagers autorisés.",
+      "Sortie piétons par le portillon bleu BGTA sous la responsabilité du commandant de bord.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Les vols d'entraînement ACFT en IFR et ACFT > 6 t en VFR sont interdits (ETE : - 1 HR) : LUN-VEN : 1900-0700.",
+      "SAM : après 1300.",
+      "DIM et JF.",
+      "Il est recommandé en VFR d'éviter la verticale du VOR DVL sauf PPR TWR 5 min avant l'estimée verticale.",
+      "Procédures d'arrivée Au dessous de 2500 ft AMSL, contact radio obligatoire 3 min avant le survol des points d'entrée de la CTR.",
+      "Sauf clairance contraire, les ACFT suivront les itinéraires publiés sur la carte APP 01.",
+      "Procédures de départ Sauf clairance contraire, les ACFT suivront les itinéraires publiés sur la carte APP 01.",
+      "DEAUVILLE NORMANDIE Procédures de transit Sauf clairance contraire, les ACFT suivront l'itinéraire ≥ VIS 2500 m (ACFT et HEL).",
+      "Atterrissage RWY 12 et 30 interdit de nuit si PAPI U/S.",
+      "Equipement de surveillance du trafic : Aérodrome équipé d'une visualisation radar (voir AD 1.0).",
+      "DEAUVILLE NORMANDIE 16 - GRF : Service assuré par RFFS pendant les horaires suivants : LUN-DIM et JF : 0800-1800 du 01 NOV au 31 MAR 0700-1900 du 01 APR au 31 OCT, et pendant les opérations d'extension de l'Exploitant.",
+      "En dehors de ces HOR, GRF non assuré.",
+      "Indisponibilité GRF en cas de déclenchement du RFFS.",
+      "RCR (Runway Condition Report) actualisé et transmis à chaque inspection de piste.",
+      "Transmission AIREP auprès des services de l'Exploitant et du SNA Local : aerosgs@deauville.aeroport.fr / sna-o-cca-lfrg-ld@aviation-civile.gouv.fr"
+    ]
+  }
 }

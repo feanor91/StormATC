@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFKD",
   "name": "Sollières-Sardières",
   "source": {
     "publication": "AIP France AD 2 LFKD",
     "chartDate": "2025-09-04",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 45.25389,
@@ -47,5 +49,18 @@
     "TKOF RWY 19: as soon as possible, turn 30° to the right to go along the relief and avoid flying over hamlet of Chatel and Bramans and Verney villages.",
     "TKOF RWY 01: as soon as possible, turn 25° to the right to avoid flying of Sollières village.",
     "AEM (NR 9875): see AIP ENR 5.5 (1) AD voisins / Neighbouring AD:"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Par vent faible, préférer un décollage en RWY 19 et un atterrissage en RWY 01 compte tenu de l'environnement et de la pente de la piste.",
+      "Décollage RWY 19 : dès que possible, altérer sa route de 30° vers la droite pour longer le relief et éviter le survol du hameau du Chatel et des villages de Bramans et du Verney.",
+      "Décollage RWY 01 : dès que possible, altérer sa route de 25° vers la droite pour éviter le survol du village de Sollières.",
+      ""
+    ]
+  }
 }

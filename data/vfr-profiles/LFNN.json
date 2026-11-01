@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFNN",
   "name": "Narbonne-Vinassan",
   "source": {
     "publication": "AIP France AD 2 LFNN",
     "chartDate": "2021-09-09",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.19417,
@@ -53,5 +55,23 @@
     "QFU 283°: avoid overflying Narbonne during takeoff.",
     "Downwind leg located south of Coursan.",
     "AEM (NR 9538): HJ, 500 ft ASFC, as per protocol."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "AD interdit aux aéronefs non munis de radio.",
+      "Utilisation simultanée avions-planeurs interdite.",
+      "Bande gazonnée impraticable par fortes pluies, inondable si crues.",
+      "Se renseigner sur l'état des pistes auprès de l'aéro-club.",
+      "",
+      "Le commandant de bord doit vérifier si les performances au décollage et à l'atterrissage sont compatibles avec les caractéristiques de l'aérodrome.",
+      "Présence d'un fossé drainant, matérialisé par des balises jaunes, dégagement par les extrémités de piste.",
+      "",
+      "TWY : largeur 35 m.",
+      "QFU 283° : éviter le survol de Narbonne au décollage.",
+      "Branche vent arrière au sud de la commune de Coursan.",
+      ""
+    ]
+  }
 }

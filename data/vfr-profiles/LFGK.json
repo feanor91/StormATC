@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFGK",
   "name": "Joigny",
   "source": {
     "publication": "AIP France AD 2 LFGK",
     "chartDate": "2025-12-25",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 47.99444,
@@ -59,5 +61,21 @@
     "Crosswind South and North components are limited to 15 kt at landing and take-off on paved runways 08 and 26 (due to the presence of trees in the North side surfaces).",
     "The stand markings on the PRKG are designed to accommodate aircraft with a maximum wingspan of 12 m.",
     "AEM activity (NR 8235): see AIP ENR 5.5"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Piste non revêtue inutilisable après fortes pluies.",
+      "Piste non revêtue réservée aux ACFT basés et à ceux autorisés par l'exploitant.",
+      "Distances déclarées utilisables : Usable declared distances : Présence d'un arbre qui perce de 9 m la trouée d'atterrissage 26 et la trouée de décollage 08 de la piste revêtue.",
+      "",
+      "",
+      "L'extrémité ouest de la piste revêtue est identifiée par une marque transversale jaune.",
+      "Forte déclivité après extrémité W piste revêtue.",
+      "Dénivellation de 1 m à l'W du TWY entre la RWY et le PRKG.",
+      "Les composantes Sud et Nord de vents traversiers sont fixées à 15 kt à l'atterrissage et au décollage sur les pistes revêtues 08 et 26 (cause présence d'arbres dans les surfaces latérales Nord).",
+      "Les marques de poste de stationnement sur le PRKG sont prévues pour l'accueil d'aéronefs d'envergure 12 m max.",
+      ""
+    ]
+  }
 }

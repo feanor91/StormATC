@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFRQ",
   "name": "Quimper Cornouaille",
   "source": {
     "publication": "AIP France AD 2 LFRQ",
     "chartDate": "2026-10-01",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 47.975,
@@ -140,5 +142,42 @@
     "Level maintained until arrival or departure of the last SKED flight.",
     "Level 1 outside these SKED (Powder extinguisher available).",
     "Péril animalier / Wildlife strike hazard: Occasionnel HOR RFFS / Random RFFS SKED."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD interdit aux planeurs.",
+      "Activité ULM : réservée aux ULM basés ou autorisés O/R TWR (voir consignes locales).",
+      "",
+      "Présence de dévers de plus de 50 % dans les aires de sécurité d'extrémités de piste aux seuils 09 et 27.",
+      "Présence de 3 maisons dans la bande au nord de la piste 09-27 dépassant de 1,77 m à 3,23 m par rapport à l'altitude de piste.",
+      "Une partie du parking de l'Aviation Générale (20 m) est située dans la bande de piste.",
+      "La présence d'une clôture sur un talus au Nord de la piste 09-27 (seuil 09) constitue un obstacle.",
+      "",
+      "QFU 274 ° préférentiel : vent d'ouest dominant.",
+      "Roulage interdit hors RWY et TWY.",
+      "Contact radio recommandé 5 minutes avant de pénétrer dans la CTR.",
+      "Essais moteurs interdits entre 2100 et 0700 (ETE : - 1HR).",
+      "Décollages interdits depuis TWY B et C pour les aéronefs de masse supérieure à 2 tonnes (absence de panneau d'information de distance restante TKOF).",
+      "",
+      "départs : sur clairance du CTL En absence IFR : VIS : avions 1500 m, hélicoptères 800 m, plafond 600 ft.",
+      "QUIMPER PLUGUFFAN RWY 09 : Atterrissage de nuit interdit si PAPI U/S.",
+      "Entraînements tour de piste de nuit soumis à accord de l'exploitant.",
+      "La fréquence assignée au PCL : 118.630 MHz qui est de type fréquence Tour.",
+      "PAPI 09/27 activable avec le PCL.",
+      "Consignes d'activation du PCL : L'activation PCL basse intensité (BI) : 3 coups d'alternat en moins de 5 secondes.; L'activation PCL en haute intensité (HI) : 5 coups d'alternat en moins de 5 secondes.; L'extinction est automatique après 15 minutes ; pas d'extinction manuelle possible.",
+      "Equipement de surveillance du trafic : Aérodrome équipé d'une visualisation radar (voir AD 1.0).",
+      "",
+      "QUIMPER PLUGUFFAN 11 - RFFS : Extension possible niveau 5 PPR 72 HR par E-mail à l'exploitant d'AD.",
+      "",
+      "",
+      ""
+    ],
+    "reportingPoints": [
+      {
+        "name": "S",
+        "location": "Intersection 4 voies route de Plomelin"
+      }
+    ]
+  }
 }

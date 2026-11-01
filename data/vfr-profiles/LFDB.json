@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFDB",
   "name": "Montauban",
   "source": {
     "publication": "AIP France AD 2 LFDB",
     "chartDate": "2024-08-08",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 44.02667,
@@ -65,5 +67,33 @@
     "Refer to 9th RSAM special instructions of use or contact MIL OPS.",
     "Noise-sensitive AD.",
     "PPR PN 24 HR OPS MIL: mandatory for non based ACFT going to 9eme RSAM."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "AD enclavé dans l'agglomération.",
+      "Rassemblement d'ACFT uniquement sur PPR PN 1 semaine exploitant.",
+      "Mise en marche moteur interdite si parachutage en cours.",
+      "TODA RWY 31 réduite cause présence d'obstacles dans la trouée d'envol 31.",
+      "",
+      "Présence de nombreux arbres dans la trouée d'envol 13 / trouée d'atterrissage 31, situés sur le relief proche de l'axe de piste, entre RDL 110° et RDL 123° / 0.7NM THR 31.",
+      "",
+      "Tours de piste basse hauteur interdits.",
+      "Touch and go interdits au QFU 314°.",
+      "Atterrissage QFU 134° : maintenir strictement le plan de descente de 7.1% jusqu'à la D 820.",
+      "Atterrissage QFU 314° : ne pas intercepter l'axe d'approche finale en dessous de 900ft AMSL et maintien de l'axe jusqu'au passage de la rocade A20.",
+      "Décollage QFU 134° : l'attention des pilotes est attirée sur la nécessité de vérifier que les performances de leur appareil garantissent le survol en sécurité des obstacles, et notamment des arbres.",
+      "De plus, le maintien de l'axe jusqu'à 900ft AMSL, avant de virer et de continuer la montée est impératif.",
+      "Décollage QFU 314° : alignement impératif à l'extrémité de piste, maintenir l'axe jusqu'au bout de piste, puis RM 330° dès que possible.",
+      "Roulage interdit hors RWY et TWY.",
+      "Hélicoptères : translation jusqu'aux parkings CIV ou MIL.",
+      "Roulage sur le TWY : HEL en translation prioritaire pour couper le TWY B et rejoindre le parking MIL.",
+      "HEL CIV : translation jusqu'au parking HEL CIV, de préférence zone herbeuse au NW du parking CIV.",
+      "PRKG MIL AVION/HEL lourds : seuls 3 plots sont utilisables.",
+      "Se référer aux conditions particulières d'utilisation du 9ème RSAM ou contacter les OPS MIL.",
+      "AD très sensible au bruit.",
+      "PPR obligatoire PN 24 HR OPS MIL pour les ACFT non basés à destination du 9ème RSAM (Régiment de soutien aéromobile)."
+    ]
+  }
 }

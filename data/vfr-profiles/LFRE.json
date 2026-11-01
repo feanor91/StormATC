@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFRE",
   "name": "Baule-Escoublac",
   "source": {
     "publication": "AIP France AD 2 LFRE",
     "chartDate": "2025-07-10",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 47.28833,
@@ -55,5 +57,27 @@
     "For helicopters, mandatory radio messages before startup.",
     "TWY B1 only usable to vacate RWY.",
     "PJE on AD (NR 277): see AIP ENR 5.5"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD réservé aux ACFT munis de radio.",
+      "Dangers à la navigation aérienne L'attention des pilotes est attirée sur la proximité des CTR SAINT NAZAIRE afin d'éviter toute pénétration en espace D sans clairance.",
+      "AD susceptible d'être envahi en quelques minutes par la brume de mer.",
+      "Présence obstacle (mât météo) balisé H24, 140 ft AMSL, R 090 / 210 m de la tour.",
+      "",
+      "Roulage interdit hors piste et TWY.",
+      "Circulation des ACFT de CAT B restreinte au-delà des postes d'AVT.",
+      "Postes de stationnement avec câbles, numérotés de 1 à 14 sur P1 réservés aux ACFT de CAT A.",
+      "De P1 vers les hangars, TXL réservée uniquement aux ACFT basés.",
+      "P2 est réservé aux ACFT de CAT B et hélicoptères.",
+      "Survol du parc régional de Brière déconseillé à moins de 1000 ft.",
+      "AD sensible au bruit.",
+      "Procédure moindre bruit : afin de limiter les nuisances, décollage QFU 106° et atterrissage QFU 286° préféré si conditions météo et trafic compatibles.",
+      "Tour de piste : en QFU 106° et 286° se font uniquement au Nord de la piste.; interdit de 1100 à 1300 et après 1800 (ETE : - 1 HR); Interdit le DIM et JF pour ACFT non basés.",
+      "",
+      "TWY B1 utilisable uniquement en sortie de piste.",
+      ""
+    ]
+  }
 }

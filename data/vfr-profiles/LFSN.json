@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFSN",
   "name": "Nancy-Essey",
   "source": {
     "publication": "AIP France AD 2 LFSN",
     "chartDate": "2026-01-22",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.69222,
@@ -73,5 +75,43 @@
     "SAM, DIM et JF / SAT, SUN and public HOL: Niveau 2 / Level 2: PN 30 min pendant HOR ATS / PN 30 min during ATS SKED.",
     "Niveau 5 / Level 5: PPR exploitant d'aérodrome PN 72 HR avant le vol / PPR AD operator PN 72 HR before the flight.",
     "Péril animalier / Wildlife strike hazard: Occasionnel HOR RFFS / Random RFFS SKED."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD réservé aux ACFT munis de radio.",
+      "AD interdit aux planeurs.",
+      "AD interdit aux ULM de classe 2.",
+      "Piste non revêtue réservée aux hélicoptères et utilisable uniquement sur accord du service AFIS et pendant les HOR ATS.",
+      "Utilisation simultanée de la piste revêtue et de la piste en herbe interdite.",
+      "Survol des installations de stockage de Gaz de France, dégazage intempestif jusqu'à 500 m du sol.",
+      "Présence d'un obstacle de type clôture balisée à 163 m de l'axe, d'une hauteur de 2 m entre les R 140 et 170 du seuil 21.",
+      "",
+      "QFU 026° préférentiel cause procédure IFR.",
+      "Circuits basse hauteur (500 ft AAL MNM) autorisés dans le cadre des vols d'entraînement avec instructeur à bord, limités à un seul mouvement par séance, uniquement pendant HOR ATS et après accord AFIS.",
+      "HEL : arrivées par le point initial H1 à 1300 (500).",
+      "DEP RWY 03 : après décollage ou remise de gaz, poursuivre dans l'axe jusqu'à 1000 ft AAL avant de virer.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "10 - AVT : Paiement possible par CB Total, CB hors American Express et en espèce (750 € max, pas de rendu de monnaie).",
+      "",
+      "Avitaillement automatique disponible avec CB TOTAL (uniquement 100LL).",
+      "PN 45 min pour les vols sanitaires et PPR PN 72 HR pour les autres vols.",
+      "Avitaillement auto H24 poste R2 disponible pour HEL avec CB Total (Jet A1).",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  }
 }

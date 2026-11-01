@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFCF",
   "name": "Figeac-Livernon",
   "source": {
     "publication": "AIP France AD 2 LFCF",
     "chartDate": "2025-10-02",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 44.6725,
@@ -46,5 +48,17 @@
     "Strength of TWY and PRKG: 5.7 t.",
     "TWY width: 8,50 m.",
     "Ground markings: there is a distance of 13 m between Aerobatics activity (NR 6630): see AIP ENR 5.5"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Distances déclarées utilisables : TORA, TODA, ASDA et LDA RWY 11 réduites pour cause de marques de seuil 14 m aprés le seuil physique.",
+      "",
+      "",
+      "Les accotements Sud de la piste revêtue sont utilisables comme TWY.",
+      "Force portante de la bretelle et du PRKG : 5.7 t.",
+      "Largeur TWY : 8,50 m.",
+      ""
+    ]
+  }
 }

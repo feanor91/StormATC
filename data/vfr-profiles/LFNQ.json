@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFNQ",
   "name": "Mont-Louis La Quillane",
   "source": {
     "publication": "AIP France AD 2 LFNQ",
     "chartDate": "2022-12-01",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 42.54333,
@@ -45,5 +47,18 @@
     "Outside gliding activity hours, runway inspections are not carried out, the pilot in command shall get aware of runway conditions.",
     "Glider winching on AD (NR 999), 1700 ft ASFC, SR-SS activity announced by rotating lights mounted on the electrical winch – users information on A/A FREQ.",
     "PJE over AD (NR 319) 1300 ft ASFC, SR-SS, activity announced by NOTAM above 1300 ft."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Le CDT de bord doit : soit avoir la qualification \"Montagne\",; soit totaliser plus de 100 heures de vol comme pilote et satisfaire à l'une des deux conditions ci-après : 1) avoir utilisé le terrain comme CDT de bord dans les douze derniers mois, 2) avoir effectué une reconnaissance de site dans les deux derniers mois, avec un instructeur autorisé à fréquenter le terrain et avoir été lâché à l'issue de cette reconnaissance (mention portée sur le carnet de vol).",
+      "Aérodrome réservé aux aéronefs basés pour la période comprise entre le 31 octobre et le 31 mai, et aux aéronefs équipés de skis utilisant l'aérodrome enneigé sous la seule responsabilité du CDT de bord, le balisage et damage de la piste n'étant pas assuré par le gestionnaire.",
+      "",
+      "Par vent de secteur Nord < 15 kt utiliser le QFU 141° pour le décollage en raison de la pente de la piste.",
+      "Atterrissage de préférence QFU 321° en raison de la pente de la piste et fortes turbulences seuil 14.",
+      "",
+      "",
+      "Parachutages sur AD (N° 319) 1300 ft ASFC, SR-SS, activité annoncée par NOTAM au dessus de 1300 ft."
+    ]
+  }
 }

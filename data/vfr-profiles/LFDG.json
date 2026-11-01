@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFDG",
   "name": "Gaillac - Lisle-sur-Tarn",
   "source": {
     "publication": "AIP France AD 2 LFDG",
     "chartDate": "2023-11-02",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.88306,
@@ -47,5 +49,24 @@
     "1300 AAL / 4000 AMSL: During flights overhead AD, imperative presence of a \"Ground Control\" for aerobatic activity which must watch frequency A/A.; Radio-contact compulsory with TOULOUSE APP; Aerobatics activity stopped in case of IFR ARR to ALBI.",
     "Transponder recommended.",
     "Aerobatics activity possible only with AD operator agreement and in accordance with the local instructions."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Distances déclarées utilisables : TODA RWY 07 et 25 réduites cause présence d'arbres dans les trouées de DEC.",
+      "",
+      "Roulage interdit hors RWY et TWY.",
+      "Eviter le survol de la ville de Gaillac au Nord-Est.",
+      "Entrainements \"basse hauteur\" interdits si tour de piste en cours.",
+      "Pour les entraînements, le circuit de tour de piste est précisé dans les consignes locales d'exploitation affichées sur l'aérodrome.",
+      "",
+      "",
+      "",
+      "Voltige sur AD (N° 6730) : 0800-1100 et 1300-1800 (ETE : - 1 HR).",
+      "Axe 07/25, longueur 2500 m, centré sur ARP.",
+      "",
+      "",
+      ""
+    ]
+  }
 }

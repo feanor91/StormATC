@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFRV",
   "name": "Vannes - Meucon",
   "source": {
     "publication": "AIP France AD 2 LFRV",
     "chartDate": "2025-08-07",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 47.71917,
@@ -71,5 +73,34 @@
     "Important parachuting activity.",
     "TWY B prohibited.",
     "PJE (NR 274) on AD: see AIP ENR 5.5 Aerobatics (NR 6358) on AD: see AIP ENR 5.5 Simultaneous aerobatics and parachuting activity forbidden."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Demande par E-mail AFIS Pendant l'activité parachutage, piste 08/26 réservée aux appareils utilisés par les entités signataires du protocole parachutage 274 et aux appareils autorisés par l'exploitant.",
+      "Information disponible AFIS ou A/A.",
+      "",
+      "PAPI en fonctionnement obligatoire pour toute approche de nuit RWY 22.",
+      "Circuits « basse hauteur » autorisés dans le cadre des vols d'entrainement avec instructeur uniquement : minimum 500 ft AAL, au SE RWY 04/22 .",
+      "Les pilotes sont invités à utiliser les points de report VFR notamment dans les trajectoires de contournement des LF-R 278 et R 279.",
+      "Conditions de pénétration de la LF-R 278 VANNES (à l'exclusion de la zone LF - R94 A Meucon) : contact radio obligatoire avec VANNES INFO ou A/A en l'absence AFIS.",
+      "Conditions de pénétration de la LF-R 279 VANNES PARA (à l'exclusion des zones LF-R 94 A et B Meucon): contournement obligatoire pendant l'activité sauf : ACFT au départ et à destination AD VANNES GOLFE.",
+      "DU MORBIHAN",
+      "ACFT largueurs de parachutistes",
+      "ACFT assurant des missions d'assistance, de sauvetage ou de sécurité publique, lorsque leur mission ne permet pas le contournement de la zone.",
+      "Demande de mise en route obligatoire pour tout hélicoptère.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Activité parachutage (N°274) sur AD : voir AIP ENR 5.5 Voltige (N° 6358) sur AD : voir AIP ENR 5.5 Activité simultanée de voltige et de parachutage interdite."
+    ]
+  }
 }

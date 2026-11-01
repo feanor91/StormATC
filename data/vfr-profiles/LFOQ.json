@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFOQ",
   "name": "Blois - Le Breuil",
   "source": {
     "publication": "AIP France AD 2 LFOQ",
     "chartDate": "2026-09-03",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 47.67972,
@@ -59,5 +61,26 @@
     "LUN, MER-VEN / MON, WED-FRI: 0830-1130, 1230-1630 MAR / TUE: 1230-1630 sauf JF / except public HOL Level 2 or 3 outside these SKED, PPR AFIS before 1530 on the previous day or on the last working day.",
     "Level 1 outside these SKED.",
     "Péril animalier / Wildlife strike hazard: Occasionnel - HOR RFFS niveau 3 / Random - RFFS level 3 SKED."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "QFU 300° préférentiel.",
+      "Atterrissages et décollages simultanés interdits sur toutes les pistes.",
+      "Tout décollage ou atterrissage est suspendu sur la piste 12/30 si un appareil est immobilisé sur la demi-bande accolée de la piste 12L/30R non revêtue.",
+      "Activité IFR possible.",
+      "",
+      "Attention particulière Les points d'attente S, Z et U sont sur un TWY traversant plusieurs pistes.",
+      "Présence éventuellle de voiles en descente à proximité des TWY S, N et C.",
+      "Evitement de survol Eviter le survol des villes de Villefrancoeur, Le Breuil et La Chapelle Vendômoise.",
+      "Verticale terrain : passage verticale terrain interdit pendant activité voltige ou parachutisme.",
+      "Circuits courts interdits pendant l'activité parachutisme.",
+      "Tour de piste interdit après 2200 locales sauf autorisation exceptionnelle de l'exploitant.",
+      "STAP et PCL : Limité HN sur PPR AFIS avant 1530 la veille ou le dernier jour ouvré.",
+      "STAP : Paramètres disponibles (FR seulement) : vent, T°, DP, QNH, QFE, visibilité instrumentale, nébulosité, informations diverses éventuelles.",
+      "",
+      "Niveau 1 en dehors de ces HOR.",
+      ""
+    ]
+  }
 }

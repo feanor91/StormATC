@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFNV",
   "name": "Valréas - Visan",
   "source": {
     "publication": "AIP France AD 2 LFNV",
     "chartDate": "2025-12-25",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 44.33583,
@@ -53,5 +55,25 @@
     "Non home-based ACFT are not allowed to perform more than two traffic patterns.",
     "Taxiing prohibited except on RWY and TWY.",
     "Aerobatics (NR 6900): See AIP ENR 5.5"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Arbre à l'Est du seuil de piste 02 proche du circuit de piste paramoteur.",
+      "",
+      "",
+      "",
+      "Cause environnement, entraînements tours de piste Cause environnement, après decollage piste 02, tourner vers l'Ouest dès que possible et éviter le survol du village de Richerenches à 2 km au Nord des installations.",
+      "TODA réduite cause obstacles dans les trouées de décollage et dans la surface de dégagement latérale Ouest.",
+      "TWY A : largeur 16 m.",
+      "Présence d'un talus de hauteur 1 m à 10 m du bord Ouest du TWY A, prudence recommandée.",
+      "L'utilisation simultanée de la piste et des TWY par des ACFT est interdite, à l'exception des ACFT en attente aux seuils 02 et 20 perpendiculairement à la RWY avec l'avant de l'appareil positionné au-dessus des dalles de béton de 6 m X 6 m aux seuils respectifs.",
+      "ACFT d'envergure > 14 m, ne pas utiliser le TWY mais remonter la piste.",
+      "Présence possible de paramoteur à l'EST de la piste.",
+      "L'utilisation de la bande ULM paramoteur se fait avec circuits préférentiels main gauche au QFU 198° et main droite au QFU 018°.",
+      "Les ACFT non basés ne pourront pas faire plus de deux tours de piste.",
+      "Roulage interdit hors RWY et TWY.",
+      ""
+    ]
+  }
 }

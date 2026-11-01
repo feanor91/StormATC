@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFBT",
   "name": "Tarbes-Lourdes-Pyrénées",
   "source": {
     "publication": "AIP France AD 2 LFBT",
     "chartDate": "2026-09-03",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.18556,
@@ -83,5 +85,30 @@
     "E-mail dépôt / Depot e-mail: lde.gpo-a@wfscorp.com E-mail responsable / Manager E-mail: ncabarrou@wfscorp.com Information sur / on FREQ: 131.465 MHz.",
     "Payment: credit card, WFS Fuel Contract card, AVCARD, UVAIR, cash (max 1500 €).",
     "Autres / Other: faire demande d'avitaillement à / request refuelling from fuel24@wfscorp.com Niveau 7 / Level 7: 0500-2130 Niveau 5 / Level 5: 2130-0500 Vols commerciaux programmés / Scheduled commercial flights: Niveau 7 / Level 7 Niveaux 7 à 9 disponibles sur / Level 7 to 9 available with PPR 1 HR: en HOR d'ouverture AD / during AD opening SKED: TEL +33 (0)5 62 32 96 00; hors HOR d'ouverture AD / outside AD opening SKED: TEL +33 (0)5 62 32 67 14 ou / or +33 Péril animalier / Wildlife strike hazard: Continu de SR-30 à SS+30 / Continuous from SR-30 to SS+30."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Vols d'entraînement sur accord de la subdivision contrôle TEL ATS et E-mail : sna-so-pyrenees-ctlld@aviation-civile.gouv.fr Les séances d'entraînement pour les aéronefs d'envergure supérieure à 24m (code C) et pour les hélicoptères de tout type sont soumis à autorisation de l'exploitant.",
+      "Contacts OPS (0500-2300 locales) : TEL : +33(0)5 62 32 96 00; E-mail : ops.tarbes-lourdes@aeroports-laregion.fr.",
+      "Vols d'entraînement interdits entre 2300 et 0600 locales.",
+      "Les ACFT de l'ACB de Bigorre sont considérés comme ACFT basés.",
+      "ULM autorisés si radio et transpondeur.",
+      "Il est recommandé de suivre l'itinéraire E-EA à 2500 ft AMSL MAX.",
+      "Parachutage (N° 311, 316, 330, 334-1 et 334-2) : voir AIP ENR 5.5 AEM N° 9020 : voir AIP ENR 5.5 Ballon captif N° 976 : voir AIP ENR 5.3 Activité planeurs : dans la zone R 240 Laloubère à l'Est des installations de TARBES.",
+      "Activité annoncée sur ATIS et sur FREQ ATC.",
+      "En présence de trafic IFR : Avions : VIS 3000 m, plafond 1100 ft,; HEL : VIS 3000 m, plafond 1100 ft.",
+      "En l'absence de trafic IFR : Avions : VIS 1500 m, plafond 600 ft (180 m); HEL : VIS 800 m, plafond 600 ft (180 m) hélicoptères 4ème RHFS et 5ème RHC et instructeurs.",
+      "ACB Léon Morane et ACB de Bigorre.",
+      "LDG RWY 02 interdits.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Paiement : carte bancaire, carte WFS Fuel Contract, AVCARD, UVAIR, espèces (max 1500 €).",
+      ""
+    ]
+  }
 }

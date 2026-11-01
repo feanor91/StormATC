@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFRI",
   "name": "Roche-sur-Yon - Les Ajoncs",
   "source": {
     "publication": "AIP France AD 2 LFRI",
     "chartDate": "2024-10-03",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 46.7025,
@@ -70,5 +72,34 @@
     "Niveau 5 / Level 5: jours d'activation, consulter NOTAM / activation days, consult NOTAM.",
     "Niveau 2 / Level 2: LUN-VEN / MON-FRI: 0800-1130,1300-1600.",
     "Niveau 1 / Level 1: en dehors de ces HOR, SAM-DIM et JF / outside these SKED, SAT-SUN and public HOL: Extincteur sur roues à disposition sur aire de trafic / Wheeled extinguisher available on"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD utilisable par les ULM détenteurs d'une aptitude radio.",
+      "AD interdit aux ULM de classe 1 (paramoteur).",
+      "Utilisation simultanée des pistes interdite.",
+      "Piste non revêtue réservée aux planeurs et aéronefs basés.",
+      "Piste, voies de circulation et parkings non revêtus non utilisables en période de pluie.",
+      "Activité IFR possible.",
+      ": Atterrissage RWY28 interdit si PAPI 28 U/S.",
+      "",
+      "",
+      "Circuit \"basse hauteur\" dans le cadre des vols d'entraînement avec instructeur uniquement : minimum 500 ft AAL au Nord de la piste 10/28.",
+      "Cause nombreuses activités, éviter les transits par la verticale de l'aérodrome.",
+      "PPR PN 24 HR pour stationnement PRKG en dur.",
+      "Treuillage planeurs (N° 923) : SR-SS, SFC/2300 ft AMSL, sur bande non revêtue 10/28.",
+      "Treuil équipé de feux à éclats et radio.",
+      "Cable non balisé.",
+      "Information des usagers : LA ROCHE INFO ou A/A.",
+      "Parachutage sur AD (N° 257) SR-SS, FL 135, activité réelle connue de LA ROCHE INFO ou A/A, et de NANTES INFO/APP.",
+      "Voltige sur AD (N° 6393) : axe RWY 10/28, 1700 ft AMSL/3300 ft AMSL, LUN-VEN : 0830-1100,1300-1800, SAM, DIM et JF : 0900-1100, 1330-1700 (ETE : - 1 HR).",
+      "",
+      "",
+      "AEM (N° 8984) : SR-SS, SFC/1300 ft AMSL-1000 ft ASFC.",
+      "",
+      "",
+      ""
+    ]
+  }
 }

@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFRM",
   "name": "Le Mans-Arnage",
   "source": {
     "publication": "AIP France AD 2 LFRM",
     "chartDate": "2026-02-19",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 47.94861,
@@ -57,5 +59,26 @@
     "After TKOF runway 02, route alteration by 30° right as soon as possible.",
     "PAPI 20: MEHT adapted to CAT A ACFT only.",
     "Gliders' winching activity (NR 887): see AIP ENR 5.5 Parachuting (NR 220): see AIP ENR 5.5 AEM (NR 8390): see AIP ENR 5.5 Péril animalier / Wildlife strike hazard: Adapted: unavailable outside AFIS SKED or extensions."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "Restriction à l'occasion de l'épreuve automobile des \"24 heures du Mans‘' et autres épreuves \"Le Mans Classic\", GP MOTO (annoncées par NOTAM) .etc.",
+      "",
+      "PRKG Nord inaccessible sauf à l'occasion de l'épreuve des \"24 Heures du Mans\".",
+      "AD sensible au bruit : tours de piste interdits aux non basés entre 2100 et 0700 UTC (ETE : - 1 HR).",
+      "L'utilisation des pistes est autorisée de nuit uniquement si les PAPI sont en fonctionnement.",
+      "De nuit seul le TWY A est utilisable.",
+      "QFU préférentiel 019° cause procédure IFR.",
+      "Roulage interdit hors RWY et TWY.",
+      "Circuits \"basse hauteur\" autorisés dans le cadre des vols d'entraînement avec instructeur uniquement et interdits les WE et jours fériés du 1er avril au 31 octobre entre 1100-1300 UTC (ETE : -1HR) et entre 1800-SS UTC (ETE : -1HR) : minimum 500 ft AAL à l'Est de la piste 02/20.",
+      "Eviter le survol du Mans, Arnage, et du centre Butagaz situé à 2500 m de l'ARP dans le QDR 200°.",
+      "RVR < 800 m : balisage et feux de protection de piste allumés, seul le TWY A est utilisable.",
+      "Après TKOF piste 02, altération de route 30° droite dès que possible.",
+      "PAPI 20 : MEHT appropriée pour les avions de CAT A seulement.",
+      ""
+    ]
+  }
 }

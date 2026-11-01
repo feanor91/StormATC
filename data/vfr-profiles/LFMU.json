@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFMU",
   "name": "Béziers-Cap d'Agde",
   "source": {
     "publication": "AIP France AD 2 LFMU",
     "chartDate": "2026-03-19",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.32333,
@@ -135,5 +137,48 @@
     "Routes: To Montpellier or Narbonne: Minimum altitude 3000 ft AMSL, maximum level.",
     "FL 055 (FL 045 if R 108E active).",
     "Restrictions AVGAS 100LL Station: prohibited when the 3B position is occupied by a B737 or A400M."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "TWY B réservé aux ACFT < 5,7 t.",
+      "TWY B et T3 : envergure maximale : 16.65 m.",
+      "ACFT MTOW > 20 t demi-tour uniquement sur raquette.",
+      "",
+      "",
+      "",
+      "",
+      "STAP : paramètres disponibles : vent, VIS, RVR, base des nuages, T, DP, QNH, QFE.",
+      "PPR auprès exploitant d'AD",
+      "3 coups d'alternat : basse intensité",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Itinéraires : Vers Montpellier ou Narbonne : Altitude minimale 3000 ft AMSL, niveau maximal.",
+      "FL 055 (FL 045 si R 108E active).",
+      "Restrictions Station AVGAS 100LL : interdit lorsque le poste 3B est occupé par un B737 ou A400M."
+    ],
+    "reportingPoints": [
+      {
+        "name": "MZ",
+        "location": "Zone industrielle au Nord-Ouest de Mèze, le long de l'autoroute A9 AMDT 08/24"
+      }
+    ]
+  }
 }

@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFQM",
   "name": "Besançon-La Vèze",
   "source": {
     "publication": "AIP France AD 2 LFQM",
     "chartDate": "2025-09-04",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 47.20528,
@@ -60,5 +62,29 @@
     "Outside these SKED: Level 1, or level 2 PPR AFIS PN 1HR.",
     "Level 4 possible with PPR PN 24 HR AFIS.",
     "TEL: +33 (0)3 81 83 15 32 - E-mail: afis@smablv.fr Péril animalier / Wildlife strike hazard:"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "ULM sur PPR exploitant d'aérodrome.",
+      "Activité IFR possible.",
+      "",
+      "",
+      "QFU 231° préférentiel à l'atterrissage cause procédure IFR.",
+      "QFU 231° préférentiel au décollage cause environnement.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "3 impulsions sur FREQ A/A en moins de 5 secondes pour allumer le balisage avec PAPI 05/23 sur brillance 3 et éclairage PRKG avions.",
+      "5 impulsions sur FREQ A/A en moins de 5 secondes pour allumer le balisage avec PAPI 05/23 sur brillance 4, feux à éclats et éclairage PRKG avions.",
+      "Balisage allumé pour 15 minutes.",
+      "",
+      "En dehors de ces HOR : Niveau 1, ou niveau 2 PPR AFIS PN 1HR.",
+      "Niveau 4 possible avec PPR PN 24 HR AFIS.",
+      ""
+    ]
+  }
 }

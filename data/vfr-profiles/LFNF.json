@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFNF",
   "name": "Vinon",
   "source": {
     "publication": "AIP France AD 2 LFNF",
     "chartDate": "2024-02-22",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.73639,
@@ -84,5 +86,42 @@
     "Area restricted to home-based paramotor equipped with A/A 118.155 MHz Frequency.",
     "Use SKED: 01 APR - 30 SEP: SR-0900, 01 OCT - 31 MAR: SR-1100 and 1400-SS (SUM - 1 HR).",
     "Axis of TKOF/LDG, parallel to RWY 02/20, is to maintain due to multiple activities - height limited to 500 ft AAL."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "TWY T, traversée piste 28/10 entre HS1 et HS2 : 4.6m Balisage pistes mixtes 28/10 et 16/34 uniquement par marques latérales (absence balises tronconiques).",
+      "",
+      "Risque de forts rabattants en approche finale piste 16, piste 28 et piste 34.",
+      "",
+      "La piste 10 ne doit être utilisée que lorsque des conditions de vent ne permettent pas l'utilisation d'autres QFU : « Touch and go » interdits.",
+      "Activités liées au vol à voile Pendant l'intense activité de remorquages, la piste en service est celle utilisée pour les décollages des planeurs.",
+      "Le starter planeur ou les remorqueurs peuvent informer les aéronefs au départ ou à l'arrivée de la piste utilisée et des mouvements en cours et prévus.",
+      "La piste 30 est exclusivement réservée à l'atterrissage des planeurs au QFU 280°.",
+      "Les avions remorqueurs peuvent atterrir sur une autre piste que la piste en service.",
+      "L'attention des usagers est attirée sur le point de report TRAPEZE qui est un point de descente des remorqueurs.",
+      "Entraînement Entraînements tours de piste inférieurs à 1600 ft interdits aux avions et ULM non basés.",
+      "Les ACFT motorisés non basés ne pourront pas faire plus de deux tours de piste consécutifs.",
+      "Travail au sol hélicoptères autorisé après accord écrit de l'Exploitant - PPR minimum 24HR.",
+      "Voir TXT 03.",
+      "",
+      "",
+      "Bande revêtue 28 \"circuit avions\" : dégagement \"main gauche\" en HS1 ou TWY S.",
+      "Roulage Roulage interdit hors RWY et TWY sauf dégagements de piste vers TWY contigus.",
+      "Bandes revêtues incluses dans les pistes 28 et 16.",
+      "Décollage / Montée initiale Les décollages et/ou les atterrissages simultanés parallèles sur une même piste ou selon des axes convergents sont interdits.",
+      "ACFT motorisés, sauf pour des raisons de sécurité, doivent éviter le survol de Vinon sur Verdon (notamment lors de l'utilisation du circuit RWY 10/28).",
+      "Décollages piste 10 : obligatoirement à partir du début de piste.",
+      "Sauf annonce contraire, en montée initiale, le dégagement d'axe s'effectue côté tour de piste.",
+      "",
+      "Veille permanente de la FREQ A/A par le pilote durant l'activité.",
+      "AEM (N° 9541) : HJ - 500 ft ASFC.",
+      "Zone paramoteur",
+      "Zone incluse sur la partie Ouest de la piste 30.",
+      "Zone réservée aux paramoteurs basés munis de la fréquence A/A 118.155 MHz.",
+      "Période d'utilisation : 01 APR - 30 SEP : SR-0900, 01 OCT - 31 MAR : SR-1100 et 1400-SS (ETE - 1 HR).",
+      "Axe de TKOF/LDG parallèle piste 02/20, à maintenir cause activités multiples - hauteur limitée 500 ft AAL."
+    ]
+  }
 }

@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFRB",
   "name": "Brest-Bretagne",
   "source": {
     "publication": "AIP France AD 2 LFRB",
     "chartDate": "2026-06-11",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.44722,
@@ -157,5 +159,41 @@
     "Payment: credit cards, SHELL cards, cash (750 euros max) and BROKER cards (WOLRDFUEL, AEG.).",
     "General Aviation Apron: AVGAS/100LL and JET A1 automatic dispensers available H24 only by credit card or local SHELL card (issued to users based in GA Brest).",
     "Niveau / Level 8: possible sur demande ou selon vol programmé / possible O/R or scheduled flight Niveau / Level 7: LUN-DIM / MON-SUN: 0445-2300 Niveau / Level 5: LUN-DIM / MON-SUN: 2300-0445 Péril animalier / Wildlife strike hazard: De LS-30 à CS+30 / From SR-30 to SS+30 Sur demande en dehors de ce créneau / On request outside this slot."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD accessible aux ULM uniquement après demande écrite justifiée aux services ATS par E-mail : sna-o-cca-lfrb-ld@aviation-civile.gouv.fr Signaux lumineux indisponibles.",
+      "AD soumis à la réglementation européenne (EASA).",
+      "",
+      "Procédure de « réduction de séparation sur piste » applicable sur la piste 07R/25L aux seuls aéronefs de moins de 7 t dans les conditions fixées à l'AMC9 de l'ATS.TR.210(c)(2)(i) du règlement (UE) 2017/373 et uniquement à l'initiative du contrôle.",
+      "Largeur TWY S : 7 m.",
+      "Taxiway Sierra réservé de nuit aux véhicules et aéronefs basés.",
+      "",
+      "",
+      "",
+      "En présence de TFC IFR : Avions : VIS : 3500 m - Plafond : 1000 ft.",
+      "Dépôt de FPL obligatoire si vol de nuit hors CTR.",
+      "Equipement de surveillance du trafic : Aérodrome équipé d'un radar secondaire (voir AD 1.0).",
+      "BREST BRETAGNE 10 - AVT : LUN-VEN : 0400-2100, SAM-DIM : 0400-1930.",
+      "En dehors de ces HOR, avitaillement assuré pour les vols commerciaux programmés ou sur PPR pour les urgences (gendarmerie….), EVASAN et vols commerciaux déroutés au 06 47 39 26 74 (délai maximal pour intervention d'une heure à prévoir).",
+      "Moyens de paiement : cartes bancaires, cartes SHELL, espèces (750 euros max) et cartes BROKER (WORLDFUEL, AEG.).",
+      "Parking Aviation Générale : Distributeurs JETA1 et AVGAS/100LL disponibles H24 uniquement par carte bancaire ou carte SHELL locale (délivrée aux usagers basés AG Brest).",
+      ""
+    ],
+    "reportingPoints": [
+      {
+        "name": "PA",
+        "location": "Château d'eau de Plabennec"
+      },
+      {
+        "name": "SWL",
+        "location": "Sud antennes de Pencran"
+      },
+      {
+        "name": "NWL",
+        "location": "Kerdroc, croisement de la RD25/RD38"
+      }
+    ]
+  }
 }

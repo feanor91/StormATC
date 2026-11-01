@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFQA",
   "name": "Reims - Prunay",
   "source": {
     "publication": "AIP France AD 2 LFQA",
     "chartDate": "2025-06-12",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 49.20861,
@@ -69,5 +71,32 @@
     "Payment: VISA, MASTERCARD, AMERICAN EXPRESS, WFS, COLT, AVCARD, MULTISERVICE, UVAIR, AEG FUEL, BONS ENAC or CASH.",
     "Niveau 2 / Level 2: HOR ATS / ATS SKED En dehors de ces HOR / Outside these SKED PPR avant / before 1500 par / by TEL / E-mail Exploitant / Operator.",
     "Péril animalier / Wildlife strike hazard: Occasionnel HOR ATS / Random ATS SKED."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Activité IFR possible.",
+      "Utilisation simultanée des 2 RWY interdite.",
+      "",
+      "Risque de confusion avec l'ancien AD de REIMSCHAMPAGNE inutilisable situé dans le 324°/7,6 NM de l'ARP (RWY 07/25).",
+      "",
+      "PPR obligatoire auprès de l'AFIS pour les ACFT équipés de turboréacteurs.",
+      "Tout TKOF ou LDG d'avions est suspendu si un planeur est immobilisé sur la RWY non revêtue à moins de 40 m de la limite commune.",
+      "Circuits basse hauteur : Côté circuit ACFT, hauteur MNM 500 ft AAL et instructeur à bord.",
+      "TWY B inutilisable par les ACFT dont la largeur de train d'atterrissage est supérieure ou égale à 4,5 m.",
+      "Emplacement A sur PRKG P 2 réservé aux ACFT de code A.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "AVGAS : H24 carte bancaire ou HOR ATS autres paiements.",
+      "TEL : Exploitant.",
+      "En dehors de ces HOR, PPR avant 1500 par TEL / E-mail Exploitant.",
+      "",
+      "",
+      ""
+    ]
+  }
 }

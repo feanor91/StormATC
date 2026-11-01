@@ -5,6 +5,13 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **French text in the VFR profiles**: 276 profiles now carry a `fr` object with the French column of the chart, copied as
+  printed (never translated): `fr.notes` keeps the indices of `notes` (an empty string where the French twin could not be
+  paired with certainty, 3454 of 5082 notes are filled) and `fr.reportingPoints` gives the French name of 180 points. The
+  French of the structured procedures (`circuit`, `withAts`, `withoutAts`) and of the points' purposes is not recorded yet.
+
 ## 0.27.1 - 2026-11-01
 
 ### Changed

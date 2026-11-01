@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFIL",
   "name": "Rion-des-Landes",
   "source": {
     "publication": "AIP France AD 2 LFIL",
     "chartDate": "2024-11-28",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": -43.91583,
@@ -53,5 +55,22 @@
     "Information on RION A/A and DAX TWR.",
     "In case of DAX closed: BIARRITZ INFO.",
     "Reserved for signatory users to the protocol."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD réservé aux ACFT munis de radio.",
+      "Piste pouvant être dégradée occasionnellement par des animaux, vérifier son état lors de votre arrivée à la verticale de l'aérodrome.",
+      "",
+      "Pénétration LF-R 40 B sur autorisation de DAX APP.",
+      "Roulage interdit hors RWY et TWY.",
+      "QFU préférentiel 047° cause LF-R 40 A.",
+      "",
+      "Centré sur ARP : longueur 1500 m, largeur 1000 m.",
+      "LUN-VEN : 1500 - SS+30 ; SAM-DIM et JF : SR - SS+30 ; (ETE -1HR).",
+      "Information sur RION A/A et DAX TWR.",
+      "En cas de fermeture DAX : BIARRITZ INFO.",
+      "Réservée aux usagers signataires du protocole."
+    ]
+  }
 }

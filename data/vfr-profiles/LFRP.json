@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFRP",
   "name": "Ploërmel - Loyat",
   "source": {
     "publication": "AIP France AD 2 LFRP",
     "chartDate": "2026-02-19",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.00194,
@@ -47,5 +49,18 @@
     "Gliders winching (NR 921): see AIP ENR 5.5.",
     "Orange flashing light located on the winch at threshold 09 or 27 of the winch launching runway North of beaconed RWY.",
     "Avoid AD overhead below 2000 ft AMSL Gliders aerobatics (NR 6370): see AIP ENR 5.5."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "ULM : ARR/DEP, maintenir 500 ft AAL jusqu'à dégagement du circuit avion.",
+      "En cas d'ARR ou DEP planeurs ou avions, les ULM doivent libérer la piste et l'axe de piste (attente sur PRKG ou dans circuit ULM).",
+      "Présence d'une piste de lancement au treuil (800 x 50 m) non balisée au Nord de la piste ainsi que de zones de prévol et d'alignement à l'Est de la piste balisée, uniquement utilisées dans le cadre de l'activité du club de vol à voile basé.",
+      "En raison de l'activité planeur sur la piste mixte, les balises de bord de piste sont absentes.",
+      "",
+      "Feu orange à éclats installé sur le treuil positionné sur le seuil 09 ou 27 de la piste de lancement au treuil au Nord de la piste balisée.",
+      "Les verticales terrain sont à éviter en dessous de 2000 ft AMSL Voltige planeurs (N° 6370) : voir AIP ENR 5.5."
+    ]
+  }
 }

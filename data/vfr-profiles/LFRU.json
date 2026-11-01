@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFRU",
   "name": "Morlaix Ploujean",
   "source": {
     "publication": "AIP France AD 2 LFRU",
     "chartDate": "2025-08-07",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.60083,
@@ -72,5 +74,28 @@
     "Contact: ATS.",
     "PAPI compulsory for LDG RWY 04 and RWY 22.",
     "AEM activity (NR 8972): see AIP ENR 5.5 \"Activity in progress\" indicated by a bright colour flag."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD réservé aux ACFT munis de radio.",
+      "En dehors HOR AFIS utilisation simultanée piste revêtue et piste non-revêtue interdite.",
+      "Vols à l'intérieur de l'espace Schengen uniquement.",
+      "Il est recommandé de ne pas utiliser la piste 04/22 par composante traversière du vent supérieure à : 25kt sur piste sèche; 20kt sur piste mouillée.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "TWY B non balisé, réservé à l'aviation légère (envergure MAX 15 m).",
+      "TWY B, C, G non balisé.",
+      "Parkings en pente : cales recommandées.",
+      "MORLAIX PLOUJEAN Assistance aéroportuaire obligatoire pour les aéronefs et les hélicoptères dont la MTOW est supérieure à 3 t.",
+      "",
+      "PAPI obligatoire pour LDG RWY 04 et RWY 22.",
+      "AEM (N° 8972) : voir AIP ENR 5.5 \"Activité en cours\" signalée par la présence d'un pavillon de couleur vive."
+    ]
+  }
 }

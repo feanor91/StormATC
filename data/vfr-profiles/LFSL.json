@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFSL",
   "name": "Brive-Vallée de Dordogne",
   "source": {
     "publication": "AIP France AD 2 LFSL",
     "chartDate": "2026-07-09",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 45.03972,
@@ -128,5 +130,32 @@
     "PCL: limited HN,; with PPR AD operator on previous day before 1100 or on the last working day (SUM: -1 HR).",
     "Traffic monitoring equipment AD equipped with a radar display during ATS SKED (See AD 1.0).",
     "Aerobatics NR 6580: see AIP ENR 5.5"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "Obstacles : Shelter du glide non frangible à 120 m de l'axe de piste.",
+      "Présence d'une colline perçant la surface latérale sud (côté seuil 11).",
+      "Présence d'une butte perçant la surface latérale nord à 110m de l'axe, à 630 m du seuil 11 et de longueur 30 m.",
+      "Présence d'arbres sur AD : .",
+      "",
+      "",
+      "ALT au sommet 1063 ft 3 obstacles perçant servitude latérale seuil 29 : zone boisée : 450218N - 0012955E, R 061/320 m.",
+      "",
+      "Présence d'une colline perçant la surface d'approche du seuil 29.",
+      "Pentes : Pentes négatives > 50% à l'intérieur de la bande de piste : en amont RESA seuil 11 (possibilité de turbulences dues au relief).; côté gauche bande de piste RWY 29, dans les 300 mètres du seuil.",
+      "Activités : Voltige N°6686 et 6716 : voir AIP ENR 5.5.",
+      "Activité PUL dense au lieu-dit \"Le Roc\", entre 3000 et 4000 ft AMSL.",
+      "",
+      "Roulage interdit hors RWY et TWY.",
+      "TWY D utilisable de jour uniquement.",
+      "RWY 29 : au décollage et en tour de piste virage à gauche au plus tard à 500 ft AAL.",
+      "Environnement très sensible au bruit, éviter le survol des zones habitées avoisinantes.",
+      "Notification avec préavis par E-mail OPS VFR Spécial Minima MTO en présence d'IFR dans la CTR : VIS 2500 m.",
+      "PCL : limité HN,; sur PPR auprès de l' exploitant avant 1100 la veille ou le dernier jour ouvré (ETE : -1 HR).",
+      "Equipement de surveillance du traffic AD équipé d'une visualisation radar pendant les HOR ATS (Voir AD 1.0).",
+      ""
+    ]
+  }
 }

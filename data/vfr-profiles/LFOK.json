@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFOK",
   "name": "Paris Châlons Vatry",
   "source": {
     "publication": "AIP France AD 2 LFOK",
     "chartDate": "2026-09-03",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.77333,
@@ -118,5 +120,50 @@
     "Traffic surveillance equipment: AD equipped with a radar display (see AD 1.0).",
     "Réparations / Repairs: Restaurants and hotels in the vicinity.",
     "Divers / Miscellaneous: Fréquence OPS / OPS FREQ:"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD réservé aux ACFT munis de radio.",
+      "Assistance obligatoire pour tout ACFT.",
+      "Accès parkings PPR 2 HR auprès du Service Trafic : TEL : 03 26 64 82 30 Email : ops@xcr-airport.com Dangers à la navigation aérienne Hot spot : accès interdit à la piste via A3.",
+      "",
+      "Roulage interdit hors RWY et TWY.",
+      "Alignement et décollage interdits depuis A3.",
+      "Entraînement vol à vue : Tous les avions dont la MTOW ≥ 20 t, et tout avion équipé de turboréacteurs devra effectuer les circuits de vol à vue dans les conditions suivantes : altitude du circuit standard : 2100 ft AMSL; monter 1000 ft AMSL minimum dans l'axe avant de virer en vent arrière Nord ou Sud.; Altitude minimale pour effectuer un circuit \"basse hauteur\" : 1300 ft AMSL.",
+      "",
+      "En présence de vol IFR dans la CTR, VH ≥ 3500",
+      "De nuit, le parking W est accessible uniquement : Suite à un atterrissage en piste 10, après un dégagement de piste via les bretelles A4 ou A5.",
+      "Suite à un atterrissage en piste 28, après un dégagement de piste via la bretelle A2.",
+      "Equipement de surveillance du trafic : AD équipé d'une visualisation radar (voir AD 1.0).",
+      "",
+      ""
+    ],
+    "reportingPoints": [
+      {
+        "name": "N",
+        "location": "Echangeur autoroutier A26 et D5"
+      },
+      {
+        "name": "N1",
+        "location": "Usine à l'ouest de Vatry"
+      },
+      {
+        "name": "S",
+        "location": "Intersection autoroute A26 avec D98 et voie de chemin de fer"
+      },
+      {
+        "name": "SW",
+        "location": "Silo de stokage à l'ouest de Sommesous"
+      },
+      {
+        "name": "W",
+        "location": "Sucrerie de Connantre"
+      },
+      {
+        "name": "WA",
+        "location": "Ville de Connantray - Vaurefroy"
+      }
+    ]
+  }
 }

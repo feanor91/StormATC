@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFMA",
   "name": "Aix - Les Milles",
   "source": {
     "publication": "AIP France AD 2 LFMA",
     "chartDate": "2026-10-01",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.50528,
@@ -131,5 +133,62 @@
     "Dimensions: 30 m x 27 m,",
     "Limited to one aircraft,",
     "Use of the run-up area under the responsability of the operator and/or pilot in command."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD interdit aux planeurs.",
+      "Utilisable pour ULM : seuls les ULM de classes 3 et 6 sont autorisés.",
+      "Port d'un gilet haute visibilité obligatoire côté piste.",
+      "",
+      "ENVIRONNEMENT - LIMITATION DES NUISANCES : Hors cas de sécurité immédiate ou instruction du contrôle de la circulation aérienne, respecter strictement les circuits publiés figurant sur le volet atterrissage à vue.",
+      "Essais moteurs autres que ceux inclus dans la procédure de décollage interdits : la nuit de 1900 à 0700 (ETE : - 1 HR); SAM de 1100 à 1500 et de 1630 à 1900 (ETE : - 1 HR).; DIM et JF.",
+      "RWY 14 : Entre l'extrémité physique de la piste et le THR 32 : longueur de roulement de 232 m utilisable au décollage.",
+      "RWY 32 : Entre l'extrémité physique de la piste et le THR 14 : longueur de roulement de 123 m utilisable au décollage.",
+      "",
+      "",
+      "PCL en service en dehors HOR ATS : 3 coups d'alternat : brillance 2/4.",
+      "Balisage disponible : balisage latéral de piste,TWY C, PAPI RWY 14, PAPI RWY 32, aire de trafic NW et SW.",
+      "5 coups d'alternat : brillance 4/4.",
+      "Balisage disponible : balisage latéral de piste,TWY C, PAPI RWY 14, PAPI RWY 32, aire de trafic NW et SW.",
+      "7 coups d'alternat : OFF.",
+      "PCL soumis à PPR 12 HR, assistance obligatoire et notification sur : https://cy.myhandlingsoftware.com Activités diverses Parachutage N°401 : voir AIP ENR 5.5 Zone de travail hélicoptère : non revêtue et balisée, réservée aux hélicoptères basés, utilisable uniquement de jour, pendant HOR ATS et en dehors de l'activité parachutisme zone 401.",
+      "Manoeuvres de decollage et d'atterissage strictement interdites depuis et sur la zone de travail hélicoptère.",
+      "",
+      "Après autorisation de pénétrer dans la CTR, poursuivre vers AR 2200 ft AMSL MAX et phares allumés, poursuivre 228° jusqu'à la verticale AD et effectuer un circuit à l'OUEST.; DEP : Avant TKOF, retourner au parking.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "reportingPoints": [
+      {
+        "name": "AN",
+        "location": "Travers Est tour de guet incendie Ouest d'EGUILLES"
+      },
+      {
+        "name": "AT",
+        "location": "Carrefour Est d'EGUILLES"
+      },
+      {
+        "name": "AE",
+        "location": "Nord cheminée de GARDANNE"
+      },
+      {
+        "name": "AR",
+        "location": "Bretelle autoroute A8 AIX Ouest"
+      },
+      {
+        "name": "AS",
+        "location": "Ouest of CABRIES"
+      },
+      {
+        "name": "AW",
+        "location": "Aqueduc de ROQUEFAVOUR"
+      }
+    ]
+  }
 }

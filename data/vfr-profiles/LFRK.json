@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFRK",
   "name": "Caen - Carpiquet",
   "source": {
     "publication": "AIP France AD 2 LFRK",
     "chartDate": "2026-06-11",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 49.17333,
@@ -140,5 +142,37 @@
     "Aerobatics NR 6300: see AIP ENR 5.5 Péril animalier / Wildlife strike hazard: SR-30 - SS+30 during ATC SKED.",
     "Implementation: for all commercial flights or every two hours minimum; on ATC triggering; on crew request (PN 15 minutes) before arrival / departure of an.",
     "ACFT, contact operations FREQ."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "Aéromodélisme : Hors HOR ATS : Risque de présence d'aéromodèles SFC-950 ft AMSL.",
+      "AEM N°8976 : voir AIP ENR 5.5 (interférence avec la procédure VOR RWY 12 ).",
+      "AEM N°9002 : voir AIP ENR 5.5 AEM N°8376 : voir AIP ENR 5.5 Procédures et consignes particulières Du 1er avril au 31 octobre, activité entraînement tour de piste soumise à l'accord du CTL.",
+      "Entraînement basse hauteur possible sur autorisation du CTL, uniquement pour vols avec instructeurs, pour les monomoteurs 300 ft MNM, bimoteurs 500 ft MNM.",
+      "QFU 304 ° préférentiel cause procédure IFR.",
+      "PPR (envoi et demande d'infos contacter l'exploitant) : Arrivées et départs soumis à PPR 24HR pour tous les vols non réguliers et nécessitant parking et/ou éventuelle intervention de l'exploitant, sauf ACFT basés, vols sanitaires et \"touch and go\".",
+      "Délai réduit à 2 heures pour tous les aéronefs accueillis sur le parking d'un usager de la plateforme ayant donné son accord et ne nécessitant aucune intervention de l'exploitant.",
+      "Tout ACFT ne respectant pas ces critères et n'ayant pas de numéro de PPR ne sera pas autorisé par l'ATC.",
+      "",
+      "Des attentes en vol à l'extérieur de la CTR peuvent être demandées aux ACFT en VFR souhaitant pénétrer dans la CTR de CAEN.",
+      "Hors ATS, l'utilisation du PCL est interdite pour l'activité en tours de piste.",
+      "STAP : Paramètres disponibles : vent, base des nuages, VIS, RVR, T, DP, QNH, QFE.",
+      "Equipement de surveillance du trafic : Aérodrome équipé d'une visualisation radar (voir AD 1.0).",
+      "",
+      "Mis en place : pour tous vols commerciaux ou à minima toutes les deux heures; sur déclenchement ATC; sur demande équipage (PN 15 minutes) avant l'arrivée / le départ d'un ACFT, contact FREQ Opérations.",
+      ""
+    ],
+    "reportingPoints": [
+      {
+        "name": "NK",
+        "location": "Tour de télécommunication de St-Contest"
+      },
+      {
+        "name": "SW",
+        "location": "Pont sur la 4 voies au SE de Villers Bocage"
+      }
+    ]
+  }
 }

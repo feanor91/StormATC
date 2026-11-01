@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFNU",
   "name": "Uzès",
   "source": {
     "publication": "AIP France AD 2 LFNU",
     "chartDate": "2024-08-08",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 44.08361,
@@ -55,5 +57,25 @@
     "Electrical fence around RWY perimeter.",
     "HEL area (300 x 30 m) located North West from AD reserved for State, Civil Security, and Emergency Services helicopters.",
     "AEM (NR 9549): 500 ft ASFC, HJ (1) Aérodromes voisins / Neighbouring AD:"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD réservé aux ACFT basés et à ceux basés sur les AD voisins (1).",
+      "Pour les usagers extérieurs, sur autorisation préalable de l'exploitant AD, demande à déposer au moins 72 heures à l'avance à l'adresse suivante : aeroclub.uzes@gmail.com Utilisation simultanée piste avions et piste HEL interdite.",
+      "Distances déclarées utilisables : TODA RWY 17 réduite cause arbres dans la trouée de décollage.",
+      "",
+      "En cas d'impossibilité, passer en vent traversier derrière ce village.",
+      "Aéronefs non basés limités à 2 tours de piste.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  }
 }

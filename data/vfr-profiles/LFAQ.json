@@ -4,14 +4,16 @@
     "Only what the chart states is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text; the reporting points, rules and notes were added by hand.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "No circuit height or circuit side is printed on this chart, so none is recorded. The chart is titled ALBERT BRAY."
+    "No circuit height or circuit side is printed on this chart, so none is recorded. The chart is titled ALBERT BRAY.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFAQ",
   "name": "International Amiens Henry Potez",
   "source": {
     "publication": "AIP France AD 2 LFAQ",
     "chartDate": "2025-05-15",
-    "extraction": "manual, from the chart text and images"
+    "extraction": "manual, from the chart text and images",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 49.97,
@@ -134,5 +136,20 @@
     "Radio failure on arrival: squawk 7600. Before receiving the CTR entry clearance, do not enter the CTR. Within the CTR, continue as cleared, or fly overhead the tower with lights on at 1700 ft and join the aerodrome circuit watching the approach axes.",
     "Radio failure on departure: before take-off, do not take off. After take-off, squawk 7600 and leave the CTR.",
     "Aerobatics on the aerodrome (no. 6012), during ATC hours only, on the axis of paved runway 08/26, 1000 m long, 1900 ft AMSL to 3500 ft AMSL (extension possible down to 900 ft AMSL under the protocol); reserved for authorised pilots; information on ALBERT TWR and LILLE INFO."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "QFU 264° préférentiel cause procédure IFR.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  }
 }

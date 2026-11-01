@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFKR",
   "name": "Saint-Rémy-de-Maurienne",
   "source": {
     "publication": "AIP France AD 2 LFKR",
     "chartDate": "2026-08-06",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 45.375,
@@ -42,5 +44,25 @@
     "Do not turn before1525 ft AMSL.",
     "Circling prohibited for non-based aircraft.",
     "AEM NR 9865: see AIP ENR 5.5"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD utilisable par les HEL et ULM.",
+      "Pour les pilotes d'ULM, il est fortement conseillé d'avoir suivi le cursus montagne organisé par la FFPLUM.",
+      "Le transport aérien commercial par avion est interdit à l'exception des vols de découverte.",
+      "Distances déclarées utilisables :TORA et TODA RWY16 et 34 réduites cause obstacles dans les trouées de décollage.",
+      "",
+      "Conditions aérologiques délicates par vent de secteur Sud.",
+      "Présence de lignes à très haute tension sous les trajectoires d'ARR et DEP.",
+      "",
+      "RWY 34 préférentielle cause environnement.",
+      "Atterrissage RWY 16 et 34 : ne pas descendre en étape de base à moins de 1800 ft AMSL cause ligne HT dans les servitudes de l'AD, parallèle à la piste, non balisée.",
+      "Survol de l'usine Arkéma à La Chambre interdit.",
+      "Départ RWY 34 : Virer à droite cap 016°.",
+      "Ne pas virer avant 1525 ft AMSL.",
+      "Tours de piste interdits aux ACFT non basés.",
+      ""
+    ]
+  }
 }

@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFME",
   "name": "Nîmes-Courbessac",
   "source": {
     "publication": "AIP France AD 2 LFME",
     "chartDate": "2024-11-28",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.85306,
@@ -149,5 +151,40 @@
     "SUN and public HOL: SR-SS, other SKED and FL announced by NOTAM.",
     "AEM (NR 9542), remote-controlled flights according to protocol, SFC - 500 ft ASFC, HJ.",
     "Paramotors East of AD 300 ft AAL."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD interdit aux planeurs.",
+      "Utilisation alternée de la piste avion.",
+      "La partie inutilisable est signalée par des croix blanches.",
+      "En application de l'article L571-7 du code de l'environnement, il est interdit d'effectuer des vols en hélicoptères d'entraînement au départ ou à destination de LFME ainsi que des vols touristiques circulaires sans escale ou avec escale de moins d'une heure.",
+      "Prendre connaissance de l'ATIS de GARONS.",
+      "",
+      "",
+      "La LF-R8, activée H24, a été créée afin que les ACFT évoluant à l'intérieur de son volume communiquent sur FREQ A/A uniquement.",
+      "Conditions et consignes d'évolution dans la LF-R8 Courbessac",
+      "Visibilité horizontale > 5 km.",
+      "Transpondeur obligatoire affiché sur 7000 mode ALT dès le roulage, dans le circuit d'A/D et avant pénétration.",
+      "Contact radio obligatoire sur FREQ A/A.",
+      "ACFT à l'arrivée, au départ ou en circuit d'AD : ne pas dépasser la RD 999 reliant Beaucaire à Nîmes au Sud de l'AD.",
+      "Arrivée : Eviter la verticale de l'AD; se diriger vers l'Est de Marguerittes en descente vers 900ft AMSL et, dans la mesure du possible, prendre connaissance des paramètres en auto-information.",
+      "Puis s'intégrer en début de vent arrière en évitant le survol de l'agglomération.",
+      "",
+      "",
+      "",
+      "Virage à droite à la RM 080° après décollage en restant au Nord de l'A9 vers 1000ft.",
+      "Dès qu'il libère le circuit de piste en montée vers 1000 ft AMSL, le pilote doit contacter GARONS TWR pour obtention de la clairance de transit dans la CTR.",
+      "Afin d'éviter le survol de l'agglomération de Marguerittes, les branches vent arrière des circuits avion et ULM doivent s'effectuer à l'Ouest de la RD135 ou à l'Est de l'agglomération en cas d'impossibilité.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "AEM (N° 9542), vols radiocommandés selon protocole, SFC - 500 ft ASFC, HJ.",
+      "Paramoteurs à l'Est de l'AD 300 ft AAL."
+    ]
+  }
 }

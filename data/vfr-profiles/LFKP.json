@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFKP",
   "name": "Tour-du-Pin - Cessieu",
   "source": {
     "publication": "AIP France AD 2 LFKP",
     "chartDate": "2025-03-20",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 45.5575,
@@ -51,5 +53,22 @@
     "TKOF RWY 29: after take-off, follow MAG 280°.",
     "South AD traffic pattern for helicopters and class 3 ULM.",
     "Limitation of noise emissions: Non home-based ACFT: avoid exceeding 3 consecutive AD circuits; HEL: limit prolonged hovering flights."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Utilisable par les HEL et ULM.",
+      "Distances déclarées utilisables : TODA RWY 11 et RWY 29 réduites afin de tenir compte des obstacles dans les trouées de TKOF.",
+      "",
+      "Colline à l'Est du terrain avec un angle important de 2,7° / 4,7% (à partir de l'extrémité Est de la piste 11).",
+      "Colline avant le seuil 29 : peut créer l'illusion d'être trop bas sur le plan.",
+      "Turbulences et rabattants possibles en finale.",
+      "Présence d'oiseaux générée par la déchetterie à l'Est du terrain.",
+      "En cas d'activité VAV, absence possible des dièdres des angles Nord-Est ou Nord-Ouest de la piste.",
+      "",
+      "TKOF RWY 29 : après le décollage, prendre la RM 280°.",
+      "Tour de piste au Sud pour les hélicoptères et les ULM de classe 3.",
+      "Limitations des nuisances sonores : Aéronefs non basés : éviter de dépasser 3 tours de piste consécutifs; HEL : limiter les vols stationnaires prolongés."
+    ]
+  }
 }

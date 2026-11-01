@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFRT",
   "name": "Saint-Brieuc Armor",
   "source": {
     "publication": "AIP France AD 2 LFRT",
     "chartDate": "2026-02-19",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.5375,
@@ -39,5 +41,18 @@
     "TWY A unusable at night.",
     "Pilot control lighting (PCL) usable O/R before 1100 (SUM: - 1 HR) on the last working day, by E-mail to: tour@aeroport-saint-brieuc.fr AEM (NR 8974): see AIP ENR 5.5 Divers / Miscellaneous: GRF: Service d'évaluation et de report de l'état de surface de la piste / Global Reporting Format: HOR AFIS / AFIS SKED.",
     "Assistance / Handling - TEL exploitant d'aérodrome / AD operator."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD accessible aux ULM uniquement sur PPR 24 HR ou avant 1100 le dernier jour ouvré, par E-mail à : tour@aeroport-saint-brieuc.fr Activité IFR possible.",
+      "",
+      "",
+      "Circuits \"basse hauteur\" dans le cadre des vols d'entraînement avec instructeur : minimum 300 ft AAL au Nord de la RWY, limités à 2 par séance d'instruction et interdit le dimanche.",
+      "Utilisation du PAPI obligatoire IFR / VFR pour ATT de nuit RWY 06.",
+      "Taxiway A inutilisable de nuit.",
+      "",
+      ""
+    ]
+  }
 }

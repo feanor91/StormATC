@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFMC",
   "name": "Luc - Le Cannet",
   "source": {
     "publication": "AIP France AD 2 LFMC",
     "chartDate": "2026-10-01",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.38472,
@@ -198,5 +200,39 @@
     "NW, NL and SW points: 1500 ft AMSL ARR procedures: NW, NL, SW and SE points: 2000 ft AMSL; NE point: 1800 ft AMSL.",
     "By the West: PL - BJ - DG By the North: MY - TV - TOULON By the South: TV - SA - LA MOLE",
     "Entry routings: from the west PL - BJ - DG; from the north MY - TV - TOULON; from the south TV - SA - LA MOLE."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Passage d'avions à réaction interdit <1500 ft AMSL.",
+      "La descente vers le circuit de piste doit s'effectuer le plus tardivement possible afin de réduire les nuisances Procédures de DEP : Pour le point NE : Monter 1300 ft AMSL.",
+      "Dès que possible, suivre le sud de l'autoroute jusqu'au point NE",
+      "Pour le point SE : 2000 ft AMSL ",
+      "Pour les points NW, NL et SW : 1500 ft AMSL Procédure d'ARR : Pour les points NW, NL, SW et SE : 2000 ft AMSL; Pour le point NE : 1800 ft AMSL.",
+      "LE LUC LE CANNET Par l'Ouest : PL - BJ - DG Par le Nord : MY - TV - TOULON Par le Sud : TV - SA - LA MOLE",
+      ""
+    ],
+    "reportingPoints": [
+      {
+        "name": "DG",
+        "location": "Noms / )"
+      },
+      {
+        "name": "MY",
+        "location": ")"
+      },
+      {
+        "name": "PL",
+        "location": ")"
+      },
+      {
+        "name": "TV",
+        "location": ")"
+      },
+      {
+        "name": "NL",
+        "location": ")"
+      }
+    ]
+  }
 }

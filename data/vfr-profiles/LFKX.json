@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFKX",
   "name": "Méribel",
   "source": {
     "publication": "AIP France AD 2 LFKX",
     "chartDate": "2026-02-19",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 45.4075,
@@ -66,5 +68,37 @@
     "Contact Courchevel in case of interference with their published flight paths.",
     "Use by helicopters The plane airfield traffic pattern must be followed with flying overhead the AD at 6500 ft AMSL.",
     "Be careful not to interfere with published flight paths of Courchevel."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Marquages de piste de dimensions réduites.",
+      "En conditions hivernales, piste non déneigée.",
+      "S'assurer de l'état de la piste avant le vol et avant l'atterrissage.",
+      "Pas de décollage le matin avant 0900 locales (sauf autorisation particulière donnée par l'exploitant d'aérodrome de l'altiport).",
+      "Silencieux moteur obligatoire pour l'activité d'instruction.",
+      "Pas de vols d'instruction entre 1230 et 1400 locales.",
+      "Aéronefs non basés : activité limitée à deux atterrissages par demi-journée.",
+      "Hélicoptères : limiter les opérations rotor tournant lors des embarquements / débarquements.",
+      "Arrivée : Arrivée recommandée par le Col de la Lune à 7000 ft.",
+      "Provenance NE : arriver à 6500 ft en veillant à ne pas interférer avec les trajectoires publiées de Courchevel.",
+      "S'annoncer en vue des installations de l'altiport et se reporter verticale.",
+      "En cas de QNH non connu : arriver par le Col de la Lune.",
+      "Prendre comme référence le dos de Crêt Voland dont l'altitude est de 6867 ft lors du passage travers.",
+      "MERIBEL ROBERT MERLOZ Atterrissage : QFU 152° obligatoire.",
+      "Passage verticale seuil 15 à 6500 ft AMSL.",
+      "Intégration branche éloignement à 6000 ft AMSL.",
+      "Roulage : s'assurer que l'approche et la courte finale sont dégagées avant de traverser la piste vers la raquette ouest et avant l'alignement.",
+      "Effectuer les essais moteur sur la raquette à l'ouest de la piste.",
+      "Décollage : QFU 332° obligatoire.",
+      "Départ : après décollage, ouvrir à droite au cap 360° et annoncer à la radio \"axe dégagé\".",
+      "Contacter Courchevel en cas d'interférence avec les trajectoires publiées.",
+      "Utilisation par les hélicoptères Respecter le circuit avion en passant par la verticale 6500 ft AMSL.",
+      "Veiller à ne pas interférer avec les trajectoires publiées de Courchevel."
+    ]
+  }
 }

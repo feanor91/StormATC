@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFGX",
   "name": "Champagnole - Crotenay",
   "source": {
     "publication": "AIP France AD 2 LFGX",
     "chartDate": "2022-12-29",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 46.76333,
@@ -52,5 +54,23 @@
     "AEM on AD (NR 8049): SFC - 800 ASFC/2600 AMSL.",
     "SUM: 0700-1700, WIN: 0800-SS.",
     "As per protocol."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "DEP 20 : après décollage, prendre cap 218° pour éviter la ligne électrique et le village.",
+      "ARR 20 : forêt au Nord dans la trouée d'atterrissage conduisant à un plan de descente aménagé vers le seuil décalé.; vérifier les performances de l'aéronef.",
+      "DEP 02 : forêt au Nord dans la trouée de décollage constituant un obstacle perçant pouvant atteindre 20 m.; montée pente Max; vérifier les performances de l'aéronef en fonction des obstacles publiés.; procédure départ court recommandée.",
+      "ARR 02 : respecter le plan de descente vers le seuil décalé cause clocher de l'église et ligne électrique en finale.",
+      "",
+      "ETE : 0700-1700, HIV : 0800-SS.",
+      "Selon protocole."
+    ]
+  }
 }

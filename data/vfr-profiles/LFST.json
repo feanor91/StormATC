@@ -5,14 +5,16 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded."
+    "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFST",
   "name": "Strasbourg-Entzheim",
   "source": {
     "publication": "AIP France AD 2 LFST",
     "chartDate": "2025-06-12",
-    "extraction": "chart text, table and English column read by script, procedures structured by hand"
+    "extraction": "chart text, table and English column read by script, procedures structured by hand",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.54194,
@@ -217,5 +219,43 @@
     "HEL with wheel landing gear: all movements are performed by taxiing on ground between TWY K, M, N, Q and the assigned stand and vice versa.",
     "Traffic surveillance equipment: AD equipped with primary and secondary surveillance radar.",
     "Free flight and AEM at Mundolsheim up to 500 ft ASFC."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Interdit aux planeurs, motoplaneurs, aérostats et ULM.",
+      "ACFT du chapitre 2 de l'annexe 16 OACI : interdit H24.",
+      "Autres aéronefs : TKOF interdits entre 2230 et 0500.",
+      "",
+      "En cas de retard d'un vol commercial passager programmé, dont la marge cumulée est inférieure à 10 EPNdB, au-delà des horaires précitées, la compagnie aérienne ou son représentant transmet sa demande à l'exploitant de l'AD (superviseur de service de la SASE joignable au 03 88 64 69 85) qui traite sa demande.",
+      "A l'ARR sur le parking Bravo notamment, les pilotes sont invités à vérifier qu'ils arrêtent correctement leur ACFT sur une barre d'arrêt visible depuis la gauche du cockpit.",
+      "Présence d'un obstacle de type clôture balisée d'une hauteur de 2,5 m dans la bande de piste à 120 m du seuil 05 entre les RDL 179° et 209° et entre les RDL 249° et 279°.",
+      "Procédure \"réduction des séparations sur piste\" applicable sur la piste 05/23 aux seuls aéronefs monomoteurs à hélice en vol VFR dans les conditions fixées par la réglementation nationale.",
+      "HEL équipés de roues : tous les mouvements doivent se faire au roulage au sol entre les TWY K, M, N, Q et le poste désigné et vice versa.",
+      "Equipement de surveillance des trafics : aérodrome équipé d'un radar primaire et secondaire.",
+      ""
+    ],
+    "reportingPoints": [
+      {
+        "name": "N",
+        "location": "Echangeur autoroutier Brumath Nord A4/A340"
+      },
+      {
+        "name": "N1",
+        "location": "Pont de l'Europe entre STRASBOURG et KEHL"
+      },
+      {
+        "name": "W",
+        "location": "Bâtiment industriel caractéristique"
+      },
+      {
+        "name": "WB",
+        "location": "Village ITTENHEIM sur RN4"
+      },
+      {
+        "name": "W1",
+        "location": "Village ERGERSHEIM D30/D45"
+      }
+    ]
+  }
 }

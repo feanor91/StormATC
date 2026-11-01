@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFOH",
   "name": "Havre-Octeville",
   "source": {
     "publication": "AIP France AD 2 LFOH",
     "chartDate": "2026-10-01",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 49.53389,
@@ -62,5 +64,32 @@
     "Paiement carte TOTAL ou carte de crédit / Payment TOTAL card or credit card.",
     "WIN: Level 5: MON-FRI: 0830-1200 / 1300-1645 Level 2: SAT-SUN and public HOL: 0930-1545 Level 1: 25 DEC and 01 JAN SUM: Level 5: MON-FRI: 0730-1100 / 1200-1645 Level 2: SAT - SUN and public HOL: 0730-1100 / 1200-1645 Level 7: O/R operator Level 1: outside these SKED Equipment available for Level 1 RFFS: 5 fire extinguishers: 3 x 50 kg powder extinguishers: in front of the terminal, near the stands C1 to C3 and D1 to D3, at the AVT / AVGAS / 100LL.",
     "Péril animalier / Wildlife strike hazard: Occasionnel / Random - O/R."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "RWY 04 et 22 interdites par vent traversier supérieur à : 20 kt sur piste humide,; 25 kt sur piste sèche.",
+      "Activités parachutage (N° 238) et voltige (N° 6290) interdites simultanément.",
+      "",
+      "Site susceptible d'être envahi en quelques minutes par la brume de mer.",
+      "Par vents de secteurs W à NW : cisaillement et forte turbulence possibles entre le seuil 04 et la bretelle centrale.",
+      "",
+      "TWY A limité aux ACFT dont l'envergure est inférieure à 36 m et dont la largeur hors tout du train principal est inférieure à 9 m.",
+      "Parkings commerciaux B et B1 face au terminal avec assistance obligatoire.",
+      "",
+      "PAPI non couplé à la PCL : PAPI en A/A O/R auprès de l'AFIS PPR 24 HR.",
+      "STAP, paramètres disponibles : vent, base des nuages, RVR, T, DP, QNH, QFE et info particulières.",
+      "STAP couplé au PCL : 3 coups d'alternat : BI; 5 coups d'alternat : HI; 7 coups d'alternat : coupure du PCL.",
+      "LE HAVRE OCTEVILLE Activités diverses Activité PUL et parapente : au Cap de la Hève : MAX 150 ft ASFC; site St-Andrieux (entre les travers N et NW du seuil 22).",
+      "MAX 350 ft ASFC hors HOR ATS.",
+      "MAX 150 ft ASFC jusqu'à Cauville. puis 350 ft ASFC jusqu'à la sortie de zone pendant HOR ATS.",
+      "Parachutage sur AD N° 238 : Voir AIP ENR 5.5.",
+      "",
+      "",
+      "",
+      "",
+      "LE HAVRE OCTEVILLE 9 - AVT : 10 - RFFS : HIV: Niveau 5 : LUN-VEN : 0830-1200 / 1300-1645 Niveau 2 : SAM, DIM et JF : 0930-1545 Niveau 1 : 25 DEC et 01 JAN ETE : Niveau 5 : LUN-VEN : 0730-1100 / 1200-1645 Niveau 2 : SAM, DIM et JF : 0730-1100 / 1200-1645 Niveau 7 : O/R exploitant Niveau 1 : en dehors de ces HOR Moyen mis à disposition pour RFFS Niveau 1 : 5 extincteurs : 3 de 50 kg poudre devant l'aérogare, à proximité des emplacements de stationnement C1 à C3 et.",
+      "D1 à D3, au niveau de la station carburant AVGAS/100LL."
+    ]
+  }
 }

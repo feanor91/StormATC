@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFJD",
   "name": "Corlier",
   "source": {
     "publication": "AIP France AD 2 LFJD",
     "chartDate": "2025-09-04",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 46.03972,
@@ -62,5 +64,26 @@
     "Arrive via point W at 3100 ft AMSL without interfering with the aerodrome circuit, then follow the circuit indicated on the chart to join overhead.",
     "Fly the aerodrome traffic circuit at 3100 ft AMSL.",
     "Do not park in line-up and take-off positions."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Effectuer le circuit d'aérodrome à 3100 ft AMSL.",
+      "Ne pas stationner en position alignement de décollage."
+    ],
+    "reportingPoints": [
+      {
+        "name": "W",
+        "location": "Ouest de Chatillon de Cornelle"
+      }
+    ]
+  }
 }

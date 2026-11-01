@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFCI",
   "name": "Albi-Le Séquestre",
   "source": {
     "publication": "AIP France AD 2 LFCI",
     "chartDate": "2024-08-08",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.91333,
@@ -68,5 +70,36 @@
     "Parachute activity (NR 357): SFC/FL 135 - 0600-SS (SUM: -1HR).",
     "Daytime only.",
     "Activation known by: ALBI INFO or A/A, TOULOUSE INFO."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "En été, présence d'oiseaux sur la piste au SR et au SS.",
+      "",
+      "Pour l'AVT suivre la ligne de guidage parallèle à la station pour les ACFT d'une envergure < 25 m, de préférence face au Nord afin de ne pas souffler les hangars.",
+      "Ne pas rester stationné sur l'aire d'AVT.",
+      "Port du gilet haute visibilité obligatoire par arrêté préfectoral.",
+      "Ligne blanche parallèle au hangar à ne pas franchir moteur tournant.",
+      "Faire les essais moteur au point d'attente intermédiaire C1 avant de pénétrer sur le TWY.",
+      "Coupling disponible pour le JET A1 sur demande, seulement HOR ATS.",
+      "Configuration circuit automobile INACTIF : Voir carte VAC ATT 01.",
+      "Activité IFR possible.",
+      "Après atterrissage RWY 27 remonter la piste sur l'axe.",
+      "Ne pas s'engager sur le circuit automobile.",
+      "RWY 09, les ACFT multi-moteurs doivent s'aligner en début de piste.",
+      "Configuration circuit automobile ACTIF : Activation du circuit automobile annoncée par NOTAM.",
+      "Voir carte VAC ATT 02.",
+      "Service AFIS systématiquement rendu pendant l'activité du circuit auto.",
+      "Sans réponse du service AFIS, AD non utilisable.",
+      "Piste utilisable de jour uniquement.",
+      "Activité IFR interdite.",
+      "Seuil RWY 09 matérialisé par balises dièdres.",
+      "LDG RWY 09 : suivre impérativement la pente PAPI jusqu'à l'atterrissage.",
+      "LDG RWY 27 : suivre impérativement la pente PAPI jusqu'à la rocade.",
+      "",
+      "De jour uniquement.",
+      "Activité réelle connue de : ALBI INFO ou A/A, TOULOUSE INFO."
+    ]
+  }
 }

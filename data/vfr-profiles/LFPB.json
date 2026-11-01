@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFPB",
   "name": "Paris-Le Bourget",
   "source": {
     "publication": "AIP France AD 2 LFPB",
     "chartDate": "2024-10-31",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.96944,
@@ -153,5 +155,84 @@
     "Radiocommunication failure Arrival: before VAIRES railway station, divert to previous alternate airfield.; after VAIRES railway station, continue the flight according to the last instructions received.",
     "Departure: before VAIRES railway station turn back to LFPB; after VAIRES railway station continue the fly according to general rules.",
     "Traffic surveillance equipment: AD equipped with secondary surveillance radar (see AD 1.0)."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "RWY 27 utilisable exclusivement à l'atterrissage des aéronefs d'envergure inférieure à 52 m.",
+      "RWY 09 utilisable exclusivement au décollage des aéronefs d'envergure inférieure à 52 m.",
+      "L'AD est interdit au trafic commercial régulier et charter, réservé aux ACFT obligatoirement munis des FREQ de ‘'DE GAULLE APP'' (IFR) et ‘'LE BOURGET TOUR''.",
+      "ACFT tous types aucun vol local d'entraînement n'est admis de jour comme de nuit (Exceptionnel et sur PPR pour ACFT à hélice).",
+      "",
+      "",
+      "",
+      "HS 1 : TWY traversant une piste avec ACFT à l'arrondi.",
+      "HS 2 : Le point d'attente est situé assez loin du seuil de piste.",
+      "HS 3 : Risque de confusion entre les deux seuils 07 et 09.",
+      "HS 4 : Traversée de piste 03-21.",
+      "Cette piste est très faiblement utilisée mais reste active.",
+      "HS 5 : Noeud de circulation important (appareils et véhicules) avec mauvaise visibilité due à la présence de bâtiments.",
+      "HS 6 : Risque de confusion entre les voies B1 et B.",
+      "",
+      "Le nom de la société assistante doit être obligatoirement mentionné en case 18 du plan de vol en remarque (RMK).",
+      "Pour les vols spéciaux (missions, photo, travail aérien, drones) sur demande adressée avec un préavis minimum de 10 jours ouvrés au SNA/RP/CDG/SE/Subdivision contrôle.",
+      "",
+      "E-mail : lfpg-ctl@aviation-civile.gouv.fr Roulage Roulage interdit hors RWY et TWY.",
+      "Dans le cadre de la prévention des rapprochements dangereux entre mobiles sur l'aire de manoeuvre, la vitesse des aéronefs sur les TWY W1, W2 et C22 est limitée à 35 km/h (20 kt).",
+      "Sur les TWY, les phares de roulage doivent être allumés quelles que soient les conditions de visibilité, H24.",
+      "L'aire de trafic V1 peut être reclassée par NOTAM, en aire de manoeuvre TWY V1.",
+      "Vols VFR VFR : conditions VMC en classe D.",
+      "PARIS LE BOURGET La desserte de l'aéroport de PARIS LE BOURGET en régime de vol VFR est interdite aussi bien à l'arrivée qu'au départ, aux aéronefs classés en fonction de la turbulence de sillage \"gros porteurs\" de masse maximale certifiée au décollage supérieure ou égale à 100 000 kg.",
+      "La vitesse maximale est de 150 kt sur les itinéraires d'arrivée et de départ en VFR.",
+      "Transit VFR interdit entre E1 et W1.",
+      "Itinéraire réservé aux arrivées et départs le Bourget.",
+      "Procédure d'arrivée Entrée dans la CTR PARIS.",
+      "L'autorisation d'entrée dans la CTR PARIS sera demandée sur FREQ LE BOURGET Tour avant d'atteindre ses limites.",
+      "Elle comportera de plus : indicatif, type d'appareil, provenance, position, altitude.",
+      "Sauf autorisation particulière du contrôle, l'entrée dans la CTR PARIS s'effectuera à l'un des points suivants : Entrée Nord/Ouest : W1 (RDL 133° /PON) ;; Entrée Sud/Est : E1 (RDL 119° /PON) .",
+      "Itinéraire à l'intérieur de la CTR PARIS Sauf autorisation contraire de la TWR, les ACFT en vue du sol suivront les routes magnétiques ci-après.",
+      "Entrée Nord/Ouest :W1 RM 133° (RDL 133° /PON) puis RM 089° (RDL 269° /BT) jusqu'à W2.",
+      "",
+      "",
+      "Attente Sauf autorisation contraire de la TWR, l'attente initiale éventuelle sera effectuée en vol circulaire à la verticale de W1 à l'altitude de 1500 ft ou à la verticale de E1 à l'altitude de 1300 ft Altitude en vol L'altitude MAX de vol à l'intérieur de la CTR PARIS est limitée à 1500 ft.",
+      "",
+      "",
+      "après W2 ou après E2 : se conformer aux instructions",
+      "Dans le cas contraire se diriger vers le seuil 03 pour effectuer un atterrissage sur la piste 03 sans interférer avec la piste 09/27.",
+      "",
+      "",
+      "",
+      "Altitude de vol Sauf autorisation particulière de la TWR, l'altitude de vol à l'intérieur de la CTR PARIS sera de 1500 ft de W1 vers E1 et de 1300 ft de E1 vers W1.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Plafond 1500 ft.",
+      "",
+      "PARIS LE BOURGET Procédure de radiocommunication A l'arrivée, pour pénétrer sur l'itinéraire : écouter l'ATIS du BOURGET; contacter LE BOURGET 3 mn au moins avant la gare de VAIRES pour obtenir la clairance.; maintenir ensuite la veille radio.",
+      "Atterrissage de nuit RWY 03 PAPI obligatoire.",
+      "Panne de radiocommunication A l'arrivée : avant la gare de VAIRES se dérouter sur l'AD de dégagement prévu.; après la gare de VAIRES, suivre les dernières instructions reçues.",
+      "Au Départ : avant la gare de VAIRES, faire demi tour; après la gare de VAIRES poursuivre le vol et appliquer la règlementation générale.",
+      "Equipement de surveillance de trafic : AD équipé d'un radar secondaire (voir AD 1.0)."
+    ],
+    "reportingPoints": [
+      {
+        "name": "E1",
+        "location": "Château d'eau"
+      },
+      {
+        "name": "E2",
+        "location": "Intersection A3/voie ferrée"
+      },
+      {
+        "name": "W2",
+        "location": "Jonction N1/N16"
+      },
+      {
+        "name": "W1",
+        "location": "Patte d'oie d'Herblay"
+      }
+    ]
+  }
 }

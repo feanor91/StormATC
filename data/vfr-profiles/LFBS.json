@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFBS",
   "name": "Grands Lacs",
   "source": {
     "publication": "AIP France AD 2 LFBS",
     "chartDate": "2026-02-19",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 44.36806,
@@ -95,5 +97,40 @@
     "Procedures DEP microlight seaplanes to hydrobase (LFHB): After take-off, directly join the hydrobase by south turn, avoiding built-up areas.",
     "Traffic monitoring equipment: aerodrome equipped with a radar display (see AD 1.0).",
     "Gliders winching (NR 978): see AIP ENR 5.5 Aerobatics (NR 6610): see AIP ENR 5.5 AEM (NR 9137): see AIP ENR 5.5"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Utilisation simultanée des pistes interdite.",
+      "Piste non revêtue 13/31 réservée aux usagers basés ou autorisés par l'exploitant.",
+      "",
+      "AD susceptible d'être envahi en quelques minutes par la brume de mer.",
+      "L'attention des usagers est attirée sur la longueur du câble de treuillage planeurs (1700 m).",
+      "",
+      "",
+      "",
+      "",
+      "Circuits basse hauteur 500 ft MNM, au Sud de la piste 09/27 et uniquement pour des besoins de formation avec instructeur à bord.",
+      "TKOF et LDG interdits pendant les opérations de treuillage.",
+      "BISCARROSSE PARENTIS TKOF piste 09 revêtue : prendre le cap 070° 300 m après le THR 27 pour éviter le survol des zones habitées.",
+      "TKOF piste 09 herbe : prendre le cap 070° au passage du THR 27 pour éviter le survol des zones habitées.",
+      "TKOF piste 27 : Survol de l'hydrobase interdit pendant les exercices de pannes moteur.",
+      "Prendre le cap 250° au passage du THR 09 pour éviter le survol des zones habitées.",
+      "Procédure DEP hydravions vers hydrobase (LFHB) : TKOF piste 09 : après altération de cap, vent traversier 500 ft AMSL minimum puis rejointe de l'hydrobase par la pointe Est du lac.",
+      "TKOF piste 27 : après altération de cap, rejointe directe de l'hydrobase à 500 ft AMSL.",
+      "Procédure DEP ULM « hydro » vers hydrobase (LFHB) : Après décollage, rejointe directe de l'hydrobase par virage Sud en évitant le survol des habitations.",
+      "Equipement de surveillance du trafic : aérodrome équipé d'une visualisation radar (voir AD 1.0).",
+      "Treuillage planeurs (N° 978) : voir AIP ENR 5.5 Voltige (N° 6610) : voir AIP ENR 5.5 AEM (N° 9137) : voir AIP ENR 5.5"
+    ],
+    "reportingPoints": [
+      {
+        "name": "O2",
+        "location": "Est de Biscarrosse Plage"
+      },
+      {
+        "name": "OS",
+        "location": "Nord de Biscarrosse sur D652"
+      }
+    ]
+  }
 }

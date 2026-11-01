@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFYS",
   "name": "Sainte-Léocadie",
   "source": {
     "publication": "AIP France AD 2 LFYS",
     "chartDate": "2026-05-14",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 42.44722,
@@ -84,5 +86,35 @@
     "2 m from edge on each side.",
     "No access if wingspan > 24 m HEL with overall width > 14 m, translation out of ground effect at height > 4 m Light HEL spots numbered 1 to 7 and 12, 13: No simultaneous operations on successive spots, overlapping of protection areas Heavy HEL spots numbered 8 to 11: Non compliant for NH 90.",
     "Overlapping of protection areas Prior contact with AD Authority for instructions No occasional crash cradle Holding point located before service vehicle track Paved part out of fence is not usable for ACFT backtracking RWY 25 for departure: western side not flattened out Aerobatics (NR 6856): 069/249 axis centred on ARP 6000/7500 ft AMSL Activity reserved for pilots authorized by the CDT of the mountain flying center and using the LFYS AD based ACFT HJ only 0800-1800 UAV: Request for flight in MIL training sector and airfield vicinity: letter of agreement mandatory"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "SAINTE LEOCADIE Consignes particulières / Conditions d'utilisation de l'AD Code de référence AD (OACI) : 1A AD réservé aux ACFT d'Etat, aux ACFT CIV autorisés de Sainte Léocadie et de La Llagonne La Quillane AD accessible aux autres ACFT sous conditions fixés par le directeur d'AD : Le commandant de bord Avion doit : Soit détenir la qualification «Montagne»,; Soit totaliser 200 hdv ET avoir réalisé une recon- nasance de site avec un instructeur des ACB basés (mention portée au carnet de vol).",
+      "Concernant le CDT de bord ULM multiaxes (classe 3) : Le suivi du cursus Montagne organisé par la FFPLUM est fortement recommandé ;; Avoir réalisé une reconnaissance de site avec un instructeur des ACB basés (mention portée au carnet de vol).",
+      "",
+      "Non conforme pour ACFT avec envergure > 19 m",
+      "Non conforme pour HEL avec LgHT > 14 m ≤ Pour les ACFT d'engergure > 19 m et 24 m : guidage par membre d'équipage au sol obligatoire.",
+      "Marge de 2 m de part et d'autre.",
+      "Accès interdit si envergure > 24 m Pour les HEL avec largeur hors tout > 14 m, translation hors effet de sol à une hauteur > 4 m Plots HEL légers numérotés 1 à 7 et 12, 13 : Pas d'opérations simultanées sur plots consécutifs, chevauchement des aires de protection Plots HM numérotés 8 à 11 : Non conformes NH 90.",
+      ""
+    ],
+    "reportingPoints": [
+      {
+        "name": "N",
+        "location": "5600 ft AMSL Nom / Pont sur voie ferrée /"
+      },
+      {
+        "name": "W",
+        "location": "Rond point / D 68 - D 30"
+      },
+      {
+        "name": "SW",
+        "location": "Chapelle de NAHUJA /"
+      },
+      {
+        "name": "E",
+        "location": "Point côté 1558 m (entre ERR et LIO) /"
+      }
+    ]
+  }
 }

@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFLJ",
   "name": "Courchevel",
   "source": {
     "publication": "AIP France AD 2 LFLJ",
     "chartDate": "2024-08-08",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 45.39583,
@@ -122,5 +124,47 @@
     "HEL ARRIVAL: Entry points: N, E and L.",
     "An HEL will not land track 147° from helistation when an airplane is taking off or landing on RWY 04/22.",
     "HEL DEPARTURE: An HEL will not take off track 327° from helistation when an airplane is taking off or on final leg for landing."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "L'utilisation d'avions monomoteurs dont la masse maximale certifiée au décollage excède 2,5 tonnes et d'avions bimoteurs est conditionnée au dépôt auprès de la DSAC Centre-Est d'un dossier qui comprendra les renseignements relatifs au pilote, les consignes d'utilisation, les limitations opérationnelles, les procédures de DEP et ARR ainsi que les procédures en cas de panne moteur au décollage.",
+      "Présence de talus de neige, de hauteur importante, en bordure de piste.",
+      "Déneigement : confirmation auprès de l'exploitant d'aérodrome.",
+      "Enneigement visible par webcam : https://www.courchevel.com En période hivernale soleil rasant en finale 22.",
+      "Présence possible de poussière sur l'ensemble de la plateforme : risque d'effet de brown out (ou voile brun) du aux souffles des hélices et pales.",
+      "Forte activité parapente et planeur en point de compterendu \"L\" et en vallée.",
+      "",
+      "Tours de piste interdits entre 1130 et 1330 (ÉTÉ : -1 HR).",
+      "Limitation des tours de piste à deux par appareil et par demi-journée, sauf accord spécifique de l'exploitant.",
+      "REFERENCE ALTIMETRIQUE : AFIS ouvert : QNH fourni par COURCHEVEL Information.",
+      "AFIS fermé : Prise de référence altimétrique, passage travers Nord du point LIMA (7450 ft).",
+      "LIMITATION DES NUISANCES SONORES : Éviter le survol de la station COURCHEVEL 1850 et de COURCHEVEL 1650 (MORIOND).",
+      "ARRIVEE AVION : ARR piste 22 obligatoire.",
+      "AFIS ouvert : ARR possible par le point N.",
+      "En raison de nuisances sonores, il est souhaitable de limiter les verticales à l'ARR.",
+      "AFIS fermé : cheminement depuis W, passage travers Nord point L pour prise de référence altimétrique, passage verticale AD (7100 ft MNM), base, dernier virage, puis finale.",
+      "DÉPART AVION : DEP piste 04 obligatoire.",
+      "Aide aux pilotes d'avions : référence de trait de guidage de couleur jaune au sol depuis point d'attente gauche vers seuil de piste 04 pris sur avion dont l'envergure est de 16 m ou la demi-envergure est de 8 m.",
+      "Un avion ne décollera pas si un autre aéronef s'est annoncé en étape de base.",
+      "COURCHEVEL L'attention des pilotes est attirée lors d'un décollage piste 04 en cas de survol de l'aérodrome par un autre trafic pour l'éloignement.",
+      "ARRIVEE HEL : Point d'entrée : N, E et L.",
+      "Un HEL n'atterrirra pas sur l'axe 147° de l'hélistation, lorsqu'un avion est au décollage ou à l'atterrissage sur la piste 04/22.",
+      "DEPART HEL : Un HEL ne décollera pas route 327° depuis l'hélistation, lorsqu'un avion est au décollage ou aligné en finale pour l'atterrissage."
+    ],
+    "reportingPoints": [
+      {
+        "name": "E",
+        "location": "Croix sur la Dent du Villard"
+      }
+    ]
+  }
 }

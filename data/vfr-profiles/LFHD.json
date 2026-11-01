@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFHD",
   "name": "Pierrelatte",
   "source": {
     "publication": "AIP France AD 2 LFHD",
     "chartDate": "2025-12-25",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 44.39778,
@@ -54,5 +56,18 @@
     "Non home based ACFT limited to one pattern.",
     "Non home-based ULM shall use airplanes RWY.",
     "PJE (NR 438): see AIP ENR 5.5 Aerobatics activity (NR 6803): see AIP ENR 5.5 AEM (NR 9815): see AIP ENR 5.5 Unmanned ACFT activity (LF-R 329 area): see AIP ENR 5.1 Gliders winching activity (NR 1004): see AIP ENR 5.5"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "Après pluies prolongées, inutilisable hors piste pour le roulage et résistance insuffisante de la piste pour avion > 2 t.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Activité parachutage (N° 438) : voir AIP ENR 5.5 Voltige (N° 6803) : voir AIP ENR 5.5 AEM (N° 9815) : voir AIP ENR 5.5 Activité de drones (zone LF-R 329) : voir AIP ENR 5.1 Activité treuillage planeurs (N° 1004) : voir AIP ENR 5.5"
+    ]
+  }
 }

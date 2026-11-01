@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFKB",
   "name": "Bastia Poretta",
   "source": {
     "publication": "AIP France AD 2 LFKB",
     "chartDate": "2026-01-22",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 42.55,
@@ -203,5 +205,31 @@
     "Activity known by BASTIA APP.",
     "Radiocommunication failure: report 1500 ft over SA, avoid flying over parachuting NR 405, fly overhead airfield mid-RWY to join East side of the airport maintaining 1500 ft to join the circuit to QFU in use, complying with the air traffic and / or the wind sock.",
     "Divers / Miscellaneous: PPR mandatory 48HR for all general aviation and business flights, by E-mail: ppr@satab.aero."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Activité ULM : AD autorisé aux ULM de classe 2, 3, 4 et 6 munis de radio et transpondeur mode C : peut être subordonné à l'aptitude du pilote à s'intégrer dans la circulation d'aérodrome.",
+      "ULM basés : activité définie par protocole avec les services de la CA.",
+      "TWY M (largeur 21,50 m) limité aux ACFT de code C.",
+      "TWY C (largeur 12,20 m) limité aux ACFT de code B et interdit la nuit.",
+      "",
+      "La proximité du relief peut obliger à effectuer un virage côté mer pour une prise d'altitude avant le passage NW.",
+      "Activité parapente aux abords de la CTR sur un axe NW-W et aux abords du point S, vigilance accrue recommandée.",
+      "Présence d'oiseaux de type \"Milans Royaux\" d'un poids moyen de 1,1 kg pour une période allant du printemps jusqu'à début juillet.",
+      "",
+      "ALT préférentielle 1000 ft ASFC MAX à N1 et 1500 ft ASFC MAX à S.",
+      "Le circuit d'aérodrome peut se faire sur «autorisation» par l'ouest du terrain côté relief, à la même altitude que le circuit publié côté mer (1000 ft).",
+      "Utilisation PAPI 34 obligatoire jour et nuit.",
+      "",
+      "Ne sont pas concernés les ACFT de la Sécurité Civile en mission (Trackers, Canadairs).",
+      "BASTIA PORETTA et carte ENR 3.3.4 - LFMM MEDITERRANEE ITI NIGHT VFR.",
+      "Equipement de surveillance du trafic : AD équipé d'un radar secondaire (voir AD 1.0) et ADS-B.",
+      "",
+      "Activité de parachutage N° 405 - H24-FL 195.",
+      "Activité connue de BASTIA APP.",
+      "Consignes particulières de radiocommunication Panne de radiocommunication : se présenter 1500 ft au point SA en évitant le survol de l'activité parachutage N° 405, faire une verticale terrain à mi-piste puis rejoindre l'Est des installations toujours à 1500 ft pour intégrer le circuit pour le QFU en service, en fonction du trafic observé et / ou de la manche à air.",
+      "BASTIA PORETTA 18 - PPR obligatoire 48HR pour tous les vols de l'aviation générale et d'affaires, par Email : ppr@satab.aero."
+    ]
+  }
 }

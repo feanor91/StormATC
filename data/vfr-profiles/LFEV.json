@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFEV",
   "name": "Gray - Saint-Adrien",
   "source": {
     "publication": "AIP France AD 2 LFEV",
     "chartDate": "2026-04-16",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 47.43222,
@@ -84,5 +86,38 @@
     "Paiement carte TOTAL uniquement sur automate / Payment by TOTAL card only on automatic dispenser.",
     "Niveau 1 / Level 1.",
     "Péril animalier / Wildlife strike hazard:"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Piste non revêtue 350 x 20 m réservée aux ULM basés.",
+      "Piste non revêtue 860 x 50 m réservée aux ACFT basés.",
+      "Activité IFR possible.",
+      "Utilisation simultanée des pistes interdite.",
+      "Distances déclarées utilisables : (1) TORA, TODA et LDA RWY 07/25 revêtue réduites.",
+      "Les fins de ces distances se situent au DTHR opposé.",
+      "Par vent fort du Sud-Sud-Est, risque de turublences et cisaillements lors de l'atterrissage sur le premier tiers de la piste revêtue 25.",
+      "Par vent fort du Sud-Sud-Est, risque de turublences et cisaillements lors de l'atterrissage sur le premier tiers de la piste revêtue 25.",
+      "",
+      "HS 1 : Priorité roulage sur TWY B.",
+      "HS 2 : Priorité roulage sur TWY B.",
+      "TWY A réservé aux aéronefs dont l'envergure est inférieure à 15 mètres.",
+      "TWY C réservé aux aéronefs dont l'envergure est inférieure à 12 mètres.",
+      "QFU 072° préférentiel cause procédure RNP RWY 07.",
+      "Respecter les circuits publiés dans la mesure du possible.",
+      "Utilisation du PAPI obligatoire de jour et de nuit sur piste revêtue.",
+      "Décollage obligatoire depuis les extrémités de piste.",
+      "Après décollage en piste 07, ne pas tourner à droite avant la route D474.",
+      "",
+      "",
+      "",
+      "Le plus tôt possible et au plus tard : 12 HR avant l'atterrissage de l'aéronef pour les vols du LUN au VEN, 24 HR avant l'atterrissage de l'aéronef pour les vols des SAM, DIM et JF. ❍ ❍ ❍ ❍ 10 - AVT : 11 - RFFS : 12 - NIL.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  }
 }

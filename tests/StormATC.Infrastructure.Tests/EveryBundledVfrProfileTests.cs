@@ -60,6 +60,26 @@ public sealed class EveryBundledVfrProfileTests
         JsonElement root = document.RootElement;
         Assert.Equal(icao, root.GetProperty("icao").GetString());
 
+        // The French column, when it was read, keeps the indices of the English notes.
+        if (root.TryGetProperty("fr", out JsonElement french) && french.TryGetProperty("notes", out JsonElement frenchNotes))
+        {
+            Assert.Equal(root.GetProperty("notes").GetArrayLength(), frenchNotes.GetArrayLength());
+            foreach (JsonElement note in frenchNotes.EnumerateArray())
+            {
+                Assert.Equal(JsonValueKind.String, note.ValueKind);
+            }
+        }
+
+        if (french.ValueKind == JsonValueKind.Object && french.TryGetProperty("reportingPoints", out JsonElement frenchPoints)
+            && root.TryGetProperty("reportingPoints", out JsonElement englishPoints))
+        {
+            var englishNames = englishPoints.EnumerateArray().Select(p => p.GetProperty("name").GetString()).ToHashSet();
+            foreach (JsonElement point in frenchPoints.EnumerateArray())
+            {
+                Assert.Contains(point.GetProperty("name").GetString(), englishNames);
+            }
+        }
+
         if (!root.TryGetProperty("reportingPoints", out JsonElement points))
         {
             return;

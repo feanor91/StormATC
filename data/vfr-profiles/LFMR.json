@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFMR",
   "name": "Barcelonnette - Saint-Pons",
   "source": {
     "publication": "AIP France AD 2 LFMR",
     "chartDate": "2025-12-25",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 44.38722,
@@ -56,5 +58,26 @@
     "Avoid to overfly the neighbouring villages.",
     "Final fix for all approach path,THR 09.",
     "Ground stationary work, THR 09 imperatively."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "Risque augmenté de sortie de piste à l'extrémité à l'atterrissage.",
+      "La température (supérieure à 8°C) et l'altitude sont pénalisantes au décollage et à l'atterrissage.",
+      "Durant l'approche, visualisation du plan en finale faussée en raison de la courbure de la piste : visuel de 7% qui donne une impression de plan fort.",
+      "Par fort Mistral en Vallée du Rhône ou de mars à octobre, à partir de midi jusqu'au soir, lorsque la brise de vallée est établie, fortes turbulences et rabattants en courte finale 27.",
+      "Route (D 609) au THR 27 : Obstacles possibles (camion de gabarit supérieur à 4.30m) dans la trouée d'envol : vérifier systématiquement les performances lors d'un décollage en piste 09 pour assurer le franchissement.",
+      "Par convention, les ACFT circuleront dans la moitié droite de la vallée de l'Ubaye dans le sens du vol.",
+      "Prendre connaissance des « consignes particulières LFMR » publiées sur le site : www.aerodromebarcelonnette.fr/consignes-lfmr Approche / Atterrissage : accès omnidirectionnel au dessus du relief, se présenter verticale manche à air, 5000 ft QNH, MNM.",
+      "A l'atterrissage, privilégier un point de toucher des roues dans le premier quart montant de la piste afin de compenser la partie descendante dans sa deuxième moitié.",
+      "Roulage : Roulage interdit hors piste et TWY.",
+      "Voie de tractage réservée aux planeurs, atterrissage interdit si cette voie est engagée par un ou plusieurs planeurs.",
+      "Décollage / Montée initiale : En cas de panne moteur au décollage, il y a peu de dégagement : piste 27 : à gauche le lit de l'Ubaye,; piste 09 : à droite le golf.",
+      "",
+      "Eviter le survol des communes avoisinantes.",
+      "",
+      ""
+    ]
+  }
 }

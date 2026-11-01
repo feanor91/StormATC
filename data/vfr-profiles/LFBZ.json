@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFBZ",
   "name": "Biarritz Pays Basque",
   "source": {
     "publication": "AIP France AD 2 LFBZ",
     "chartDate": "2026-09-03",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.46833,
@@ -181,5 +183,44 @@
     "Radiocommunication failure: Sqawk 7600.",
     "If failure occurs after entering CTR: before receiving the entry clearance in AD circuit: perform a holding If possible contact TWR 05 59 22 43 92 (emergency number only).",
     "Failing that, exit CTR as soon as possible. after receiving traffic circuit integration clearance: proceed with landing as cleared."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD interdit aux planeurs.",
+      "",
+      "Voltige N° 6683 : voir AIP ENR 5.5 AEM N° 9113, 9130, 9460 : voir AIP ENR 5.5 Parachutage N° 302, 329, 366, 376 : voir AIP ENR 5.5 Drone N° 40-001 : voir AIP ENR 5.5 Procédures et consignes particulières Mise en route avec PPR 5 min.",
+      "Tour de piste à basse hauteur réservé aux aéronefs basés à 500 ft AAL.",
+      "L'usage du VOR est recommandé.",
+      "QFU préférentiel 268° : cause procédure ILS.",
+      "",
+      "Le virage à gauche vers le Nord n'est possible qu'après accord du contrôle et en évitant le survol de l'agglomération Biarritz Anglet Bayonne,",
+      "",
+      "",
+      "",
+      "Voies de circulation : S1 interdit la nuit; S1 interdit le jour par RVR < 800 m; T1 réservé aux HEL de LHT ≤ 13 m.",
+      "Conditions d'utilisation du PRKG Sud : avions d'envergure maximale de 15 m.",
+      "BIARRITZ PAYS BASQUE VFR de nuit Consignes particulières : En cas de panne radio, afficher transpondeur 7600, effectuer une verticale aérodrome à 1500 ft AAL avant intégration du circuit, surveiller l'axe d'approche finale, le clignotement momentané du balisage a valeur d'autorisation d'atterrir.",
+      "Itinéraires Points cheminement Altitude de vol avion/helicoptère (AMSL) N1 NC-NA NE1 NE-NA S1 SE-S SW1 SW-SB TS1 S-SB TW1 NA-SB Ces itinéraires sont suivis : obligatoirement en CTR, en situation de VFR spécial; en VMC sur instruction du contrôle.",
+      "BIARRITZ PAYS BASQUE Transit \"côtier\" TW1 : Une autorisation explicite de Biarritz ATS doit être obtenue pour croiser l'axe de piste.",
+      "",
+      "",
+      "",
+      "Contacter 5 mn avant le survol des points d'entrée.",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "reportingPoints": [
+      {
+        "name": "SW",
+        "location": "Chapelle Nord baie de St-Jean-de-Luz"
+      },
+      {
+        "name": "E",
+        "location": "Intersection D936 et sortie n°4 autoroute A64"
+      }
+    ]
+  }
 }

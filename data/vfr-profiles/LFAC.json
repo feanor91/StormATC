@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFAC",
   "name": "Calais - Dunkerque",
   "source": {
     "publication": "AIP France AD 2 LFAC",
     "chartDate": "2026-05-14",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 50.96083,
@@ -51,5 +53,25 @@
     "PCL: for general Aviation, PPR 2 hours from AD operator, before the closing of ATS,;.",
     "PPR from AFIS, controls FATO lighting.",
     "PJE on AD NR 227: see ENR 5.5 Aerobatic activity on AD NR 6001: see ENR 5.5 AEM activity: NR 8299: see ENR 5.5"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "En dehors des HOR, le service AFIS peut être rendu à tout moment sans préavis, en circulation d'aérodrome.",
+      "Activité réelle connue sur la FREQ AFIS.",
+      "FATO : hélistation limitée à 4,3 tonnes,; les hélicoptères à l'arrivée s'annonceront pour l'hélistation ou la piste revêtue en fonction de leur masse,; décollage de l'hélistation en 06 possible en l'absence d'aéronef au roulage ou stationné sur le parking.",
+      "",
+      "Hélistation hospitalière située sous la finale 06 (242°/ 2.6 NM ARP), utilisable de jour et de nuit.",
+      "Activité annoncée sur FREQ CALAIS.",
+      "",
+      "Circuits basse hauteur : Entraînements tour de piste inférieurs aux hauteurs publiées : réservés aux vols de formation avec instructeur à bord; limités à 3 tours de piste par séance d'instruction; hauteur minimale : 300 ft AAL.",
+      "Roulage interdit hors RWY et TWY.",
+      "Largeur TWY A, B, C : 15 m.",
+      "Largeur TWY D : 8 m.",
+      "TWY D interdit de nuit (aucun balisage lumineux).",
+      "PCL : pour aviation générale, PPR 2 heures auprès de l'exploitant, avant la fermeture ATS,; .",
+      "",
+      "Parachutage sur AD N° 227 : voir ENR 5.5 Voltige sur AD N° 6001 : voir ENR 5.5 Activité aéromodélisme N° 8299 : voir ENR 5.5"
+    ]
+  }
 }

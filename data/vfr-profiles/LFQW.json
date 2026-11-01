@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFQW",
   "name": "Vesoul - Frotey",
   "source": {
     "publication": "AIP France AD 2 LFQW",
     "chartDate": "2025-12-25",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 47.63861,
@@ -62,5 +64,23 @@
     "Each side bar consists of 5 lights.",
     "PJE (NR 232): see AIP ENR 5.5 Aerobatic activity (NR 6466): see AIP ENR 5.5 AEM (NR 8051): see AIP ENR 5.5 Balloons activity: reserved for home based ACFT.",
     "Occasional TKOF and as per as protocol."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "AD réservé aux ACFT munis de radio.",
+      "RWY revêtue 08/26 interdite aux aéronefs dont la distance de référence au décollage est supérieure à 800 m.",
+      "Piste non revêtue réservée aux ULM.",
+      "",
+      "Par vent de NW ou SW, fortes turbulences et cisaillement au seuil 26, prévoir un atterrissage décalé de 350 m du seuil.",
+      "Présence d'obstacles (arbres) dans les surfaces latérales.",
+      "Réservé aux pilotes autorisés par l'exploitant.",
+      "",
+      "Feux de seuils et d'extrémité de piste installés au droit du seuil et de l'extrémité en 2 barres de flanc.",
+      "Chaque barre de flanc est composée de 5 feux.",
+      "Activité parachutisme (N° 232) : voir AIP ENR 5.5 Activité voltige (N° 6466) : voir AIP ENR 5.5 AEM (N° 8051) : voir AIP ENR 5.5 Activité ballons : réservée aéronefs basés.",
+      "Décollages occasionnels et selon protocole."
+    ]
+  }
 }

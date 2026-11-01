@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFJL",
   "name": "Metz-Nancy-Lorraine",
   "source": {
     "publication": "AIP France AD 2 LFJL",
     "chartDate": "2026-04-16",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.97833,
@@ -44,5 +46,14 @@
     "RWY 04 and 22 operations prohibited in the event of crosswinds greater than 20 kt on wet RWY and 25 kt on dry RWY.",
     "Minima special VFR within the CTR LORRAINE: with IFR trafic: VIS 3400 m,; without IFR trafic: VIS 1500 m; Reporting points:.",
     "Consignes particulières / Special instructions Traffic surveillance equipment: AD equipped with secondary surveillance radar."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Dangers à la navigation aérienne AEM Delme : 800 ft ASFC.",
+      "Exploitation RWY 04 et 22 interdite en cas de vent traversier supérieur à 20 kt sur piste mouillée et 25 kt sur piste sèche.",
+      "Minima VFR spécial dans la CTR LORRAINE : en présence de trafic IFR : VIS 3400 m,; en absence de trafic IFR : VIS 1500 m; Points de compte rendu :.",
+      "METZ NANCY LORRAINE Equipement AD Equipement de surveillance du trafic : AD équipé d'un radar secondaire."
+    ]
+  }
 }

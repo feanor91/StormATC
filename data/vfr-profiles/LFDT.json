@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFDT",
   "name": "Tarbes - Laloubère",
   "source": {
     "publication": "AIP France AD 2 LFDT",
     "chartDate": "2024-01-25",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 43.215,
@@ -85,5 +87,27 @@
     "SR-SS except SAT, SUN and Public HOL - Activity according to protocol - Actual activity known on PYRENEES INFO.",
     "AEM (NR 9066): HJ, 330 ft ASFC.",
     "ULM: entry within ACFT circuit."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Utilisation simultanée des pistes adjacentes interdite.",
+      "Tout TKOF ou LDG d'ACFT est suspendu si un planeur est immobilisé sur la piste planeurs à moins d'une demilargeur de la limite commune des pistes.",
+      "L'attention des pilotes est attirée sur la nécessité de vérifier que les performances de leur appareil garantissent le survol de la route RD 935 située à l'extrémité de la piste seuil 08 avec une marge d'au moins 50 ft.",
+      "",
+      "Prudence recommandée compte tenu de l'activité planeur éventuelle dans le choix du QFU.",
+      "Les pilotes extérieurs doivent prendre connaissance des consignes particulières temporaires sur le site www.aerobigorre.org/infopilote et s'y inscriront.",
+      "L'inscription est valable 12 mois et doit être renouvelée en cas de modification de ces consignes.",
+      "ARR QFU 080° et DEP QFU 260° : sans clairance de pénétration en CTR LOURDES, rester à l'Est du repère visuel Château d'eau d'Odos.",
+      "Prudence recommandée compte tenu de la proximité des CTR LOURDES et TMA 1 PYRENEES afin d'éviter toute pénétration en espace D sans clairance.",
+      "Parachutage possible sur AD (n°330), éviter la verticale en fonction de l'activité réelle connue sur Pyrénées Info.",
+      "QFU en service sur intérogation du pilote de l'aéronef de largage ou de la base parachutisme au sol.",
+      "0800-SS (ETE : - 1 HR) - PPR PYRENEES APP.",
+      "",
+      "PJE (N° 334-2) TARBES QUARTIER SOULT - FL 115",
+      "",
+      "AEM (N° 9066) : HJ, 330 ft ASFC.",
+      "ULM : intégration dans le circuit avions."
+    ]
+  }
 }

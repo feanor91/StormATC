@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFHU",
   "name": "Alpe d'Huez",
   "source": {
     "publication": "AIP France AD 2 LFHU",
     "chartDate": "2021-10-07",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 45.0875,
@@ -97,5 +99,38 @@
     "RWY centerline: lines (15 x 0,2 m) 15 meters apart.",
     "Approved touchdown zone: marks (30 x 2,50 to 7,50 m) on each side of RWY centerline located 75 meters after the threshold.",
     "End of the RWY and slope interruption with the"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD à caractéristiques spéciales, réservé aux pilotes d'avion, titulaires : Soit de la qualification montagne (roues ou skis), en état de validité.; Soit de la qualification montagne restreinte à l'altiport (sol non enneigé ou sol enneigé et damé), en état de validité.",
+      "Pour les pilotes d'ULM, il est fortement conseillé d'avoir suivi le cursus montagne organisé par la FFPLUM.",
+      "",
+      "Mouvements simultanés entre un avion au roulage sur la plateforme supérieure et un hélicoptère en translation vers ou depuis son poste de stationnement interdits.",
+      "",
+      "",
+      "Aéronefs non basés : activité limitée à deux atterrissage par jour; activité d'instruction limitée à quatre atterrissages par avion et par jour, silencieux moteur obligatoire.; pas de vol d'instruction entre 1230 et 1400, heures locales.",
+      "",
+      "",
+      "L'ALPE D'HUEZ Atterrissage : QFU 058 obligatoire.",
+      "Passages bas interdits.",
+      "Passage à 500 ft ASFC (6700 ft AMSL) audessus de la piste selon un axe orienté NNE/SSW.",
+      "S'assurer de l'état de la piste et de son enneigement éventuel.",
+      "Rejoindre la branche vent arrière suivant un angle de 45° en maintenant cette ALT jusqu'à l'avant dernier virage.",
+      "Décollage : QFU 238 obligatoire.",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Zone préférentielle de LDG forcé à 6 km dans le 294° de l'AD.",
+      "",
+      "Balisage diurne, marques de couleur blanche : .",
+      "Seuil 06 : 3 marques de 15 x 1 m de part et d'autre de l'axe.",
+      "Axe de piste : marques de 15 x 0,20 m espacées de 15 m.",
+      "Zone recommandée pour l'impact : marques de 30 x 2,50 m à 7,50 m de part et d'autre de l'axe, la base de ces marques se trouvant à 75 m du seuil de piste.",
+      ""
+    ]
+  }
 }

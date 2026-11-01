@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFBN",
   "name": "Niort - Marais Poitevin",
   "source": {
     "publication": "AIP France AD 2 LFBN",
     "chartDate": "2026-09-03",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 46.31333,
@@ -75,5 +77,38 @@
     "RWY 25: take heading 260°.",
     "Continuous patterns prohibited between 0000 and 0600 (local time) except for State flights and/or authorized by AD operator.",
     "Aerobatics NR 6506: see AIP ENR 5.5 AEM NR 9184.1 and 9184.2: see AIP ENR 5.5 Parachuting NR 379: see AIP ENR 5.5"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Activité IFR possible.",
+      "Piste revêtue : usage par les planeurs avec accord AFIS uniquement.",
+      "Piste non revêtue : utilisation simultanée par avions et planeurs : se poser en aval du dernier planeur.",
+      "Usage simultané des deux pistes et de la bande ULM uniquement possible si le service AFIS est ouvert et si les aéronefs sont monomoteurs et évoluent en VFR de jour.",
+      "Bande ULM au sud de la piste revêtue réservée aux ULM basés et aux aéro modèles autorisés par l'exploitant.",
+      "Activités simultanées sur bande ULM interdites.",
+      "Activité planeurs : conditions de perméabilité des LF-R 49 A1 et L1 selon protocole FFVV/BA709.",
+      "Par vent N à NE possibilité turbulence forte à très forte en finale 07.",
+      "Le seuil 07 n'étant pas visible au point d'attente,une extrême prudence est recommandée avant de pénétrer sur la piste revêtue.",
+      "Forte activité de parachutisme en été.",
+      "Le largueur para peut effectuer un circuit au Sud pour la piste en herbe, ce qui interfère avec le circuit de la piste revêtue.",
+      "",
+      "Roulage interdit hors RWY et TWY.",
+      "Usage du taxiway en herbe : prudence à proximité de l'aire d'embarquement des parachutistes, traversée de piétons.",
+      "Usage du taxiway revêtu : ne pas traverser l'axe de la piste en herbe si un aéronef est en finale ou au décollage de la piste en herbe.",
+      "PRKG en herbe équipé de points d'attache.",
+      "Marquage au sol de l'aire d'avitaillement et des aires de demi-tour sur piste : avion de référence, Beech 1900 D.",
+      "PRKG HEL, diamètre rotor 11 m maximum.",
+      "LHT 13 m maximum, de jour uniquement.",
+      "Circuit basse hauteur avec instructeur uniquement.",
+      "Interdit sur piste revêtue si activité AEM dans le volume n°9184-2.",
+      "NIORT MARAIS POITEVIN Passage verticale de l'échangeur routier W recommandé pour éviter le survol d'Aiffres pour les départs RWY 25 et les arrivées RWY 07.",
+      "",
+      "Cause nuisances, après décollage et dans la mesure du possible : .",
+      "RWY 07 : prendre un cap 060°,",
+      "RWY 25 : prendre un cap 260°.",
+      "Succession de tours de piste interdite entre 0000 et 0600 (heures locales) sauf pour les vols d'Etat et/ou autorisés par l'exploitant.",
+      "Voltige N° 6506 : voir AIP ENR 5.5 AEM N° 9184.1 et 9184.2 : voir AIP ENR 5.5 Parachutage N° 379 : voir AIP ENR 5.5"
+    ]
+  }
 }

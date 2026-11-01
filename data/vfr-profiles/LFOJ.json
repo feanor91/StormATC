@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFOJ",
   "name": "Orléans - Bricy",
   "source": {
     "publication": "AIP France AD 2 LFOJ",
     "chartDate": "2026-01-22",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 47.98778,
@@ -92,5 +94,11 @@
   "notes": [
     "AD prohibited to ACFT without radio and to GLD PPR requested for LDG to the flight director before VFR flights are recommended to follow Special VFR routes HEL: inbound and outbound routes 330 ft ASFC, LDG and TKOF axis 068°/248° Large gathering of birds and deers on the platform and close nearby.",
     "Especially on and around the discharge of Bucy Saint Liphard and the composting plant of Saint Peravy La Colombe Off-airport trees penetrating the 07 TKOF clearance and lateral surfaces Road in RWY axis at 180 m from THR 25, road clearance: 438 ft AMSL Railway track in RWY axis at 300 m from THR 25, rail clearance: 431 ft AMSL PJE on AD (NR 207): H24 / FL 195 Possible up to FL 300 announced by NOTAM By day, contact ORLEANS APP or PARIS UAC/ACC By night, real activity known by ORLEANS APP AEM on AD (NR 8415): SFC - 500 ft ASFC Radio controlled model flying as per protocol"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "Demande à effectuer avant Les itinéraires en VFR Spécial sont recommandés pour les VFR HEL : itinéraires d'entrée et de sortie 330 ft ASFC, LDG et TKOF axe 068°/248° Dangers à la navigation aérienne Forte concentration d'oiseaux et de cervidés sur la plate-forme et aux abords de celle-ci.",
+      "Notamment sur et aux abords de la décharge de Bucy Saint Liphard et de l'usine de compostage de Saint Peravy La Colombe Présence d'arbres hors emprise qui percent la trouée  de TKOF 07 et les surfaces latérales Présence route dans l'axe de RWY à 180 m THR 25, gabarit routier de 438 ft AMSL  Présence voie ferrée dans l'axe de RWY à 300 m THR 25, gabarit ferroviaire de 431 ft AMSL Activités diverses PJE sur AD (NR 207) : H24 / FL 195 Possible jusqu'au FL 300 annoncée par NOTAM De jour, contacter ORLEANS APP ou PARIS UAC/ACC De nuit, activité réelle connue de ORLEANS APP AEM sur AD (NR 8415) : SFC - 500 ft ASFC / SR - SS Vols radiocommandés selon protocole"
+    ]
+  }
 }

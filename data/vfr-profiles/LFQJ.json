@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFQJ",
   "name": "Maubeuge - Élesmes",
   "source": {
     "publication": "AIP France AD 2 LFQJ",
     "chartDate": "2025-12-25",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 50.30833,
@@ -59,5 +61,22 @@
     "HEL, ballons and hot-air ballons activity possible on AD.",
     "Paramotor activity close to the drop zone.",
     "If paramotor activity, unpaved 300x20 m strip closed."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Utilisation simultanée piste revêtue et non revêtue (800 x 80 m) interdite.",
+      "Piste revêtue réservée aux avions et ULM classe multiaxes.",
+      "Piste non revêtue (800 x 80 m) réservée aux aéronefs basés.",
+      "Quand les pistes non revêtues sont inutilisables (NOTAM), toutes les activités sont reportées sur la piste revêtue.",
+      "",
+      "TWY A et C limités : aux ACFT d'envergure inférieure à 24 m; aux ACFT dont la largeur hors tout du train principal est inférieure à 6 m.",
+      "La bande axiale de demi-tour n'est plus utilisée sur le seuil 05.",
+      "TKOF pistes 23 : prendre dès que possible à gauche cap 213° et éviter la commune d'Assevent et le centre pénitentiaire (QDR 218° / 1,5 NM).",
+      "Parachutage (N° 271) : voir AIP ENR 5.5 Voltige (N° 6030) : voir AIP ENR 5.5 AEM (N° 8287) : voir AIP ENR 5.5 Activités HEL, ballons et montgolfières possibles sur AD.",
+      "",
+      "",
+      "Si activité paramoteur, bande non revêtue 300x20 m fermée."
+    ]
+  }
 }

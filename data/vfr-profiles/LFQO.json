@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFQO",
   "name": "Lille - Marcq-en-Barœul",
   "source": {
     "publication": "AIP France AD 2 LFQO",
     "chartDate": "2025-04-17",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 50.68722,
@@ -93,5 +95,42 @@
     "User information on MARCQ A/A or LILLE INFO.",
     "AEM (NR 8252): 0800- 1930 (SUM: - 1 HR), daytime only, 900 ft ASFC/970 ft AMSL.",
     "Radio-controlled model flying as per protocol."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "AD interdit aux ULM de classe 1 (paramoteur).",
+      "Utilisation simultanée des deux pistes accolées interdite.",
+      "TWY revêtu des parkings au seuil 25 : largeur 7 m.",
+      "",
+      "Pour le remorqueur, circuits à 900 ft (800 ft).",
+      "Tout TKOF ou LDG est suspendu si un planeur est immobilisé sur la piste à moins d'une demi-largeur de la limite commune.",
+      "Circulation au sol : Roulage interdit hors RWY et TWY.",
+      "Les dégagements au sol se font vers le TWY latéral accolé à la piste utilisée.",
+      "Les TWY sont nommés ainsi : TWY E en latéral de la piste 17L, TWY S en latéral des pistes 25L et 07R, TWY N en latéral des pistes 07L et 25R et TWY W en latéral de la piste 17R, les TWY qui connectent les parkings aux pistes étant A (au Sud de la piste 35) et B (à l'Est menant au seuil 25).",
+      "Pour éviter les croisements au sol : départs RWY 25 et RWY 17 circulation par le TWY B et retour par le TWY A.",
+      "Départs RWY 07 et RWY 35 : circulation par le TWY A et retour par le TWY B.",
+      "En cas de fortes pluies, possibilité d'emprunter le TWY N plutôt que le TWY A lors de l'atterrissage en piste 25.",
+      "Décollage en piste 25 : Pour le circuit avion, les pilotes obliqueront vers la gauche route magnétique 238° afin de suivre une ligne parallèle à la rocade M652 et éviter le survol de \"Wambrechies\".",
+      "Pour le circuit ULM et planeurs, les appareils obliqueront à droite pour rejoindre et survoler « La Deûle» pour éviter le survol du centre de \"Wambrechies\".",
+      "Décollage en piste 35 : Pour le circuit avion, les pilotes obliqueront vers la gauche route magnétique 336° afin d'éviter le survol de \"Bondues\".",
+      "LILLE MARCQ EN BAROEUL Pour le circuit ULM et planeurs, les pilotes de remorqueurs éviteront les passages répétés plusieurs fois de suite au-dessus du même groupe d'habitations.",
+      "Les pilotes ULM obliqueront vers la droite pour rejoindre et suivre la D654 afin d'éviter de survoler les quartiers bordant le centre de \"Bondues\".",
+      "Décollage en piste 17 : Une bande d'envol de 110 m de longueur et 50 m de largeur servant uniquement au décollage des planeurs est créée en amont de la piste 17L afin d'augmenter la hauteur de survol de \"Marcq-en-Baroeul\".",
+      "Les pilotes d'avion et d'ULM, après avoir atteint l'altitude de sécurité, obliqueront en fonction de leur circuit pour survoler les habitations le moins longtemps possible.",
+      "Vols d'entrainement : Entraînement hélicoptère en vol local soumis à autorisation de l'exploitant (SIGAL).",
+      "Interdiction des entrainements tours de piste, exercices panne moteur et circuits basse hauteur après 1930 (ETE : -1HR), de jour uniquement.",
+      "Interdiction des exercices panne moteur et circuits basse hauteur les dimanches et les jours fériés.",
+      "",
+      "Parachutage sur AD (N° 200) : FL 140, 0800-1930 (ETE : -1 HR) de jour uniquement.",
+      "Information des usagers sur A/A MARCQ et LILLE APP/FIS FREQ.",
+      "Activité réservée aux usagers signataires du protocole.",
+      "Activité voltige (N° 6000) : Axe RWY 07/25, longueur 1000 m, 1700 ft AMSL / FL 055, LUN-VEN sauf JF 08001930 (ETE : - 1 HR), SAM 0800-1100 et 1300-1930 (ETE : -1HR), DIM et JF interdiction.",
+      "De jour uniquement.",
+      "Activité reservée aux pilotes autorisés selon protocole.",
+      "Information des usagers sur A/A MARCQ OU LILLE INFO.",
+      "AEM (N° 8252) : 0800- 1930 (ETE : - 1 HR), de jour uniquement, 900 ft ASFC/970 ft AMSL.",
+      "Vols radiocommandés selon protocole."
+    ]
+  }
 }

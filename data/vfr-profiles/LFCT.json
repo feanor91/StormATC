@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFCT",
   "name": "Thouars",
   "source": {
     "publication": "AIP France AD 2 LFCT",
     "chartDate": "2023-10-05",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 46.96194,
@@ -53,5 +55,22 @@
     "Winching and aerobatics activities prohibited simultaneously.",
     "AEM (NR 9043): HJ, 330 ft ASFC.",
     "As per protocol."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Pendant l'activité de treuillage planeurs, les aéronefs à l'arrivée doivent évoluer à 2000 ft ASFC et attendre la fin du treuillage.",
+      "En raison du profil bombé de la piste 12/30, le seuil 30 n'est pas visible de l'entrée de piste du seuil 12, une grande prudence est requise pour pénétrer sur la piste.",
+      "",
+      "Activité treuillage planeurs sur AD (N° 965) annoncée par feu tournant installé sur le treuil SR-SS, 1000 ft ASFC.",
+      "Annoncée sur A/A THOUARS.",
+      "Activité de voltige (N° 6509).",
+      "Axe RWY 12/30 de 1 km de long, centré sur PSN : 465739N – 0000913W, 07001100, 1300-1800 (ETE : - 1 HR), 2000 ft AMSL/5000 ft AMSL.",
+      "Activité réservée aux usagers basés ou signataires du protocole.",
+      "Activité réelle annoncée sur THOUARS A/A et POITIERS INFO.",
+      "Activités treuillage et voltige interdites simultanément.",
+      "AEM (N° 9043) : HJ, 330 ft ASFC.",
+      "Selon protocole."
+    ]
+  }
 }

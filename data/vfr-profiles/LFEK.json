@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFEK",
   "name": "Issoudun - Le Fay",
   "source": {
     "publication": "AIP France AD 2 LFEK",
     "chartDate": "2022-11-03",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 46.88861,
@@ -82,5 +84,32 @@
     "LF-R 20 B3: entry authorized after radio contact.",
     "Apply instructions provided by AVORD APP.",
     "Users' information on LIMOGES INFO, AVORD APP."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "FREQ A/A fréquemment brouillée par des émetteurs RFI.",
+      "Manche à vent : possibilités d'indications erronées par vent de secteur E-SE.",
+      "",
+      "Roulage interdit hors piste et TWY.",
+      "Absence de panneau et de marque d'indication d'arrêt avant piste (sauf sur TWY S seuil 35).",
+      "Une vigilance particulière devra être portée sur l'absence de trafic avant de traverser les pistes.",
+      "01/04-31/10 : activité planeur intense potentielle.",
+      "Les avions de servitude sont susceptibles d'atterrir sur une piste différente de celle où sont alignés les planeurs.",
+      "Aéronefs motorisés extérieurs : atterrissage sur la piste utilisée par les avions de servitude durant l'activité planeur,; contact et écoute 5 mn avant verticale aérodrome pour observation lors de l'intégration dans le circuit.",
+      "En approche finale, s'assurer de l'absence d'un décollage sur une autre piste.",
+      "Circulation éventuelle de véhicules sur l'aire de manœuvre pour le tractage des planeurs.",
+      "Cause chemins ruraux à proximité des seuils 06, 11, 24 et 29 : modifications des TODA des pistes afférentes.",
+      "",
+      "",
+      "Vols radiocommandés selon protocole.",
+      "Voltige planeurs sur AD (N° 6408) : Axes RWY 11/29 et 17/35 de longueur 2000 m centrés sur ARP.",
+      "ETE : 0700-1900, HIV : SR-SS.",
+      "",
+      "Activité réservée aux planeurs autorisés et selon protocole.",
+      "LF-R 20 B3 : pénétration autorisée après contact radio.",
+      "Suivre instructions d'AVORD APP.",
+      "Information des usagers sur LIMOGES INFO, AVORD APP."
+    ]
+  }
 }

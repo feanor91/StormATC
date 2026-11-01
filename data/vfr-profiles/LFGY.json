@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFGY",
   "name": "Saint-Dié - Remomeix",
   "source": {
     "publication": "AIP France AD 2 LFGY",
     "chartDate": "2024-11-28",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.26639,
@@ -55,5 +57,23 @@
     "Activity reserved for ACFT authorized by AD operator.",
     "According to protocol.",
     "User's information on STRASBOURG INFO."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Piste 07/25 interdite aux aéronefs dont la masse (MTOW) est supérieure à 5,7 t et aux aéronefs avec turboréacteurs.",
+      "Dangers à la navigation aérienne Présence possible de parapentes près des collines au Nord et à l'Ouest de l'AD.",
+      "",
+      "Tours de piste répétitifs réservés aux pilotes basés.",
+      "TWY A limité aux aéronefs dont la largeur hors tout du train principal est inférieure ou égale à 3 m.",
+      "",
+      "Voltige sur AD (N°6155), axe de piste, longueur 3000 m, centré sur ARP, 1700 ft / 5000 ft AAL.",
+      "LUN-SAM : 0800-1100, 1300-1800.",
+      "DIM : 0900-1100, 1330-1800 (ETE : - 1 HR).",
+      "Parachutage sur AD (N°570): FL 130, SR-SS.",
+      "Activité réservée aux aéronefs autorisés par le gestionnaire d'AD.",
+      "Selon protocole.",
+      "Information des usagers STRASBOURG INFO."
+    ]
+  }
 }

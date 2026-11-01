@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFAK",
   "name": "Dunkerque - Les Moëres",
   "source": {
     "publication": "AIP France AD 2 LFAK",
     "chartDate": "2026-04-16",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 51.03944,
@@ -49,5 +51,20 @@
     "Avoid flying over Sainte Foy and Saint François farms.",
     "TKOF RWY 25: turn left as soon as possible, route 238° due to obstacles (trees and electricity poles identified at THR RWY 07 and the educational farm \"Le Caméléus\" in Ghyvelde).",
     "AEM (NR 8354): see AIP ENR 5.5"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Présence d'une antenne haubanée (ALT 813 ft) au sud du circuit.",
+      "",
+      "Eviter le survol de la ferme Sainte Foy et de la ferme Saint François.",
+      "Décollage piste 25 : prendre dès que possible à gauche cap 238° car présence d'obstacles (arbres et poteaux électriques identifiés au seuil de piste 07 et de la ferme pédagogique \"Le Caméléus\" à Ghyvelde).",
+      ""
+    ]
+  }
 }

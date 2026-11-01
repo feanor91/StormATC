@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFLI",
   "name": "Annemasse",
   "source": {
     "publication": "AIP France AD 2 LFLI",
     "chartDate": "2026-09-03",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 46.19194,
@@ -132,5 +134,28 @@
     "Noise abatment procedures: All TKOF must compulsorily start from RWY threshold;; After TKOF RWY 12, make a 45° right turn as soon as possible after overflying the first houses located at the end of RWY.; After TKOF RWY 30 maintain strictly RWY axis up to the railway station.; At departure, as soon as possible after TKOF reduce to normal climb power up to the circuit end.; At arrival, set holding power rating on approach to AD.",
     "HEL procedures: Suivre trajectoire spécifiée à 3100 (1500) pour; Follow prescribed flight track at 3100 (1500) to join or to leave HEL circuit.; Adopt if possible noise abatement procedure.",
     "Aerobatics activity NR 6838: see AIP ENR 5.5"
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "Entraînement tours de piste réservé aux avions et hélicoptères basés.",
+      "Roulage interdit hors RWY et TWY.",
+      "",
+      "QFU 115° préférentiel cause environnement.",
+      "Vols à l'arrivée : Procédure recommandée pour intégration QFU 115° : A l'issue de la reconnaissance ou avoir pris connaissance de la piste 12 en service, report sur le point R à 3100 ft et s'intégrer en vent arrière à 2600 ft.",
+      "Vols avec annulation IFR dans la TMA LSGG : Se référer aux STAR, cartes d'approche aux instruments et cartes VFR VAC de Genève (LSGG).",
+      "Par bonnes conditions météorologiques, les annulations IFR peuvent intervenir avant d'entamer une approche aux instruments de LSGG.",
+      "En cas d'approche aux instruments de LSGG, prévoir de quitter l'axe d'approche de LSGG au plus tard à 3000 ft AMSL pour rejoindre Annemasse en VFR/VMC.",
+      "Si les conditions météorologiques ne le permettent pas, indiquer les intentions à l'ATC de LSGG.",
+      "L'attention des pilotes est attirée sur la présence d'un relief (Mont Salève) entre le point VFR S et l'aérodrome d'Annemasse.",
+      "Vols au départ : Des informations détaillées sont disponibles auprès de l'exploitant de l'aérodrome.; Vols avec passage en IFR dans la TMA LSGG :.",
+      "Avant la mise en route, contacter Genève départ sur FREQ (ou par téléphone +41 22 747 13 68 en cas de non-réponses successives).",
+      "S'attendre à un passage en IFR à BIVLO ou en direction de MOLUS ou CBY.",
+      "Vols avec passage en IFR hors TMA LSGG mais dans la FIR LSAG : Avant la mise en route, contacter ALPS RADAR par téléphone 00 41 22 747 13 91.",
+      "ANNEMASSE Procédures moindre bruit : Les TKOF doivent être effectués obligatoirement à partir des extrémités de piste ;; Après TKOF RWY 12, altération de cap de 45° à droite dès que possible après les premières maisons situées à l'extrémité de piste.; Après TKOF RWY 30 maintenir strictement l'axe de piste jusqu'à la gare SNCF.; Au départ, dès que possible après TKOF réduction à la puissance de montée normale jusqu'à la sortie du circuit.; A l'arrivée, adopter régime attente à l'approche de l'AD.",
+      "",
+      "Activité de voltige N° 6838 : voir AIP ENR 5.5"
+    ]
+  }
 }

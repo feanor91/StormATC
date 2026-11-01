@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFMX",
   "name": "Château-Arnoux-Saint-Auban",
   "source": {
     "publication": "AIP France AD 2 LFMX",
     "chartDate": "2024-08-08",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 44.05861,
@@ -45,5 +47,24 @@
     "Landings: Due to the width of the manoeuvring area, the airfield is divided in two different zones, East (Echo) and West (Whisky), separated by the central axis (021°/201°).",
     "Landing is announced specifying: The general orientation of the landing (North or South); The chosen sector (Echo or Whisky).",
     "Ex: F-XX down wind for North \"Whisky\"."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Activité planeur particulièrement intense en début et en fin d'après midi.",
+      "Violents rabattants par vent de secteur N et SE.",
+      "Terrain lourd après pluies prolongées et dégel.",
+      "Possibilité de retour de planeurs basés en panne radio.",
+      "Digue pouvant occasionner des risques de retenue d'eau en zone Sud et des zones potentiellement détrempées.",
+      "",
+      "Cause nuisances sonores, éviter le survol des agglomérations avoisinantes et respecter les circuits publiés Aéronefs non basés : LDG et TKOF sur axe 021°/201° uniquement ; d'autres axes peuvent être utilisés par les ACFT basés.",
+      "Par vent inférieur à 2 m/s, utiliser l'axe principal 201°.",
+      "Les minis bandes d'accélération bitumées sont réservées aux aéronefs basés : Roulage interdit hors périmètre balisé.",
+      "Phraséologie utilisée par les aéronefs basés : Décollage depuis une bande d'accélération : Le décollage est annoncé en précisant la bande utilisée.",
+      "Ex : F-XX décolle sur la Sud « Whisky ».",
+      "Atterrissages : Compte tenu de la largeur de l'aire de manœuvre, l'aérodrome est partagé en deux secteurs Est (Echo) et Ouest (Whisky) séparés par l'axe central (021°/201°).",
+      "L'atterrissage est annoncé en précisant : L'orientation générale de l'atterrissage (Nord ou Sud); Le secteur choisi (Echo ou Whisky).",
+      "Ex : F-XX en vent arrière pour la Nord « Whisky »."
+    ]
+  }
 }

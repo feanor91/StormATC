@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFSG",
   "name": "Épinal-Mirecourt",
   "source": {
     "publication": "AIP France AD 2 LFSG",
     "chartDate": "2026-05-14",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 48.325,
@@ -55,5 +57,23 @@
     "Outside AFIS SKED, possible opening PPR AD operator.",
     "Level 5 for all ACFT class 4 or higher with PAX.",
     "Péril animalier / Wildlife strike hazard: Occasionnel / Random - HOR / SKED AFIS (HJ uniquement / by day only)."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Activité IFR possible.",
+      "TWY A, B, D, E, F, T1, T2 et T3 non utilisables par les aéronefs à voilure fixe d'empattement supérieur ou égal à 18 m et de largeur hors tout du train principal supérieure ou égale à 9 m.",
+      "Roulage interdit hors RWY et TWY.",
+      "Aérodrome situé dans la zone LF-R87 : circulation et procédures d'aérodrome : contact radio obligatoire avec EPINAL INFO ou A/A en l'absence AFIS.",
+      "TWY E non utilisable par les aéronefs à voilure fixe d'envergure supérieure ou égale à 26 m.",
+      "Restriction utilisation TWY F réservé aux aéronefs autorisés par le gestionnaire.",
+      "PCL : O/R PN 24HR auprès de l'exploitant d'aérodrome; 3 impulsions en moins de 5 secondes pour allumer le balisage en basse intensité.; 5 impulsions en moins de 5 secondes pour allumer le balisage en haute intensité.; Possibilité d'éteindre le balisage en effectuant 7 coups d'alternat en moins de 5 secondes.",
+      "",
+      "Niveau 5 : HOR AFIS.",
+      "Niveau 6 : possible PPR 48HR auprès de l'exploitant pour tout ACFT de classe 6 et supérieure transportant des passagers.",
+      "En dehors HOR AFIS, ouverture possible PPR exploitant.",
+      "Niveau 5 pour tout ACFT de classe 4 et supérieure transportant des passagers.",
+      ""
+    ]
+  }
 }

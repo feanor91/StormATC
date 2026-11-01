@@ -5,14 +5,16 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded."
+    "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFRS",
   "name": "Nantes Atlantique",
   "source": {
     "publication": "AIP France AD 2 LFRS",
     "chartDate": "2026-07-09",
-    "extraction": "chart text, table and English column read by script, procedures structured by hand"
+    "extraction": "chart text, table and English column read by script, procedures structured by hand",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 47.15694,
@@ -212,5 +214,44 @@
     "Aerobatics activity (NR 6380) 12 km West of AD; activity overhead RD 723; 1700 ft AMSL / FL 055.",
     "Activity reserved for users authorized by AVA.",
     "PPR NANTES APP."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Procédure de moindre bruit au décollage.",
+      "",
+      "Hotspot : HS 1 : risque d'incursion de piste : unique point d'attente situé très en amont de la piste.",
+      "HS 2 : Risque de confusion entre les TWY RC et C.",
+      "Collationnement systématique et complet obligatoire.",
+      "HS 3 : Risque de confusion entre les TWY RD et D.",
+      "Collationnement systématique et complet obligatoire.",
+      "Point de toucher RWY 21 : pente localement supérieure à 0,8 %, atteignant jusqu'à 1,8 %.",
+      "",
+      "",
+      "Décollage depuis TWY B uniquement possible pour les aéronefs de CAT A et B.",
+      "Pas de décollage depuis TWY C et TWY D, sauf hélicoptère.",
+      "L'utilisation du TWY RD est limitée aux ACFT d'envergure < 36 m.",
+      "L'utilisation des TWY D et E est limitée aux ACFT avec OMGWS < 9 m.",
+      "",
+      "",
+      "Equipement de Surveillance du trafic : Aérodrome équipé d'un radar secondaire (voir AD 1.0).",
+      "Activité de voltige (N° 6380) 12 km à l'Ouest de l'AD ; activités sur RD 723 ; 1700 ft AMSL / FL 055.",
+      "Activité réservée aux usagers autorisés par AVA.",
+      ""
+    ],
+    "reportingPoints": [
+      {
+        "name": "E",
+        "location": "Rond-point du Butay (silo et château d'eau)"
+      },
+      {
+        "name": "NE",
+        "location": "Château d'eau de la Haye Fouassière"
+      },
+      {
+        "name": "W",
+        "location": "Ecluse du canal de la Martinière"
+      }
+    ]
+  }
 }

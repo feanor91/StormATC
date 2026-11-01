@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFBE",
   "name": "Bergerac Dordogne Périgord",
   "source": {
     "publication": "AIP France AD 2 LFBE",
     "chartDate": "2026-06-11",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 44.82444,
@@ -119,5 +121,18 @@
     "Vigilance is required, due to the possible jet blast on stand D3, D31 and D4.",
     "Route Height Without IFR traffic within the CTR: ACFT: VIS 1500 m - HEL: VIS 800 m.",
     "Possible SW1 unusable if AEM 9417 active Divers / Miscellaneous: Assistance aviation générale / General aviation handling TRAFIC BERGERAC: GRF (service d'évaluation et de report de l'état de surface de piste) / GRF (global reporting format): HOR RFFS / RFFS SKED."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "Piste non revêtue réservée aux aéronefs basés.",
+      "",
+      "Demi-tour sur la piste interdit.",
+      "Vigilance recommandée au roulage vers les postes de stationnement en raison d'une visibilité réduite depuis la tour sur certains postes.",
+      "Voie de relation Air CD privée, à l'usage exclusif de la société Air CD.",
+      "Vigilance requise en raison de la possibilité de souffle réacteur en poste D3, D31 et D4.",
+      "Itinéraires NE1 NE-NA 1500 m (HEL 1000 m) NW1 NW-NA SE1 SE-SA SW1 SW-SA En l'absence de TFC IFR dans la CTR : Avions : VIS 1500 m - HEL : VIS 800 m.",
+      ""
+    ]
+  }
 }

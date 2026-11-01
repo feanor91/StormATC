@@ -4,14 +4,16 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
   ],
   "icao": "LFRC",
   "name": "Cherbourg - Manche",
   "source": {
     "publication": "AIP France AD 2 LFRC",
     "chartDate": "2026-02-19",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, checked",
+    "frenchExtraction": "French column of the chart text, read by script and paired with the English sentences"
   },
   "referencePosition": {
     "latitude": 49.65083,
@@ -45,5 +47,15 @@
     "300 ft MNM for single-engined ACFT, 500 ft MNM for twinengined ACFT.",
     "TWY B and C: night use reserved for military ACFT.",
     "STAP: available data: wind, VIS, RVR, cloud base, T, DP, QNH, QFE."
-  ]
+  ],
+  "fr": {
+    "notes": [
+      "",
+      "",
+      "",
+      "300 ft MNM pour les monomoteurs, 500 ft MNM pour les bimoteurs.",
+      "TWY B et C : utilisation de nuit réservée aux aéronefs militaires.",
+      "STAP : paramètres disponibles : vent, VIS, RVR, base des nuages, T, DP, QNH, QFE."
+    ]
+  }
 }
