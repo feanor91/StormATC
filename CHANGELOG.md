@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.28.5 - 2026-11-01
+
 ### Fixed
 
 - **Spoken names of the reporting points with a digit** (N1, W2, HA3...): the digit was left out ("Whisky" for W1), so the
