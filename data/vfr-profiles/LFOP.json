@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFOP",
   "name": "Rouen Vallée de Seine",
@@ -43,7 +44,7 @@
       },
       "latitude": 49.44806,
       "longitude": 0.90528,
-      "location": "Karting circuit AMBOURVILLE"
+      "location": "Circuit de karting d'AMBOURVILLE"
     },
     {
       "name": "NW",
@@ -53,7 +54,7 @@
       },
       "latitude": 49.5475,
       "longitude": 0.95639,
-      "location": "BARENTIN railway viaduct"
+      "location": "Viaduc ferroviaire de BARENTIN"
     },
     {
       "name": "N",
@@ -63,7 +64,7 @@
       },
       "latitude": 49.48972,
       "longitude": 1.145,
-      "location": "ISNEAUVILLE highway interchange"
+      "location": "Échangeur autoroutier d'ISNEAUVILLE"
     },
     {
       "name": "E",
@@ -83,7 +84,7 @@
       },
       "latitude": 49.31222,
       "longitude": 1.23722,
-      "location": "POSES ponds locks"
+      "location": "Écluses Étangs de POSES"
     },
     {
       "name": "W",
@@ -93,7 +94,7 @@
       },
       "latitude": 49.31,
       "longitude": 0.99917,
-      "location": "ORIVAL viaduct"
+      "location": "Viaduc d'ORIVAL"
     },
     {
       "name": "SB",
@@ -103,7 +104,7 @@
       },
       "latitude": 49.26806,
       "longitude": 1.13722,
-      "location": "BORD motorway service area"
+      "location": "Aire d'autoroute de BORD"
     }
   ],
   "notes": [
@@ -164,32 +165,6 @@
       "Niveau 1 pour piste non-revêtue 05/23.",
       "12 - 13 - 14 - NIL.",
       "15 - ACB : ACRN TEL."
-    ],
-    "reportingPoints": [
-      {
-        "name": "AC",
-        "location": "Circuit de karting d'AMBOURVILLE"
-      },
-      {
-        "name": "NW",
-        "location": "Viaduc ferroviaire de BARENTIN"
-      },
-      {
-        "name": "N",
-        "location": "Échangeur autoroutier d'ISNEAUVILLE"
-      },
-      {
-        "name": "S",
-        "location": "Écluses Étangs de POSES"
-      },
-      {
-        "name": "W",
-        "location": "Viaduc d'ORIVAL"
-      },
-      {
-        "name": "SB",
-        "location": "Aire d'autoroute de BORD"
-      }
     ]
   }
 }

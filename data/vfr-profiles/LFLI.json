@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFLI",
   "name": "Annemasse",
@@ -51,7 +52,7 @@
       },
       "latitude": 46.14194,
       "longitude": 6.26111,
-      "location": "Ouest de Reignier / West of Reignier"
+      "location": "Ouest de Reignier"
     },
     {
       "name": "E",
@@ -61,7 +62,7 @@
       },
       "latitude": 46.34722,
       "longitude": 6.36306,
-      "location": "Beach, EXCENEVEX"
+      "location": "EXCENEVEX (Plage)"
     },
     {
       "name": "N",
@@ -71,7 +72,7 @@
       },
       "latitude": 46.35444,
       "longitude": 6.1525,
-      "location": "Lake of DIVONNE-LES-BAINS"
+      "location": "Lac de DIVONNE-LES-BAINS"
     },
     {
       "name": "W",
@@ -91,7 +92,7 @@
       },
       "latitude": 46.12194,
       "longitude": 5.89917,
-      "location": "East of FORT DE L'ECLUSE"
+      "location": "Est de"
     },
     {
       "name": "S",
@@ -101,7 +102,7 @@
       },
       "latitude": 46.13361,
       "longitude": 6.09944,
-      "location": "Saint-Julien, junction of the A40-A41 motorways"
+      "location": "St JULIEN (Intersection Autoroutes A40-A41)"
     },
     {
       "name": "SE",

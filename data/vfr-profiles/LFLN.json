@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFLN",
   "name": "Saint-Yan",
@@ -87,7 +88,7 @@
       },
       "latitude": 46.44,
       "longitude": 4.14083,
-      "location": "Paray le Monial, railway junction SE of town"
+      "location": "Paray le Monial, embranchement ferroviaire au SE de la ville"
     },
     {
       "name": "S",
@@ -107,7 +108,7 @@
       },
       "latitude": 46.33472,
       "longitude": 3.96278,
-      "location": "ABM W of town of Avrilly, ABM E water tower of Avrilly"
+      "location": "ABM W ville d'Avrilly, ABM E château d'eau d'Avrilly"
     },
     {
       "name": "W",
@@ -127,7 +128,7 @@
       },
       "latitude": 46.40694,
       "longitude": 3.90083,
-      "location": "Le Pin, water tower SE of the town"
+      "location": "Le Pin, château d'eau au SE de la localité"
     },
     {
       "name": "NW",
@@ -190,20 +191,6 @@
       "Treuillage parachutisme ascensionnel (N° 1006) : voir AIP ENR 5.5.",
       "Voltige (N° 6458): voir AIP ENR 5.5.",
       "AEM (N° 8069) voir AIP ENR 5.5."
-    ],
-    "reportingPoints": [
-      {
-        "name": "EA",
-        "location": "Paray le Monial, embranchement ferroviaire au SE de la ville"
-      },
-      {
-        "name": "SA",
-        "location": "ABM W ville d'Avrilly, ABM E château d'eau d'Avrilly"
-      },
-      {
-        "name": "WA",
-        "location": "Le Pin, château d'eau au SE de la localité"
-      }
     ]
   }
 }

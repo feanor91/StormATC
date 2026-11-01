@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFRB",
   "name": "Brest-Bretagne",
@@ -97,7 +98,7 @@
       },
       "latitude": 48.365,
       "longitude": -4.78361,
-      "location": "North Le Conquet"
+      "location": "Nord"
     },
     {
       "name": "PA",
@@ -107,7 +108,7 @@
       },
       "latitude": 48.50417,
       "longitude": -4.42278,
-      "location": "Plabennec water-tower"
+      "location": "Château d'eau de Plabennec"
     },
     {
       "name": "SWL",
@@ -117,7 +118,7 @@
       },
       "latitude": 48.41667,
       "longitude": -4.2,
-      "location": "South of Pencran antennas"
+      "location": "Sud antennes de Pencran"
     },
     {
       "name": "LF",
@@ -137,7 +138,7 @@
       },
       "latitude": 48.61028,
       "longitude": -4.37889,
-      "location": "Kerdroc, crossing of RD25/RD38"
+      "location": "Kerdroc, croisement de la RD25/RD38"
     }
   ],
   "notes": [
@@ -180,20 +181,6 @@
       "Moyens de paiement : cartes bancaires, cartes SHELL, espèces (750 euros max) et cartes BROKER (WORLDFUEL, AEG.).",
       "Parking Aviation Générale : Distributeurs JETA1 et AVGAS/100LL disponibles H24 uniquement par carte bancaire ou carte SHELL locale (délivrée aux usagers basés AG Brest).",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "PA",
-        "location": "Château d'eau de Plabennec"
-      },
-      {
-        "name": "SWL",
-        "location": "Sud antennes de Pencran"
-      },
-      {
-        "name": "NWL",
-        "location": "Kerdroc, croisement de la RD25/RD38"
-      }
     ]
   }
 }

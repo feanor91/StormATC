@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFYS",
   "name": "Sainte-Léocadie",
@@ -44,7 +45,7 @@
       },
       "latitude": 42.47083,
       "longitude": 2.03361,
-      "location": "Proceed at Bridge on railway"
+      "location": "5600 ft AMSL Nom / Pont sur voie ferrée /"
     },
     {
       "name": "W",
@@ -54,7 +55,7 @@
       },
       "latitude": 42.45083,
       "longitude": 1.955,
-      "location": "Roundabout"
+      "location": "Rond point / D 68 - D 30"
     },
     {
       "name": "SW",
@@ -64,7 +65,7 @@
       },
       "latitude": 42.425,
       "longitude": 1.99361,
-      "location": "NAHUJA Chapel"
+      "location": "Chapelle de NAHUJA /"
     },
     {
       "name": "E",
@@ -74,7 +75,7 @@
       },
       "latitude": 42.44556,
       "longitude": 2.04889,
-      "location": "Spot elevation 1558 m (between ERR and LIO)"
+      "location": "Point côté 1558 m (entre ERR et LIO) /"
     }
   ],
   "notes": [
@@ -97,24 +98,6 @@
       "Marge de 2 m de part et d'autre.",
       "Accès interdit si envergure > 24 m Pour les HEL avec largeur hors tout > 14 m, translation hors effet de sol à une hauteur > 4 m Plots HEL légers numérotés 1 à 7 et 12, 13 : Pas d'opérations simultanées sur plots consécutifs, chevauchement des aires de protection Plots HM numérotés 8 à 11 : Non conformes NH 90.",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "N",
-        "location": "5600 ft AMSL Nom / Pont sur voie ferrée /"
-      },
-      {
-        "name": "W",
-        "location": "Rond point / D 68 - D 30"
-      },
-      {
-        "name": "SW",
-        "location": "Chapelle de NAHUJA /"
-      },
-      {
-        "name": "E",
-        "location": "Point côté 1558 m (entre ERR et LIO) /"
-      }
     ]
   }
 }

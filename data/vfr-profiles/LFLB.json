@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFLB",
   "name": "Chambéry - Savoie",
@@ -80,7 +81,7 @@
       },
       "latitude": 45.80583,
       "longitude": 5.82889,
-      "location": "Lake edge"
+      "location": "Bout du lac"
     },
     {
       "name": "SB",
@@ -100,7 +101,7 @@
       },
       "latitude": 45.48389,
       "longitude": 6.02361,
-      "location": "Motorway interchange"
+      "location": "Échangeur autoroutier"
     },
     {
       "name": "SW",
@@ -110,7 +111,7 @@
       },
       "latitude": 45.55556,
       "longitude": 5.83111,
-      "location": "Crucifix Pass"
+      "location": "Col du Crucifix"
     },
     {
       "name": "WA",
@@ -170,7 +171,7 @@
       },
       "latitude": 46.04472,
       "longitude": 6.2575,
-      "location": "Evires pass (A410 and D1203 junction)"
+      "location": "Col d'Elvires (jonction A410 et D1203 )"
     },
     {
       "name": "E",
@@ -180,7 +181,7 @@
       },
       "latitude": 45.93528,
       "longitude": 6.16806,
-      "location": "Les Glaisins (interchange)"
+      "location": "Les Glaisins (échangeur)"
     }
   ],
   "notes": [
@@ -271,12 +272,6 @@
       "Arrivée : L'altitude du segment utilisé sera maintenue jusqu'à être en vue et dans les 5 NM de l'aérodrome, puis rejoindre le circuit.",
       "",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "NE",
-        "location": "Col d'Elvires (jonction A410 et D1203 )"
-      }
     ]
   }
 }

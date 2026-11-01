@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFPG",
   "name": "Paris-Charles-de-Gaulle",
@@ -71,7 +72,7 @@
       },
       "latitude": 49.08667,
       "longitude": 2.55167,
-      "location": "Motorway Toll A1"
+      "location": "Péage autoroute A1"
     },
     {
       "name": "N",
@@ -81,7 +82,7 @@
       },
       "latitude": 49.04972,
       "longitude": 2.5475,
-      "location": "Intersection A1 - railway"
+      "location": "Intersection A1 - Voie ferrée"
     },
     {
       "name": "S",
@@ -91,7 +92,7 @@
       },
       "latitude": 48.97111,
       "longitude": 2.58639,
-      "location": "Roundabout at the intersection of the D9 and D309 roads"
+      "location": "Rond-point à l'intersection des routes D9 et D309 Est du bourg (099° 6.4 NM BT)"
     }
   ],
   "notes": [
@@ -144,16 +145,6 @@
       "",
       "Ces données sont publiées uniquement à titre indicatif et informatif, et ne sont pas exhaustives.",
       "Elles ne se substituent en aucun cas à l'information aéronautique de référence diffusée au travers de l'AIP France, des NOTAM et des Sup AIP."
-    ],
-    "reportingPoints": [
-      {
-        "name": "RH1",
-        "location": "Péage autoroute A1"
-      },
-      {
-        "name": "N",
-        "location": "Intersection A1 - Voie ferrée"
-      }
     ]
   }
 }

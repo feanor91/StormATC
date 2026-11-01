@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFOK",
   "name": "Paris Châlons Vatry",
@@ -51,7 +52,7 @@
       },
       "latitude": 48.91194,
       "longitude": 4.28611,
-      "location": "A26 and D5 motorway interchange"
+      "location": "Échangeur autoroutier A26 et D5"
     },
     {
       "name": "N1",
@@ -61,7 +62,7 @@
       },
       "latitude": 48.82389,
       "longitude": 4.22417,
-      "location": "Factory west of Vatry"
+      "location": "Usine à l'ouest de Vatry"
     },
     {
       "name": "S",
@@ -71,7 +72,7 @@
       },
       "latitude": 48.67083,
       "longitude": 4.17333,
-      "location": "Intersection motorway A26, D98 and railway"
+      "location": "Intersection autoroute A26 avec D98 et voie de chemin de fer"
     },
     {
       "name": "SW",
@@ -81,7 +82,7 @@
       },
       "latitude": 48.735,
       "longitude": 4.19222,
-      "location": "Silo west of Sommesous"
+      "location": "Silo de stokage à l'ouest de Sommesous"
     },
     {
       "name": "W",
@@ -91,7 +92,7 @@
       },
       "latitude": 48.72722,
       "longitude": 3.9,
-      "location": "Sugar plant of Connantre"
+      "location": "Sucrerie de Connantre"
     },
     {
       "name": "WA",
@@ -101,7 +102,7 @@
       },
       "latitude": 48.7475,
       "longitude": 4.06222,
-      "location": "Town of Connantray - Vaurefroy"
+      "location": "Ville de Connantray - Vaurefroy"
     }
   ],
   "notes": [
@@ -138,32 +139,6 @@
       "Équipement de surveillance du trafic : AD équipé d'une visualisation radar (voir AD 1.0).",
       "",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "N",
-        "location": "Échangeur autoroutier A26 et D5"
-      },
-      {
-        "name": "N1",
-        "location": "Usine à l'ouest de Vatry"
-      },
-      {
-        "name": "S",
-        "location": "Intersection autoroute A26 avec D98 et voie de chemin de fer"
-      },
-      {
-        "name": "SW",
-        "location": "Silo de stokage à l'ouest de Sommesous"
-      },
-      {
-        "name": "W",
-        "location": "Sucrerie de Connantre"
-      },
-      {
-        "name": "WA",
-        "location": "Ville de Connantray - Vaurefroy"
-      }
     ]
   }
 }

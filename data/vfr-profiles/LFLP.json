@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFLP",
   "name": "Annecy Haute-Savoie Mont-Blanc",
@@ -57,7 +58,7 @@
       },
       "latitude": 46.04472,
       "longitude": 6.2575,
-      "location": "Evires pass (A410 and D1203 junction)"
+      "location": "Col d'Evires (jonction A410 et D1203)"
     },
     {
       "name": "NA",
@@ -67,7 +68,7 @@
       },
       "latitude": 46.00444,
       "longitude": 6.13167,
-      "location": "Interchange A41 / A410"
+      "location": "Échangeur A41 / A410"
     },
     {
       "name": "N",
@@ -87,7 +88,7 @@
       },
       "latitude": 45.96667,
       "longitude": 6.03333,
-      "location": "La Balme lake"
+      "location": "Lac de la Balme"
     },
     {
       "name": "W",
@@ -97,7 +98,7 @@
       },
       "latitude": 45.90167,
       "longitude": 5.92056,
-      "location": "Vallières hydroelectric station"
+      "location": "Centre hydroélectrique de Vallières"
     },
     {
       "name": "ALBY",
@@ -117,7 +118,7 @@
       },
       "latitude": 45.87556,
       "longitude": 6.07611,
-      "location": "Water tower"
+      "location": "Château d'eau"
     },
     {
       "name": "SJ",
@@ -127,7 +128,7 @@
       },
       "latitude": 45.84417,
       "longitude": 6.17417,
-      "location": "St Jorioz harbour"
+      "location": "Port de St Jorioz"
     },
     {
       "name": "E",
@@ -137,7 +138,7 @@
       },
       "latitude": 45.93528,
       "longitude": 6.16806,
-      "location": "Les Glaisins interchange"
+      "location": "Échangeur des Glaisins"
     },
     {
       "name": "EA",
@@ -147,7 +148,7 @@
       },
       "latitude": 45.89583,
       "longitude": 6.22833,
-      "location": "Water treatment plant of Alex (2 NM north-east of Bluffy, on the straight line of the D16)"
+      "location": "Station d'épuration d'Alex (2 NM au Nord-Est de Bluffy, sur la ligne droite de la D 16)"
     },
     {
       "name": "HN",
@@ -157,8 +158,8 @@
       },
       "latitude": 45.93333,
       "longitude": 6.12833,
-      "location": "Brogny's bridge",
-      "purpose": "helicopter reporting point"
+      "location": "Pont de Brogny",
+      "purpose": "point de compte rendu hélicoptères"
     },
     {
       "name": "HM",
@@ -168,8 +169,8 @@
       },
       "latitude": 45.92139,
       "longitude": 6.11583,
-      "location": "Stadium, northern end of \"des Îles\" graveyard",
-      "purpose": "helicopter reporting point"
+      "location": "Stade à la pointe Nord du cimetière des Îles",
+      "purpose": "point de compte rendu hélicoptères"
     },
     {
       "name": "HS",
@@ -179,8 +180,8 @@
       },
       "latitude": 45.89694,
       "longitude": 6.08778,
-      "location": "Annecy city centre interchange (A41 / D3508 junction)",
-      "purpose": "helicopter reporting point"
+      "location": "Échangeur Annecy Centre (jonction A41 / D3508)",
+      "purpose": "point de compte rendu hélicoptères"
     }
   ],
   "notes": [
@@ -275,20 +276,6 @@
       "",
       "En présence de trafic IFR, rehaussement des minima ≥ MTO sur les trois itinéraires publiés : VIS 3000 m.",
       "ANNECY MEYTHET 10 - AVT : Automates H24 envergure max 16 m : 100 LL, UL Aéro Super +, électricité (poste 61), JET A1 (paiement JET A1 automate par carte TotalEnergies uniquement) Au poste 0800-1800 : JET A1 et JET A1 SAF (paiement JET A1 SAF par carte TotalEnergies ou Fuel release uniquement) Carte TotalEnergies, VISA, MASTERCARD, espèces euros."
-    ],
-    "reportingPoints": [
-      {
-        "name": "NA",
-        "location": "Échangeur A41 / A410"
-      },
-      {
-        "name": "W",
-        "location": "Centre hydroélectrique de Vallières"
-      },
-      {
-        "name": "SA",
-        "location": "Château d'eau"
-      }
     ]
   }
 }

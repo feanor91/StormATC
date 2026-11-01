@@ -4,7 +4,8 @@
     "Only what the chart states is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text; the reporting points, rules and notes were added by hand.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "No circuit height or circuit side is printed on this chart, so none is recorded; the published circuit is a drawing and is not read."
+    "No circuit height or circuit side is printed on this chart, so none is recorded; the published circuit is a drawing and is not read.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFBH",
   "name": "La Rochelle - Île de Ré",
@@ -52,8 +53,8 @@
       },
       "latitude": 46.295,
       "longitude": -1.10639,
-      "location": "Charron village",
-      "purpose": "special VFR reporting point"
+      "location": "Village de CHARRON",
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "NA",
@@ -63,8 +64,8 @@
       },
       "latitude": 46.23444,
       "longitude": -1.15972,
-      "location": "La Pelle place",
-      "purpose": "special VFR reporting point"
+      "location": "Lleu-dit LA PELLE",
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "E",
@@ -74,8 +75,8 @@
       },
       "latitude": 46.2025,
       "longitude": -1.02778,
-      "location": "Usseau place, N137/N11 roundabout",
-      "purpose": "special VFR reporting point"
+      "location": "Lieu-dit USSEAU-Rond-point N137/N11",
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "EA",
@@ -85,8 +86,8 @@
       },
       "latitude": 46.205,
       "longitude": -1.10222,
-      "location": "Saint-Xandre village",
-      "purpose": "special VFR reporting point"
+      "location": "Village de ST XANDRE",
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "S",
@@ -96,8 +97,8 @@
       },
       "latitude": 46.07556,
       "longitude": -1.07667,
-      "location": "Châtelaillon racecourse",
-      "purpose": "special VFR reporting point"
+      "location": "Hippodrome de CHATELAILLON",
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "SA",
@@ -107,8 +108,8 @@
       },
       "latitude": 46.12139,
       "longitude": -1.11,
-      "location": "S-shaped curve of the N137 road",
-      "purpose": "special VFR reporting point"
+      "location": "Virage en forme de \"S\" de la RN137",
+      "purpose": "point de compte rendu VFR spécial"
     }
   ],
   "withAts": {

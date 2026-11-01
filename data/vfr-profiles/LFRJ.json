@@ -4,7 +4,8 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFRJ",
   "name": "Base d'aéronautique navale de Landivisiau",
@@ -132,7 +133,7 @@
       },
       "latitude": 48.61028,
       "longitude": -4.37889,
-      "location": "Kerdroc, crossroad RD 25 / RD 38"
+      "location": "Kerdroc - Croisement RD 25 / RD 38"
     },
     {
       "name": "SEL",
@@ -152,7 +153,7 @@
       },
       "latitude": 48.48611,
       "longitude": -4.15,
-      "location": "South Landivisiau AD"
+      "location": "Sud AD Landivisiau"
     },
     {
       "name": "SWL",
@@ -162,7 +163,7 @@
       },
       "latitude": 48.41667,
       "longitude": -4.2,
-      "location": "South antennas of Pencran"
+      "location": "Sud antennes de Pencran"
     }
   ]
 }

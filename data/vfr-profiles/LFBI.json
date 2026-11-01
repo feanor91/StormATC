@@ -5,7 +5,8 @@
     "were first extracted automatically from the chart text; the reporting points, rules and notes were added by hand.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "No circuit height or circuit side is printed on this chart, so none is recorded.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFBI",
   "name": "Poitiers-Biard",
@@ -72,7 +73,7 @@
       "latitude": 46.70417,
       "longitude": 0.26667,
       "location": "Neuville de Poitou",
-      "purpose": "not a special VFR reporting point"
+      "purpose": "n'est pas un point de compte rendu VFR spécial"
     },
     {
       "name": "E",
@@ -82,8 +83,8 @@
       },
       "latitude": 46.55889,
       "longitude": 0.50056,
-      "location": "Saint-Julien-l'Ars, railroad",
-      "purpose": "special VFR reporting point"
+      "location": "St Julien - l'Ars : voie ferrée",
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "EA",
@@ -93,8 +94,8 @@
       },
       "latitude": 46.59167,
       "longitude": 0.39444,
-      "location": "Buxerolles plant (white chimney, road)",
-      "purpose": "special VFR reporting point, clearance limit point"
+      "location": "Usine Buxerolles (cheminée blanche, route)",
+      "purpose": "point de compte rendu VFR spécial, point de clairance limite"
     },
     {
       "name": "W",
@@ -104,8 +105,8 @@
       },
       "latitude": 46.64667,
       "longitude": 0.17028,
-      "location": "Vouillé, road and Auxance river",
-      "purpose": "special VFR reporting point"
+      "location": "Vouillé/route, rivière Auxance",
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "WA",
@@ -115,8 +116,8 @@
       },
       "latitude": 46.62861,
       "longitude": 0.26417,
-      "location": "Moulinet roundabout",
-      "purpose": "special VFR reporting point, clearance limit point"
+      "location": "Rond-point de Moulinet",
+      "purpose": "point de compte rendu VFR spécial, point de clairance limite"
     },
     {
       "name": "S",
@@ -126,8 +127,8 @@
       },
       "latitude": 46.44861,
       "longitude": 0.26944,
-      "location": "water tank",
-      "purpose": "special VFR reporting point, clearance limit point"
+      "location": "Réservoir d'eau",
+      "purpose": "point de compte rendu VFR spécial, point de clairance limite"
     }
   ],
   "withAts": {
@@ -182,12 +183,6 @@
       "",
       "",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "EA",
-        "location": "Usine Buxerolles (cheminée blanche, route)"
-      }
     ]
   }
 }

@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFMY",
   "name": "Salon-de-Provence",
@@ -98,7 +99,7 @@
       },
       "latitude": 43.62861,
       "longitude": 5.00722,
-      "location": "Michelin racing circuit"
+      "location": "Circuit Michelin"
     },
     {
       "name": "S",
@@ -108,7 +109,7 @@
       },
       "latitude": 43.59389,
       "longitude": 5.19472,
-      "location": "Lançon de Provence, motorway toll"
+      "location": "Lançon de Provence Péage autoroute"
     },
     {
       "name": "SW",
@@ -128,7 +129,7 @@
       },
       "latitude": 43.81083,
       "longitude": 5.04222,
-      "location": "HST bridge, Cavaillon"
+      "location": "Pont TGV Cavaillon"
     },
     {
       "name": "PS",
@@ -138,7 +139,7 @@
       },
       "latitude": 43.74056,
       "longitude": 5.09111,
-      "location": "Senas, motorway toll"
+      "location": "Senas Péage autoroute"
     },
     {
       "name": "ME",
@@ -148,7 +149,7 @@
       },
       "latitude": 43.73972,
       "longitude": 5.20111,
-      "location": "Dam, 1.8 km NE of Mallemort"
+      "location": "Barrage 1,8 km NE Mallemort"
     },
     {
       "name": "LR",
@@ -158,7 +159,7 @@
       },
       "latitude": 43.72222,
       "longitude": 5.27528,
-      "location": "La Roque, crossroad RD 561 / RD 67 D"
+      "location": "La Roque Croisement RD 561 / RD 67 D"
     }
   ],
   "notes": [

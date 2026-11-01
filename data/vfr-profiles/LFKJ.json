@@ -6,7 +6,8 @@
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFKJ",
   "name": "Ajaccio Napoléon Bonaparte",
@@ -55,7 +56,7 @@
       },
       "latitude": 42.04722,
       "longitude": 8.74722,
-      "location": "Stagnone beach"
+      "location": "Plage du Stagnone"
     },
     {
       "name": "NV",
@@ -65,7 +66,7 @@
       },
       "latitude": 42.10972,
       "longitude": 9.11389,
-      "location": "Abeam Vizzavona col"
+      "location": "Travers Col de Vizzavona"
     },
     {
       "name": "NW",
@@ -75,7 +76,7 @@
       },
       "latitude": 42.12111,
       "longitude": 8.51639,
-      "location": "Over sea"
+      "location": "En mer"
     },
     {
       "name": "NWA",
@@ -85,7 +86,7 @@
       },
       "latitude": 41.96194,
       "longitude": 8.72778,
-      "location": "Abeam Punta Castle"
+      "location": "Travers château de la Punta"
     },
     {
       "name": "NZ",
@@ -95,7 +96,7 @@
       },
       "latitude": 42.01833,
       "longitude": 8.89333,
-      "location": "Tavaco activity area"
+      "location": "Zone d'activité de Tavaco"
     },
     {
       "name": "S",
@@ -105,7 +106,7 @@
       },
       "latitude": 41.66194,
       "longitude": 8.72333,
-      "location": "Over sea"
+      "location": "En mer"
     },
     {
       "name": "SA",
@@ -125,7 +126,7 @@
       },
       "latitude": 41.85361,
       "longitude": 8.79167,
-      "location": "South of Agosta Beach"
+      "location": "Sud de la plage d'Agosta"
     },
     {
       "name": "SC",
@@ -135,7 +136,7 @@
       },
       "latitude": 41.90417,
       "longitude": 8.79917,
-      "location": "Capitello Tower"
+      "location": "Tour de Capitello"
     },
     {
       "name": "SEA",
@@ -155,7 +156,7 @@
       },
       "latitude": 41.87556,
       "longitude": 8.58806,
-      "location": "Sanguinaires Island Signal Station"
+      "location": "Sémaphore des îles Sanguinaires"
     },
     {
       "name": "WA",
@@ -165,7 +166,7 @@
       },
       "latitude": 41.89722,
       "longitude": 8.70472,
-      "location": "South of Ajaccio Cemetery"
+      "location": "Sud cimetière d'Ajaccio"
     }
   ],
   "withAts": {
@@ -253,12 +254,6 @@
       "Conditions météo : Visi > 5 km - Plafond > 5000 ft.",
       "AEM (N° 9621) : 300 AAL ; activité autorisée selon le protocole applicable aux associations.",
       "Information des usagers sur ATIS ou FREQ ATC."
-    ],
-    "reportingPoints": [
-      {
-        "name": "W",
-        "location": "Sémaphore des îles Sanguinaires"
-      }
     ]
   }
 }

@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFBG",
   "name": "Cognac-Châteaubernard",
@@ -55,7 +56,7 @@
       },
       "latitude": 45.65083,
       "longitude": -0.2525,
-      "location": "Crossroad"
+      "location": "Nom / Carrefour / Centre Gensac la Pallue"
     },
     {
       "name": "E2",
@@ -65,7 +66,7 @@
       },
       "latitude": 45.61722,
       "longitude": -0.21889,
-      "location": "Crossroad"
+      "location": "Carrefour / Centre Ségonzac"
     },
     {
       "name": "N",
@@ -75,7 +76,7 @@
       },
       "latitude": 45.77222,
       "longitude": -0.42278,
-      "location": "Church"
+      "location": "Église / Burie"
     },
     {
       "name": "N1",
@@ -85,7 +86,7 @@
       },
       "latitude": 45.68556,
       "longitude": -0.39722,
-      "location": "Merpins bridge"
+      "location": "Pont de Merpins /"
     },
     {
       "name": "NE",
@@ -95,7 +96,7 @@
       },
       "latitude": 45.68833,
       "longitude": -0.285,
-      "location": "Saint Brice bridge"
+      "location": "Pont de Saint Brice /"
     },
     {
       "name": "S",
@@ -105,7 +106,7 @@
       },
       "latitude": 45.52361,
       "longitude": -0.29083,
-      "location": "Silo East"
+      "location": "Silo Est / Archiac"
     },
     {
       "name": "S1",
@@ -135,7 +136,7 @@
       },
       "latitude": 45.61778,
       "longitude": -0.33278,
-      "location": "Church tower"
+      "location": "Clocher / Salles d'Angles"
     },
     {
       "name": "W2",
@@ -145,7 +146,7 @@
       },
       "latitude": 45.54167,
       "longitude": -0.4425,
-      "location": "Crossroad"
+      "location": "Carrefour / Centre Chadenac"
     }
   ],
   "notes": [
@@ -162,40 +163,6 @@
       "Surfaces latérales percées par obstacles : RWY 05/23 : OBST BG927, arbre ATL = 149 ft ; OBST BG926, bosquet d'arbres ATL = 142 ft.",
       "",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "E1",
-        "location": "Nom / Carrefour / Centre Gensac la Pallue"
-      },
-      {
-        "name": "E2",
-        "location": "Carrefour / Centre Ségonzac"
-      },
-      {
-        "name": "N",
-        "location": "Église / Burie"
-      },
-      {
-        "name": "N1",
-        "location": "Pont de Merpins /"
-      },
-      {
-        "name": "NE",
-        "location": "Pont de Saint Brice /"
-      },
-      {
-        "name": "S",
-        "location": "Silo Est / Archiac"
-      },
-      {
-        "name": "W1",
-        "location": "Clocher / Salles d'Angles"
-      },
-      {
-        "name": "W2",
-        "location": "Carrefour / Centre Chadenac"
-      }
     ]
   }
 }

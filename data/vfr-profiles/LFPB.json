@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFPB",
   "name": "Paris-Le Bourget",
@@ -64,7 +65,7 @@
       },
       "latitude": 48.89861,
       "longitude": 2.55722,
-      "location": "Water tower de Montfermeil"
+      "location": "Château d'eau"
     },
     {
       "name": "E2",
@@ -74,7 +75,7 @@
       },
       "latitude": 48.93222,
       "longitude": 2.48083,
-      "location": "Junction A3/Railway"
+      "location": "Intersection A3/voie ferrée"
     },
     {
       "name": "W2",
@@ -84,7 +85,7 @@
       },
       "latitude": 48.97417,
       "longitude": 2.36583,
-      "location": "Junction N1/N16"
+      "location": "Jonction N1/N16"
     },
     {
       "name": "W1",
@@ -94,7 +95,7 @@
       },
       "latitude": 49.00139,
       "longitude": 2.185,
-      "location": "Herblay junction"
+      "location": "Patte d'oie d'Herblay"
     }
   ],
   "notes": [
@@ -215,24 +216,6 @@
       "Panne de radiocommunication A l'arrivée : avant la gare de VAIRES se dérouter sur l'AD de dégagement prévu. après la gare de VAIRES, suivre les dernières instructions reçues.",
       "Au Départ : avant la gare de VAIRES, faire demi tour ; après la gare de VAIRES poursuivre le vol et appliquer la règlementation générale.",
       "Équipement de surveillance de trafic : AD équipé d'un radar secondaire (voir AD 1.0)."
-    ],
-    "reportingPoints": [
-      {
-        "name": "E1",
-        "location": "Château d'eau"
-      },
-      {
-        "name": "E2",
-        "location": "Intersection A3/voie ferrée"
-      },
-      {
-        "name": "W2",
-        "location": "Jonction N1/N16"
-      },
-      {
-        "name": "W1",
-        "location": "Patte d'oie d'Herblay"
-      }
     ]
   }
 }

@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFBS",
   "name": "Grands Lacs",
@@ -62,7 +63,7 @@
       },
       "latitude": 44.45,
       "longitude": -1.225,
-      "location": "East of Biscarrosse Plage"
+      "location": "Est de Biscarrosse Plage"
     },
     {
       "name": "OS",
@@ -72,7 +73,7 @@
       },
       "latitude": 44.41667,
       "longitude": -1.15,
-      "location": "North of Biscarrosse on road D562"
+      "location": "Nord de Biscarrosse sur D652"
     }
   ],
   "notes": [
@@ -121,16 +122,6 @@
       "Procédure DEP ULM « hydro » vers hydrobase (LFHB) : Après décollage, rejointe directe de l'hydrobase par virage Sud en évitant le survol des habitations.",
       "Équipement de surveillance du trafic : aérodrome équipé d'une visualisation radar (voir AD 1.0).",
       "Treuillage planeurs (N° 978) : voir AIP ENR 5.5 Voltige (N° 6610) : voir AIP ENR 5.5 AEM (N° 9137) : voir AIP ENR 5.5"
-    ],
-    "reportingPoints": [
-      {
-        "name": "O2",
-        "location": "Est de Biscarrosse Plage"
-      },
-      {
-        "name": "OS",
-        "location": "Nord de Biscarrosse sur D652"
-      }
     ]
   }
 }

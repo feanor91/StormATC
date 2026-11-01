@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFMP",
   "name": "Perpignan-Rivesaltes",
@@ -58,7 +59,7 @@
       },
       "latitude": 42.91028,
       "longitude": 3.05583,
-      "location": "Cap Leucate lighthouse"
+      "location": "Phare maritime de Cap Leucate"
     },
     {
       "name": "NF",
@@ -68,7 +69,7 @@
       },
       "latitude": 42.87667,
       "longitude": 2.99861,
-      "location": "Port Fitou peninsula"
+      "location": "Presqu'île de Port Fitou"
     },
     {
       "name": "E",
@@ -78,7 +79,7 @@
       },
       "latitude": 42.77889,
       "longitude": 3.03861,
-      "location": "Agly river mouth"
+      "location": "Embouchure de l'Agly"
     },
     {
       "name": "EA",
@@ -88,7 +89,7 @@
       },
       "latitude": 42.76389,
       "longitude": 2.98694,
-      "location": "Bridge over Agly river between Saint Laurent and Torreilles"
+      "location": "Pont sur l'Agly entre Saint Laurent et Torreilles"
     },
     {
       "name": "PC",
@@ -98,7 +99,7 @@
       },
       "latitude": 42.70306,
       "longitude": 3.0375,
-      "location": "Canet Harbour entrance"
+      "location": "Entrée Port de Canet"
     },
     {
       "name": "SC",
@@ -108,7 +109,7 @@
       },
       "latitude": 42.61972,
       "longitude": 3.03917,
-      "location": "Saint-Cyprien Harbour entrance"
+      "location": "Entrée Port de Saint-Cyprien"
     },
     {
       "name": "MS",
@@ -118,7 +119,7 @@
       },
       "latitude": 42.60833,
       "longitude": 2.86056,
-      "location": "Mas Sabola road junction D900/D612"
+      "location": "Mas Sabola échangeur D900/D612"
     },
     {
       "name": "WS",
@@ -128,7 +129,7 @@
       },
       "latitude": 42.68194,
       "longitude": 2.75917,
-      "location": "Stretch of water of Bosigues between le Soler and Saint Feliu"
+      "location": "Plan d'eau de Bosigues entre le Soler et Saint Feliu"
     },
     {
       "name": "WN",
@@ -138,7 +139,7 @@
       },
       "latitude": 42.78861,
       "longitude": 2.68,
-      "location": "D117 bridge over Maury, Mas camps"
+      "location": "Pont de la D117 sur le Maury, Mas Camps"
     }
   ],
   "notes": [
@@ -237,44 +238,6 @@
       "AEROSMITH66 : TEL : 04 68 63 27 60 - E-mail : technicaloffice@aerosmith66.com Aéro Service Roussillon : TEL / FAX : 04 68 52 37 93.",
       "AEROFUTUR MAINTENANCE : TEL : 04 68 84 43 64 - E-mail : contact@aerofutur-maintenance.fr 15 - ACB : du Roussillon TEL : 04 68 73 48 18.",
       "Perpignan Hélico TEL : 06 16 37 14 98."
-    ],
-    "reportingPoints": [
-      {
-        "name": "NL",
-        "location": "Phare maritime de Cap Leucate"
-      },
-      {
-        "name": "NF",
-        "location": "Presqu'île de Port Fitou"
-      },
-      {
-        "name": "E",
-        "location": "Embouchure de l'Agly"
-      },
-      {
-        "name": "EA",
-        "location": "Pont sur l'Agly entre Saint Laurent et Torreilles"
-      },
-      {
-        "name": "PC",
-        "location": "Entrée Port de Canet"
-      },
-      {
-        "name": "SC",
-        "location": "Entrée Port de Saint-Cyprien"
-      },
-      {
-        "name": "MS",
-        "location": "Mas Sabola échangeur D900/D612"
-      },
-      {
-        "name": "WS",
-        "location": "Plan d'eau de Bosigues entre le Soler et Saint Feliu"
-      },
-      {
-        "name": "WN",
-        "location": "Pont de la D117 sur le Maury, Mas Camps"
-      }
     ]
   }
 }

@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFTH",
   "name": "Toulon-Hyères",
@@ -56,7 +57,7 @@
       },
       "latitude": 43.19167,
       "longitude": 6.28028,
-      "location": "NE point of Valcros golf"
+      "location": "Pointe NE du golf de Valcros"
     },
     {
       "name": "ET",
@@ -76,7 +77,7 @@
       },
       "latitude": 43.08,
       "longitude": 6.39583,
-      "location": "South of Cap Bénat"
+      "location": "Sud Cap Bénat"
     },
     {
       "name": "CT",
@@ -86,7 +87,7 @@
       },
       "latitude": 42.96417,
       "longitude": 6.23889,
-      "location": "South of Île de Porquerolles"
+      "location": "Sud Île de Porquerolles"
     },
     {
       "name": "PT",
@@ -106,7 +107,7 @@
       },
       "latitude": 43.14417,
       "longitude": 5.60444,
-      "location": "1 NM south of Cap de l'Aigle"
+      "location": "1 NM Sud Cap de l'Aigle"
     },
     {
       "name": "CL",
@@ -156,7 +157,7 @@
       },
       "latitude": 43.33944,
       "longitude": 6.12083,
-      "location": "Sainte Anastasie, south corridor of the gymnasium"
+      "location": "Sainte Anastasie - Travers sud du gymnase"
     },
     {
       "name": "SL",

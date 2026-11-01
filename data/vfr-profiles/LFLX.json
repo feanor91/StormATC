@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFLX",
   "name": "Châteauroux - Centre",
@@ -51,7 +52,7 @@
       },
       "latitude": 46.97278,
       "longitude": 1.6,
-      "location": "Electric substation"
+      "location": "Levroux - Poste électrique"
     },
     {
       "name": "W",
@@ -61,7 +62,7 @@
       },
       "latitude": 46.85056,
       "longitude": 1.53028,
-      "location": "Cimetery"
+      "location": "Villedieu sur Indre - Cimetière"
     },
     {
       "name": "S",
@@ -71,7 +72,7 @@
       },
       "latitude": 46.69944,
       "longitude": 1.58333,
-      "location": "Interchange"
+      "location": "Échangeur"
     },
     {
       "name": "SE",
@@ -81,7 +82,7 @@
       },
       "latitude": 46.74167,
       "longitude": 1.83056,
-      "location": "Bridge"
+      "location": "Ardentes - Pont"
     },
     {
       "name": "NE",
@@ -91,7 +92,7 @@
       },
       "latitude": 46.94028,
       "longitude": 1.94861,
-      "location": "South of Issoudun on D8"
+      "location": "Sud Issoudun sur D8"
     },
     {
       "name": "E",
@@ -101,7 +102,7 @@
       },
       "latitude": 46.83111,
       "longitude": 1.86667,
-      "location": "Ablenay and RD 925"
+      "location": "Ablenay et RD 925"
     },
     {
       "name": "NW",
@@ -111,7 +112,7 @@
       },
       "latitude": 46.91472,
       "longitude": 1.59861,
-      "location": "Castle"
+      "location": "Villegongis - Château"
     }
   ],
   "notes": [

@@ -6,7 +6,8 @@
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFRS",
   "name": "Nantes Atlantique",
@@ -55,7 +56,7 @@
       },
       "latitude": 47.09639,
       "longitude": -1.44917,
-      "location": "Butay roundabout (silo and water tower)"
+      "location": "Rond-point du Butay (silo et château d'eau)"
     },
     {
       "name": "E1",
@@ -65,7 +66,7 @@
       },
       "latitude": 47.37222,
       "longitude": -1.02111,
-      "location": "Varades bridge"
+      "location": "Pont de Varades"
     },
     {
       "name": "E2",
@@ -85,7 +86,7 @@
       },
       "latitude": 46.83806,
       "longitude": -1.41722,
-      "location": "Saint Denis Lès Lucs"
+      "location": "Saint Dénis Lès Lucs"
     },
     {
       "name": "NE",
@@ -95,7 +96,7 @@
       },
       "latitude": 47.15222,
       "longitude": -1.39056,
-      "location": "La Haye Fouassière water tower"
+      "location": "Château d'eau de la Haye Fouassière"
     },
     {
       "name": "NW",
@@ -115,7 +116,7 @@
       },
       "latitude": 47.20722,
       "longitude": -1.78639,
-      "location": "Martinière canal lock"
+      "location": "Écluse du canal de la Martinière"
     },
     {
       "name": "W1",
@@ -238,20 +239,6 @@
       "Activité de voltige (N° 6380) 12 km à l'Ouest de l'AD ; activités sur RD 723 ; 1700 ft AMSL / FL 055.",
       "Activité réservée aux usagers autorisés par AVA.",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "E",
-        "location": "Rond-point du Butay (silo et château d'eau)"
-      },
-      {
-        "name": "NE",
-        "location": "Château d'eau de la Haye Fouassière"
-      },
-      {
-        "name": "W",
-        "location": "Écluse du canal de la Martinière"
-      }
     ]
   }
 }

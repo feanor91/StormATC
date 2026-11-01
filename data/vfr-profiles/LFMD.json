@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFMD",
   "name": "Cannes - Mandelieu",
@@ -65,7 +66,7 @@
       },
       "latitude": 43.66,
       "longitude": 6.98,
-      "location": "Golf South Opio"
+      "location": "Golf au Sud du village d'Opio"
     },
     {
       "name": "N",
@@ -75,7 +76,7 @@
       },
       "latitude": 43.63278,
       "longitude": 6.85306,
-      "location": "Stadium \"Le Tignet\""
+      "location": "Stade Le Tignet"
     },
     {
       "name": "NA",
@@ -85,7 +86,7 @@
       },
       "latitude": 43.75,
       "longitude": 7.18889,
-      "location": "Dam on Var North of shopping center"
+      "location": "Sur le Var, Barrage Nord du centre commercial"
     },
     {
       "name": "SA",
@@ -95,7 +96,7 @@
       },
       "latitude": 43.48889,
       "longitude": 7.04694,
-      "location": "1 NM South of St Honorat island"
+      "location": "1 NM au Sud de l'île Saint Honorat"
     },
     {
       "name": "SB",
@@ -105,7 +106,7 @@
       },
       "latitude": 43.53528,
       "longitude": 7.145,
-      "location": "1 NM South of Cap Gros"
+      "location": "1 NM au Sud du Cap Gros"
     },
     {
       "name": "SW",
@@ -115,7 +116,7 @@
       },
       "latitude": 43.43583,
       "longitude": 6.935,
-      "location": "1 NM South East Cap Roux"
+      "location": "1 NM Sud-Est Cap Roux"
     },
     {
       "name": "DR",
@@ -125,7 +126,7 @@
       },
       "latitude": 43.39833,
       "longitude": 6.85556,
-      "location": "0.8 NM South of Cap du Dramont lighthouse"
+      "location": "0.8 NM Sud du Phare du Cap du Dramont"
     },
     {
       "name": "WA",
@@ -135,7 +136,7 @@
       },
       "latitude": 43.66694,
       "longitude": 7.14556,
-      "location": "Cagnes-Sur-Mer castle"
+      "location": "Château de Cagnes-sur-Mer"
     },
     {
       "name": "WL",
@@ -145,7 +146,7 @@
       },
       "latitude": 43.55389,
       "longitude": 6.79389,
-      "location": "South of St Cassien lake"
+      "location": "Pointe Sud du lac de St Cassien"
     },
     {
       "name": "WD",
@@ -155,7 +156,7 @@
       },
       "latitude": 43.52111,
       "longitude": 6.80667,
-      "location": "Planestel Stadium South of motorway A8"
+      "location": "Stade du Planestel au Sud de l'autoroute A8"
     },
     {
       "name": "LC",
@@ -165,7 +166,7 @@
       },
       "latitude": 43.58583,
       "longitude": 6.99778,
-      "location": "Interception of marechal Juin avenue and highway A8"
+      "location": "Intersection entre l'avenue du maréchal Juin et l'autoroute A8"
     },
     {
       "name": "HE",
@@ -175,7 +176,7 @@
       },
       "latitude": 43.54417,
       "longitude": 6.97028,
-      "location": "Rocky dike East of double pier in the SW of marshalling yard of Cannes-La Bocca and S/E of the building with the yellow roof"
+      "location": "Digue rocheuse à l'Est de la double jetée au S/O de la gare de triage de Cannes-La Bocca et au S/E du bâtiment au toit jaune"
     },
     {
       "name": "HV",
@@ -185,7 +186,7 @@
       },
       "latitude": 43.52556,
       "longitude": 7.01667,
-      "location": "West of the lighthouse at Batéguier (Ste Marguerite island)"
+      "location": "Ouest Phare du Batéguier (île Sainte-Marguerite)"
     },
     {
       "name": "HW",
@@ -195,7 +196,7 @@
       },
       "latitude": 43.53778,
       "longitude": 6.95861,
-      "location": "Long pier East of Béal shelter harbor"
+      "location": "Jetée longue à l'Est du port abri du Béal"
     },
     {
       "name": "SV",
@@ -205,7 +206,7 @@
       },
       "latitude": 43.5075,
       "longitude": 7.03167,
-      "location": "West abeam St Honorat island"
+      "location": "Travers Ouest de l'île Saint-Honorat"
     },
     {
       "name": "PF",
@@ -215,7 +216,7 @@
       },
       "latitude": 43.53944,
       "longitude": 7.07778,
-      "location": "Fourmigue light house (Golf-Juan Bay)"
+      "location": "Phare de la Fourmigue (Baie de Golfe-Juan)"
     },
     {
       "name": "TA",
@@ -225,7 +226,7 @@
       },
       "latitude": 43.53667,
       "longitude": 7.00167,
-      "location": "Between South of red rocks and HV"
+      "location": "Entre le Sud des rochers rouges et HV"
     },
     {
       "name": "TD",
@@ -235,7 +236,7 @@
       },
       "latitude": 43.50556,
       "longitude": 6.99444,
-      "location": "West of SV and South of TA"
+      "location": "Ouest de SV et Sud de TA"
     }
   ],
   "notes": [
@@ -388,52 +389,6 @@
       "Équipement de surveillance du trafic : Aérodrome équipé d'une visualisation radar (voir AD 1.0).",
       "",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "NA",
-        "location": "Sur le Var, Barrage Nord du centre commercial"
-      },
-      {
-        "name": "SA",
-        "location": "1 NM au Sud de l'île Saint Honorat"
-      },
-      {
-        "name": "DR",
-        "location": "0.8 NM Sud du Phare du Cap du Dramont"
-      },
-      {
-        "name": "WD",
-        "location": "Stade du Planestel au Sud de l'autoroute A8"
-      },
-      {
-        "name": "LC",
-        "location": "Intersection entre l'avenue du maréchal Juin et l'autoroute A8"
-      },
-      {
-        "name": "HE",
-        "location": "Digue rocheuse à l'Est de la double jetée au S/O de la gare de triage de Cannes-La Bocca et au S/E du bâtiment au toit jaune"
-      },
-      {
-        "name": "HV",
-        "location": "Ouest Phare du Batéguier (île Sainte-Marguerite)"
-      },
-      {
-        "name": "HW",
-        "location": "Jetée longue à l'Est du port abri du Béal"
-      },
-      {
-        "name": "SV",
-        "location": "Travers Ouest de l'île Saint-Honorat"
-      },
-      {
-        "name": "PF",
-        "location": "Phare de la Fourmigue (Baie de Golfe-Juan)"
-      },
-      {
-        "name": "TA",
-        "location": "Entre le Sud des rochers rouges et HV"
-      }
     ]
   }
 }

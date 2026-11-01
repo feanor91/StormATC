@@ -4,7 +4,8 @@
     "Only what the chart states is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text; the reporting points, rules and notes were added by hand.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "The circuit side is not printed on this chart, so none is recorded."
+    "The circuit side is not printed on this chart, so none is recorded.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFBP",
   "name": "Pau-Pyrénées",
@@ -50,8 +51,8 @@
       },
       "latitude": 43.49472,
       "longitude": -0.37,
-      "location": "Lème, water tower",
-      "purpose": "runway 13 arrivals from the north report here at 1600 ft AMSL; runway 31 northern departures turn towards it"
+      "location": "Lème : Château d'eau",
+      "purpose": "arrivées piste 13 par le nord : compte rendu ici à 1600 ft AMSL ; départs piste 31 vers le nord : virage vers ce point"
     },
     {
       "name": "NE",
@@ -61,8 +62,8 @@
       },
       "latitude": 43.46,
       "longitude": -0.32278,
-      "location": "crossroad RN 134 / D 944, Navailles-Angos",
-      "purpose": "runway 31 arrivals from the north report here at 2500 ft AMSL"
+      "location": "Intersection RN 134 / D 944",
+      "purpose": "arrivées piste 31 par le nord : compte rendu ici à 2500 ft AMSL"
     },
     {
       "name": "NA",
@@ -72,8 +73,8 @@
       },
       "latitude": 43.42,
       "longitude": -0.34611,
-      "location": "Angos, water tower",
-      "purpose": "runway 31 arrivals from the north keep 2500 ft AMSL to here, west of the N134 to avoid DZ301; after NA comply with ATC"
+      "location": "Navaillès Angos : Château d'eau",
+      "purpose": "arrivées piste 31 par le nord : maintenir 2500 ft AMSL jusqu'ici, à l'ouest de la N134 pour éviter la DZ301 ; après NA, suivre les instructions de l'ATC"
     },
     {
       "name": "S",
@@ -83,8 +84,8 @@
       },
       "latitude": 43.29861,
       "longitude": -0.48667,
-      "location": "water tower",
-      "purpose": "runway 31 arrivals from the south report here at 2500 ft AMSL (at SE or S)"
+      "location": "Château d'eau",
+      "purpose": "arrivées piste 31 par le sud : compte rendu ici à 2500 ft AMSL (à SE ou S)"
     },
     {
       "name": "SA",
@@ -94,8 +95,8 @@
       },
       "latitude": 43.33667,
       "longitude": -0.46056,
-      "location": "roundabout RN 117 / D 509, Lescar silos",
-      "purpose": "runway 31 arrivals from the south keep 2500 ft AMSL to here; after SA comply with ATC"
+      "location": "Rond point RN 117 / D509 / Silos de Lescar",
+      "purpose": "arrivées piste 31 par le sud : maintenir 2500 ft AMSL jusqu'ici ; après SA, suivre les instructions de l'ATC"
     },
     {
       "name": "SE",
@@ -105,8 +106,8 @@
       },
       "latitude": 43.27889,
       "longitude": -0.38778,
-      "location": "Jurançon, roundabout RN 134 / D 100",
-      "purpose": "runway 31 arrivals from the south report here at 2500 ft AMSL (at SE or S)"
+      "location": "Jurançon : Rond point RN 134 / D100",
+      "purpose": "arrivées piste 31 par le sud : compte rendu ici à 2500 ft AMSL (à SE ou S)"
     },
     {
       "name": "SW",
@@ -116,8 +117,8 @@
       },
       "latitude": 43.32111,
       "longitude": -0.57778,
-      "location": "Monein west",
-      "purpose": "runway 13 arrivals from the south report here at 2500 ft AMSL; runway 31 southern departures turn towards it"
+      "location": "Monein",
+      "purpose": "arrivées piste 13 par le sud : compte rendu ici à 2500 ft AMSL ; départs piste 31 vers le sud : virage vers ce point"
     },
     {
       "name": "W",
@@ -127,7 +128,7 @@
       },
       "latitude": 43.415,
       "longitude": -0.57556,
-      "location": "Artix, intersection with the A64 and high-voltage lines"
+      "location": "H.T"
     }
   ],
   "withAts": {

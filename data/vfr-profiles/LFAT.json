@@ -5,7 +5,8 @@
     "were first extracted automatically from the chart text; the reporting points, rules and notes were added by hand.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "No circuit height or circuit side is printed on this chart, so none is recorded. The radials and distances from BNE drawn beside the reporting points are not recorded.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFAT",
   "name": "Le Touquet-Elizabeth II",
@@ -53,8 +54,8 @@
       },
       "latitude": 50.74056,
       "longitude": 1.5675,
-      "location": "Boulogne-sur-Mer lighthouse",
-      "purpose": "on the N-NA-NB route, which avoids the coastal towns of Boulogne, Hardelot and Sainte-Cécile by the west"
+      "location": "Phare de Boulogne-sur-Mer",
+      "purpose": "sur l'itinéraire N-NA-NB, qui évite par l'ouest les communes côtières de Boulogne, Hardelot et Sainte-Cécile"
     },
     {
       "name": "NA",
@@ -64,8 +65,8 @@
       },
       "latitude": 50.63528,
       "longitude": 1.57667,
-      "location": "Hardelot beach",
-      "purpose": "on the N-NA-NB route, which avoids the coastal towns of Boulogne, Hardelot and Sainte-Cécile by the west"
+      "location": "Plage de Hardelot",
+      "purpose": "sur l'itinéraire N-NA-NB, qui évite par l'ouest les communes côtières de Boulogne, Hardelot et Sainte-Cécile"
     },
     {
       "name": "NB",
@@ -75,8 +76,8 @@
       },
       "latitude": 50.58083,
       "longitude": 1.57889,
-      "location": "north of Sainte-Cécile beach, abeam west of the camping",
-      "purpose": "on the N-NA-NB route, which avoids the coastal towns of Boulogne, Hardelot and Sainte-Cécile by the west"
+      "location": "Nord de la plage de Sainte-Cécile, travers Ouest du camping",
+      "purpose": "sur l'itinéraire N-NA-NB, qui évite par l'ouest les communes côtières de Boulogne, Hardelot et Sainte-Cécile"
     },
     {
       "name": "E",
@@ -86,7 +87,7 @@
       },
       "latitude": 50.44361,
       "longitude": 1.84556,
-      "location": "pond of Marles sur Canche"
+      "location": "Étangs de Marles sur Canche"
     },
     {
       "name": "EA",
@@ -96,7 +97,7 @@
       },
       "latitude": 50.49056,
       "longitude": 1.71944,
-      "location": "intersection of the high voltage line with the Canche"
+      "location": "Intersection ligne haute tension avec la Canche"
     },
     {
       "name": "S",
@@ -106,7 +107,7 @@
       },
       "latitude": 50.41806,
       "longitude": 1.64778,
-      "location": "town of Rang du Fliers"
+      "location": "Ville de Rang du Fliers"
     },
     {
       "name": "NE",
@@ -116,8 +117,8 @@
       },
       "latitude": 50.63556,
       "longitude": 1.74278,
-      "location": "intersection of the road and the railway south of Samer",
-      "purpose": "reporting point on request"
+      "location": "Intersection de la route et de la voie ferrée au Sud de SAMER",
+      "purpose": "point de compte rendu sur demande"
     }
   ],
   "withAts": {
@@ -159,32 +160,6 @@
       "",
       "",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "N",
-        "location": "Phare de Boulogne-sur-Mer"
-      },
-      {
-        "name": "NA",
-        "location": "Plage de Hardelot"
-      },
-      {
-        "name": "NB",
-        "location": "Nord de la plage de Sainte-Cécile, travers Ouest du camping"
-      },
-      {
-        "name": "E",
-        "location": "Étangs de Marles sur Canche"
-      },
-      {
-        "name": "S",
-        "location": "Ville de Rang du Fliers"
-      },
-      {
-        "name": "NE",
-        "location": "Intersection de la route et de la voie ferrée au Sud de SAMER"
-      }
     ]
   }
 }

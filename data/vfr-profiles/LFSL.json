@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFSL",
   "name": "Brive-Vallée de Dordogne",
@@ -53,7 +54,7 @@
       },
       "latitude": 45.14722,
       "longitude": 1.48528,
-      "location": "Crossroads A20 and N89"
+      "location": "Carrefour A20 et N89"
     },
     {
       "name": "NA",
@@ -63,7 +64,7 @@
       },
       "latitude": 45.09861,
       "longitude": 1.52,
-      "location": "Interchange A20 Noailles"
+      "location": "Échangeur A20 Noailles"
     },
     {
       "name": "S",
@@ -73,7 +74,7 @@
       },
       "latitude": 44.90167,
       "longitude": 1.50111,
-      "location": "Interchange A20 Souillac"
+      "location": "Échangeur A20 Souillac"
     },
     {
       "name": "SA",
@@ -83,7 +84,7 @@
       },
       "latitude": 44.99056,
       "longitude": 1.52667,
-      "location": "Toll on A20"
+      "location": "Gare de péage A20"
     },
     {
       "name": "E",
@@ -93,7 +94,7 @@
       },
       "latitude": 44.93694,
       "longitude": 1.60889,
-      "location": "village (with 7 towers)"
+      "location": "Martel, village médiéval (avec 7 tours)"
     },
     {
       "name": "W",
@@ -103,7 +104,7 @@
       },
       "latitude": 44.975,
       "longitude": 1.32694,
-      "location": "Salignac Castle"
+      "location": "Château de Salignac"
     }
   ],
   "notes": [

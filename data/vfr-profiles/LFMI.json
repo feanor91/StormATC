@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFMI",
   "name": "Istres - Le Tubé",
@@ -49,7 +50,7 @@
       },
       "latitude": 43.58611,
       "longitude": 4.88306,
-      "location": "Abeam"
+      "location": "Nom / Travers / Le Grand Mas"
     },
     {
       "name": "N5",
@@ -69,7 +70,7 @@
       },
       "latitude": 43.57917,
       "longitude": 4.97694,
-      "location": "Motor racing track of"
+      "location": "Autodrome de / Miramas"
     },
     {
       "name": "NW",
@@ -99,7 +100,7 @@
       },
       "latitude": 43.32444,
       "longitude": 5.17222,
-      "location": "South"
+      "location": "Sud / Carry le Rouet"
     },
     {
       "name": "SB",
@@ -109,7 +110,7 @@
       },
       "latitude": 43.43972,
       "longitude": 4.42306,
-      "location": "Abeam South"
+      "location": "1500 m Travers Sud / Saintes Maries de la Mer"
     },
     {
       "name": "SL",
@@ -119,7 +120,7 @@
       },
       "latitude": 43.41444,
       "longitude": 4.68972,
-      "location": "West"
+      "location": "Ouest / Salin de Giraud"
     },
     {
       "name": "SC",
@@ -129,7 +130,7 @@
       },
       "latitude": 43.21056,
       "longitude": 5.30194,
-      "location": "West"
+      "location": "1 NM Ouest / Cap Croisette"
     },
     {
       "name": "SD",
@@ -139,7 +140,7 @@
       },
       "latitude": 43.37528,
       "longitude": 4.82972,
-      "location": "Abeam South"
+      "location": "Travers Sud / Port St Louis du Rhône"
     },
     {
       "name": "S3",
@@ -159,7 +160,7 @@
       },
       "latitude": 43.46417,
       "longitude": 4.98583,
-      "location": "Overhead pond of"
+      "location": "Verticale étang de / Levalduc"
     },
     {
       "name": "SW",
@@ -169,7 +170,7 @@
       },
       "latitude": 43.32444,
       "longitude": 5.04167,
-      "location": "South"
+      "location": "Sud / Carro"
     },
     {
       "name": "W2",
@@ -189,7 +190,7 @@
       },
       "latitude": 43.48167,
       "longitude": 4.8025,
-      "location": "Abeam"
+      "location": "Travers / Le Radeau"
     }
   ],
   "notes": [
@@ -210,48 +211,6 @@
       "",
       "",
       "Vols radiocommandés selon protocole En raison d'activités particulières CER et activation à bref délai des zones LF-R 108A F1, LF-R 108A F2 contact radio obligatoire 5 MIN avant de pénétrer dans les CTR d'Istres, se conformer aux instructions d'Istres APP, Istres TWR ou Rhône CTL, Camargue CTL P 41 : cercle de 3NM de rayon centré sur ARP LFMI SFC - 4500 ft AMSL Consignes particulières de radiocommunication Afficher code transpondeur 7600 DEP : panne de radiocommunication avant d'avoir clôturé avec l' AD de DEP, faire demi-tour et se présenter à 1000 ft AAL, face à la tour, cap à l'Est, phares allumés, puis attendre les signaux optiques ARR : maintenir le niveau MNM de croisière et débuter la descente en fonction du relief et des obstacles éventuels pour se présenter à l'ETA à 1000 ft AAL, face à la tour, cap à l'Est, phares allumés, puis attendre les signaux optiques"
-    ],
-    "reportingPoints": [
-      {
-        "name": "N4",
-        "location": "Nom / Travers / Le Grand Mas"
-      },
-      {
-        "name": "NE",
-        "location": "Autodrome de / Miramas"
-      },
-      {
-        "name": "S",
-        "location": "Sud / Carry le Rouet"
-      },
-      {
-        "name": "SB",
-        "location": "1500 m Travers Sud / Saintes Maries de la Mer"
-      },
-      {
-        "name": "SL",
-        "location": "Ouest / Salin de Giraud"
-      },
-      {
-        "name": "SC",
-        "location": "1 NM Ouest / Cap Croisette"
-      },
-      {
-        "name": "SD",
-        "location": "Travers Sud / Port St Louis du Rhône"
-      },
-      {
-        "name": "S4",
-        "location": "Verticale étang de / Levalduc"
-      },
-      {
-        "name": "SW",
-        "location": "Sud / Carro"
-      },
-      {
-        "name": "W3",
-        "location": "Travers / Le Radeau"
-      }
     ]
   }
 }

@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFMK",
   "name": "Carcassonne Salvaza",
@@ -58,7 +59,7 @@
       "latitude": 43.28222,
       "longitude": 2.58778,
       "location": "Rieux Minervois",
-      "purpose": "special VFR reporting point"
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "ES",
@@ -69,7 +70,7 @@
       "latitude": 43.185,
       "longitude": 2.55611,
       "location": "Capendu",
-      "purpose": "special VFR reporting point"
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "NC",
@@ -79,8 +80,8 @@
       },
       "latitude": 43.26861,
       "longitude": 2.40056,
-      "location": "Conques Sur Orbiel",
-      "purpose": "special VFR reporting point"
+      "location": "Conques sur Orbiel",
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "SF",
@@ -90,8 +91,8 @@
       },
       "latitude": 43.15556,
       "longitude": 2.30583,
-      "location": "Coufoullens",
-      "purpose": "special VFR reporting point"
+      "location": "Coufoulens",
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "S",
@@ -102,7 +103,7 @@
       "latitude": 43.05444,
       "longitude": 2.21667,
       "location": "Limoux",
-      "purpose": "special VFR reporting point"
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "WA",
@@ -113,7 +114,7 @@
       "latitude": 43.25417,
       "longitude": 2.1775,
       "location": "Alzonne",
-      "purpose": "special VFR reporting point"
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "W",
@@ -124,7 +125,7 @@
       "latitude": 43.28222,
       "longitude": 2.08639,
       "location": "Villepinte",
-      "purpose": "special VFR reporting point"
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "WM",
@@ -135,7 +136,7 @@
       "latitude": 43.19028,
       "longitude": 2.14194,
       "location": "Montréal",
-      "purpose": "special VFR reporting point"
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "WP",
@@ -145,8 +146,8 @@
       },
       "latitude": 43.19361,
       "longitude": 2.055,
-      "location": "Prouille",
-      "purpose": "special VFR reporting point"
+      "location": "Prouille ≥ ≥ ≥",
+      "purpose": "point de compte rendu VFR spécial"
     }
   ],
   "notes": [

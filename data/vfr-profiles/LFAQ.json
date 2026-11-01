@@ -5,7 +5,8 @@
     "were first extracted automatically from the chart text; the reporting points, rules and notes were added by hand.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "No circuit height or circuit side is printed on this chart, so none is recorded. The chart is titled ALBERT BRAY.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFAQ",
   "name": "International Amiens Henry Potez",
@@ -60,8 +61,8 @@
       },
       "latitude": 50.06556,
       "longitude": 2.66222,
-      "location": "Hamel village, on the D50 road",
-      "purpose": "special VFR reporting point"
+      "location": "Village de Hamel sur la D50",
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "NA",
@@ -71,8 +72,8 @@
       },
       "latitude": 50.01611,
       "longitude": 2.67333,
-      "location": "north end of the Henry Potez business park",
-      "purpose": "special VFR reporting point"
+      "location": "Extrémité Nord du parc d'activité Henry Potez",
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "S",
@@ -82,8 +83,8 @@
       },
       "latitude": 49.87389,
       "longitude": 2.83472,
-      "location": "D1029 and A1 motorway interchange",
-      "purpose": "special VFR reporting point"
+      "location": "Intersection D1029 et autoroute A1",
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "SA",
@@ -93,8 +94,8 @@
       },
       "latitude": 49.92389,
       "longitude": 2.75972,
-      "location": "Cappy village, on the Somme canal",
-      "purpose": "special VFR reporting point"
+      "location": "Village de Cappy sur le canal de la Somme",
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "W",
@@ -104,8 +105,8 @@
       },
       "latitude": 49.88694,
       "longitude": 2.51167,
-      "location": "memorial south of Corbie",
-      "purpose": "special VFR reporting point"
+      "location": "Mémorial au Sud de Corbie",
+      "purpose": "point de compte rendu VFR spécial"
     },
     {
       "name": "WA",
@@ -115,8 +116,8 @@
       },
       "latitude": 49.90556,
       "longitude": 2.6325,
-      "location": "memorial west of Cerisy",
-      "purpose": "special VFR reporting point"
+      "location": "Mémorial à l'Ouest de Cerisy",
+      "purpose": "point de compte rendu VFR spécial"
     }
   ],
   "withAts": {

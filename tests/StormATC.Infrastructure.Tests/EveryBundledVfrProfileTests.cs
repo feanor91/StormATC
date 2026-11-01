@@ -95,6 +95,17 @@ public sealed class EveryBundledVfrProfileTests
             string name = point.GetProperty("name").GetString()!;
             Assert.True(names.Add(name), $"{icao}: the reporting point {name} is listed twice.");
 
+            // The base is read by French pilots: the name and the purpose of a point are French.
+            foreach (string field in new[] { "location", "purpose" })
+            {
+                if (point.TryGetProperty(field, out JsonElement fieldText))
+                {
+                    Assert.DoesNotMatch(
+                        @"(?i)(the|of|north|south|west|east|bridge|crossroads?|tower|reporting|runway|arrivals?|departures?)",
+                        fieldText.GetString()!);
+                }
+            }
+
             bool hasLatitude = point.TryGetProperty("latitude", out JsonElement latitude);
             bool hasLongitude = point.TryGetProperty("longitude", out JsonElement longitude);
             Assert.Equal(hasLatitude, hasLongitude);

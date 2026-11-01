@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFGJ",
   "name": "Dole-Jura",
@@ -52,7 +53,7 @@
       },
       "latitude": 47.12194,
       "longitude": 5.38111,
-      "location": "Saint-Seine en Bâche, motorway crossing"
+      "location": "Saint-Seine en Bâche (croisement autoroute)"
     },
     {
       "name": "SE",
@@ -62,7 +63,7 @@
       },
       "latitude": 46.8524,
       "longitude": 5.5714,
-      "location": "Poligny motorway toll"
+      "location": "Péage de Poligny"
     },
     {
       "name": "W",
@@ -72,7 +73,7 @@
       },
       "latitude": 47.0325,
       "longitude": 5.17013,
-      "location": "Péage de Seurre / Seurre motorway toll"
+      "location": "AMDT 02/26"
     }
   ],
   "notes": [
@@ -115,12 +116,6 @@
       "",
       "",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "W",
-        "location": "AMDT 02/26"
-      }
     ]
   }
 }

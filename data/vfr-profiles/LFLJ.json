@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFLJ",
   "name": "Courchevel",
@@ -68,7 +69,7 @@
       },
       "latitude": 45.42,
       "longitude": 6.67611,
-      "location": "Cross on the Dent du Villard"
+      "location": "Croix sur la Dent du Villard"
     },
     {
       "name": "C",
@@ -78,7 +79,7 @@
       },
       "latitude": 45.40111,
       "longitude": 6.64778,
-      "location": "Quarry crête des Gravelles"
+      "location": "Carrière"
     },
     {
       "name": "L",
@@ -88,7 +89,7 @@
       },
       "latitude": 45.40861,
       "longitude": 6.61472,
-      "location": "Pylon \"7450\", arrival of the ski lifts"
+      "location": "Pylône\"7450\" arrivée des remontées mécaniques"
     }
   ],
   "notes": [
@@ -159,12 +160,6 @@
       "ARRIVEE HEL : Point d'entrée : N, E et L.",
       "Un HEL n'atterrirra pas sur l'axe 147° de l'hélistation, lorsqu'un avion est au décollage ou à l'atterrissage sur la piste 04/22.",
       "DEPART HEL : Un HEL ne décollera pas route 327° depuis l'hélistation, lorsqu'un avion est au décollage ou aligné en finale pour l'atterrissage."
-    ],
-    "reportingPoints": [
-      {
-        "name": "E",
-        "location": "Croix sur la Dent du Villard"
-      }
     ]
   }
 }

@@ -6,7 +6,8 @@
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFBD",
   "name": "Bordeaux - Mérignac",
@@ -68,7 +69,7 @@
       },
       "latitude": 44.9075,
       "longitude": -0.74722,
-      "location": "Crossroads D1215 / D6, St Médard"
+      "location": "Carrefour D1215 / D6 St Médard"
     },
     {
       "name": "EA",
@@ -78,7 +79,7 @@
       },
       "latitude": 44.89361,
       "longitude": -0.66889,
-      "location": "Crossroads D1215 / D1, Le Taillan"
+      "location": "Carrefour D1215 / D1 Le Taillan"
     },
     {
       "name": "N",
@@ -108,7 +109,7 @@
       },
       "latitude": 44.70417,
       "longitude": -0.77,
-      "location": "Antenna croix d'Hins"
+      "location": "Antenne"
     },
     {
       "name": "SA",
@@ -118,7 +119,7 @@
       },
       "latitude": 44.775,
       "longitude": -0.69167,
-      "location": "factory Gazinet"
+      "location": "Usine"
     },
     {
       "name": "S",
@@ -128,7 +129,7 @@
       },
       "latitude": 44.71667,
       "longitude": -0.69028,
-      "location": "Crossroads D1010 / D214, La Birade"
+      "location": "Carrefour D1010 / D214 La Birade"
     },
     {
       "name": "SE",
@@ -148,7 +149,7 @@
       },
       "latitude": 44.76972,
       "longitude": -0.77111,
-      "location": "Waste reception center"
+      "location": "Usine déchetterie"
     }
   ],
   "withAts": {

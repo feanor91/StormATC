@@ -5,6 +5,14 @@ public releases.
 
 ## Unreleased
 
+### Changed
+
+- **Reporting points are in French only**: in every VFR profile the `location` of a point is now the name printed in the
+  French column of the chart (copied, not translated), and its `purpose` is written in French; `fr.reportingPoints` is
+  gone since the point itself carries the French. A point whose French name could not be read has no `location` (10
+  points). `spoken.en`, the name the English phraseology says over the radio, is kept. A test fails when a point name or
+  purpose contains common English words.
+
 ## 0.28.3 - 2026-11-01
 
 ### Fixed

@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFOJ",
   "name": "Orléans - Bricy",
@@ -48,7 +49,7 @@
       },
       "latitude": 47.95,
       "longitude": 1.84889,
-      "location": "Saran, road interchange A10 / D2701"
+      "location": "Saran Échangeur routier A10 / D2701"
     },
     {
       "name": "N",
@@ -58,7 +59,7 @@
       },
       "latitude": 48.10194,
       "longitude": 1.88333,
-      "location": "Ponds north of Artenay"
+      "location": "Étangs Nord de Artenay"
     },
     {
       "name": "NW",
@@ -68,7 +69,7 @@
       },
       "latitude": 48.04722,
       "longitude": 1.70417,
-      "location": "Industrial estate east of Patay"
+      "location": "Zone industrielle Est de Patay"
     },
     {
       "name": "S",
@@ -78,7 +79,7 @@
       },
       "latitude": 47.81944,
       "longitude": 1.64167,
-      "location": "A10 highway rest area, Meung-sur-Loire"
+      "location": "Aire de repos autoroute A10 Meung-sur-Loire"
     },
     {
       "name": "SE",
@@ -88,7 +89,7 @@
       },
       "latitude": 47.90278,
       "longitude": 1.84722,
-      "location": "Highway interchange west of Orléans"
+      "location": "Échangeur autoroutier Ouest Orléans"
     }
   ],
   "notes": [

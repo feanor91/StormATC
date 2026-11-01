@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFTW",
   "name": "Nîmes-Garons",
@@ -110,7 +111,7 @@
       },
       "latitude": 43.64417,
       "longitude": 4.43244,
-      "location": "Ecluse canal Sud Saint-Gilles"
+      "location": "Écluse canal Sud Saint-Gilles"
     },
     {
       "name": "PA",
@@ -131,7 +132,7 @@
       "latitude": 43.75331,
       "longitude": 4.51456,
       "location": "Bellegarde",
-      "purpose": "reporting point specific to helicopters"
+      "purpose": "point de compte rendu spécifique aux hélicoptères"
     },
     {
       "name": "CZ",
@@ -142,7 +143,7 @@
       "latitude": 43.81514,
       "longitude": 4.32858,
       "location": "Saint Césaire",
-      "purpose": "reporting point specific to helicopters"
+      "purpose": "point de compte rendu spécifique aux hélicoptères"
     },
     {
       "name": "RD",
@@ -153,7 +154,7 @@
       "latitude": 43.8315,
       "longitude": 4.49725,
       "location": "Redessan",
-      "purpose": "reporting point specific to helicopters"
+      "purpose": "point de compte rendu spécifique aux hélicoptères"
     },
     {
       "name": "UH",
@@ -164,7 +165,7 @@
       "latitude": 43.75606,
       "longitude": 4.26758,
       "location": "Uchaud",
-      "purpose": "reporting point specific to helicopters"
+      "purpose": "point de compte rendu spécifique aux hélicoptères"
     }
   ],
   "notes": [

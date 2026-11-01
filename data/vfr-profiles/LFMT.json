@@ -6,7 +6,8 @@
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFMT",
   "name": "Montpellier-Méditerranée",
@@ -66,7 +67,7 @@
       },
       "latitude": 43.56361,
       "longitude": 4.19278,
-      "location": "Ramparts of the medieval city of Aigues Mortes"
+      "location": "Remparts de la cité médiévale d'Aigues Mortes"
     },
     {
       "name": "ES",
@@ -76,7 +77,7 @@
       },
       "latitude": 43.48278,
       "longitude": 4.14194,
-      "location": "South of the light house of Espiguette"
+      "location": "Sud phare de l'Espiguette"
     },
     {
       "name": "ER",
@@ -86,7 +87,7 @@
       },
       "latitude": 43.57861,
       "longitude": 4.10083,
-      "location": "North road interchange D62 / D61 North of La Grande Motte"
+      "location": "Nord échangeur routier D62 / D61 Au Nord de La Grande Motte"
     },
     {
       "name": "SA",
@@ -96,7 +97,7 @@
       },
       "latitude": 43.46,
       "longitude": 4.2325,
-      "location": "Mouth of the Recul canal"
+      "location": "Embouchure du canal de Recul"
     },
     {
       "name": "N",
@@ -106,7 +107,7 @@
       },
       "latitude": 43.79139,
       "longitude": 4.09028,
-      "location": "North of the city of Sommières"
+      "location": "Nord ville de Sommières"
     },
     {
       "name": "NC",
@@ -116,7 +117,7 @@
       },
       "latitude": 43.62528,
       "longitude": 4.00389,
-      "location": "Water tower of Mauguio"
+      "location": "Château d'eau de Mauguio"
     },
     {
       "name": "NE",
@@ -126,7 +127,7 @@
       },
       "latitude": 43.68,
       "longitude": 3.98083,
-      "location": "Water tower of Castries"
+      "location": "Château d'eau de Castries"
     },
     {
       "name": "WF",
@@ -136,7 +137,7 @@
       },
       "latitude": 43.63472,
       "longitude": 3.75806,
-      "location": "St Georges d'Orques interchange (karting track)"
+      "location": "Échangeur St Georges d'Orques (Circuit Karting)"
     },
     {
       "name": "PF",
@@ -146,7 +147,7 @@
       },
       "latitude": 43.72917,
       "longitude": 3.86972,
-      "location": "Interchange D17 Prades Le Lez – St Mathieu de Tréviers"
+      "location": "Échangeur D17 Prades Le Lez – St Mathieu de Tréviers"
     },
     {
       "name": "NF",
@@ -156,7 +157,7 @@
       },
       "latitude": 43.71472,
       "longitude": 4.02,
-      "location": "Beaulieu quarry"
+      "location": "Carrière de Beaulieu"
     },
     {
       "name": "SW",
@@ -166,7 +167,7 @@
       },
       "latitude": 43.5125,
       "longitude": 3.88361,
-      "location": "Cathedral of Maguelone"
+      "location": "Cathédrale de Maguelone"
     },
     {
       "name": "WT",
@@ -176,7 +177,7 @@
       },
       "latitude": 43.54361,
       "longitude": 3.79222,
-      "location": "\"Montpellier Fabrègues SUD\" motorway service area"
+      "location": "Aire d'autoroute \"Montpellier Fabrègues SUD\""
     },
     {
       "name": "W",
@@ -186,7 +187,7 @@
       },
       "latitude": 43.56222,
       "longitude": 3.83056,
-      "location": "Motorway toll station of St Jean de Vedas"
+      "location": "Péage autoroutier de St jean de Vedas"
     },
     {
       "name": "SF",
@@ -196,7 +197,7 @@
       },
       "latitude": 43.46611,
       "longitude": 3.81528,
-      "location": "D114 bridge between Vic pond and Ingril pond"
+      "location": "Pont de la D114 entre l'étang de Vic et l'étang d'Ingril"
     }
   ],
   "withAts": {
@@ -296,60 +297,6 @@
       "Station automatique AVGAS 100 LL utilisable uniquement pour les avions dont l'envergure est inférieure à 12 m.",
       "Équipement de surveillance du trafic : AD équipé d'un radar secondaire (voir AD 1.0).",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "AM",
-        "location": "Remparts de la cité médiévale d'Aigues Mortes"
-      },
-      {
-        "name": "ES",
-        "location": "Sud phare de l'Espiguette"
-      },
-      {
-        "name": "ER",
-        "location": "Nord échangeur routier D62 / D61 Au Nord de La Grande Motte"
-      },
-      {
-        "name": "SA",
-        "location": "Embouchure du canal de Recul"
-      },
-      {
-        "name": "N",
-        "location": "Nord ville de Sommières"
-      },
-      {
-        "name": "NC",
-        "location": "Château d'eau de Mauguio"
-      },
-      {
-        "name": "NE",
-        "location": "Château d'eau de Castries"
-      },
-      {
-        "name": "WF",
-        "location": "Échangeur St Georges d'Orques (Circuit Karting)"
-      },
-      {
-        "name": "PF",
-        "location": "Échangeur D17 Prades Le Lez – St Mathieu de Tréviers"
-      },
-      {
-        "name": "SW",
-        "location": "Cathédrale de Maguelone"
-      },
-      {
-        "name": "WT",
-        "location": "Aire d'autoroute \"Montpellier Fabrègues SUD\""
-      },
-      {
-        "name": "W",
-        "location": "Péage autoroutier de St jean de Vedas"
-      },
-      {
-        "name": "SF",
-        "location": "Pont de la D114 entre l'étang de Vic et l'étang d'Ingril"
-      }
     ]
   }
 }

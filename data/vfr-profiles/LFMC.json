@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFMC",
   "name": "Luc - Le Cannet",
@@ -57,7 +58,7 @@
       },
       "latitude": 43.55833,
       "longitude": 6.46139,
-      "location": "Draguignan, pylon"
+      "location": "Noms / )"
     },
     {
       "name": "MY",
@@ -67,7 +68,7 @@
       },
       "latitude": 43.64639,
       "longitude": 6.06361,
-      "location": "Montmeyan, through north high school"
+      "location": ")"
     },
     {
       "name": "BJ",
@@ -77,7 +78,7 @@
       },
       "latitude": 43.56056,
       "longitude": 6.01028,
-      "location": "Barjols, roundabout"
+      "location": ")"
     },
     {
       "name": "NC",
@@ -87,7 +88,7 @@
       },
       "latitude": 43.42083,
       "longitude": 6.38333,
-      "location": "Entraygues power station"
+      "location": "Centrale électrique d'Entraygues"
     },
     {
       "name": "NE",
@@ -97,7 +98,7 @@
       },
       "latitude": 43.45,
       "longitude": 6.4925,
-      "location": "Les Arcs, bridge of the road interchange south of the Super U zone"
+      "location": "Les Arcs Pont de l'échangeur routier S de la zone du Super U"
     },
     {
       "name": "NW",
@@ -107,7 +108,7 @@
       },
       "latitude": 43.46667,
       "longitude": 6.3125,
-      "location": "Argens bridge (D17)"
+      "location": "Pont d'Argens (D17)"
     },
     {
       "name": "SA",
@@ -117,7 +118,7 @@
       },
       "latitude": 43.33944,
       "longitude": 6.12083,
-      "location": "Ste Anastasie, through south gymnasium"
+      "location": "Ste Anastasie (Travers sud gymnase)"
     },
     {
       "name": "SE",
@@ -127,7 +128,7 @@
       },
       "latitude": 43.32111,
       "longitude": 6.46389,
-      "location": "La Garde Freinet, Freinet fort"
+      "location": "La Garde Freinet (Fort Freinet)"
     },
     {
       "name": "SW",
@@ -137,7 +138,7 @@
       },
       "latitude": 43.31806,
       "longitude": 6.29861,
-      "location": "Gonfaron, bridge over the motorway"
+      "location": ")"
     },
     {
       "name": "VC",
@@ -147,7 +148,7 @@
       },
       "latitude": 43.19167,
       "longitude": 6.28028,
-      "location": "NE point of Valcros golf"
+      "location": "Pointe NE du golf de Valcros"
     },
     {
       "name": "PL",
@@ -157,7 +158,7 @@
       },
       "latitude": 43.52222,
       "longitude": 5.70306,
-      "location": "Puyloubier, General's castle"
+      "location": ")"
     },
     {
       "name": "TV",
@@ -167,7 +168,7 @@
       },
       "latitude": 43.40806,
       "longitude": 5.91861,
-      "location": "Tourves, ruins of castle"
+      "location": ")"
     },
     {
       "name": "NL",
@@ -177,7 +178,7 @@
       },
       "latitude": 43.46667,
       "longitude": 6.38833,
-      "location": "Lorgues, crossroad D10 - D48 - power line"
+      "location": ")"
     },
     {
       "name": "UB",
@@ -187,8 +188,8 @@
       },
       "latitude": 43.41306,
       "longitude": 6.34889,
-      "location": "Recycling center, Le Thoronet road, junction D17 and power line",
-      "purpose": "exit only"
+      "location": "Déchèterie route du Thoronet embranchement D17 et ligne électrique",
+      "purpose": "sortie uniquement"
     }
   ],
   "notes": [
@@ -211,28 +212,6 @@
       "Pour les points NW, NL et SW : 1500 ft AMSL Procédure d'ARR : Pour les points NW, NL, SW et SE : 2000 ft AMSL ; Pour le point NE : 1800 ft AMSL.",
       "LE LUC LE CANNET Par l'Ouest : PL - BJ - DG Par le Nord : MY - TV - TOULON Par le Sud : TV - SA - LA MOLE",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "DG",
-        "location": "Noms / )"
-      },
-      {
-        "name": "MY",
-        "location": ")"
-      },
-      {
-        "name": "PL",
-        "location": ")"
-      },
-      {
-        "name": "TV",
-        "location": ")"
-      },
-      {
-        "name": "NL",
-        "location": ")"
-      }
     ]
   }
 }

@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFMA",
   "name": "Aix - Les Milles",
@@ -52,7 +53,7 @@
       },
       "latitude": 43.56389,
       "longitude": 5.33639,
-      "location": "Abeam East of fire watchtower West of EGUILLES"
+      "location": "Travers Est tour de guet incendie Ouest d'EGUILLES"
     },
     {
       "name": "AT",
@@ -62,7 +63,7 @@
       },
       "latitude": 43.5725,
       "longitude": 5.39194,
-      "location": "Road intersection East of EGUILLES"
+      "location": "Carrefour Est d'EGUILLES"
     },
     {
       "name": "AE",
@@ -72,7 +73,7 @@
       },
       "latitude": 43.48,
       "longitude": 5.48528,
-      "location": "Chimney North of GARDANNE"
+      "location": "Nord cheminée de GARDANNE"
     },
     {
       "name": "AR",
@@ -82,7 +83,7 @@
       },
       "latitude": 43.52694,
       "longitude": 5.40222,
-      "location": "Slip road A8 AIX WEST"
+      "location": "Bretelle autoroute A8 AIX Ouest"
     },
     {
       "name": "AS",
@@ -92,7 +93,7 @@
       },
       "latitude": 43.445,
       "longitude": 5.37222,
-      "location": "West of CABRIES"
+      "location": "Ouest de CABRIES"
     },
     {
       "name": "AW",
@@ -102,7 +103,7 @@
       },
       "latitude": 43.51611,
       "longitude": 5.31194,
-      "location": "ROQUEFAVOUR aqueduct"
+      "location": "Aqueduc de ROQUEFAVOUR"
     }
   ],
   "notes": [
@@ -163,32 +164,6 @@
       "",
       "",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "AN",
-        "location": "Travers Est tour de guet incendie Ouest d'EGUILLES"
-      },
-      {
-        "name": "AT",
-        "location": "Carrefour Est d'EGUILLES"
-      },
-      {
-        "name": "AE",
-        "location": "Nord cheminée de GARDANNE"
-      },
-      {
-        "name": "AR",
-        "location": "Bretelle autoroute A8 AIX Ouest"
-      },
-      {
-        "name": "AS",
-        "location": "Ouest of CABRIES"
-      },
-      {
-        "name": "AW",
-        "location": "Aqueduc de ROQUEFAVOUR"
-      }
     ]
   }
 }

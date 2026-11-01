@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFCL",
   "name": "Toulouse - Lasbordes",
@@ -57,7 +58,7 @@
       },
       "latitude": 43.65417,
       "longitude": 1.52472,
-      "location": "Bridge at the junction of A68 and D70"
+      "location": "Pont à l'intersection de l'A68 et de la D70"
     },
     {
       "name": "DS",
@@ -67,7 +68,7 @@
       },
       "latitude": 43.54806,
       "longitude": 1.60833,
-      "location": "Val de Saune lake"
+      "location": "Lac de Val de Saune"
     },
     {
       "name": "AE",
@@ -77,7 +78,7 @@
       },
       "latitude": 43.69389,
       "longitude": 1.66139,
-      "location": "Laragou lake"
+      "location": "Lac de Laragou"
     },
     {
       "name": "AS",
@@ -97,7 +98,7 @@
       },
       "latitude": 43.53333,
       "longitude": 1.55278,
-      "location": "Swimming pool"
+      "location": "Piscine"
     }
   ],
   "notes": [

@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFBU",
   "name": "international Angoulême-Cognac",
@@ -52,7 +53,7 @@
       },
       "latitude": 45.81056,
       "longitude": 0.1925,
-      "location": "Intersection between N 10 and D 15"
+      "location": "Intersection N 10 et D 15"
     },
     {
       "name": "NA",
@@ -62,7 +63,7 @@
       },
       "latitude": 45.7775,
       "longitude": 0.19222,
-      "location": "La Poutardière warehouses"
+      "location": "Entrepôts de la Poutardière"
     },
     {
       "name": "NE",
@@ -72,7 +73,7 @@
       },
       "latitude": 45.79361,
       "longitude": 0.29361,
-      "location": "Quarry north of Braconne forest"
+      "location": "Carrière au Nord de la forêt de la Braconne"
     },
     {
       "name": "SE",
@@ -82,7 +83,7 @@
       },
       "latitude": 45.7025,
       "longitude": 0.26472,
-      "location": "N 141 interchange + Antenna"
+      "location": "Échangeur N 141 + Antenne"
     },
     {
       "name": "S",
@@ -92,7 +93,7 @@
       },
       "latitude": 45.66111,
       "longitude": 0.25944,
-      "location": "Touvre village"
+      "location": "Village de Touvre"
     },
     {
       "name": "SA",
@@ -102,7 +103,7 @@
       },
       "latitude": 45.69194,
       "longitude": 0.15083,
-      "location": "North of Saint-Yriex lake"
+      "location": "Nord du plan d'eau de Saint-Yriex"
     }
   ],
   "notes": [
@@ -147,28 +148,6 @@
       "",
       "ANGOULEME BRIE CHAMPNIERS 11 - RFFS : JF et en dehors de ces HOR : Niveau 1 Ouverture et extension possible niveau 4 ou 5 sur demande.",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "NW",
-        "location": "Intersection N 10 et D 15"
-      },
-      {
-        "name": "NA",
-        "location": "Entrepôts de la Poutardière"
-      },
-      {
-        "name": "NE",
-        "location": "Carrière au Nord de la forêt de la Braconne"
-      },
-      {
-        "name": "SE",
-        "location": "Échangeur N 141 + Antenne"
-      },
-      {
-        "name": "SA",
-        "location": "Nord du plan d'eau de Saint-Yriex"
-      }
     ]
   }
 }

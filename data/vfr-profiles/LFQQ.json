@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFQQ",
   "name": "Lille - Lesquin",
@@ -56,8 +57,8 @@
       },
       "latitude": 50.60306,
       "longitude": 3.11333,
-      "location": "Overhead the golf course of the Lille metropolis",
-      "purpose": "VFR holding point, to be used only on ATC instruction"
+      "location": "Vertical le golf de Lille Métropole",
+      "purpose": "point d'attente VFR, à utiliser uniquement sur instruction de l'ATC"
     },
     {
       "name": "N",
@@ -66,8 +67,7 @@
         "en": "November"
       },
       "latitude": 50.64528,
-      "longitude": 2.92917,
-      "location": "Intersection between the A25 motorway and the high-speed train (TGV) railway"
+      "longitude": 2.92917
     },
     {
       "name": "W",
@@ -77,7 +77,7 @@
       },
       "latitude": 50.52278,
       "longitude": 2.79306,
-      "location": "Intersection between the railway and the canal, south of La Bassée"
+      "location": "Intersection voie SNCF et canal au Sud de LA BASSEE"
     },
     {
       "name": "SE",
@@ -87,7 +87,7 @@
       },
       "latitude": 50.47111,
       "longitude": 3.22778,
-      "location": "A23 motorway interchange with road D938"
+      "location": "Échangeur autoroute A23 avec route D938"
     },
     {
       "name": "SA",
@@ -97,7 +97,7 @@
       },
       "latitude": 50.51833,
       "longitude": 3.13361,
-      "location": "Traffic circle east of Pont-à-Marcq and north of the golf"
+      "location": "Rond-point à l'Est de PONT A MARCQ, et au Nord du golf"
     },
     {
       "name": "SW",
@@ -107,7 +107,7 @@
       },
       "latitude": 50.45722,
       "longitude": 2.97139,
-      "location": "Bridge of the A1 motorway and bridge of the TGV line over the Deule canal"
+      "location": "Pont de l'autoroute A1 et pont ligne TGV sur le canal de la DEULE"
     }
   ],
   "notes": [

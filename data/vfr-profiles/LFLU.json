@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFLU",
   "name": "Valence-Chabeuil",
@@ -64,7 +65,7 @@
       },
       "latitude": 44.99861,
       "longitude": 4.87667,
-      "location": "Isère bridge"
+      "location": "Pont de l'Isère"
     },
     {
       "name": "NE",
@@ -74,7 +75,7 @@
       },
       "latitude": 45.02583,
       "longitude": 5.09694,
-      "location": "Toll at Chatuzange le Goubet"
+      "location": "Péage autoroutier de Chatuzange le Goubet"
     },
     {
       "name": "SA",
@@ -84,7 +85,7 @@
       },
       "latitude": 44.87389,
       "longitude": 4.87167,
-      "location": "Marshalling yard Porte lès Valence"
+      "location": "Gare de triage Porte-lès-Valence"
     },
     {
       "name": "S",
@@ -94,7 +95,7 @@
       },
       "latitude": 44.77611,
       "longitude": 4.82639,
-      "location": "Intersection railroad Livron"
+      "location": "Échangeur voie ferrée Livron"
     }
   ],
   "notes": [
@@ -187,20 +188,6 @@
       "",
       "Descendre à 2500 AMSL en vue de Valence, passage verticale TWR à 2500 AMSL, phares allumés.",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "NE",
-        "location": "Péage autoroutier de Chatuzange le Goubet"
-      },
-      {
-        "name": "SA",
-        "location": "Gare de triage Porte-lès-Valence"
-      },
-      {
-        "name": "S",
-        "location": "Échangeur voie ferrée Livron"
-      }
     ]
   }
 }

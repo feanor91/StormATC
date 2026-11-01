@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFOB",
   "name": "Paris Beauvais",
@@ -56,7 +57,7 @@
       },
       "latitude": 49.52361,
       "longitude": 2.1875,
-      "location": "A16 interchange over RD 1001 to \" Le bois Saint Martin \" locality"
+      "location": "Croisement de l'A16 sur la RD 1001 au lieu dit \" Le bois Saint Martin \""
     },
     {
       "name": "WB",
@@ -76,7 +77,7 @@
       },
       "latitude": 49.41944,
       "longitude": 1.9375,
-      "location": "Hamlet \" le pont qui penche \" on N31"
+      "location": "Hameau \" le pont qui penche \", sur la N31"
     },
     {
       "name": "SW",
@@ -86,7 +87,7 @@
       },
       "latitude": 49.32389,
       "longitude": 2.08,
-      "location": "West abeam of television relay station near A16 to \" Le bois de Molle \" locality"
+      "location": "Travers Ouest d'un relais de télévision près de l'A16, au lieu dit \" Le bois de Molle \""
     },
     {
       "name": "SE",
@@ -96,7 +97,7 @@
       },
       "latitude": 49.32917,
       "longitude": 2.2,
-      "location": "RD 1001 interchange with D2 and D44 at Noailles"
+      "location": "Croisement de la RD 1001 avec les D2 et D44 à Noailles"
     },
     {
       "name": "S",
@@ -106,7 +107,7 @@
       },
       "latitude": 49.39778,
       "longitude": 2.12889,
-      "location": "A16 interchange at Allone"
+      "location": "Échangeur de l'A16 à Allone"
     }
   ],
   "notes": [
@@ -191,28 +192,6 @@
       "",
       "BEAUVAIS TILLE 18 - Des informations complémentaires pour la préparation des vols appelées l'adresse https://www.écologique-solidaire.gouv.fr/collaborative-aérodrome-safetyhighlights-cash Ces données sont publiées uniquement à titre indicatif et informatif, et ne sont pas exhaustives.",
       "Elles ne se substituent en aucun cas à l'information aéronautique de référence diffusée au travers de l'AIP France, des NOTAM et des SUP AIP."
-    ],
-    "reportingPoints": [
-      {
-        "name": "N",
-        "location": "Croisement de l'A16 sur la RD 1001 au lieu dit \" Le bois Saint Martin \""
-      },
-      {
-        "name": "W",
-        "location": "Hameau \" le pont qui penche \", sur la N31"
-      },
-      {
-        "name": "SW",
-        "location": "Travers Ouest d'un relais de télévision près de l'A16, au lieu dit \" Le bois de Molle \""
-      },
-      {
-        "name": "SE",
-        "location": "Croisement de la RD 1001 avec les D2 et D44 à Noailles"
-      },
-      {
-        "name": "S",
-        "location": "Échangeur de l'A16 à Allone"
-      }
     ]
   }
 }

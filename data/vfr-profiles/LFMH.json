@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFMH",
   "name": "Saint-Étienne-Loire",
@@ -50,7 +51,7 @@
       },
       "latitude": 45.73944,
       "longitude": 4.22139,
-      "location": "Hippodrome Feurs / Feurs racetrack"
+      "location": "Hippodrome Feurs"
     },
     {
       "name": "NA",
@@ -60,7 +61,7 @@
       },
       "latitude": 45.64417,
       "longitude": 4.23139,
-      "location": "Montrond les Bains, crossroad"
+      "location": "Intersection Montrond les Bains"
     },
     {
       "name": "W",
@@ -70,7 +71,7 @@
       },
       "latitude": 45.5575,
       "longitude": 4.12583,
-      "location": "St Romain-le-Puy mound"
+      "location": "Butte St Romain-le-Puy"
     },
     {
       "name": "NE",
@@ -80,7 +81,7 @@
       },
       "latitude": 45.6325,
       "longitude": 4.45389,
-      "location": "St Symphorien-sur-Coise, church"
+      "location": "Église St Symphorien-sur-Coise"
     },
     {
       "name": "SE",
@@ -90,7 +91,7 @@
       },
       "latitude": 45.47306,
       "longitude": 4.51833,
-      "location": "St Chamond railway station"
+      "location": "Gare St Chamond"
     },
     {
       "name": "S",
@@ -100,7 +101,7 @@
       },
       "latitude": 45.39278,
       "longitude": 4.29167,
-      "location": "Firminy crossroad"
+      "location": "Intersection Firminy"
     }
   ],
   "notes": [

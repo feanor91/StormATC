@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFIP",
   "name": "Peyresourde-Balestas",
@@ -38,7 +39,7 @@
       },
       "latitude": 42.80222,
       "longitude": 0.46306,
-      "location": "Col de Peyresourde / Peyresourde pass"
+      "location": "Col de Peyresourde"
     },
     {
       "name": "N1",
@@ -48,7 +49,7 @@
       },
       "latitude": 42.90472,
       "longitude": 0.35944,
-      "location": "Town of Arreau"
+      "location": "Village d'Arreau"
     },
     {
       "name": "N2",
@@ -58,7 +59,7 @@
       },
       "latitude": 42.80944,
       "longitude": 0.40861,
-      "location": "Bridge in the North of Loudenvielle lake"
+      "location": "Pont au Nord du lac de Loudenvielle"
     },
     {
       "name": "S",
@@ -68,7 +69,7 @@
       },
       "latitude": 42.78556,
       "longitude": 0.41028,
-      "location": "Power station"
+      "location": "Centrale électrique"
     }
   ],
   "notes": [
@@ -131,12 +132,6 @@
       "Aucun aéronef ne s'alignera et décollera si un autre aéronef s'est annoncé en dernier virage.",
       "Après le décollage, virer à droite vers le départ N1, le départ E ou vers la branche vent arrière (cf carte).",
       "Attention au trafic en transit passant par le col de Peyresourde."
-    ],
-    "reportingPoints": [
-      {
-        "name": "N2",
-        "location": "Pont au Nord du lac de Loudenvielle"
-      }
     ]
   }
 }

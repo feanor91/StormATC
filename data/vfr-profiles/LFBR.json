@@ -5,7 +5,8 @@
     "were first extracted automatically from the chart text; the reporting points, rules and notes were added by hand.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "No circuit height or circuit side is printed on this chart, so none is recorded.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFBR",
   "name": "Muret - Lherm",
@@ -72,7 +73,7 @@
       },
       "latitude": 43.4,
       "longitude": 1.44167,
-      "location": "Ariège loop"
+      "location": "Boucle de l'Ariège"
     },
     {
       "name": "SN",
@@ -82,7 +83,7 @@
       },
       "latitude": 43.35833,
       "longitude": 1.275,
-      "location": "town of Noé"
+      "location": "Ville de Noé"
     }
   ],
   "withAts": {

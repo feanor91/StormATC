@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFBZ",
   "name": "Biarritz Pays Basque",
@@ -44,7 +45,7 @@
       },
       "latitude": 43.65583,
       "longitude": -1.44833,
-      "location": "Capbreton: North sea wall beacon"
+      "location": "Capbreton : phare digue Nord"
     },
     {
       "name": "NA",
@@ -54,7 +55,7 @@
       },
       "latitude": 43.53028,
       "longitude": -1.52361,
-      "location": "Adour mouth"
+      "location": "Embouchure de l'Adour"
     },
     {
       "name": "NP",
@@ -64,7 +65,7 @@
       },
       "latitude": 43.49278,
       "longitude": -1.5525,
-      "location": "Biarritz lighthouse"
+      "location": "Phare de Biarritz"
     },
     {
       "name": "NE",
@@ -74,7 +75,7 @@
       },
       "latitude": 43.51972,
       "longitude": -1.4025,
-      "location": "Water tower"
+      "location": "Château d'eau"
     },
     {
       "name": "BG",
@@ -84,7 +85,7 @@
       },
       "latitude": 43.54611,
       "longitude": -1.195,
-      "location": "Gaves réunis"
+      "location": "Bec-de-Gave - Confluent Adour"
     },
     {
       "name": "SW",
@@ -94,7 +95,7 @@
       },
       "latitude": 43.40167,
       "longitude": -1.66,
-      "location": "Chapel North St-Jean-de-Luz bay"
+      "location": "Chapelle Nord baie de St-Jean-de-Luz"
     },
     {
       "name": "SB",
@@ -104,7 +105,7 @@
       },
       "latitude": 43.43222,
       "longitude": -1.60083,
-      "location": "UHABIA beach"
+      "location": "Bidart - plage UHABIA"
     },
     {
       "name": "S",
@@ -114,7 +115,7 @@
       },
       "latitude": 43.41722,
       "longitude": -1.49472,
-      "location": "Ste Barbe hill"
+      "location": "Colline Ste Barbe"
     },
     {
       "name": "SA",
@@ -124,7 +125,7 @@
       },
       "latitude": 43.40583,
       "longitude": -1.57139,
-      "location": "Ahetze church"
+      "location": "Ahetze église"
     },
     {
       "name": "SE",
@@ -144,7 +145,7 @@
       },
       "latitude": 43.46667,
       "longitude": -1.28694,
-      "location": "Intersection D936 and exit nr 4 of highway A64"
+      "location": "Intersection D936 et sortie n°4 autoroute A64"
     },
     {
       "name": "SH",
@@ -154,7 +155,7 @@
       },
       "latitude": 43.385,
       "longitude": -1.305,
-      "location": "Hasparren village centre"
+      "location": "Hasparren centre bourg"
     }
   ],
   "notes": [
@@ -211,16 +212,6 @@
       "",
       "",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "SW",
-        "location": "Chapelle Nord baie de St-Jean-de-Luz"
-      },
-      {
-        "name": "E",
-        "location": "Intersection D936 et sortie n°4 autoroute A64"
-      }
     ]
   }
 }

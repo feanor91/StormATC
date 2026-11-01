@@ -6,7 +6,8 @@
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFST",
   "name": "Strasbourg-Entzheim",
@@ -55,7 +56,7 @@
       },
       "latitude": 48.74833,
       "longitude": 7.68417,
-      "location": "Road intersection Brumath North A4/A340"
+      "location": "Échangeur autoroutier Brumath Nord A4/A340"
     },
     {
       "name": "N1",
@@ -65,7 +66,7 @@
       },
       "latitude": 48.57361,
       "longitude": 7.80167,
-      "location": "Europe's bridge between STRASBOURG and KEHL"
+      "location": "Pont de l'Europe entre STRASBOURG et KEHL"
     },
     {
       "name": "NE",
@@ -75,7 +76,7 @@
       },
       "latitude": 48.68389,
       "longitude": 7.87556,
-      "location": "South of village GAMBSHEIM"
+      "location": "Sud du village de"
     },
     {
       "name": "E",
@@ -85,7 +86,7 @@
       },
       "latitude": 48.47694,
       "longitude": 7.75194,
-      "location": "Nautical base PLOBSHEIM"
+      "location": "Base nautique"
     },
     {
       "name": "EA",
@@ -95,7 +96,7 @@
       },
       "latitude": 48.525,
       "longitude": 7.66528,
-      "location": "Road intersection A35 / D400"
+      "location": "Échangeur routier A35/D400"
     },
     {
       "name": "EB",
@@ -105,7 +106,7 @@
       },
       "latitude": 48.50833,
       "longitude": 7.69667,
-      "location": "Road intersection RN83 / RN353"
+      "location": "Échangeur routier RN83/RN353"
     },
     {
       "name": "S",
@@ -115,7 +116,7 @@
       },
       "latitude": 48.32111,
       "longitude": 7.48833,
-      "location": "Road intersection A35 / RN83"
+      "location": "Échangeur routier A35/RN83"
     },
     {
       "name": "W",
@@ -125,7 +126,7 @@
       },
       "latitude": 48.68972,
       "longitude": 7.49889,
-      "location": "Typical industrial building"
+      "location": "Bâtiment industriel caractéristique"
     },
     {
       "name": "WA",
@@ -135,7 +136,7 @@
       },
       "latitude": 48.56417,
       "longitude": 7.6,
-      "location": "Water tower KOLBSHEIM"
+      "location": "Château d'eau"
     },
     {
       "name": "WB",
@@ -145,7 +146,7 @@
       },
       "latitude": 48.60278,
       "longitude": 7.59583,
-      "location": "ITTENHEIM town on RN4"
+      "location": "Village ITTENHEIM sur RN4"
     },
     {
       "name": "W1",
@@ -155,7 +156,7 @@
       },
       "latitude": 48.56944,
       "longitude": 7.52806,
-      "location": "ERGERSHEIM town intersection D30/D45"
+      "location": "Village ERGERSHEIM D30/D45"
     },
     {
       "name": "W2",
@@ -165,7 +166,7 @@
       },
       "latitude": 48.52,
       "longitude": 7.49778,
-      "location": "Road intersection A352 / D500"
+      "location": "DORLISHEIM"
     }
   ],
   "withAts": {
@@ -234,28 +235,6 @@
       "HEL équipés de roues : tous les mouvements doivent se faire au roulage au sol entre les TWY K, M, N, Q et le poste désigné et vice versa.",
       "Équipement de surveillance des trafics : aérodrome équipé d'un radar primaire et secondaire.",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "N",
-        "location": "Échangeur autoroutier Brumath Nord A4/A340"
-      },
-      {
-        "name": "N1",
-        "location": "Pont de l'Europe entre STRASBOURG et KEHL"
-      },
-      {
-        "name": "W",
-        "location": "Bâtiment industriel caractéristique"
-      },
-      {
-        "name": "WB",
-        "location": "Village ITTENHEIM sur RN4"
-      },
-      {
-        "name": "W1",
-        "location": "Village ERGERSHEIM D30/D45"
-      }
     ]
   }
 }

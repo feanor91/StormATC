@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFKB",
   "name": "Bastia Poretta",
@@ -49,7 +50,7 @@
       },
       "latitude": 42.70278,
       "longitude": 9.46333,
-      "location": "Abeam Bastia harbour"
+      "location": "Travers port de Bastia"
     },
     {
       "name": "NW",
@@ -59,7 +60,7 @@
       },
       "latitude": 42.67222,
       "longitude": 9.38278,
-      "location": "Teghime pass"
+      "location": "Col de Téghime"
     },
     {
       "name": "NA",
@@ -69,7 +70,7 @@
       },
       "latitude": 42.61944,
       "longitude": 9.43556,
-      "location": "Casatorra racecourse"
+      "location": "Hippodrome de Casatorra"
     },
     {
       "name": "W",
@@ -79,7 +80,7 @@
       },
       "latitude": 42.6,
       "longitude": 9.36611,
-      "location": "Lancone pass"
+      "location": "Col du Lancone"
     },
     {
       "name": "SA",
@@ -89,7 +90,7 @@
       },
       "latitude": 42.52222,
       "longitude": 9.44389,
-      "location": "South abeam Lucciana's power plant"
+      "location": "Travers Sud centrale thermique de Lucciana"
     },
     {
       "name": "SW",
@@ -99,7 +100,7 @@
       },
       "latitude": 42.50833,
       "longitude": 9.37167,
-      "location": "Barchetta plant"
+      "location": "Usine de Barchetta"
     },
     {
       "name": "S",
@@ -109,7 +110,7 @@
       },
       "latitude": 42.33889,
       "longitude": 9.54111,
-      "location": "Campoloro harbour"
+      "location": "Port de Campoloro"
     },
     {
       "name": "N1",
@@ -119,7 +120,7 @@
       },
       "latitude": 42.86111,
       "longitude": 9.48083,
-      "location": "Losse tower"
+      "location": "Tour de Losse"
     },
     {
       "name": "HV",
@@ -129,7 +130,7 @@
       },
       "latitude": 42.53806,
       "longitude": 9.48972,
-      "location": "Abeam San Parteo chapel (south turn)"
+      "location": "Travers chapelle San Parteo"
     },
     {
       "name": "HX",
@@ -139,7 +140,7 @@
       },
       "latitude": 42.57944,
       "longitude": 9.46694,
-      "location": "Hangar covered with photovoltaic panels"
+      "location": "Hangar couvert de panneaux photovoltaïques"
     },
     {
       "name": "HZ",
@@ -149,7 +150,7 @@
       },
       "latitude": 42.50167,
       "longitude": 9.50528,
-      "location": "200 m west of the photovoltaic field"
+      "location": "200 m à l'Ouest du champ photovoltaïque"
     },
     {
       "name": "HO",
@@ -159,7 +160,7 @@
       },
       "latitude": 42.52306,
       "longitude": 9.53389,
-      "location": "Golo river mouth (delta)"
+      "location": "Embouchure - delta du fleuve Golo"
     },
     {
       "name": "HW",
@@ -169,7 +170,7 @@
       },
       "latitude": 42.57194,
       "longitude": 9.44083,
-      "location": "Intersection of the national road and the 2 x 2 lane road"
+      "location": "Intersection RN et 2 x 2 voies"
     },
     {
       "name": "HB",
@@ -179,7 +180,7 @@
       },
       "latitude": 42.56278,
       "longitude": 9.51444,
-      "location": "South of Biguglia pond"
+      "location": "Sud Étang de Biguglia"
     }
   ],
   "notes": [

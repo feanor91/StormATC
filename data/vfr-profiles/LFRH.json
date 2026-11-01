@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFRH",
   "name": "Lorient Bretagne Sud",
@@ -57,7 +58,7 @@
       },
       "latitude": 47.85833,
       "longitude": -3.75,
-      "location": "Pont-Aven"
+      "location": "Pont Aven"
     },
     {
       "name": "WL",
@@ -67,7 +68,7 @@
       },
       "latitude": 47.8,
       "longitude": -3.58333,
-      "location": "Clohars-Carnoët"
+      "location": "Clohars - Carnoet"
     },
     {
       "name": "SL",
@@ -97,7 +98,7 @@
       },
       "latitude": 47.67639,
       "longitude": -3.2,
-      "location": "Lorois bridge"
+      "location": "Pont Lorois"
     },
     {
       "name": "NW",
@@ -107,7 +108,7 @@
       },
       "latitude": 47.86528,
       "longitude": -3.54167,
-      "location": "Railway bridge, south-east of Quimperlé"
+      "location": "Pont ferroviaire, SE de Quimperlé"
     },
     {
       "name": "S",
@@ -127,7 +128,7 @@
       },
       "latitude": 47.80583,
       "longitude": -3.45917,
-      "location": "Guidel crossroads on the N165"
+      "location": "Échangeur de Guidel sur la N 165"
     },
     {
       "name": "NL",
@@ -137,7 +138,7 @@
       },
       "latitude": 47.83,
       "longitude": -3.3375,
-      "location": "St Severin crossroads"
+      "location": "Carrefour St Severin"
     },
     {
       "name": "N",
@@ -147,7 +148,7 @@
       },
       "latitude": 47.91667,
       "longitude": -3.34722,
-      "location": "Crossroads D769 - D2, west of Plouay"
+      "location": "Carrefour D769 - D2, W Plouay"
     },
     {
       "name": "NE",
@@ -157,7 +158,7 @@
       },
       "latitude": 47.86917,
       "longitude": -3.06278,
-      "location": "Crossroads N24, west of Baud"
+      "location": "Échangeur N24, W Baud"
     },
     {
       "name": "A",

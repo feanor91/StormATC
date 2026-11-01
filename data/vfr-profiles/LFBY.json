@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFBY",
   "name": "Dax - Seyresse",
@@ -49,7 +50,7 @@
       },
       "latitude": 43.85389,
       "longitude": -0.91889,
-      "location": "Crossing of D413 and power line 1.5 km W Lesgor"
+      "location": "Croisement D413 - ligne HT 1,5 km W Lesgor"
     },
     {
       "name": "NG",
@@ -59,7 +60,7 @@
       },
       "latitude": 43.82361,
       "longitude": -0.96667,
-      "location": "Marshalling yard 3 km South East Laluque"
+      "location": "Gare de triage 3 km Sud-Est Laluque"
     },
     {
       "name": "NEA",
@@ -69,7 +70,7 @@
       },
       "latitude": 43.75722,
       "longitude": -1.00944,
-      "location": "Water tower in the vicinity of the railway, North of Saint Vincent de Paul"
+      "location": "Château d'eau à proximité de la voie de chemin de fer Nord Saint Vincent de Paul"
     },
     {
       "name": "N",
@@ -79,7 +80,7 @@
       },
       "latitude": 43.73389,
       "longitude": -1.10667,
-      "location": "Antenna on the west of interchange D824 and D16"
+      "location": "Antenne à l'ouest de l'échangeur D824 et D16"
     },
     {
       "name": "N2",
@@ -89,7 +90,7 @@
       },
       "latitude": 43.69806,
       "longitude": -1.07306,
-      "location": "Water tower, Saubagnac"
+      "location": "Château d'eau - Saubagnac"
     },
     {
       "name": "W",
@@ -99,7 +100,7 @@
       },
       "latitude": 43.62972,
       "longitude": -1.39611,
-      "location": "Toll gate Benesse - Maremne"
+      "location": "Gare de péage Benesse - Maremne"
     },
     {
       "name": "S",
@@ -109,7 +110,7 @@
       },
       "latitude": 43.63417,
       "longitude": -1.10361,
-      "location": "Winding D6, 3 km North-East of St Lon les Mines"
+      "location": "Lacets D6 3 km Nord-Est St Lon les Mines"
     },
     {
       "name": "E",
@@ -119,7 +120,7 @@
       },
       "latitude": 43.64528,
       "longitude": -1.01389,
-      "location": "East building of the Bénesse quarry"
+      "location": "Bâtiment Est de la carrière de Bénesse"
     },
     {
       "name": "SEA",
@@ -139,7 +140,7 @@
       },
       "latitude": 43.49,
       "longitude": -0.78556,
-      "location": "West of Orthez"
+      "location": "Ouest d'Orthez"
     },
     {
       "name": "BG",
@@ -149,7 +150,7 @@
       },
       "latitude": 43.54667,
       "longitude": -1.195,
-      "location": "Bec de Gave - Gaves Réunis (Adour confluence)"
+      "location": "Bec de Gave - Gaves Réunis (Confluent Adour)"
     }
   ],
   "notes": [

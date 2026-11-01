@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFBE",
   "name": "Bergerac Dordogne Périgord",
@@ -58,7 +59,7 @@
       },
       "latitude": 44.87544,
       "longitude": 0.54867,
-      "location": "Water tower, Village Pélissous"
+      "location": "Village Pélissous (Château d'eau)"
     },
     {
       "name": "NE",
@@ -68,7 +69,7 @@
       },
       "latitude": 44.91942,
       "longitude": 0.56075,
-      "location": "Crossing, Route N21 - Ligne HT"
+      "location": "Route N21 - Ligne HT (Croisement)"
     },
     {
       "name": "NW",
@@ -78,7 +79,7 @@
       },
       "latitude": 44.93125,
       "longitude": 0.43036,
-      "location": "Crossing, Route D709 - Ligne HT"
+      "location": "Route D709 - Ligne HT (Croisement)"
     },
     {
       "name": "SA",
@@ -88,7 +89,7 @@
       },
       "latitude": 44.77519,
       "longitude": 0.52186,
-      "location": "Water tower, Village Colombier"
+      "location": "Village Colombier (Château d'eau)"
     },
     {
       "name": "SE",
@@ -98,7 +99,7 @@
       },
       "latitude": 44.73031,
       "longitude": 0.60719,
-      "location": "Church, Village Issigeac"
+      "location": "Village Issigeac (Église)"
     },
     {
       "name": "SW",
@@ -108,7 +109,7 @@
       },
       "latitude": 44.66769,
       "longitude": 0.39642,
-      "location": "Church, Village Eymet"
+      "location": "Village Eymet (Église)"
     }
   ],
   "notes": [

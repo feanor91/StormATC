@@ -6,7 +6,8 @@
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFLL",
   "name": "Lyon-Saint-Exupéry",
@@ -59,7 +60,7 @@
       },
       "latitude": 45.89194,
       "longitude": 4.80111,
-      "location": "Marshalling yard of SAINT GERMAIN AU MONT D'OR"
+      "location": "Gare de triage de SAINT GERMAIN AU MONT D'OR /"
     },
     {
       "name": "NA",
@@ -69,7 +70,7 @@
       },
       "latitude": 45.85694,
       "longitude": 4.91333,
-      "location": "Junction of A46 / TGV / D1083"
+      "location": "Intersection de A46/TGV/D1083"
     },
     {
       "name": "NW",
@@ -79,7 +80,7 @@
       },
       "latitude": 45.845,
       "longitude": 4.83333,
-      "location": "COUZON dam"
+      "location": "Barrage de COUZON"
     },
     {
       "name": "S",
@@ -89,7 +90,7 @@
       },
       "latitude": 45.58972,
       "longitude": 4.79667,
-      "location": "Road junction of CHASSE SUR RHONE"
+      "location": "Échangeur routier de CHASSE SUR RHONE /"
     },
     {
       "name": "SA",
@@ -99,7 +100,7 @@
       },
       "latitude": 45.64972,
       "longitude": 4.84056,
-      "location": "FEYZIN marshalling yard"
+      "location": "Gare de triage de FEYZIN"
     },
     {
       "name": "MS",
@@ -109,7 +110,7 @@
       },
       "latitude": 45.72333,
       "longitude": 5.02333,
-      "location": "Roundabout South East of GENAS"
+      "location": "Rond point routier Sud-Est de GENAS"
     },
     {
       "name": "TW",
@@ -119,7 +120,7 @@
       },
       "latitude": 45.71694,
       "longitude": 5.07056,
-      "location": "Roundabout of EUROPE"
+      "location": "Rond point de l'EUROPE"
     },
     {
       "name": "TE",
@@ -129,7 +130,7 @@
       },
       "latitude": 45.725,
       "longitude": 5.115,
-      "location": "East abeam of SAUGNIEU"
+      "location": "Travers Est de SAUGNIEU"
     },
     {
       "name": "MC",
@@ -139,7 +140,7 @@
       },
       "latitude": 45.72917,
       "longitude": 5.15389,
-      "location": "CHAVAGNEUX stadium"
+      "location": "Stade de CHAVAGNEUX"
     },
     {
       "name": "EA",
@@ -149,7 +150,7 @@
       },
       "latitude": 45.72306,
       "longitude": 5.22972,
-      "location": "Roundabout west of Cremieu"
+      "location": "CREMIEU"
     }
   ],
   "withAts": {
@@ -209,24 +210,6 @@
       "PAPI 35L : pour les avions avec une hauteur oeil/roue supérieure à 12 mètres, la marge de franchissement du seuil est inférieure à 6 mètres.",
       "",
       "LYON SAINT EXUPERY Équipement de surveillance du trafic : AD équipé d'un radar secondaire (voir AD 1.0)."
-    ],
-    "reportingPoints": [
-      {
-        "name": "N",
-        "location": "Gare de triage de SAINT GERMAIN AU MONT D'OR /"
-      },
-      {
-        "name": "S",
-        "location": "Échangeur routier de CHASSE SUR RHONE /"
-      },
-      {
-        "name": "MS",
-        "location": "Rond point routier Sud-Est de GENAS /"
-      },
-      {
-        "name": "TW",
-        "location": "Rond point de l'EUROPE /"
-      }
     ]
   }
 }

@@ -6,7 +6,8 @@
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
     "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFML",
   "name": "Marseille Provence",
@@ -79,7 +80,7 @@
       },
       "latitude": 43.555,
       "longitude": 5.28389,
-      "location": "Ventabren, intersection of A8 and D19"
+      "location": "Ventabren (intersection A8 et D19)"
     },
     {
       "name": "NB",
@@ -89,7 +90,7 @@
       },
       "latitude": 43.47139,
       "longitude": 5.24239,
-      "location": "Vitrolles radar antenna"
+      "location": "Antenne du radar de Vitrolles"
     },
     {
       "name": "E",
@@ -99,7 +100,7 @@
       },
       "latitude": 43.44,
       "longitude": 5.45167,
-      "location": "Slag heap South-West of Gardanne"
+      "location": "Terril au Sud Ouest de Gardanne"
     },
     {
       "name": "EA",
@@ -109,7 +110,7 @@
       },
       "latitude": 43.43147,
       "longitude": 5.38436,
-      "location": "Motor way interchange South Cabries"
+      "location": "Échangeur autoroutier de Cabriés"
     },
     {
       "name": "EB",
@@ -119,7 +120,7 @@
       },
       "latitude": 43.41047,
       "longitude": 5.32461,
-      "location": "Cross road East Pennes Mirabeau"
+      "location": "Carrefour routier aménagé à l'Est des Pennes Mirabeau"
     },
     {
       "name": "SW",
@@ -129,7 +130,7 @@
       },
       "latitude": 43.32444,
       "longitude": 5.04167,
-      "location": "South of Carro"
+      "location": "Sud de Carro"
     },
     {
       "name": "SC",
@@ -149,7 +150,7 @@
       },
       "latitude": 43.32444,
       "longitude": 5.17222,
-      "location": "South of Carry-le-Rouet"
+      "location": "Sud de Carry-le-Rouet"
     },
     {
       "name": "SA",
@@ -159,7 +160,7 @@
       },
       "latitude": 43.37408,
       "longitude": 5.18793,
-      "location": "East Chateauneuf les Martigues"
+      "location": "Est de Chateauneuf les Martigues"
     },
     {
       "name": "SB",
@@ -169,7 +170,7 @@
       },
       "latitude": 43.40758,
       "longitude": 5.18481,
-      "location": "Junction of Bolmon pond and Marseille canal"
+      "location": "Convergence étang de Bolmon et canal de Marseille"
     },
     {
       "name": "SR",
@@ -179,7 +180,7 @@
       },
       "latitude": 43.15389,
       "longitude": 5.38194,
-      "location": "1 NM South of Riou Islands"
+      "location": "1 NM Sud des îles du Riou"
     }
   ],
   "withAts": {
@@ -302,44 +303,6 @@
       "",
       "",
       "Équipement de surveillance du trafic : aérodrome équipé d'un radar primaire et secondaire."
-    ],
-    "reportingPoints": [
-      {
-        "name": "NB",
-        "location": "Antenne du radar de Vitrolles"
-      },
-      {
-        "name": "E",
-        "location": "Terril au Sud Ouest de Gardanne"
-      },
-      {
-        "name": "EA",
-        "location": "Échangeur autoroutier de Cabriés"
-      },
-      {
-        "name": "EB",
-        "location": "Carrefour routier aménagé à l'Est des Pennes Mirabeau"
-      },
-      {
-        "name": "SW",
-        "location": "Sud de Carro"
-      },
-      {
-        "name": "S",
-        "location": "Sud de Carry-le-Rouet"
-      },
-      {
-        "name": "SA",
-        "location": "Est de Chateauneuf les Martigues"
-      },
-      {
-        "name": "SB",
-        "location": "Convergence étang de Bolmon et canal de Marseille"
-      },
-      {
-        "name": "SR",
-        "location": "1 NM Sud des îles du Riou"
-      }
     ]
   }
 }

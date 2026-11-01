@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFPT",
   "name": "Paris- Pontoise",
@@ -56,8 +57,8 @@
       },
       "latitude": 48.97056,
       "longitude": 1.79611,
-      "location": "South of Gargenville tanks",
-      "purpose": "optional reporting point, recommended for arrivals and departures through the south sector"
+      "location": "Sud des réservoirs de Gargenville",
+      "purpose": "point de compte rendu facultatif, recommandé pour les arrivées et les départs par le secteur sud"
     },
     {
       "name": "NW",
@@ -67,7 +68,7 @@
       },
       "latitude": 49.1475,
       "longitude": 1.89917,
-      "location": "Bercagny water tower"
+      "location": "Château d'eau de Bercagny"
     },
     {
       "name": "E",
@@ -87,8 +88,8 @@
       },
       "latitude": 49.06722,
       "longitude": 1.87694,
-      "location": "Frémainville distillery",
-      "purpose": "mandatory for arrivals through the south sector, except on ATC instruction"
+      "location": "Distillerie de Frémainville",
+      "purpose": "obligatoire pour les arrivées par le secteur sud, sauf instruction de l'ATC"
     }
   ],
   "notes": [

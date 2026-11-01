@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFTF",
   "name": "Cuers - Pierrefeu",
@@ -58,7 +59,7 @@
       },
       "latitude": 43.29333,
       "longitude": 6.15278,
-      "location": "Access road NE of the village of Puget-Ville"
+      "location": "Bretelle d'accès NE du village Puget-Ville"
     },
     {
       "name": "SL",
@@ -78,7 +79,7 @@
       },
       "latitude": 43.23417,
       "longitude": 6.28472,
-      "location": "Collobrières, crossroads 1 NM west of the village"
+      "location": "Collobrières Carrefour 1 NM W du village"
     },
     {
       "name": "VC",
@@ -88,7 +89,7 @@
       },
       "latitude": 43.19167,
       "longitude": 6.28028,
-      "location": "NE point of Valcros golf"
+      "location": "Pointe NE du golf de Valcros"
     },
     {
       "name": "TV",
@@ -98,7 +99,7 @@
       },
       "latitude": 43.40806,
       "longitude": 5.91861,
-      "location": "Tourves, castle ruins"
+      "location": "Tourves - Ruines de château"
     },
     {
       "name": "SA",
@@ -108,7 +109,7 @@
       },
       "latitude": 43.33944,
       "longitude": 6.12083,
-      "location": "Ste Anastasie, abeam south of the gymnasium"
+      "location": "Ste Anastasie - Travers sud du gymnase"
     }
   ],
   "notes": [

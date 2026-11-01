@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFLS",
   "name": "International de Grenoble-Isère",
@@ -60,7 +61,7 @@
       },
       "latitude": 45.46889,
       "longitude": 5.2975,
-      "location": "Champier racing circuit"
+      "location": "Circuit automobile de Champier"
     },
     {
       "name": "PU",
@@ -70,7 +71,7 @@
       },
       "latitude": 45.47194,
       "longitude": 5.55583,
-      "location": "North of Paladru lake"
+      "location": "Nord du lac de Paladru"
     },
     {
       "name": "NE",
@@ -80,7 +81,7 @@
       },
       "latitude": 45.44778,
       "longitude": 5.52389,
-      "location": "South of Paladru lake"
+      "location": "Sud du lac de Paladru"
     },
     {
       "name": "VN",
@@ -90,7 +91,7 @@
       },
       "latitude": 45.36028,
       "longitude": 5.625,
-      "location": "East abeam Voiron"
+      "location": "Travers Est Voiron"
     },
     {
       "name": "W",
@@ -100,7 +101,7 @@
       },
       "latitude": 45.32389,
       "longitude": 5.05361,
-      "location": "South Roundabout Beaurepaire deviation"
+      "location": "Rond point sud déviation de Beaurepaire"
     },
     {
       "name": "NW",
@@ -110,7 +111,7 @@
       },
       "latitude": 45.445,
       "longitude": 5.0325,
-      "location": "Railroad tunnel"
+      "location": "Tunnel TGV"
     },
     {
       "name": "SE",
@@ -120,7 +121,7 @@
       },
       "latitude": 45.30972,
       "longitude": 5.6175,
-      "location": "Interchange north of Voreppe"
+      "location": "Échangeur nord de Voreppe"
     },
     {
       "name": "S",
@@ -130,7 +131,7 @@
       },
       "latitude": 45.25167,
       "longitude": 5.24639,
-      "location": "Lake south Roybon"
+      "location": "Lac au Sud de Roybon"
     }
   ],
   "notes": [
@@ -201,12 +202,6 @@
       "",
       "",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "W",
-        "location": "Rond point sud déviation de Beaurepaire"
-      }
     ]
   }
 }

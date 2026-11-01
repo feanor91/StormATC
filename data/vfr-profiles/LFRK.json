@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFRK",
   "name": "Caen - Carpiquet",
@@ -60,7 +61,7 @@
       },
       "latitude": 49.22389,
       "longitude": -0.27556,
-      "location": "Cimenterie de Ranville / Ranville Cement Works"
+      "location": "Cimenterie de Ranville"
     },
     {
       "name": "EY",
@@ -70,7 +71,7 @@
       },
       "latitude": 49.14083,
       "longitude": -0.25389,
-      "location": "Cagny sugar plant"
+      "location": "Sucrerie de Cagny"
     },
     {
       "name": "NK",
@@ -80,7 +81,7 @@
       },
       "latitude": 49.21194,
       "longitude": -0.40333,
-      "location": "St Contest telecommunication tower"
+      "location": "Tour de télécommunication de St-Contest"
     },
     {
       "name": "SC",
@@ -90,7 +91,7 @@
       },
       "latitude": 49.09917,
       "longitude": -0.51222,
-      "location": "Water tower Evrecy"
+      "location": "Château d'eau d'Evrecy"
     },
     {
       "name": "SK",
@@ -100,7 +101,7 @@
       },
       "latitude": 48.99389,
       "longitude": -0.49222,
-      "location": "Orne turn NW of Thury-Harcourt"
+      "location": "Boucle de l'Orne au NO de Thury-Harcourt"
     },
     {
       "name": "SW",
@@ -110,7 +111,7 @@
       },
       "latitude": 49.07806,
       "longitude": -0.64139,
-      "location": "Road bridge SE of Villiers Bocage"
+      "location": "Pont sur la 4 voies au SE de Villers Bocage"
     },
     {
       "name": "W",
@@ -120,7 +121,7 @@
       },
       "latitude": 49.19361,
       "longitude": -0.86444,
-      "location": "Route Caen - EY reserved to ACFT on departure"
+      "location": "Giratoire de la forêt de Balleroy"
     }
   ],
   "notes": [
@@ -163,16 +164,6 @@
       "",
       "Mis en place : pour tous vols commerciaux ou à minima toutes les deux heures ; sur déclenchement ATC ; sur demande équipage (PN 15 minutes) avant l'arrivée / le départ d'un ACFT, contact FREQ Opérations.",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "NK",
-        "location": "Tour de télécommunication de St-Contest"
-      },
-      {
-        "name": "SW",
-        "location": "Pont sur la 4 voies au SE de Villers Bocage"
-      }
     ]
   }
 }

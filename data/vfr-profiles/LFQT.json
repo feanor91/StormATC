@@ -5,7 +5,8 @@
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
-    "A \"fr\" object holds the French column of the same chart, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty; the French of the procedures and of the points' purposes is not recorded."
+    "A \"fr\" object holds the French column of the same chart for the notes, copied as printed and never translated: a French note sits at the index of its English twin and is left empty when the twin could not be paired with certainty.",
+    "The reporting points are in French: \"location\" is the name printed in the French column of the chart, copied and not translated, and \"purpose\" is written in French; a point whose French name could not be read has no \"location\". Only \"spoken.en\" is English: the name the English phraseology says over the radio."
   ],
   "icao": "LFQT",
   "name": "Merville - Calonne",
@@ -59,7 +60,7 @@
       },
       "latitude": 50.77528,
       "longitude": 2.56389,
-      "location": "Hertzian radio relay 2 NM South of Steenvoorde"
+      "location": "Relais hertzien 2 NM Sud Steenvoorde"
     },
     {
       "name": "NA",
@@ -69,7 +70,7 @@
       },
       "latitude": 50.68333,
       "longitude": 2.57083,
-      "location": "La Motte-au-Bois castle"
+      "location": "Château de La Motte-au-Bois"
     },
     {
       "name": "NE",
@@ -79,7 +80,7 @@
       },
       "latitude": 50.68389,
       "longitude": 2.84333,
-      "location": "Motorway interchange West of Armentieres"
+      "location": "Échangeur autoroutier à l'Ouest d'Armentières"
     },
     {
       "name": "EA",
@@ -89,7 +90,7 @@
       },
       "latitude": 50.64083,
       "longitude": 2.745,
-      "location": "Water tower East of Estaires"
+      "location": "Château d'eau à l'Est d'Estaires"
     },
     {
       "name": "S",
@@ -99,7 +100,7 @@
       },
       "latitude": 50.43528,
       "longitude": 2.70417,
-      "location": "Motorway interchange at Lievin"
+      "location": "Échangeur autoroutier à Liévin"
     },
     {
       "name": "SA",
@@ -109,7 +110,7 @@
       },
       "latitude": 50.54111,
       "longitude": 2.65056,
-      "location": "Roundabout North-East of Bethune"
+      "location": "Rond-point au Nord-Est de Béthune"
     },
     {
       "name": "W",
@@ -119,7 +120,7 @@
       },
       "latitude": 50.64611,
       "longitude": 2.40806,
-      "location": "Silos East of Aires-sur-la-Lys"
+      "location": "Silos à l'Est d'Aires-sur-la-Lys"
     },
     {
       "name": "WA",
@@ -129,7 +130,7 @@
       },
       "latitude": 50.62639,
       "longitude": 2.55111,
-      "location": "Lys river and RD 916 intersection"
+      "location": "Intersection RD 916 et rivière Lys"
     },
     {
       "name": "EB",
@@ -192,36 +193,6 @@
       "",
       "",
       ""
-    ],
-    "reportingPoints": [
-      {
-        "name": "N",
-        "location": "Relais hertzien 2 NM Sud Steenvoorde"
-      },
-      {
-        "name": "NE",
-        "location": "Échangeur autoroutier à l'Ouest d'Armentières"
-      },
-      {
-        "name": "EA",
-        "location": "Château d'eau à l'Est d'Estaires"
-      },
-      {
-        "name": "S",
-        "location": "Échangeur autoroutier à Liévin"
-      },
-      {
-        "name": "SA",
-        "location": "Rond-point au Nord-Est de Béthune"
-      },
-      {
-        "name": "W",
-        "location": "Silos à l'Est d'Aires-sur-la-Lys"
-      },
-      {
-        "name": "WA",
-        "location": "Intersection RD 916 et rivière Lys"
-      }
     ]
   }
 }
