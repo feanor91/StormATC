@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.28.0 - 2026-11-01
+
 ### Added
 
 - **French text in the VFR profiles**: 276 profiles now carry a `fr` object with the French column of the chart, copied as
