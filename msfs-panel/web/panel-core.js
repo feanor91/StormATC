@@ -549,9 +549,14 @@ var StormAtcPanel = (function () {
         var MAP_ZOOM_STEP = 1.5;
         var MAP_MIN_RANGE_NM = 1.5;
         var MAP_MAX_RANGE_NM = 400;
+        // The look of NavVFR's own map: colour, line width and dashes by kind of airspace.
         var MAP_ZONE_STYLE = {
-            restricted: '#ff5c5c', ctr: '#4aa3ff', tma: '#9b8cff', radio: '#35d39a', leisure: '#ffb347', sector: '#7f93a8',
-            other: '#7f93a8'
+            restricted: { colour: 'rgb(192, 40, 40)', width: 2, dashed: false },
+            ctr: { colour: 'rgb(31, 90, 200)', width: 2, dashed: true },
+            tma: { colour: 'rgb(50, 60, 170)', width: 1.5, dashed: false },
+            radio: { colour: 'rgb(142, 68, 173)', width: 1.5, dashed: true },
+            leisure: { colour: 'rgb(215, 125, 15)', width: 1.5, dashed: false },
+            other: { colour: 'rgb(120, 120, 120)', width: 1, dashed: false }
         };
         var mapBar = null, mapWrap = null, mapCanvas = null, mapInfo = null, mapNote = null;
         var mapFollowButton = null, mapRotateButton = null;
@@ -570,6 +575,9 @@ var StormAtcPanel = (function () {
         var mapTrailAt = 0;
         var mapTimer = null;
         var mapGeometry = null;
+        var mapTiles = {};
+        var mapLabelsReady = false;
+        var mapTileKeys = [];
 
         function mapTexts() {
             var t = lastState && lastState.labels && lastState.labels.map;
@@ -591,6 +599,7 @@ var StormAtcPanel = (function () {
 
         function buildMap() {
             clear(mapPane);
+            mapLabelsReady = !!(lastState && lastState.labels && lastState.labels.map);
             var t = mapTexts();
             mapBar = el('div', 'sa-chartbar');
             mapBar.appendChild(mapButton(t.zoomOut, function () { zoomMap(1 / MAP_ZOOM_STEP); }));
@@ -659,7 +668,7 @@ var StormAtcPanel = (function () {
             // Screen offset back to map offset: the inverse of the rotation used to draw.
             var mx = dx * Math.cos(rot) - dy * Math.sin(rot);
             var my = dx * Math.sin(rot) + dy * Math.cos(rot);
-            mapCenter = { lat: mapCenter.lat + my / g.ppd, lon: mapCenter.lon - mx / (g.ppd * g.cosLat) };
+            mapCenter = { lat: fromMercator(mercator(mapCenter.lat) + my / g.scale), lon: mapCenter.lon - mx / g.scale * 180 / Math.PI };
             if (mapFollow) {
                 mapFollow = false;
                 storageSet('stormatc.mapFollow', '0');
@@ -771,6 +780,29 @@ var StormAtcPanel = (function () {
 
         function toRad(d) { return d * Math.PI / 180; }
 
+        function mercator(lat) { return Math.log(Math.tan(Math.PI / 4 + toRad(lat) / 2)); }
+
+        function fromMercator(y) { return (2 * Math.atan(Math.exp(y)) - Math.PI / 2) * 180 / Math.PI; }
+
+        // A tile of NavVFR's base map, asked from StormATC once and kept; null while it is coming.
+        function mapTile(base, layer, z, x, y) {
+            var key = base + '/' + layer + '/' + z + '/' + x + '/' + y;
+            var tile = mapTiles[key];
+            if (tile) { return tile.ready ? tile.image : null; }
+            if (mapTileKeys.length > 600) {
+                var old = mapTileKeys.splice(0, 200);
+                for (var i = 0; i < old.length; i++) { delete mapTiles[old[i]]; }
+            }
+            var image = new Image();
+            tile = { image: image, ready: false };
+            image.onload = function () { tile.ready = true; drawMap(); };
+            image.onerror = function () { tile.ready = false; };
+            image.src = baseUrl() + '/api/navvfr/tile/' + layer + '/' + z + '/' + x + '/' + y;
+            mapTiles[key] = tile;
+            mapTileKeys.push(key);
+            return null;
+        }
+
         function distanceNm(lat1, lon1, lat2, lon2) {
             var dLat = toRad(lat2 - lat1);
             var dLon = toRad(lon2 - lon1);
@@ -814,6 +846,38 @@ var StormAtcPanel = (function () {
             return best;
         }
 
+        // The diagonal hatching NavVFR uses inside restricted areas.
+        function mapHatch(ctx, colour) {
+            try {
+                var tile = document.createElement('canvas');
+                tile.width = 8;
+                tile.height = 8;
+                var c = tile.getContext('2d');
+                c.strokeStyle = colour;
+                c.globalAlpha = 150 / 255;
+                c.lineWidth = 1.6;
+                c.beginPath();
+                c.moveTo(-1, 9);
+                c.lineTo(9, -1);
+                c.stroke();
+                return ctx.createPattern(tile, 'repeat');
+            } catch (e) { return null; }
+        }
+
+        // Liang-Barsky: the part of a segment that lies inside a rectangle, or null.
+        function clipSegment(a, b, left, top, right, bottom) {
+            var t0 = 0, t1 = 1, dx = b[0] - a[0], dy = b[1] - a[1];
+            var p = [-dx, dx, -dy, dy];
+            var q = [a[0] - left, right - a[0], a[1] - top, bottom - a[1]];
+            for (var i = 0; i < 4; i++) {
+                if (p[i] === 0) { if (q[i] < 0) { return null; } continue; }
+                var t = q[i] / p[i];
+                if (p[i] < 0) { if (t > t1) { return null; } if (t > t0) { t0 = t; } }
+                else { if (t < t0) { return null; } if (t < t1) { t1 = t; } }
+            }
+            return [a[0] + t0 * dx, a[1] + t0 * dy, a[0] + t1 * dx, a[1] + t1 * dy];
+        }
+
         function drawMap() {
             if (tab !== 'map' || !mapCanvas) { return; }
             var t = mapTexts();
@@ -831,18 +895,22 @@ var StormAtcPanel = (function () {
             var live = aircraftIsLive(mapState);
             var ppd = (h / 2) / (mapRangeNm / 60);
             var cosLat = Math.cos(toRad(mapCenter.lat));
+            // Web Mercator, like the tiles: scale is the number of pixels per radian of longitude.
+            var scaleX = ppd * cosLat * 180 / Math.PI;
             var rot = mapHeadingUp && a && live ? toRad(a.headingTrue) : 0;
-            mapGeometry = { w: w, h: h, ppd: ppd, cosLat: cosLat, rotation: rot };
+            mapGeometry = { w: w, h: h, ppd: ppd, cosLat: cosLat, rotation: rot, scale: scaleX };
+            var centreY = mercator(mapCenter.lat);
 
             function project(lat, lon) {
-                var dx = (lon - mapCenter.lon) * cosLat * ppd;
-                var dy = -(lat - mapCenter.lat) * ppd;
+                var dx = toRad(lon - mapCenter.lon) * scaleX;
+                var dy = -(mercator(lat) - centreY) * scaleX;
                 return [w / 2 + dx * Math.cos(rot) + dy * Math.sin(rot), h / 2 - dx * Math.sin(rot) + dy * Math.cos(rot)];
             }
 
             var px = Math.max(10, Math.round(10 * scale));
-            ctx.fillStyle = '#0d1620';
+            ctx.fillStyle = '#e8ebee';
             ctx.fillRect(0, 0, w, h);
+            drawMapTiles(ctx, w, h, scaleX, centreY, rot);
             ctx.lineJoin = 'round';
             ctx.textBaseline = 'middle';
 
@@ -850,51 +918,59 @@ var StormAtcPanel = (function () {
             var inside = [];
             var labels = [];
 
-            // Airspaces: those at the aircraft's altitude strongly, the others faintly.
+            // Airspaces, drawn as NavVFR draws them: a coloured outline, a band inside it (hatched for
+            // restricted areas) and the name and limits written along the longest visible side.
             var zones = (mapData && mapData.airspaces) || [];
+            var hatch = null;
             for (var z = 0; z < zones.length; z++) {
                 var zone = zones[z];
-                var colour = MAP_ZONE_STYLE[zone.kind] || MAP_ZONE_STYLE.other;
-                var here = zone.lowerFt <= altitude && zone.upperFt >= altitude;
-                var above = zone.lowerFt > altitude;
-                var isInside = false;
-                var labelAt = null;
+                var look = MAP_ZONE_STYLE[zone.kind] || MAP_ZONE_STYLE.other;
+                if (a && zone.lowerFt <= altitude && zone.upperFt >= altitude && zoneContains(zone, a.lon, a.lat)) { inside.push(zone); }
                 for (var r = 0; r < zone.rings.length; r++) {
                     var ring = zone.rings[r];
-                    if (!ring.length) { continue; }
-                    ctx.beginPath();
+                    if (ring.length < 4) { continue; }
+                    var pts = [];
                     var minX = 1e9, maxX = -1e9, minY = 1e9, maxY = -1e9;
                     for (var k = 0; k < ring.length; k++) {
                         var p = project(ring[k][1], ring[k][0]);
-                        if (k === 0) { ctx.moveTo(p[0], p[1]); } else { ctx.lineTo(p[0], p[1]); }
+                        pts.push(p);
                         minX = Math.min(minX, p[0]); maxX = Math.max(maxX, p[0]);
                         minY = Math.min(minY, p[1]); maxY = Math.max(maxY, p[1]);
                     }
-                    if (maxX < 0 || minX > w || maxY < 0 || minY > h) { continue; }
+                    if (maxX < 0 || minX > w || maxY < 0 || minY > h || (maxX - minX < 3 && maxY - minY < 3)) { continue; }
+                    ctx.beginPath();
+                    for (var q0 = 0; q0 < pts.length; q0++) {
+                        if (q0 === 0) { ctx.moveTo(pts[q0][0], pts[q0][1]); } else { ctx.lineTo(pts[q0][0], pts[q0][1]); }
+                    }
                     ctx.closePath();
-                    ctx.globalAlpha = here ? 0.16 : 0.05;
-                    ctx.fillStyle = colour;
-                    ctx.fill();
-                    ctx.globalAlpha = here ? 0.95 : 0.35;
-                    ctx.strokeStyle = colour;
-                    ctx.lineWidth = here ? 2 : 1;
-                    if (ctx.setLineDash) { ctx.setLineDash(above ? [6, 5] : []); }
+                    ctx.save();
+                    ctx.clip();
+                    ctx.lineWidth = 14;
+                    if (zone.kind === 'restricted') {
+                        if (!hatch) { hatch = mapHatch(ctx, look.colour); }
+                        ctx.strokeStyle = hatch || look.colour;
+                    } else {
+                        ctx.globalAlpha = 40 / 255;
+                        ctx.strokeStyle = look.colour;
+                    }
                     ctx.stroke();
-                    if (maxX - minX > px * 7 && !labelAt) { labelAt = [(minX + maxX) / 2, (minY + maxY) / 2, maxX - minX]; }
+                    ctx.restore();
+                    ctx.strokeStyle = look.colour;
+                    ctx.lineWidth = look.width;
+                    if (ctx.setLineDash) { ctx.setLineDash(look.dashed ? [9, 5] : []); }
+                    ctx.stroke();
+                    if (ctx.setLineDash) { ctx.setLineDash([]); }
+                    labels.push({ pts: pts, zone: zone, colour: look.colour, minX: minX, maxX: maxX, minY: minY, maxY: maxY });
                 }
-                if (ctx.setLineDash) { ctx.setLineDash([]); }
-                ctx.globalAlpha = 1;
-                if (a && here && zoneContains(zone, a.lon, a.lat)) { isInside = true; inside.push(zone); }
-                if (labelAt && here) { labels.push({ x: labelAt[0], y: labelAt[1], zone: zone, colour: colour, wide: labelAt[2], inside: isInside }); }
             }
 
             // Range rings around the aircraft.
             if (a) {
                 var centre = project(a.lat, a.lon);
                 var step = mapRangeNm > 60 ? 50 : (mapRangeNm > 25 ? 20 : (mapRangeNm > 10 ? 10 : 5));
-                ctx.strokeStyle = 'rgba(159, 179, 200, 0.25)';
+                ctx.strokeStyle = 'rgba(60, 80, 100, 0.35)';
                 ctx.lineWidth = 1;
-                ctx.fillStyle = 'rgba(159, 179, 200, 0.6)';
+                ctx.fillStyle = 'rgba(40, 60, 80, 0.8)';
                 ctx.font = (px - 1) + 'px sans-serif';
                 for (var nm = step; nm <= mapRangeNm * 2.5; nm += step) {
                     var radius = nm / 60 * ppd;
@@ -912,15 +988,24 @@ var StormAtcPanel = (function () {
                 for (var q = 0; q < airports.length; q++) {
                     var ap = project(airports[q].lat, airports[q].lon);
                     if (ap[0] < 0 || ap[0] > w || ap[1] < 0 || ap[1] > h) { continue; }
-                    ctx.fillStyle = '#c9d6e3';
+                    ctx.fillStyle = 'rgb(31, 111, 224)';
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 1.5;
                     ctx.beginPath();
-                    ctx.arc(ap[0], ap[1], 3, 0, Math.PI * 2);
+                    ctx.arc(ap[0], ap[1], 4.5, 0, Math.PI * 2);
                     ctx.fill();
-                    if (mapRangeNm <= 25) { ctx.fillText(airports[q].ident, ap[0] + 6, ap[1]); }
+                    ctx.stroke();
+                    if (mapRangeNm <= 25) {
+                        var tw2 = ctx.measureText(airports[q].ident).width;
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.63)';
+                        ctx.fillRect(ap[0] + 7, ap[1] - px * 0.6, tw2 + 4, px * 1.2);
+                        ctx.fillStyle = 'rgb(11, 42, 85)';
+                        ctx.fillText(airports[q].ident, ap[0] + 9, ap[1]);
+                    }
                 }
             }
 
-            // Route.
+            // Route: a white casing under a red line, numbered round markers (blue for aerodromes), as in NavVFR.
             var route = (mapState && mapState.route) || [];
             var nextIndex = nextWaypoint(route, a);
             if (route.length > 1) {
@@ -929,47 +1014,86 @@ var StormAtcPanel = (function () {
                     var rp = project(route[s].lat, route[s].lon);
                     if (s === 0) { ctx.moveTo(rp[0], rp[1]); } else { ctx.lineTo(rp[0], rp[1]); }
                 }
-                ctx.strokeStyle = '#ff4fd8';
-                ctx.lineWidth = 3;
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 8;
+                ctx.stroke();
+                ctx.strokeStyle = 'rgb(228, 40, 30)';
+                ctx.lineWidth = 4;
                 ctx.stroke();
             }
-            ctx.font = 'bold ' + px + 'px sans-serif';
+            ctx.font = 'bold ' + (px - 1) + 'px sans-serif';
+            ctx.textAlign = 'center';
             for (var n = 0; n < route.length; n++) {
                 var wp = project(route[n].lat, route[n].lon);
-                ctx.fillStyle = n === nextIndex ? '#ffd166' : (route[n].icao ? '#4aa3ff' : '#ff4fd8');
-                ctx.strokeStyle = '#0d1620';
-                ctx.lineWidth = 2;
+                ctx.fillStyle = route[n].icao ? 'rgb(31, 111, 224)' : 'rgb(228, 40, 30)';
+                ctx.strokeStyle = n === nextIndex ? '#ffd166' : '#ffffff';
+                ctx.lineWidth = 2.5;
                 ctx.beginPath();
-                ctx.arc(wp[0], wp[1], n === nextIndex ? 7 : 5, 0, Math.PI * 2);
+                ctx.arc(wp[0], wp[1], 8, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.stroke();
                 ctx.fillStyle = '#ffffff';
-                ctx.strokeStyle = 'rgba(13, 22, 32, 0.9)';
+                ctx.fillText(String(n + 1), wp[0], wp[1]);
+            }
+            ctx.textAlign = 'start';
+            ctx.font = 'bold ' + px + 'px sans-serif';
+            for (var nn = 0; nn < route.length; nn++) {
+                var wq = project(route[nn].lat, route[nn].lon);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.92)';
                 ctx.lineWidth = 3;
-                ctx.strokeText(route[n].name, wp[0] + 9, wp[1] - 9);
-                ctx.fillText(route[n].name, wp[0] + 9, wp[1] - 9);
+                ctx.fillStyle = 'rgb(11, 42, 85)';
+                ctx.strokeText(route[nn].name, wq[0] + 11, wq[1] - 11);
+                ctx.fillText(route[nn].name, wq[0] + 11, wq[1] - 11);
             }
 
-            // Zone labels, without overlapping.
+            // Zone labels, written along the longest visible side, without overlapping.
             ctx.font = px + 'px sans-serif';
             var placed = [];
             for (var l = 0; l < labels.length; l++) {
                 var lab = labels[l];
-                var text = lab.zone.name + '  ' + formatLimit(lab.zone.lower) + '–' + formatLimit(lab.zone.upper);
-                var width = ctx.measureText(text).width;
-                var rect = { x: lab.x - width / 2, y: lab.y - px, w: width, h: px * 2 };
+                if (mapRangeNm > 400) { break; }
+                var best = null;
+                var bestLength = 0;
+                for (var e = 0; e < lab.pts.length - 1; e++) {
+                    var clipped = clipSegment(lab.pts[e], lab.pts[e + 1], 6, 6, w - 6, h - 6);
+                    if (!clipped) { continue; }
+                    var len = Math.sqrt(Math.pow(clipped[2] - clipped[0], 2) + Math.pow(clipped[3] - clipped[1], 2));
+                    if (len > bestLength) { bestLength = len; best = clipped; }
+                }
+                if (bestLength < 28) { continue; }
+                var full = lab.zone.name + '   ' + formatLimit(lab.zone.lower) + ' - ' + formatLimit(lab.zone.upper);
+                var text = null;
+                var candidates = [full, lab.zone.name];
+                for (var cI = 0; cI < candidates.length; cI++) {
+                    if (ctx.measureText(candidates[cI]).width <= bestLength - 6) { text = candidates[cI]; break; }
+                }
+                if (!text) { continue; }
+                var tw = ctx.measureText(text).width;
+                var x1 = best[0], y1 = best[1], x2 = best[2], y2 = best[3];
+                if (x2 < x1) { var tx = x1; x1 = x2; x2 = tx; var ty = y1; y1 = y2; y2 = ty; }
+                var angle = Math.atan2(y2 - y1, x2 - x1);
+                var mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+                var box = { x: mx - tw / 2 - px * 0.7, y: my - tw / 2 * Math.abs(Math.sin(angle)) - px, w: tw + px * 1.4, h: tw * Math.abs(Math.sin(angle)) + px * 2 };
                 var clash = false;
                 for (var c = 0; c < placed.length; c++) {
-                    if (rect.x < placed[c].x + placed[c].w && rect.x + rect.w > placed[c].x &&
-                        rect.y < placed[c].y + placed[c].h && rect.y + rect.h > placed[c].y) { clash = true; break; }
+                    if (box.x < placed[c].x + placed[c].w && box.x + box.w > placed[c].x &&
+                        box.y < placed[c].y + placed[c].h && box.y + box.h > placed[c].y) { clash = true; break; }
                 }
-                if (clash || width > lab.wide * 1.6) { continue; }
-                placed.push(rect);
-                ctx.strokeStyle = 'rgba(13, 22, 32, 0.9)';
-                ctx.lineWidth = 3;
-                ctx.strokeText(text, rect.x, lab.y);
-                ctx.fillStyle = lab.inside ? '#ffffff' : lab.colour;
-                ctx.fillText(text, rect.x, lab.y);
+                if (clash) { continue; }
+                placed.push(box);
+                // On the inside of the zone: the side of the segment where the middle of the zone lies.
+                var cx = (lab.minX + lab.maxX) / 2, cy = (lab.minY + lab.maxY) / 2;
+                var side = ((x2 - x1) * (cy - y1) - (y2 - y1) * (cx - x1)) > 0 ? px + 1 : -3;
+                ctx.save();
+                ctx.translate(mx, my);
+                ctx.rotate(angle);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
+                ctx.lineWidth = 3.5;
+                ctx.lineJoin = 'round';
+                ctx.strokeText(text, -tw / 2, side);
+                ctx.fillStyle = lab.colour;
+                ctx.fillText(text, -tw / 2, side);
+                ctx.restore();
             }
 
             // The track flown, then the aircraft.
@@ -979,7 +1103,7 @@ var StormAtcPanel = (function () {
                     var tp = project(mapTrail[m][0], mapTrail[m][1]);
                     if (m === 0) { ctx.moveTo(tp[0], tp[1]); } else { ctx.lineTo(tp[0], tp[1]); }
                 }
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.55)';
+                ctx.strokeStyle = 'rgba(30, 60, 90, 0.7)';
                 ctx.lineWidth = 2;
                 ctx.stroke();
             }
@@ -988,7 +1112,7 @@ var StormAtcPanel = (function () {
                 ctx.save();
                 ctx.translate(ap2[0], ap2[1]);
                 ctx.rotate(toRad(a.headingTrue) - rot);
-                ctx.fillStyle = live ? '#ffffff' : '#7f93a8';
+                ctx.fillStyle = live ? '#ffffff' : '#9aa7b4';
                 ctx.strokeStyle = '#0d1620';
                 ctx.lineWidth = 2;
                 ctx.beginPath();
@@ -1005,22 +1129,55 @@ var StormAtcPanel = (function () {
             // North marker and scale bar.
             var north = rot ? '↑ N ' + Math.round(-rot * 180 / Math.PI + 360) % 360 + '°' : 'N';
             ctx.font = 'bold ' + px + 'px sans-serif';
-            ctx.fillStyle = '#9fb3c8';
+            ctx.fillStyle = '#34495e';
             ctx.fillText(north, w - px * 4, px * 1.2);
             var barNm = mapRangeNm > 60 ? 20 : (mapRangeNm > 25 ? 10 : (mapRangeNm > 10 ? 5 : (mapRangeNm > 4 ? 2 : 1)));
             var barPx = barNm / 60 * ppd;
-            ctx.strokeStyle = '#ffffff';
+            ctx.strokeStyle = '#1b2a3a';
             ctx.lineWidth = 3;
             ctx.beginPath();
             ctx.moveTo(10, h - 14); ctx.lineTo(10 + barPx, h - 14);
             ctx.stroke();
-            ctx.fillStyle = '#ffffff';
+            ctx.fillStyle = '#1b2a3a';
             ctx.fillText(barNm + ' NM', 10, h - 26);
 
             // Overlay texts.
             mapFollowButton.className = 'sa-btn sa-chartnav' + (mapFollow ? ' sa-on' : '');
             mapRotateButton.textContent = mapHeadingUp ? t.headingUp : t.northUp;
             renderMapInfo(t, a, live, inside, route, nextIndex);
+        }
+
+        // The base map of NavVFR (same tiles, same style), drawn under everything else.
+        function drawMapTiles(ctx, w, h, scaleX, centreY, rot) {
+            var base = mapState && mapState.baseMap;
+            if (!base || !base.layers) { return; }
+            var z = Math.round(Math.log(scaleX * 2 * Math.PI / 256) / Math.LN2);
+            z = Math.max(0, Math.min(base.maxZoom, z));
+            var tiles = Math.pow(2, z);
+            var size = 256 * (scaleX * 2 * Math.PI / (256 * tiles));
+            var radius = Math.sqrt(w * w + h * h) / 2;
+            // The tiles that the screen (turned or not) can show.
+            var fx = function (px) { return ((mapCenter.lon + px / scaleX * 180 / Math.PI) + 180) / 360 * tiles; };
+            var fy = function (py) { return (1 - (centreY - py / scaleX) / Math.PI) / 2 * tiles; };
+            var x0 = Math.floor(fx(-radius)), x1 = Math.floor(fx(radius));
+            var y0 = Math.max(0, Math.floor(fy(-radius))), y1 = Math.min(tiles - 1, Math.floor(fy(radius)));
+            if ((x1 - x0 + 1) * (y1 - y0 + 1) > 120) { return; }
+            var cx = (mapCenter.lon + 180) / 360 * tiles;
+            var cy = (1 - centreY / Math.PI) / 2 * tiles;
+            ctx.save();
+            ctx.translate(w / 2, h / 2);
+            ctx.rotate(-rot);
+            for (var layer = 0; layer < base.layers; layer++) {
+                for (var ty = y0; ty <= y1; ty++) {
+                    for (var tx = x0; tx <= x1; tx++) {
+                        var wrapped = ((tx % tiles) + tiles) % tiles;
+                        var image = mapTile(base.key, layer, z, wrapped, ty);
+                        if (!image) { continue; }
+                        ctx.drawImage(image, (tx - cx) * size - 0.5, (ty - cy) * size - 0.5, size + 1, size + 1);
+                    }
+                }
+            }
+            ctx.restore();
         }
 
         function renderMapInfo(t, a, live, inside, route, nextIndex) {
@@ -1294,10 +1451,8 @@ var StormAtcPanel = (function () {
             }
             if (state.labels.map) {
                 var mapTitle = state.labels.map.tab;
-                if (tabMap.textContent !== mapTitle) {
-                    tabMap.textContent = mapTitle;
-                    if (mapCanvas) { buildMap(); drawMap(); }
-                }
+                tabMap.textContent = mapTitle;
+                if (mapCanvas && !mapLabelsReady) { buildMap(); drawMap(); }
             }
             var wasAtBottom = dialoguePane.scrollHeight - dialoguePane.scrollTop - dialoguePane.clientHeight < 40;
             stickToBottom = stickToBottom || wasAtBottom;

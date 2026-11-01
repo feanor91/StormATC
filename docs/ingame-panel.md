@@ -46,7 +46,7 @@ haut à droite changent la taille du texte ; le choix est mémorisé.
 
 ## La carte
 
-L'onglet **Carte** dessine, sans fond de carte ni téléchargement, ce que **NavVFR** connaît : la **route** (points et
+L'onglet **Carte** montre, avec **le même fond de carte et le même style que NavVFR** (les tuiles passent par NavVFR, le simulateur ne télécharge rien), ce que **NavVFR** connaît : la **route** (points et
 tracé, le prochain point en jaune), les **espaces aériens** autour de vous, les **terrains** et **votre avion** avec la
 trace de son vol. Les zones qui concernent votre altitude (celle de l'avion, ou l'altitude de croisière de NavVFR tant
 que l'avion n'est pas suivi) sont colorées et nommées avec leurs limites ; les zones plus hautes sont en pointillés

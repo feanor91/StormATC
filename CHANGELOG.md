@@ -5,6 +5,13 @@ public releases.
 
 ## Unreleased
 
+### Changed
+
+- **The Map tab now shows NavVFR's own base map**: the same tiles as NavVFR (light grey, CARTO, relief or streets, whichever
+  NavVFR displays), and the same look for airspaces (coloured outline, inner band, hatching for restricted areas, name and
+  limits along the side), route (white casing, red line, numbered markers) and aerodromes. The tiles come through NavVFR
+  (which downloads and keeps them), then StormATC; the simulator downloads nothing itself.
+
 ## 0.27.0 - 2026-11-01
 
 ### Changed

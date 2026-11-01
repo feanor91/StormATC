@@ -47,6 +47,28 @@ public sealed class NavVfrFeedClient : INavVfrFeed
             cancellationToken);
     }
 
+    /// <inheritdoc />
+    public async Task<NavVfrTile?> GetTileAsync(int layer, int zoom, int x, int y, CancellationToken cancellationToken)
+    {
+        try
+        {
+            using HttpResponseMessage response = await _http.GetAsync(
+                string.Create(CultureInfo.InvariantCulture, $"api/tile/{layer}/{zoom}/{x}/{y}"), cancellationToken).ConfigureAwait(false);
+            if (!response.IsSuccessStatusCode || response.Content.Headers.ContentLength > MaximumBytes)
+            {
+                return null;
+            }
+
+            byte[] bytes = await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
+            return new NavVfrTile(bytes, response.Content.Headers.ContentType?.MediaType ?? "image/png");
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or IOException)
+        {
+            _logger.LogDebug(ex, "NavVFR's tile did not come.");
+            return null;
+        }
+    }
+
     private async Task<byte[]?> GetAsync(string path, CancellationToken cancellationToken)
     {
         try

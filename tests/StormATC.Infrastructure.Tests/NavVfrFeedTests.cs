@@ -40,6 +40,9 @@ public sealed class NavVfrFeedTests : IDisposable
     {
         public (double MinLat, double MinLon, double MaxLat, double MaxLon)? LastRectangle { get; private set; }
 
+        public Task<NavVfrTile?> GetTileAsync(int layer, int zoom, int x, int y, CancellationToken cancellationToken) =>
+            Task.FromResult<NavVfrTile?>(layer == 0 && zoom == 5 && x == 16 && y == 11 ? new NavVfrTile([1, 2, 3], "image/png") : null);
+
         public Task<byte[]?> GetStateAsync(CancellationToken cancellationToken) => Task.FromResult(state);
 
         public Task<byte[]?> GetMapAsync(double a, double b, double c, double d, CancellationToken cancellationToken)
@@ -121,6 +124,25 @@ public sealed class NavVfrFeedTests : IDisposable
             using HttpResponseMessage response = await client.GetAsync(path);
 
             Assert.Equal(HttpStatusCode.ServiceUnavailable, response.StatusCode);
+        }
+    }
+
+    [Fact]
+    public async Task A_tile_of_the_base_map_is_relayed_with_its_type_and_an_unknown_one_is_not_found()
+    {
+        (ToolbarPanelServer server, HttpClient client) = await StartAsync(new FakeFeed(null, null));
+        using (server)
+        using (client)
+        {
+            using HttpResponseMessage found = await client.GetAsync("api/navvfr/tile/0/5/16/11");
+            using HttpResponseMessage missing = await client.GetAsync("api/navvfr/tile/0/5/16/12");
+            using HttpResponseMessage junk = await client.GetAsync("api/navvfr/tile/a/b/c/d");
+
+            Assert.Equal(HttpStatusCode.OK, found.StatusCode);
+            Assert.Equal("image/png", found.Content.Headers.ContentType?.MediaType);
+            Assert.Equal(new byte[] { 1, 2, 3 }, await found.Content.ReadAsByteArrayAsync());
+            Assert.Equal(HttpStatusCode.NotFound, missing.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, junk.StatusCode);
         }
     }
 

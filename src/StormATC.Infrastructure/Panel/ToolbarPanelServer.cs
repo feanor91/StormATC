@@ -43,6 +43,9 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
     /// <summary>NavVFR's airspaces and aerodromes in a rectangle (<c>minLat</c>, <c>minLon</c>, <c>maxLat</c>, <c>maxLon</c>).</summary>
     public const string NavVfrMapPath = "/api/navvfr/map";
 
+    /// <summary>NavVFR's base map tiles, <c>/api/navvfr/tile/{layer}/{zoom}/{x}/{y}</c>.</summary>
+    public const string NavVfrTilePath = "/api/navvfr/tile";
+
     /// <summary>The largest route accepted, in bytes: a real route is a few kilobytes.</summary>
     private const int MaximumRouteBytes = 512 * 1024;
 
@@ -250,6 +253,12 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
                 return;
             }
 
+            if (path.StartsWith(NavVfrTilePath + "/", StringComparison.Ordinal))
+            {
+                await ServeNavVfrTileAsync(context, path, cancellationToken).ConfigureAwait(false);
+                return;
+            }
+
             if (path is NavVfrStatePath or NavVfrMapPath)
             {
                 await ServeNavVfrAsync(context, path, cancellationToken).ConfigureAwait(false);
@@ -396,6 +405,33 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
         }
 
         await WriteAsync(response, "application/json; charset=utf-8", bytes, cancellationToken).ConfigureAwait(false);
+    }
+
+    private async Task ServeNavVfrTileAsync(HttpListenerContext context, string path, CancellationToken cancellationToken)
+    {
+        HttpListenerResponse response = context.Response;
+        string[] parts = path[(NavVfrTilePath.Length + 1)..].Split('/');
+        if (_navVfr is null
+            || parts.Length != 4
+            || !int.TryParse(parts[0], NumberStyles.None, CultureInfo.InvariantCulture, out int layer)
+            || !int.TryParse(parts[1], NumberStyles.None, CultureInfo.InvariantCulture, out int zoom)
+            || !int.TryParse(parts[2], NumberStyles.None, CultureInfo.InvariantCulture, out int x)
+            || !int.TryParse(parts[3], NumberStyles.None, CultureInfo.InvariantCulture, out int y)
+            || zoom > 24)
+        {
+            response.StatusCode = (int)HttpStatusCode.NotFound;
+            return;
+        }
+
+        NavVfrTile? tile = await _navVfr.GetTileAsync(layer, zoom, x, y, cancellationToken).ConfigureAwait(false);
+        if (tile is null)
+        {
+            response.StatusCode = (int)HttpStatusCode.NotFound;
+            return;
+        }
+
+        response.Headers["Cache-Control"] = "private, max-age=3600";
+        await WriteAsync(response, tile.ContentType, tile.Bytes, cancellationToken).ConfigureAwait(false);
     }
 
     private static bool TryDegrees(string? text, out double value) =>
