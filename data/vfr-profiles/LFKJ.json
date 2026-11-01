@@ -4,14 +4,15 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded."
   ],
   "icao": "LFKJ",
   "name": "Ajaccio Napoléon Bonaparte",
   "source": {
     "publication": "AIP France AD 2 LFKJ",
     "chartDate": "2026-01-22",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, procedures structured by hand"
   },
   "referencePosition": {
     "latitude": 41.92361,
@@ -39,6 +40,10 @@
       ]
     }
   ],
+  "circuit": {
+    "lowHeight": "500 ft AMSL; training flights authorised only with an instructor pilot; downwind leg east of the runway; runway 20: use the touchdown marking as the aiming point, not the displaced threshold marking",
+    "restrictions": "landing lights compulsory in the CTR"
+  },
   "reportingPoints": [
     {
       "name": "N",
@@ -161,6 +166,43 @@
       "location": "South of Ajaccio Cemetery"
     }
   ],
+  "withAts": {
+    "arrivals": [
+      {
+        "note": "maritime transit mainland / Ajaccio: aircraft coming from LONSU are recommended to reach or cross NW at 2000 ft AMSL; in a maritime crossing the compulsory arrival and departure route is NW <-> W"
+      },
+      {
+        "transit": "W <-> SA",
+        "note": "unless otherwise cleared, recommended altitude 2000 ft AMSL maximum; W to SA preferential altitude 2000 ft AMSL; SA to W preferential altitude 1500 ft AMSL"
+      },
+      {
+        "transit": "N <-> SC <-> SEA",
+        "note": "unless otherwise cleared, recommended flight levels above FL055; N to SEA preferential FL075; SEA to N preferential FL065"
+      },
+      {
+        "note": "routes of arrival and departure for other flights: northbound WA <-> W <-> NW; southbound SB <-> SA <-> S; minimum altitude 3000 ft AMSL; visibility of at least 5 km below FL100; on pilot request and after clearance, the pilot in charge of obstacle clearance may depart from these routes"
+      }
+    ],
+    "departures": [
+      {
+        "runway": "02",
+        "note": "take-off runway 02 and missed landing runway 02: climb on the runway heading, reach 1000 ft AMSL minimum at the latest 2 NM after the displaced threshold of runway 20, then turn left while continuing the climb"
+      }
+    ],
+    "waiting": "holding in flight is possible at SA and W between 3000 ft and 5000 ft to avoid interference with IFR flights",
+    "specialVfr": "in the presence of IFR aircraft in the CTR: visibility 3000 m, ceiling 1000 ft AAL",
+    "nightVfr": {
+      "restrictions": "landing on runway 20 prohibited; activity prohibited if the hazard light of Monte Sant'Angelo is not available; local flights limited to 1 aircraft at most",
+      "circuit": "west of runway 02/20, altitude 1500 ft AMSL",
+      "flightInTheCtr": "cloud base at least 3500 ft AAL, visibility at least 5 km, minimum altitude 3000 ft AMSL",
+      "helicopters": "FATO not usable at night: take off and land on the runway; night VFR minima: visibility 4000 m and ceiling 1000 ft AAL on route SB-SA and WA-W without IFR aircraft in the CTR or other helicopters in special VFR (holding possible); special VFR by night: a delay is to be expected if IFR traffic is in the CTR"
+    },
+    "radio": {
+      "failure": "if possible, use a mobile phone to call the tower on +33 4 95 23 59 60",
+      "failureOnArrival": "before the clearance to enter the class D airspace, do not enter it; after the clearance to enter the CTR, follow the last clearance, do not interfere with runway 02/20 and follow the optical signals; the tower chief may be called on 04 95 20 11 95 (emergency number only)",
+      "failureOnDeparture": "before take-off cancel the departure and return to the parking; after take-off turn back, join the downwind leg of the runway in use, do not interfere with runway 02/20 and follow the optical signals"
+    }
+  },
   "notes": [
     "(1) MAX thrust offset for B747, B757 and B763: reduction 92 m.",
     "Non home-based ULM: Use of AD only with agreement from apron control (PCE) and ATS services.",
@@ -174,45 +216,15 @@
     "Paraglider activity in the vicinity of CTR on an axis crossing N, NZ and NV.",
     "Towed paragliding activity from a boat, with a non-visible nylon cable approximately 450 m long, up to a MAX height of 1000 ft in \"Golfe de Sagone\", Liscia bay.",
     "Special caution recommended.",
-    "Landing lights compulsory in CTR manage their flight in order to reach or cross NW at 2000 ft AMSL.",
-    "TRANSITS W <---> SA: Unless opposite clearance, recommended altitude 2000 ft AMSL MAX: Route W --> SA: Preferential ALT 2000 AMSL; Route SA --> W: Preferential ALT 1500 AMSL.",
-    "TRANSITS N <---> SC <---> SEA: Unless opposite clearance, recommended FL above FL 055: Route N --> SEA: Preferential FL 075; Route SEA --> N: Preferential FL 065 500 ft AMSL.",
-    "Training flight authorized only with an instructor pilot.",
-    "Downwind leg east of RWY.",
-    "RWY 20, use as aiming point the touchdown marking and not the.",
-    "DTHR marking.",
     "TWY H: MAX wingspan 24 m day time use only.",
     "TWY F: only for Civil safety ACFT and towed ACFT with a MAX wingspan of 36 m.",
     "TWY A/C/D/D1/D2/E/G1/G2: MAX wingspan 36 m TWY B: MAX wingspan 65 m.",
     "TWY T: MAX wingspan 36 m.",
-    "In presence of IFR ACFT in the CTR: VIS 3000 m - ceiling 1000 ft AAL.",
-    "RESTRICTIONS: LDG RWY 20 prohibited.",
-    "Activity prohibited if hazard light of Monte Sant' Angelo is not available.",
-    "Local flights are limited to only 1 ACFT maximum.",
-    "AERODROME CIRCUITS: West of RWY 02/20, ALT 1500 AMSL.",
-    "HELICOPTERS: FATO not usable at night; mandatory use of RWY to land and take-off.; Minima VFRs by night: VIS 4000m and ceiling 1000ft.",
-    "AAL for helicopters on route SB-SA and WA-W without presence of IFR ACFT within CTR or other VFRs helicopter (possible holding).",
-    "PROCEDURE: TKOF 02 and aborted LDG RWY 02: climb runway heading up to 1000 ft AMSL MNM at the latest 2 NM after DTHR RWY 20, then turn left still climbing.",
-    "Possible in flight waiting patterns at SA and W between 3000 ft and 5000 ft to avoid interference with IFR flight.",
-    "FLIGHT IN THE CTR: Weather conditions: height of cloud base greater than or equal to 3500 ft AAL.; VIS greater than or equal to 5 km; Minimum altitude: 3000 ft AMSL.",
-    "OTHER FLIGHTS: Routes of arrival and departure are: Northbound WA <---> W <---> NW Southbound SB <---> SA <---> S Minimum altitude: 3000 ft AMSL.",
-    "VIS greater than or equal to 5 km below FL100.",
-    "On pilot's request and after clearance, the pilot in charge of the obstacle clearance can disregard the following of these routes.",
-    "In maritime crossing, the compulsory route for arrival / departure is: NW <---> W.",
-    "Delay to expect if IFR traffic in the CTR.",
     "Traffic surveillance equipment: AD equipped with secondary surveillance radar (see AD 1.0) and ADS-B.",
     "Aerobatics (NR 7000): axis RWY 02/20 centered on AD ARP; 3000 AMSL / 5000 AMSL; SR-SS with AJACCIO TWR authorization.",
     "Activity prohibited on SAT, SUN and HOL from May 1st to September 30th.",
     "Meteo conditions: Visi > 5 km - Ceiling > 5000 ft.",
     "AEM (NR 9621): 300 AAL; activity authorized according to the draft agreement with the associations.",
-    "Users' information on ATIS or ATC FREQ.",
-    "Radiocommunication failure: If possible, use GSM to call TWR: (+33)4 95 23 59 60 Before having received the clearance to enter in D airspace: do not enter.",
-    "After receiving the clearance to enter the CTR: follow the last clearance, do not interfere with RWY 02/20, follow optical instructions.",
-    "Try to call TWR Chief: 04 95 20 11 95 (emergency number only).",
-    "Prior TKOF: cancel departure.",
-    "Return to PRKG.",
-    "After TKOF: turn and go back.",
-    "Join downwind of RWY in use, do not interfere with RWY 02/20, follow optical instructions.",
-    "Informations diverses / Miscellaneous Horaires sauf indication contraire / Timetables unless otherwise specified UTC HIV; HOR ETE: -1HR / UTC WIN; SUM SKED: -1HR Péril animalier / Wildlife strike hazard: de / from SR-30 à / to SS+30"
+    "Users' information on ATIS or ATC FREQ."
   ]
 }

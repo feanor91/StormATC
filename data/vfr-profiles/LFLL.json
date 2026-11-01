@@ -4,14 +4,15 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded."
   ],
   "icao": "LFLL",
   "name": "Lyon-Saint-Exupéry",
   "source": {
     "publication": "AIP France AD 2 LFLL",
     "chartDate": "2025-03-20",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, procedures structured by hand"
   },
   "referencePosition": {
     "latitude": 45.72556,
@@ -149,6 +150,39 @@
       "location": "Roundabout west of Cremieu"
     }
   ],
+  "withAts": {
+    "arrivals": [
+      {
+        "transit": "west to east",
+        "note": "an explicit clearance from Saint-Ex TWR is required to transit in the Saint-Exupery CTR; failing that, hold over MS, which is a clearance limit point; if contact cannot be established with Saint-Ex TWR, contact Bron TWR again for instructions; an explicit clearance from Saint-Ex TWR is also required to cross the runway axes, failing which hold west of TW"
+      },
+      {
+        "transit": "east to west",
+        "note": "an explicit clearance from Saint-Ex TWR is required to cross the runway axes; failing that, hold east of TE"
+      },
+      {
+        "note": "when holding, VFR or special VFR flights must ensure their own separation from other VFR aircraft that may hold at the same point"
+      },
+      {
+        "note": "on arrival, contact the frequency given by the TWR, which gives the instructions and information to reach the parking stand; the TWR can only give information on aircraft it knows; parking stands are allocated by the manager and the TWR relays it"
+      }
+    ],
+    "departures": [
+      {
+        "note": "before any movement, contact the Saint-Exupery Preflight (Prevol) frequency; the TWR organises the taxi sequence to join the manoeuvring area"
+      }
+    ],
+    "routes": "VFR routes within class C and D airspaces: all aircraft are recommended to transit with lights on; special conditions of use of some routes may be published by NOTAM; the altitude of 2000 ft is likely to be imposed on all VFR routes published on the VAC sheets",
+    "nightVfr": {
+      "departure": "climb overhead the aerodrome to the minimum altitude of the route segment to be used",
+      "arrival": "keep the altitude of the segment used until in sight and within 5 NM of the aerodrome, then join the traffic pattern"
+    },
+    "radio": {
+      "failureInTransit": "if the failure occurs before the clearance to enter class C or D airspace, do not enter it; if it occurs after the clearance, leave the TMA to return to class G airspace as soon as possible, without crossing the Saint-Exupery extended runway centrelines",
+      "failureOnArrival": "if the failure occurs before the clearance to enter the CTR, do not enter it and return to class G airspace as soon as possible; after the clearance, leave the CTR by the most appropriate routing without crossing the Saint-Exupery extended runway centrelines, and do not enter the Lyon-Bron CTR from the west",
+      "failureOnDeparture": "keep an altitude below 2500 ft and leave the CTR without entering the Lyon-Bron CTR from the west"
+    }
+  },
   "notes": [
     "AD reserved for radio-equipped ACFT and HEL.",
     "Training flights on IFR/VFR or night VFR are restricted (AD 2 LFLL).",
@@ -159,31 +193,6 @@
     "After vacating RWY 17R/35L, ACFT shall wait for SAINT-EX GND instructions prior to entering TWY T.",
     "PAPI 35L: for ACFT with eye/wheel height greater than 12 metres, TCH is less than 6 metres.",
     "Disregard the PAPI signal.",
-    "VFR ROUTES WITHIN CLASS C and D AIRSPACES All ACFT are recommended to transit with lights on.",
-    "Special conditions to use some routes may be published by NOTAM.",
-    "The altitude of 2000 ft is likely to be imposed on all VFR routes published on VACs.",
-    "West East direction: To transit in Saint Exupéry CTR pilots must obtain an explicit clearance from SAINT EX TWR.",
-    "Failing this, a holding pattern over MS shall be performed which is a clearance limit point.",
-    "If contact cannot be established with SAINT EX TWR, pilot contacts again BRON TWR for instructions.",
-    "Pilots must obtain an explicit clearance from SAINT EX TWR to cross RWY axis.",
-    "Failing this, a holding pattern shall be performed West of TW.",
-    "East West direction: Pilots must obtain an explicit clearance from SAINT EX TWR to cross RWY axis.",
-    "Failing this, a holding pattern shall be performed East of TE.",
-    "When holding, VFR flights or special VFR flights must ensure their own separation from possible other holding VFR ACFT.",
-    "On departure and before making any movement, ACFT must compulsorily contact SAINT EXUPERY Delivery frequency.",
-    "The TWR will organize taxiing sequence to join the manoeuvring area.",
-    "On arrival, ACFT must contact the frequency given by the TWR.",
-    "The TWR will instruct pilots and give them any additional information to join their PRKG stands.",
-    "The TWR can only provide information on ACFT which is known to them.",
-    "Departure: climb overhead AD at route segment minimum altitude.",
-    "Arrival: used segment altitude will be maintained until being in sight and within 5 NM AD, then join traffic pattern.",
-    "Traffic surveillance equipment: AD equipped with a secondary surveillance radar (see AD 1.0).",
-    "Special radiocommunication instruction Radiocommunication failure: Transit flights If the failure occurs before the clearance for entering within class C or D airspace, do not enter this airspace.",
-    "If the failure occurs after the clairance for entering within class C or D airspace, leave TMA airspace to come back in class G airspace as soon as possible.",
-    "Do not cross ST EXUPERY extended RWY centerline.",
-    "At arrival If the failure occurs before the clearance for entering the CTR, do not enter the CTR and come back in class G airspace as soon as possible.",
-    "If the failure occurs after the clearance for entering the CTR, leave the CTR using the best routing without crossing ST EXUPERY extended RWY centerline.",
-    "Do not enter CTR of LYON BRON in the west.",
-    "At departure Maintain your altitude below 2500 ft and leave the CTR without entering CTR of LYON BRON in the west."
+    "Traffic surveillance equipment: AD equipped with a secondary surveillance radar (see AD 1.0)."
   ]
 }

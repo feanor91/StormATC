@@ -4,14 +4,15 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded."
   ],
   "icao": "LFMT",
   "name": "Montpellier-Méditerranée",
   "source": {
     "publication": "AIP France AD 2 LFMT",
     "chartDate": "2026-01-22",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, procedures structured by hand"
   },
   "referencePosition": {
     "latitude": 43.58333,
@@ -47,7 +48,13 @@
     }
   ],
   "preferredQfu": 303,
-  "preferredQfuReason": "preferred QFU 303, due to IFR procedure",
+  "preferredQfuReason": "due to the IFR procedure",
+  "circuit": {
+    "heightNote": "downwind leg at a minimum altitude of 1000 ft on runway 12L and on the secondary runway 12R/30L",
+    "handNote": "circuit patterns are flown north-east of the main runway 12L/30R and south-west of the secondary runway 12R/30L; runway 30R, training pattern take-off: the initial turn is made at 1.4 NM FJR to join a right-hand downwind leg; the circuit must not go beyond the A9 motorway unless ATC instructs otherwise; on the secondary runway, caution during the last turn so as not to interfere with the axis of the main runway 12L/30R, landing lights recommended on final for all aircraft",
+    "restrictions": "the north-facing configuration (30R and 30L) is preferred for environmental reasons; avoid overflying Mauguio and La Grande Motte unless ATC instructs otherwise; circuits on the secondary runway are forbidden to aircraft not based at Montpellier when runway 12R is in use",
+    "trainingPatterns": "circuits around the aerodrome (traffic patterns, IFR APP, engine failure and go-around simulations) are prohibited for aircraft of acoustic groups 1, 2 and 3; allowed for groups 4 and 5 from 1 October to 15 June, Monday to Saturday except public holidays, 0700-2000 (summer 1 h earlier); allowed all year for piston-engine aircraft 0700-2000 (summer 1 h earlier); on the secondary runway 12R/30L, from 21 June to 21 September, on Saturdays, Sundays and holidays: avoid patterns between 1200 and 1500 local time, and between 1500 and 1700 local time except for low-noise aircraft (CALIPSO category A); prior approval of the aerodrome operator and of the air navigation service is required to train aircraft not based at Montpellier, request sent at least 48 h before (business days) to montpellier-subdivision-ctl@aviation-civile.gouv.fr with type, registration, date, duration and nature of the training"
+  },
   "reportingPoints": [
     {
       "name": "AM",
@@ -190,6 +197,69 @@
       "location": "D114 bridge between Vic pond and Ingril pond"
     }
   ],
+  "withAts": {
+    "arrivals": [
+      {
+        "note": "first contact at least 3 minutes before overflying the entry points, awaiting clearance; unless cleared otherwise or instructed, overfly the entry points at no more than the altitudes below"
+      },
+      {
+        "via": "AM",
+        "altitudeMaxFeet": 1500,
+        "contact": "118.775"
+      },
+      {
+        "via": "ES",
+        "altitudeMaxFeet": 1000,
+        "contact": "118.775"
+      },
+      {
+        "via": "NF",
+        "altitudeMaxFeet": 2000,
+        "contact": "118.775"
+      },
+      {
+        "via": "NE",
+        "altitudeMaxFeet": 1500,
+        "contact": "118.775"
+      },
+      {
+        "via": "SF",
+        "altitudeMaxFeet": 1500,
+        "contact": "118.200"
+      },
+      {
+        "via": "WT",
+        "altitudeMaxFeet": 1500,
+        "contact": "118.200"
+      },
+      {
+        "via": "WF",
+        "altitudeMaxFeet": 1500,
+        "contact": "118.200"
+      }
+    ],
+    "departures": [
+      {
+        "note": "respect the direction of turn of the aerodrome circuits; an exemption is possible with ATC clearance"
+      },
+      {
+        "runway": "30L",
+        "note": "after take-off follow heading 283 unless otherwise instructed by ATC"
+      },
+      {
+        "runway": "12R",
+        "note": "westbound departures avoid the city of Perols, in order to fly over the Rhone canal at Sete"
+      }
+    ],
+    "transit": "the transits published on the VAC chart are likely to be imposed by ATC, in particular the SW-ES transit at 1000 ft when visibility is above 4500 m; users are reminded that they are responsible for carrying life jackets for any overflight of the sea",
+    "specialVfr": "visibility 1500 m",
+    "nightVfr": "night VFR routes: see AIP ENR 3.3 paragraph 5.3.6 Montpellier and the ENR 3.3 LFMM SOUTH ITI NIGHT VFR chart",
+    "radio": {
+      "failureOnArrival": "squawk 7600; outside the CTR do not enter it; inside the CTR, before the clearance to enter the circuit leave the CTR by the most appropriate VFR route without crossing the runway axes; after the clearance to enter the circuit join as authorised, land and vacate at the end of the runway, then wait and follow the follow-me vehicle",
+      "failureOnDeparture": "before entering the runway do not take off, wait and follow the follow-me vehicle; after entering the runway and before take-off vacate at the first exit, wait and follow the follow-me vehicle; after take-off squawk 7600 and respect the last clearance until leaving controlled airspace",
+      "failureInTransit": "before the clearance to enter controlled airspace do not enter it; inside controlled airspace leave it, without crossing the runway axis in the CTR"
+    }
+  },
   "notes": [
     "AD prohibited for ULM (except based) and gliders except in case of emergency.",
     "Use of RWY 12R/30L prohibited for ACFT complying with at least one of the following conditions: Weight over 5.7 t,; Turbojet,; Wingspan over 24 m,; Main gear overall width over 6 m,; Reference TKOF distance over 800 m.",
@@ -204,42 +274,7 @@
     "Special precaution is required during crossing on the marking and signage.",
     "Maximum wingspan for crossing at the intersection: 13,45 m (Cessna 425).",
     "AVGAS 100LL automatique dispenser to be used only by ACFT whose wingspan is less than 12 m.",
-    "Preferred QFU: 303° due to IFR procedure.",
-    "Arrival Procedures First contact must be established at least 3 minutes before overflying entry points, awaiting clearance.",
-    "Except clearance or special instruction, overfly entry points in compliance with altitudes indicated below: Maximum altitudes Frequency to contact Departures procedures Respect the direction of turn of aerodrome circuit.",
-    "Possible exemption with control clearance.",
-    "Transit Procedures The published transits on VAC chart are likely to be enforced by ATC, in particular the SW-ES transit at 1000 ft when VIS > 4500 m.",
-    "Users are reminded of their responsibility for carrying life jackets for any maritime overflight.",
-    "An intense activity of general aviation and training flights is observed around the airport.",
-    "RWY configuration \"facing north\" - RWY 30R & 30L - shall be preferred for environmental reasons.",
-    "Further details are provided below about trajectories and training flights.",
-    "Training flights Special measures apply to based aircraft.",
-    "Prior approval must be granted by the aerodrome operator and the air navigation service for training of any aircraft which is not based at Montpellier Méditerranée Airport.",
-    "A training guide document is available on the airport's website.",
-    "Demand shall be sent at least 48h before (business days) to the following email and must include aircraft type, registration, date, duration and nature of the training.",
-    "Please specify any parking stand, handling or refueling request. montpellier-subdivision-ctl@aviation-civile.gouv.fr Circuits around the airfield (traffic patterns, IFR APP, engine failure and go around simulations…) are: prohibited for aircrafts of acoustic groups 1,2 and 3;; allowed for aircraft of acoustic groups 4 and 5 from 1st.",
-    "October to 15 june included, from MON to SAT except public HOL, from 0700 to 2000 (SUM - 1 HR), allowed all year long for piston engine ACFT from 0700 to 2000 (SUM - 1 HR).",
-    "Additional slot restrictions apply on secondary RWY 12R/30L, from June 21st to September 21st, on Saturdays, Sundays and holidays for training flights: avoid traffic patterns between 12h00 and 15h00 local time,; avoid traffic patterns between 15h00 and 17h00 local time except for low noise emissions ACFT (CALIPSO.",
-    "Secondary RWY pattern 12R / 30L On RWY 12R/30L, circuit patterns are flown in the South-West of the RWY and at a minimum altitude of 1000 ft.",
-    "Circuit patterns on secondary runway are forbidden to any ACFT which is not Montpellier-based when RWY 12R is in use.",
-    "When RWY 30L is active, departing ACFT shall follow heading 283° after take off, unless otherwise instructed by ATC.",
-    "When RWY 12R is active, departing ACFT going westbound should avoid city of Perols, in order to fly vertically over the Rhône canal at Sète.",
-    "Caution during last turn for final approach, in order not to interfere with main RWY 12L / 30R axis.",
-    "For all ACFT, landing lights are recommended on final.",
-    "Main RWY pattern 12L / 30R On RWY 12L/30R, circuit patterns are flown in the NorthEast of the RWY.",
-    "In traffic pattern RWY 12L, ACFT must maintain a minimum altitude of 1000 ft in downwind leg.",
-    "Aircraft shall preferably avoid overflying cities of Mauguio and La Grande Motte, unless otherwise instructed by ATC.",
-    "RWY 30R, when taking off for a training pattern, it is mandatory for the initial turn to be performed at 1,4 NM FJR to join right hand downing leg.",
-    "The circuit must not go beyond A9 highway except otherwise instructed by ATC.",
-    "VIS 1500 m.",
-    "Night VFR routes: See AIP ENR 3.3 § 5.3.6 MONTPELLIER and ENR 3.3 LFMM SOUTH ITI NIGHT VFR chart.",
     "Traffic surveillance equipment: AD equipped with secondary surveillance radar (see AD 1.0).",
-    "RADIO FAILURE special instructions Upon arrival: Squawk A7600; Outside the CTR: do not enter; Inside the CTR:; before receiving clearance to enter the runway circuit: exit the CTR by the most appropriate VFR route without crossing the runway axis.; after receiving clearance to enter the runway circuit: enter the circuit as authorized, then land, and clear at the end of the runway.",
-    "Wait then follow the vehicle \"follow me\".",
-    "On departure: Before entering the runway: do not take off, wait and follow the \"follow me\" vehicle.; Before takeoff after penetration: clear the runway at the first exit, wait and then follow the vehicle \"follow me\".; After takeoff: squawk A7600.",
-    "Respect last clearance until leaving controlled airspace.",
-    "In transit: Before receiving clearance to enter the controlled airspace: do not enter it.; In controlled airspace: leave the controlled airspace.",
-    "In CTR, do not cross the runway axis.",
     "Péril animalier / Wildlife strike hazard: Continu pendant la journée aéronautique / Continuous during the aeronautical day."
   ]
 }

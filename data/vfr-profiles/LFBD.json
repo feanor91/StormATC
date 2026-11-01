@@ -4,14 +4,15 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded."
   ],
   "icao": "LFBD",
   "name": "Bordeaux - Mérignac",
   "source": {
     "publication": "AIP France AD 2 LFBD",
     "chartDate": "2026-09-03",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, procedures structured by hand"
   },
   "referencePosition": {
     "latitude": 44.82861,
@@ -148,6 +149,52 @@
       "location": "Waste reception center"
     }
   ],
+  "withAts": {
+    "arrivals": [
+      {
+        "note": "aircraft bound to Bordeaux-Merignac and operating in uncontrolled airspace must call Merignac TWR 3 minutes before overflying the entry points"
+      },
+      {
+        "note": "transit within the Aquitaine FIS: the flight information given on Aquitaine Information to VFR flights in class E and G airspace can be interrupted without notice; in that case each transit of class D airspace must be cleared with Aquitaine Approach, sector BW 129.880 or sector BE 119.275"
+      },
+      {
+        "note": "vacating by the inactive runway is considered effective once the aircraft has crossed the wildlife control way; it is subject to ATC clearance and prohibited by night or by day when the RVR is below 800 m"
+      }
+    ],
+    "departures": [
+      {
+        "note": "for flights to the south-west, because of TMA 1.1 whose lower limit is 1000 ft AMSL, the default exit point is S; the exit by SW is possible only on request and ATC clearance, at the altitude given by ATC"
+      },
+      {
+        "note": "pilots are reminded of the proximity of the Le Barp LF P 5 area and must adapt their navigation accordingly"
+      }
+    ],
+    "routes": {
+      "use": "except particular ATC clearance, these routes are followed in special VFR conditions and in VMC for environmental protection; they are two-way, usable for departures, arrivals and transits",
+      "altitudeFeetAmsl": 1500,
+      "altitudeNote": "except particular clearance, an overfly altitude of 1500 ft AMSL is respected on all routes (except the exit by SW, see the departure procedure)",
+      "legend": "-- visibility of at least 1500 m; == visibility of at least 3000 m",
+      "tracks": [
+        {
+          "runway": "23/05",
+          "tracks": "NA -- NW; NA == N; NA == NE; SA -- SW; SA -- S; SA == SE"
+        },
+        {
+          "runway": "29",
+          "tracks": "EA -- N; EA == NE; SA -- SW; SA -- S; SA == SE"
+        },
+        {
+          "runway": "11",
+          "tracks": "EA -- N; EA == NE; OA -- SW; OA == S"
+        }
+      ]
+    },
+    "nightVfr": "radio contact with Aquitaine Approach is compulsory before entering class D airspace",
+    "radio": {
+      "failureOnArrival": "before the clearance to enter the CTR, do not enter it; inside the CTR, before the clearance to join the traffic pattern, leave the CTR by the most suitable VFR route; after the clearance to join the pattern, continue to land as cleared",
+      "failureOnDeparture": "before take-off do not take off; after take-off leave the CTR following the last clearance (route and altitude)"
+    }
+  },
   "notes": [
     "Compulsory Airport handling service: see TXT 03 Engine tests should have been carried out before taxiing request.",
     "Areas K/J: Aircraft departing under VFR flight rules also contact ATC to request startup clearance, which may include a taxi hold, before leaving their parking position or the refueling station.",
@@ -157,19 +204,6 @@
     "Training flights are under restriction (see AIP: AD 2 LFBD.21.4.1.3).",
     "Air navigation hazard Confusion risk between thresholds 05 and 11 due to their proximity.",
     "Paradropping activity NR 312: see AIP ENR 5.5 AEM activity NR 9011, 9026, 9380 and 9497: see AIP ENR 5.5 Free flying winch launch activity NR 905: see AIP ENR 5.5 special VFR conditions.",
-    "VMC environmental protection respect.",
-    "These routes are two-way, usable for departures, arrivals and transits.",
-    "Except particular clearance: an overfly altitude of 1500 ft AMSL will be respected on all routes (except the exit by SW, cf. § ‘'Departing procedures'').",
-    "Transit within AQUITAINE FIS Flight information service given on frequency AQUITAINE Information to VFR flights inside class E and G relevant from AQUITAINE FIS can be interrupted without any forecast.",
-    "In that case each class D airspace transit must be cleared on AQUITAINE Approach frequencies sector BW on 129.880 or BE on 119.275.",
-    "* All tracks are two-way Arrival procedures Aircraft bound to LFBD and operating in uncontrolled airspace must call MERIGNAC TWR, 3 minutes before overflying of entry points.",
-    "Vacating via inactive RWY: is considered as effective as soon as the ACFT crosses wildlife control way.",
-    "It is subject to ATC clearance.",
-    "It is prohibited by night or during daytime when RVR is smaller than 800 m.",
-    "Departing procedures For flights to SW: due to the TMA 1.1 presence whose lower limit is 1000 ft AMSL, the default exit point is point S.",
-    "Exit via SW is possible on request and ATC clearance only and at the altitude given by ATC.",
-    "In addition, pilots must be aware of le Barp LF P 5 area proximity.",
-    "It is necessary to adapt the navigation accordingly.",
     "Niveau / Level 8.",
     "Voir / see AIP AD 2 LFBD.6 Péril animalier / Wildlife strike hazard: de / from SR-30 à / to SS+30."
   ]

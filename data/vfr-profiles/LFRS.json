@@ -4,14 +4,15 @@
     "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
     "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
     "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "Procedures (arrivals, departures, special VFR, radio failure) were then structured by hand from the English column of the text pages; what the chart only draws is not recorded."
   ],
   "icao": "LFRS",
   "name": "Nantes Atlantique",
   "source": {
     "publication": "AIP France AD 2 LFRS",
     "chartDate": "2026-07-09",
-    "extraction": "chart text, table and English column read by script, checked"
+    "extraction": "chart text, table and English column read by script, procedures structured by hand"
   },
   "referencePosition": {
     "latitude": 47.15694,
@@ -38,6 +39,11 @@
       ]
     }
   ],
+  "circuit": {
+    "trainingPatterns": "aircraft under 5.7 t: prohibited 2230-0600 local time, minimum height 1000 ft AAL; aircraft of 5.7 t or more: prohibited Monday to Friday 1200-1400 and 1800-0800 local time, and on Saturdays, Sundays and public holidays, minimum height 1500 ft AAL; manoeuvrability training flights on the aerodrome in VFR need prior permission from ATC; for aircraft of 5.7 t or more, requests go to the SNA Ouest ATC subdivision by mail (sna-o-e-ct-ld@aviation-civile.gouv.fr) with PPR 72 HR",
+    "lowHeight": "only for VFR training flights, with an instructor on board and under ATC clearance; aircraft under 5.7 t: minimum height 500 ft AAL; aircraft of 5.7 t or more: minimum height 800 ft AAL; runway 03: left-hand circuit only; runway 21: right-hand circuit only; limited to one aircraft at a time",
+    "restrictions": "noise-sensitive platform: considering the environment, comply with the published circuits as far as possible; east circuits are available only on ATC clearance"
+  },
   "reportingPoints": [
     {
       "name": "E",
@@ -160,6 +166,30 @@
       "location": "Sainte Pazanne"
     }
   ],
+  "withAts": {
+    "arrivals": [
+      {
+        "note": "first contact on Nantes Information 130.275"
+      },
+      {
+        "note": "request the clearance to enter the class D airspace at least 5 minutes before reaching the entry points, unless special clearance or instructions are given; points NE, E, SW, W and NW: 1500 ft AMSL"
+      },
+      {
+        "note": "on pilot request and with ATC clearance, routes different from those published on the APP 01 chart may be used; in case of a direct route clearance to the aerodrome, overflying the urban area of Nantes is always avoided; visual approaches: see the IAC atlas page AD 2 LFRS ENV 01"
+      },
+      {
+        "note": "parking in the recreational and general aviation areas is self-guided; inside those areas the pilot chooses the position according to the space available and is responsible for keeping safety margins while parking"
+      }
+    ],
+    "departures": [
+      {
+        "note": "at the first contact with the TWR, give the requested exit point; points NE, E, SW, W and NW: 1000 ft AMSL; on pilot request and with ATC clearance, routes different from those published on the APP 01 chart may be used, but overflying the urban area of Nantes is always avoided"
+      }
+    ],
+    "transit": "first contact on Nantes Information 130.275; the points E1, E2, E3 and W1, W2, W3, W4 of the APP 01 chart can be made compulsory reporting points by ATC; risk of loss of radio contact at the east limits of the FIS below 2500 ft",
+    "specialVfr": "in case of IFR traffic within the CTR, special VFR is not authorised",
+    "nightVfr": "all types of aircraft: QFU 028 is recommended while the tailwind does not exceed 5 kt, except when the runway state makes it unusable"
+  },
   "notes": [
     "AD prohibited for gliders and ULM.",
     "Noise abatement procedure for TKOF.",
@@ -178,30 +208,6 @@
     "The use of TWY D and E is restricted to ACFT with OMGWS < 9 m.",
     "For single-engined and multi-engined ACFT in VFR flight and weight < 5.7 t, LDG and TKOF RWY 03 abeam TWY B.",
     "For ACFT whose wingspan 36 m, taxiing must be perfomed via RC.",
-    "Training flights: ACFT < 5.7 t: prohibited 2230-0600 local time.",
-    "Minimum height 1000 ft AAL.",
-    "ACFT 5.7 t: prohibited MON-FRI 1200-1400 local time and 1800-0800 local time, SAT, SUN and public HOL.",
-    "Minimum height 1500 ft AAL.",
-    "Manoeuvrability VFR training flights on AD are subject to prior permission from ATC.",
-    "For ACFT 5.7 t, requests must be addressed to SNA Ouest ATC subdivision by mail: sna-o-e-ct-ld@aviationcivile.gouv.fr, on PPR 72 HR.",
-    "Low height circuits: Only for training flights VFR, with an instructor on board and under ATC clearance.",
-    "ACFT < 5.7 t: minimum height 500 ft AAL.",
-    "ACFT 5.7 t: minimum height 800 ft AAL.",
-    "RWY 03: left hand circuit only.",
-    "RWY 21: right hand circuit only.",
-    "Restricted to one ACFT at a time.",
-    "Advices due to noise nuisance: Noise sensitive platform.",
-    "Considering the environment, comply with published circuits as far as possible.",
-    "East circuits are available only on ATC clearance.",
-    "In case of IFR traffic within CTR, special VFR nonauthorized.",
-    "Arrival procedures First contact on NANTES Information 130.275.",
-    "Clearance to enter the airspace of class D will be at least requested 5 minutes before arriving to entry points.",
-    "Unless special clearance or instructions given.",
-    "Points NE, E, SW, W and NW: 1500 ft AMSL.",
-    "On pilot's request and with ATC clearance, flight routes different from those published on APP 01 chart may be used.",
-    "In case of direct route clearance to the AD, overflying of the urban area of NANTES should always be avoided.",
-    "Visual approaches: see IAC atlas page AD 2 LFRS ENV 01.",
-    "All types of aircraft: QFU 028° is recommended when tailwind is no greater than 5 kt, except when RWY is unusable.",
     "Traffic surveillance equipment: AD equipped with secondary surveillance radar (see AD 1.0).",
     "Aerobatics activity (NR 6380) 12 km West of AD; activity overhead RD 723; 1700 ft AMSL / FL 055.",
     "Activity reserved for users authorized by AVA.",

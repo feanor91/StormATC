@@ -5,6 +5,15 @@ public releases.
 
 ## Unreleased
 
+### Changed
+
+- **Structured VFR procedures for seven large aerodromes** (Marseille Provence, Lyon-Saint-Exupéry, Bordeaux-Mérignac,
+  Strasbourg-Entzheim, Nantes Atlantique, Montpellier-Méditerranée, Ajaccio Napoléon Bonaparte): arrivals by entry point with
+  the altitudes and frequencies of the chart's tables, departures, transits, special VFR, night VFR, radio failure and
+  training-flight restrictions are now structured (`withAts`, `circuit`) instead of flattened table text in the notes. Read by hand from
+  the English column of the text pages; what the chart only draws is not recorded. Montpellier now has its preferred
+  runway (QFU 303, as the chart states).
+
 ## 0.26.0 - 2026-11-01
 
 ### Added
