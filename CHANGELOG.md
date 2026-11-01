@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.28.4 - 2026-11-01
+
 ### Changed
 
 - **Reporting points are in French only**: in every VFR profile the `location` of a point is now the name printed in the
