@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.26.0 - 2026-11-01
+
 ### Added
 
 - **A Map tab in the in-simulator panel**: the route drawn in NavVFR, the airspaces around (those at your altitude are
