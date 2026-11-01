@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.28.7 - 2026-11-01
+
 ### Added
 
 - **More French notes**: `fr.notes` goes from 3 418 to 4 417 filled notes out of 5 165 (86 %). The French is now read at the
