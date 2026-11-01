@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFXB (AIP France, chart dated 2026-05-14), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFXB (AIP France, chart dated 2026-05-14): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFXB",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFXB",
     "chartDate": "2026-05-14",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 45.70194,
@@ -19,12 +20,11 @@
   "elevationFeet": 118,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Approach"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "radioMandatory": true
   },
-  "frequencies": {
-    "fis": 124.2,
-    "approach": 132.45
-  },
+  "frequencies": {},
   "runways": [
     {
       "id": "05/23",
@@ -54,5 +54,24 @@
         299
       ]
     }
+  ],
+  "notes": [
+    "ATS: NIL. The chart header prints these units to call, which are not services of this aerodrome (its air-air frequency apart): .",
+    "AD with restricted use, reserved for radio-equipped ACFT Home based ACFT more than 80 NM from the platform must request permission to land on the site not later than 24 HR before the arrival The applicant shall provide by: E-mail: ba722.osab.fct@intradef.gouv.fr and ba722-csi.soff-semaine@intradef.gouv.fr or 05 46 95 85 26 or 05 46 95 85 11 in duty service following elements: Last name / First name; Brand / ACFT type; ACFT Registration; Flight from / to; Date / Time of ARR and DEP.",
+    "Without reply from air base 722 is considered as an agreement VFR routes altitudes: To the Northwest: 1100 ft; To the Northeast: 1000 ft; To the South: 1100 ft.",
+    "TKOF climb surface penetrated by OBST: DEP RWY 23, THR 05:; OBST, road clearance 161 ft.",
+    "LDG climb surface penetrated by OBST: ARR RWY 05, THR 05:; OBST, road clearance 161 ft.",
+    "No TWY or delivery possible between RWY 05/23 paved and RWY unpaved",
+    "RWY 05/23: Unpaved.",
+    "Divided in two parallel RWY: simultaneous LDG and TKOF on both RWY prohibited",
+    "RWY 05L/23R: Unpaved.",
+    "Priority reserved for GLD and tugs The first 50 m of the NW half-width of RWY 05L/23R are reserved for the parking of GLD awaiting TKOF The first 50 m of the eastern half-width of RWY 12/30 are reserved for the parking of GLD awaiting TKOF If GLD are awaiting TKOF, landing ACFT shall use the available half-width downstream of the parked GLD LDG and TKOF will be suspended if an ACFT is immobilized within less than half a RWY width from the centerline ATTENTION REQUIRED on BRAVO TWY, markings GLD tape type by ground marking without white cone for limit RWY and TWY Hold the ground track on BRAVO TWY while staying south of the TWY yellow cones",
+    "RWY 05R/23L: Unpaved.",
+    "Reserved for airplanes, usable by GLD in the event of glider congestion on RWY 05L/23R",
+    "RWY 05/23: Paved.",
+    "Reserved for MIL ACFT and authorized for CIV ACFT O/R to AD MIL authority",
+    "RWY 12/30: Unpaved.",
+    "Usable using windsock indication",
+    "ULM RWY: reserved for based ULM usable in accordance with local instructions 0800-1000: MAINT and intervention on RWY and TWY every WED Low height patterns < 500 ft: only with an instructor pilot on board If no MIL and / or CIV activity, the RWY inspection is not carried out: airfield use is under the responsibility of the pilot in command PJE on AD (NR 367): SFC - FL 125 MON, WED and FRI: SR-30 - SS+30 TUE, THU: SR-30 - 2359 Activity announced on SAINTES A/A Actual activity on LA ROCHELLE INFO and During LF-R 49 activity: PJE ABV 3000 ft AMSL, Aerobatics (NR 6715): Unpaved RWY 05/23 axis length 1000 m, 600 / 5000 ft AMSL > 3000 ft AMSL and if LF-R49 L1 and / or A1 actives: upon authorization of COGNAC APP Real activity known by SAINTES A/A, COGNAC APP, LA AEM (NR 9060): SFC - 350 ft ASFC / 0700-SS Free flights and remote piloted flights according to protocol Hot air balloon activity: SR - SR+1HR During the entire activity, the aerostat's pilots will maintain radio contact on 122.400 MHz Inflation training without elevation can be carried out at the end of the day Starter cabin on the edge of the RWY, 10 m from TWY"
   ]
 }

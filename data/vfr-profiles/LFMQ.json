@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFMQ (AIP France, chart dated 2026-03-19), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFMQ (AIP France, chart dated 2026-03-19): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFMQ",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFMQ",
     "chartDate": "2026-03-19",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.25222,
@@ -19,7 +20,11 @@
   "elevationFeet": 1391,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "ETE / SUM : 0700-1600. HIV / WIN : 0800-1600. +33 4 94 98 39 35 afis@aeroportducastellet.com (UTC HIV ; HOR ETE : - 1 HR)",
+    "outsideAtsHours": "air-air frequency 119.005",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "approach": 124.35,
@@ -33,5 +38,37 @@
         305
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "AD prohibited to gliders.",
+    "AD prohibited to ACFT (except HEL) if crosswind higher than 15 kt.",
+    "Possible IFR operations.",
+    "Except for based ACFT authorized by AD operator, use of RWY 12/30 prohibited outside AFIS SKED.",
+    "High-visibility vest mandatory on runway side.",
+    "Runway inspection during ATS SKED only.",
+    "Possible restrictions of aerial activities during events on Paul Ricard circuit.",
+    "Flight intentions for ACFT with mandatory flight plans via: business aviation flights: https://cy.myhandlingsoftware.com; general aviation flights: https://www.touchngo.fr.",
+    "If strong wind from NW, possibility of turbulences on final APCH.",
+    "By sea breeze (wind from SSW) and in case of uncertainly about wind direction indication, use RWY 30.",
+    "AD likely to be covered by sea haze in a few minutes.",
+    "Possible brown out due to propeller and blade blast (possible presence of dust on the airfield).",
+    "Possible bird hazard on the airfield and its immediate vicinity.",
+    "Aerobatics (NR 6965): see AIP ENR 5.5 Radio contact mandatory even before engine run up or engine tests.",
+    "Circling training on request by TEL: +33 4 94 98 39 35.",
+    "Training, go-around, touch and go, traffic pattern prohibited outside ATS SKED and between 1100-1200 (SUM: -1HR).",
+    "For IFR training: see eAIP.",
+    "Overflying of race course prohibited, below 1500 ft AAL.",
+    "Protection against obstacles limited at 7 km for PAPI RWY 12 and 30.",
+    "Day and night, compulsory use of PAPI on RWY 30.",
+    "PAPI 30 in use during AFIS SKED only.",
+    "RWY 12 and 30: TKOF compulsory from THR.",
+    "H24 JET A1-AVGAS 100LL automated fuel dispenser payment by operator badge or credit card only.",
+    "Refueling truck JET A1 ATS SKED: payment by credit card or cash.",
+    "Lubrifiants / Lubricants: NIL.",
+    "Niveau 5 / Level 5 pendant HOR ATS / during ATS SKED.",
+    "Niveau 1 / Level 1 hors HOR ATS / outside ATS SKED.",
+    "Lake rescue 1 boat + 2 lifeboats (60 seats).",
+    "Péril animalier / Wildlife strike hazard: Occasionnel / Random."
   ]
 }

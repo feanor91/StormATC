@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBX (AIP France, chart dated 2026-07-09), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFBX (AIP France, chart dated 2026-07-09): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFBX",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFBX",
     "chartDate": "2026-07-09",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 45.1975,
@@ -19,7 +20,10 @@
   "elevationFeet": 328,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "LUN-VEN sauf JF / MON-FRI except public HOL : 0700-1100, 1200-1600. En dehors de ces HOR : PPR 48 HR par (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "approach": 119.275,
@@ -40,5 +44,31 @@
         292
       ]
     }
+  ],
+  "preferredQfu": 112,
+  "preferredQfuReason": "preferred QFU 112, due to noise pollution",
+  "notes": [
+    "Possible IFR operations.",
+    "AD reserved for radio-equipped ACFT.",
+    "Simultaneous use of RWY prohibited.",
+    "TORA, ASDA and LDA RWY 29 reduced due to RESA.",
+    "Unpaved RWY reserved for home-based ACFT and authorized gliders pilots.",
+    "During ATS SKED, fees are payable at the TWR.",
+    "Convex runway: from BRAVO holding point, THR 29 is invisible.",
+    "When strong crosswind, light to severe turbulence THR 11 and 29.",
+    "Due to reliefs, the airfield is in darkness at SS+15 MIN.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Preferred QFU: 112° due to noise pollution.",
+    "TKOF from TWY A: only permitted during the day and on RWY 11.",
+    "TKOF from TWY B: prohibited day and night, RWY backtrack is mandatory.",
+    "North circuit available only for authorized home based aircraft using the unpaved runway.",
+    "The commercial apron in front of the TWR must remain cleared.",
+    "Overhead AD arrival at 1800 ft AMSL for all ACFT before entering the traffic circuit.",
+    "Low altitude circuit at 500 ft MNM with instructor on board.",
+    "TWY and apron strength: 26 F/C/W/T.",
+    "TKOF on paved RWY29: by night, due to curved funnel, overhead end of RWY take 242°.",
+    "VFR MTOW < 1.9 t: PPR 48HR.",
+    "IFR and VFR MTOW > 1.9 t: PPR 48HR and ATS presence mandatory and handling assistance mandatory request on portal MyHandling (https://cy.myhandlingsoftware.com).",
+    "FBO EDEIS: perigueux.afis@edeis.com PCL: PPR 48HR, instructions provided by AD operator during the request."
   ]
 }

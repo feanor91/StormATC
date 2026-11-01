@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFNN (AIP France, chart dated 2024-08-08), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFNN (AIP France, chart dated 2021-09-09): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFNN",
   "name": "Narbonne-Vinassan",
   "source": {
     "publication": "AIP France AD 2 LFNN",
-    "chartDate": "2024-08-08",
-    "extraction": "automatic"
+    "chartDate": "2021-09-09",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.19417,
@@ -19,10 +20,13 @@
   "elevationFeet": 10,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Approach"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 119.505",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
-    "approach": 130.855,
     "airAir": 119.505
   },
   "runways": [
@@ -33,5 +37,21 @@
         283
       ]
     }
+  ],
+  "notes": [
+    "ATS: NIL. The chart header prints these units to call, which are not services of this aerodrome (its air-air frequency apart): .",
+    "Before using NARBONNE airfield, every pilot shall receive specific training set by a certified flight instructor user of this aerodrome.",
+    "AD reserved for radio-equipped ACFT.",
+    "Simultaneous use of RWY by gliders and aeroplanes is prohibited.",
+    "Grass strip waterlogged after severe rainfalls.",
+    "Use of AD subject to prior information from ACB.",
+    "AD likely to be covered by sea haze in a few minutes.",
+    "Captain must check if ACFT takeoff and landing performance comply with airfield specifications.",
+    "Presence of a draining ditch, materialized by yellow beacons, vacating RWY by runway ends.",
+    "Low height circuit patterns reserved for home-based ACFT.",
+    "TWY: width 35 m.",
+    "QFU 283°: avoid overflying Narbonne during takeoff.",
+    "Downwind leg located south of Coursan.",
+    "AEM (NR 9538): HJ, 500 ft ASFC, as per protocol."
   ]
 }

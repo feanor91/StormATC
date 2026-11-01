@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFGM (AIP France, chart dated 2023-03-23), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFGM (AIP France, chart dated 2023-03-23): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFGM",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFGM",
     "chartDate": "2023-03-23",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 46.60333,
@@ -18,10 +19,12 @@
   },
   "elevationFeet": 1032,
   "service": {
-    "kind": "Approach"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 119.89",
+    "nightVfrApproved": true
   },
   "frequencies": {
-    "approach": 123.405,
     "airAir": 119.89
   },
   "runways": [
@@ -32,5 +35,8 @@
         269
       ]
     }
+  ],
+  "notes": [
+    "ATS: NIL. The chart header prints these units to call, which are not services of this aerodrome (its air-air frequency apart): ."
   ]
 }

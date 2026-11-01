@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFSJ (AIP France, chart dated 2023-10-05), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFSJ (AIP France, chart dated 2023-10-05): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFSJ",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFSJ",
     "chartDate": "2023-10-05",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 49.65889,
@@ -18,7 +19,10 @@
   },
   "elevationFeet": 513,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 123.5",
+    "nightVfrApproved": false
   },
   "frequencies": {
     "airAir": 123.5
@@ -38,5 +42,24 @@
         256
       ]
     }
+  ],
+  "preferredQfu": 76,
+  "preferredQfuReason": "preferred QFU 76, due to clearing",
+  "notes": [
+    "During rainy period, pilots are restricted to use the paved RWY only and the East paved TWY.",
+    "Variation in level between paved RWY and grass strip 08/26.",
+    "Taxiing on this part of AD is prohibited.",
+    "Radio use highly recommended.",
+    "Preferred QFU: 076°, due to clearing.",
+    "Avoid overflying the surrounding built up areas.",
+    "Simultaneous use of both RWY prohibited.",
+    "Paved TWY reserved for ACFT whose overall length of the main landing gear is less than 3.5 m and whose wingspan is less than 11 m.",
+    "Precautionary taxiing recommended on the paved TWY due to the presence of a fence in the TWY strip.",
+    "Gliders winching (NR 956): SR-SS, SFC-2200 ft AMSL.",
+    "Winch equipped with a flashing light.",
+    "Users information on A/A SEDAN.",
+    "Aerobatics on AD (NR 6100): North and parallel to grass strip 08/26, East limit road D 964, length 3000 m, width 500 m.1650 ft AAL/5000 ft AAL.",
+    "SAT, SUN and HOL: SR-SS.",
+    "AEM (NR 8228): 500 ft ASFC (600 ft ASFC announced via NOTAM), SR-SS."
   ]
 }

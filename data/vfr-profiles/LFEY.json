@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFEY (AIP France, chart dated 2022-10-06), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFEY (AIP France, chart dated 2023-07-13): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFEY",
   "name": "Île-d'Yeu",
   "source": {
     "publication": "AIP France AD 2 LFEY",
-    "chartDate": "2022-10-06",
-    "extraction": "automatic"
+    "chartDate": "2023-07-13",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 46.7175,
@@ -18,7 +19,10 @@
   },
   "elevationFeet": 79,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "AFIS. - JAN-FEB, NOV-DEC : LUN-VEN / MON-FRI : 0615-1100, 1330-1700. - MAR, OCT : MER-SAM / WED-SAT : 0615-1100, 1330-1700. DIM / SUN : 0815-1100, 1330-1700. - APR-JUN, SEP : MER-DIM et JF / WED-SUN and public HOL : 0745-1130, 1330-1730. - JUL-AUG : LUN-DIM / MON-SUN : 0745-1130, 1330-1800. 25/12 et / and 01/01 : fermé / closed. Le service est susceptible d'être rendu en dehors des HOR publiés, sans préavis. En dehor (UTC HIV ; HOR ETE : - 1 HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "afis": 118.905
@@ -38,5 +42,24 @@
         215
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "AD usable by ULM with radio capability.",
+    "AD prohibited to class 1 ULM (paramotors).",
+    "Grass strip 04/22 recommended for crosswinds greater than 15 kt on runway 14/32.",
+    "Possible IFR activity.",
+    "Air navigation hazard High bird strike hazard in the vicinity of AD and on AD.",
+    "AD likely to be covered by sea haze in a few minutes.",
+    "For information about dangerous activities, in the vicinity of ILE D'YEU and over the continent within the limits of LF-D18, contact CCMAR ATLANTIQUE (call sign ARMOR) FREQ 124.725.",
+    "\"Low height\" circuit during training flights only with an instructor on board.",
+    "MNM 500 ft West from RWY 14/32.",
+    "Noise-sensitive AD.",
+    "Radio contact 3 minutes before entering AD circuit.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "TKOF RWY 32 fly direct heading to \"les Chiens Perrins\", then to the continent avoiding overflying the island.",
+    "ARR RWY 32 avoid overflying the island, entering by \"la pointe du But\" (North point).",
+    "Péril animalier / Wildlife strike hazard: Occasionnel / Random.",
+    "Pendant les HOR RFFS niveau 2 / During RFFS SKED level 2."
   ]
 }

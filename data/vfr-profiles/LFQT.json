@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFQT (AIP France, chart dated 2026-09-03), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFQT (AIP France, chart dated 2026-09-03): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFQT",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFQT",
     "chartDate": "2026-09-03",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 50.61667,
@@ -19,7 +20,9 @@
   "elevationFeet": 61,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "TowerAndGround"
+    "kind": "TowerAndGround",
+    "atsHours": "Sauf JF / Except HOL. ETE / SUM : LUN-VEN / MON-FRI : 0630-1830. HIV / WIN : LUN-VEN / MON-FRI : 0730-1800. En dehors de ces HOR, PPR le dernier jour ouvrable avant 1400 auprès de l'exploitant. Outside these SKED, PPR before 1400 on the last working day from AD operator (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": true
   },
   "frequencies": {
     "atis": 127.905,
@@ -42,5 +45,124 @@
         216
       ]
     }
+  ],
+  "preferredQfu": 216,
+  "preferredQfuReason": "preferred QFU 216, due to ILS procedure",
+  "reportingPoints": [
+    {
+      "name": "N",
+      "spoken": {
+        "fr": "Novembre",
+        "en": "November"
+      },
+      "latitude": 50.77528,
+      "longitude": 2.56389,
+      "location": "Hertzian radio relay 2 NM South of Steenvoorde"
+    },
+    {
+      "name": "NA",
+      "spoken": {
+        "fr": "Novembre Alpha",
+        "en": "November Alpha"
+      },
+      "latitude": 50.68333,
+      "longitude": 2.57083,
+      "location": "La Motte-au-Bois castle"
+    },
+    {
+      "name": "NE",
+      "spoken": {
+        "fr": "Novembre Écho",
+        "en": "November Echo"
+      },
+      "latitude": 50.68389,
+      "longitude": 2.84333,
+      "location": "Motorway interchange West of Armentieres"
+    },
+    {
+      "name": "EA",
+      "spoken": {
+        "fr": "Écho Alpha",
+        "en": "Echo Alpha"
+      },
+      "latitude": 50.64083,
+      "longitude": 2.745,
+      "location": "Water tower East of Estaires"
+    },
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 50.43528,
+      "longitude": 2.70417,
+      "location": "Motorway interchange at Lievin"
+    },
+    {
+      "name": "SA",
+      "spoken": {
+        "fr": "Sierra Alpha",
+        "en": "Sierra Alpha"
+      },
+      "latitude": 50.54111,
+      "longitude": 2.65056,
+      "location": "Roundabout North-East of Bethune"
+    },
+    {
+      "name": "W",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 50.64611,
+      "longitude": 2.40806,
+      "location": "Silos East of Aires-sur-la-Lys"
+    },
+    {
+      "name": "WA",
+      "spoken": {
+        "fr": "Whisky Alpha",
+        "en": "Whiskey Alpha"
+      },
+      "latitude": 50.62639,
+      "longitude": 2.55111,
+      "location": "Lys river and RD 916 intersection"
+    },
+    {
+      "name": "EB",
+      "spoken": {
+        "fr": "Écho Bravo",
+        "en": "Echo Bravo"
+      },
+      "latitude": 50.57528,
+      "longitude": 2.775,
+      "location": "Mémorial de Neuve-Chapelle et intersection RD 171 - RD 947"
+    }
+  ],
+  "notes": [
+    "Grass strip reserved for gliders during their activity.",
+    "Simultaneous use of both grass strip and main RWY 04- 22 is prohibited.",
+    "ULM activity: reserved to ACFT equipped with radio and sqwak, affiliated to based organisations having signed an agreement with CA services.",
+    "Usable declared distances: TORA,TODA, ASDA and LDA RWY 22 reduced due to the infrangible shelter of LOC 22 at 180 m from RWY end.",
+    "Heavy IFR training activity.",
+    "On arrival and on transit, radio contact recommended with MERVILLE TWR at least 5 min before entering the CTR.",
+    "Low height traffic patterns: only with ATS clearance and at 300 ft AAL MNM.",
+    "Night training patterns prohibited outside ATC SKED except AD operator authorization on standard circuit and at a MNM height of 1500 ft.",
+    "Departure 04: climb in the axis 036°, do not turn before having overtaken the factory in the north east sector.",
+    "Departure 04 with turn before factory: only on ATS clearance, turn right and follow trajectory south of railway.",
+    "Preferred QFU: 216°, due to ILS procedure.",
+    "Consignes particulières / Special instructions PCL outside ATS SKED upon PPR from AD operator.",
+    "PCL inactive 0000-0500 (SUM: -1 HR).",
+    "Activation with PPR 48 HR.",
+    "Traffic surveillance equipment: AD equipped with a radar display (see AD 1.0).",
+    "AEM NR 8253: see AIP ENR 5.5.",
+    "Aerobatics NR 6015: see AIP ENR 5.5.",
+    "PJE NR 241: see AIP ENR 5.5.",
+    "Pyrotechnic inoperative.",
+    "Radiocommunication failure: Transit: Before ATC clearance, pass round of the CTR.",
+    "After ATC clearance, comply with the latest clearance received.",
+    "ARR/DEP: Join the nearest compulsory WPT and turn back to AD by the mandatory route, proceed overhead higher than the circuit and join published downwind leg.",
+    "Adhere to possible visual signals."
   ]
 }

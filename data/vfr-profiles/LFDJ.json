@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFDJ (AIP France, chart dated 2026-04-16), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFDJ (AIP France, chart dated 2024-11-28): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFDJ",
   "name": "Pamiers - Les Pujols",
   "source": {
     "publication": "AIP France AD 2 LFDJ",
-    "chartDate": "2026-04-16",
-    "extraction": "automatic"
+    "chartDate": "2024-11-28",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.09056,
@@ -19,7 +20,11 @@
   "elevationFeet": 1114,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "AFIS : Du 1er mai au 30 septembre : LUN-VEN : 0700-1100, 1300-1700 / SAM, DIM, JF : 0700-1100, 1300- 1600. From 01 MAY to 30 SEP : MON-FRI : 0700-1100, 1300-1700 / SAT, SUN, public HOL : 0700-1100, 1300-1600. Du 1er octobre au 30 avril : LUN-VEN : 0700-1100, 1300-1600. From 01 OCT to 30 APR : MON-FRI : 0700-1100, 1300-1600. En-dehors de ces HOR, SAM, DIM et JF : PPR PN 48 HR. Outside these SKED, SAT, SUN and public H (UTC HIV ; HOR ETE : -1HR)",
+    "outsideAtsHours": "air-air frequency 118.180",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "approach": 120.355,
@@ -33,5 +38,31 @@
         271
       ]
     }
+  ],
+  "preferredQfu": 271,
+  "preferredQfuReason": "preferred QFU 271, due to environment",
+  "notes": [
+    "Multi-axis ULM activity possible after ATS agreement.",
+    "Possible IFR operations.",
+    "AD reserved for radio-equipped ACFT.",
+    "Snow covering risk: check availibility of AD by phone.",
+    "Model aircraft activity interferes with low height circuits.",
+    "Activities within LF-R27: \"ground-to-ground\" firing area located at Saint Félix de Rieutord, 4.0 NM SW AD, SFC/6500 ft.",
+    "Activity known on PAMIERS Information (AFIS SKED ) or TOULOUSE Information.",
+    "Preferred QFU: 271° due to environment.",
+    "Simultaneous activities of aerobatics and PJE (NR 399) are prohibited.",
+    "PJE activity (NR 399) overhead AD H24, FL 140.",
+    "Available after permission from AD operator.",
+    "Simultaneous aerobatics and PJE activity prohibited.",
+    "Priority will be given to IFR ACFT and TOULOUSE ESSAIS 3 CTA activity.",
+    "Actual activity provided by TOULOUSE INFO and PAMIERS INFO.",
+    "PJE NW of AD, 1.5 NM (activity NR 309 Tour du Crieu): H24, FL 120 MAX.",
+    "Activity provided by TOULOUSE INFO.",
+    "PJE (NR 383), PAMIERS Beaumont district, NW of AD, 3.24 NM, 0700-1100 / 1300-1600, FL 115.",
+    "Activity provided by TOULOUSE INFO, PAMIERS INFO.",
+    "Aerobatics (NR 6720) centered at THR 09, 2500 m long, NS extension 500 m on both sides of RWY centerline, 1500 ft ASFC/2400 ft ASFC, during day times.",
+    "PPR from AFIS with PN 48 HR.",
+    "Radio contact compulsory on PAMIERS Information or A/A.",
+    "AEM (NR 9018) South RWY: HJ, 330 ft ASFC MAX."
   ]
 }

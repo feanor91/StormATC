@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFAI (AIP France, chart dated 2022-08-11), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFAI (AIP France, chart dated 2022-08-11): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFAI",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFAI",
     "chartDate": "2022-08-11",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 48.59694,
@@ -18,7 +19,11 @@
   },
   "elevationFeet": 428,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 127.98",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 127.98
@@ -38,5 +43,24 @@
         232
       ]
     }
+  ],
+  "preferredQfu": 52,
+  "preferredQfuReason": "preferred QFU 52, in order to limit noise pollution",
+  "notes": [
+    "Simultaneous use of paved and unpaved RWY 05/23 prohibited.",
+    "AD reserved for radio-equipped ACFT.",
+    "RWY pattern landmarks: presence of visual cues materializing axis of final approaches RWY 05 and 23 (red and white checkerboard).",
+    "LDG QFU 232°, turn base leg EAST of \"Le Sceau\" then line up in long final 23 to overfly the checkerboard (leaving the farm on the Left side).",
+    "LDG QFU 052°, turn base leg overhead settling tanks of the sugar factory then line up in long final 05 to overfly the checkerboard (leaving the water tower on the Right side).",
+    "RWY circuit training below 800 ft AAL: only for training flights with instructor on board; height 300 ft AAL MNM.",
+    "Hot Spot: special attention to ground circulation on TWY Alpha: pay attention to proximity of parking areas on part of TWY Alpha parallel to the RWY.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Pilots are required a close attention when operating grass RWY after severe rain falls.",
+    "Half turn prohibited on paved RWY and grass RWY.",
+    "Preferred QFU 052° in order to limit noise pollution.",
+    "As far as possible, respect published AD circuit.",
+    "ULM: Air traffic: only at NW of AD in the area noticed on the map.",
+    "Entrances and exits of area by NW.; Ground traffic: Double WEST TWY to use and clear the ULM RWY.",
+    "Use limited to pilots authorized by the chief pilot of ACMDMV or ACAM ACB."
   ]
 }

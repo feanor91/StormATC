@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFDV (AIP France, chart dated 2024-01-25), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFDV (AIP France, chart dated 2024-01-25): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFDV",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFDV",
     "chartDate": "2024-01-25",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 46.27056,
@@ -18,7 +19,10 @@
   },
   "elevationFeet": 500,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 119.23",
+    "nightVfrApproved": true
   },
   "frequencies": {
     "airAir": 119.23
@@ -31,5 +35,20 @@
         199
       ]
     }
+  ],
+  "preferredQfu": 199,
+  "preferredQfuReason": "preferred QFU 199, due to DTHR RWY 20",
+  "notes": [
+    "Simultaneous use of ACFT RWY and ULM strip prohibited.",
+    "ACFT without radio must contact ACB before use.",
+    "Low height patterns only with onboard instructor.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Access to ULM strip from TWY / access to TWY from ULM strip: crossing grass RWY at the panel A02/20.",
+    "Preferred QFU 199° due to DTHR RWY 20.",
+    "Wind turbines near the South circuit of ULM strip: caution is recommended.",
+    "1- Based pilots: a) holder of the night flight rating, b) practical assessment of night flying ability on site by a qualified instructor, c) certificate of knowledge of local regulations setting out specific rules for use of the aerodrome.",
+    "2- Non-based pilots: a) authorized by aerodrome operator, b) holder of the night flight rating, c) a minimum of 200 flight hours' experience, including 20 hours at night, and recent practical experience (3 night take-offs and 3 night landings in the last 3 months) or have passed a practical assessment of night flying ability on site by a qualified instructor are required, d) certificate of knowledge of local regulations setting out specific rules for use of the aerodrome.",
+    "Pilots should be aware before each flight of special instructions concerning the use of the platform from the ACB, PN 36 HR.",
+    "PUL towed by ULM activity on ULM strip."
   ]
 }

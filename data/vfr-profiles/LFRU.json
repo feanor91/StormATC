@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFRU (AIP France, chart dated 2025-08-07), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFRU (AIP France, chart dated 2025-08-07): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFRU",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFRU",
     "chartDate": "2025-08-07",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 48.60083,
@@ -19,7 +20,10 @@
   "elevationFeet": 278,
   "magneticVariationDegrees": -1.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "AFIS : LUN-VEN / MON-FRI : 0800-1100, 1300-1600. En dehors de ces HOR et JF : PPR la veille ou le dernier jour ouvrable pendant HOR AFIS par (UTC HIV ; HOR ETE : - 1 HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "approach": 122.4,
@@ -47,5 +51,26 @@
         270
       ]
     }
+  ],
+  "notes": [
+    "Possible IFR activity.",
+    "AD reserved for radio-equipped ACFT.",
+    "Simultaneous use of paved and unpaved RWY prohibited outside AFIS SKED.",
+    "Flight only inside Schengen boundaries.",
+    "It is recommended not to use RWY 04/22 when crosswind component is greater than: 25kt on dry RWY; 20kt on wet RWY.",
+    "AD likely to be covered by sea haze in a few minutes.",
+    "RWY 04/22: Obstacles (vegetation) in 04 and 22 RWY funnels: see chart AD 2 LFRU ATT 01.; Degraded RWY condition, cracks, dents, bumps; ACFT take-off and landing performances likely to be altered, even on dry RWY. and the grass strip at the home-based ACFT apron.",
+    "Cambered RWY: close attention required before entering RWY due to non-visibility.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Main RWY 04/22 has priority.",
+    "During AEM activity, it is recommended not to use unpaved RWY 09/27.",
+    "Low height pattern available only for training with instructor on board and subject to a written authorization by the operator.",
+    "TWY B without marking reserved for light aviation (MAX wing span: 15 m).",
+    "TWY B, C, G without marking.",
+    "Sloping apron: wheel chocks recommended.",
+    "Airport handling mandatory for ACFT and helicopters whose MTOW is greater than 3 t.",
+    "Contact: ATS.",
+    "PAPI compulsory for LDG RWY 04 and RWY 22.",
+    "AEM activity (NR 8972): see AIP ENR 5.5 \"Activity in progress\" indicated by a bright colour flag."
   ]
 }

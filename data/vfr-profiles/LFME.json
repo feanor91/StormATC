@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFME (AIP France, chart dated 2024-11-28), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFME (AIP France, chart dated 2024-11-28): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFME",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFME",
     "chartDate": "2024-11-28",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.85306,
@@ -19,7 +20,11 @@
   "elevationFeet": 197,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 118.255",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 118.255
@@ -39,5 +44,110 @@
         356
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "AL",
+      "spoken": {
+        "fr": "Alpha Lima",
+        "en": "Alpha Lima"
+      },
+      "latitude": 43.66639,
+      "longitude": 4.5875,
+      "location": "Arles"
+    },
+    {
+      "name": "BC",
+      "spoken": {
+        "fr": "Bravo Charlie",
+        "en": "Bravo Charlie"
+      },
+      "latitude": 43.83028,
+      "longitude": 4.63333,
+      "location": "Beaucaire"
+    },
+    {
+      "name": "CA",
+      "spoken": {
+        "fr": "Charlie Alpha",
+        "en": "Charlie Alpha"
+      },
+      "latitude": 43.77944,
+      "longitude": 4.19472,
+      "location": "Calvisson"
+    },
+    {
+      "name": "CS",
+      "spoken": {
+        "fr": "Charlie Sierra",
+        "en": "Charlie Sierra"
+      },
+      "latitude": 43.95278,
+      "longitude": 4.47833,
+      "location": "Collias"
+    },
+    {
+      "name": "AS",
+      "spoken": {
+        "fr": "Alpha Sierra",
+        "en": "Alpha Sierra"
+      },
+      "latitude": 43.68194,
+      "longitude": 4.21389,
+      "location": "Aimargues"
+    },
+    {
+      "name": "SG",
+      "spoken": {
+        "fr": "Sierra Golf",
+        "en": "Sierra Golf"
+      },
+      "latitude": 43.64417,
+      "longitude": 4.43244,
+      "location": "Canal lock South Saint-Gilles"
+    },
+    {
+      "name": "PA",
+      "spoken": {
+        "fr": "Papa Alpha",
+        "en": "Papa Alpha"
+      },
+      "latitude": 43.69025,
+      "longitude": 4.54454,
+      "location": "Motorway toll of Arles"
+    }
+  ],
+  "notes": [
+    "AD reserved for radio and squawk-equipped ACFT.",
+    "AD prohibited for gliders.",
+    "Alternate use of ACFT RWY.",
+    "Unusable strip marked by white crosses.",
+    "Under the L571-7 article of Environment code, it is forbidden to perform training helicopter flights inbound or outbound LFME and to perform circular touristic flights without stopover or with a stopover lasting less than one hour.",
+    "Make oneself acquainted with ATIS GARONS.",
+    "Crews must be aware of IFR activity bound for Nîmes Garons above RWY traffic pattern.",
+    "Nîmes-Courbessac AD is located in the CTR of NIMESGarons.",
+    "LF-R8, activated H24, was created so that ACFT inside communicate on A/A FREQ only.",
+    "Flying conditions and instructions in LF-R8 Courbessac",
+    "Visibility > 5 km.",
+    "Transponder mandatory switched on 7000 ALT mode as soon as taxiing, in AD circuit and before penetration.",
+    "Radio contact mandatory on A/A FREQ.",
+    "ACFT on arrival, departure and in AD circuit: do not cross RD 999 joining Beaucaire and Nîmes in the South of AD.",
+    "Arrival: Avoid overhead AD; head East of Marguerittes descending to 900ft AMSL and as far as possible, acquaint with A/A parameters.",
+    "Then join AD traffic pattern at the beginning of downwind leg avoiding overflight of the urban area.",
+    "Departure: TKOF RWY 18: turn left MAG 080° after TKOF 500ft.",
+    "AAL toward 1000ft AMSL maxi.",
+    "TKOF RWY 36: due to relief in North funnel, pilots are asked to attentively check their climbing up performances.",
+    "Turn right MAG 080° after TKOF staying North of A9 towards 1000ft AMSL maxi.",
+    "Immediately after leaving AD circuit climbing up to 1000 ft AMSL, pilots must contact GARONS TWR to obtain transit clearance in the CTR.",
+    "To avoid overflight of the urban area of Marguerittes, ACFT and ULM circuits downwind legs must be flown West of RD135 or East of the urban area if that is not possible.",
+    "Low altitude circuits prohibited.",
+    "Use of ACFT and ULM RWY: All movements have to be performed on marked TWY only.; As far as it remains compatible with their performances,.",
+    "ULM will use in preference the ULM RWY, particularly for traffic pattern training.",
+    "It is recommended that gyroplanes and pendulous ACFT use the ULM RWY because of their manoeuvrability.",
+    "East TWY and South TWY reserved only for ULM in order to join the ULM RWY.",
+    "Announce your intentions by radio before departure or joining the ULM RWY via intermediate TWY.",
+    "SUN and public HOL: SR-SS, other SKED and FL announced by NOTAM.",
+    "AEM (NR 9542), remote-controlled flights according to protocol, SFC - 500 ft ASFC, HJ.",
+    "Paramotors East of AD 300 ft AAL."
   ]
 }

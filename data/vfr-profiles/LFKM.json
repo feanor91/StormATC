@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFKM (AIP France, chart dated 2022-06-16), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFKM (AIP France, chart dated 2017-09-14): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFKM",
   "name": "Saint-Galmier",
   "source": {
     "publication": "AIP France AD 2 LFKM",
-    "chartDate": "2022-06-16",
-    "extraction": "automatic"
+    "chartDate": "2017-09-14",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 45.60639,
@@ -18,11 +19,13 @@
   },
   "elevationFeet": 1269,
   "service": {
-    "kind": "Tower"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 123.5",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
-    "approach": 120.5,
-    "tower": 119.25,
     "airAir": 123.5
   },
   "runways": [
@@ -33,5 +36,19 @@
         335
       ]
     }
+  ],
+  "notes": [
+    "ATS: NIL. The chart header prints these units to call, which are not services of this aerodrome (its air-air frequency apart): .",
+    "AD reserved for ACFT and gliders whose pilots have been recognized fit to use the AD by an instructor (or hold a flight instructor qualification) AD usable by HEL and ULM AD reserved for radio-equipped ACFT.",
+    "TKOF and LDG prohibited for motorized ACFT except for emergency landing from 1130 to 1315 and from 1900 to 0800 (SUM: - 1 HR).",
+    "Flights of aeroplanes and ULM are prohibited during parachuting.",
+    "R 224 activation SKED: 0800-1900 (SUM: - 1 HR).",
+    "AD located within CTR SAINT-ETIENNE. a) IFR approach path to Saint-Etienne Loire AD via EB, above R 224. b) Special instruction inside restricted area: 1) inside R 224 (MAX 500 ft ASFC) possible flight on A/A 123.5 and without transponder.",
+    "2) to leave R 224, mandatory clearance to enter CTR: signal flight purpose before take off on 119.250, otherwise contact immediately ST ETIENNE TWR after taking off.; stay within R 224 as far as possible until obtaining the clearance to enter CTR.",
+    "Parachuting over AD (NR 419): FL 150.",
+    "SAT, SUN and HOL: SR-SS+30.",
+    "Activity reserved for authorized pilots and according to the current agreement protocol.",
+    "The effective activity is known by SAINT-ETIENNE TWR, CLERMONT INFO, LYON INFO, and MARSEILLE ACC.",
+    "Other SKED announced by NOTAM AEM (NR 9905): 500 ft ASFC, during R 224 activation."
   ]
 }

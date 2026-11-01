@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFKG (AIP France, chart dated 2025-12-25), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFKG (AIP France, chart dated 2025-12-25): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFKG",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFKG",
     "chartDate": "2025-12-25",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 42.05444,
@@ -19,11 +20,12 @@
   "elevationFeet": 177,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "Tower"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 118.350",
+    "nightVfrApproved": false
   },
   "frequencies": {
-    "approach": 119.9,
-    "tower": 118.35,
     "airAir": 118.35
   },
   "runways": [
@@ -34,5 +36,20 @@
         1
       ]
     }
+  ],
+  "notes": [
+    "ATS: NIL. The chart header prints these units to call, which are not services of this aerodrome (its air-air frequency apart): .",
+    "Restricted use AD to Corsica based ACFT and to Administration ACFT.",
+    "Otherwise, stopover possible with PPR 72 HR open time sent to AD operator by email: ppr@aerodromedeghisonaccia.com AD prohibited to aircraft of mass exceeding 5.7 t without a formal prior approval from the AD operator, including for state ACFT.",
+    "AD prohibited at night including for State aircraft; AD is available at night in case of emergency.",
+    "Simultaneous use of RWY 18/36 and of the drop zone is prohibited except for ACFT based at LFKG and restricted to precision parachuting activities.",
+    "Flight plans and flight authorization submitted to the duty officer of the Military Control Center of Air Base 126 TEL: 04 95 56 85 96 - 06 22 01 23 87 TWY A available for code A ACFT TWY B available for code B ACFT.",
+    "Helicopter activity in or out of ground effect prohibited outside of paved RWY.",
+    "HEL approach prohibited on apron and hangar vicinity.",
+    "Helicopters must translate via TWY B.",
+    "Helicopters must park on the HEL apron except specific authorization from AD operator.",
+    "Parachuting (NR 406): see AIP ENR 5.5.",
+    "Aerobatics (NR 7002), RWY center line centered on ARP on 1,5 NM long, 1650 ft AMSL / 3500 ft AMSL, SRSS outside LF-R 65 activation, or prior permission of LF-R 65 operating authority.",
+    "Aerobatics activity reserved for pilots with \"aerobatics\" authorization on their pilot license and with authorization from PEGAASUS (managing authority) (ENR 5.5)."
   ]
 }

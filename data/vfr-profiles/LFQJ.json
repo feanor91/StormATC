@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFQJ (AIP France, chart dated 2025-12-25), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFQJ (AIP France, chart dated 2025-12-25): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFQJ",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFQJ",
     "chartDate": "2025-12-25",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 50.30833,
@@ -19,7 +20,11 @@
   "elevationFeet": 452,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 121.005",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 121.005
@@ -39,5 +44,20 @@
         226
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Simultaneous use of paved RWY and unpaved RWY (800 x 80 m) prohibited.",
+    "Paved RWY reserved for ACFT and multi-axis class ULM.",
+    "Unpaved RWY (800 x 80 m) reserved for homebased ACFT.",
+    "When the unpaved RWYs are not available (NOTAM), all activities are transferred on paved RWY.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "TWY A and C restricted: to ACFT with wingspan lower than 24 m; to ACFT with overall width of main landing gear lower than 6 m.",
+    "Half-turn axial mark cannot be used on THR 05.",
+    "TKOF runways 23: turn left as soon as possible heading 213° and avoid the city of Assevent and the prison (QDR 218° / 1.5 NM).",
+    "Parachuting activity (NR 271): see AIP ENR 5.5 Aerobatics activity (NR 6030): see AIP ENR 5.5 AEM (NR 8287): see AIP ENR 5.5.",
+    "HEL, ballons and hot-air ballons activity possible on AD.",
+    "Paramotor activity close to the drop zone.",
+    "If paramotor activity, unpaved 300x20 m strip closed."
   ]
 }

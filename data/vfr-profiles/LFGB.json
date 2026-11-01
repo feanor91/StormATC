@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFGB (AIP France, chart dated 2025-12-25), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFGB (AIP France, chart dated 2025-12-25): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFGB",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFGB",
     "chartDate": "2025-12-25",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 47.73722,
@@ -19,7 +20,10 @@
   "elevationFeet": 789,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 125.255",
+    "radioMandatory": true
   },
   "frequencies": {
     "fis": 130.9,
@@ -47,5 +51,80 @@
         339
       ]
     }
+  ],
+  "preferredQfu": 199,
+  "preferredQfuReason": "preferred QFU 199, due to noise pollution",
+  "reportingPoints": [
+    {
+      "name": "EH",
+      "spoken": {
+        "fr": "Écho Hôtel",
+        "en": "Echo Hotel"
+      },
+      "latitude": 47.78083,
+      "longitude": 7.49306,
+      "location": "Utilisation /  Use"
+    },
+    {
+      "name": "SH",
+      "spoken": {
+        "fr": "Sierra Hôtel",
+        "en": "Sierra Hotel"
+      },
+      "latitude": 47.68889,
+      "longitude": 7.36194,
+      "location": "Outcomings"
+    },
+    {
+      "name": "NH",
+      "spoken": {
+        "fr": "Novembre Hôtel",
+        "en": "November Hotel"
+      },
+      "latitude": 47.77667,
+      "longitude": 7.39611,
+      "location": "Outcomings"
+    },
+    {
+      "name": "WH",
+      "spoken": {
+        "fr": "Whisky Hôtel",
+        "en": "Whiskey Hotel"
+      },
+      "latitude": 47.72778,
+      "longitude": 7.34806,
+      "location": "Incomings"
+    },
+    {
+      "name": "PH",
+      "spoken": {
+        "fr": "Papa Hôtel",
+        "en": "Papa Hotel"
+      },
+      "latitude": 47.77583,
+      "longitude": 7.41,
+      "location": "Incomings"
+    }
+  ],
+  "notes": [
+    "Site under video protection.",
+    "AD reserved for radio-equipped ACFT.",
+    "Simultaneous use of RWY is prohibited.",
+    "Unpaved RWY 16/34 reserved for home-based ULM.",
+    "Paved RWY reserved for ACFT whose reference distance is less than 800 m.",
+    "Pilots' attention is drawn towards the proximity of BALE-MULHOUSE AD and associated IFR intense activity, of BALE CTR and of TMA 1 BALE (lower limit 1000 ft ASFC); so the transit routes from / to BALE-MULHOUSE AD via N and NE points.",
+    "The attention of the pilots is drawn to the proximity between the helipad of Moenchsberg hospital and WH point.",
+    "Possible damages due to animals on unpaved RWY.",
+    "In case of sector South wind, watch out for the aircraft on ILS approach RWY 15 at BALE-MULOUSE.",
+    "Captive balloons (NR 960): see ENR 5.3 Preferred QFU: 199° due to noise pollution.",
+    "TKOF at QFU 199°: preferentiel lining up at RWY threshold.",
+    "After TKOF left hand turn before crossing of the highway, if possible.",
+    "TKOF QFU 159° and LDG QFU 339°: do not cross RWY 02/20 extended centerline.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Paved TWY width: 7.5 m.",
+    "Arrivals and departures conditions for motorized ACFT: A/A compulsory for arrivals 1 minute before overhead of reporting point: NH for arrivals by the North; WH for arrivals by the West.",
+    "ARRIVALS: from South-West and West via WH; from North and East via NH.",
+    "DEPARTURES RWY 20: to the West, after initial climb, avoid the Habsheim village, then South of Habsheim heading to the West via SH.; to the East and the North via EH.",
+    "DEPARTURES RWY 02: to the West, down wind, avoiding Habsheim village, then South of Habsheim heading to the West via SH.; to the East and the North via EH; to the North via PH for based ULMs and glider tow- aircraft."
   ]
 }

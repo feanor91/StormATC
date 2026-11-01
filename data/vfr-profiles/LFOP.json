@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFOP (AIP France, chart dated 2026-05-14), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFOP (AIP France, chart dated 2026-05-14): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFOP",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFOP",
     "chartDate": "2026-05-14",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 49.39083,
@@ -19,11 +20,117 @@
   "elevationFeet": 512,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "LUN-VEN : 0700-1900, SAM-DIM : 0800-1800. En dehors de ces HOR, extension et réouverture : Pour ligne régulière : O/R. Pour EVASAN : contacter le SAMU 76. Pour aéronef d'Etat : contacter la Préfecture de Seine-Maritime. Pour aéronef autre que ligne régulière, EVASAN ou aéronef d'Etat, PPR au plus tard le dernier jour ouvrable avant 1500 : par SITA : UROAPXH ou (UTC HIV ; HOR ETE : - 1 HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "atis": 120.73,
     "approach": 134.825,
     "tower": 120.2
-  }
+  },
+  "preferredQfu": 220,
+  "preferredQfuReason": "preferred QFU 220, due to IFR procedure and RWY lighting LIH",
+  "reportingPoints": [
+    {
+      "name": "AC",
+      "spoken": {
+        "fr": "Alpha Charlie",
+        "en": "Alpha Charlie"
+      },
+      "latitude": 49.44806,
+      "longitude": 0.90528,
+      "location": "Karting circuit AMBOURVILLE"
+    },
+    {
+      "name": "NW",
+      "spoken": {
+        "fr": "Novembre Whisky",
+        "en": "November Whiskey"
+      },
+      "latitude": 49.5475,
+      "longitude": 0.95639,
+      "location": "BARENTIN railway viaduct"
+    },
+    {
+      "name": "N",
+      "spoken": {
+        "fr": "Novembre",
+        "en": "November"
+      },
+      "latitude": 49.48972,
+      "longitude": 1.145,
+      "location": "ISNEAUVILLE highway interchange"
+    },
+    {
+      "name": "E",
+      "spoken": {
+        "fr": "Écho",
+        "en": "Echo"
+      },
+      "latitude": 49.35861,
+      "longitude": 1.35889,
+      "location": "FLEURY SUR ANDELLE"
+    },
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 49.31222,
+      "longitude": 1.23722,
+      "location": "POSES ponds locks"
+    },
+    {
+      "name": "W",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 49.31,
+      "longitude": 0.99917,
+      "location": "ORIVAL viaduct"
+    },
+    {
+      "name": "SB",
+      "spoken": {
+        "fr": "Sierra Bravo",
+        "en": "Sierra Bravo"
+      },
+      "latitude": 49.26806,
+      "longitude": 1.13722,
+      "location": "BORD motorway service area"
+    }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Restrictions of unpaved RWY 05/23: Unpaved RWY 05/23 reserved for home based ACFT.",
+    "RWY Condition Information or special operating conditions available at AD operator.",
+    "Runway 04/22 grooved.",
+    "Heavy concentration of birds in the vicinity and over the aerodrome in the event of winds and/or of heavy rainfalls on the coast.",
+    "ULM, paragliders and gliders heavy activity in the vicinity of \"S\" point: private AD VAL-DE-REUIL.",
+    "Private aerodromes activity: PONT DE L'ARCHE ( R 200 / 5.4 NM ROUEN AD -.",
+    "ULM, ACFT, HEL)",
+    "VAL DE REUIL ( R 163 / 6.8 NM ROUEN AD - ULM, ACFT, HEL)",
+    "ST CYR LA CAMPAGNE ( R 215 / 10.3 NM ROUEN AD - ACFT).",
+    "Preferred QFU: 220°, due to IFR procedure and RWY lighting LIH.",
+    "On arrival and in transit, radio contact recommended with LILLE APP 10 min before overhead ROU.",
+    "Because of frequent activation of CTR outside specified SKED, airspace real activity information on ATIS.",
+    "Eastern pattern from RWY 04/22 under ATS clearance.",
+    "After take-off RWY 04 or RWY 22, climb straight ahead 1000 ft AAL before turning.",
+    "\"Low height\" circuits: minimum 300 ft AAL only with ATC clearance for training flights with an instructor on board.",
+    "STAP: available data: wind, cloud base, VIS, RVR, T°, DP, QNH, QFE and possible particular information.",
+    "Traffic surveillance equipment: AD equipped with a radar display (see AD 1.0).",
+    "Aerobatics NR 6225: see AIP ENR 5.5 Parachute jumping activity NR 211: see AIP ENR 5.5 Radio failure: visual signals U/S.",
+    "Carburants / Fuel: 100 LL-JET A1.",
+    "SKED: MON-FRI: 0745-1630, SAT and SUN: 0845-1730.",
+    "Credit cards: VISA, WORLD FUEL SVC, cash payment.",
+    "Level 5: MON-FRI: 0700-1700, SAT and SUN: 0800-1800.",
+    "Niveau 1 / Level 1: hors / outside HOR / SKED.",
+    "Extension et réouverture / Extension and reopening: O/R: Pendant heures ouvrables / During working hours:; En dehors heures ouvrables / Outside working hours: TEL: 06 74 69 57 69.",
+    "Level 1 for 05/23 unpaved RWY.",
+    "Péril animalier / Wildlife strike hazard: Occasionnel / Random."
+  ]
 }

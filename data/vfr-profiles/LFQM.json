@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFQM (AIP France, chart dated 2025-09-04), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFQM (AIP France, chart dated 2025-09-04): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFQM",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFQM",
     "chartDate": "2025-09-04",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 47.20528,
@@ -19,7 +20,10 @@
   "elevationFeet": 1270,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "AFIS : LUN-VEN sauf JF : 0800-1130 ; 1300-1700. En dehors de ces HOR : PPR AFIS 1HR. AFIS peut être rendu sans préavis 24/7. Info connue sur LA VEZE INFO. AFIS : MON-FRI except public HOL : 0800-1130 ; 1300-1700. Outside these SKED : PPR AFIS 1HR. AFIS may be provided without prior notice 24/7. Information available on LA VEZE INFO (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "afis": 122.205
@@ -32,5 +36,29 @@
         231
       ]
     }
+  ],
+  "preferredQfu": 231,
+  "preferredQfuReason": "preferred QFU 231, due to IFR procedure",
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "ULM: PPR from AD operator.",
+    "Possible IFR operations.",
+    "RWY shoulders not provided.",
+    "ACFT traffic circuit SE of AD must be conducted in a way to avoid village of SAONE.",
+    "Landing preferred QFU 231° due to IFR procedure.",
+    "Take-off preferred QFU 231° due to environment.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "IFR training for non based ACFT: PPR from AD operator.",
+    "VFR restrictions (except sanitary and commercial flights): From 1st of April to 30th of September: TKOF and.",
+    "LDG prohibited at night starting 2159 LT.",
+    "From 1st of October to 31th of March: TKOF and LDG prohibited at night starting 2100 LT.",
+    "PCL for lighting and PAPI B1.",
+    "3 clicks on microphone on A/A FREQ in less than 5 seconds to turn on lighting and PAPI 05/23 on intensity 3 and apron lighting.",
+    "5 clicks on microphone on A/A FREQ in less than 5 seconds to turn on lighting and PAPI 05/23 on intensity 4, flashing lights and apron lighting.",
+    "Lighting on for 15 minutes.",
+    "PJE (NR 215): see AIP ENR 5.5 Level 2: MON-FRI: 0800-1130, 1300-1700.",
+    "Outside these SKED: Level 1, or level 2 PPR AFIS PN 1HR.",
+    "Level 4 possible with PPR PN 24 HR AFIS.",
+    "TEL: +33 (0)3 81 83 15 32 - E-mail: afis@smablv.fr Péril animalier / Wildlife strike hazard:"
   ]
 }

@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFDN (AIP France, chart dated 2026-07-09), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFDN (AIP France, chart dated 2026-07-09): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFDN",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFDN",
     "chartDate": "2026-07-09",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 45.88944,
@@ -19,7 +20,11 @@
   "elevationFeet": 60,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "AFIS LUN-VEN / MON-FRI : 0800-1100 et / and 1200-1600. En dehors de ces horaires, extension possible, PPR la veille ou dernier jour ouvrable avant 1100 / Outside these SKED, possible extension, PPR on the day before or on the last working day before 1100 (UTC HIV ; HOR ETE : - 1 HR)",
+    "outsideAtsHours": "air-air frequency 119.305",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "approach": 124.205,
@@ -33,5 +38,21 @@
         302
       ]
     }
+  ],
+  "preferredQfu": 302,
+  "preferredQfuReason": "preferred QFU 302, due to IFR procedure",
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "AD prohibited for paramotors and lights aerostats (Classes 1 and 5 ULM).",
+    "Possible IFR operations.",
+    "AD likely to be covered by sea haze in a few minutes.",
+    "Axial line of the RWY turn-pad, TWY A and B are designed for ACFT whose wingspan is smaller than 36 m and main gear overall width is smaller than 9 m.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Preferred QFU: 302° due to IFR procedure.",
+    "Aerodrome circuit below 500 ft AAL authorized only with an instructor pilot.",
+    "Military school flights during opening days.",
+    "TWY A and E not usable.",
+    "Parachuting on AD (NR 354): see AIP ENR 5.5.",
+    "Aerobatics over AD (NR 6502): see AIP ENR 5.5."
   ]
 }

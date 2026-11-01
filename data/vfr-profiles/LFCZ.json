@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFCZ (AIP France, chart dated 2025-09-04), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFCZ (AIP France, chart dated 2025-09-04): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFCZ",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFCZ",
     "chartDate": "2025-09-04",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 44.14583,
@@ -18,7 +19,11 @@
   },
   "elevationFeet": 165,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 118.905",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 118.905
@@ -31,5 +36,16 @@
         261
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "AD likely to be covered by sea haze in a few minutes.",
+    "Arrivals from North, 01/07-31/08: reserved for the Police rescue helicopter.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Access way in front of hangars reserved for home-based ACFT.",
+    "TWY B unavailable during paradropping.",
+    "Access runways 08 and 26 via TWY A only.",
+    "TWY B unavailable at night.",
+    "PCL: 3 times: LIL; 5 times: LIL II; Lighting extinction by operationg the trigger 7 times in less than 5 seconds."
   ]
 }

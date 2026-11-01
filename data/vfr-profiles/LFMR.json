@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFMR (AIP France, chart dated 2025-12-25), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFMR (AIP France, chart dated 2025-12-25): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFMR",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFMR",
     "chartDate": "2025-12-25",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 44.38722,
@@ -19,7 +20,11 @@
   "elevationFeet": 3714,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 123.5",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 123.5
@@ -32,5 +37,24 @@
         269
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Length cambered RWY, RWY end not visible from THR to 2 QFUs.",
+    "Increased risk of runway excursion during landing.",
+    "Temperature (above 8°C) and altitude are penalizing during take-off and landing.",
+    "During approach, visualisation of final approach slope distorted because of cambered RWY: visual of 7% that gives an impression of high slope.",
+    "When strong Mistral in « Vallée du Rhône » or between March and October, from midday to the evening, when valley breeze is established, strong turbulences and downdrafts in short final 27.",
+    "Route (D 609) at THR 27: Possible obstacles (trucks higher than 4.30 m) in the TKOF funnel: systematically check performances during TKOF RWY 09 to ensure clearance.",
+    "Procédures and special instructions Conventionally ACFT will fly over right side of the «vallée de l'Ubaye» in the flight direction.",
+    "Read « Consignes particulières LFMR » published on the website: www.aerodromebarcelonnette.fr/consignes-lfmr Approach / Landing: proceed omnidirectionnal arrival above mountains, and fly overhead wind-sock, 5000 ft QNH, MNM.",
+    "At landing, choose a touchdown point in the first rising quarter of the runway in order to compensate the descending part in its second half.",
+    "Taxiing: Taxiing prohibited except on RWY and TWY.",
+    "Towing way reserved for gliders, landing prohibited when this way is engaged by one or several gliders.",
+    "Takeoff / Initial climb: In case of engine failure during take-off, there is little clearance: RWY 27: on the left Ubaye riverbed,; RWY 09: golf on the right.",
+    "Comply strictly with the published AD circuit.",
+    "Avoid to overfly the neighbouring villages.",
+    "Final fix for all approach path,THR 09.",
+    "Ground stationary work, THR 09 imperatively."
   ]
 }

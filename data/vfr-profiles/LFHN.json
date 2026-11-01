@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFHN (AIP France, chart dated 2026-08-06), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFHN (AIP France, chart dated 2026-08-06): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFHN",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFHN",
     "chartDate": "2026-08-06",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 46.12333,
@@ -19,7 +20,11 @@
   "elevationFeet": 1626,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 123.5",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 123.5
@@ -32,5 +37,24 @@
         3
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Possible derogation for home-based ACFT.",
+    "Glider activity reserved for gliders authorized by the AD operator.",
+    "TORA and TODA RWY 36 reduced due to road gauge in RWY strip.",
+    "Access to South hangars: the distance between the two buildings facing hangar 5 is only 17 meters, thus only one ACFT at a time can be manoeuvring engine running.",
+    "Gyroplane and helicopter training activity subject to agreement of AD operator.",
+    "Presence of numerous power cables without marking, crossing the Rhône river.",
+    "Heavy paragliding activity NE and SW of AD.",
+    "Particular weather conditions: wind shear and down draughts from North sector wind, notably on landing and take off at QFU 003°.",
+    "Due to topography, RWY length and slope climbing 1.5 %, weak performances hazards requiring weight limitation for most light ACFT, notably at QFU 003°.",
+    "Central TWY: follow the centreline because it is asphalted on 6.3 m wide.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Transversal slope of RWY: slope descending 3% from West to East.",
+    "Except emergency, avoid go-arounds on final RWY 36 above housing estate.",
+    "SAT, SUN and public HOL: traffic pattern reserved for home-based aircraft.",
+    "ULM: High approach recommended for LDG on QFU 003°; Traffic pattern: avoid overflight of motorway A40.",
+    "Aerobatics NR 6807: see AIP ENR 5.5"
   ]
 }

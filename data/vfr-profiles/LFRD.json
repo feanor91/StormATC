@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFRD (AIP France, chart dated 2026-06-11), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFRD (AIP France, chart dated 2026-06-11): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFRD",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFRD",
     "chartDate": "2026-06-11",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 48.58778,
@@ -18,7 +19,10 @@
   },
   "elevationFeet": 219,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "0730-1900 (UTC HIV ; HOR ETE : - 1 HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "atis": 124.58,
@@ -48,5 +52,116 @@
         350
       ]
     }
+  ],
+  "preferredQfu": 350,
+  "preferredQfuReason": "preferred QFU 350, due to IFR operations",
+  "reportingPoints": [
+    {
+      "name": "N",
+      "spoken": {
+        "fr": "Novembre",
+        "en": "November"
+      },
+      "latitude": 48.67694,
+      "longitude": -2.07222,
+      "location": "Ile de Cézembre / Cezembre island"
+    },
+    {
+      "name": "NE",
+      "spoken": {
+        "fr": "Novembre Écho",
+        "en": "November Echo"
+      },
+      "latitude": 48.71139,
+      "longitude": -1.84306,
+      "location": "Headland of Grouin"
+    },
+    {
+      "name": "NB",
+      "spoken": {
+        "fr": "Novembre Bravo",
+        "en": "November Bravo"
+      },
+      "latitude": 48.61889,
+      "longitude": -2.02583,
+      "location": "Rance dam"
+    },
+    {
+      "name": "E",
+      "spoken": {
+        "fr": "Écho",
+        "en": "Echo"
+      },
+      "latitude": 48.53694,
+      "longitude": -1.97306,
+      "location": "Bridge St Hubert"
+    },
+    {
+      "name": "SW",
+      "spoken": {
+        "fr": "Sierra Whisky",
+        "en": "Sierra Whiskey"
+      },
+      "latitude": 48.52194,
+      "longitude": -2.23278,
+      "location": "Plancoet"
+    },
+    {
+      "name": "WJ",
+      "spoken": {
+        "fr": "Whisky Juliett",
+        "en": "Whiskey Juliett"
+      },
+      "latitude": 48.5725,
+      "longitude": -2.21472,
+      "location": "Le Guildo"
+    },
+    {
+      "name": "NW",
+      "spoken": {
+        "fr": "Novembre Whisky",
+        "en": "November Whiskey"
+      },
+      "latitude": 48.68778,
+      "longitude": -2.31917,
+      "location": "Cap Fréhel"
+    },
+    {
+      "name": "SE",
+      "spoken": {
+        "fr": "Sierra Écho",
+        "en": "Sierra Echo"
+      },
+      "latitude": 48.49139,
+      "longitude": -2.00167,
+      "location": "Ecluse du Châtelier"
+    }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT and A + C mode transponder.",
+    "RWY 17R/35L strip reserved for authorized ULM.",
+    "Numerous birds on airfield and surroundings.",
+    "Hot air balloons may be present inside CTR.",
+    "Paragliding activity may be present on the coast between Saint-Jacut de la Mer and La Guimorais.",
+    "AD likely to be covered by sea-haze in a few minutes.",
+    "During strong westerly winds: windshears and strong turbulences on final RWY 17 and on the RWY due to Preferred QFU: 350° due to IFR operations.",
+    "Training flights using jet engines or military ACFT possible with ATC authorization: MON-FRI 0700-1100 and 1300-1800, SAT 0700-1100 (SUM: -1 HR).",
+    "The control tower arranges the taxiing sequence for entering the manoeuvring area.",
+    "On departure and on arrival, only information about aircraft movement known by ATS can be provided.",
+    "Pilots are responsible for ground and air collision avoidance, their own separation and the third party safety.",
+    "Below 2500 ft AMSL, radio contact is required 3 min before overflying the CTR entry points, on TWR frequency.",
+    "\"Low height\" patterns are authorized only for training flights with instructor pilot on board and with ATC clearance: MNM 300 ft AAL on preferential patterns.",
+    "Overflying SABENA installations is forbidden while in patterns.",
+    "RWY 17R/35L unpaved: Closed from 1st November to 31st March.",
+    "RWY 11/29: unusable outside ATS SKED; visual use only in the daytime; usable as TWY under control of the tower or Air to.",
+    "Air communications.",
+    "TWY use: TWY C: limited to ACFT whose overall width of main gear is 3.05 m.",
+    "TWY D: only for EMERAUDE ULM.",
+    "TWY G, E, S: only for Sabena Tecnics.",
+    "Minimal width: 10.5 m.",
+    "Reserved for ACFT with wingspan < 24 m except on section from TWY 11/29 to ACFT painting hangar (code C ACFT accepted on this section).",
+    "On segment between intermediate holding points S1 and E1, code C ACFT are authorized under towing condition only.",
+    "TWY U: ULM only.",
+    "Traffic surveillance equipment: AD equipped with radar display (see AD 1.0)."
   ]
 }

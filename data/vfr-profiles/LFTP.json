@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFTP (AIP France, chart dated 2022-04-21), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFTP (AIP France, chart dated 2022-04-21): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFTP",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFTP",
     "chartDate": "2022-04-21",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.86889,
@@ -18,7 +19,10 @@
   },
   "elevationFeet": 2469,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 123.5",
+    "nightVfrApproved": false
   },
   "frequencies": {
     "airAir": 123.5
@@ -38,5 +42,17 @@
         338
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for home-based ACFT.",
+    "If northern wind is higher than 20 kt use of RWY 07/25 is prohibited.",
+    "RWY 16/34 usable only by seasonal or permanent home based ACFT in accordance with local instructions decided by the CAA.",
+    "Simultaneous movements on both RWY 07 and 25 prohibited.",
+    "Landing of powered ACFT on QFU 074°, with West sector wind lower than 15 kt, authorized considering sloping ground.",
+    "TWY width: 30 m TWY A along the runway, and TWY B 22 m when joining the hangar, 45 m TWY C SouthEast of the RWY.",
+    "Fire extinguisher located close to the refuelling area.",
+    "QFU 338°: In mistral wind conditions, highly turbulent aerology due to a ravine ahead of THR 34.",
+    "Taxiing outside runway possible.",
+    "Caution for LDG RWY 25 (3.5% declivity)."
   ]
 }

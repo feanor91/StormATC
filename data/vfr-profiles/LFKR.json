@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFKR (AIP France, chart dated 2026-08-06), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFKR (AIP France, chart dated 2026-08-06): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFKR",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFKR",
     "chartDate": "2026-08-06",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 45.375,
@@ -23,5 +24,23 @@
   },
   "frequencies": {
     "airAir": 123.5
-  }
+  },
+  "notes": [
+    "AD suitable for aircraft whose pilots: have been assessed as competent to use the aerodrome by an instructor holding a mountain rating following a site reconnaissance or; hold a mountain qualification.",
+    "AD suitable for HEL and microlights.",
+    "Microlight pilots are strongly advised to have completed the mountain training course organised by the FFPLUM.",
+    "Commercial air travel by aeroplane is prohibited, with the exception of sightseeing flights.",
+    "Usable declared distances: TORA and TODA RWY 16 and 34 reduced due to obstacles in TKOF funnels.",
+    "Paragliding area South-East of the AD.",
+    "Tricky flying conditions in Southerly winds.",
+    "Presence of extra-high-voltage power lines beneath the flight paths of ARR and DEP.",
+    "Departure and arrival following the valley.",
+    "Preferred RWY 34 due to environment.",
+    "Landing on RWY 16 and 34: do not descend below 1800 ft AMSL at the base leg due to a high-voltage power line within the AD's easements, running parallel to the runway and unmarked.",
+    "Flying over the Arkéma factory in La Chambre is prohibited.",
+    "Take-off from RWY 34: Turn right heading 016°.",
+    "Do not turn before1525 ft AMSL.",
+    "Circling prohibited for non-based aircraft.",
+    "AEM NR 9865: see AIP ENR 5.5"
+  ]
 }

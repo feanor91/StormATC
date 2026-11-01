@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFTF (AIP France, chart dated 2025-10-02), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFTF (AIP France, chart dated 2026-09-03): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFTF",
   "name": "Cuers - Pierrefeu",
   "source": {
     "publication": "AIP France AD 2 LFTF",
-    "chartDate": "2025-10-02",
-    "extraction": "automatic"
+    "chartDate": "2026-09-03",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.2475,
@@ -19,7 +20,8 @@
   "elevationFeet": 269,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "radioMandatory": true
   },
   "frequencies": {
     "tower": 122.7
@@ -32,5 +34,88 @@
         288
       ]
     }
+  ],
+  "preferredQfu": 108,
+  "preferredQfuReason": "preferred QFU 108, aRR and DEP within R 64 B : report to points CN, PV, SL, VC, or CO Low HGT circuit 500 ft AAL (800 AMSL) O/R on request or announced by A/A As far as possible, avoid flying over hamlets : Beauvais, les Platanes, les Marseillais and Pierrefeu-du-Var Keep surrounding relief in view for any arrival in R 64 B (active or inactive) or during RWY pattern Non home based ACFT : limitation of 2 successive RWY laps H ome based ACFT : limitation of RWY laps, especially in summer, evenings and weekends IFR departure : If R 64 B active, activation of FPL by CUERS CTL with Nice who will give integration point and clairance If R 64 B inactive, activation of FPL on FREQ NICE INFO OUEST which will give clearance",
+  "reportingPoints": [
+    {
+      "name": "CN",
+      "spoken": {
+        "fr": "Charlie Novembre",
+        "en": "Charlie November"
+      },
+      "latitude": 43.29889,
+      "longitude": 6.18306,
+      "location": "Carnoules"
+    },
+    {
+      "name": "PV",
+      "spoken": {
+        "fr": "Papa Victor",
+        "en": "Papa Victor"
+      },
+      "latitude": 43.29333,
+      "longitude": 6.15278,
+      "location": "Access road NE of the village of Puget-Ville"
+    },
+    {
+      "name": "SL",
+      "spoken": {
+        "fr": "Sierra Lima",
+        "en": "Sierra Lima"
+      },
+      "latitude": 43.19139,
+      "longitude": 6.03528,
+      "location": "Solliès-Pont"
+    },
+    {
+      "name": "CO",
+      "spoken": {
+        "fr": "Charlie Oscar",
+        "en": "Charlie Oscar"
+      },
+      "latitude": 43.23417,
+      "longitude": 6.28472,
+      "location": "Collobrières, crossroads 1 NM west of the village"
+    },
+    {
+      "name": "VC",
+      "spoken": {
+        "fr": "Victor Charlie",
+        "en": "Victor Charlie"
+      },
+      "latitude": 43.19167,
+      "longitude": 6.28028,
+      "location": "NE point of Valcros golf"
+    },
+    {
+      "name": "TV",
+      "spoken": {
+        "fr": "Tango Victor",
+        "en": "Tango Victor"
+      },
+      "latitude": 43.40806,
+      "longitude": 5.91861,
+      "location": "Tourves, castle ruins"
+    },
+    {
+      "name": "SA",
+      "spoken": {
+        "fr": "Sierra Alpha",
+        "en": "Sierra Alpha"
+      },
+      "latitude": 43.33944,
+      "longitude": 6.12083,
+      "location": "Ste Anastasie, abeam south of the gymnasium"
+    }
+  ],
+  "notes": [
+    "AD available for CAP day time in VMC from SR-30 to SS+30 AD reserved for radio-equipped ACFT, prohibited to GLD and ULM except categories 3, 4 and 6 Overflight of MIL facilities prohibited below 1500 ft AAL Prior radio contact compulsory on RAI.",
+    "Conform to instructions For ACFT destined to MIL installations, contact the operations department to obtain a PPR NR E-mail: aia-cuers-pierrefeu.c-ops.fct@intradef.gouv.fr 04 22 43 17 20 - 04 22 43 10 95 AD controlled during noticed periods on RAI Watching FREQ compulsory within R 64 B, whatever is the noticed activity TWY M1 and M2: exclusive use for MIL or state ACFT on ATC clearance The paved PRKG reserved to ACB du VAR is prohibited for ACFT > 3.5 t Transient ACFT: pilots must report their flights in the register located in the users association secretary of the CIV area TWY C1 and M1 line up is possible for a TKOF on the RWY 11: from C1: 1335 m remaining; from M1: 1325 m remaining; AD South pattern:.",
+    "If the RAI is broadcasting on the FREQ, contact NICE APP 134.475 IFR on ARR: If pilot can maintain VMC, he cancels IFR to perform VFR arrival.",
+    "ACFT will be transferred to CUERS TWR or A/A FREQ If pilot can't find VMC, ACFT can be coordinated with TOULON APP to go down in its spaces in order to obtain VMC Taxiing restriction: Caution when taxiing, fence 22 m from TWY axis M1 and M2 Medium and heavy ACFT: U-turn prohibited outside the turning pads areas at the end of RWY Obstacle on TWY access CIV area: gate 2.60 m high by 29 m wide, presence of guides on the ground 7.42 m from TWY axis, 26 cm above ground, wheelbase of landing gear limited to 5 m C1 prohibited for ACFT > 1,5 t ACFT wingspan > 15 m must use TWY C2 with caution ACFT wingspan > 24 m must only use the central TWY for access to the ACB MIL PJE (NR 424): day and night, announced by NOTAM.",
+    "SFC - FL 130 Start up or entering LF- R 64 B after prior agreement of TWR Towing of banners activity under prior agreement of AD CDT, follow instructions in force (available in AZCCP secretary's office and in delegation Côte d'Azur) Aerobatics (NR 6956): Week-ends and HOL only Axis located 5 NM NE AD and oriented E/W on 4 km length.",
+    "3000 ft AMSL- 5000 ft AMSL AEM (NR 9751): Outside LF-R 64 B activity.",
+    "SFC - 500 ASFC Not approved AD operator see see Flight preparation Addressing VFR FPL see"
   ]
 }

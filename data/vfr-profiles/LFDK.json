@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFDK (AIP France, chart dated 2024-08-08), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFDK (AIP France, chart dated 2024-08-08): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFDK",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFDK",
     "chartDate": "2024-08-08",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 45.49389,
@@ -18,7 +19,9 @@
   },
   "elevationFeet": 11,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 118.455"
   },
   "frequencies": {
     "airAir": 118.455
@@ -31,5 +34,15 @@
         315
       ]
     }
+  ],
+  "notes": [
+    "AD likely to be covered by sea haze in a few minutes.",
+    "Frequent overflights of paramotors and balloons outside AD operations.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "TKOF 32: if possible avoid flight over Jeune Soulac.",
+    "Parachute jumping activity (NR 371): FL 135.",
+    "For ALT > 2500 ft, PPR from AQUITAINE APP.",
+    "Information on A/A SOULAC.",
+    "Actual activity known on AQUITAINE INFO."
   ]
 }

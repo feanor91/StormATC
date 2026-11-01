@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFNQ (AIP France, chart dated 2022-12-01), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFNQ (AIP France, chart dated 2022-12-01): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFNQ",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFNQ",
     "chartDate": "2022-12-01",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 42.54333,
@@ -18,7 +19,9 @@
   },
   "elevationFeet": 5612,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 119.91"
   },
   "frequencies": {
     "airAir": 119.91
@@ -31,5 +34,16 @@
         321
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for home based ACFT and ACFT which are based at PERPIGNAN, SAINTE-LEOCADIE, and PUIVERT.",
+    "The captain must: either be mountain rated,; or have 100 flying hours as a pilot, and satisfy one of the two following conditions: 1) to have used the AD as a captain during the last twelve months, 2) to have performed an AD reconnaissance, during the last two months, with an instructor who is authorized to use the AD, and being authorized to fly solo after this reconnaissance (this must be recorded in the flight log).",
+    "Aerodrome reserved for home-based aircraft from October 31st to May 31st, and for aircraft equipped with skis and using the snowy aerodrome under the sole responsibility of the pilot in command, knowing that lighting and runway grooming are not carried out by the operator.",
+    "The RWY is often snow-covered, or waterlogged.",
+    "With North sector wind < 15 kt, use QFU 141° for takeoff, due to runway slope.",
+    "Preferred landing QFU 321°, due to runway slope and heavy turbulences at threshold 14.",
+    "Outside gliding activity hours, runway inspections are not carried out, the pilot in command shall get aware of runway conditions.",
+    "Glider winching on AD (NR 999), 1700 ft ASFC, SR-SS activity announced by rotating lights mounted on the electrical winch – users information on A/A FREQ.",
+    "PJE over AD (NR 319) 1300 ft ASFC, SR-SS, activity announced by NOTAM above 1300 ft."
   ]
 }

@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBT (AIP France, chart dated 2026-09-03), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFBT (AIP France, chart dated 2026-09-03): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFBT",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFBT",
     "chartDate": "2026-09-03",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.18556,
@@ -19,11 +20,68 @@
   "elevationFeet": 1260,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "TowerAndGround"
+    "kind": "TowerAndGround",
+    "atsHours": "0400-2230, 2330-0200 Aviation civile. Bloc technique. Aérodrome de Tarbes - 65290 JUILLAN (UTC HIV ; HOR ETE : - 1 HR)",
+    "nightVfrApproved": true
   },
   "frequencies": {
     "approach": 128.8,
     "tower": 119.055,
     "ground": 121.805
-  }
+  },
+  "reportingPoints": [
+    {
+      "name": "E",
+      "spoken": {
+        "fr": "Écho",
+        "en": "Echo"
+      },
+      "latitude": 43.19722,
+      "longitude": 0.19306,
+      "location": "Motorway bridge"
+    },
+    {
+      "name": "EA",
+      "spoken": {
+        "fr": "Écho Alpha",
+        "en": "Echo Alpha"
+      },
+      "latitude": 43.17639,
+      "longitude": 0.08778,
+      "location": "Momères"
+    },
+    {
+      "name": "W",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 43.19278,
+      "longitude": -0.11639,
+      "location": "Pontacq"
+    }
+  ],
+  "notes": [
+    "Tie-down fittings available on PRKG Golf.",
+    "Training flights with ATC unit agreement ATS TEL and E-mail: sna-so-pyrenees-ctl-ld@aviation-civile.gouv.fr Training flights for ACFT whose wingspan is larger than 24m (code C) and helicopters of all types are subject to authorization of AD operator.",
+    "OPS contact details (0500-2300 local time): TEL: +33(0)5 62 32 96 00; E-mail: ops.tarbes-lourdes@aeroports-laregion.fr.",
+    "Training flights prohibited between 2300 and 0600 local time.",
+    "ACFT from Bigorre ACB are considered as based ACFT.",
+    "Radio and squawk-equipped ULM are authorized.",
+    "It is recommended to follow route E-EA at 2500 ft AMSL MAX.",
+    "Paradropping (NR 311, 316, 330, 334-1 and 334-2): see AIP ENR 5.5 AEM NR 9020: see AIP ENR 5.5 Captive balloon NR 976: see AIP ENR 5.3 Gliding activity: in R 240 Laloubère area East of TARBES installations.",
+    "Activity announced on ATIS and ATC FREQ.",
+    "With IFR trafic: Airplanes: VIS 3000 m, ceiling 1100 ft,; HEL: VIS 3000 m, ceiling 1100 ft.",
+    "Without IFR trafic: Airplanes: VIS 1500 m, ceiling 600 ft (180 m); HEL: VIS 800 m, ceiling 600 ft (180 m) pilots, 4th RHFS and 5th RHC helicopters and ACB.",
+    "Léon de Morane, ACB de Bigorre instructors.",
+    "LDG RWY 02 prohibited.",
+    "Carburants / Fuel: 100LL - Jet A1 - SAF (Sustainable Aviation Fuel).",
+    "HOR ouvrables / working SKED: du / from 01/04 au / to 31/10: 0300-1900 (selon trafic / depending on traffic); du / from 01/11 au / to 31/03: 0400-1800 (selon trafic / depending on traffic).",
+    "Outside these SKED: O/R PN 1HR for non scheduled ACFT.",
+    "Station auto-service H24 (Aviation Générale) / H24 self-service station (General Aviation).",
+    "TEL: +33 5 62 92 53 08 (Dépôt / Depot ) +33 6 30 68 81 37 (Portable avitailleur dépôt / Depot fuel attendant mobile) +33 6 72 14 35 21 (Responsable / Manager ) +33 7 88 45 60 82 (Astreinte en HOR non ouvrables / On-call during non working SKED ).",
+    "E-mail dépôt / Depot e-mail: lde.gpo-a@wfscorp.com E-mail responsable / Manager E-mail: ncabarrou@wfscorp.com Information sur / on FREQ: 131.465 MHz.",
+    "Payment: credit card, WFS Fuel Contract card, AVCARD, UVAIR, cash (max 1500 €).",
+    "Autres / Other: faire demande d'avitaillement à / request refuelling from fuel24@wfscorp.com Niveau 7 / Level 7: 0500-2130 Niveau 5 / Level 5: 2130-0500 Vols commerciaux programmés / Scheduled commercial flights: Niveau 7 / Level 7 Niveaux 7 à 9 disponibles sur / Level 7 to 9 available with PPR 1 HR: en HOR d'ouverture AD / during AD opening SKED: TEL +33 (0)5 62 32 96 00; hors HOR d'ouverture AD / outside AD opening SKED: TEL +33 (0)5 62 32 67 14 ou / or +33 Péril animalier / Wildlife strike hazard: Continu de SR-30 à SS+30 / Continuous from SR-30 to SS+30."
+  ]
 }

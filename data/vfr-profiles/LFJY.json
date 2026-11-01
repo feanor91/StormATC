@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFJY (AIP France, chart dated 2026-05-14), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFJY (AIP France, chart dated 2026-05-14): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFJY",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFJY",
     "chartDate": "2026-05-14",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 49.02556,
@@ -18,7 +19,8 @@
   },
   "elevationFeet": 866,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 120.405
@@ -31,5 +33,42 @@
         228
       ]
     }
+  ],
+  "preferredQfu": 228,
+  "preferredQfuReason": "preferred QFU 228, due to IFR procedure",
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Possible IFR operations.",
+    "Constrained airspace, AD close to Ochey CTR, Etain CTR and Lorraine CTR.",
+    "Paragliding activity: Within the limits of LF-R104 when not active.",
+    "From ground level to 2000ft AGL.",
+    "Grass strip reserved for gliders and ACFT exceptionally authorized by AD operator.",
+    "RWY 05L/23R: reserved for ULM and helicopters.",
+    "Simultaneous use of grass strip and RWY 05L/23R prohibited.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Taxiing on TWY E restricted to aircraft with a wingspan smaller than 15 m.",
+    "Preferred QFU: 228° due to IFR procedure.",
+    "Activity on glider take off strip announced by NOTAM.",
+    "Anchor points available on PRKG P4.",
+    "P1 and P2 parking stands restricted to ACFT with a wingspan smaller than 30 m.",
+    "P3 parking stand restricted to ACFT with a wingspan smaller than 36 m.",
+    "Avoid overflying the surrounding built up areas, Traffic patterns training only possible tuesday and thursday from SS to SS + 0300.",
+    "Low height patterns prohibited.",
+    "Access to RWY 05R/23L: from P4: via B or C; from P1 or P2: via M only.",
+    "TWY and parking equipped with lighting system: B, C, T2, T3, G, J and P4.",
+    "TWY and parking equipped with reflective markers: M, P1 et P2.",
+    "WEATHER INFORMATION available by STAP on the AD FREQ: 7 clicks on mic.",
+    "Available parameters: wind, pressure, temperature.",
+    "Horaires sauf indication contraire / Timetables unless otherwise specified UTC HIV; HOR ETE: -1HR / UTC WIN; SKED SUM: -1HR Situation / Location: VFR de nuit / Night VFR: Agréé - voir aides lumineuses / Approved - see lighting aids.",
+    "Exploitant d'aérodrome / AD operator: Siège / Seat: Maison de Madine 55210 Nonsard-Lamarche DSAC-NE (voir / see GEN).",
+    "BORDEAUX (voir / see GEN).",
+    "Préparation du vol / Flight preparation: Acheminement / Addressing FPL: voir / see voir / see GEN; Station: NIL.",
+    "Douanes, Police / Customs, Police: 100 LL: Paiements cartes TOTAL H24 / Payment TOTAL card H24.",
+    "100 LL, UL91: O/R paiements par CB, cash, chèque / O/R payments by credit card, cash, cheque.",
+    "JET A1: Paiements / payments CB H24.",
+    "O/R paiements par cash, chèque / O/R payments by cash, cheque.",
+    "TEL: 03 29 89 30 10 ou / or 06 07 85 15 39.",
+    "Niveau 1 / Level 1.",
+    "Péril animalier / Wildlife strike hazard:"
   ]
 }

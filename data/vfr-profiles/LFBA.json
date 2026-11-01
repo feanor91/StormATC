@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBA (AIP France, chart dated 2026-07-09), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFBA (AIP France, chart dated 2026-07-09): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFBA",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFBA",
     "chartDate": "2026-07-09",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 44.17472,
@@ -19,7 +20,10 @@
   "elevationFeet": 204,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "LUN-VEN : 0700-1700, SAM-DIM et JF : 0800-1100 1215-1700. MON-FRI : 0700-1700, SAT-SUN and public HOL: 0800-1100 1215-1700 (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "atis": 129.605,
@@ -34,5 +38,18 @@
         291
       ]
     }
+  ],
+  "preferredQfu": 291,
+  "preferredQfuReason": "preferred QFU 291, due to IFR procedure",
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "AD highly sensitive to noise.",
+    "Low height circuit during training flights and with an instructor only.",
+    "MNM 600 ft.",
+    "Preferred QFU: 291° due to IFR procedure.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Traffic surveillance equipment: AD equipped with a radar display (see AD 1.0).",
+    "Consignes particulières / Special instructions Paradropping NR 380: see AIP ENR 5.5 During paradropping activity start up clearance compulsory during ATS SKED.",
+    "AEM NR 9132: see AIP ENR 5.5"
   ]
 }

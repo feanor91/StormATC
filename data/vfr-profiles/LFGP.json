@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFGP (AIP France, chart dated 2026-04-16), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFGP (AIP France, chart dated 2026-04-16): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFGP",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFGP",
     "chartDate": "2026-04-16",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 47.98139,
@@ -19,7 +20,11 @@
   "elevationFeet": 355,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 120.04",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 120.04
@@ -46,5 +51,13 @@
         250
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Simultaneous use of contiguous RWY prohibited.",
+    "RWY 07R/25L reserved for gliders winching.",
+    "Preferred QFU at landing: 070°, due to clearing.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Parachuting NR 268: see AIP ENR 5.5 Gliders' winching NR 951: see AIP ENR 5.5"
   ]
 }

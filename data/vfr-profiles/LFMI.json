@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFMI (AIP France, chart dated 2025-10-30), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFMI (AIP France, chart dated 2024-05-16): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFMI",
   "name": "Istres - Le Tubé",
   "source": {
     "publication": "AIP France AD 2 LFMI",
-    "chartDate": "2025-10-30",
-    "extraction": "automatic"
+    "chartDate": "2024-05-16",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.5225,
@@ -19,7 +20,9 @@
   "elevationFeet": 82,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "TowerAndGround"
+    "kind": "TowerAndGround",
+    "atsHours": "LUN / MON : 0715-1600 MAR-JEU / TUE-THU : 0700-1600 VEN / FRI : 0700-1400 Hors HOR et SAM, DIM, JF : O/R en fonction du positer / Out of HOR and SAT, SUN, HOL : O/R in accordance with alert status PPR LFMIZPZX -  04 42 56 13 49 - 04 13 93 91 95 - 864 125 9195 (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": true
   },
   "frequencies": {
     "approach": 131.0,
@@ -34,5 +37,166 @@
         330
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "N4",
+      "spoken": {
+        "fr": "Novembre",
+        "en": "November"
+      },
+      "latitude": 43.58611,
+      "longitude": 4.88306,
+      "location": "Abeam"
+    },
+    {
+      "name": "N5",
+      "spoken": {
+        "fr": "Novembre",
+        "en": "November"
+      },
+      "latitude": 43.64139,
+      "longitude": 4.91667,
+      "location": "La Samatane"
+    },
+    {
+      "name": "NE",
+      "spoken": {
+        "fr": "Novembre Écho",
+        "en": "November Echo"
+      },
+      "latitude": 43.57917,
+      "longitude": 4.97694,
+      "location": "Motor racing track of"
+    },
+    {
+      "name": "NW",
+      "spoken": {
+        "fr": "Novembre Whisky",
+        "en": "November Whiskey"
+      },
+      "latitude": 43.64583,
+      "longitude": 4.74944,
+      "location": "Saint-Hippolyte"
+    },
+    {
+      "name": "NW1",
+      "spoken": {
+        "fr": "Novembre Whisky",
+        "en": "November Whiskey"
+      },
+      "latitude": 43.55639,
+      "longitude": 4.72056,
+      "location": "Mas Thibert"
+    },
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 43.32444,
+      "longitude": 5.17222,
+      "location": "South"
+    },
+    {
+      "name": "SB",
+      "spoken": {
+        "fr": "Sierra Bravo",
+        "en": "Sierra Bravo"
+      },
+      "latitude": 43.43972,
+      "longitude": 4.42306,
+      "location": "Abeam South"
+    },
+    {
+      "name": "SL",
+      "spoken": {
+        "fr": "Sierra Lima",
+        "en": "Sierra Lima"
+      },
+      "latitude": 43.41444,
+      "longitude": 4.68972,
+      "location": "West"
+    },
+    {
+      "name": "SC",
+      "spoken": {
+        "fr": "Sierra Charlie",
+        "en": "Sierra Charlie"
+      },
+      "latitude": 43.21056,
+      "longitude": 5.30194,
+      "location": "West"
+    },
+    {
+      "name": "SD",
+      "spoken": {
+        "fr": "Sierra Delta",
+        "en": "Sierra Delta"
+      },
+      "latitude": 43.37528,
+      "longitude": 4.82972,
+      "location": "Abeam South"
+    },
+    {
+      "name": "S3",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 43.45722,
+      "longitude": 5.03222,
+      "location": "Saint Mitre Les Remparts"
+    },
+    {
+      "name": "S4",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 43.46417,
+      "longitude": 4.98583,
+      "location": "Overhead pond of"
+    },
+    {
+      "name": "SW",
+      "spoken": {
+        "fr": "Sierra Whisky",
+        "en": "Sierra Whiskey"
+      },
+      "latitude": 43.32444,
+      "longitude": 5.04167,
+      "location": "South"
+    },
+    {
+      "name": "W2",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 43.40722,
+      "longitude": 5.0575,
+      "location": "Martigues"
+    },
+    {
+      "name": "W3",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 43.48167,
+      "longitude": 4.8025,
+      "location": "Abeam"
+    }
+  ],
+  "notes": [
+    "AD approved with restricted use AD prohibited to non radio-equipped ACFT, glidders and ULM PPR to LDG: MON-FRI: the previous day before 1500 (SUM - 1HR) SAT, SUN, HOL: before 1430 (SUM - 1HR) the last working day 04 42 56 13 49 or LFMIZPZX or E-mail: ba125.dv.fct@intradef.gouv.fr The PPR NR shall be mentioned in FPL field 18 FPL compulsory for all flights to or from Istres All MON, from 0645 to 0815 (SUM - 1HR), AD closed for maintenance Unusable outside RWY and TWY SESLA RWY: LDG prohibited.",
+    "Used only by HEL in CER CTR ISTRES class D: see complementary leaf of VFR routings: ARR: contact ISTRES TWR after instruction of CAMARGUE CTL.",
+    "Entry in the traffic circuit is prohibited if radio contact with ISTRES TWR is not established prior reaching point W3 and NE for light ACFT HEL: ARR at 500 ft AAL via NE, W3 or S3 and join circuit For light ACFT: DEP-ARR by NE at 600 ft or 1100 AMSL on TWR instruction - Special feature: DEP QFU 15 or ARR QFU 33 maintaining Istres town at East, follow N 1569 VFR routings along the coast: FREQ to call: CAMARGUE CTL",
+    "ACFT: VIS: 1500 m",
+    "HEL: VIS: 800 m Routing subject to CLR entrance/exit Routing mandatory between S-SW-SD-SL-SB A Special VFR clearance is required to enter CTR ISTRES Meteorological conditions of special VFR: ACFT: 3000 m 5000 m - 1000 ft Ceilling 1500 ft HEL: 800 m 5000 m - 600 ft Ceilling 1500 ft In order to provide separation from IFR traffic, holding may be requested FREQ to call: CAMARGUE CTL CTR Istres: No clouds below 2500 ft AMSL; VIS 5 km.",
+    "Holding sectors: comply with ATC instructions Reporting points (ALT in ft) Routes 2500 2500 1500 AEM (NR 9895): SFC - 500 ft ASFC SR - SS.",
+    "Remote controlled flights according to protocol Due to particular activity test and acceptance flights and activation of LF-R 108A F1, LF-R 108A F2 areas, radio contact mandatory 5 MIN before entering Istres CTR, comply with Istres APP, Istres TWR instructions or Rhone CTL or Camargue CTL P 41: 3 NM radius circle centered on ARP LFMI SFC - 4500 ft AMSL Squawk 7600 DEP: radiocommunication failure before having closed with AD of DEP, proceed to turn round and fly to 1000 ft AAL, facing TWR, bound to East, lighting on, then wait for air traffic light gun signals ARR: maintain MNM cruise level and start to descend according to the relief and possible obstacles to proceed ETA at 1000 ft AAL, facing TWR, flying Eastbound, lighting on, then wait for air traffic light gun signals"
   ]
 }

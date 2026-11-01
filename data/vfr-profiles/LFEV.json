@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFEV (AIP France, chart dated 2026-04-16), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFEV (AIP France, chart dated 2026-04-16): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFEV",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFEV",
     "chartDate": "2026-04-16",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 47.43222,
@@ -19,7 +20,11 @@
   "elevationFeet": 689,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 118.84",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 118.84
@@ -46,5 +51,38 @@
         252
       ]
     }
+  ],
+  "preferredQfu": 72,
+  "preferredQfuReason": "preferred QFU 72, due to RNP procedure RWY 07",
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Unpaved RWY 350 x 20 m reserved for home-based ULM.",
+    "Unpaved RWY 860 x 50 m reserved for home-based ACFT.",
+    "Possible IFR operations.",
+    "Simultaneous use of RWY prohibited.",
+    "Usable declared distances: (1) Reduced TORA, TODA and LDA on paved RWY 07/25.",
+    "Ends of these declared distances are located at the opposite DTHR.",
+    "In case of strong winds from the North-North-East, risk of turbulence and windshear during LDG on the first third of paved RWY 07.",
+    "In case of strong winds from the South-South-East, risk of turbulence and windshear during LDG on the first third of paved RWY 25.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "HS 1: Taxiing priority on TWY B.",
+    "HS 2: Taxiing priority on TWY B.",
+    "TWY A reserved for ACFT whose wingspan is smaller than 15 meters.",
+    "TWY C reserved for ACFT whose wingspan is smaller than 12 meters.",
+    "Preferred QFU: 072° due to RNP procedure RWY 07.",
+    "Comply with published circuits as far as possible.",
+    "Mandatory use of PAPI on paved RWY, by day and by night.",
+    "Mandatory TKOF from RWYs ends.",
+    "After TKOF on RWY 07, do not turn right before the D474 road.",
+    "Douanes, Police / Customs, Police: Obligations for goods air flow: Concerned flights: from third country to the customs territory of the.",
+    "Union but within Schengen: Iceland, Liechtenstein, Norway, Swiss.",
+    "E-mail with the following information: Airport/aerodrome of origin, ACFT registration number, Pilot and passengers identity: Name, First name, date of birth, nationality Estimated time of arrival,",
+    "Send to: codt-metz@douane.finances.gouv.fr As soon as possible or at the latest: 12 HR before LDG for flights from MON to FRI, 24 HR before LDG for flights on SAT, SUN and public HOL.",
+    "Carburant / Fuel: 100 LL et / and JET A1, H24 et / and 7j/7 / 7 days on 7.",
+    "Lubrifiant / Lubricants: possible.",
+    "S'adresser à / Contact JG Aviation.",
+    "Paiement carte TOTAL uniquement sur automate / Payment by TOTAL card only on automatic dispenser.",
+    "Niveau 1 / Level 1.",
+    "Péril animalier / Wildlife strike hazard:"
   ]
 }

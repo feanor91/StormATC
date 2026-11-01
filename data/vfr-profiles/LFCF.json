@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFCF (AIP France, chart dated 2025-10-02), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFCF (AIP France, chart dated 2025-10-02): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFCF",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFCF",
     "chartDate": "2025-10-02",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 44.6725,
@@ -19,7 +20,10 @@
   "elevationFeet": 1085,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 119.635",
+    "nightVfrApproved": false
   },
   "frequencies": {
     "airAir": 119.635
@@ -32,5 +36,15 @@
         288
       ]
     }
+  ],
+  "notes": [
+    "LDG prohibited when an ACFT is stationary on the turnaround area.",
+    "Usable declared distances: TORA, TODA, ASDA and LDA RWY 11 reduced due to THR marks 14 m beyond physical THR.",
+    "Possible snow conditions, contact BORDEAUX BNIA for information.",
+    "Simultaneous use of the different RWY or TKOF areas prohibited.",
+    "South shoulders of the paved RWY are usable as TWY.",
+    "Strength of TWY and PRKG: 5.7 t.",
+    "TWY width: 8,50 m.",
+    "Ground markings: there is a distance of 13 m between Aerobatics activity (NR 6630): see AIP ENR 5.5"
   ]
 }

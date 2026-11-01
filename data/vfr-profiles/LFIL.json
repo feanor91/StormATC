@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFIL (AIP France, chart dated 2024-11-28), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFIL (AIP France, chart dated 2024-11-28): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFIL",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFIL",
     "chartDate": "2024-11-28",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": -43.91583,
@@ -18,7 +19,11 @@
   },
   "elevationFeet": 256,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 119.51",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 119.51
@@ -31,5 +36,22 @@
         227
       ]
     }
+  ],
+  "preferredQfu": 47,
+  "preferredQfuReason": "preferred QFU 47, due to LF-R 40 A",
+  "notes": [
+    "AD usable by helicopters except training flights.",
+    "AD reserved for radio-equipped ACFT.",
+    "RWY likely to be damaged by some animals, check RWY conditions when passing overhead the aerodrome.",
+    "Entering LF-R 40 A authorized on published routes after contacting DAX TWR outside these routes, PPR DAX TWR.",
+    "Entering LF-R 40 B after authorization from DAX APP.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Preferred QFU 047° due to LF-R 40 A.",
+    "Aerobatics activity NR 6681: 05/23 axis; 2250 ft AMSL - 3250 ft AMSL.",
+    "Centered on ARP: 1500 m long, 1000 m wide.",
+    "MON-FRI: 1500 - SS+30; SAT-SUN and public HOL: SR - SS+30; (SUM -1HR).",
+    "Information on RION A/A and DAX TWR.",
+    "In case of DAX closed: BIARRITZ INFO.",
+    "Reserved for signatory users to the protocol."
   ]
 }

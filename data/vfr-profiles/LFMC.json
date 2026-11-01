@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFMC (AIP France, chart dated 2026-05-14), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFMC (AIP France, chart dated 2026-10-01): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFMC",
   "name": "Luc - Le Cannet",
   "source": {
     "publication": "AIP France AD 2 LFMC",
-    "chartDate": "2026-05-14",
-    "extraction": "automatic"
+    "chartDate": "2026-10-01",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.38472,
@@ -19,7 +20,9 @@
   "elevationFeet": 265,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "TowerAndGround"
+    "kind": "TowerAndGround",
+    "atsHours": "LUN-JEU / MON-THU : 0700-1615 VEN / FRI : 0700-1100 SAM, DIM, JF / SAT, SUN, HOL : Fermé / Closed AD activable H24 selon les besoins du gestionnaire / AD activated H24 according to managing authority needs  04 98 11 74 51 (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": false
   },
   "frequencies": {
     "atis": 128.65,
@@ -42,5 +45,158 @@
         266
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "DG",
+      "spoken": {
+        "fr": "Delta Golf",
+        "en": "Delta Golf"
+      },
+      "latitude": 43.55833,
+      "longitude": 6.46139,
+      "location": "Draguignan, pylon"
+    },
+    {
+      "name": "MY",
+      "spoken": {
+        "fr": "Mike Yankee",
+        "en": "Mike Yankee"
+      },
+      "latitude": 43.64639,
+      "longitude": 6.06361,
+      "location": "Montmeyan, through north high school"
+    },
+    {
+      "name": "BJ",
+      "spoken": {
+        "fr": "Bravo Juliett",
+        "en": "Bravo Juliett"
+      },
+      "latitude": 43.56056,
+      "longitude": 6.01028,
+      "location": "Barjols, roundabout"
+    },
+    {
+      "name": "NC",
+      "spoken": {
+        "fr": "Novembre Charlie",
+        "en": "November Charlie"
+      },
+      "latitude": 43.42083,
+      "longitude": 6.38333,
+      "location": "Entraygues power station"
+    },
+    {
+      "name": "NE",
+      "spoken": {
+        "fr": "Novembre Écho",
+        "en": "November Echo"
+      },
+      "latitude": 43.45,
+      "longitude": 6.4925,
+      "location": "Les Arcs, bridge of the road interchange south of the Super U zone"
+    },
+    {
+      "name": "NW",
+      "spoken": {
+        "fr": "Novembre Whisky",
+        "en": "November Whiskey"
+      },
+      "latitude": 43.46667,
+      "longitude": 6.3125,
+      "location": "Argens bridge (D17)"
+    },
+    {
+      "name": "SA",
+      "spoken": {
+        "fr": "Sierra Alpha",
+        "en": "Sierra Alpha"
+      },
+      "latitude": 43.33944,
+      "longitude": 6.12083,
+      "location": "Ste Anastasie, through south gymnasium"
+    },
+    {
+      "name": "SE",
+      "spoken": {
+        "fr": "Sierra Écho",
+        "en": "Sierra Echo"
+      },
+      "latitude": 43.32111,
+      "longitude": 6.46389,
+      "location": "La Garde Freinet, Freinet fort"
+    },
+    {
+      "name": "SW",
+      "spoken": {
+        "fr": "Sierra Whisky",
+        "en": "Sierra Whiskey"
+      },
+      "latitude": 43.31806,
+      "longitude": 6.29861,
+      "location": "Gonfaron, bridge over the motorway"
+    },
+    {
+      "name": "VC",
+      "spoken": {
+        "fr": "Victor Charlie",
+        "en": "Victor Charlie"
+      },
+      "latitude": 43.19167,
+      "longitude": 6.28028,
+      "location": "NE point of Valcros golf"
+    },
+    {
+      "name": "PL",
+      "spoken": {
+        "fr": "Papa Lima",
+        "en": "Papa Lima"
+      },
+      "latitude": 43.52222,
+      "longitude": 5.70306,
+      "location": "Puyloubier, General's castle"
+    },
+    {
+      "name": "TV",
+      "spoken": {
+        "fr": "Tango Victor",
+        "en": "Tango Victor"
+      },
+      "latitude": 43.40806,
+      "longitude": 5.91861,
+      "location": "Tourves, ruins of castle"
+    },
+    {
+      "name": "NL",
+      "spoken": {
+        "fr": "Novembre Lima",
+        "en": "November Lima"
+      },
+      "latitude": 43.46667,
+      "longitude": 6.38833,
+      "location": "Lorgues, crossroad D10 - D48 - power line"
+    },
+    {
+      "name": "UB",
+      "spoken": {
+        "fr": "Uniform Bravo",
+        "en": "Uniform Bravo"
+      },
+      "latitude": 43.41306,
+      "longitude": 6.34889,
+      "location": "Recycling center, Le Thoronet road, junction D17 and power line",
+      "purpose": "exit only"
+    }
+  ],
+  "notes": [
+    "AD with restricted use Prohibited to no radio equipped ACFT, GLD and ULM Flying school (IFR training) reserved for based ACFT Disregard signal area out of ATS HOR Presence of a wind sock between RWY 13 and 09 West of the AD Noise abatment procedure: Climb MAX rate.",
+    "Passage of jet aircrafts prohibited <1500 ft AMSL.",
+    "Due to noise abatment descent to visual patern altitude should be delayed as much as possible DEP procedures: NE point: Climb 1300 ft AMSL.",
+    "As soon as possible, follow the south of the highway up to NE point",
+    "SE point: 2000 ft AMSL",
+    "NW, NL and SW points: 1500 ft AMSL ARR procedures: NW, NL, SW and SE points: 2000 ft AMSL; NE point: 1800 ft AMSL.",
+    "By the West: PL - BJ - DG By the North: MY - TV - TOULON By the South: TV - SA - LA MOLE",
+    "Entry routings: from the west PL - BJ - DG; from the north MY - TV - TOULON; from the south TV - SA - LA MOLE."
   ]
 }

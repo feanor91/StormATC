@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFMA (AIP France, chart dated 2026-10-01), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFMA (AIP France, chart dated 2026-10-01): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFMA",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFMA",
     "chartDate": "2026-10-01",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.50528,
@@ -19,7 +20,9 @@
   "elevationFeet": 368,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "ETE / SUM : LUN-SAM / MON-SAT : 0600-1730, DIM / SUN : 0600-1700 HIV / WIN : 0700-1700 (UTC HIV ; HOR ETE : -1HR)",
+    "radioMandatory": true
   },
   "frequencies": {
     "atis": 136.23,
@@ -35,5 +38,98 @@
         323
       ]
     }
+  ],
+  "preferredQfu": 323,
+  "preferredQfuReason": "preferred QFU 323, due to local meteorological conditions",
+  "reportingPoints": [
+    {
+      "name": "AN",
+      "spoken": {
+        "fr": "Alpha Novembre",
+        "en": "Alpha November"
+      },
+      "latitude": 43.56389,
+      "longitude": 5.33639,
+      "location": "Abeam East of fire watchtower West of EGUILLES"
+    },
+    {
+      "name": "AT",
+      "spoken": {
+        "fr": "Alpha Tango",
+        "en": "Alpha Tango"
+      },
+      "latitude": 43.5725,
+      "longitude": 5.39194,
+      "location": "Road intersection East of EGUILLES"
+    },
+    {
+      "name": "AE",
+      "spoken": {
+        "fr": "Alpha Écho",
+        "en": "Alpha Echo"
+      },
+      "latitude": 43.48,
+      "longitude": 5.48528,
+      "location": "Chimney North of GARDANNE"
+    },
+    {
+      "name": "AR",
+      "spoken": {
+        "fr": "Alpha Roméo",
+        "en": "Alpha Romeo"
+      },
+      "latitude": 43.52694,
+      "longitude": 5.40222,
+      "location": "Slip road A8 AIX WEST"
+    },
+    {
+      "name": "AS",
+      "spoken": {
+        "fr": "Alpha Sierra",
+        "en": "Alpha Sierra"
+      },
+      "latitude": 43.445,
+      "longitude": 5.37222,
+      "location": "West of CABRIES"
+    },
+    {
+      "name": "AW",
+      "spoken": {
+        "fr": "Alpha Whisky",
+        "en": "Alpha Whiskey"
+      },
+      "latitude": 43.51611,
+      "longitude": 5.31194,
+      "location": "ROQUEFAVOUR aqueduct"
+    }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "AD prohibited for gliders.",
+    "Usable by ULM: only classes 3 and 6 ULM are authorized.",
+    "High-visibility vest mandatory on runway side.",
+    "Preferred RWY 32 due to local meteorological conditions.",
+    "Except in case of immediate safety or air traffic control instruction, follow strictly circuits published on the visual landing chart.",
+    "Engine tests not included in take off procedure prohibited: at night from 1900 to 0700 (SUM: - 1 HR); SAT from 1100 to 1500 and from 1630 to 1900 (SUM: - 1 HR).; SUN and public HOL.",
+    "RWY 14: Between RWY end and THR 32: 232 m long strip available for takeoff.",
+    "RWY 32: Between RWY end and THR 14: 123 m long strip available for takeoff.",
+    "Air navigation hazard Parachuting NR 445: see AIP ENR 5.5 Meteorological minima: ACFT: VIS 3000 m; HEL: VIS 800 m.",
+    "Traffic surveillance equipment: AD equipped with radar display (see AD 1.0).",
+    "PCL available outside ATS SKED: 3 clicks on mic: brightness 2/4.",
+    "Available lighting: RWY edge lighting, TWY C, PAPI RWY 14, PAPI RWY 32, traffic area NW and SW.",
+    "5 clicks on mic: brightness 4/4.",
+    "Available lighting: RWY edge lighting, TWY C, PAPI RWY 14, PAPI RWY 32, traffic area NW and SW.",
+    "7 clicks on mic: OFF.",
+    "PCL submitted to PPR 12 HR, mandatory handling and notification on: https://cy.myhandlingsoftware.com Parachuting NR 401: see AIP ENR 5.5 Helicopter work area: not lighted, reserved for based HEL, daytime use only, during ATS SKED and outside PJE NR 401.",
+    "Landing and take-off maneuvers from and over this area are strictly forbidden.",
+    "Radiocommunication failure: Display transponder A7600; ARR: Before first contact, do not enter the CTR.",
+    "After authorization to enter CTR, continue inbound AR 2200 ft AMSL MAX and lights on, continue 228° up to overhead AD and follow a pattern to the West.; DEP: Before TKOF, taxi back to the apron.",
+    "TKOF, follow last clearance received.",
+    "TRANSIT: If transit is already authorized, follow last clearance received.",
+    "If not, do not enter the CTR.",
+    "Engine run-up area with noise barrier",
+    "Dimensions: 30 m x 27 m,",
+    "Limited to one aircraft,",
+    "Use of the run-up area under the responsability of the operator and/or pilot in command."
   ]
 }

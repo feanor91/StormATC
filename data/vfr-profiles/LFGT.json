@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFGT (AIP France, chart dated 2026-07-09), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFGT (AIP France, chart dated 2026-07-09): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFGT",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFGT",
     "chartDate": "2026-07-09",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 48.71833,
@@ -19,7 +20,11 @@
   "elevationFeet": 873,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 123.5",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 123.5
@@ -39,5 +44,24 @@
         220
       ]
     }
+  ],
+  "preferredQfu": 220,
+  "preferredQfuReason": "preferred QFU 220, due to noise pollution",
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Simultaneous use of RWY prohibited.",
+    "ACFT TKOF or LDG must be stopped if a glider lies on the unpaved RWY on less than a half width of its SE limit.",
+    "PHALSBOURG BOURSCHEID air base with associated IFR procedures, notably when RWY 06 in use.",
+    "Very high sensitivity of unpaved RWY to bad weather and precipitation.",
+    "Frequent presence of molehill on unpaved RWY.",
+    "Inquire about the practicability of the RWY from one of the ACB.",
+    "Curved RWY: no visibility from one THR to another.",
+    "Gliding activity possible on paved RWY.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Preferred QFU 220° due to noise pollution.",
+    "ACL: apron ALT in front of windsock: 853 ft.",
+    "Follow indicated AD circuit as much as possible.",
+    "Radio contact with PHALSBOURG is required in D class CTR except if strictly following published AD circuit of SARREBOURG BUHL.",
+    "AEM NR 8053: see AIP ENR 5.5"
   ]
 }

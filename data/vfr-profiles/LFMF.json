@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFMF (AIP France, chart dated 2023-11-30), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFMF (AIP France, chart dated 2023-11-30): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFMF",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFMF",
     "chartDate": "2023-11-30",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.60806,
@@ -18,7 +19,11 @@
   },
   "elevationFeet": 738,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 119.055",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 119.055
@@ -44,5 +49,39 @@
         317
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio equipped ACFT (1) Declared distances usables: TODA reduced due to the gauge of track road traffic and/or vegetation adjacent to the RWY strips ends.",
+    "TODA: reduced distance, which requires TKOF before the opposite DTHR.",
+    "Close attention advised for taxiing outside of RWY.",
+    "LDG are difficult with severe winds from NW (mistral).",
+    "Severe turbulences due to down-draughts and rotors on AD.",
+    "Important glider traffic SR-SS.",
+    "Unidirectional RWY 32.",
+    "RWY 32 (TKOF and LDG) reserved for gliders.",
+    "RWY 10L and 28R reserved for gliders from SR - SS.",
+    "When RWY 32 is in use, AEM activity is prohibited.",
+    "Simultaneous use of glider RWY and airplane RWY prohibited.",
+    "LDG and TKOF are to be delayed if a glider is immobilized closer than 30 m from the common limit of glider RWY and airplane RWY.",
+    "Priority to landing gliders.",
+    "Mixed RWY 32 markings only made of side marks (beacons missing).",
+    "Altitude loss areas: Existence of two glider descending areas with a radius of 1 km centered respectively for RWY 10L and RWY 28R at 1600 m in the 330° and 030° of the identification circle of the field: \"FAYENCE\" respectively named \"Zone Camandre\" and \"Zone Chautard\".",
+    "Noise pollution: Limitation to two RWY patterns for non-based ACFT; \"Low height\" RWY pattern prohibited for non-based.",
+    "Over aerodrome at 2500 ft AAL for any ACFT before integration in their traffic pattern – Except activation of area 6954 (activity known on 119.050 Mhz).",
+    "Helicopter activity: \"ground work\" prohibited unless waived for twin-engined aircraft for specific \"engine failure\" exercises.",
+    "The exercise intent must be sent by e-mail to chefpilote@aapca.net with a prior notice of at least 24 hours.",
+    "This request may be subject to limitation or delay by the Chief Pilot according to the activity scheduled on the aerodrome site.",
+    "AEM activity (NR 9705) on AD: 500 ft ASFC.",
+    "Aerobatic (NR 6954) over AD: 2700 ft AMSL / FL 055",
+    "HJ - Reserved for gliders.",
+    "A winch for gliders (NR 984) on RWY10L/28R or 14/32 limited to 2250 ft AMSL, SR-SS, transmitted on the A/A FREQ and rotating light mounted on the winch.",
+    "During winching: on the RWY 10L/28R: RWY32 prohibited and RWY for gliders 10L/28R prohibited for any other use.; on the RWY 14/32: RWY10/28 prohibited and RWY32 prohibited for any other use.; all ACFT must proceed overhead AD at 2000 ft AAL before joining circuit.; aerobatics over aerodrome suspended.",
+    "Paramotors: Before all activities at Fayence Airport, any paramotor user must sign the Chart of good practices of paramotor pilots with association of Fayence's paramotors, following e-mail adress: club.paramoteur.fayence@gmail.com The activity takes place only in the configuration facing the East part of the RWY (QFU 10 in use).",
+    "Existence of 2 zones outside easements specifically created within the aerodrome right-of-way for paramotors activities.",
+    "Zone 1: engine warm-up and wing pre-flights area.",
+    "Zone 2: installation just before TKOF.",
+    "The paramotor circuit is located South of RWY 10R/28L at 500 ft AAL.",
+    "Remote controlled flights: prior contact with the operator.",
+    "Activity prohibited if RWY 32 in use."
   ]
 }

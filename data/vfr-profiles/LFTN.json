@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFTN (AIP France, chart dated 2025-12-25), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFTN (AIP France, chart dated 2025-12-25): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFTN",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFTN",
     "chartDate": "2025-12-25",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 44.24306,
@@ -19,7 +20,10 @@
   "elevationFeet": 1623,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 123.5",
+    "nightVfrApproved": false
   },
   "frequencies": {
     "airAir": 123.5
@@ -32,5 +36,20 @@
         346
       ]
     }
+  ],
+  "preferredQfu": 346,
+  "preferredQfuReason": "preferred QFU 346, due to heavy down-draft with North wind",
+  "notes": [
+    "AD reserved for home-based ACFT and ACFT based on the neighbouring AD (1).",
+    "Pilots with a mountain licence can also use the AD.",
+    "If wind stronger than 10 m/s, possible turbulences on final.",
+    "If East wind, heavy down-draft on South THR.",
+    "Presence of a 2090 ft hill, North-East of RWY, covered by woods penetrating the side clearance surface.",
+    "Preferred QFU: 346°, due to heavy down-draft with North wind.",
+    "Turn left as soon as possible after TKOF.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "QFU 346°: cause of movable nature of the North-East part of runway, preferably use West part during bad weather.",
+    "AEM (NR 9537): See AIP ENR 5.5 Use of either AEM areas depending on MET conditions.",
+    "Users permanently monitoring FREQ (1) AD voisins / Neighbouring AD: AIX - ALES - AUBENAS - AVIGNON - LANGOGNE - MENDE - MONTELIMAR -"
   ]
 }

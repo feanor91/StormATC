@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBS (AIP France, chart dated 2026-02-19), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFBS (AIP France, chart dated 2026-02-19): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFBS",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFBS",
     "chartDate": "2026-02-19",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 44.36806,
@@ -19,7 +20,9 @@
   "elevationFeet": 100,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "LUN-VEN sauf JF / MON-FRI except public HOL : - du / from 15/02 au / to 31/10 : 0800-1900 heure locale / local time , - du / from 01/11 au / to 14/02 : 0830-1800 heure locale / local time (UTC HIV ; HOR ETE : - 1 HR)",
+    "radioMandatory": true
   },
   "frequencies": {
     "tower": 118.04,
@@ -47,5 +50,50 @@
         314
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "O2",
+      "spoken": {
+        "fr": "Oscar",
+        "en": "Oscar"
+      },
+      "latitude": 44.45,
+      "longitude": -1.225,
+      "location": "East of Biscarrosse Plage"
+    },
+    {
+      "name": "OS",
+      "spoken": {
+        "fr": "Oscar Sierra",
+        "en": "Oscar Sierra"
+      },
+      "latitude": 44.41667,
+      "longitude": -1.15,
+      "location": "North of Biscarrosse on road D562"
+    }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Simultaneous use of RWY prohibited.",
+    "Unpaved RWY 13/31 reserved for home-based ACFT or authorized by AD operator.",
+    "Aerobatics (NR 6698): see AIP ENR 5.5 Recommended caution in the vicinity of the hydrobase: presence of seaplanes under 500 ft AMSL on dedicated frequency.",
+    "AD likely to be covered by sea haze in a few minutes.",
+    "Caution: gliders winch cable length (1700 m).",
+    "Activity announced by turning light installed on the winch and on TWR FREQ Taxiing prohibited except on RWY and TWY.",
+    "Overflight of AD is forbidden during winch launching activity.",
+    "ARR/DEP: 900 ft AMSL MAX during LF-R 31 SKED.",
+    "North patterns prohibited outside ATS SKED.",
+    "Low height circuits 500 ft MNM South of RWY 09/27 and only for training purposes with flight instructor on board.",
+    "TKOF and LDG forbidden during winching operations.",
+    "TKOF paved RWY 09: heading 070° 300 m after THR 27 to avoid flying over built-up areas.",
+    "TKOF grass RWY 09: heading 070° passing THR 27 to avoid flying over built-up areas.",
+    "TKOF RWY 27: overflight of hydrobase forbidden during engine failure exercises.",
+    "Heading 250° passing THR 09 to avoid flying over built-up areas.",
+    "Procedures DEP seaplanes to hydrobase (LFHB): TKOF RWY 09: after heading alteration, crosswind at minimum 500 ft AMSL then join hydrobase by eastern tip of the lake.",
+    "TKOF RWY 27: after heading alteration, join directly the hydrobase at 500ft AMSL.",
+    "Procedures DEP microlight seaplanes to hydrobase (LFHB): After take-off, directly join the hydrobase by south turn, avoiding built-up areas.",
+    "Traffic monitoring equipment: aerodrome equipped with a radar display (see AD 1.0).",
+    "Gliders winching (NR 978): see AIP ENR 5.5 Aerobatics (NR 6610): see AIP ENR 5.5 AEM (NR 9137): see AIP ENR 5.5"
   ]
 }

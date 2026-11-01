@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFRQ (AIP France, chart dated 2026-10-01), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFRQ (AIP France, chart dated 2026-10-01): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFRQ",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFRQ",
     "chartDate": "2026-10-01",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 47.975,
@@ -18,7 +19,10 @@
   },
   "elevationFeet": 297,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "LUN-VEN (sauf JF) : 0700-1900 SAM, DIM et JF : 0800-1800 (UTC HIV ; HOR ETE : - 1 HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "approach": 125.86,
@@ -33,5 +37,108 @@
         274
       ]
     }
+  ],
+  "preferredQfu": 274,
+  "preferredQfuReason": "preferred QFU 274, : prevailing wind from west",
+  "reportingPoints": [
+    {
+      "name": "NW",
+      "spoken": {
+        "fr": "Novembre Whisky",
+        "en": "November Whiskey"
+      },
+      "latitude": 48.04306,
+      "longitude": -4.20417,
+      "location": "Guengat"
+    },
+    {
+      "name": "NE",
+      "spoken": {
+        "fr": "Novembre Écho",
+        "en": "November Echo"
+      },
+      "latitude": 48.04,
+      "longitude": -4.06917,
+      "location": "Ty Sanguer"
+    },
+    {
+      "name": "N",
+      "spoken": {
+        "fr": "Novembre",
+        "en": "November"
+      },
+      "latitude": 48.00444,
+      "longitude": -4.16111,
+      "location": "Crossroads D784 / D765"
+    },
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 47.93972,
+      "longitude": -4.17806,
+      "location": "Crossroads 4 lanes - Plomelin road"
+    },
+    {
+      "name": "W",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 47.95556,
+      "longitude": -4.35833,
+      "location": "Pouldreuzic"
+    },
+    {
+      "name": "SW",
+      "spoken": {
+        "fr": "Sierra Whisky",
+        "en": "Sierra Whiskey"
+      },
+      "latitude": 47.86972,
+      "longitude": -4.22194,
+      "location": "Pont l'Abbé"
+    },
+    {
+      "name": "SE",
+      "spoken": {
+        "fr": "Sierra Écho",
+        "en": "Sierra Echo"
+      },
+      "latitude": 47.8875,
+      "longitude": -4.11806,
+      "location": "Cornouaille bridge"
+    }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "AD prohibited for gliders.",
+    "ULM activity: reserved for home-based or cleared ULM O/R TWR (see local instructions).",
+    "AD likely to be covered by sea haze in few minutes.",
+    "Presence of superelevations exceeding 50% in the safety area of end of runway at thresholds 09 and 27.",
+    "Presence of 3 houses in the strip north of runway 09-27 exceeding the runway altitude of 1.77 m to 3.23 m.",
+    "Part of the General Aviation apron (20 m) is located in the runway strip.",
+    "The presence of a fence on an embankment North of runway 09-27 (threshold 09) constitutes an obstacle.",
+    "\"Low height\" circuits during training only with an instructor on board and with control clearance: MNM 500 ft AAL, South RWY 09/27.",
+    "Preferred QFU 274 °: prevailing wind from west.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Radio contact advised 5 min before entering CTR.",
+    "Engine run up forbidden between 2100 and 0700 (SUM: - 1HR).",
+    "TKOF forbidden from TWY B and C for ACFT with MTOW greater than 2 tons (TKOF distance remaining signs missing).",
+    "With IFR traffic: Arrivals: radio contact before CTR entry points, possible holding.; departures: with ATC clearence.",
+    "Without IFR traffic: VIS: ACFT: 1500 m, HEL 800 m, ceiling 600 ft.",
+    "RWY 09: Night landing prohibited if PAPI U/S.",
+    "Night training patterns must be approved by AD operator.",
+    "The frequency assigned to PCL: 118.630 MHz which is TWR frequency type.",
+    "PAPI 09/27 activation with PCL.",
+    "PCL activation instructions: Low intensity PCL activation (LIL): 3 clicks on mic in less than 5 seconds.; High intensity PCL activation (LIH): 5 clicks on mic in less than 5 seconds.; Shutdown is automatic after 15 minutes; no manual shutdown possible.",
+    "Traffic surveillance equipment: AD equipped with a radar display (see AD 1.0).",
+    "AEM NR 8973: see AIP ENR 5.5 Niveau 5 / Level 5: LUN-VEN / MON-FRI: 0700-1200, 1500-1630 (niveau 2 assuré 1200-1500 possibilité niveau 5 sur demande / level 2 provided 1200-1500 possibility level 5 O/R).; SAM, DIM et JF / SAT, SUN and public HOL: 0800-1700.",
+    "Possible extension level 5 upon 72 HR PPR by E-mail to AD operator.",
+    "Level maintained until arrival or departure of the last SKED flight.",
+    "Level 1 outside these SKED (Powder extinguisher available).",
+    "Péril animalier / Wildlife strike hazard: Occasionnel HOR RFFS / Random RFFS SKED."
   ]
 }

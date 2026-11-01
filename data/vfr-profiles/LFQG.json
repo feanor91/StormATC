@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFQG (AIP France, chart dated 2024-07-11), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFQG (AIP France, chart dated 2024-07-11): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFQG",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFQG",
     "chartDate": "2024-07-11",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 47.00361,
@@ -19,7 +20,11 @@
   "elevationFeet": 602,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "ETE (01/04-31/10) : LUN-VEN : 0630-1030, 1130-1530. HIV (01/11-31/03) : LUN-VEN : 0730-1130, 1230-1630. Extensions : - LUN-VEN : PPR PN 24HR - SAM-DIM : PPR PN avant VEN 1400 locale - JF : PPR le dernier jour ouvrable avant 1400 locale SUM (01/04-31/10) : MON-FRI : 0630-1030, 1130-1530. WIN (01/11-31/03) : MON-FRI : 0730-1130, 1230-1630. Extensions : - MON-FRI : PPR PN 24HR - SAT-SUN : PPR PN before FRI 1400 local ti (UTC HIV ; HOR ETE : -1HR)",
+    "outsideAtsHours": "air-air frequency 120.605",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "approach": 119.7,
@@ -40,5 +45,49 @@
         301
       ]
     }
+  ],
+  "preferredQfu": 301,
+  "preferredQfuReason": "preferred QFU 301, due to IFR procedure",
+  "notes": [
+    "Possible IFR operations.",
+    "AD reserved for radio-equipped ACFT.",
+    "Simultaneous use of both RWY prohibited.",
+    "In case of glider activity: Two glider line-up areas are defined as a rectangle on each end of the unpaved RWY.",
+    "South boundaries of these areas are located at 75 m from the paved RWY axis.",
+    "They extend over 30 m from RWY THR.",
+    "The paved RWY can be used for TKOF and LDG if some ACFT are located in the line-up area or in the gliders vacating area.",
+    "TKOF and LDG prohibited if there is an ACFT on grass strip.",
+    "Restrictions paved RWY 12/30: prohibited for ACFT whose reference TKOF distance is greater than 1200 m.; mandatory TKOF from RWY ends.",
+    "The grass strip can be used: at TKOF if some gliders are located in the vacating area or in line-up area.; at LDG if some gliders are located in the vacating area or in line-up area maintaining the RWY THR crossing at a minimum altitude of 15 m.",
+    "As soon as the tow plane declares he's lining up ahead of a glider, paved and unpaved RWY are unusable.",
+    "Grass strip 12/30 reserved for authorized ACFT, not available after rain.",
+    "TWY A width: 10,00 m.",
+    "TWY B width: 10,50 m.",
+    "THR 30 strength: 17 F/C/W/T.",
+    "Preferred QFU: 301° due to IFR procedure.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Do not use PAPI if eye-to-wheel height exceeds 3 m.",
+    "Hospital overflight prohibited, except SAMU helicopter.",
+    "Base leg direct joining from the South is prohibited to ACFT.",
+    "Only are allowed medical flights between the airport and the hospital.",
+    "PCL: SS+30 - SR-30 The PCL turns on after 3 microphone switch action and activates RWY, TWY and the PAPI RWY 30.",
+    "The PCL turns off automatically after 15 minutes.",
+    "Aerobatics activity (NR 6456) with PPR from AD operator.",
+    "Paved RWY axis, 1000 m each side of ARP, 1500 ft AAL/FL 055, AFIS SKED, unusable during IFR and gliders activities, PPR AVORD APP.",
+    "Users information on NEVERS INFO.",
+    "AEM (NR 8232): SUM: 0600-SS, WIN: 0700-SS, 500 ft ASFC.",
+    "Upper limit raised to 1200 ft ASFC announced by NOTAM.",
+    "According to conditions set by protocol.",
+    "Parachuting on AD (NR 234): SFC - FL 145.",
+    "SR - SS+30.",
+    "According to conditions set by protocol.",
+    "Activity reserved for users designated by protocol.",
+    "Actual activity known by: NEVERS INFO, AVORD APP, PARIS INFO, PARIS ACC.",
+    "Gliding on the grass strip: SFC – FL 115, SR-SS+30.",
+    "According to conditions set by protocol.",
+    "Activity reserved for users designated by protocol.",
+    "Actual activity known by NEVERS INFO.",
+    "Informations diverses / Miscellaneous Réparations / Repairs: Hotels in town, restaurants in the vicinity.",
+    "Divers / Miscellaneous: GRF (service d'évaluation et de report de l'état de surface de piste / Global Reporting Format ): HOR AFIS / AFIS SKED."
   ]
 }

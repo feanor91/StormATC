@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFOT (AIP France, chart dated 2026-04-16), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFOT (AIP France, chart dated 2024-10-31): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFOT",
   "name": "Tours Val de Loire",
   "source": {
     "publication": "AIP France AD 2 LFOT",
-    "chartDate": "2026-04-16",
-    "extraction": "automatic"
+    "chartDate": "2024-10-31",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 47.43194,
@@ -19,7 +20,10 @@
   "elevationFeet": 357,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "HOR ATS publiés par NOTAM / ATS SKED published by NOTAM (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "approach": 134.875,
@@ -34,5 +38,96 @@
         195
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "N",
+      "spoken": {
+        "fr": "Novembre",
+        "en": "November"
+      },
+      "latitude": 47.57083,
+      "longitude": 0.67,
+      "location": "Château Castle"
+    },
+    {
+      "name": "NE",
+      "spoken": {
+        "fr": "Novembre Écho",
+        "en": "November Echo"
+      },
+      "latitude": 47.59028,
+      "longitude": 0.89972,
+      "location": "Castle"
+    },
+    {
+      "name": "E",
+      "spoken": {
+        "fr": "Écho",
+        "en": "Echo"
+      },
+      "latitude": 47.42444,
+      "longitude": 0.83667,
+      "location": "Vernou / Brenne, HST tunnel"
+    },
+    {
+      "name": "W",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 47.44028,
+      "longitude": 0.63861,
+      "location": "La Membrole - Intersection N138-D959"
+    },
+    {
+      "name": "SW",
+      "spoken": {
+        "fr": "Sierra Whisky",
+        "en": "Sierra Whiskey"
+      },
+      "latitude": 47.30361,
+      "longitude": 0.55833,
+      "location": "Interchange South-East Tours"
+    },
+    {
+      "name": "S1",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 47.32972,
+      "longitude": 0.69333,
+      "location": "A10 interchange South Tours"
+    },
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 47.28194,
+      "longitude": 0.78472,
+      "location": "Esvres, railway bridge over the Indre"
+    }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "AD prohibited for gliders and ULM class 1, 2, 4, 5, 6.",
+    "Auto-information reserved for based ACFT.",
+    "Radio-Communication failure Airfield accessible according to local instructions.",
+    "For all QFU: crosswind limitations (based on average wind): 25kt with dry RWY / 20kt with wet RWY.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "TWY B restricted to ACFT with a wingspan less than 24 m.",
+    "Use of TWY C prohibited if this TWY is used by an ACFT with a wingspan 24 m.",
+    "Take off from taxiway B is prohibited on runway 02.",
+    "TWY C1 restricted to ACFT with a wingspan less than 15 m.",
+    "RWY penetration via TWY C is prohibited day and night.",
+    "Jets: VIS 5 km, ceiling 1000 ft.",
+    "HEL: VIS 800 m, ceiling 600 ft on PPR PN 24HR from AD operator.",
+    "Reserved for home-based ACFT.",
+    "RWY 02 approach prohibited if PAPI 02 U/S.",
+    "RWY 20 approach prohibited if PAPI 20 U/S.",
+    "Night IFR Night IFR flight authorized with following restrictions: With AD operator's authorization; IFR approach RWY 02 prohibited if PAPI 02 U/S; IFR approach RWY 20 prohibited if PAPI 20 U/S."
   ]
 }

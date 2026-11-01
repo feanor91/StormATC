@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFRS (AIP France, chart dated 2026-07-09), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFRS (AIP France, chart dated 2026-07-09): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFRS",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFRS",
     "chartDate": "2026-07-09",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 47.15694,
@@ -18,7 +19,9 @@
   },
   "elevationFeet": 90,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "H24 (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": true
   },
   "frequencies": {
     "fis": 130.275,
@@ -34,5 +37,174 @@
         208
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "E",
+      "spoken": {
+        "fr": "Écho",
+        "en": "Echo"
+      },
+      "latitude": 47.09639,
+      "longitude": -1.44917,
+      "location": "Butay roundabout (silo and water tower)"
+    },
+    {
+      "name": "E1",
+      "spoken": {
+        "fr": "Écho",
+        "en": "Echo"
+      },
+      "latitude": 47.37222,
+      "longitude": -1.02111,
+      "location": "Varades bridge"
+    },
+    {
+      "name": "E2",
+      "spoken": {
+        "fr": "Écho",
+        "en": "Echo"
+      },
+      "latitude": 47.08389,
+      "longitude": -1.26889,
+      "location": "Clisson"
+    },
+    {
+      "name": "E3",
+      "spoken": {
+        "fr": "Écho",
+        "en": "Echo"
+      },
+      "latitude": 46.83806,
+      "longitude": -1.41722,
+      "location": "Saint Denis Lès Lucs"
+    },
+    {
+      "name": "NE",
+      "spoken": {
+        "fr": "Novembre Écho",
+        "en": "November Echo"
+      },
+      "latitude": 47.15222,
+      "longitude": -1.39056,
+      "location": "La Haye Fouassière water tower"
+    },
+    {
+      "name": "NW",
+      "spoken": {
+        "fr": "Novembre Whisky",
+        "en": "November Whiskey"
+      },
+      "latitude": 47.25722,
+      "longitude": -1.68528,
+      "location": "Sautron"
+    },
+    {
+      "name": "W",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 47.20722,
+      "longitude": -1.78639,
+      "location": "Martinière canal lock"
+    },
+    {
+      "name": "W1",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 47.44056,
+      "longitude": -1.5,
+      "location": "Nort sur Erdre"
+    },
+    {
+      "name": "W2",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 47.29167,
+      "longitude": -1.87806,
+      "location": "Cordemais"
+    },
+    {
+      "name": "W3",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 47.04333,
+      "longitude": -1.9525,
+      "location": "Bourgneuf en Retz"
+    },
+    {
+      "name": "W4",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 46.84694,
+      "longitude": -1.88083,
+      "location": "Challans"
+    },
+    {
+      "name": "SW",
+      "spoken": {
+        "fr": "Sierra Whisky",
+        "en": "Sierra Whiskey"
+      },
+      "latitude": 47.10778,
+      "longitude": -1.78861,
+      "location": "Sainte Pazanne"
+    }
+  ],
+  "notes": [
+    "AD prohibited for gliders and ULM.",
+    "Noise abatement procedure for TKOF.",
+    "Lost of radio contact may occure EAST limits of FIS bellow 2500 ft.",
+    "Hotspot: HS 1: risk of incoming in RWY: holding point located far upstream of the RWY.",
+    "HS 2: Risk of confusion between TWY RC and C.",
+    "Systematic and complete readback mandatory.",
+    "HS 3: Risk of confusion between TWY RD and D.",
+    "Systematic and complete readback mandatory.",
+    "Touchdown point of RWY 21: slope locally higher than 0.8 %, reaching up to 1.8 %.",
+    "Hard landing risk (See long profile on AD 2 LFRS AOC RWY03-21 chart).",
+    "RWY length from TWY B: 2001 m.",
+    "TKOF from TWY B only possible for CAT A and B ACFT.",
+    "No TKOF from TWY C and TWY D, except helicopter.",
+    "The use of TWY RD is restricted to ACFT with wingspan < 36 m.",
+    "The use of TWY D and E is restricted to ACFT with OMGWS < 9 m.",
+    "For single-engined and multi-engined ACFT in VFR flight and weight < 5.7 t, LDG and TKOF RWY 03 abeam TWY B.",
+    "For ACFT whose wingspan 36 m, taxiing must be perfomed via RC.",
+    "Training flights: ACFT < 5.7 t: prohibited 2230-0600 local time.",
+    "Minimum height 1000 ft AAL.",
+    "ACFT 5.7 t: prohibited MON-FRI 1200-1400 local time and 1800-0800 local time, SAT, SUN and public HOL.",
+    "Minimum height 1500 ft AAL.",
+    "Manoeuvrability VFR training flights on AD are subject to prior permission from ATC.",
+    "For ACFT 5.7 t, requests must be addressed to SNA Ouest ATC subdivision by mail: sna-o-e-ct-ld@aviationcivile.gouv.fr, on PPR 72 HR.",
+    "Low height circuits: Only for training flights VFR, with an instructor on board and under ATC clearance.",
+    "ACFT < 5.7 t: minimum height 500 ft AAL.",
+    "ACFT 5.7 t: minimum height 800 ft AAL.",
+    "RWY 03: left hand circuit only.",
+    "RWY 21: right hand circuit only.",
+    "Restricted to one ACFT at a time.",
+    "Advices due to noise nuisance: Noise sensitive platform.",
+    "Considering the environment, comply with published circuits as far as possible.",
+    "East circuits are available only on ATC clearance.",
+    "In case of IFR traffic within CTR, special VFR nonauthorized.",
+    "Arrival procedures First contact on NANTES Information 130.275.",
+    "Clearance to enter the airspace of class D will be at least requested 5 minutes before arriving to entry points.",
+    "Unless special clearance or instructions given.",
+    "Points NE, E, SW, W and NW: 1500 ft AMSL.",
+    "On pilot's request and with ATC clearance, flight routes different from those published on APP 01 chart may be used.",
+    "In case of direct route clearance to the AD, overflying of the urban area of NANTES should always be avoided.",
+    "Visual approaches: see IAC atlas page AD 2 LFRS ENV 01.",
+    "All types of aircraft: QFU 028° is recommended when tailwind is no greater than 5 kt, except when RWY is unusable.",
+    "Traffic surveillance equipment: AD equipped with secondary surveillance radar (see AD 1.0).",
+    "Aerobatics activity (NR 6380) 12 km West of AD; activity overhead RD 723; 1700 ft AMSL / FL 055.",
+    "Activity reserved for users authorized by AVA.",
+    "PPR NANTES APP."
   ]
 }

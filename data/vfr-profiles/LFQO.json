@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFQO (AIP France, chart dated 2025-04-17), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFQO (AIP France, chart dated 2025-04-17): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFQO",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFQO",
     "chartDate": "2025-04-17",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 50.68722,
@@ -19,7 +20,11 @@
   "elevationFeet": 70,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 122.005",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 122.005
@@ -53,5 +58,40 @@
         350
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "AD prohibited for Class 1 microlights (paramotor).",
+    "Simultaneous use of the two joined RWY prohibited.",
+    "Paved TWY from aprons to THR 25: width 7 m.",
+    "Microlights, gliders and tug plane use the same circuits and runways.",
+    "For the tug plane, 900 ft (800 ft) circuits.",
+    "TKOF or LDG must be stopped if a glider is immobilized on the runway less than half a width from the common limit.",
+    "Ground taxiing: Taxiing prohibited except on RWY et TWY.",
+    "Ground clearances are to the lateral TWY adjacent to the runway in use.",
+    "The TWYs are nammed as follows: TWY E lateral to runway 17L, TWY S lateral to runways 25L and 07R, TWY N lateral to runways 07L and 25R and TWY W lateral to runway 17R, TWYs connecting the aprons to the runways are A (to the South of runway 35) and B (to the East leading to threshold 25).",
+    "To avoid ground crossovers: departures from RWY 25 and RWY 17 taxi via TWY B and return via TWY A.",
+    "Departures RWY 07 and RWY 35: taxi via TWY A and return via TWY B.",
+    "In the event of heavy rain, possibility of using TWY N instead of TWY A when landing on runway 25.",
+    "TKOF RWY 25: for the airplane circuit, pilots will turn left along magnetic route 238° to follow a line parallel to the M652 bypass and avoid flying over \"Wambrechies\".",
+    "For the microlight and glider circuit, pilots will turn right to join and fly over \"La Deûle\" to avoid flying over the center of \"Wambrechies\".",
+    "TKOF RWY 35: For the airplane circuit, pilots will turn left along the 336° magnetic route to avoid overflying \"Bondues\".",
+    "For the microlight and glider circuits, tug planes pilots should avoid passing over the same group of houses several times in a row.",
+    "Microlight pilots will turn right to join and follow the D654 to avoid flying over the disticts bordering the center of \"Bondues\".",
+    "TKOF RWY 17: A gliders take-off strip 110 m long and 50 m wide has been created upstream of the runway 17L to increase the flight height over \"Marcq-en-Baroeul\".",
+    "Aircraft and microlight pilots, once they have reached a safe altitude, will obliquely circle their flight path to minimize the time spent over residential areas.",
+    "Training flights: Helicopter local training flight: PPR from operator (SIGAL).",
+    "Runway circuit training, engine failure exercise and lowlevel circuits are prohibited after 1930 (sum: -1HR), daytime only.",
+    "Engine failure and low-level circuit exercises prohibited on Sundays and public HOL.",
+    "HEL, balloons and hot air balloons activities possible on AD.",
+    "PJE on AD (NR 200): FL 140, 0800-1930 (SUM: -1 HR) daytime only.",
+    "User information available on A/A MARCQ and LILLE APP/FIS FREQ.",
+    "Activity reserved for users signatory to the protocol.",
+    "Aerobatics (NR 6000): RWY 07/25 axis, 1000 m length, SKED MON-FRI except public HOL: 0800- 1930 (SUM: – 1HR), SAT 0800-1100 and 1300-1930 (SUM: -1HR), SUN and public HOL prohibited.",
+    "Daytime only.",
+    "Activity reserved for authorized pilots according to protocol.",
+    "User information on MARCQ A/A or LILLE INFO.",
+    "AEM (NR 8252): 0800- 1930 (SUM: - 1 HR), daytime only, 900 ft ASFC/970 ft AMSL.",
+    "Radio-controlled model flying as per protocol."
   ]
 }

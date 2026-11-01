@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFAS (AIP France, chart dated 2025-12-25), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFAS (AIP France, chart dated 2025-12-25): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFAS",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFAS",
     "chartDate": "2025-12-25",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 48.92694,
@@ -18,7 +19,10 @@
   },
   "elevationFeet": 513,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 123.18",
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 123.18
@@ -31,5 +35,18 @@
         241
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "AD reserved for home-based ACFT and for ACFT based at neighbouring AD (1) or autorized by the operator.",
+    "ULM activity reserved for home-based and those of classes 3, 4 and 6.",
+    "Caution: from May to June, possibility of RWY mowing by a tractor with rotating light.",
+    "The opposite threshold is not visible from the holding points, special attention is recommended before entering the RWY.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Taking into account the environment and noise pollution, avoid overflying sensitive urban areas (Damblainville, Eraines, Versainville).",
+    "AEM (NR 8399) on AD: See AIP ENR 5.5.",
+    "Aerobatics on AD (NR 6293): See AIP ENR 5.5.",
+    "From March to October: intense gliding activity from late morning to SS.",
+    "AEM (N° 8463): See AIP ENR 5.5 (1) AD voisins / neighbouring AD: ALENÇON - ARGENTAN - AVRANCHES - BAGNOLES- BERNAY- CAEN -"
   ]
 }

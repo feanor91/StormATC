@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFDS (AIP France, chart dated 2024-01-25), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFDS (AIP France, chart dated 2024-01-25): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFDS",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFDS",
     "chartDate": "2024-01-25",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 44.79222,
@@ -18,7 +19,10 @@
   },
   "elevationFeet": 979,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 118.155",
+    "nightVfrApproved": false
   },
   "frequencies": {
     "airAir": 118.155
@@ -31,5 +35,26 @@
         284
       ]
     }
+  ],
+  "preferredQfu": 104,
+  "preferredQfuReason": "preferred QFU 104, due to environment",
+  "notes": [
+    "AD reserved to ACFT radio-equipped.",
+    "Grass strip reserved for ULM.",
+    "Simultaneous use of paved RWY and ULM grass strip prohibited.",
+    "ULM grass strip and unpaved apron areas likely to be soggy in winter and after severe rainfalls.",
+    "LDG paved RWY 10: Base leg and final turn must be made West of Domme village.",
+    "After take-off RWY 10, if ACFT performance allows it, turn right MAG 110° at DER for initial climb.",
+    "During DZ331 activation, during the entire descent of paratroopers and until they land, any movement of ACFT is prohibited on paved RWY and ULM grass strip.",
+    "Preferred QFU: 104° due to environment.",
+    "Taxiing prohibited except on RWY, ULM grass strip and TWY.",
+    "TWY A only usable by ACFT with a wingspan not exceeding 15 m and an overall width of the main gear not exceeding 4.5 m.",
+    "Aerobatic activity (NR 6600): 2500 ft AMSL - 5000 ft AMSL, SR-SS.",
+    "Actual activity announced on A/A SARLAT.",
+    "Parachuting on AD (NR 331): SFC/ FL 135, SR-SS+30.",
+    "Activity reserved for users who have signed a protocol with AD operator.",
+    "Actual activity provided by: LIMOGES Information, AQUITAINE Information, RODEZ Information and announced on A/A SARLAT.",
+    "AEM activity (NR 9142): 500 ft ASFC, radio controlled model flying as per protocol.",
+    "Flights by night are allowed only on FRI-SAT-public HOL: SS-2100."
   ]
 }

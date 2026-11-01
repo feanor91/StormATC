@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFHY (AIP France, chart dated 2026-09-03), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFHY (AIP France, chart dated 2026-09-03): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFHY",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFHY",
     "chartDate": "2026-09-03",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 46.53444,
@@ -19,7 +20,9 @@
   "elevationFeet": 915,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "AFIS : MAR-VEN sauf JF / TUE-FRI except public HOL : 0800-1100, 1230-1630 En dehors de ces HOR ouverture possible pour vols IFR ou commerciaux avec préavis le dernier jour ouvrable avant 1500 auprès de l'AFIS. Outside these SKED , possible opening for IFR or commercial flights on request from AFIS on the last working day before 1500 (UTC HIV ; HOR ETE : -1HR)",
+    "radioMandatory": true
   },
   "frequencies": {
     "approach": 123.405,
@@ -40,5 +43,24 @@
         261
       ]
     }
+  ],
+  "preferredQfu": 261,
+  "preferredQfuReason": "preferred QFU 261, due to IFR procedures and Taxiing prohibited except on RWY and TWY",
+  "notes": [
+    "Possible IFR operations.",
+    "AD reserved for radio-equipped ACFT.",
+    "Simultaneous use of RWYs prohibited.",
+    "Unpaved RWY reserved for home-based aircraft.",
+    "THR 08: down-draft with North wind.",
+    "When proceeding to downwind, gliders can spiral in the descending area.",
+    "Grass RWY is likely to be closed after severe rainfalls.",
+    "Information given on AFIS.",
+    "Preferred QFU 261° due to IFR procedures and Taxiing prohibited except on RWY and TWY.",
+    "Any ACFT TKOF or LDG is delayed if a glider is grounded on the grass RWY within 75 m from paved RWY centerline.",
+    "Southern circuit at 1000 ft.",
+    "AD training patterns authorized for home-based ACFT.",
+    "PCL operation 3-7: 3 = ignition for 15 minutes; 7 = extinction.",
+    "AEM NR 9795: see AIP ENR 5.5.",
+    "Aerobatics NR 6750: see AIP ENR 5.5."
   ]
 }

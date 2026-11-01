@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFCI (AIP France, chart dated 2024-08-08), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFCI (AIP France, chart dated 2024-08-08): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFCI",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFCI",
     "chartDate": "2024-08-08",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.91333,
@@ -19,7 +20,10 @@
   "elevationFeet": 565,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "LUN-JEU / MON-THU : 0700-1700. VEN / FRI : 0700-1100, 1300-1700. SAM et DIM / SAT and SUN : 1300-1700 (HIV / WIN , JF / public HOL : non assuré / not provided). Pour extension des HOR ATS : PPR PN 24 HR du LUN au VEN et PPR PN 48 HR SAM, DIM et JF. For extension of ATS SKED : PPR PN 24 HR from MON to FRI and PPR PN 48 HR SAT, SUN and public HOL (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "approach": 123.85,
@@ -33,5 +37,36 @@
         268
       ]
     }
+  ],
+  "preferredQfu": 268,
+  "preferredQfuReason": "preferred QFU 268, due to environment",
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "No RWY inspection outside ATS SKED.",
+    "In summer, bird hazard on the RWY at SR and SS.",
+    "Preferred QFU 268° due to environment.",
+    "For the refuelling follow the guide line parallel to the station for ACFT with a wingspan < 25 m, preferably facing North in order to avoid jet blast on the hangars.",
+    "Do not stay parked in the refuelling area.",
+    "Wearing a high visibility vest is mandatory by prefectoral decree.",
+    "White line parallel to the hangar not to be crossed with engine running.",
+    "Engine test at intermediate holding point C1 before entering TWY.",
+    "JET A1 Coupling available on request, only ATS SKED.",
+    "Racing circuit INACTIVE: See VAC ATT 01.",
+    "Possible IFR operation.",
+    "After LDG RWY 27, back track the runway on the center line.",
+    "Do not enter the racing circuit.",
+    "RWY 09, multi-engine ACFT must line-up at the beginning of RWY.",
+    "Racing circuit ACTIVE: Activation of racing circuit announced by NOTAM.",
+    "See VAC ATT 02.",
+    "FIS systematically provided during racing circuit activity.",
+    "Without FIS, AD not available.",
+    "RWY available only by day.",
+    "IFR operations prohibited.",
+    "THR RWY 09 materialized by dihedral beacons.",
+    "LDG RWY 09: imperatively follow PAPI slope till landing.",
+    "LDG RWY 27: imperatively follow PAPI slope till the ring road.",
+    "Parachute activity (NR 357): SFC/FL 135 - 0600-SS (SUM: -1HR).",
+    "Daytime only.",
+    "Activation known by: ALBI INFO or A/A, TOULOUSE INFO."
   ]
 }

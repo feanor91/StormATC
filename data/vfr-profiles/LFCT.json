@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFCT (AIP France, chart dated 2023-10-05), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFCT (AIP France, chart dated 2023-10-05): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFCT",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFCT",
     "chartDate": "2023-10-05",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 46.96194,
@@ -18,7 +19,11 @@
   },
   "elevationFeet": 341,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 123.355",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 123.355
@@ -31,5 +36,22 @@
         298
       ]
     }
+  ],
+  "preferredQfu": 298,
+  "preferredQfuReason": "preferred QFU 298, due to longitudinal slope",
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "During gliders launching activity arriving ACFT must fly at 2000 ft ASFC and wait till the end of winching.",
+    "Due to the RWY 12/30 convex profile, THR 30 is not visible from THR 12, a great caution is required to enter the RWY.",
+    "Preferred QFU 298° due to longitudinal slope.",
+    "Gliders winching activity on AD (NR 965) signalled by rotating light set up on winch SR-SS, 1000 ft ASFC.",
+    "Announced on A/A THOUARS.",
+    "Aerobatics (NR 6509).",
+    "1000 m along RWY 12/30 axis, centered on PSN: 465739N – 0000913W, 0700-1100, 1300-1800 (SUM: - 1 HR), 2000 ft AMSL/5000 ft AMSL.",
+    "Activity reserved for home based pilots or users who have signed the protocol.",
+    "Real activity announced on THOUARS A/A and POITIERS INFO.",
+    "Winching and aerobatics activities prohibited simultaneously.",
+    "AEM (NR 9043): HJ, 330 ft ASFC.",
+    "As per protocol."
   ]
 }

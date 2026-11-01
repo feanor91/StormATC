@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFJR (AIP France, chart dated 2026-10-01), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFJR (AIP France, chart dated 2026-10-01): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFJR",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFJR",
     "chartDate": "2026-10-01",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 47.56028,
@@ -18,7 +19,11 @@
   },
   "elevationFeet": 194,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "AFIS : LUN-SAM / MON-SAT : 0730-1645 - DIM : non assuré / SUN : not provided. La présence réelle de ce service est connue sur la FREQ AFIS. Extension ou réouverture possibles sur demande écrite auprès du gestionnaire le dernier jour ouvrable avant 1530. Actual presence of AFIS is known on FREQ AFIS. Possible extension or reopening with written request to AD operator on the last working day before 1530 (UTC HIV ; HOR ETE : - 1 HR)",
+    "outsideAtsHours": "air-air frequency 124.705",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "afis": 124.705
@@ -45,5 +50,39 @@
         260
       ]
     }
+  ],
+  "preferredQfu": 260,
+  "preferredQfuReason": "preferred QFU 260",
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Possible IFR operations.",
+    "Unpaved South RWY is reserved for gliding and tug ACFT.",
+    "Simultaneous use of close paved and unpaved North RWY prohibited.",
+    "Unpaved RWY and TWY not available after a raining period.",
+    "Preferred QFU 260°.",
+    "ACFT circuits must avoid overflying Marcé and Seiches sur le Loir due to environmental reasons.",
+    "Traffic circuits forbidden 2100-0700 (SUM - 1 HR).",
+    "\"Low height\" circuits 500 ft AAL MNM are authorized during training flights only with an instructor on board.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "TWY A, C and S only usable with light ACFT.",
+    "Winching activity suspended after IFR ACFT has overflown 6.2 NM THR 26 and 4.5 NM THR 08 on final APCH.",
+    "Simultaneous winching and aerobatics activities according to formal provisions of agreement.",
+    "The width of the access gate to the Museum area does not allow self-manoeuvring entry and exit of aircraft.",
+    "No ACFT mooring point is provided on the platform.",
+    "Free exit through a turnstile between the TWR and the terminal.",
+    "Individual and unique code to be requested for airside access outside opening hours.",
+    "PAPI RWY 08 and RWY 26 mandatory for night landings.",
+    "PCL on PPR 1HR from AD operator: TEL: 02 41 33 50 01 afis.angers@edeis.com",
+    "3 clicks on mic: low intensity,",
+    "5 clicks on mic: high intensity,",
+    "7 clicks on mic: PCL shutdown.",
+    "Possible winching activity (announced on frequency).",
+    "Is recommended to be careful and to avoid overflying the airfield below 3000 ft AMSL.",
+    "Aerobatics NR 6362: see AIP ENR 5.5 Glider winching NR 927: see AIP ENR 5.5 Level 5: MON-FRI: 0800-1645.",
+    "During the week, outside these SKED, possible extension or reopening for level 2 O/R AD operator before 1530 on website: MyHandling.",
+    "Level 2: SAT: 0800-1645.",
+    "Level 1: SAT: 2300-2359, SUN: 0000-2259 During week-end, outside these SKED, possible extension or reopening level 2 or 5 O/R AD operator, the last working day before 1530 on website: MyHandling.",
+    "Level 1: 5 wheeled fire extinguishers in front of the terminal, the ACB and the 3 hangars East of the ACB.",
+    "Péril animalier / Wildlife strike hazard: Occasionnel / Random."
   ]
 }

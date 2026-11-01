@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFLU (AIP France, chart dated 2024-11-28), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFLU (AIP France, chart dated 2024-11-28): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFLU",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFLU",
     "chartDate": "2024-11-28",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 44.91556,
@@ -19,7 +20,11 @@
   "elevationFeet": 525,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "AFIS : Sauf JF / Except public HOL. LUN - VEN / MON - FRI : 0700 -1800. En dehors de ces HOR et pour les vols commerciaux seulement : PPR PN 24 HR auprès de l'exploitant d'aérodrome et avant VEN 1300 pour les SAM et DIM. Outside of these SKED and for commercial flights only : PPR PN 24 HR from AD operator and before FRI 1300 for SAT and SUN (UTC HIV ; HOR ETE : -1HR)",
+    "outsideAtsHours": "air-air frequency 120.105",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "afis": 120.105,
@@ -47,5 +52,92 @@
         186
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "NW",
+      "spoken": {
+        "fr": "Novembre Whisky",
+        "en": "November Whiskey"
+      },
+      "latitude": 44.99861,
+      "longitude": 4.87667,
+      "location": "Isère bridge"
+    },
+    {
+      "name": "NE",
+      "spoken": {
+        "fr": "Novembre Écho",
+        "en": "November Echo"
+      },
+      "latitude": 45.02583,
+      "longitude": 5.09694,
+      "location": "Toll at Chatuzange le Goubet"
+    },
+    {
+      "name": "SA",
+      "spoken": {
+        "fr": "Sierra Alpha",
+        "en": "Sierra Alpha"
+      },
+      "latitude": 44.87389,
+      "longitude": 4.87167,
+      "location": "Marshalling yard Porte lès Valence"
+    },
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 44.77611,
+      "longitude": 4.82639,
+      "location": "Intersection railroad Livron"
+    }
+  ],
+  "notes": [
+    "Aerodrome reserved for radio-equipped ACFT.",
+    "Simultaneous use of paved RWY and grass strip 01L/19R prohibited.",
+    "Simultaneous use of grass strips prohibited.",
+    "Grass strip 01R/19L reserved only for gliders landing and home-based helicopters training in accordance with local instructions.",
+    "External ULM: during ATS SKED, contact TWR by phone before flight.",
+    "MIL ACFT departing to GAMSTAT: PPR PN 24HR on 04 75 79 76 41.",
+    "FREQ OPS MIL: 140.600 - 369.350046.200.",
+    "TORA and TODA RWY 19 reduced by 90 m due to the presence of the road clearance in take-off funnel 19.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Aerodrome circuits: ACFT on the East of the Bérards.",
+    "For ACFT over 30 t, runway turnaround areas compulsory.",
+    "TWY parallel to RWY, available for light ACFT.",
+    "Access to GAMSTAT apron:.",
+    "Gate N: width 23.4 m.",
+    "Gate M: width 23.5 m.",
+    "Internal gate: width 23 m.",
+    "Precautionary taxiing required for external ACFT.",
+    "Preferred QFU: 006°, due to IFR procedure.",
+    "Low height circuits: authorized for training with an instructor only (eastern circuit).",
+    "Only one low height circuit possible per period of 15 minutes.",
+    "Outside ATS SKED, one low height circuit possible per period of 30 minutes, until 2200 local time.",
+    "Low height circuit prohibited without instructor, below 500 ft ASFC, or after 2200 local time, or on Sunday.",
+    "Landing RWY 19: PAPI compulsory, by day for jet ACFT or commercial transport ACFT, by night for all ACFT.",
+    "TWY L, M, N and S available during daytime only and for RVR 800 m.",
+    "TWY M only available for MIL HEL in translation in ground effect and for home-based aircraft with an overall width of the main gear smaller than 2.2 m.",
+    "TWY L and N reserved for aircraft whose main gear overall width is smaller than 4.5 m.",
+    "If pelicandrome active, TWY S closed.",
+    "Gliders' descending areas: In addition to the gliders' descending area QFU 19 on page ATT 01, gliders' descending area QFU 01: radial minimum altitude.",
+    "ARR: last route segment altitude will be used until field in sight in the 5 NM AD area to join the traffic pattern.",
+    "Outside ATS SKED: When operating PCL, local flight activity is restricted at two ACFT in the circuit until 2230 local time.",
+    "Outside this period for ARR and DEP only (journeys).",
+    "STAP: available data: wind, cloud base, instrumental visibility, T, DP, QNH, QFE.",
+    "PAPI not turned on by PCL.",
+    "Aerobatics NR (6835) on AD: AFIS SKED, 2500 AMSL",
+    "Activity reserved for authorized pilots by AD operator as per protocol in force.",
+    "RADIOCOMMUNICATION FAILURE: VFR by day: Inbound flights:.",
+    "Squawk 7600.",
+    "Fly overhead TWR via the East facing tower at 2000 AMSL with landing lights on.",
+    "Then join AD circuit by monitoring APCH axis.",
+    "Outbound flights: Before take-off, return to apron.",
+    "Squawk 7600.",
+    "Descend at 2500 AMSL in sight of VALENCE, fly overhead TWR at 2500 AMSL with lights on.",
+    "Informations diverses / Miscellaneous Jet Systems (Hélicoptères / Helicopters ) TEL: 04 75 85 43 20 Taxis et locations de voiture sur demande / Taxis and car rental on request."
   ]
 }

@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFOU (AIP France, chart dated 2026-06-11), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFOU (AIP France, chart dated 2026-06-11): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFOU",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFOU",
     "chartDate": "2026-06-11",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 47.08194,
@@ -19,7 +20,10 @@
   "elevationFeet": 443,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "AFIS : ETE : LUN - SAM : 0530-1000 et 1130-1700, DIM et JF : 1200-1700. HIV : LUN - SAM : 0700-1100 et 1230-1800, DIM et JF : 1300-1800. En dehors de ces HOR, PPR dernier jour ouvrable avant 1700. SUM : MON - SAT : 0530-1000 and 1130-1700, SUN and public HOL : 1200-1700. WIN : MON - SAT : 0700-1100 and 1230-1800, SUN and public HOL : 1300-1800. Outside these SKED, PPR before 1700 on the last working day. Aérodrome de (UTC HIV ; HOR ETE : - 1 HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "approach": 124.25,
@@ -40,5 +44,26 @@
         205
       ]
     }
+  ],
+  "preferredQfu": 204,
+  "preferredQfuReason": "preferred QFU 204, due to IFR procedure",
+  "notes": [
+    "Possible IFR operations.",
+    "AD reserved for radio-equipped ACFT.",
+    "Simultaneous use of both RWYs prohibited.",
+    "Unpaved RWY not available after heavy rain.",
+    "TORA RWY 20 = 1290 m Reduced TORA and TODA RWY 20 due to road gauge located in take-off funnel.",
+    "Use of unpaved RWY reserved for ACFT authorized by AD operator outside gliders activity hours.",
+    "Outside ATS SKED, entrance and exit of unpaved RWY must be performed in front of the terminal.",
+    "\"Low height\" circuits: during training flights only with an instructor on board: minimum 500 AAL, West of RWY 02/20.",
+    "Preferred QFU: 204° due to IFR procedure.",
+    "TKOF QFU 024°: outside ATS SKED, backtracking and lining up only from holding point A.",
+    "From East apron, join holding point A via TWY C and B.",
+    "TKOF QFU 204°: line up at RWY threshold to avoid noise.",
+    "After TKOF: take initial departure heading 267°.",
+    "TWY C reserved for ACFT with wingspan less than 15 m.",
+    "RWY pattern training forbidden between 2100 and 0700 (SUM: - 1 HR).",
+    "ATS absence: PAPI 02 unavailable.",
+    "Aerobatics NR 6390: see AIP ENR 5.5 AEM NR 8308: see AIP ENR 5.5"
   ]
 }

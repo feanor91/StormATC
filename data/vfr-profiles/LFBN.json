@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBN (AIP France, chart dated 2026-07-09), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFBN (AIP France, chart dated 2026-09-03): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFBN",
   "name": "Niort - Marais Poitevin",
   "source": {
     "publication": "AIP France AD 2 LFBN",
-    "chartDate": "2026-07-09",
-    "extraction": "automatic"
+    "chartDate": "2026-09-03",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 46.31333,
@@ -18,7 +19,10 @@
   },
   "elevationFeet": 201,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "AFIS HIV : LUN-VEN sauf JF : 0800-1630, ETE : LUN-VEN : 0800-1800, SAM, DIM et JF : 0900-1200, 1400-1800. En dehors de ces HOR, PPR 2 HR (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "afis": 119.105
@@ -38,5 +42,38 @@
         246
       ]
     }
+  ],
+  "preferredQfu": 246,
+  "preferredQfuReason": "preferred QFU 246, due to THR 07 visibility at holding point",
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Possible IFR operations.",
+    "Paved RWY: using by gliders only with AFIS authorization.",
+    "Unpaved RWY: simultaneous use by ACFT and gliders: land downstream of the last glider.",
+    "Simultaneous use of both RWY and ULM strip only possible if AFIS service open and for single-engine ACFT operating under daytime VFR.",
+    "ULM strip at the south of paved RWY reserved for home based ULM and for aeromodels authorized by the AD operator.",
+    "Simultaneous activities on ULM strip prohibited.",
+    "Glider activity: entering conditions for LF-R 49 A1 and L1 according FFVV/BA709 protocol.",
+    "If wind blowing from N/NE possibility of high to very high turbulence in final approach RWY 07.",
+    "Threshold 07 not visible from holding point, close attention advised before entering the paved RWY.",
+    "Intense parachuting activity during summer.",
+    "The paradropping ACFT may fly a southern traffic pattern for the grass RWY, which interferes with the traffic pattern of the paved RWY.",
+    "Preferred QFU 246° due to THR 07 visibility at holding point.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Use of grass TWY: caution in the vicinity of the skydivers boarding area, crossing of pedestrians.",
+    "Use of paved TWY: do not cross the grass RWY centreline if an ACFT is on final or taking off from the grass RWY.",
+    "Grass apron equipped with tie-down fittings.",
+    "Ground marking of fueling area and turn-around areas on RWY: reference ACFT, Beech 1900 D.",
+    "HEL apron, rotor diameter 11 m MAX.",
+    "Overall length 13 m MAX, daytime only.",
+    "Low altitude traffic pattern only with flight instructor on board.",
+    "Prohibited on paved RWY if AEM activity in volume NR 9184-2.",
+    "Vertical passage over W road interchange recommended to avoid flying over Aiffres during RWY 25 departure and RWY 07 arrival.",
+    "Lighting system: O/R TEL: AD operator.",
+    "Due to noise pollution, after TKOF and as far as possible:.",
+    "RWY 07: take heading 060°,",
+    "RWY 25: take heading 260°.",
+    "Continuous patterns prohibited between 0000 and 0600 (local time) except for State flights and/or authorized by AD operator.",
+    "Aerobatics NR 6506: see AIP ENR 5.5 AEM NR 9184.1 and 9184.2: see AIP ENR 5.5 Parachuting NR 379: see AIP ENR 5.5"
   ]
 }

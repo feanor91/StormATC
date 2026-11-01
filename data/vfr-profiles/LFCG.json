@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFCG (AIP France, chart dated 2025-01-23), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFCG (AIP France, chart dated 2025-01-23): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFCG",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFCG",
     "chartDate": "2025-01-23",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.00778,
@@ -19,7 +20,11 @@
   "elevationFeet": 1376,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 118.255",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 118.255
@@ -39,5 +44,22 @@
         332
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Simultaneous use of both adjacents RWY prohibited.",
+    "Mixed use (ACFT and gliders) of the grass strip reserved for home-based users, gliders' daytime markings.",
+    "Aerobatics (NR 6002) 3.5 NM NNW from ARP.",
+    "Heavy gliders school activity from April to September.",
+    "Gliders activity is possible on the paved RWY.",
+    "Presence of gliders and service ACFT in lining-up area at 140 m upside DTHR 33 of paved RWY.",
+    "Preferential QFU 332° due to relief and RWY slope.",
+    "Gliders descending area located NW of the aerodrome.",
+    "All TKOF or LDG suspended if a glider is lying on that half of the glider strip adjacent to the ACFT RWY.",
+    "Grass TWY parallel with the RWY is reserved for homebased aircraft.",
+    "The strip giving access to the RWY from the glider and aircraft hangars is reserved for home-based users.",
+    "Parachuting (NR 603): FL 115, SR-SS, accordind to protocol with SNA-Sud.",
+    "Simultaneous PARACHUTING and AEROBATICS activities prohibited.",
+    "Activity known by TOULOUSE INFO or A/A SAINT GIRONS."
   ]
 }

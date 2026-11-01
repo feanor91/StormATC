@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFAV (AIP France, chart dated 2024-10-03), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFAV (AIP France, chart dated 2024-10-03): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFAV",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFAV",
     "chartDate": "2024-10-03",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 50.32472,
@@ -19,7 +20,11 @@
   "elevationFeet": 172,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "LUN-VEN : 0715 - 1100, 1215 - 1600. En dehors de ces horaires O/R par FAX ou mail avant 1500. SAM, DIM et JF : O/R par FAX ou mail le jour ouvrable précédent avant 1100 pour vols EVASAN et Officiels uniquement. PPR exploitant d'aérodrome par FAX ou mail le jour ouvrable précédent avant 1100 pour vols commerciaux et d'affaires. MON-FRI : 0715 - 1100, 1215 - 1600. Outside these SKED O/R by FAX or email before 1500. SAT (UTC HIV ; HOR ETE : -1HR)",
+    "outsideAtsHours": "air-air frequency 122.605",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "afis": 122.605
@@ -32,5 +37,27 @@
         290
       ]
     }
+  ],
+  "preferredQfu": 110,
+  "preferredQfuReason": "preferred QFU 110, due to IFR operations",
+  "notes": [
+    "Possible IFR operations.",
+    "AD reserved for radio-equipped ACFT Unpaved RWY 11/29 usable by ACFT.",
+    "Preferential use (except ULM): RWY 11/29.",
+    "Use of RWY 11/29 by ULM: paved: possible for multi-axis ULM; unpaved: possible with aeronautical authority prior agreement.",
+    "Simultaneous use of paved RWY 11/29 and unpaved RWY 11/29 or TWY D prohibited.",
+    "Simultaneous use of unpaved RWY 11/29 and TWY D prohibited (1) Reduced declared distances: RWY 11: due to LOC shelter located at 127 m from end of RWY.",
+    "TORA: 1685 m.",
+    "RWY 29: due to RD 630 height restriction barrier in take-off funnel 29.",
+    "TORA: 1618 m.",
+    "Not all obstacles are shown for readability reasons.",
+    "Preferred QFU 110° due to IFR operations.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Use of APU: 30 min before departure only.",
+    "RWY circuit training prohibited 1900 - 0800 (SUM -1HR).",
+    "RWY circuit training below published circuit heights: only on RWY 06/24; reserved for training flights with instructor on board.",
+    "TWY A: 400 m x 16 m.",
+    "TWY B: 200 m x 7,50 m.",
+    "Usable only by day by ACFT with MTOW < or = 5.7 t."
   ]
 }

@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFHO (AIP France, chart dated 2024-08-08), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFHO (AIP France, chart dated 2024-08-08): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFHO",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFHO",
     "chartDate": "2024-08-08",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 44.53944,
@@ -19,7 +20,10 @@
   "elevationFeet": 923,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 119.855",
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 119.855
@@ -32,5 +36,22 @@
         2
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio equipped ACFT Preferred QFU 002° due to environment.",
+    "LDG RWY 18: do not descend below 1000 ft AAL until lining up on final APCH.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Caution advised when taxiing due to presence of civil safety equipment close to the TWY.",
+    "TWY civil protection is unusable when pelicandrome is active.",
+    "Parallel TWY reserved as a priority for Civil Safety ACFT.",
+    "South hangars service way: maximum wingspan of 12 meters, maximum landing gear width of 4 meters.",
+    "Avoid overflying Balazuc located south of AD.",
+    "PAPI mandatory by night.",
+    "LDG RWY 18 prohibited by night.",
+    "PCL: 3 clicks on mic: edge lighting, windsock, signs, PAPI,; 5 clicks on mic: edge lighting, windsock, signs, flashing lights,; 7 clicks on mic: shutdown.",
+    "PJE on AD (NR 412): FL 135; SAT, SUN and public HOL; Daytime except when LF-R 55 C or D are active.",
+    "Aerobatics over AD (NR 6810): when LF-R 55 D is inactive: 2600 ft AMSL / FL 060; HJ on SAT, SUN and public HOL, PPR from ORANGE APP 118.925.",
+    "AEM on AD (NR 9635): 500 ft ASFC, SR-SS.",
+    "As per protocol."
   ]
 }

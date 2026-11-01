@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFCX (AIP France, chart dated 2025-12-25), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFCX (AIP France, chart dated 2025-12-25): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFCX",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFCX",
     "chartDate": "2025-12-25",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 44.08583,
@@ -19,7 +20,8 @@
   "elevationFeet": 243,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 121.055
@@ -39,5 +41,30 @@
         280
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Unpaved RWY reserved for home-based ACFT or ACFT with authorization from managing authority.",
+    "If unpaved RWY unusable after heavy rainfalls or other reasons, gliding activity reported on paved RWY.",
+    "Simultaneous use of both RWY prohibited.",
+    "QFU 100° preferred for both RWY.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "LDG and TKOF are delayed if a glider is immobilized on the South half of the unpaved RWY.",
+    "The central paved TWY cuts across the unpaved RWY.",
+    "Before entering on this TWY: coming from apron, hold position at holding point; coming from paved RWY, hold position before entering on unpaved RWY.",
+    "Say \"RWY vacated\" once the holding point is crossed.",
+    "Paved TWY width 7.5 m.",
+    "Unpaved North TWY primarily used by gliders and service planes for vacating unpaved RWY and pre-flight waiting.",
+    "The gliders line-up area occupies the northern half of unpaved RWY up to 50 m from THR.",
+    "At both QFU, if one or more gliders occupy the line-up area, it activates the temporary displaced threshold, which is not marked on RWY and is located 100 m from THR at the level of the first side strip.",
+    "Caution when landing.",
+    "When paved RWY is used by gliders, preflight areas are located at the south of paved RWY thresholds.",
+    "See diagram and instructions: https://aerodromecastelsarrasin-moissac.com/consignes/ AEM (NR 9072): See ENR 5.5 Aerobatics on AD (NR 6740), 500 m width each side of RWY axis and 1500 m length each side of ARP in RWY axis.",
+    "1500 ft AMSL / 3500 ft AMSL.",
+    "SUN and public HOL 0900-1100 and 1300-1700 (SUM: -1 HR).",
+    "Other days 0800-1100 and 1300-1700 (SUM: -1 HR).",
+    "Activity according to 2 protocols (based and non based users), with prior agreement of AD operator.",
+    "Activity announced on A/A FREQ.",
+    "Parachuting activity (NR 384): See ENR 5.5"
   ]
 }

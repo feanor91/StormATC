@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFMV (AIP France, chart dated 2026-01-22), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFMV (AIP France, chart dated 2026-01-22): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFMV",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFMV",
     "chartDate": "2026-01-22",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.90667,
@@ -19,7 +20,10 @@
   "elevationFeet": 124,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "TowerAndGround"
+    "kind": "TowerAndGround",
+    "atsHours": "ETE / SUM : LUN-VEN / MON-FRI : 0500 -1930 - SAM / SAT : 0500 -1900 - DIM / SUN : 0600-1930. HIV / WIN : LUN-VEN / MON-FRI : 0600-2000 - SAM / SAT : 0600-1800 - DIM / SUN : 0700-2000. Extensions d'horaires connues sur ATIS AVIGNON . Modifications possibles par NOTAM. / SKED extensions on ATIS AVIGNON. Possible changes by NOTAM. DGAC (UTC HIV ; HOR ETE : - 1 HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "atis": 120.83,
@@ -35,5 +39,201 @@
         347
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "NA",
+      "spoken": {
+        "fr": "Novembre Alpha",
+        "en": "November Alpha"
+      },
+      "latitude": 43.98722,
+      "longitude": 4.82472,
+      "location": "Barthelasse island"
+    },
+    {
+      "name": "NE",
+      "spoken": {
+        "fr": "Novembre Écho",
+        "en": "November Echo"
+      },
+      "latitude": 44.05417,
+      "longitude": 5.05139,
+      "location": "Carpentras"
+    },
+    {
+      "name": "E",
+      "spoken": {
+        "fr": "Écho",
+        "en": "Echo"
+      },
+      "latitude": 43.92028,
+      "longitude": 5.05694,
+      "location": "l'Isle sur la Sorgue"
+    },
+    {
+      "name": "SE",
+      "spoken": {
+        "fr": "Sierra Écho",
+        "en": "Sierra Echo"
+      },
+      "latitude": 43.85833,
+      "longitude": 4.9875,
+      "location": "Sandpit Factory north side Durance"
+    },
+    {
+      "name": "SW",
+      "spoken": {
+        "fr": "Sierra Whisky",
+        "en": "Sierra Whiskey"
+      },
+      "latitude": 43.85,
+      "longitude": 4.77917,
+      "location": "Graveson"
+    },
+    {
+      "name": "W",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 43.92222,
+      "longitude": 4.74167,
+      "location": "Rhône Durance meeting"
+    },
+    {
+      "name": "NW",
+      "spoken": {
+        "fr": "Novembre Whisky",
+        "en": "November Whiskey"
+      },
+      "latitude": 44.06028,
+      "longitude": 4.78972,
+      "location": "Roquemaure"
+    },
+    {
+      "name": "N",
+      "spoken": {
+        "fr": "Novembre",
+        "en": "November"
+      },
+      "latitude": 44.12861,
+      "longitude": 4.79111,
+      "location": "Intersection of the A7 and A9 motorways. Unusable if Orange CTR active"
+    },
+    {
+      "name": "CX",
+      "spoken": {
+        "fr": "Charlie X-ray",
+        "en": "Charlie X-ray"
+      },
+      "latitude": 44.09111,
+      "longitude": 4.59722,
+      "location": "Connaux"
+    }
+  ],
+  "notes": [
+    "AD prohibited to gliders.",
+    "AD reserved for radio-equipped ACFT.",
+    "Unpaved RWY and ULM strip available on PPR from TWR only.",
+    "Unpaved RWY, ULM strip and unpaved TWY available daytime and VMC only.",
+    "Simultaneous LDG and/or TKOF on paved and unpaved RWY prohibited.",
+    "For ACFT over 30 t half-turn on turn pads is compulsory.",
+    "Taxiing prohibited between aprons B and C.",
+    "Heavy paradropping activity overhead AVIGNON PUJAUT AD known on PROVENCE APP and AVIGNON TWR.",
+    "Glider activity nearby AVIGNON PUJAUT and MAZET DE ROMANIN ADs.",
+    "On approach RWY 35, by sunny weather, at the end of the afternoon, between march and september, the presence of photovoltaic panels on the shaderoofs of the parking of the terminal located west of the RWY, might cause a glare.",
+    "Aerobatic activity (NR 6925) La Montagnette: see AIP ENR 5.5 Except special clearance or instructions, entry in and exit out of the CTR must be carried out by the compulsory reporting points.",
+    "Departure procedures Presence of a bulky obstacle (TGV High-speed train line) after TKOF QFU 167°, 2200 m after brakes release, ALT 157 ft.",
+    "If possible avoid overflying Caumont sur Durance, Châteauneuf de Gadagne, Morières, Montfavet neighborhood and Noves.",
+    "TKOF QFU 347° For Westbound departures: do not turn below 1000 ft AMSL or before railway (unless otherwise instructed by ATC).",
+    "Prefer a right turn followed by a vertical shift over the circuit.",
+    "Line-up required for light ACFT via holding point Alpha.",
+    "Line-up for heavy helicopteres via holding points Charlie or Bravo.",
+    "Arrival from West QFU 167° Fly overhead TWR to perform a circuit to the East (unless otherwise instructed by ATC).",
+    "West circuit On ATC clearance only.",
+    "Low height circuits Only for training flights with instructor on board.",
+    "RWY 17/35 MNM height 500 ft AAL, circuit located East of RWY.",
+    "Training flight for ACFT over 5.7 t On AD operator clearance.",
+    "Prohibited WE and public Use of parking stands Stands Instructions ACFT types wingspan length Self-manoeuvring.",
+    "Stands numbers not marked on the ground.",
+    "Self-manoeuvring.",
+    "Stands numbers not marked on the ground.",
+    "Reserved DA42 and DA62.",
+    "Arrival and departure in oversteering.",
+    "Speed 5 km/h recommended.",
+    "Marshaller mandatory.",
+    "Arrival and departure in oversteering.",
+    "Speed 5 km/h recommended.",
+    "Marshaller mandatory.",
+    "Arrival and departure in oversteering.",
+    "Speed 5 km/h recommended.",
+    "Marshaller mandatory.",
+    "Arrival and departure in oversteering.",
+    "Speed 5 km/h recommended.",
+    "Marshaller mandatory.",
+    "Arrival and departure in oversteering.",
+    "Speed 5 km/h recommended.",
+    "Marshaller mandatory.",
+    "Arrival and departure in oversteering.",
+    "Speed 5 km/h recommended.",
+    "Marshaller mandatory.",
+    "Arrival and departure in oversteering.",
+    "Speed 5 km/h recommended.",
+    "Marshaller mandatory.",
+    "Arrival and departure in oversteering.",
+    "Speed 5 km/h recommended.",
+    "Marshaller mandatory.",
+    "Arrival and departure in oversteering.",
+    "Speed 5 km/h recommended.",
+    "Marshaller mandatory.",
+    "Arrival and departure in oversteering.",
+    "Speed 5 km/h recommended.",
+    "Marshaller mandatory.",
+    "Arrival and departure in oversteering.",
+    "Speed 5 km/h recommended.",
+    "Marshaller mandatory.",
+    "Marshaller mandatory.",
+    "Marshaller mandatory.",
+    "Marshaller mandatory.",
+    "Stand 13C HELICO not available.",
+    "PLANE Stand 13C PLANE not available. overall dimension) Marshaller mandatory.",
+    "Marshaller mandatory. overall dimension) Self-manoeuvring stand.",
+    "Stand 2F not available.",
+    "Marshaller mandatory.",
+    "Stands 1F and 3F not available.",
+    "Self-manoeuvring stand.",
+    "Stands 2F and 4F not available.",
+    "Marshaller mandatory.",
+    "Stands 3F and 5F not available.",
+    "Self-manoeuvring stand.",
+    "Stand 4F not available.",
+    "Self-manoeuvring stand.",
+    "Stand 7F not available.",
+    "Marshaller mandatory.",
+    "Stands 6F and 8F not available.",
+    "Self-manoeuvring stand.",
+    "Stand 7F not available.",
+    "Night flights: ACFT other than single engine and light twin engine: on AD operator clearance.",
+    "Training patterns prohibited after SUM: 2100, WIN: 2100.",
+    "TWY A not usable at night.",
+    "Outside ATS SKED, at night, use TWY C.",
+    "STAP FR only: HN, ATS absence: PPR AD operator before 1700 by E-mail: handling@avignon.aeroport.fr, https://cy.myhandlingsoftware.com Available data: wind, VIS, RVR, cloud base, T, DP, QNH, QFE.",
+    "Traffic surveillance equipment: AD equipped with a radar display (see AD 1.0).",
+    "Aerobatics on AD (NR 6901): see AIP ENR 5.5 Activity \"Drone RTE\" within the RTE building 20 m ASFC, known by AVIGNON TWR (exclusive use of RTE by protocol).",
+    "Radio failure instructions During ATS SKED: squawk A7600.",
+    "In flight: During daytime, without prior instructions, do not enter CTR except in case of emergency (A7700).",
+    "Follow the last instructions received, else report over 1700 ft AMSL abeam RWY without interfere with axes.",
+    "Then join the middle of the circuit to the East by watching traffic.",
+    "Daytime: in final, threshold RWY identification lights (flashing lights) operating will give clearance to land.",
+    "Nighttime: intensity of RWY lighting variating will give clearance to land.",
+    "Nighttime: entering the CTR from over 4500 ft AMSL to 1700 ft AMSL is authorized in case of radio failure.",
+    "When landed, vacate RWY.",
+    "At holding point, wait until the arrival of a service vehicle.",
+    "At stand: close flight plan.",
+    "Sur / On AD.",
+    "Taxis, véhicules de location / Taxis, car rental.",
+    "Service d'évaluation et de report de l'état de surface de piste / Global Reporting Format: HOR RFFS / RFFS SKED.",
+    "Outside RFFS SKED, GRF with PPR 24 HR to AD operator:"
   ]
 }

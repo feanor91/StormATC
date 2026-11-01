@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFQL (AIP France, chart dated 2023-09-07), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFQL (AIP France, chart dated 2023-09-07): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFQL",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFQL",
     "chartDate": "2023-09-07",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 50.46639,
@@ -18,7 +19,10 @@
   },
   "elevationFeet": 170,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 123.355",
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 123.355
@@ -38,5 +42,27 @@
         269
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Usable declared distances reduced due to obstacles near RWY thresholds.",
+    "AD prohibited for class 5 microlights (balloons).",
+    "LDG RWY 03 and RWY 09: caution advised due to roads in front.",
+    "A/A frequency shared with Laon Chambry.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "LDG or TKOF is prohibited if an ACFT is lying on adjacent TWY and between the two thresholds of RWY in use.",
+    "Avoid overflying Lens (Hospital), Bénifontaine and Loosen-Gohelle.",
+    "Aerobatics (NR 6010): 2000 ft AMSL/3500 ft AMSL.",
+    "SAT, SUN and public HOL: SR-SS overhead RWY in use.",
+    "PJE (NR 264) on AD: FL 140.",
+    "Upper limit FL 115 when LF-CBA 1A active.",
+    "SR-SS + 30.",
+    "Users information on A/A LENS and LILLE APP/FIS.",
+    "Activity reserved for signatory users to the protocol.",
+    "Paramotor activity near parachute target: holding altitude 700 ft.",
+    "Activity reserved for the signatories of the protocol.",
+    "For non-based, imperative agreement of the aerodrome director.",
+    "AEM NR 8295: 400 ft ASFC MAX, SR-SS.",
+    "Radio controlled model flying as per protocol."
   ]
 }

@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFCA (AIP France, chart dated 2024-08-08), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFCA (AIP France, chart dated 2024-08-08): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFCA",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFCA",
     "chartDate": "2024-08-08",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 46.78028,
@@ -19,10 +20,12 @@
   "elevationFeet": 210,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Approach"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 120.055",
+    "radioMandatory": true
   },
   "frequencies": {
-    "approach": 134.1,
     "airAir": 120.055
   },
   "runways": [
@@ -33,5 +36,25 @@
         356
       ]
     }
+  ],
+  "preferredQfu": 176,
+  "preferredQfuReason": "preferred QFU 176, due to noise pollution and obstructions in TKOF funnel QFU 356°",
+  "notes": [
+    "ATS: NIL. The chart header prints these units to call, which are not services of this aerodrome (its air-air frequency apart): .",
+    "AD reserved for radio-equipped ACFT.",
+    "Simultaneous use of paved RWY and ULM strip prohibited.",
+    "Non home based class 3 ULM must use paved RWY and ACFT circuit 1000 ft.",
+    "ULM strip reserved for pendulous class ULM and autogyro, as well as home-based multiaxis ULM.",
+    "Paved RWY slippery after heavy rainfall.",
+    "Obstructions (trees line) on both sides of RWY axis in North approach funnel, ALT 285 ft (75 ft ASFC).",
+    "Integration only by exterior RWY circuit at 1000 ft ASFC.",
+    "Downwind leg of exterior RWY circuit located East of TARGE.",
+    "Landing QFU 176°: maintain a slope of 7% MNM.",
+    "Preferred QFU 176° due to noise pollution and obstructions in TKOF funnel QFU 356°.",
+    "Approved with limitations because the power supply is not backed up.",
+    "TWY N and S are prohibited at night.",
+    "1 - Based aircraft pilot: Have passed a practical assessment of night flying aptitude on site with a qualified instructor.",
+    "2 - Non-based pilot:; Have a minimum of 200 hours' flying experience, including 20 hours at night, and recent practice (3 night take-offs and 3 night landings in the last 3 months) or have passed a practical assessment of aptitude for night flying on site with a qualified instructor.",
+    "Pilots must get to know local procedures by contacting the aerodrome operator by mail at bureau.aileschat@gmail.com"
   ]
 }

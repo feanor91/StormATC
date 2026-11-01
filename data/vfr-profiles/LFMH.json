@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFMH (AIP France, chart dated 2024-12-26), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFMH (AIP France, chart dated 2024-12-26): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFMH",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFMH",
     "chartDate": "2024-12-26",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 45.53417,
@@ -19,7 +20,10 @@
   "elevationFeet": 1325,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "HOR ATC / ATC SKED : LUN-VEN / MON-FRI : 0700- 1900, sauf JF / except public HOL. Possibilité d'ouverture ou d'extension ATC avec PPR PN 72H uniquement pour vols IFR commerciaux : LUN-VEN 0600-0700, 1900-2000. AFIS : En dehors des horaires d'extension du service ATC, possibilité d'activation du service AFIS avec PPR PN 24H à operations@saint-etienne.aeroport.fr Horaires d'activation ATS annoncés sur ATIS SAINT-ETIENN (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "approach": 120.5,
@@ -34,5 +38,104 @@
         353
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "N",
+      "spoken": {
+        "fr": "Novembre",
+        "en": "November"
+      },
+      "latitude": 45.73944,
+      "longitude": 4.22139,
+      "location": "Hippodrome Feurs / Feurs racetrack"
+    },
+    {
+      "name": "NA",
+      "spoken": {
+        "fr": "Novembre Alpha",
+        "en": "November Alpha"
+      },
+      "latitude": 45.64417,
+      "longitude": 4.23139,
+      "location": "Montrond les Bains, crossroad"
+    },
+    {
+      "name": "W",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 45.5575,
+      "longitude": 4.12583,
+      "location": "St Romain-le-Puy mound"
+    },
+    {
+      "name": "NE",
+      "spoken": {
+        "fr": "Novembre Écho",
+        "en": "November Echo"
+      },
+      "latitude": 45.6325,
+      "longitude": 4.45389,
+      "location": "St Symphorien-sur-Coise, church"
+    },
+    {
+      "name": "SE",
+      "spoken": {
+        "fr": "Sierra Écho",
+        "en": "Sierra Echo"
+      },
+      "latitude": 45.47306,
+      "longitude": 4.51833,
+      "location": "St Chamond railway station"
+    },
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 45.39278,
+      "longitude": 4.29167,
+      "location": "Firminy crossroad"
+    }
+  ],
+  "notes": [
+    "AD reserved for radio equipped ACFT.",
+    "Usable declared distances: TODA, ASDA and LDA RWY 17 reduced due to obstacles within RWY's strip limits.",
+    "Presence of relief in the RWY 17 take-off funnel.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Eastbound traffic pattern on ATS instructions.",
+    "Take off RWY 35: presence of a road immediately after RWY.",
+    "Check if take off specifications enable crossing of its size (H = 5m) when overflying end of RWY.",
+    "Unlighted TWY D is usable only HJ by light single-engine ACFT and on ATS instruction.",
+    "Traffic patterns training flights.",
+    "Possible low height traffic patterns for training flights (MAX 2 circlings) with following conditions: with a flight instructor on board; only by daylight; ALT MNM 1800 ft AMSL.",
+    "The \"reduced runway separation\" procedure is applicable on the paved runway 17/35 under the Only with ATC services.",
+    "ACFT: VIS > = 1500 m, ceiling > = 600 ft.",
+    "HEL: HJ: VIS > = 800 m, ceiling > = 600 ft.",
+    "HN: VIS > = 4000 m, ceiling > = 1000 ft out of clouds and with visual on the ground. compulsory.",
+    "ARR: when entering, at a mandatory reporting point contact SAINT ETIENNE TWR, providing flight data, and comply with ATC clearance.",
+    "DEP: leaving CTR, before TKOF inform SAINT ETIENNE TWR of destination, after TKOF follow prescribed routes.",
+    "TRANSIT: Contact SAINT ETIENNE TWR at CTR entry points to receive instructions.",
+    "DEP: climb overhead AD to chosen route segment minimum altitude.",
+    "ARR: last route segment altitude will be used until field in sight within 5 NM AD area to join the traffic pattern.",
+    "Landing on RWY 35 prohibited without ATS or if PAPI 35 U/S.",
+    "PCL: PAPI not turned on by PCL.",
+    "Traffic surveillance equipment: AD equipped with radar display.",
+    "Aerobatics on AD (NR 6811) 3000 AMSL/ 5500 AMSL every day 0800-1900 (SUM: - 1 HR) with clearance from ST ETIENNE TWR/INFORMATION and CLERMONT APP.",
+    "Radiocommunication failure: Before entering CTR, ACFT will not continue to SAINT ETIENNE.",
+    "If CTL instructions already received, comply with and report overhead AD 3000 ft AMSL then join traffic pattern.",
+    "When AFIS service is activated: If failure occurs before joining AD circuit and before receiving AFIS information, ACFT shall not continue his flight to LFMH.; If AFIS information have already been received, pilot continues his flight reporting overhead 3000 ft AMSL to join the circuit.",
+    "SKED: MON-FRI 0815-1730; SAT-SUN and public HOL: fuelling not provided.",
+    "JET A1 fuelling: outside this SKED, fuelling possible with PPR (MON-FRI: PPR PN 24HR; SATSUN and public HOL: PPR PN 48HR).",
+    "By E-mail: operations@saint-etienne.aeroport.fr",
+    "AVGAS fuelling: during opening SKED, payment with bank card or AIR TOTAL card.",
+    "Outside this SKED payment only with AIR TOTAL card.",
+    "Lubrifiant / Lubricant: NIL.",
+    "Niveau 7 / Level 7.",
+    "Level 5: MON-FRI 0700-1800; Level 1: SAT-SUN and public HOL Outside this SKED: for medical and HEMS flights: levels 2, 3, 4, 5 provided with PPR PN 1HR30 (TEL: 06 74 32 11 99); for other aircrafts: levels 2, 3, 4, 5 possible (MON-FRI: with PPR PN 24HR; SAT-SUN and public HOL: with PPR PN 48HR); Levels 6-7 provided with PPR PN 30 days by E-mail to: operations@saint-etienne.aeroport.fr.",
+    "Péril animalier / Wildlife strike hazard: Occasionnel / Random."
   ]
 }

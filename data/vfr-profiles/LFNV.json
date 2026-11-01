@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFNV (AIP France, chart dated 2025-12-25), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFNV (AIP France, chart dated 2025-12-25): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFNV",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFNV",
     "chartDate": "2025-12-25",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 44.33583,
@@ -19,7 +20,9 @@
   "elevationFeet": 472,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 120.06"
   },
   "frequencies": {
     "airAir": 120.06
@@ -32,5 +35,23 @@
         197
       ]
     }
+  ],
+  "notes": [
+    "Grove in the immediate vicinity of the airfield, North of the RWY 20 threshold.",
+    "Tree East of the RWY 02 threshold, near the paramotor circuit.",
+    "Radio contact mandatory.",
+    "Due to environmental matters, training patterns below inférieurs à 1500 (1000) interdits aux ACFT non basés.",
+    "1500 (1000) prohibited for non home-based ACFT.",
+    "Due to environmental matters, after take off RWY02, turn West as soon as possible and avoid flying over the village of Richerenches 2 km North of the airfield.",
+    "TODA reduced due to obstacles within takeoff funnels and within the West lateral clearance surface.",
+    "TWY A: width 16 m.",
+    "Presence of an embankment of 1 m high at 10 m from the West side of TWY A, recommended caution.",
+    "Simultaneous use of RWY and TWY by ACFT is prohibited, except for ACFT holding at THR 02 and THR 20, perpendicular to RWY with the front of the ACFT positioned above concrete slabs of 6 m X 6 m at respective THR.",
+    "ACFT with a wingspan > 14 m, do not use the TWY, backtrack the RWY instead.",
+    "Possible presence of paramotor EAST side of the RWY.",
+    "Use of ULM grass trip is done with preferential circuits left hand QFU 198° and right hand QFU 018°.",
+    "Non home-based ACFT are not allowed to perform more than two traffic patterns.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Aerobatics (NR 6900): See AIP ENR 5.5"
   ]
 }

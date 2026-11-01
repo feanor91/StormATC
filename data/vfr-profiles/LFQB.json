@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFQB (AIP France, chart dated 2025-05-15), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFQB (AIP France, chart dated 2025-05-15): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFQB",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFQB",
     "chartDate": "2025-05-15",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 48.32167,
@@ -19,7 +20,10 @@
   "elevationFeet": 389,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "AFIS : 01/04 - 30/09 : 0830-1130, 1230-1730 - 01/10 - 31/03 : 0830-1130, 1230-1630. Extensions : LUN-VEN : PPR la veille avant 1600, SAM-DIM : PPR VEN avant 1600. JF : PPR le dernier jour ouvrable avant 1600. Extensions : MON-FRI : PPR on previous day before 1600, SAT-SUN : PPR FRI before 1600. Public HOL : PPR on the last working day before 1600. Aéroport de Troyes en Champagne - RD619 - 10600 Barberey Saint Sulpice (UTC HIV ; HOR ETE : - 1 HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "fis": 120.325,
@@ -47,5 +51,39 @@
         230
       ]
     }
+  ],
+  "preferredQfu": 172,
+  "preferredQfuReason": "preferred QFU 172, due to infrastructures. raining flights (SUM : - 1 HR) : Training patterns prohibited between 2130-0600",
+  "notes": [
+    "See Consignes particulières / Special instructions AD reserved for radio-equipped ACFT.",
+    "Compulsory radio contact.",
+    "Possible IFR operations.",
+    "RWY: taxiing to/from RWY 05/23 via unpaved RWY 17R/35L and TWY WN and WS.; simultaneous use of RWY 05/23 and paved RWY 17/35 or RWY 17R/35L prohibited.; simultaneous use of paved RWY 17/35 and unpaved.",
+    "RWY 17R/35L possible.",
+    "RWY 17: available distance for take-off from TWY EC: 1240 m.",
+    "RWY 35: available distance for take-off from TWY ES: 1120 m the announcement on the frequency of an IFR procedure in progress locks the use of RWY 05/23.",
+    "In order to join apron, assistance (Marshaller) is mandatory on the gate MyHandling (https://cy.myhandlingsoftware.com) for aircrafts heavier than 3 t, or whose whellbase is superior to 8 m.",
+    "Take-off RWY 35: left turn as soon as possible and overfly D 619, as far as possible at 1000 ft ASFC (1400 AMSL) minimum.",
+    "Instrument departures RWY 17 of ACFT whose reference field length is greater than or equal to 1200 m shall be performed from early beginning of RWY.",
+    "Preferred QFU 172° due to infrastructures. raining flights (SUM: - 1 HR): Training patterns prohibited between 2130-0600.",
+    "IFR training flights and ACFT in VFR flight with a weight over 4 t are prohibited: every day between 2100-0700;; on saturday after 1500;; on sunday and public HOL.",
+    "Avoid overflying the village of ‘'La Rivière de Corps'' (South of AD).",
+    "Avoid flight abeam the airfield if glider activity (Wincher Truck).",
+    "Ground Taxiing: Taxiing prohibited except on RWY and TWY.",
+    "Translation TWY H available for HEL only.",
+    "1) Airplanes: Taxiways to join stand E1 and apron F available only for aircraft with maximum wingspan 17 m.",
+    "Consignes particulières / Special instructions The use of EC taxiway is limited to aircraft which overall landing gear width is inferior to 18 m.",
+    "Turn pads: ERJ 145 ACFT, turning angle greater than 45 DEG.",
+    "2) Helicopters: to join E1:.",
+    "Via EC and main apron: Ground taxiing mandatory.",
+    "Maximum rotor diameter 17 m.",
+    "Via ES et H: translation mandatory.",
+    "Maximum rotor diameter 16.5 m and maximum weight 5 tons.",
+    "Aerobatics on AD ( NR 6140): East edge of paved RWY on a width of 500 m, 1650 ft ASFC / 4500 ft AMSL, 0900-1100, 1300-1500 (SUM: - 1 HR).",
+    "Activity limited for 15 minutes in each slot.",
+    "Activity announced by SEINE APP or TROYES Information.",
+    "AEM activity: (NR 8226): 500 ft ASFC/SFC.",
+    "SR-SS As per protocol.",
+    "Glider winch launching activity (NR 897) at AD, limited to 2000 ft ASFC, SR-SS, announced on TROYES Information or A/A and by rotating light on the ground."
   ]
 }

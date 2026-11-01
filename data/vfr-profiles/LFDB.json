@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFDB (AIP France, chart dated 2025-01-23), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFDB (AIP France, chart dated 2024-08-08): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFDB",
   "name": "Montauban",
   "source": {
     "publication": "AIP France AD 2 LFDB",
-    "chartDate": "2025-01-23",
-    "extraction": "automatic"
+    "chartDate": "2024-08-08",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 44.02667,
@@ -19,10 +20,13 @@
   "elevationFeet": 353,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Approach"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 120.605",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
-    "approach": 125.18,
     "airAir": 120.605
   },
   "runways": [
@@ -33,5 +37,33 @@
         314
       ]
     }
+  ],
+  "preferredQfu": 134,
+  "preferredQfuReason": "preferred QFU 134, due to environment",
+  "notes": [
+    "ATS: NIL. The chart header prints these units to call, which are not services of this aerodrome (its air-air frequency apart): .",
+    "AD reserved for radio-equipped ACFT.",
+    "AD located into urban area.",
+    "ACFT meeting submit to PPR PN 1 week from AD operator.",
+    "Engine startup prohibited when paradropping activity in progress.",
+    "Reduced TODA RWY 31 due to presence of obstacles within the departure funnel 31.",
+    "ACFT: possible wake turbulence in areas and tracks used by HEL.",
+    "Presence of numerous trees within the RWY 13 takingoff funnel / RWY 31 landing funnel, located on the relief near RWY axis, between RDL 110° and RDL 123° / 0.7NM THR 31.",
+    "Preferred QFU: 134° due to environment.",
+    "Low traffic patterns prohibited.",
+    "Touch and go prohibited QFU 314°.",
+    "LDG QFU 134°: maintain strictly the descent slope of 7.1% till D 820.",
+    "LDG QFU 314°: do not intercept the final approach axis below 900ft AMSL and maintain the axis till motorway A20.",
+    "TKOF QFU 134°: pilots must be focused on checking that the performances of their device allow to have a secure overflight of obstacles, especially trees.",
+    "Moreover, it is imperative to maintain the axis till 900ft AMSL, before turning and continuing the climb.",
+    "TKOF QFU 314°: compulsory line up at the end of the RWY, maintain the axis till the end of the RWY, then turn MAG 330° as soon as possible.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Helicopters: translation to CIV or MIL aprons.",
+    "Taxiing instruction: priority to HEL in translation to cross over TWY B and join MIL apron.",
+    "CIV HEL: translation to HEL CIV apron, preferably over grass strip NW of CIV apron.",
+    "MIL ACFT/Heavy HEL apron: only 3 beacons are usable.",
+    "Refer to 9th RSAM special instructions of use or contact MIL OPS.",
+    "Noise-sensitive AD.",
+    "PPR PN 24 HR OPS MIL: mandatory for non based ACFT going to 9eme RSAM."
   ]
 }

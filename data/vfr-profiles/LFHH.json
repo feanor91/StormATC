@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFHH (AIP France, chart dated 2025-12-25), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFHH (AIP France, chart dated 2025-12-25): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFHH",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFHH",
     "chartDate": "2025-12-25",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 45.46278,
@@ -19,9 +20,26 @@
   "elevationFeet": 720,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 123.5"
   },
   "frequencies": {
     "airAir": 123.5
-  }
+  },
+  "notes": [
+    "TODA RWY 19 reduced by 60 m due to road in the vicinity of RWY physical end.",
+    "Zone P18 in the vicinity (2 NM South-West) of the AD.",
+    "Proximity of a private AD at Côtes d'Arey, 1.7 NM/143° from AD.",
+    "Risk of confusion between paved TWY and grass RWY.",
+    "Airfield likely to be impracticable in case of rainfalls.",
+    "QFU 009° preferred due to environnement.",
+    "Only 2 successive traffic circuits allowed for non based ACFT.",
+    "Traffic circuits and training close to the ground are prohibited for rotating wings.",
+    "Taxi with caution towards AVT, reduced TWY width (4.5 m).",
+    "Powered movements prohibited in the ACB hangars area indicated by ground red markings.",
+    "Take off QFU 009°: As soon as possible, turn right to reach highway A7 before the toll station.",
+    "Do not turn before the toll station.",
+    "East departure, do not turn before the Rhône."
+  ]
 }

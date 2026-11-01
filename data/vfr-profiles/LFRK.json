@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFRK (AIP France, chart dated 2026-06-11), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFRK (AIP France, chart dated 2026-06-11): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFRK",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFRK",
     "chartDate": "2026-06-11",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 49.17333,
@@ -19,7 +20,10 @@
   "elevationFeet": 243,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "Horaires indicatifs (cf. NOTAM pour précisions) / Indicative SKED (cf. NOTAM for precision) : LUN-VEN / MON-FRI : 0500- 2100 , SAM / SAT : 0600-1900, DIM et JF / SUN and public HOL : 0600 -2100 Extension possible sous conditions / Extension available within conditions : - PN 72 HR (sous réserve acceptation / subject to approval). - Vols commerciaux seulement / Commercial flights only. - Jusqu'à 2359 maximum / Up to 2 (UTC HIV ; HOR ETE : - 1 HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "atis": 123.08,
@@ -42,5 +46,99 @@
         304
       ]
     }
+  ],
+  "preferredQfu": 304,
+  "preferredQfuReason": "preferred QFU 304, due to IFR procedure",
+  "reportingPoints": [
+    {
+      "name": "EK",
+      "spoken": {
+        "fr": "Écho Kilo",
+        "en": "Echo Kilo"
+      },
+      "latitude": 49.22389,
+      "longitude": -0.27556,
+      "location": "Cimenterie de Ranville / Ranville Cement Works"
+    },
+    {
+      "name": "EY",
+      "spoken": {
+        "fr": "Écho Yankee",
+        "en": "Echo Yankee"
+      },
+      "latitude": 49.14083,
+      "longitude": -0.25389,
+      "location": "Cagny sugar plant"
+    },
+    {
+      "name": "NK",
+      "spoken": {
+        "fr": "Novembre Kilo",
+        "en": "November Kilo"
+      },
+      "latitude": 49.21194,
+      "longitude": -0.40333,
+      "location": "St Contest telecommunication tower"
+    },
+    {
+      "name": "SC",
+      "spoken": {
+        "fr": "Sierra Charlie",
+        "en": "Sierra Charlie"
+      },
+      "latitude": 49.09917,
+      "longitude": -0.51222,
+      "location": "Water tower Evrecy"
+    },
+    {
+      "name": "SK",
+      "spoken": {
+        "fr": "Sierra Kilo",
+        "en": "Sierra Kilo"
+      },
+      "latitude": 48.99389,
+      "longitude": -0.49222,
+      "location": "Orne turn NW of Thury-Harcourt"
+    },
+    {
+      "name": "SW",
+      "spoken": {
+        "fr": "Sierra Whisky",
+        "en": "Sierra Whiskey"
+      },
+      "latitude": 49.07806,
+      "longitude": -0.64139,
+      "location": "Road bridge SE of Villiers Bocage"
+    },
+    {
+      "name": "W",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 49.19361,
+      "longitude": -0.86444,
+      "location": "Route Caen - EY reserved to ACFT on departure"
+    }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "AD likely to be covered by sea-haze in a few minutes.",
+    "Aerobatics: Outside ATS SKED: Risk of presence of model aircraft SFC-950 ft AMSL.",
+    "AEM NR 8976: see AIP ENR 5.5 (interference with VOR RWY 12 procedure).",
+    "AEM NR 9002: see AIP ENR 5.5 AEM NR 8376: see AIP ENR 5.5 From 1st APR to 31st OCT, training patterns are prohibited without prior ATC agreement.",
+    "Low height training possible on ATC clearance reserved for flight with instructor, for single-engined ACFT 300 ft MNM, twin-engined ACFT 500 ft MNM.",
+    "Preferred QFU 304 ° due to IFR procedure.",
+    "PPR (sending and requesting information contact operator): Arrivals and departures subject to PPR 24HR for all nonscheduled flights and requiring parking and/or possible intervention of the operator, except based ACFT, sanitary flights and \"touch and go\".",
+    "Time limit reduced to 2 hours for all ACFT welcomed in the parking of a platform user who has given their agreement and does not require any intervention from the operator.",
+    "Any ACFT that does not meet these criteria and does not have a PPR number will not be authorized by ATC.",
+    "Except VFR circuits, only one type of traffic (IFR or Circuits reserved for home-based ACFT.",
+    "VFR flights may be subject to hold out of CAEN CTR before entering.",
+    "Outside ATS SKED, PCL prohibited for traffic patterns.",
+    "STAP: Available data: wind, cloud base, VIS, RVR, T, DP, QNH, QFE.",
+    "Traffic surveillance equipment: AD equipped with radar display (see AD 1.0).",
+    "Aerobatics NR 6300: see AIP ENR 5.5 Péril animalier / Wildlife strike hazard: SR-30 - SS+30 during ATC SKED.",
+    "Implementation: for all commercial flights or every two hours minimum; on ATC triggering; on crew request (PN 15 minutes) before arrival / departure of an.",
+    "ACFT, contact operations FREQ."
   ]
 }

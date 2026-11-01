@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFKB (AIP France, chart dated 2025-04-17), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFKB (AIP France, chart dated 2026-01-22): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFKB",
   "name": "Bastia Poretta",
   "source": {
     "publication": "AIP France AD 2 LFKB",
-    "chartDate": "2025-04-17",
-    "extraction": "automatic"
+    "chartDate": "2026-01-22",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 42.55,
@@ -19,7 +20,9 @@
   "elevationFeet": 26,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "H24 - Aérodrome de BASTIA PORETTA 20290 Borgo (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": true
   },
   "frequencies": {
     "fis": 124.725,
@@ -34,5 +37,171 @@
         340
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "N",
+      "spoken": {
+        "fr": "Novembre",
+        "en": "November"
+      },
+      "latitude": 42.70278,
+      "longitude": 9.46333,
+      "location": "Abeam Bastia harbour"
+    },
+    {
+      "name": "NW",
+      "spoken": {
+        "fr": "Novembre Whisky",
+        "en": "November Whiskey"
+      },
+      "latitude": 42.67222,
+      "longitude": 9.38278,
+      "location": "Teghime pass"
+    },
+    {
+      "name": "NA",
+      "spoken": {
+        "fr": "Novembre Alpha",
+        "en": "November Alpha"
+      },
+      "latitude": 42.61944,
+      "longitude": 9.43556,
+      "location": "Casatorra racecourse"
+    },
+    {
+      "name": "W",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 42.6,
+      "longitude": 9.36611,
+      "location": "Lancone pass"
+    },
+    {
+      "name": "SA",
+      "spoken": {
+        "fr": "Sierra Alpha",
+        "en": "Sierra Alpha"
+      },
+      "latitude": 42.52222,
+      "longitude": 9.44389,
+      "location": "South abeam Lucciana's power plant"
+    },
+    {
+      "name": "SW",
+      "spoken": {
+        "fr": "Sierra Whisky",
+        "en": "Sierra Whiskey"
+      },
+      "latitude": 42.50833,
+      "longitude": 9.37167,
+      "location": "Barchetta plant"
+    },
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 42.33889,
+      "longitude": 9.54111,
+      "location": "Campoloro harbour"
+    },
+    {
+      "name": "N1",
+      "spoken": {
+        "fr": "Novembre",
+        "en": "November"
+      },
+      "latitude": 42.86111,
+      "longitude": 9.48083,
+      "location": "Losse tower"
+    },
+    {
+      "name": "HV",
+      "spoken": {
+        "fr": "Hôtel Victor",
+        "en": "Hotel Victor"
+      },
+      "latitude": 42.53806,
+      "longitude": 9.48972,
+      "location": "Abeam San Parteo chapel (south turn)"
+    },
+    {
+      "name": "HX",
+      "spoken": {
+        "fr": "Hôtel X-ray",
+        "en": "Hotel X-ray"
+      },
+      "latitude": 42.57944,
+      "longitude": 9.46694,
+      "location": "Hangar covered with photovoltaic panels"
+    },
+    {
+      "name": "HZ",
+      "spoken": {
+        "fr": "Hôtel Zoulou",
+        "en": "Hotel Zulu"
+      },
+      "latitude": 42.50167,
+      "longitude": 9.50528,
+      "location": "200 m west of the photovoltaic field"
+    },
+    {
+      "name": "HO",
+      "spoken": {
+        "fr": "Hôtel Oscar",
+        "en": "Hotel Oscar"
+      },
+      "latitude": 42.52306,
+      "longitude": 9.53389,
+      "location": "Golo river mouth (delta)"
+    },
+    {
+      "name": "HW",
+      "spoken": {
+        "fr": "Hôtel Whisky",
+        "en": "Hotel Whiskey"
+      },
+      "latitude": 42.57194,
+      "longitude": 9.44083,
+      "location": "Intersection of the national road and the 2 x 2 lane road"
+    },
+    {
+      "name": "HB",
+      "spoken": {
+        "fr": "Hôtel Bravo",
+        "en": "Hotel Bravo"
+      },
+      "latitude": 42.56278,
+      "longitude": 9.51444,
+      "location": "South of Biguglia pond"
+    }
+  ],
+  "notes": [
+    "Simultaneous movement on two adjacent parking cones prohibited.",
+    "ULM activity: AD authorized for class 2, 3, 4 and 6 ULMs equipped with radio and mode C transponder: may be subject to integrate into aerodrome trafic.",
+    "Home based ULM: activity defined by agreement with ATC.",
+    "TWY M (21,50 m wide) limited to C code ACFT.",
+    "TWY C (12,20 m wide) limited to B code ACFT and prohibited at night.",
+    "AD likely to be covered by sea haze in a few minutes.",
+    "The relief proximity may force to turn toward the sea and climb before reporting point NW.",
+    "Paraglider activity in CTR's vicinity on an NW-W axis and close to S point, strong watch recommended.",
+    "Red kite birds presence from spring to early july, average weight 1.1 kg.",
+    "Above 1000 ft ASFC or 1500 ft AMSL, request to BASTIA information the clearance to entry within the TMA 1.",
+    "Preferred ALT 1000 ft ASFC MAX at N1 and 1500 ft MAX at S.",
+    "AD circuit on west of AD, near relief, is possible with clearance, at the same altitude than published circuit seaward (1000 ft).",
+    "Use of PAPI 34 is mandatory day and night.",
+    "Low height circuit: on ATC clearance for instruction flight, seaward circuit, East of AD only.",
+    "Except for \"Sécurité Civile\" ACFT performing their mission (Trackers, Canadairs) or special ATC clearance, turn around on RWY prohibited for ACFT over 5700 kg.",
+    "ENR 3.3.4 - LFMM MEDITERRANEE ITI NIGHT VFR.",
+    "Traffic surveillance equipment: AD equipped with secondary surveillance radar (see AD 1.0) and ADS-B.",
+    "Aerobatics NR 7001: above AD, 3000 ft / 5000 ft AMSL.",
+    "Parachuting NR 405: H24-FL 195.",
+    "Activity known by BASTIA APP.",
+    "Radiocommunication failure: report 1500 ft over SA, avoid flying over parachuting NR 405, fly overhead airfield mid-RWY to join East side of the airport maintaining 1500 ft to join the circuit to QFU in use, complying with the air traffic and / or the wind sock.",
+    "Divers / Miscellaneous: PPR mandatory 48HR for all general aviation and business flights, by E-mail: ppr@satab.aero."
   ]
 }

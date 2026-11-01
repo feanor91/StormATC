@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFIR (AIP France, chart dated 2024-11-28), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFIR (AIP France, chart dated 2022-11-03): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFIR",
   "name": "Revel - Montgey",
   "source": {
     "publication": "AIP France AD 2 LFIR",
-    "chartDate": "2024-11-28",
-    "extraction": "automatic"
+    "chartDate": "2022-11-03",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.48028,
@@ -19,7 +20,11 @@
   "elevationFeet": 643,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 119.58",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 119.58
@@ -32,5 +37,25 @@
         305
       ]
     }
+  ],
+  "preferredQfu": 305,
+  "preferredQfuReason": "preferred QFU 305",
+  "notes": [
+    "AD reserved for home-based ACFT and ACFT based on neighbouring AD (1).",
+    "AD can be used by HEL.",
+    "AD reserved for radio-equipped ACFT.",
+    "If South-East wind over 30 kt, strong turbulences in the vicinity of the AD.",
+    "Major bird risk.",
+    "Preferred QFU 305°.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Presence of yellow day-lighting for half-turn at THR RWY 30.",
+    "Traffic patterns for training and touch and go prohibited for non-home-based ACFT.",
+    "The South hangar is intended for private use.",
+    "Only authorized ACFT can take the mandatory towing route between the hangar and the continuous white line marking the start of the TWY.",
+    "Warning the distance between the towing line and: the refuelling station: 11.60 m the new hangar: 7.20 m Aerobatics (NR 6710) 500 m wide on each side of the RWY axis, 2500 m long from ARP to NW.",
+    "1300/3300 ft AAL on daytime; compulsory radio contact A/A.",
+    "Usable only with the AD operator agreement.",
+    "AEM NR 9038, activity only South of the installations only.",
+    "660 AAL MAX (1) AD voisins/ Neighbouring AD: ALBI - CAHORS - CARCASSONNE - CASSAGNES - CASTELNAUDARY -"
   ]
 }

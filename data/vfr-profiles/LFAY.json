@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFAY (AIP France, chart dated 2026-09-03), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFAY (AIP France, chart dated 2026-09-03): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFAY",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFAY",
     "chartDate": "2026-09-03",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 49.87306,
@@ -19,7 +20,11 @@
   "elevationFeet": 208,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 119.89",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 119.89
@@ -39,5 +44,24 @@
         295
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Simultaneous TKOF and LDG on unpaved RWY and paved RWY prohibited.",
+    "Any TKOF and/or LDG on the paved RWY must be stopped if a glider lies on the half of the grass RWY adjoining the paved RWY.",
+    "Possible IFR operations (GNSS).",
+    "AD prohibited for ACFT > 5.7 t.",
+    "Turbulence and downwash in final RWY 12 by South/South-West wind due to hangars and woods.",
+    "Wavy RWY profile: bad visibility from holding point THR 30 and vice versa, due to wavy RWY longitudinal profile.",
+    "Group of trees R 120/1.23 NM LFAY ARP.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Acces to paved RWY via paved TWY A: width 10 m.",
+    "A by-pass TWY on the paved TWY A allows two ACFT with a maximum wingspan of 12,25 m to pass one another when taxiing to the parking.",
+    "Follow published circuits whenever possible.",
+    "Platform sensitive to noise.",
+    "Aerobatics NR 6070: see AIP ENR 5.5",
+    "Gliders activity Activities known and announced on A/A and LILLE INFO.",
+    "PCL: 3 clicks: turns on lighting; 5 clicks: turns on lighting + flashing lights; 7 clicks: switches off.",
+    "Automatically switches off after 15 minutes."
   ]
 }

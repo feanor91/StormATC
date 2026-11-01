@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFXA (AIP France, chart dated 2025-08-07), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFXA (AIP France, chart dated 2026-04-16): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFXA",
   "name": "Ambérieu",
   "source": {
     "publication": "AIP France AD 2 LFXA",
-    "chartDate": "2025-08-07",
-    "extraction": "automatic"
+    "chartDate": "2026-04-16",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 45.97972,
@@ -19,7 +20,9 @@
   "elevationFeet": 812,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "Activation TWR annoncée par NOTAM / TWR activation announced by NOTAM (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": false
   },
   "frequencies": {
     "approach": 120.23,
@@ -41,5 +44,34 @@
         191
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "PA",
+      "spoken": {
+        "fr": "Papa Alpha",
+        "en": "Papa Alpha"
+      },
+      "latitude": 46.06944,
+      "longitude": 5.32528,
+      "location": "Pont d'Ain, interchange of the A40 and A42 motorways"
+    },
+    {
+      "name": "AM",
+      "spoken": {
+        "fr": "Alpha Mike",
+        "en": "Alpha Mike"
+      },
+      "latitude": 45.96389,
+      "longitude": 5.37528,
+      "location": "East crossing Ambérieu en Bugey"
+    }
+  ],
+  "notes": [
+    "AD prohibited to ACFT without radio Unusable outside of RWY and TWY Paved RWY 01L/19R authorized to jet ACFT of ministry of the Armed Forces or others ministries on defense operator agreement with PN MNM 72 HR ULM class 1 to 6 activity reserved for home based ULM Paved movement area closed on THU 0400-1200 cause sweeping.",
+    "Possible exemption with advance notice for based ACFT on defense operator agreement RWY 01L/19R LDG is not recommended for aggressive ACFT A400M or C130 type under pain of quicky and permanently degrading the surface Presence of rough field QFU 011°/191°, east of the paved RWY.",
+    "Reserved for defense ACFT Activation reported by NOTAM.",
+    "TKOF climb surface RWY 01R impacted by fence: Height = 2.5 m; Far end RWY = 16 m.",
+    "R 258: Restricted area ground firing, SFC-3500 ft AMSL Paved RWY 01L/19R and TWY A et B: Non stabilized shoulders unusable Risk of snow: check availibility of AD by phone Non home based ACFT will be limited to 2 consecutive RWY patterns PJE (NR 422): SR-SS: Activity known by Lyon APP Other HOR and above FL 085, activity announced by NOTAM Radio controlled model flying as per protocol AEM (NR 9585): SFC - 700 ft ASFC - 1500 AMSL SR-SS"
   ]
 }

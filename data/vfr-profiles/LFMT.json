@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFMT (AIP France, chart dated 2024-11-28), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFMT (AIP France, chart dated 2026-01-22): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFMT",
   "name": "Montpellier-Méditerranée",
   "source": {
     "publication": "AIP France AD 2 LFMT",
-    "chartDate": "2024-11-28",
-    "extraction": "automatic"
+    "chartDate": "2026-01-22",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.58333,
@@ -19,7 +20,9 @@
   "elevationFeet": 17,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "TowerAndGround"
+    "kind": "TowerAndGround",
+    "atsHours": "H24 - Division Circulation Aérienne - Aéroport de Montpellier Méditerranée. CS 10012 34137 MAUGUIO Cédex (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": true
   },
   "frequencies": {
     "fis": 134.375,
@@ -42,5 +45,201 @@
         303
       ]
     }
+  ],
+  "preferredQfu": 303,
+  "preferredQfuReason": "preferred QFU 303, due to IFR procedure",
+  "reportingPoints": [
+    {
+      "name": "AM",
+      "spoken": {
+        "fr": "Alpha Mike",
+        "en": "Alpha Mike"
+      },
+      "latitude": 43.56361,
+      "longitude": 4.19278,
+      "location": "Ramparts of the medieval city of Aigues Mortes"
+    },
+    {
+      "name": "ES",
+      "spoken": {
+        "fr": "Écho Sierra",
+        "en": "Echo Sierra"
+      },
+      "latitude": 43.48278,
+      "longitude": 4.14194,
+      "location": "South of the light house of Espiguette"
+    },
+    {
+      "name": "ER",
+      "spoken": {
+        "fr": "Écho Roméo",
+        "en": "Echo Romeo"
+      },
+      "latitude": 43.57861,
+      "longitude": 4.10083,
+      "location": "North road interchange D62 / D61 North of La Grande Motte"
+    },
+    {
+      "name": "SA",
+      "spoken": {
+        "fr": "Sierra Alpha",
+        "en": "Sierra Alpha"
+      },
+      "latitude": 43.46,
+      "longitude": 4.2325,
+      "location": "Mouth of the Recul canal"
+    },
+    {
+      "name": "N",
+      "spoken": {
+        "fr": "Novembre",
+        "en": "November"
+      },
+      "latitude": 43.79139,
+      "longitude": 4.09028,
+      "location": "North of the city of Sommières"
+    },
+    {
+      "name": "NC",
+      "spoken": {
+        "fr": "Novembre Charlie",
+        "en": "November Charlie"
+      },
+      "latitude": 43.62528,
+      "longitude": 4.00389,
+      "location": "Water tower of Mauguio"
+    },
+    {
+      "name": "NE",
+      "spoken": {
+        "fr": "Novembre Écho",
+        "en": "November Echo"
+      },
+      "latitude": 43.68,
+      "longitude": 3.98083,
+      "location": "Water tower of Castries"
+    },
+    {
+      "name": "WF",
+      "spoken": {
+        "fr": "Whisky Foxtrot",
+        "en": "Whiskey Foxtrot"
+      },
+      "latitude": 43.63472,
+      "longitude": 3.75806,
+      "location": "St Georges d'Orques interchange (karting track)"
+    },
+    {
+      "name": "PF",
+      "spoken": {
+        "fr": "Papa Foxtrot",
+        "en": "Papa Foxtrot"
+      },
+      "latitude": 43.72917,
+      "longitude": 3.86972,
+      "location": "Interchange D17 Prades Le Lez – St Mathieu de Tréviers"
+    },
+    {
+      "name": "NF",
+      "spoken": {
+        "fr": "Novembre Foxtrot",
+        "en": "November Foxtrot"
+      },
+      "latitude": 43.71472,
+      "longitude": 4.02,
+      "location": "Beaulieu quarry"
+    },
+    {
+      "name": "SW",
+      "spoken": {
+        "fr": "Sierra Whisky",
+        "en": "Sierra Whiskey"
+      },
+      "latitude": 43.5125,
+      "longitude": 3.88361,
+      "location": "Cathedral of Maguelone"
+    },
+    {
+      "name": "WT",
+      "spoken": {
+        "fr": "Whisky Tango",
+        "en": "Whiskey Tango"
+      },
+      "latitude": 43.54361,
+      "longitude": 3.79222,
+      "location": "\"Montpellier Fabrègues SUD\" motorway service area"
+    },
+    {
+      "name": "W",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 43.56222,
+      "longitude": 3.83056,
+      "location": "Motorway toll station of St Jean de Vedas"
+    },
+    {
+      "name": "SF",
+      "spoken": {
+        "fr": "Sierra Foxtrot",
+        "en": "Sierra Foxtrot"
+      },
+      "latitude": 43.46611,
+      "longitude": 3.81528,
+      "location": "D114 bridge between Vic pond and Ingril pond"
+    }
+  ],
+  "notes": [
+    "AD prohibited for ULM (except based) and gliders except in case of emergency.",
+    "Use of RWY 12R/30L prohibited for ACFT complying with at least one of the following conditions: Weight over 5.7 t,; Turbojet,; Wingspan over 24 m,; Main gear overall width over 6 m,; Reference TKOF distance over 800 m.",
+    "TWY L1, L2, K, Q, R and S prohibited for ACFT whose weight is over 5.7 t.",
+    "A special care shall be paid to the misleading visual effects of the coastline which is not perpendicular to the RWY axes.",
+    "AD likely to be obscured by sea fog in a few minutes.",
+    "AD located in an IBA (Important Bird Area).",
+    "A lot of birds on AD and vicinity: danger of bats and flocks of birds (day and night).",
+    "Risk of turbulence on RWY 12R / 30L with a strong SW wind.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Beware taxiing at the intersection of TWY L1, L2 and S1: arrival/departure crossing area from parkings ENAC, ESMA and ACB.",
+    "Special precaution is required during crossing on the marking and signage.",
+    "Maximum wingspan for crossing at the intersection: 13,45 m (Cessna 425).",
+    "AVGAS 100LL automatique dispenser to be used only by ACFT whose wingspan is less than 12 m.",
+    "Preferred QFU: 303° due to IFR procedure.",
+    "Arrival Procedures First contact must be established at least 3 minutes before overflying entry points, awaiting clearance.",
+    "Except clearance or special instruction, overfly entry points in compliance with altitudes indicated below: Maximum altitudes Frequency to contact Departures procedures Respect the direction of turn of aerodrome circuit.",
+    "Possible exemption with control clearance.",
+    "Transit Procedures The published transits on VAC chart are likely to be enforced by ATC, in particular the SW-ES transit at 1000 ft when VIS > 4500 m.",
+    "Users are reminded of their responsibility for carrying life jackets for any maritime overflight.",
+    "An intense activity of general aviation and training flights is observed around the airport.",
+    "RWY configuration \"facing north\" - RWY 30R & 30L - shall be preferred for environmental reasons.",
+    "Further details are provided below about trajectories and training flights.",
+    "Training flights Special measures apply to based aircraft.",
+    "Prior approval must be granted by the aerodrome operator and the air navigation service for training of any aircraft which is not based at Montpellier Méditerranée Airport.",
+    "A training guide document is available on the airport's website.",
+    "Demand shall be sent at least 48h before (business days) to the following email and must include aircraft type, registration, date, duration and nature of the training.",
+    "Please specify any parking stand, handling or refueling request. montpellier-subdivision-ctl@aviation-civile.gouv.fr Circuits around the airfield (traffic patterns, IFR APP, engine failure and go around simulations…) are: prohibited for aircrafts of acoustic groups 1,2 and 3;; allowed for aircraft of acoustic groups 4 and 5 from 1st.",
+    "October to 15 june included, from MON to SAT except public HOL, from 0700 to 2000 (SUM - 1 HR), allowed all year long for piston engine ACFT from 0700 to 2000 (SUM - 1 HR).",
+    "Additional slot restrictions apply on secondary RWY 12R/30L, from June 21st to September 21st, on Saturdays, Sundays and holidays for training flights: avoid traffic patterns between 12h00 and 15h00 local time,; avoid traffic patterns between 15h00 and 17h00 local time except for low noise emissions ACFT (CALIPSO.",
+    "Secondary RWY pattern 12R / 30L On RWY 12R/30L, circuit patterns are flown in the South-West of the RWY and at a minimum altitude of 1000 ft.",
+    "Circuit patterns on secondary runway are forbidden to any ACFT which is not Montpellier-based when RWY 12R is in use.",
+    "When RWY 30L is active, departing ACFT shall follow heading 283° after take off, unless otherwise instructed by ATC.",
+    "When RWY 12R is active, departing ACFT going westbound should avoid city of Perols, in order to fly vertically over the Rhône canal at Sète.",
+    "Caution during last turn for final approach, in order not to interfere with main RWY 12L / 30R axis.",
+    "For all ACFT, landing lights are recommended on final.",
+    "Main RWY pattern 12L / 30R On RWY 12L/30R, circuit patterns are flown in the NorthEast of the RWY.",
+    "In traffic pattern RWY 12L, ACFT must maintain a minimum altitude of 1000 ft in downwind leg.",
+    "Aircraft shall preferably avoid overflying cities of Mauguio and La Grande Motte, unless otherwise instructed by ATC.",
+    "RWY 30R, when taking off for a training pattern, it is mandatory for the initial turn to be performed at 1,4 NM FJR to join right hand downing leg.",
+    "The circuit must not go beyond A9 highway except otherwise instructed by ATC.",
+    "VIS 1500 m.",
+    "Night VFR routes: See AIP ENR 3.3 § 5.3.6 MONTPELLIER and ENR 3.3 LFMM SOUTH ITI NIGHT VFR chart.",
+    "Traffic surveillance equipment: AD equipped with secondary surveillance radar (see AD 1.0).",
+    "RADIO FAILURE special instructions Upon arrival: Squawk A7600; Outside the CTR: do not enter; Inside the CTR:; before receiving clearance to enter the runway circuit: exit the CTR by the most appropriate VFR route without crossing the runway axis.; after receiving clearance to enter the runway circuit: enter the circuit as authorized, then land, and clear at the end of the runway.",
+    "Wait then follow the vehicle \"follow me\".",
+    "On departure: Before entering the runway: do not take off, wait and follow the \"follow me\" vehicle.; Before takeoff after penetration: clear the runway at the first exit, wait and then follow the vehicle \"follow me\".; After takeoff: squawk A7600.",
+    "Respect last clearance until leaving controlled airspace.",
+    "In transit: Before receiving clearance to enter the controlled airspace: do not enter it.; In controlled airspace: leave the controlled airspace.",
+    "In CTR, do not cross the runway axis.",
+    "Péril animalier / Wildlife strike hazard: Continu pendant la journée aéronautique / Continuous during the aeronautical day."
   ]
 }

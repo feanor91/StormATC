@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFNE (AIP France, chart dated 2024-09-05), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFNE (AIP France, chart dated 2024-09-05): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFNE",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFNE",
     "chartDate": "2024-09-05",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.6575,
@@ -19,7 +20,11 @@
   "elevationFeet": 247,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 119.58",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "fis": 132.3,
@@ -40,5 +45,60 @@
         333
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "EG",
+      "spoken": {
+        "fr": "Écho Golf",
+        "en": "Echo Golf"
+      },
+      "latitude": 43.71972,
+      "longitude": 5.02444,
+      "location": "Eyguières"
+    }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Auto-information mandatory, except for paramotor UltraLight under the responsibility of the concerned club.",
+    "Heavy aircraft (MTOW > 5.7t) prohibited on the aerodrome without prior authorization of CAA.",
+    "Authorized heavy ACFT should use unpaved strips in priority.",
+    "Usable declared distances: TORA, TODA and LDA RWY 33L are reduced to 1050 m due to obstacles.",
+    "TORA, TODA and LDA RWY 09 are reduced to 930 m due to road gauge and obstacles.",
+    "No gliding activity recommended above 1000 m (3300 ft) AMSL, due to heavy IFR activity.",
+    "The attention of pilots is drawn to the proximity of fighters planes from Salon Air Base and to the IFR activity of Salon and Marseille Provence.",
+    "The airfield is located on an avian migration axis.",
+    "Users should be particularly vigilant, especially in the fourth quarter when migratory birds may be resting on the ground.",
+    "The airfield has two grazing areas west of runway 15R/33L and on either side of RWY 09/27.",
+    "Beware of exceptional intrusions by sheep outside these areas.",
+    "Non home-based ACFT limited to 3 AD patterns.",
+    "For AD patterns without limitations (nearby aerodromes), contact AD operator (see AD 2 LFNE TXT 03).",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Simultaneous LDG or TKOF prohibited.",
+    "Exceptionally, gliders, to reach runways or hangars at the beginning of the flight session or at the end of the flight day, can use circuits other than TWY.",
+    "In this case, the movements must be supervised by an instructor equipped with a radio and give priority to the aircraft in flight on landing or take-off.",
+    "Gliders must wait outside the strip, in the designated areas.",
+    "Only gliders landing or connected to the tow plane (awaiting takeoff) can be on the strip.",
+    "LDG and TKOF interrupted if couple tug-glider stuck on RWY.",
+    "Two mini strips installed on the western part of the 15R/33L are exclusively reserved for the acceleration of aircraft-glider hitch for take-off.",
+    "Consignes particulières / Special instructions An 800 x 15 m paved strip for aircraft is located on the eastern half of the runway 15R/33L.",
+    "ACFT/gliders circuit: in case of simultaneous presence of ACFT and gliders in aerodrome circuit, ACFT must use an outer circuit.",
+    "TWY C: TKOF prohibited.",
+    "Take off and landing planes, gliders and Ultra Light prohibited out of RWYs.",
+    "A 350 x 10m paved strip for ULTRA LIGHT is located on the EASTERN half of the RWY 15L /33R.",
+    "ULTRA LIGHT can also use the main RWY15R /33L and 09 /27.",
+    "Plane base 33: do not cross A 54 motorway (R77B military activity, SFC - 2000 ft ASFC).",
+    "Ultra Light take off 10 and 28: turn North as soon as possible (local residents in 10 and AEM in 28).",
+    "Short turning final 27 Plane and 28 Ultra Light (Salon military area).",
+    "Intermediate holding points C1, C2 and G1 on TWY C and G, and A1 and A2 on TWY A: mandatory radio contact on the A/A frequency to cross the runway axis 15L/33R ULM and 09/27.",
+    "Avoid ENGINE CHECK on the main park south and prefer waiting points before holding points to enter the runways.",
+    "Reporting point: EG (reporting point de Salon de Provence LFMY) is 2250 AMSL/3250 AMSL.",
+    "Activity reserved according to conditions of protocol with SNA-SSE.",
+    "Activity known on PROVENCE Info.",
+    "Announce beginning and end of aerobatics to PROVENCE Info.",
+    "Users information on A/A.",
+    "AEM (NR 9925) 500 ASFC.",
+    "SR-SS, bypassing is mandatory.",
+    "When performing low height pattern or idle engine exercise on RWY 15, remain North of wooded area located NW of AEM area."
   ]
 }

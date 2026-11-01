@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFSM (AIP France, chart dated 2025-09-04), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFSM (AIP France, chart dated 2024-05-16): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFSM",
   "name": "Montbéliard - Courcelles",
   "source": {
     "publication": "AIP France AD 2 LFSM",
-    "chartDate": "2025-09-04",
-    "extraction": "automatic"
+    "chartDate": "2024-05-16",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 47.48667,
@@ -19,10 +20,40 @@
   "elevationFeet": 1041,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "AFIS : LUN-VEN / MON-FRI : 0730-1100, 1300-1700. En dehors de ces HOR, ainsi que SAM, DIM et JF : PPR la veille ou le dernier jour ouvrable avant 1600. Out of these SKED and SAT, SUN and HOL : PPR before 1600 on the day before or on the last working day (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "approach": 133.51,
     "afis": 132.03
-  }
+  },
+  "preferredQfu": 257,
+  "preferredQfuReason": "preferred QFU 257, due to IFR procedure",
+  "notes": [
+    "Possible IFR operations.",
+    "AD reserved for radio-equipped ACFT.",
+    "Simultaneous use of RWY prohibited.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Preferred QFU: 257° due to IFR procedure.",
+    "Due to obstacles, curved approach by South at the QFU 077°.",
+    "Very noise sensitive AD, imperatively avoid overfly neighbouring inhabited areas.",
+    "After TKOF RWY 26, turn left to overfly the area between the Doubs and the Canal du Rhône au Rhin.",
+    "After TKOF RWY 08, turn right because of the tree, ALT 1234 ft, 078° / 1 NM ARP.",
+    "TWY A and TWY B are limited to ACFT with a main gear overall width smaller than 5 meters.",
+    "At night, only East funnel is usable at TKOF and at landing.",
+    "Night use is prohibited when the PAPI is unavailable.",
+    "Night training flight is reserved for pilots with agreement from AD operator.",
+    "PCL for lighting and PAPI: 3 clicks on microphone for low intensity lighting.; 5 clicks on microphone for high intensity lighting.; 7 clicks on microphone in less than 5 seconds to switch off the lighting.;.",
+    "Automatic extinguishing 13 min 40 s.",
+    "PJE on AD (NR 248): SUM: 0600-SS, WIN: 0700-SS, FL 145.",
+    "PPR from BALE INFO above 6500 ft AMSL.",
+    "Aerobatics on AD (NR 6470): 0730-1800 (SUM: -1HR), daytime only; RWY 08/26 centerline on 1700 m; 1650 ft ASFC/5500 ft AMSL; usable only for pilots authorized by AD operator.",
+    "AEM (NR 8056): 500 ft ASFC.",
+    "SUM: 0600-1800, WIN: 0700-SS.",
+    "Hot air balloon flight near the AD: activity announced on A/A FREQ.",
+    "Informations diverses / Miscellaneous A proximité/ In the vicinity.",
+    "Divers / Miscellaneous: GRF: Service d'évaluation et de report de l'état de surface de piste / Global Reporting Format: HOR ATS / ATS SKED"
+  ]
 }

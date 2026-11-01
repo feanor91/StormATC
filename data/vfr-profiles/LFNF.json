@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFNF (AIP France, chart dated 2024-02-22), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFNF (AIP France, chart dated 2024-02-22): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFNF",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFNF",
     "chartDate": "2024-02-22",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.73639,
@@ -18,7 +19,10 @@
   },
   "elevationFeet": 903,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 118.155",
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 118.155
@@ -45,5 +49,40 @@
         339
       ]
     }
+  ],
+  "notes": [
+    "AD code 1A (wingspan ACFT<15m except moto-gliders).",
+    "AD reserved for radio-equipped ACFT (1) Available declared distances: TODA RWY 02, 20, 10, 28, 34 reduced due to a path nearby ( 2 ) TODA 28 reduced to 888m from TWY E for ACFT paved strip ( 3 ) Width of TWYs' paved strips: C: 3.8m – E: 6.5m – H, R: 4m.",
+    "TWY T, cross RWY 28/10 between HS1 and HS2: 4.6m Mixed runways 28/10 and 16/34 marking by side markers only (no truncated cone markers).",
+    "Heavy terrain on unpaved surfaces after prolonged rains or thaw.",
+    "Risk of severe down draughts on final approach runway 16, runway 28 and runway 34.",
+    "Preferential QFU 280° in winds of less than 2m/s.",
+    "RWY 10 shall only be used when wind conditions do not allow other QFUs use: « Touch and go » prohibited.",
+    "Gliding activities During intense towing activities the runway in use shall be the one operated for glider take-offs.",
+    "The gliders' starter or tow aircraft can inform aircraft on departure or on arrival about the runway in use and the activities in progress and the ones expected.",
+    "RWY 30 only reserved for glider landings QFU 280°.",
+    "Towing aircraft can land on another RWY than the one in use.",
+    "Users' attention is drawn to TRAPEZE reporting point which is a descent point for towing aircraft.",
+    "Training Training patterns below 1600 ft prohibited for non homebased ACFT and ULM.",
+    "Non home-based powered ACFT can not do more than two consecutive training patterns.",
+    "Ground work by helicopters authorised with written authorisation from the Operator - PPR minimum 24 HR.",
+    "See TXT 03.",
+    "Approach/landing To adjust with the glider circling, on arrival on the aerodrome, the reconnaissance circling of powered ACFT is performed at an altitude of 2500 ft until crosswind leg of targeted RWY.",
+    "Except prior agreement of pilots in command, an ACFT cannot land nor take-off nor cross if RWY is not vacated.",
+    "Paved strip 28 \"plane circuit\": clear \"left hand\" by HS1 or by TWY S.",
+    "Taxiing Taxiing prohibited except on RWY and TWY except RWY clearing to contiguous TWYs.",
+    "Paved strips included within RWY 28 and 16.",
+    "Taking-off / Initial climb Simultaneous parallel take-offs and/or landings on one same single runway or on converging axis are prohibited.",
+    "Except for emergency reasons, powered ACFT must avoid the overfly of Vinon sur Verdon (especially on RWY circuits 10/28).",
+    "Take-offs RWY 10: must be from beginning of runway.",
+    "Unless otherwise announced, on initial climb, the axis shall be cleared on the side of traffic circuit.",
+    "Aerobatics (NR 6951) 2000 ft AMSL to 5900 ft AMSL, from SR to SS.",
+    "During aerobatics, the pilot in command must watch on FREQ A/A.",
+    "AEM (NR 9541): HJ - 500 ft ASFC.",
+    "Paramotor area",
+    "Area located at the west of RWY 30.",
+    "Area restricted to home-based paramotor equipped with A/A 118.155 MHz Frequency.",
+    "Use SKED: 01 APR - 30 SEP: SR-0900, 01 OCT - 31 MAR: SR-1100 and 1400-SS (SUM - 1 HR).",
+    "Axis of TKOF/LDG, parallel to RWY 02/20, is to maintain due to multiple activities - height limited to 500 ft AAL."
   ]
 }

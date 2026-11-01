@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFHU (AIP France, chart dated 2024-08-08), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFHU (AIP France, chart dated 2021-10-07): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFHU",
   "name": "Alpe d'Huez",
   "source": {
     "publication": "AIP France AD 2 LFHU",
-    "chartDate": "2024-08-08",
-    "extraction": "automatic"
+    "chartDate": "2021-10-07",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 45.0875,
@@ -19,6 +20,82 @@
   "elevationFeet": 6103,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "None"
-  }
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "nightVfrApproved": false,
+    "radioMandatory": true
+  },
+  "reportingPoints": [
+    {
+      "name": "E",
+      "spoken": {
+        "fr": "Écho",
+        "en": "Echo"
+      },
+      "latitude": 45.08333,
+      "longitude": 6.13333,
+      "location": "Col de Sarenne / Sarenne's pass"
+    },
+    {
+      "name": "SE",
+      "spoken": {
+        "fr": "Sierra Écho",
+        "en": "Sierra Echo"
+      },
+      "latitude": 45.04167,
+      "longitude": 6.14722,
+      "location": "Chambon's lake"
+    },
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 45.075,
+      "longitude": 6.10417,
+      "location": "Cluy's pass"
+    },
+    {
+      "name": "W",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 45.07778,
+      "longitude": 6.01944,
+      "location": "La Paute"
+    }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Special characteristic AD reserved for airplane pilots holding: Either a valid mountain qualification (wheels or skis); Either a valid mountain qualification restricted to the altiport (ground not covered with snow, or ground covered with packed snow).",
+    "For the pilots of microlight ACFT, it is strongly advised to have followed the mountain program organized by the FFPLUM.",
+    "For helicopters, phone to (association of management of the Altiport - 06 88 48 70 49) for the integration and If runway is not groomed, landing and takeoff under the entire responsibility of the pilot in command.",
+    "Simultaneous movements between an airplane taxiing on the upper part of the aerodrome and a helicopter manœuvring to or from its stand are prohibited.",
+    "No take-off before 0900 (except special dispension given by AD operator).",
+    "Non home-based ACFT: flight activity is limited at two landings a day; flight with an instructor on board is limited at four landings by plane a day, engine muffler mandatory.; no flight with an instructor on board between 1230 and 1400 local time.",
+    "Home-based ACFT: no local flight between 1230 and 1400, local time, except special dispension given by the AD operator.",
+    "Only one take-off funnel.",
+    "Prohibited entry by the Poutran's pass, to the North, to avoid overflying the ski resort.",
+    "Landing: QFU 058 compulsory.",
+    "Low pass prohibited.",
+    "Passing over the RWY at 500 ft ASFC (6700 ft AMSL), in NNE/SSW direction.",
+    "Pilots must check RWY conditions (possible snowing-up).",
+    "Join down wind leg with an angle of 45° and maintain this ALT up to the turning base leg point.",
+    "Takeoff: QFU 238 compulsory.",
+    "After TKOF, turn left (see ch art) crossing the flying circuit at an ALT lower than that of the downwind leg.",
+    "Note: during the procedures of arrivals or departures, pilots must avoid the overflight of the ski resort and the concentration of people and housing estates.",
+    "Altimeter setting: QNH If unknown QNH, enter compulsorily via « Signal de l'Homme ».",
+    "Refer to the top of ski lifts at 7139 ft when passing abeam.",
+    "Taxiing prohibited except on RWY, TWY and PRKG.",
+    "No parking in direction of TKOF.",
+    "Preferential crash area: 6 km in the 294° / AD.",
+    "Maximum permissible weight: 5.7 tons.",
+    "White colored marking aids:.",
+    "Threshold 06: 3 marks (15 x 1 m) on each side of the centerline.",
+    "RWY centerline: lines (15 x 0,2 m) 15 meters apart.",
+    "Approved touchdown zone: marks (30 x 2,50 to 7,50 m) on each side of RWY centerline located 75 meters after the threshold.",
+    "End of the RWY and slope interruption with the"
+  ]
 }

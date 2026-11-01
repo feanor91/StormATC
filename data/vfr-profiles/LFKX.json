@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFKX (AIP France, chart dated 2026-02-19), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFKX (AIP France, chart dated 2026-02-19): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFKX",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFKX",
     "chartDate": "2026-02-19",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 45.4075,
@@ -19,7 +20,10 @@
   "elevationFeet": 5639,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 118.755",
+    "nightVfrApproved": false
   },
   "frequencies": {
     "airAir": 118.755
@@ -32,5 +36,35 @@
         332
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for ACFT equipped with radio Altiport.",
+    "Altiport reserved for pilots holding: for the plane pilots, either a mountain rating (wheels and/or skis), or a valid authorization to access the altiport.; for ULM pilots, it is strongly recommended to have attended the mountain training organised by the.",
+    "FFPLUM (French Microlight Federation).",
+    "Commercial air transport by plane is prohibited, with the exception of introductory flights.",
+    "Presence of numerous paragliders near airfield trafic.",
+    "Reduced size RWY markings.",
+    "In winter conditions, unplowed RWY.",
+    "Find out about the state of the RWY before the flight and before landing.",
+    "No TKOF in the morning before 0900 local time (except special authorization from the AD operator).",
+    "Mandatory engine muffler for training flights",
+    "No training flights between 1230 and 1400 local time.",
+    "Non home-based ACFT: activity limited at two LDG / half day.",
+    "Helicopters: limit operations with rotor turning during boarding and disembarking.",
+    "Arrival: Recommended arrival via Col de la Lune at 7000 ft.",
+    "Via NE: arrival at 6500 ft, taking care not to interfere with the published flight paths for Courchevel.",
+    "Report when in sight of the altiport facilities and report overhead AD.",
+    "In case of unknown QNH: incoming via the \"Col de la Lune\".",
+    "Use as reference the top of Crêt Voland whose altitude is 6867 ft when flying abeam this terrain.",
+    "LDG: QFU 152° compulsory.",
+    "Overflying overhead THR 15 at 6500 ft AMSL.",
+    "Integration downwind leg at 6000 ft AMSL.",
+    "Taxiing: ensure that the approach and short final are clear before crossing the RWY toward the west turn pad and before line up.",
+    "Perform engine tests on the turn pad west of the RWY.",
+    "TKOF: QFU 332° compulsory.",
+    "Departure: after TKF, turn right to heading 360° and announce on the radio \"RWY center line vacated\".",
+    "Contact Courchevel in case of interference with their published flight paths.",
+    "Use by helicopters The plane airfield traffic pattern must be followed with flying overhead the AD at 6500 ft AMSL.",
+    "Be careful not to interfere with published flight paths of Courchevel."
   ]
 }

@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFHL (AIP France, chart dated 2023-03-23), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFHL (AIP France, chart dated 2023-07-13): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFHL",
   "name": "Langogne - Lespéron",
   "source": {
     "publication": "AIP France AD 2 LFHL",
-    "chartDate": "2023-03-23",
-    "extraction": "automatic"
+    "chartDate": "2023-07-13",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 44.70556,
@@ -18,7 +19,11 @@
   },
   "elevationFeet": 3339,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 123.5",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 123.5
@@ -31,5 +36,20 @@
         216
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Asphalt strip 100 x 15 m starting from THR 22, in poor condition.",
+    "RWY 04 and 22 use is limited to: Ultralight ACFT; Helicopter; Gliders; Plane whose pilots can prove:; to be home-based ACFT pilots; or to be a holder of the mountain license; or to have recognized beforehand the platform with an instructor and have used the aerodrome as captain within 12 last months.",
+    "Air navigation hazard Trees located at 10 m from THR 22, 89 ft ASFC.",
+    "RWY 04 is preferred RWY for landing.",
+    "RWY 22 is preferred RWY for take-off.",
+    "Touch and go and low height training patterns are prohibited.",
+    "TKOF RWY 04 forbidden for ACFT.",
+    "LDG RWY 22: presence of trees 89 ft ASFC imposes a plan of approach > 8.5 %.",
+    "Check performances and LDG distance.",
+    "Parachute activity on AD (NR 444), FL 160.",
+    "Activated HJ by NOTAM on SAT, SUN and public HOL, when LF-R 55C is not in use.",
+    "Activity known by MARSEILLE ACC (FL > 145) and by CLERMONT INFO."
   ]
 }

@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFKD (AIP France, chart dated 2025-09-04), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFKD (AIP France, chart dated 2025-09-04): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFKD",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFKD",
     "chartDate": "2025-09-04",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 45.25389,
@@ -19,7 +20,10 @@
   "elevationFeet": 4255,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 123.5",
+    "nightVfrApproved": false
   },
   "frequencies": {
     "airAir": 123.5
@@ -32,5 +36,16 @@
         193
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for pilots complying with one of the following conditions: based or based on neighbouring AD (see 1) and authorized by an instructor (or holding an instructor's licence),; holding a licence for mountain flights.",
+    "AD available for HEL and ULM.",
+    "For ULM pilots, it is advised to have followed the mountain course organized by the FFPLUM.",
+    "Particular aerological conditions, especially in case of wind from East / South-East sector (Lombarde) causing strong downdrafts.The use of the airfield is strongly not recommended with these wind conditions.",
+    "Entering in the circuit after overhead AD at 5700 ft AMSL (1400 ft AAL).",
+    "In light winds, prefer RWY 19 for TKOF and RWY 01 for LDG given the environment and the RWY slope.",
+    "TKOF RWY 19: as soon as possible, turn 30° to the right to go along the relief and avoid flying over hamlet of Chatel and Bramans and Verney villages.",
+    "TKOF RWY 01: as soon as possible, turn 25° to the right to avoid flying of Sollières village.",
+    "AEM (NR 9875): see AIP ENR 5.5 (1) AD voisins / Neighbouring AD:"
   ]
 }

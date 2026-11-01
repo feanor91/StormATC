@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFQE (AIP France, chart dated 2025-10-02), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFQE (AIP France, chart dated 2024-09-05): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFQE",
   "name": "Étain-Rouvres",
   "source": {
     "publication": "AIP France AD 2 LFQE",
-    "chartDate": "2025-10-02",
-    "extraction": "automatic"
+    "chartDate": "2024-09-05",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 49.22917,
@@ -19,7 +20,9 @@
   "elevationFeet": 760,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "TowerAndGround"
+    "kind": "TowerAndGround",
+    "atsHours": "Activable H24 Activité réelle connue de / Real activity known by : ETAIN APP ou RAI 120.125 HNO : O/R le dernier jour ouvrable avant 1100 / O/R the last working day before 1100 SAM, DIM et JF : O/R le dernier jour ouvrable avant 1100 / SAT, SUN and HOL : O/R the last working day before 1100 chef CLA  03 29 87 83 52 - 863 552 8352 TWR Principal :  03 29 87 82 51 Secondaire :  03 29 87 82 74 Secours :  03 54 65 80  (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": false
   },
   "frequencies": {
     "approach": 120.125,
@@ -34,5 +37,71 @@
         191
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "E",
+      "spoken": {
+        "fr": "Écho",
+        "en": "Echo"
+      },
+      "latitude": 49.21,
+      "longitude": 5.73917,
+      "location": "Bechamps"
+    },
+    {
+      "name": "E1",
+      "spoken": {
+        "fr": "Écho",
+        "en": "Echo"
+      },
+      "latitude": 49.16139,
+      "longitude": 5.82389,
+      "location": "Bridge over Orne River"
+    },
+    {
+      "name": "N",
+      "spoken": {
+        "fr": "Novembre",
+        "en": "November"
+      },
+      "latitude": 49.33167,
+      "longitude": 5.66361,
+      "location": "Spincourt"
+    },
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 49.06111,
+      "longitude": 5.70972,
+      "location": "Pound of"
+    },
+    {
+      "name": "W",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 49.23389,
+      "longitude": 5.60583,
+      "location": "Foameix Ornel"
+    },
+    {
+      "name": "W1",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 49.19889,
+      "longitude": 5.53861,
+      "location": "Abaucourt Hautecourt"
+    }
+  ],
+  "notes": [
+    "AD reference code (ICAO): 4C AD with restricted use and prohibited to ACFT without radio For ACFT proceeding in GAT rules: AD strictly reserved for ACFT based in a radius of 40 NM centered on Etain and whose registration is listed in the protocols between the 3rd combat HEL regiment and their ACB.",
+    "The access to the airfield is only possible by day during ATS working hours and under VMC Civilian ACFT: can only use the RWY and the TWY Unusable outside TWY and RWY Overflight of AD prohibited H24 below 1000 ft ASFC Overflight of Etain city prohibited below 3300 ft ASFC FPL compulsory for ARR: out of ATS HOR for home based ACFT and H24 for other ACFT PPR mandatory for non based ACFT 03 29 87 82 34 (OFF/OPS) AEM (NR 8206): SFC - 500 ft ASFC FRI: SUM: 1100 - SS, WIN: 1200 - SS SAT, SUN and HOL: SR - SS"
   ]
 }

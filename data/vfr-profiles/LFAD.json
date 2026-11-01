@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFAD (AIP France, chart dated 2025-12-25), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFAD (AIP France, chart dated 2025-12-25): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFAD",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFAD",
     "chartDate": "2025-12-25",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 49.43361,
@@ -19,7 +20,10 @@
   "elevationFeet": 316,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 122.305",
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 122.305
@@ -32,5 +36,19 @@
         226
       ]
     }
+  ],
+  "preferredQfu": 226,
+  "preferredQfuReason": "preferred QFU 226, due to departmental road",
+  "notes": [
+    "AD reserved for radio equipped ACFT.",
+    "Usable declared distances: TODA RWY 05 reduced due to presence of the secondary road D935.",
+    "AD prohibited for Ultra Light ACFT class 1 and 5 as well as for Ultra Light gliders.",
+    "Possible presence of farming vehicles inside clearings North of RWY 05/23.",
+    "The portal width enclosing the paved parking is equal to 30 m.",
+    "Preferred QFU 226° due to departmental road.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Avoid overflying town of Compiègne and surrounding built up areas.",
+    "TWY S deflected near DTHR 23 because of wing bar lights.",
+    "Gliders aerobatics activity (NR 6053): See ENR 5.5"
   ]
 }

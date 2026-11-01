@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFCB (AIP France, chart dated 2022-02-24), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFCB (AIP France, chart dated 2023-11-30): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFCB",
   "name": "Bagnères-de-Luchon",
   "source": {
     "publication": "AIP France AD 2 LFCB",
-    "chartDate": "2022-02-24",
-    "extraction": "automatic"
+    "chartDate": "2023-11-30",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 42.80056,
@@ -18,7 +19,11 @@
   },
   "elevationFeet": 2028,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 123.5",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 123.5
@@ -30,5 +35,31 @@
         7
       ]
     }
+  ],
+  "notes": [
+    "AD located in a mountainous region.",
+    "AD reserved for radio-equipped ACFT.",
+    "When the ground is snow covered, AD reserved for home based ACFT or for ACFT equipped with skis.",
+    "Air navigation hazard Significant wind conditions that can change in a matter of minutes and compromise arrival or departure.",
+    "Slope breeze and shadow effects to be taken into account.",
+    "Pilot's attention is drawn on heavy activity gliders and hang Paraglider.",
+    "A lot of obstacles for both QFU and more especially at the South.",
+    "Preliminary reconnaissance of the site accompanied by an instructor familiar with the site or with mountain flying is highly recommended.",
+    "Highly not recommended by South wind.",
+    "No takeoff with wind oriented of 270°.",
+    "Reserved for ACFT able to follow safely the traffic circuit.",
+    "The use of QFU 187° is reserved for landing and, only in case of emergency, for motorized ACFT because of obstacles making the go around hard to execute.",
+    "Ultra light glider sector Southwest from AD.",
+    "St-Aventin valley next to ultra light glider sector, do not descend below 4000 ft AMSL.",
+    "VFR flights: contact compulsory.",
+    "Entering point by North: CIERP.",
+    "ARR and DEP on the right side of the valley.",
+    "Enter the valley only if the width of the valley not covered by the ceiling permits a turning back in safety.",
+    "Special attention when taxing on TWY due to over lapping of the side zones of releases and simultaneous movements and RWY not vacated.",
+    "Due to presence of vegetal obstacles in the East side funnel, the following recommendations must be applied: Go around in RWY 01 axis to 400 Feet; No low altitude circuit.",
+    "Gliders winching (NR 1002) on AD 4000 ft AMSL.",
+    "SR-SS, non marked cable.",
+    "Activity announced by yellow rotating light.",
+    "Users information on A/A FREQ."
   ]
 }

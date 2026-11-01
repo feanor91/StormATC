@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFEQ (AIP France, chart dated 2025-04-17), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFEQ (AIP France, chart dated 2025-04-17): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFEQ",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFEQ",
     "chartDate": "2025-04-17",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 47.48139,
@@ -19,7 +20,11 @@
   "elevationFeet": 38,
   "magneticVariationDegrees": -1.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "AFIS : Du 01/05 au 30/06 : VEN, SAM, DIM et JF : 0900 -1130, 1300-1700. From 01/05 to 30/06 : FRI, SAT, SUN and public HOL : 0900 -1130, 1300-1700. Du 01/07 au 31/08 : 0900 -1130, 1300-1700. From 01/07 to 31/08 : 0900 -1130, 1300-1700. Du 01/09 au 30/09 : VEN, SAM, DIM : 0900 -1130, 1300-1700. From 01/09 to 30/09 : FRI, SAT, SUN : 0900 -1130, 1300-1700. Du 01/10 au 30/04 : NIL. From 01/10 to 30/04 : NIL (UTC HIV ; HOR ETE : - 1 HR)",
+    "outsideAtsHours": "air-air frequency 119.605",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "afis": 119.605
@@ -31,5 +36,22 @@
         112
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "AD prohibited for gliders and paramotors.",
+    "From 01/06 to 15/09, (except for State ACFT on a public mission), AD usable: on ARR: 0600-1900; on DEP: 0600-1030 and 1200-1800.",
+    "From 16/09 to 31/05: AD available SR-30 - SS+30.",
+    "Flights only inside Schengen boundaries.",
+    "AD likely to be covered by sea haze in few minutes.",
+    "QFU 292°: severe turbulence on short final in case of strong wind.",
+    "Area LF-R 13 and LF-R 14 from the coastline: caution with their activities.",
+    "Bird presence all year through.",
+    "No RWY inspection outside AFIS SKED Radio contact is mandatory according to the AFIS volume 3 NM / 2000 ft.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "TWY A width: 8.55 m.",
+    "TWY A1 and A2 only usable to vacate RWY.",
+    "TWY A reserved for ACFT whose main gear overall width is lower or equal to 5.10 m.",
+    "Unpaved PRKG available from May to September."
   ]
 }

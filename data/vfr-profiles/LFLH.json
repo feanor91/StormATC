@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFLH (AIP France, chart dated 2026-08-06), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFLH (AIP France, chart dated 2026-08-06): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFLH",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFLH",
     "chartDate": "2026-08-06",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 46.82833,
@@ -19,7 +20,10 @@
   "elevationFeet": 623,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "HOR AFIS : MER-DIM : 0800-1700. Extension possible : AFIS peut être rendu sans préavis LUN-MAR : 0800-1700. Info connue sur CHALON INFO. En dehors de ces horaires, ouverture PPR 1 HR. AFIS SKED : WED-SUN : 0800-1700. Possible extension : AFIS can be provided without notice MON-TUE : 0800-1700. Information known with CHALON INFO. Outside these SKED, opening PPR 1 HR (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "afis": 118.605
@@ -39,5 +43,27 @@
         348
       ]
     }
+  ],
+  "preferredQfu": 348,
+  "preferredQfuReason": "preferred QFU 348, due to IFR procedure and noise pollution",
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Stony shoulders of paved RWY 17/35 unusable.",
+    "Unpaved RWY 17/35 and TWY B reserved for home based ACFT and HEL.",
+    "Possible use of non-based ACFT with PPR AFIS.",
+    "Unusable after heavy rainfalls.",
+    "TWY width: A: 10.5 m; B: 12 m.",
+    "Possible IFR operation.",
+    "QFU 168°: unpaved RWY, first 200 metres in bad condition.",
+    "Aerobatics NR 6464: see AIP ENR 5.5 In accordance with the agreement with the AD operator.",
+    "Coming from or going to paved RWY, compulsory stop at A1 and A2 holding points and watch out for any conflicting traffic taking off or landing before crossing grass strip axis.",
+    "Preferred QFU 348° due to IFR procedure and noise pollution.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "HEL: during parachuting activity, check that all parachutes are on the ground before starting up.",
+    "TKOF RWY 35: the secondary road RD 336 crosses the edge of the take-off funnel.",
+    "PCL on PPR AFIS.",
+    "PCL: SS+30 to SR-30.",
+    "PCL switches on with 3 alternate buttom clicks and activates the RWY, the PAPI RWY 35 and switches off with 7 alternate buttom clicks or switches off automatically after 15 minutes.",
+    "Parachuting activity NR 202: see AIP ENR 5.5 Aerobatics NR 6495: see AIP ENR 5.5"
   ]
 }

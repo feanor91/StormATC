@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFCQ (AIP France, chart dated 2024-11-28), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFCQ (AIP France, chart dated 2024-04-18): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFCQ",
   "name": "Graulhet - Montdragon",
   "source": {
     "publication": "AIP France AD 2 LFCQ",
-    "chartDate": "2024-11-28",
-    "extraction": "automatic"
+    "chartDate": "2024-04-18",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.76861,
@@ -19,7 +20,10 @@
   "elevationFeet": 583,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 119.655",
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 119.655
@@ -39,5 +43,31 @@
         275
       ]
     }
+  ],
+  "preferredQfu": 94,
+  "preferredQfuReason": "preferred QFU 94, due to surroundings",
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Use of aerodrome restricted to airplanes weighing less than 5.7t except under operator's prior agreement.",
+    "Simultaneous use of both RWY prohibited.",
+    "Unpaved RWY: glider marker.",
+    "Unpaved RWY and North taxiway reserved for gliders, home-based users and available for foreign users aware of local instructions published on the website https://www.aeroclub-graulhet.com/informationsgeneraleslfcq/ Mandatory registration, valid for a 12month period, to be renewed if those instructions are modified.",
+    "Unpaved RWY not available after heavy rain: glider activity is transferred to paved RWY.",
+    "Two glider's descending areas of radius 1 km centred on QDR 330° and QDR 060° at 2 km from airfield for RWY 09 and RWY 27 respectively.",
+    "Use of microlight strip (300 x 20 m) prohibited if presence of an ACFT at holding point C.",
+    "Turbulences on QFU 094° when strong South-East wind.",
+    "Presence of a 38 ft high day-marked tower located 78 m RDL 197° from THR 09. drilling the lateral surface by 2 m.",
+    "Low height circuit reserved for home-based ACFT.",
+    "Preferred QFU 094° due to surroundings.",
+    "For reasons of noise pollution foreign users are recommended to limitate ACFT/microlight training circuits or helicopters ground work.",
+    "DEP 27: mandatory lining up at the physical end of the RWY.",
+    "After TKOF, climb straight ahead.",
+    "After crossing the river \"Le Dadou\", turn right MAG 300° to stay above the industrial area and avoid flying over the houses on either side.",
+    "During winching periods, do not carry out site reconnaissance at a height < 2000 ft ASFC.",
+    "Maintain radio silence during winching periods.",
+    "South TWY: 4 metres wide,; Fence located 10 m away from RWY axis,; Taxiing prohibited to airplanes weighing more than 1.5 t,; Taxiing reserved for home-based users.",
+    "Available for foreign users aware of local instructions published on the website https://www.aeroclub-graulhet.com/ informations-generaleslfcq/ Mandatory registration, valid for a 12-month period, to be renewed if those instructions are modified.",
+    "North TWY: 7 metres wide; Fence located 14 m away from RWY axis.",
+    "AEM (NR 9071), 330 ft ASFC: 1300-SS, SUM: - 1HR Gliders winching activity (NR 1017): SFC-2500 ft AMSL."
   ]
 }

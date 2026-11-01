@@ -1,17 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the SIA eAIP page AD 2 LFRJ (AIP France, valid from 2026-10-01), not read by hand.",
-    "This is a military air base (CAM regimes). Only what the page prints as text is recorded: position, elevation,",
-    "magnetic variation, runways and the VHF frequencies. Circuit rules and reporting points are NOT extracted.",
-    "MSFS exposes only VHF radios: the UHF frequencies of the base are not usable and are not listed.",
-    "Flight simulation only: never use for real navigation."
+    "Read from the SIA chart set AD 2 LFRJ (AIP France, chart dated 2024-11-28): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFRJ",
   "name": "Base d'aéronautique navale de Landivisiau",
   "source": {
     "publication": "AIP France AD 2 LFRJ",
-    "chartDate": "2026-10-01",
-    "extraction": "automatic"
+    "chartDate": "2024-11-28",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 48.53028,
@@ -89,6 +89,80 @@
     }
   ],
   "notes": [
-    "The base also publishes 10 UHF frequencies that MSFS cannot tune."
+    "Southbound traffic may be prohibited depending on IFR or OAT traffic in progress or expected. plafond / ceiling: 450 m plafond / ceiling: 243 m (800 ft) VIS: 800 m ou 30 SEC de vol / or 30 SEC of fly plafond / ceiling: 183 m (600 ft) Authorization to enter must be requested to LANDIVISIAU APP 5 min before entering points NEL, NWL, EL or SWL.",
+    "If failure occurs before having received the entering CLR in CTR: entrance prohibited.",
+    "If failure occurs in CTR follow the last CTL instructions."
+  ],
+  "reportingPoints": [
+    {
+      "name": "EL",
+      "spoken": {
+        "fr": "Écho Lima",
+        "en": "Echo Lima"
+      },
+      "latitude": 48.52222,
+      "longitude": -3.94444,
+      "location": "Saint Thegonnec"
+    },
+    {
+      "name": "NEL",
+      "spoken": {
+        "fr": "Novembre Écho Lima",
+        "en": "November Echo Lima"
+      },
+      "latitude": 48.68056,
+      "longitude": -3.99722,
+      "location": "Saint Pol de Léon"
+    },
+    {
+      "name": "NL",
+      "spoken": {
+        "fr": "Novembre Lima",
+        "en": "November Lima"
+      },
+      "latitude": 48.6,
+      "longitude": -4.1375,
+      "location": "Saint Vougay"
+    },
+    {
+      "name": "NWL",
+      "spoken": {
+        "fr": "Novembre Whisky Lima",
+        "en": "November Whiskey Lima"
+      },
+      "latitude": 48.61028,
+      "longitude": -4.37889,
+      "location": "Kerdroc, crossroad RD 25 / RD 38"
+    },
+    {
+      "name": "SEL",
+      "spoken": {
+        "fr": "Sierra Écho Lima",
+        "en": "Sierra Echo Lima"
+      },
+      "latitude": 48.49444,
+      "longitude": -4.04167,
+      "location": "Lampaul Guimiliau"
+    },
+    {
+      "name": "SL",
+      "spoken": {
+        "fr": "Sierra Lima",
+        "en": "Sierra Lima"
+      },
+      "latitude": 48.48611,
+      "longitude": -4.15,
+      "location": "South Landivisiau AD"
+    },
+    {
+      "name": "SWL",
+      "spoken": {
+        "fr": "Sierra Whisky Lima",
+        "en": "Sierra Whiskey Lima"
+      },
+      "latitude": 48.41667,
+      "longitude": -4.2,
+      "location": "South antennas of Pencran"
+    }
   ]
 }

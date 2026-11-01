@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBD (AIP France, chart dated 2026-09-03), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFBD (AIP France, chart dated 2026-09-03): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFBD",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFBD",
     "chartDate": "2026-09-03",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 44.82861,
@@ -18,7 +19,9 @@
   },
   "elevationFeet": 166,
   "service": {
-    "kind": "TowerAndGround"
+    "kind": "TowerAndGround",
+    "atsHours": "H24 - Aéroport de BORDEAUX Mérignac - BP 70116 - 33704 Mérignac Cedex (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": true
   },
   "frequencies": {
     "fis": 120.575,
@@ -42,5 +45,132 @@
         286
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "NW",
+      "spoken": {
+        "fr": "Novembre Whisky",
+        "en": "November Whiskey"
+      },
+      "latitude": 44.97556,
+      "longitude": -0.88083,
+      "location": "Ste Hélène"
+    },
+    {
+      "name": "NA",
+      "spoken": {
+        "fr": "Novembre Alpha",
+        "en": "November Alpha"
+      },
+      "latitude": 44.9075,
+      "longitude": -0.74722,
+      "location": "Crossroads D1215 / D6, St Médard"
+    },
+    {
+      "name": "EA",
+      "spoken": {
+        "fr": "Écho Alpha",
+        "en": "Echo Alpha"
+      },
+      "latitude": 44.89361,
+      "longitude": -0.66889,
+      "location": "Crossroads D1215 / D1, Le Taillan"
+    },
+    {
+      "name": "N",
+      "spoken": {
+        "fr": "Novembre",
+        "en": "November"
+      },
+      "latitude": 45.02889,
+      "longitude": -0.79694,
+      "location": "Castelnau-de-Médoc"
+    },
+    {
+      "name": "NE",
+      "spoken": {
+        "fr": "Novembre Écho",
+        "en": "November Echo"
+      },
+      "latitude": 45.00833,
+      "longitude": -0.6125,
+      "location": "Macau"
+    },
+    {
+      "name": "SW",
+      "spoken": {
+        "fr": "Sierra Whisky",
+        "en": "Sierra Whiskey"
+      },
+      "latitude": 44.70417,
+      "longitude": -0.77,
+      "location": "Antenna croix d'Hins"
+    },
+    {
+      "name": "SA",
+      "spoken": {
+        "fr": "Sierra Alpha",
+        "en": "Sierra Alpha"
+      },
+      "latitude": 44.775,
+      "longitude": -0.69167,
+      "location": "factory Gazinet"
+    },
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 44.71667,
+      "longitude": -0.69028,
+      "location": "Crossroads D1010 / D214, La Birade"
+    },
+    {
+      "name": "SE",
+      "spoken": {
+        "fr": "Sierra Écho",
+        "en": "Sierra Echo"
+      },
+      "latitude": 44.74583,
+      "longitude": -0.50417,
+      "location": "Île de la Lande"
+    },
+    {
+      "name": "OA",
+      "spoken": {
+        "fr": "Oscar Alpha",
+        "en": "Oscar Alpha"
+      },
+      "latitude": 44.76972,
+      "longitude": -0.77111,
+      "location": "Waste reception center"
+    }
+  ],
+  "notes": [
+    "Compulsory Airport handling service: see TXT 03 Engine tests should have been carried out before taxiing request.",
+    "Areas K/J: Aircraft departing under VFR flight rules also contact ATC to request startup clearance, which may include a taxi hold, before leaving their parking position or the refueling station.",
+    "From 1st APR to 31st OCT, due to ACFT stands congestion, obtaining a stand is subject to a request before the departure, to the AD operator SA-ADBM via the ground handling company.",
+    "This procedure does not apply to based ACFT, State ACFT and HEMS.",
+    "Gliders and ULM prohibited within the CTR.",
+    "Training flights are under restriction (see AIP: AD 2 LFBD.21.4.1.3).",
+    "Air navigation hazard Confusion risk between thresholds 05 and 11 due to their proximity.",
+    "Paradropping activity NR 312: see AIP ENR 5.5 AEM activity NR 9011, 9026, 9380 and 9497: see AIP ENR 5.5 Free flying winch launch activity NR 905: see AIP ENR 5.5 special VFR conditions.",
+    "VMC environmental protection respect.",
+    "These routes are two-way, usable for departures, arrivals and transits.",
+    "Except particular clearance: an overfly altitude of 1500 ft AMSL will be respected on all routes (except the exit by SW, cf. § ‘'Departing procedures'').",
+    "Transit within AQUITAINE FIS Flight information service given on frequency AQUITAINE Information to VFR flights inside class E and G relevant from AQUITAINE FIS can be interrupted without any forecast.",
+    "In that case each class D airspace transit must be cleared on AQUITAINE Approach frequencies sector BW on 129.880 or BE on 119.275.",
+    "* All tracks are two-way Arrival procedures Aircraft bound to LFBD and operating in uncontrolled airspace must call MERIGNAC TWR, 3 minutes before overflying of entry points.",
+    "Vacating via inactive RWY: is considered as effective as soon as the ACFT crosses wildlife control way.",
+    "It is subject to ATC clearance.",
+    "It is prohibited by night or during daytime when RVR is smaller than 800 m.",
+    "Departing procedures For flights to SW: due to the TMA 1.1 presence whose lower limit is 1000 ft AMSL, the default exit point is point S.",
+    "Exit via SW is possible on request and ATC clearance only and at the altitude given by ATC.",
+    "In addition, pilots must be aware of le Barp LF P 5 area proximity.",
+    "It is necessary to adapt the navigation accordingly.",
+    "Niveau / Level 8.",
+    "Voir / see AIP AD 2 LFBD.6 Péril animalier / Wildlife strike hazard: de / from SR-30 à / to SS+30."
   ]
 }

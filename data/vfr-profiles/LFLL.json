@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFLL (AIP France, chart dated 2026-03-19), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFLL (AIP France, chart dated 2025-03-20): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFLL",
   "name": "Lyon-Saint-Exupéry",
   "source": {
     "publication": "AIP France AD 2 LFLL",
-    "chartDate": "2026-03-19",
-    "extraction": "automatic"
+    "chartDate": "2025-03-20",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 45.72556,
@@ -19,7 +20,10 @@
   "elevationFeet": 821,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "TowerAndGround"
+    "kind": "TowerAndGround",
+    "atsHours": "H24. SNA-CE 630, rue d'Allemagne 69125 Lyon Saint Saint-Exupéry Aéroport (UTC HIV ; HOR ETE : - 1 HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "fis": 135.2,
@@ -42,5 +46,144 @@
         353
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "N",
+      "spoken": {
+        "fr": "Novembre",
+        "en": "November"
+      },
+      "latitude": 45.89194,
+      "longitude": 4.80111,
+      "location": "Marshalling yard of SAINT GERMAIN AU MONT D'OR"
+    },
+    {
+      "name": "NA",
+      "spoken": {
+        "fr": "Novembre Alpha",
+        "en": "November Alpha"
+      },
+      "latitude": 45.85694,
+      "longitude": 4.91333,
+      "location": "Junction of A46 / TGV / D1083"
+    },
+    {
+      "name": "NW",
+      "spoken": {
+        "fr": "Novembre Whisky",
+        "en": "November Whiskey"
+      },
+      "latitude": 45.845,
+      "longitude": 4.83333,
+      "location": "COUZON dam"
+    },
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 45.58972,
+      "longitude": 4.79667,
+      "location": "Road junction of CHASSE SUR RHONE"
+    },
+    {
+      "name": "SA",
+      "spoken": {
+        "fr": "Sierra Alpha",
+        "en": "Sierra Alpha"
+      },
+      "latitude": 45.64972,
+      "longitude": 4.84056,
+      "location": "FEYZIN marshalling yard"
+    },
+    {
+      "name": "MS",
+      "spoken": {
+        "fr": "Mike Sierra",
+        "en": "Mike Sierra"
+      },
+      "latitude": 45.72333,
+      "longitude": 5.02333,
+      "location": "Roundabout South East of GENAS"
+    },
+    {
+      "name": "TW",
+      "spoken": {
+        "fr": "Tango Whisky",
+        "en": "Tango Whiskey"
+      },
+      "latitude": 45.71694,
+      "longitude": 5.07056,
+      "location": "Roundabout of EUROPE"
+    },
+    {
+      "name": "TE",
+      "spoken": {
+        "fr": "Tango Écho",
+        "en": "Tango Echo"
+      },
+      "latitude": 45.725,
+      "longitude": 5.115,
+      "location": "East abeam of SAUGNIEU"
+    },
+    {
+      "name": "MC",
+      "spoken": {
+        "fr": "Mike Charlie",
+        "en": "Mike Charlie"
+      },
+      "latitude": 45.72917,
+      "longitude": 5.15389,
+      "location": "CHAVAGNEUX stadium"
+    },
+    {
+      "name": "EA",
+      "spoken": {
+        "fr": "Écho Alpha",
+        "en": "Echo Alpha"
+      },
+      "latitude": 45.72306,
+      "longitude": 5.22972,
+      "location": "Roundabout west of Cremieu"
+    }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT and HEL.",
+    "Training flights on IFR/VFR or night VFR are restricted (AD 2 LFLL).",
+    "Mandatory handling for all private and commercial aircraft.",
+    "Possible confusion between LYON SAINT-EXUPERY and LYON BRON AD, 6 NM separated.",
+    "Avoid overflying the industrial area located along the RHONE, from the southern part of LYON city to the VERNAISON bridge.",
+    "Turn-around is forbidden on the RWYs for aircraft whose wingspan is over 36 m.",
+    "After vacating RWY 17R/35L, ACFT shall wait for SAINT-EX GND instructions prior to entering TWY T.",
+    "PAPI 35L: for ACFT with eye/wheel height greater than 12 metres, TCH is less than 6 metres.",
+    "Disregard the PAPI signal.",
+    "VFR ROUTES WITHIN CLASS C and D AIRSPACES All ACFT are recommended to transit with lights on.",
+    "Special conditions to use some routes may be published by NOTAM.",
+    "The altitude of 2000 ft is likely to be imposed on all VFR routes published on VACs.",
+    "West East direction: To transit in Saint Exupéry CTR pilots must obtain an explicit clearance from SAINT EX TWR.",
+    "Failing this, a holding pattern over MS shall be performed which is a clearance limit point.",
+    "If contact cannot be established with SAINT EX TWR, pilot contacts again BRON TWR for instructions.",
+    "Pilots must obtain an explicit clearance from SAINT EX TWR to cross RWY axis.",
+    "Failing this, a holding pattern shall be performed West of TW.",
+    "East West direction: Pilots must obtain an explicit clearance from SAINT EX TWR to cross RWY axis.",
+    "Failing this, a holding pattern shall be performed East of TE.",
+    "When holding, VFR flights or special VFR flights must ensure their own separation from possible other holding VFR ACFT.",
+    "On departure and before making any movement, ACFT must compulsorily contact SAINT EXUPERY Delivery frequency.",
+    "The TWR will organize taxiing sequence to join the manoeuvring area.",
+    "On arrival, ACFT must contact the frequency given by the TWR.",
+    "The TWR will instruct pilots and give them any additional information to join their PRKG stands.",
+    "The TWR can only provide information on ACFT which is known to them.",
+    "Departure: climb overhead AD at route segment minimum altitude.",
+    "Arrival: used segment altitude will be maintained until being in sight and within 5 NM AD, then join traffic pattern.",
+    "Traffic surveillance equipment: AD equipped with a secondary surveillance radar (see AD 1.0).",
+    "Special radiocommunication instruction Radiocommunication failure: Transit flights If the failure occurs before the clearance for entering within class C or D airspace, do not enter this airspace.",
+    "If the failure occurs after the clairance for entering within class C or D airspace, leave TMA airspace to come back in class G airspace as soon as possible.",
+    "Do not cross ST EXUPERY extended RWY centerline.",
+    "At arrival If the failure occurs before the clearance for entering the CTR, do not enter the CTR and come back in class G airspace as soon as possible.",
+    "If the failure occurs after the clearance for entering the CTR, leave the CTR using the best routing without crossing ST EXUPERY extended RWY centerline.",
+    "Do not enter CTR of LYON BRON in the west.",
+    "At departure Maintain your altitude below 2500 ft and leave the CTR without entering CTR of LYON BRON in the west."
   ]
 }

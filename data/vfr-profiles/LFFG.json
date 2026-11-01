@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFFG (AIP France, chart dated 2023-03-23), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFFG (AIP France, chart dated 2023-03-23): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFFG",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFFG",
     "chartDate": "2023-03-23",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 48.7575,
@@ -18,7 +19,10 @@
   },
   "elevationFeet": 536,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 123.355",
+    "nightVfrApproved": false
   },
   "frequencies": {
     "airAir": 123.355
@@ -31,5 +35,19 @@
         223
       ]
     }
+  ],
+  "notes": [
+    "Any AD activities with prior permission from AD operator within conditions defined by \"DSAC-N\".",
+    "Contact AD operator.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Aerobatics (NR 6217): 2300 ft AMSL/3500 ft AMSL axis RWY 04/22, length 1100 m.",
+    "WIN: from MON to SAT: 0930-1130 and 1300-1630.",
+    "SUN and HOL: odd weeks, 0900-1130 and 1400-1630.",
+    "SUM: from MON to SAT: 0830-1030 and 1200-1800.",
+    "SUN and HOL: odd weeks, 0800-1030 and 1300-1730.",
+    "Activity reserved for pilots authorized by DSAC-N and according to protocol.",
+    "Users information on FREQ A/A.",
+    "AEM activity (NR 8294): 550 ft.",
+    "As per protocol."
   ]
 }

@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFGK (AIP France, chart dated 2025-12-25), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFGK (AIP France, chart dated 2025-12-25): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFGK",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFGK",
     "chartDate": "2025-12-25",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 47.99444,
@@ -19,7 +20,10 @@
   "elevationFeet": 732,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 123.5",
+    "nightVfrApproved": false
   },
   "frequencies": {
     "airAir": 123.5
@@ -39,5 +43,21 @@
         258
       ]
     }
+  ],
+  "preferredQfu": 78,
+  "preferredQfuReason": "preferred QFU 78, for landing due to climbing slope and better clearing",
+  "notes": [
+    "Simultaneous use of RWY prohibited.",
+    "Unpaved RWY not available after heavy rain.",
+    "Unpaved RWY reserved for home-based ACFT and ACFT authorized by AD operator.",
+    "Tree penetrating the paved RWY LDG funnel 26 and the TKOF funnel 08 by 9 m.",
+    "This 805 ft AMSL obstacle is shown on the aerodrome chart (1) The end of the TODA RWY 08L is located at the opposite QFU DTHR (2) The end of the TODA RWY 08R is located at the opposite QFU DTHR and is indicated by aboveground visual aids on the edge of the RWY in alignment with the DTHR marks.",
+    "Preferred QFU 078° for landing due to climbing slope and better clearing.",
+    "The west end of the RWY is identified by a yellow transverse mark.",
+    "High declivity after W end of paved RWY.",
+    "1 m unevenness in the W of the TWY between RWY and PRKG.",
+    "Crosswind South and North components are limited to 15 kt at landing and take-off on paved runways 08 and 26 (due to the presence of trees in the North side surfaces).",
+    "The stand markings on the PRKG are designed to accommodate aircraft with a maximum wingspan of 12 m.",
+    "AEM activity (NR 8235): see AIP ENR 5.5"
   ]
 }

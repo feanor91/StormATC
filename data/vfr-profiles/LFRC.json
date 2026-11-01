@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFRC (AIP France, chart dated 2026-02-19), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFRC (AIP France, chart dated 2026-02-19): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFRC",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFRC",
     "chartDate": "2026-02-19",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 49.65083,
@@ -19,7 +20,11 @@
   "elevationFeet": 459,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "AFIS : LUN-VEN / MON-FRI : (HIV / WIN ) 0730-1700, (ETE / SUM ) 0700-1645. SAM, DIM et JF / SAT, SUN and public HOL : (HIV / WIN ) 0800-1700, (ETE / SUM ) 0715-1700. Tous les jours O/R jusqu'à 2200 PPR avant 1700 / Every day O/R until 2200 PPR before 1700 (UTC HIV ; HOR ETE : -1HR)",
+    "outsideAtsHours": "air-air frequency 119.630",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "afis": 119.63,
@@ -32,5 +37,13 @@
         100
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "AD likely to be covered by sea haze in a few minutes.",
+    "Low height circuits authorized for training flights only with instructor on board.",
+    "300 ft MNM for single-engined ACFT, 500 ft MNM for twinengined ACFT.",
+    "TWY B and C: night use reserved for military ACFT.",
+    "STAP: available data: wind, VIS, RVR, cloud base, T, DP, QNH, QFE."
   ]
 }

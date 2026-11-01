@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFAC (AIP France, chart dated 2026-05-14), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFAC (AIP France, chart dated 2026-05-14): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFAC",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFAC",
     "chartDate": "2026-05-14",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 50.96083,
@@ -19,12 +20,36 @@
   "elevationFeet": 12,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "AFIS : HIV / WIN : 0830-1630 ETE / SUM : 0730-1600 En dehors de ces HOR, PPR 48 HR pour EVASAN et vols commerciaux au 03 52 44 04 17 ou 03 21 35 22 66 ou 06 85 96 80 68 ou par mail à calais.aeroport@edeis.com Outside these SKED, PPR 48 HR for MEDEVAC and commercial flights at 03 52 44 04 17 or 03 21 35 22 66 or 06 85 96 80 68, or by (UTC HIV ; HOR ETE : -1HR)",
+    "outsideAtsHours": "air-air frequency 119.485",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "fis": 132.54,
     "approach": 120.275,
     "afis": 119.485,
     "airAir": 119.485
-  }
+  },
+  "preferredQfu": 239,
+  "preferredQfuReason": "preferred QFU 239, due to IFR procedure",
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Outside SKED, AFIS service may be provided at any moment without any prior notice, in aerodrome circuit.",
+    "Actual activity known on AFIS FREQ.",
+    "FATO: helipad weight limit is 4.3 tons,; arriving helicopters will report for the helipad or paved RWY depending on their weight,; takeoff from the helipad at 06 is possible if there is no ACFT taxiing or parked on the apron.",
+    "AD likely to be covered by sea haze in a few minutes.",
+    "Hospital helistation located on RWY 06 final axis (242°/ 2.6 NM ARP), usable day and night.",
+    "Activity announced on CALAIS FREQ.",
+    "Preferred QFU 239° due to IFR procedure.",
+    "Low altitude patterns: Trainings AD circuits lower than published heights: reserved for training flights with instructor on board; limited to 3 AD circuits by training flight; minimum height: 300 ft AAL.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "TWY A, B, C width: 15 m.",
+    "TWY D width: 8 m.",
+    "TWY D prohibited at night (no lighting).",
+    "PCL: for general Aviation, PPR 2 hours from AD operator, before the closing of ATS,;.",
+    "PPR from AFIS, controls FATO lighting.",
+    "PJE on AD NR 227: see ENR 5.5 Aerobatic activity on AD NR 6001: see ENR 5.5 AEM activity: NR 8299: see ENR 5.5"
+  ]
 }

@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFPH (AIP France, chart dated 2022-08-11), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFPH (AIP France, chart dated 2023-11-30): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFPH",
   "name": "Chelles - Le Pin",
   "source": {
     "publication": "AIP France AD 2 LFPH",
-    "chartDate": "2022-08-11",
-    "extraction": "automatic"
+    "chartDate": "2023-11-30",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 48.89667,
@@ -18,7 +19,11 @@
   },
   "elevationFeet": 208,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 123.93",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 123.93
@@ -38,5 +43,19 @@
         287
       ]
     }
+  ],
+  "preferredQfu": 37,
+  "preferredQfuReason": "preferred QFU 37, due to environmental reasons",
+  "notes": [
+    "Use of the aerodrome reserved for based pilots or pilots respecting the conditions defined by DSAC Nord retrievable on website: https://salledelecture-ext. aviation-civile.gouv.fr/externe/DSAC/ programme_formation_qualification_site_LFPH.pdf AD reserved for radio-equipped ACFT.",
+    "Usable declared distances: RWY 11, 22 and 29 TODA reduced due to obstacles in the TKOF funnel.",
+    "Air navigation hazard Helipad with restricted use (Fire and rescue centre) located in the 222°/0.8 NM.",
+    "Favor the use of RWY 04/22 due to the presence of obstacles in the clearances of RWY 11/29.",
+    "Preferred QFU 037°, due to environmental reasons.",
+    "RWY must be vacated towards installations after landing whatever the RWY in use.",
+    "Follow the circuits represented on the visual landing chart, due to urban surroundings.",
+    "Landing prohibited on RWY 11.",
+    "Solo traffic patterns prohibited for student pilots during initial training.",
+    "Touch and Go prohibited."
   ]
 }

@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFYR (AIP France, chart dated 2026-02-19), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFYR (AIP France, chart dated 2026-09-03): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFYR",
   "name": "Romorantin-Pruniers",
   "source": {
     "publication": "AIP France AD 2 LFYR",
-    "chartDate": "2026-02-19",
-    "extraction": "automatic"
+    "chartDate": "2026-09-03",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 47.32083,
@@ -19,7 +20,9 @@
   "elevationFeet": 289,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "(heure locale / local time) LUN-JEU / MON-THU : 0745-1700 VEN / FRI : 0745-1200 (UTC HIV ; HOR ETE : -1HR)",
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 119.075
@@ -39,5 +42,10 @@
         224
       ]
     }
+  ],
+  "notes": [
+    "AD with restricted use reserved to radio-equipped ACFT Home based ACFT more than 80 NM from the platform must inform for intention to land on the site The applicant shall provide by: E-mail: ba273.off-permanence@intradef.gouv.fr or 02 54 98 57 50 in duty service following elements: Last name / First name; Brand / ACFT type; ACFT Registration; Flight from / to; Date / Time of ARR and DEP.",
+    "Without reply from BA 273 is considered as an agreement Unusable outside RWY and TWY Unpaved RWY 04R/22L reserved to GLD, tugs and based ACFT MIL PRKG only available for based ACFT or under AD director agreement for non based ACFT RWY 04L/22R: Low height patterns training prohibited to non based.",
+    "Use of N half strip by GLD and S half strip by planes and ULM From 15/04 to 30/10 High MIL GLD activity Simultaneous use by ACFT and GLD prohibited During rainy period, unpaved RWY often unusable prior contact ACB or consult NOTAM LDG and TKOF must be delayed if an ACFT is immobilized on that half inner RWY Turn right after TKOF on RWY 22R and right hand circuit for this Turn left after TKOF on RWY 04L and left hand circuit for this Turn right after TKOF on RWY 04R and right hand circuit for this Turn left after TKOF on RWY 22L and left hand circuit for this Prior agreement required for MIL ACFT bound to the: MIL 811 273 5776 02 54 98 57 76 or 02 54 98 57 99 or 02 54 98 57 83 out of BA 273 HOR The agreement NR will be mentioned in FPL field 18 For road access to ACB Sologne (in - out), prior contact to 02.54.96.35.07 needed If no MIL activity, the movement area is not carried out GLD winching: RWY 04R/22L SFC - 2300 ft AMSL / 2000 ft ASFC, SR - SS Winch equipped with a flashing light Users information: A/A Romorantin Pruniers Aerobatic (NR 6406): RWY 04/22 North axis, limited to 1500 m from / to ARP 1000 ft ASFC / 1300 ft AMSL - 4300 ft AMSL Activity reserved for based GLD Real activity known by: AVORD APP"
   ]
 }

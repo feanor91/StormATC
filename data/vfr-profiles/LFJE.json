@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFJE (AIP France, chart dated 2024-08-08), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFJE (AIP France, chart dated 2024-08-08): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFJE",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFJE",
     "chartDate": "2024-08-08",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 44.49667,
@@ -19,7 +20,10 @@
   "elevationFeet": 2883,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 130.0",
+    "nightVfrApproved": false
   },
   "frequencies": {
     "airAir": 130.0
@@ -32,5 +36,45 @@
         212
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "NW",
+      "spoken": {
+        "fr": "Novembre Whisky",
+        "en": "November Whiskey"
+      },
+      "latitude": 44.51306,
+      "longitude": 5.35528,
+      "location": "East abeam CHALANCON"
+    },
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 44.4625,
+      "longitude": 5.36583,
+      "location": "CORNILLON SUR OULE lake"
+    }
+  ],
+  "notes": [
+    "Altiport reserved for licensed pilots: for airplane pilots, either a mountain qualification (wheels and/or skis), or a valid altiport access permit.; ULM pilots are strongly advised to have taken the mountain course organized by the FFPLUM.",
+    "Commercial air transport is prohibited, except discovery flights.",
+    "AD available for HEL and ULM.",
+    "Mandatory radio.",
+    "Possible presence of vultures near the high altitude airport (breeding in the vicinity).",
+    "Caution advised: when northern or southern wind > 15 kt (strong turbulences),; Northbound DEP when northern wind > 15 kt and/or heavy load and high temperature (down-draught, low climb).",
+    "High part of the RWY pebbled.",
+    "Runway not cleared of snow.",
+    "Check runway condition before flight.",
+    "Corner marks at the bottom of the runway less than the width of the runway.",
+    "Due to noise pollution, training sessions are kept to a strict minimum.",
+    "Arrivals: ARR from the North: abeam East of CHALANCON (NW).",
+    "ARR from the South: CORNILLON SUR OULE lake (S) then follow the circuits drawn on the chart.",
+    "Landing: RWY 03 mandatory.",
+    "No parking in take-off line position.",
+    "Do not park in front of the hangar."
   ]
 }

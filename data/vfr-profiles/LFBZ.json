@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBZ (AIP France, chart dated 2026-09-03), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFBZ (AIP France, chart dated 2026-09-03): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFBZ",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFBZ",
     "chartDate": "2026-09-03",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.46833,
@@ -19,7 +20,9 @@
   "elevationFeet": 245,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "TowerAndGround"
+    "kind": "TowerAndGround",
+    "atsHours": "TWR : LUN-DIM : 0515-2200. Prolongation au-delà de 2200 pour tout vol programmé, pour vols sanitaires et pour tout trafic ayant obtenu l'autorisation préalable de la DSAC-SO et de l'exploitant AD. TWR : MON-SUN : 0515-2200. Extension after 2200 for all scheduled flights, sanitary flights and for all traffic which have got PPR from DSAC-SO and AD operator. Aéroport de BIARRITZ PAYS BASQUE SNA-SO : 5, Esplanade de l'Eu (UTC HIV ; HOR ETE : - 1 HR)",
+    "nightVfrApproved": true
   },
   "frequencies": {
     "fis": 119.18,
@@ -27,5 +30,156 @@
     "approach": 125.605,
     "tower": 118.705,
     "ground": 121.955
-  }
+  },
+  "preferredQfu": 268,
+  "preferredQfuReason": "preferred QFU 268, : due to ILS procedure",
+  "reportingPoints": [
+    {
+      "name": "NC",
+      "spoken": {
+        "fr": "Novembre Charlie",
+        "en": "November Charlie"
+      },
+      "latitude": 43.65583,
+      "longitude": -1.44833,
+      "location": "Capbreton: North sea wall beacon"
+    },
+    {
+      "name": "NA",
+      "spoken": {
+        "fr": "Novembre Alpha",
+        "en": "November Alpha"
+      },
+      "latitude": 43.53028,
+      "longitude": -1.52361,
+      "location": "Adour mouth"
+    },
+    {
+      "name": "NP",
+      "spoken": {
+        "fr": "Novembre Papa",
+        "en": "November Papa"
+      },
+      "latitude": 43.49278,
+      "longitude": -1.5525,
+      "location": "Biarritz lighthouse"
+    },
+    {
+      "name": "NE",
+      "spoken": {
+        "fr": "Novembre Écho",
+        "en": "November Echo"
+      },
+      "latitude": 43.51972,
+      "longitude": -1.4025,
+      "location": "Water tower"
+    },
+    {
+      "name": "BG",
+      "spoken": {
+        "fr": "Bravo Golf",
+        "en": "Bravo Golf"
+      },
+      "latitude": 43.54611,
+      "longitude": -1.195,
+      "location": "Gaves réunis"
+    },
+    {
+      "name": "SW",
+      "spoken": {
+        "fr": "Sierra Whisky",
+        "en": "Sierra Whiskey"
+      },
+      "latitude": 43.40167,
+      "longitude": -1.66,
+      "location": "Chapel North St-Jean-de-Luz bay"
+    },
+    {
+      "name": "SB",
+      "spoken": {
+        "fr": "Sierra Bravo",
+        "en": "Sierra Bravo"
+      },
+      "latitude": 43.43222,
+      "longitude": -1.60083,
+      "location": "UHABIA beach"
+    },
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 43.41722,
+      "longitude": -1.49472,
+      "location": "Ste Barbe hill"
+    },
+    {
+      "name": "SA",
+      "spoken": {
+        "fr": "Sierra Alpha",
+        "en": "Sierra Alpha"
+      },
+      "latitude": 43.40583,
+      "longitude": -1.57139,
+      "location": "Ahetze church"
+    },
+    {
+      "name": "SE",
+      "spoken": {
+        "fr": "Sierra Écho",
+        "en": "Sierra Echo"
+      },
+      "latitude": 43.36778,
+      "longitude": -1.4225,
+      "location": "Cambo - Arnaga"
+    },
+    {
+      "name": "E",
+      "spoken": {
+        "fr": "Écho",
+        "en": "Echo"
+      },
+      "latitude": 43.46667,
+      "longitude": -1.28694,
+      "location": "Intersection D936 and exit nr 4 of highway A64"
+    },
+    {
+      "name": "SH",
+      "spoken": {
+        "fr": "Sierra Hôtel",
+        "en": "Sierra Hotel"
+      },
+      "latitude": 43.385,
+      "longitude": -1.305,
+      "location": "Hasparren village centre"
+    }
+  ],
+  "notes": [
+    "ULM activity: restricted to multi-axis ULM class 3.",
+    "AD prohibited for gliders.",
+    "AD likely to be covered by sea haze in few minutes.",
+    "Aerobatics NR 6683: see AIP ENR 5.5 AEM NR 9113, 9130, 9460: see AIP ENR 5.5 Parachuting NR 302, 329, 366, 376: see AIP ENR 5.5 Drone NR 40-001: see AIP ENR 5.5 Starting-up with PPR 5 min.",
+    "Low height circuits reserved to home-based ACFT at 500 ft AAL.",
+    "Pilots are advised to use VOR.",
+    "Preferred QFU 268°: due to ILS procedure.",
+    "For noise reduction purpose: route upon ATC instruction NA --> overhead TWR: 2000 ft AMSL MNM, TKOF RWY 09: maintain runway heading and climb to 1500 ft QNH as soon as possible.",
+    "The Northern left hand turn can only be made after clearance from ATC and avoid overflying the built up areas of Biarritz Anglet Bayonne, TKOF RWY 27: maintain runway heading and climb to 1500 ft QNH as soon as possible.",
+    "Northern turn must only be performed after passing the coastline, If DZ 376 active, the turn to the South must only be performed after passing the coastline.",
+    "Adhere to ATC instructions when joining departure routes after take-off and when coming from published routes to circuits.",
+    "Ground movements: After LDG, except special instruction, clear the RWY by the 2nd TWY.",
+    "Taxiways: S1 prohibited at night; S1 prohibited by day with RVR < 800 m; T1 reserved for HEL of overall length 13 m.",
+    "Use conditions of South apron: airplanes with max wingspan 15 m.",
+    "In the event of radio failure, squawk code 7600, fly overhead AD at 1500 ft AAL before entering the circuit, monitor final approach axes, momentary blinking of final approach lights is equivalent to landing clearance.",
+    "Routes Reporting points Flight altitude ACFT / HEL (AMSL) These routes are used: mandatory within CTR, in special VFR situation; in VMC on ATC instruction.",
+    "Coastal transit TW1: An explicit authorization from Biarritz ATS must be obtained before crossing RWY axis.",
+    "Failing that: direction North to South: holding over NP; direction South to North: holding over SB.",
+    "SpecialVFR: MTO minima Visibility Ceiling Arrivée / Arrival Aircraft Départ / Departure Tours de piste / RWY pattern Traffic surveillance equipment: AD equipped with a secondary radar display (see AD 1.0).",
+    "Arrival procedures: 1st contact on BIARRITZ INFO.",
+    "Aircraft bound for LFBZ must call 5 minutes before overflying entry points.",
+    "Transit procedures with BIARRITZ FIS: 1st contact on BIARRITZ INFO.",
+    "Radiocommunication failure: Sqawk 7600.",
+    "If failure occurs after entering CTR: before receiving the entry clearance in AD circuit: perform a holding If possible contact TWR 05 59 22 43 92 (emergency number only).",
+    "Failing that, exit CTR as soon as possible. after receiving traffic circuit integration clearance: proceed with landing as cleared."
+  ]
 }

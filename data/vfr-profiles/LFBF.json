@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBF (AIP France, chart dated 2026-04-16), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFBF (AIP France, chart dated 2026-03-19): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFBF",
   "name": "Toulouse-Francazal",
   "source": {
     "publication": "AIP France AD 2 LFBF",
-    "chartDate": "2026-04-16",
-    "extraction": "automatic"
+    "chartDate": "2026-03-19",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.54917,
@@ -19,7 +20,10 @@
   "elevationFeet": 535,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "AFIS - Sur PPR uniquement : LUN-VEN / MON-FRI : 0700-1800 Extension possible sur PPR AFIS : LUN-VEN avant 1600, le dernier jour ouvrable. SAM-DIM-JF : Ouverture exceptionnelle possible PPR 48 HR avant 1100, le dernier jour ouvrable. PPR obligatoire par https://cy.myhandlingsoftware.com Possible extension on PPR AFIS : MON-FRI before 1600, on the last working day. SAT-SUN-public HOL : special opening possible PPR 48 H (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "afis": 118.805
@@ -32,5 +36,44 @@
         293
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "SEA",
+      "spoken": {
+        "fr": "Sierra Écho Alpha",
+        "en": "Sierra Echo Alpha"
+      },
+      "latitude": 43.51167,
+      "longitude": 1.3875,
+      "location": "Pinsaguel"
+    },
+    {
+      "name": "SE",
+      "spoken": {
+        "fr": "Sierra Écho",
+        "en": "Sierra Echo"
+      },
+      "latitude": 43.43333,
+      "longitude": 1.4425,
+      "location": "LF-R23 operating conditions :"
+    }
+  ],
+  "notes": [
+    "AD prohibited to regular commercial traffic.",
+    "AD reserved for ACFT authorized by AD operator.",
+    "AD open when Flight Information Service is active only.",
+    "No training flight authorized for light and sport aviation.",
+    "AD reserved for radio-equipped ACFT.",
+    "For access to the military apron, you must contact the 1st RTP operations by E-mail or TEL.",
+    "MON-FRI: 05 62 11 42 43 / 1rtp.boi-ops conduite.fct@intradef.gouv.fr 05 62 11 42 09 / 1rtp-boi.off-operations.fct@intradef.gouv.fr SAT, SUN and public HOL: 05 62 11 42 40 Every day: 06 75 33 85 53.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "180° turn is prohibited on RWY for category D ACFT.",
+    "Visual circuit South of AD only at 1600 ft.",
+    "North circuit possible only for rescue and police Visibility ACFT: 3000 m; HEL: 800 m.",
+    "Ceiling: 1000 ft ASFC.",
+    "Avoidance mandatory except for: ACFT on DEP or inbound to Toulouse Francazal, authorized by AD operator (https://cy.myhandlingsoftware.com).; rescue, assistance, police or customs missions.",
+    "PJE (NR 333) on AD: see AIP ENR 5.5 Radio guided ACFT flights authorized (AD operator's agreement mandatory).",
+    "User's information on TOULOUSE Information and FRANCAZAL Information."
   ]
 }

@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFOQ (AIP France, chart dated 2026-09-03), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFOQ (AIP France, chart dated 2026-09-03): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFOQ",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFOQ",
     "chartDate": "2026-09-03",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 47.67972,
@@ -19,7 +20,11 @@
   "elevationFeet": 398,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "AFIS : LUN-VEN sauf JF / MON-FRI except public HOL : 0830-1130, 1230-1630 En dehors de ces HOR, PPR AFIS avant 1530 la veille ou le dernier jour ouvré. Outside these SKED, PPR AFIS before 1530 the day before or on the last working day (UTC HIV ; HOR ETE : -1HR)",
+    "outsideAtsHours": "air-air frequency 118.455",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "afis": 118.455,
@@ -33,5 +38,26 @@
         300
       ]
     }
+  ],
+  "preferredQfu": 300,
+  "preferredQfuReason": "preferred QFU 300",
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Preferred QFU: 300°.",
+    "Simultaneous LDG and TKOF prohibited, whatever the runway.",
+    "All TKOF or LDG RWY 12/30 is interrupted if an ACFT is occupying the adjacent strip of unpaved RWY 12L/30R.",
+    "Possible IFR activity.",
+    "TWY A, A2, B, C and N: width 9.50 m.",
+    "Special attention Holding points S, Z and U are on a TWY which crosses several runways.",
+    "Possible presence of gliders on descent near TWY S, N and C.",
+    "Overflight avoidance Avoid overflight of Villefrancoeur, Le Breuil and La Chapelle Vendômoise cities.",
+    "Overhead airfield: overhead flying is prohibited during aerobatic activity or parachuting.",
+    "Short circuit patterns prohibited during parachuting activities.",
+    "Circuit patterns prohibited after 2200 local time except with special authorization from the AD operator.",
+    "STAP and PCL: Limited HN with PPR from AFIS before 1530 on the previous day or on the last working day (SUM: - 1 HR).",
+    "STAP: Data available (FR only): wind, T°, DP, QNH, QFE, instrumental visibility, cloud cover, miscellaneous.",
+    "LUN, MER-VEN / MON, WED-FRI: 0830-1130, 1230-1630 MAR / TUE: 1230-1630 sauf JF / except public HOL Level 2 or 3 outside these SKED, PPR AFIS before 1530 on the previous day or on the last working day.",
+    "Level 1 outside these SKED.",
+    "Péril animalier / Wildlife strike hazard: Occasionnel - HOR RFFS niveau 3 / Random - RFFS level 3 SKED."
   ]
 }

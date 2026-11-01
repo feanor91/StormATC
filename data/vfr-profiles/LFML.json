@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFML (AIP France, chart dated 2024-06-13), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFML (AIP France, chart dated 2026-01-22): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFML",
   "name": "Marseille Provence",
   "source": {
     "publication": "AIP France AD 2 LFML",
-    "chartDate": "2024-06-13",
-    "extraction": "automatic"
+    "chartDate": "2026-01-22",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.43667,
@@ -19,7 +20,9 @@
   "elevationFeet": 70,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "TowerAndGround"
+    "kind": "TowerAndGround",
+    "atsHours": "H 24. DGAC - SNASSE - Aéroport MARSEILLE -PROVENCE BP1, Aéroport, 13727 Marignane CEDEX (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": true
   },
   "frequencies": {
     "fis": 124.35,
@@ -43,5 +46,164 @@
         313
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "LP",
+      "spoken": {
+        "fr": "Lima Papa",
+        "en": "Lima Papa"
+      },
+      "latitude": 43.61639,
+      "longitude": 5.315,
+      "location": "St Cannat – La Pile"
+    },
+    {
+      "name": "CB",
+      "spoken": {
+        "fr": "Charlie Bravo",
+        "en": "Charlie Bravo"
+      },
+      "latitude": 43.62694,
+      "longitude": 5.40472,
+      "location": "château de CABANNE"
+    },
+    {
+      "name": "NA",
+      "spoken": {
+        "fr": "Novembre Alpha",
+        "en": "November Alpha"
+      },
+      "latitude": 43.555,
+      "longitude": 5.28389,
+      "location": "Ventabren, intersection of A8 and D19"
+    },
+    {
+      "name": "NB",
+      "spoken": {
+        "fr": "Novembre Bravo",
+        "en": "November Bravo"
+      },
+      "latitude": 43.47139,
+      "longitude": 5.24239,
+      "location": "Vitrolles radar antenna"
+    },
+    {
+      "name": "E",
+      "spoken": {
+        "fr": "Écho",
+        "en": "Echo"
+      },
+      "latitude": 43.44,
+      "longitude": 5.45167,
+      "location": "Slag heap South-West of Gardanne"
+    },
+    {
+      "name": "EA",
+      "spoken": {
+        "fr": "Écho Alpha",
+        "en": "Echo Alpha"
+      },
+      "latitude": 43.43147,
+      "longitude": 5.38436,
+      "location": "Motor way interchange South Cabries"
+    },
+    {
+      "name": "EB",
+      "spoken": {
+        "fr": "Écho Bravo",
+        "en": "Echo Bravo"
+      },
+      "latitude": 43.41047,
+      "longitude": 5.32461,
+      "location": "Cross road East Pennes Mirabeau"
+    },
+    {
+      "name": "SW",
+      "spoken": {
+        "fr": "Sierra Whisky",
+        "en": "Sierra Whiskey"
+      },
+      "latitude": 43.32444,
+      "longitude": 5.04167,
+      "location": "South of Carro"
+    },
+    {
+      "name": "SC",
+      "spoken": {
+        "fr": "Sierra Charlie",
+        "en": "Sierra Charlie"
+      },
+      "latitude": 43.21056,
+      "longitude": 5.30194,
+      "location": "1 NM Ouest Cap Croisette"
+    },
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 43.32444,
+      "longitude": 5.17222,
+      "location": "South of Carry-le-Rouet"
+    },
+    {
+      "name": "SA",
+      "spoken": {
+        "fr": "Sierra Alpha",
+        "en": "Sierra Alpha"
+      },
+      "latitude": 43.37408,
+      "longitude": 5.18793,
+      "location": "East Chateauneuf les Martigues"
+    },
+    {
+      "name": "SB",
+      "spoken": {
+        "fr": "Sierra Bravo",
+        "en": "Sierra Bravo"
+      },
+      "latitude": 43.40758,
+      "longitude": 5.18481,
+      "location": "Junction of Bolmon pond and Marseille canal"
+    },
+    {
+      "name": "SR",
+      "spoken": {
+        "fr": "Sierra Roméo",
+        "en": "Sierra Romeo"
+      },
+      "latitude": 43.15389,
+      "longitude": 5.38194,
+      "location": "1 NM South of Riou Islands"
+    }
+  ],
+  "notes": [
+    "Significant HEL activity in the AD traffic pattern or in the vicinity of the RWY.",
+    "For safety and security reasons, handling is compulsory for any ACFT, including ACFT going to the AIRBUS HELICOPTERS area.",
+    "List of handling services must be contacted before departure from origin AD: see AD 2 LFML TXT 06.",
+    "QFU 31L take-offs are prohibited when the crosswind component (including gusts) is greater than 12 kts on wet runway.",
+    "Large gathering of birds on the platform and close nearby.",
+    "Marked pylon day and night, North-East of the axis between the pond and the General Aviation Terminal (see AD 2 LFML ATT 01).",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Arrival and transit procedures Take note of ATIS before contacting the ATC unit.",
+    "Clearance for entering the CTR shall be requested at least 3 min before reaching the entry points.",
+    "Entry by LP, CB, E, SC or SW: contact Provence TWR.",
+    "Unless otherwise cleared or instructed by the ATS, overflight of those entry points and routings at the altitude planned in the following table.",
+    "The routings laid down on the VAC are likely to be imposed by the ATS.",
+    "Axis crossing procedures An explicit authorization from Provence TWR must be obtained to cross RWY axis.",
+    "Failing that an holding will be executed as follows: North to South direction: holding at NB without interfering with axis.; South to North direction: holding at SB without interfering with axis.; Reporting points.",
+    "Path - Frequencies: After pilot's request and ATC clearance, other routing and/or ALT than those specified in the following table may be granted.",
+    "Trajectories at arrival Entry points Reporting points (ALT in ft) Contact Provence Trajectories for coastal transit Entry points Exit points Reporting points (ALT in ft) Contact Provence Other trajectories except coastal transit Tell ATC entry point in the CTR and the planned exit point.",
+    "Then comply with ATC instructions Departure procedures Look into ATIS before contacting the ATC unit: contact PROVENCE Preflight indicate the exit point and, when no FPL, the flight data.",
+    "The routings laid down on the VAC are likely to be imposed by the ATC.",
+    "Routes - Altitudes After pilot's request and ATC clearance, other routing and/or ALT than those specified in the following table may be granted.",
+    "Trajectories on departure Exit points Reporting points (ALT in ft) A special VFR clearance is necessary to enter the CTR at arrival, departure or transit when meteorological conditions observed on AD are: 1500 m.",
+    "VIS < 5000 m",
+    "600 ft ceiling < 1500 ft VFR flight ACFT operating within MARSEILLE PROVENCE CTR as special VFR flight may be requested to proceed holding in order to provide separation from IFR traffic.",
+    "Special instruction: Local flights inside CTR PROVENCE: No cloud below 2500 ft AMSL; VH 5 km.",
+    "Holding sectors: comply with ATC instructions Traffic surveillance equipment: AD equipped with primary and secondary surveillance radar.",
+    "AEM activity (NR 9510): SR-SS, 650 ft ASFC."
   ]
 }

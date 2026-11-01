@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFGO (AIP France, chart dated 2025-01-23), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFGO (AIP France, chart dated 2025-01-23): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFGO",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFGO",
     "chartDate": "2025-01-23",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 48.28944,
@@ -19,7 +20,10 @@
   "elevationFeet": 232,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 118.18",
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 118.18
@@ -39,5 +43,21 @@
         321
       ]
     }
+  ],
+  "preferredQfu": 321,
+  "preferredQfuReason": "preferred QFU 321, due to noise pollution",
+  "notes": [
+    "Simultaneous use of both RWY airplanes/gliders prohibited.",
+    "AD reserved for radio-equipped ACFT.",
+    "Radio contact mandatory.",
+    "Taxiing prohibited except on RWY and TWY. areas.",
+    "Preferred QFU 321° due to noise pollution.",
+    "AVT reserved for ACFT with wingspan less than 11 m.",
+    "Aerobatics (NR 6465) on AD: RWY 14/32 axis, 1000 m each side of the ARP, 1500 ft ASFC / FL 050.",
+    "WED, SAT, SUN and public HOL: 0800-1100, 1300-SS (SUM: -1 HR).",
+    "Activity reserved for pilots authorized by the Sens Planeur club.",
+    "Activity known by SEINE INFO.",
+    "AEM activity (NR 8231): 300 ft ASFC.",
+    "SUM: 06002000, WIN: 0700-SS."
   ]
 }

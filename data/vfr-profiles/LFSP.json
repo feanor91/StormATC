@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFSP (AIP France, chart dated 2025-01-23), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFSP (AIP France, chart dated 2025-01-23): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFSP",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFSP",
     "chartDate": "2025-01-23",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 46.90833,
@@ -19,7 +20,11 @@
   "elevationFeet": 2683,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 135.705",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 135.705
@@ -39,5 +44,22 @@
         199
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Unpaved RWY reserved for home-based ACFT and ULM.",
+    "Simultaneous use of both RWY prohibited.",
+    "Snow covered AD during winter period.",
+    "Contact ACB for more information.",
+    "Particular attention is requested from the pilots due to the proximity of Pontarlier hospital heliport, whose North funnels (axis 320° / 140°) interfere with circuit patterns and takeoffs RWY 02.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Use intermediate holding point N to use RWY 02.",
+    "Use intermediate holding point S to use RWY 20.",
+    "Traffic patterns training reserved for home-based ACFT.",
+    "Low-height circuit patterns only with instructor on board.",
+    "Preferred QFU 019°, due to noise pollution and clearing.",
+    "Avoid to fly over villages of Vuillecin, Houtaud, Dommartin, les Granges Narboz.",
+    "AEM (NR 8054) on AD: 500 ASFC, SR-SS.",
+    "As per protocol."
   ]
 }

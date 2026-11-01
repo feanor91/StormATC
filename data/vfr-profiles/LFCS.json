@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFCS (AIP France, chart dated 2026-08-06), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFCS (AIP France, chart dated 2026-08-06): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFCS",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFCS",
     "chartDate": "2026-08-06",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 44.69917,
@@ -19,7 +20,10 @@
   "elevationFeet": 192,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 119.005",
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 119.005
@@ -39,5 +43,24 @@
         211
       ]
     }
+  ],
+  "preferredQfu": 211,
+  "preferredQfuReason": "preferred QFU 211, due to environment",
+  "notes": [
+    "AD reserved for radio equipped ACFT.",
+    "Wildlife hazard: possible crane flights.",
+    "Unpaved RWY likely to be damaged by some animals, check RWY conditions when passing overhead the aerodrome.",
+    "TKOF RWY 03: left turn forbidden after TKOF.",
+    "Helicopter: traffic patterns on West part, 500 ft AAL.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Acceleration strip of 300 m x 8 m included in grass strip on QFU 211° side reserved for home-based ACFT.",
+    "\"Low height\" circuits during training flights with an instructor only: minimum 500 ft AAL East of RWY 03/21.",
+    "Preferred QFU 211°, due to environment.",
+    "One-way AVT roudabout, follow the yellow line marking.",
+    "The paved RWY 03/21 is approved for night operations with limitations.",
+    "ACFT pilots must meet the following conditions, in addition to the regulation in force: Based ACFT pilot: a.",
+    "Holder of the night rating. b.",
+    "Having completed a practical night flight proficiency assessment on site by a qualified instructor. c.",
+    "Taking into account local instructions setting the specific rules for the use of the AD."
   ]
 }

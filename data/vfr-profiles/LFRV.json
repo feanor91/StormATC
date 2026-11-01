@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFRV (AIP France, chart dated 2025-08-07), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFRV (AIP France, chart dated 2025-08-07): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFRV",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFRV",
     "chartDate": "2025-08-07",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 47.71917,
@@ -18,7 +19,11 @@
   },
   "elevationFeet": 440,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "AFIS du 01/11 au 31/03 : LUN-DIM et JF : 0800-1130, 1230-1700. Du 01/04 au 31/10 : LUN-DIM et JF : 0800-1130, 1230-1800. AFIS activable sur demande de 1130 à 1230. En dehors de ces HOR : O/R PN 48 HR à l'exploitant AD pour les EVASAN et vols commerciaux uniquement sur myhandling.com From 01/11 to 31/03 : MON-SUN and public HOL : 0800-1130, 1230-1700. From 01/04 to 31/10 : MON-SUN and public HOL : 0800-1130, 1230-1800 (UTC HIV ; HOR ETE : - 1 HR)",
+    "outsideAtsHours": "air-air frequency 122.605",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "afis": 122.605,
@@ -39,5 +44,32 @@
         261
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Outside of scheduled operating hour: AFIS service can be provided for aerodrome traffic anytime without prior notice.",
+    "The service is known on.",
+    "AFIS FREQ.",
+    "Possible IFR operations.",
+    "Simultaneous use of both RWY prohibited out AFIS SKED.",
+    "Request by E-mail AFIS During the parachuting activity, RWY 08/26 reserved for aircraft used by the signatory entities of the parachuting protocol 274 and for aircraft authorized by the operator.",
+    "Information available AFIS or A/A.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "PAPI in mandatory operation for any night approach RWY 22.",
+    "\"Low height\" circuits allowed only for training flights with instructor: minimum 500 ft AAL SE RWY 04/22.",
+    "Pilots should use the following VFR reporting points especially for the LF-R 278 and R 279 avoiding tracks.",
+    "LF-R 278 VANNES entry conditions (excluding LF- R94 A Meucon area): radio contact mandatory with VANNES INFO or A/A absence AFIS.",
+    "LF-R 279 VANNES PARA entry conditions (excluding LF-R 94 A and B Meucon areas): avoidance mandatory during activity except for: ACFT departing from or arriving to VANNES GOLFE.",
+    "DU MORBIHAN AD",
+    "ACFT dropping parachutists",
+    "ACFT conducting assistance, rescue or public safety missions, when they can't avoid the area.",
+    "Starting -up request is mandatory for all helicopters.",
+    "During the parachuting activity, aircraft departing from/arriving at Vannes, avoid overflying the North and North-West sectors of the installations.",
+    "During the parachuting activity, aircraft making an arrival followed by a departure, do not turn before overflying the opposite THR.",
+    "For the reconnaissance of the windsock, stay East of paved RWY.",
+    "Bridge near the village Bono.",
+    "Important parachuting activity.",
+    "TWY B prohibited.",
+    "PJE (NR 274) on AD: see AIP ENR 5.5 Aerobatics (NR 6358) on AD: see AIP ENR 5.5 Simultaneous aerobatics and parachuting activity forbidden."
   ]
 }

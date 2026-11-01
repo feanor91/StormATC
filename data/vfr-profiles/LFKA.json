@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFKA (AIP France, chart dated 2025-09-04), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFKA (AIP France, chart dated 2025-09-04): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFKA",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFKA",
     "chartDate": "2025-09-04",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 45.62639,
@@ -18,7 +19,10 @@
   },
   "elevationFeet": 1035,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 123.5",
+    "nightVfrApproved": false
   },
   "frequencies": {
     "airAir": 123.5
@@ -31,5 +35,22 @@
         229
       ]
     }
+  ],
+  "preferredQfu": 229,
+  "preferredQfuReason": "preferred QFU 229, : valley breeze",
+  "notes": [
+    "AD reserved for airplanes and gliders whose pilots comply with following conditions: to be admitted as being able to use the AD by a pilot instructor (or holding and instructor rating),; to be mountain flight qualified.",
+    "AD usable by HEL and ULM.",
+    "Snow removal quality not guaranteed.",
+    "If snow-covered ground, AD reserved for home-based ACFT only, under captain responsability.",
+    "Aerobatics activity LA ROCHETTE (NR 6812): see AIP ENR 5.5 Preferred RWY 23: valley breeze.",
+    "TKOF RWY 23: first turn at 1700 ft AMSL minimum.",
+    "TKOF RWY 05: as soon as possible, left turn and climb North sector.",
+    "Helicopter approach RWY 05 or 23: aim for runway center.",
+    "Respect for environment: (UTC WIN; SUM SKED: -1HR) Avoid overfly the sensitive area.",
+    "Home-based ACFT: Non home-based ACFT: ACFT: noise suppressor engine recommended.",
+    "Restricted to 2 traffic patterns.",
+    "Traffic patterns prohibited before 0800, between 1100 and 1300, WE and public HOL.",
+    "Low height patterns prohibited."
   ]
 }

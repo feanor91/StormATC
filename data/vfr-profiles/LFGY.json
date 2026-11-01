@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFGY (AIP France, chart dated 2024-11-28), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFGY (AIP France, chart dated 2024-11-28): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFGY",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFGY",
     "chartDate": "2024-11-28",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 48.26639,
@@ -19,7 +20,11 @@
   "elevationFeet": 1187,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 119.91",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 119.91
@@ -32,5 +37,23 @@
         247
       ]
     }
+  ],
+  "preferredQfu": 67,
+  "preferredQfuReason": "preferred QFU 67, due to environment",
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "RWY 07/25 prohibited to ACFT whose MTOW is greater than 5,7 t and to ACFT with turbojet engines.",
+    "Air navigation hazard Possible presence of paragliders near hills North and West of AD.",
+    "Preferred QFU 067° due to environment.",
+    "Repetitive traffic patterns reserved for home-based pilots.",
+    "TWY A restricted to ACFT whose main gear overall width is smaller than or equal to 3 m TWY B restricted to ACFT whose main gear overall width is smaller than or equal to 4 m.",
+    "TWY C and TWY D for private use, non public air traffic.",
+    "Aerobatics at AD (NR 6155) axis RWY 07/25, length 3000 m centred on ARP, 1700 ft / 5000 ft AAL.",
+    "MON-SAT: 0800-1100, 1300-1800.",
+    "SUN: 0900-1100, 1330-1800 (SUM: - 1 HR).",
+    "PJE on AD (NR 570): FL 130, SR-SS.",
+    "Activity reserved for ACFT authorized by AD operator.",
+    "According to protocol.",
+    "User's information on STRASBOURG INFO."
   ]
 }

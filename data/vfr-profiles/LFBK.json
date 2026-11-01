@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBK (AIP France, chart dated 2024-08-08), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFBK (AIP France, chart dated 2024-08-08): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFBK",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFBK",
     "chartDate": "2024-08-08",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 46.22611,
@@ -19,7 +20,11 @@
   "elevationFeet": 1367,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Afis"
+    "kind": "Afis",
+    "atsHours": "AFIS : LUN-VEN / MON-FRI : 0945-1230, 1330-1630 locale / local time de / from 01 OCT à / to 31 MAR, 0915-1230, 1330-1800 locale / local time de / from 01 APR à / to 30 SEP. SAM, DIM et JF non assurés / SAT, SUN and public HOL not provided (UTC HIV ; HOR ETE : -1HR)",
+    "outsideAtsHours": "air-air frequency 118.405",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "afis": 118.405
@@ -39,5 +44,23 @@
         346
       ]
     }
+  ],
+  "notes": [
+    "Possible IFR operations.",
+    "AD reserved for radio-equipped ACFT.",
+    "Simultaneous use of RWY prohibited.",
+    "Use of the unpaved RWY: reserved for gliders, service planes, ACFT with conventional undercarriage and aerobatic ACFT with conventional undercarriage,; during gliding activity, reserved for gliders and service planes,; frequently unusable in heavy rain.",
+    "Paved RWY unusable when a glider is stopped on half East side of unpaved RWY.",
+    "Occasionnaly used by gliders when unpaved RWY is unusable.",
+    "Heavy bird hazard over \"Etang des Landes\" (219°/3,4 NM from ARP).",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Do not enter TWY when TKOF QFU 346° or LDG QFU 166° in progress on the unpaved RWY.",
+    "Threshold 35 not visible from holding point: caution recommended before entering runway.",
+    "For nuisance limitation on the village of Lépaud, west circuits are authorized for aerobatic ACFT in the absence of gliding activity.",
+    "PCL: 3 times: LIL; 5 times: LIH; Lighting extinction by operating the trigger 7 times in less than 5 seconds.",
+    "Aerobatic activity NR 6551 on AD: centered on ARP, 2000 m along RWY 17/35 axis, 1650 ft ASFC / 3300 ft ASFC, lower limit and upper limit (MAX FL 060) changeable by NOTAM, SR-SS, announced on FREQ MONTLUÇON INFO or A/A, reserved to pilots authorized by CAA.",
+    "Glider winching NR 967 on AD, take off from grass strip, 2000 ft AMSL, non marked cable, rotating light on ground.",
+    "Activity announced on MONTLUÇON INFO or A/A.",
+    "Simultaneous activity with aerobatic NR 6551 prohibited."
   ]
 }

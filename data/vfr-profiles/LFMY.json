@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFMY (AIP France, chart dated 2025-10-30), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFMY (AIP France, chart dated 2026-09-03): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFMY",
   "name": "Salon-de-Provence",
   "source": {
     "publication": "AIP France AD 2 LFMY",
-    "chartDate": "2025-10-30",
-    "extraction": "automatic"
+    "chartDate": "2026-09-03",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 43.60306,
@@ -19,7 +20,9 @@
   "elevationFeet": 197,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "LUN-JEU / MON-THU : 0700-1600 VEN / FRI : 0700-1400 SAM, DIM, JF / SAT, SUN, HOL : Activité réelle connue de / Real activity known by : SALON APP ou / or RAI 135.150 MHz (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": false
   },
   "frequencies": {
     "approach": 135.15,
@@ -53,5 +56,113 @@
         342
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "LA",
+      "spoken": {
+        "fr": "Lima Alpha",
+        "en": "Lima Alpha"
+      },
+      "latitude": 43.70056,
+      "longitude": 5.10167,
+      "location": "Lamanon"
+    },
+    {
+      "name": "LP",
+      "spoken": {
+        "fr": "Lima Papa",
+        "en": "Lima Papa"
+      },
+      "latitude": 43.61639,
+      "longitude": 5.315,
+      "location": "Saint Cannat - La Pile"
+    },
+    {
+      "name": "EG",
+      "spoken": {
+        "fr": "Écho Golf",
+        "en": "Echo Golf"
+      },
+      "latitude": 43.71972,
+      "longitude": 5.02444,
+      "location": "Eyguières"
+    },
+    {
+      "name": "W",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 43.62861,
+      "longitude": 5.00722,
+      "location": "Michelin racing circuit"
+    },
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 43.59389,
+      "longitude": 5.19472,
+      "location": "Lançon de Provence, motorway toll"
+    },
+    {
+      "name": "SW",
+      "spoken": {
+        "fr": "Sierra Whisky",
+        "en": "Sierra Whiskey"
+      },
+      "latitude": 43.555,
+      "longitude": 5.08833,
+      "location": "Cornillon"
+    },
+    {
+      "name": "CV",
+      "spoken": {
+        "fr": "Charlie Victor",
+        "en": "Charlie Victor"
+      },
+      "latitude": 43.81083,
+      "longitude": 5.04222,
+      "location": "HST bridge, Cavaillon"
+    },
+    {
+      "name": "PS",
+      "spoken": {
+        "fr": "Papa Sierra",
+        "en": "Papa Sierra"
+      },
+      "latitude": 43.74056,
+      "longitude": 5.09111,
+      "location": "Senas, motorway toll"
+    },
+    {
+      "name": "ME",
+      "spoken": {
+        "fr": "Mike Écho",
+        "en": "Mike Echo"
+      },
+      "latitude": 43.73972,
+      "longitude": 5.20111,
+      "location": "Dam, 1.8 km NE of Mallemort"
+    },
+    {
+      "name": "LR",
+      "spoken": {
+        "fr": "Lima Roméo",
+        "en": "Lima Romeo"
+      },
+      "latitude": 43.72222,
+      "longitude": 5.27528,
+      "location": "La Roque, crossroad RD 561 / RD 67 D"
+    }
+  ],
+  "notes": [
+    "Overflight of AD prohibited H24 below 300 m (1000 ft) ASFC AD only usable by day AD prohibited to armed ACFT AD prohibited to ACFT without radio AD unusable outside TWY and RWY AD with restricted use: 1- mainly to State and MIL ACFT 2- to particular authorized activities 3- to based ACFT LDG subject to PPR sent to the DV/head of the OPS division.",
+    "The agreement NR has to be mentioned in FPL 18 field Outside activation times of CTR and CTA SALON: auto-information FREQ RWY 16/34: slippery during rainy conditions BAR AERAZUR F30 type 5 at each end of the RWY, height: 1.5 m For TORA, ASDA and LDA the actual distances are available 50 m before RWY end lighting VFR Spécial Jets: VIS: 5 km Ceiling: 1000 ft Conventionals: VIS: 3 km Ceiling: 1000 ft HEL: VIS: 800 m Ceiling: 600 ft Eastern part of AD reserved to GLD, unmanned aerial remote piloted vehicles, engine \"school\" flights and acrobatic training LF-R 276 Patrouille de France active requires mandatory bypass except for authorized ACFT Taxiing plan TWY and PRKG limitations: TWY C: Closed; C130:; VIP PRKG only; TWY A1, A2 et B1 are prohibited; A400M: PRKG et TWY are prohibited.",
+    "Other ceiling usable 1400 m AMSL MON-FRI: 0600-0800, 1045-1145, 1630-1800 / SAT, SUN, HOL: SR-SS Real activity known by SALON APP and above 4500 AMSL by Provence APP/AFIS.",
+    "Others HOR and level of activity announced by NOTAM AEM (NR 9915): SFC - 820 ft ASFC / SR-SS Remote controlled flights in accordance with protocol Special activity (NR 13-001): SFC - 490 ft ASFC / Day time Visual line of sight use of unmanned remotely piloted aircraft, as per protocol"
   ]
 }

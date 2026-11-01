@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFEZ (AIP France, chart dated 2026-01-22), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFEZ (AIP France, chart dated 2026-01-22): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFEZ",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFEZ",
     "chartDate": "2026-01-22",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 48.72361,
@@ -19,7 +20,10 @@
   "elevationFeet": 1247,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 136.105",
+    "nightVfrApproved": false
   },
   "frequencies": {
     "airAir": 136.105
@@ -46,5 +50,16 @@
         317
       ]
     }
+  ],
+  "notes": [
+    "AD reserved for pilots members of Union Aeronautique Metropole Grand Nancy and pilots authorised by AD operator.",
+    "Simultaneous use of RWY prohibited.",
+    "Warning: towing cables unrolled on the northern part of the runway in use (width 5 m).",
+    "Possible presence of sheeps near the RWY.",
+    "Non home-based ACFT shall proceed overhead AD at 3000 ft AAL before entering the traffic circuit.",
+    "Except for safety reasons, avoid overflight of the AD below 2500 ft AAL.",
+    "Taxiing: mark the stop before crossing the RWY.",
+    "Announce your intentions on A/A FREQ before rolling or taxiing again.",
+    "Gliders towing activity (NR 944): See AIP ENR 5.5 Gliders' aerobatics activity (NR 6154): See AIP ENR 5.5 AEM (NR 8055): See AIP ENR 5.5"
   ]
 }

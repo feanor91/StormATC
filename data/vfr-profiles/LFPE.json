@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFPE (AIP France, chart dated 2023-02-23), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFPE (AIP France, chart dated 2026-01-22): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFPE",
   "name": "Meaux - Esbly",
   "source": {
     "publication": "AIP France AD 2 LFPE",
-    "chartDate": "2023-02-23",
-    "extraction": "automatic"
+    "chartDate": "2026-01-22",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 48.92694,
@@ -18,7 +19,10 @@
   },
   "elevationFeet": 220,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "TWR : 0800 - SS + 30 limité à / limited to 1900. Chef C.A / ATC manager : (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "tower": 120.15
@@ -38,5 +42,33 @@
         335
       ]
     }
+  ],
+  "preferredQfu": 335,
+  "preferredQfuReason": "preferred QFU 335, due to APCH and LDG axis better clearings",
+  "notes": [
+    "AD reserved to radio-equipped ACFT.",
+    "Restriction use of AD Class 2, 3, 4 and 6 ULM activity authorized in accordance with the provisions of the decree of july 12, 2019 relating to general air trafic procedures for the use of aerodromes by aircraft.",
+    "Class 1 and 5 ULM activity prohibited.",
+    "Presence of particular hazards: Birds presence all year long.",
+    "A - Permanent special instructions Visual marking circuit 16/34: Presence of AMER (significatif point) materialized by a checked pattern red and white.",
+    "Downwind 16/34, stay West of AMER.",
+    "Circuits Except in cases of immediate safety, aerodrome users are asked to strictly comply with the published circuits.",
+    "In 07/25 configuration, full stop landings performed preferentially on RWY 07R/25L.",
+    "Taxiing: after landing on 07R/25L, vacating prohibited on B1 between A9 and D4 due to drainage trench Taxiing prohibited except on RWY and TWY.",
+    "Rwy vacating only via taxiways Refuelling: entry on refuelling area via TWY D2.",
+    "Refuelling heading 335°.",
+    "B - Special instructions in the presence of ATS services In 07/25 configuration: 700 ft AAL pattern usable by ACFT, HEL and high performance ULM.; 500 ft AAL pattern usable by slow-moving ULM and by slow-moving ACFT and HEL with ATC clearance.; 400 ft AAL pattern usable only with ATC clearance (ULM and HEL only).",
+    "In 16/34 configuration: 700 ft AAL pattern usable by ACFT, HEL and high performance ULM.",
+    "Consignes particulières / Special instructions",
+    "500 ft AAL pattern usable only with ATC clearance (ULM and HEL only).",
+    "400 ft AAL pattern usable by slow-moving ULM and by slow-moving ACFT and HEL with ATC clearance.",
+    "C - Special instruction in the absence of ATS services.",
+    "RMZ inactive.",
+    "Preferential RWY Preferred QFU 335° due to APCH and LDG axis better clearings.",
+    "In 07/25 configuration: 500 ft AAL pattern reserved for slow-moving ULM; 400 ft AAL pattern unusable.",
+    "In 16/34 configuration: 400 ft AAL pattern reserved for slow-moving ULM; 500 ft AAL pattern unusable.",
+    "Activity reserved for authorized home-based pilots according to local restrictions.",
+    "Traffic monitoring equipment: Aerodrome equipped with radar display (see AD 1.0).",
+    "Radiocommunication equipment failure: AD accessible to based users as per local instructions when ATS is active."
   ]
 }

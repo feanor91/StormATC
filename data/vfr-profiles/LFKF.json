@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFKF (AIP France, chart dated 2025-04-17), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFKF (AIP France, chart dated 2025-08-07): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFKF",
   "name": "Figari Sud Corse",
   "source": {
     "publication": "AIP France AD 2 LFKF",
-    "chartDate": "2025-04-17",
-    "extraction": "automatic"
+    "chartDate": "2025-08-07",
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 41.50222,
@@ -19,7 +20,10 @@
   "elevationFeet": 85,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "TowerAndGround"
+    "kind": "TowerAndGround",
+    "atsHours": "TWR : HOR annoncés par NOTAM / SKED announced by NOTAM. Aérodrome de FIGARI SUD CORSE, 20114 Figari (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "atis": 118.73,
@@ -35,5 +39,139 @@
         225
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "EF",
+      "spoken": {
+        "fr": "Écho Foxtrot",
+        "en": "Echo Foxtrot"
+      },
+      "latitude": 41.46417,
+      "longitude": 9.27722,
+      "location": "Punta di Rondinara"
+    },
+    {
+      "name": "EAF",
+      "spoken": {
+        "fr": "Écho Alpha Foxtrot",
+        "en": "Echo Alpha Foxtrot"
+      },
+      "latitude": 41.5925,
+      "longitude": 9.37222,
+      "location": "Punta di a Chiappa"
+    },
+    {
+      "name": "AS",
+      "spoken": {
+        "fr": "Alpha Sierra",
+        "en": "Alpha Sierra"
+      },
+      "latitude": 41.71389,
+      "longitude": 9.40694,
+      "location": "Tour de Fautéa"
+    },
+    {
+      "name": "NEF",
+      "spoken": {
+        "fr": "Novembre Écho Foxtrot",
+        "en": "November Echo Foxtrot"
+      },
+      "latitude": 41.72278,
+      "longitude": 9.29917,
+      "location": "Cavu bridge"
+    },
+    {
+      "name": "NF",
+      "spoken": {
+        "fr": "Novembre Foxtrot",
+        "en": "November Foxtrot"
+      },
+      "latitude": 41.66667,
+      "longitude": 9.20833,
+      "location": "Ospedale lake"
+    },
+    {
+      "name": "NWF",
+      "spoken": {
+        "fr": "Novembre Whisky Foxtrot",
+        "en": "November Whiskey Foxtrot"
+      },
+      "latitude": 41.56472,
+      "longitude": 9.04139,
+      "location": "Giannuccio"
+    },
+    {
+      "name": "WF",
+      "spoken": {
+        "fr": "Whisky Foxtrot",
+        "en": "Whiskey Foxtrot"
+      },
+      "latitude": 41.49556,
+      "longitude": 8.92889,
+      "location": "Tower of Roccapina"
+    },
+    {
+      "name": "WAF",
+      "spoken": {
+        "fr": "Whisky Alpha Foxtrot",
+        "en": "Whiskey Alpha Foxtrot"
+      },
+      "latitude": 41.47528,
+      "longitude": 8.98417,
+      "location": "Tower of Olmeto"
+    },
+    {
+      "name": "SAF",
+      "spoken": {
+        "fr": "Sierra Alpha Foxtrot",
+        "en": "Sierra Alpha Foxtrot"
+      },
+      "latitude": 41.39222,
+      "longitude": 9.09861,
+      "location": "Capo di Feno"
+    },
+    {
+      "name": "SF",
+      "spoken": {
+        "fr": "Sierra Foxtrot",
+        "en": "Sierra Foxtrot"
+      },
+      "latitude": 41.38694,
+      "longitude": 9.14444,
+      "location": "Madonetta lighthouse"
+    },
+    {
+      "name": "BF",
+      "spoken": {
+        "fr": "Bravo Foxtrot",
+        "en": "Bravo Foxtrot"
+      },
+      "latitude": 41.47333,
+      "longitude": 9.15,
+      "location": "1 NM north of the dam of Figari"
+    }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "AD accessibility: for general aviation, PPR before DEP mandatory to operator by E-mail: fsc.ppr@cci.corsica ULM activity: Class 2, 3, 4, and 6 ULM with radio and transponder mode C.; Prohibited activity on SAT, SUN and public HOL between the 1st of June and the 30th of September.; Outside these periods use only after PPR acceptance by the operator.",
+    "Crosswind limitation on wet runway: 20 kt.",
+    "Wake turbulences during approach: With medium and strong wind (> 15 kt) especially from W/NW sector, strong or very strong turbulences are likely to be encountered in the vicinity of AD.",
+    "Turbulences on final: Caution, windshear possibility on final RWY 23.",
+    "HS (hot spot): short taxiing distance from parking exit to holding point \"C\".",
+    "On RWY 05 approach, the presence of a photovoltaic roof on an agricultural hangar, about 900 meters before the THR 05 and 70 meters to the right of the runway axis, is likely to cause a dazzle just before the abeam passing hangar.",
+    "From June 1st till September 30th RWY patterns must be approved by ATC service.",
+    "On final 05 overflight of Mont CALDARELLO (388 ft) covered by PAPI.",
+    "Low height patterns: preferential Northward patterns 300 ft minimum reserved for instruction.",
+    "Use of turnaround areas (intermediate or end of RWY) is compulsory, for half-turn on RWY.",
+    "East of the CTR, recommended transit itinerary northbound and southbound via AS, EAF, EF at 2500 ft AMSL MAX due to IFR activity.",
+    "Radio contact not guaranteed with Ajaccio INFO in the East and North East of CTR, due to imperfect VHF coverage.",
+    "Without clearance, remain in G class.",
+    "Traffic surveillance equipment: AD equipped with a radar display (see AD 1.0).",
+    "FATO operating conditions Compulsory airport handling services: see TXT 03.",
+    "Due to stands congestion, obtaining a stand is subject to a request 12 hours before departure, from the AD operator (CCI) by E-mail: fsc.ppr@cci.corsica This procedure does not apply to based helicopters, State and medical helicopters.",
+    "FATO use: The FATO is located North-East of the General Aviation Helicopters flying to FIGARI or transiting in the CTR must contact TWR 3 minutes before entering the class D airspace, and fly over the compulsory reporting points.",
+    "Radiocommunication failure If failure occurs before receiving the clearance to enter the CTR, the helicopter shall not enter the airspace.",
+    "If failure occurs within the CTR: before receiving the clearance to join the traffic pattern: leave the CTR the shortest way,; after receiving the clearance to join the traffic pattern: continue according to the latest clearance."
   ]
 }

@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFLP (AIP France, chart dated 2026-08-06), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFLP (AIP France, chart dated 2026-08-06): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFLP",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFLP",
     "chartDate": "2026-08-06",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 45.93083,
@@ -19,7 +20,10 @@
   "elevationFeet": 1521,
   "magneticVariationDegrees": 3.0,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "HOR TWR : 0800-1800. En dehors de ces HOR, CTR désactivée et CTL AD non assuré / Outside these SKED, CTR deactivated and AD CTL not provided. Extensions possibles pour vols assistés et vols IFR basés PPR auprès de l'exploitant ( (UTC HIV ; HOR ETE : -1HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "fis": 123.705,
@@ -41,5 +45,186 @@
         216
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "NE",
+      "spoken": {
+        "fr": "Novembre Écho",
+        "en": "November Echo"
+      },
+      "latitude": 46.04472,
+      "longitude": 6.2575,
+      "location": "Evires pass (A410 and D1203 junction)"
+    },
+    {
+      "name": "NA",
+      "spoken": {
+        "fr": "Novembre Alpha",
+        "en": "November Alpha"
+      },
+      "latitude": 46.00444,
+      "longitude": 6.13167,
+      "location": "Interchange A41 / A410"
+    },
+    {
+      "name": "N",
+      "spoken": {
+        "fr": "Novembre",
+        "en": "November"
+      },
+      "latitude": 46.03444,
+      "longitude": 6.10722,
+      "location": "Cruseilles"
+    },
+    {
+      "name": "NW",
+      "spoken": {
+        "fr": "Novembre Whisky",
+        "en": "November Whiskey"
+      },
+      "latitude": 45.96667,
+      "longitude": 6.03333,
+      "location": "La Balme lake"
+    },
+    {
+      "name": "W",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 45.90167,
+      "longitude": 5.92056,
+      "location": "Vallières hydroelectric station"
+    },
+    {
+      "name": "ALBY",
+      "spoken": {
+        "fr": "Alpha Lima Bravo Yankee",
+        "en": "Alpha Lima Bravo Yankee"
+      },
+      "latitude": 45.81667,
+      "longitude": 6.02028,
+      "location": "Alby sur Chéran"
+    },
+    {
+      "name": "SA",
+      "spoken": {
+        "fr": "Sierra Alpha",
+        "en": "Sierra Alpha"
+      },
+      "latitude": 45.87556,
+      "longitude": 6.07611,
+      "location": "Water tower"
+    },
+    {
+      "name": "SJ",
+      "spoken": {
+        "fr": "Sierra Juliett",
+        "en": "Sierra Juliett"
+      },
+      "latitude": 45.84417,
+      "longitude": 6.17417,
+      "location": "St Jorioz harbour"
+    },
+    {
+      "name": "E",
+      "spoken": {
+        "fr": "Écho",
+        "en": "Echo"
+      },
+      "latitude": 45.93528,
+      "longitude": 6.16806,
+      "location": "Les Glaisins interchange"
+    },
+    {
+      "name": "EA",
+      "spoken": {
+        "fr": "Écho Alpha",
+        "en": "Echo Alpha"
+      },
+      "latitude": 45.89583,
+      "longitude": 6.22833,
+      "location": "Water treatment plant of Alex (2 NM north-east of Bluffy, on the straight line of the D16)"
+    },
+    {
+      "name": "HN",
+      "spoken": {
+        "fr": "Hôtel Novembre",
+        "en": "Hotel November"
+      },
+      "latitude": 45.93333,
+      "longitude": 6.12833,
+      "location": "Brogny's bridge",
+      "purpose": "helicopter reporting point"
+    },
+    {
+      "name": "HM",
+      "spoken": {
+        "fr": "Hôtel Mike",
+        "en": "Hotel Mike"
+      },
+      "latitude": 45.92139,
+      "longitude": 6.11583,
+      "location": "Stadium, northern end of \"des Îles\" graveyard",
+      "purpose": "helicopter reporting point"
+    },
+    {
+      "name": "HS",
+      "spoken": {
+        "fr": "Hôtel Sierra",
+        "en": "Hotel Sierra"
+      },
+      "latitude": 45.89694,
+      "longitude": 6.08778,
+      "location": "Annecy city centre interchange (A41 / D3508 junction)",
+      "purpose": "helicopter reporting point"
+    }
+  ],
+  "notes": [
+    "20 m wide grooved RWY, centered on the axis.",
+    "Aerodrome located in a densely populated area.",
+    "Consequently, training flights to and from the aerodrome are prohibited for HEL, and above the same area, circular scenic lights without stopover or with stopover of less than one hour are prohibited too.",
+    "AD reserved for radio-equipped ACFT.",
+    "Possible IFR operations, heavy VFR traffic.",
+    "AEM NR 9707: SFC - 500 ft ASFC / 2480 ft AMSL, see AIP ENR 5.5.",
+    "A) TWY A and B 1) Reserved for ACFT whose width of landing gear is less than 4.5m (ACFT code A).",
+    "2) Width: 7.50 m.",
+    "3) Lighting: edge reflecting.",
+    "4) Prohibited use when RVR < 800 m.",
+    "B) FOR NOISE ABATEMENT PURPOSES 1) Strictly respect the published circuits unless otherwise instructed by ATC.",
+    "2) Traffic pattern training activity reserved for homebased ACFT.",
+    "3) Traffic pattern training activity prohibited for thermal engine ACFT (local time).",
+    "MON-FRI: before 0800, 1200-1400, after 1900",
+    "SAT: before 0900, 1300-1500, after 1900",
+    "SUN and public HOL.",
+    "4) Low height patterns: flights reserved for based pilots with instructor on board.",
+    "5) Helicopter arrival from West during ATC presence: favor NW circuit or W/Grand Epagny (Departmental Fire and Emergency Service red building), high arrival over expressway then LDG on grass RWY.",
+    "6) Helicopter westbound departure during ATC presence: favor grass RWY DEP from TWY G3 facing NW (Departmental Fire and Emergency Service red building), fast climb over expressway then direction NW or W).",
+    "7) Technical flight: respect traffic patterns SKED for the ground work on grass RWY; favor westbound flights respecting points 4) and 5).",
+    "C) ACFT PATTERN 1) TKOF 04: maintain RWY axis, fly over the fast lane and do not turn before the highway.; DEP to the West: prefer NW; DEP to the East or to the lake: prefer E (avoid SA).",
+    "Fly right over the Glaisins interchange.",
+    "2) TKOF 22: maintain RWY axis; DEP to the East: prefer SA (avoid E), turn left at the fast lane crossing and follow the higway to SA.; DEP to the West: prefer right turn avoiding overflight of Poisy.; for downwind leg, turn left at the latest crossing highway and stay North-East of it.",
+    "3) ARR 04:; From East: reach SA, highway then published base leg (do not fly over R 185 if active) or via vertical outside from West: join overhead AD then downwind leg from North: join N to overhead AD then downwind leg from South: join SA, highway then published base leg or via overhead outside ATC.",
+    "4) ARR 22: from East: join E to the published base leg or via overhead outside ATC.; from West: join overhead AD to downwind leg; from North: join N to overhead AD then downwind leg; from South: join SA to downwind leg or via overhead outside ATC.",
+    "D) HEL PATTERN The airplane circuit is also available for helicopters.",
+    "Between HM and unpaved RWY, overfly the CD 14 at or above altitude 1850 ft.",
+    "E) VFR ITINERARIES They are compulsory only on ATC instruction, particularly on Special VFR with presence of IFR.",
+    "1) ALBY – SA itinerary: Stay East of the highway A41; Holding pattern over SA may be respected 2) N - NA and NE – NA itinerary:; Stay North of highways A41 and A410; Holding pattern over NA may have to be respected.",
+    "F) The procedure \"runway separation reduction\" is applicable on paved runway for single engine propeller ACFT flying in VFR according to the national Air Traffic Regulations.",
+    "AD equipement AD equipped with radar display (partial coverage): see AD 1.0.",
+    "Special radiocommunication instruction Radio communication failure on arrival during ATS SKED: Squawk transponder code 7600; Comply with the last ATC instructions received or join overhead at minimum 3000 ft AMSL, avoiding the runway axis.; Integrate with lights on at the start of the downwind, ensuring visual separation from other aircraft, then land.",
+    "Visual signals and pyrotechnics inoperative.",
+    "Special operating requirements These requirements are applicable to: all commercial flights with an airplane; all non-commercial flights with an airplane whose reference field length is greater than 1200 m (take-off distance at MTOW, sea level, ISA, no wind, no RWY slope).",
+    "A) Operating instructions These requirements are due to mountainous terrain in the vicinity of Annecy aerodrome.",
+    "It is considered essential that pilots are well familiar with approach, missed approach, circling manoeuvres, and departure procedures.",
+    "Therefore, concerned operators have to set up specific operational instructions about the use of Annecy aerodrome, as well as provisions for their pilots training.",
+    "The responsibility for the preparation of such instructions rests on the operator (or pilot-in-command for noncommercial flights).",
+    "B) Flight crews training For all flights, a theoretical training about procedures intended to be used is mandatory for the pilot-incommand.",
+    "Night operations and operations with weather conditions below 3,000 feet ceiling and 5,000 metres visibility require a training using a suitable flight simulation training device (FSTD) or an on-site training in VMC conditions on a same category aircraft.",
+    "Note: all operators and pilots must be able to prove that they comply with the above training(s).",
+    "The application of these provisions will be subject to verifications during ramp inspections.",
+    "In case of IFR traffic, increase of the meteorological minima on the three published routes: VIS 3000 m.",
+    "Carburants / Fuel: 100 LL, UL Aéro Super +, électricité / electricity, JET A1, JET A1 SAF (suivre ligne 6 / follow line 6) Self-Service H24 max span 16 m: 100 LL, UL Aéro Super +, electricity (stand 61), JET A1 (JET A1 selfservice payment only with TotalEnergies card) On the stand 0800-1800: JET A1 and JET A1 SAF (JET A1 SAF payment with TotalEnergies card or"
   ]
 }

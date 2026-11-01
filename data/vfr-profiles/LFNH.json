@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFNH (AIP France, chart dated 2024-11-28), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFNH (AIP France, chart dated 2024-11-28): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFNH",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFNH",
     "chartDate": "2024-11-28",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 44.0225,
@@ -19,9 +20,35 @@
   "elevationFeet": 388,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "None"
+    "kind": "None",
+    "atsHours": "none (ATS: NIL)",
+    "outsideAtsHours": "air-air frequency 118.18",
+    "nightVfrApproved": false,
+    "radioMandatory": true
   },
   "frequencies": {
     "airAir": 118.18
-  }
+  },
+  "preferredQfu": 310,
+  "preferredQfuReason": "preferred QFU 310, due to environment",
+  "notes": [
+    "Simultaneous use of both RWY prohibited.",
+    "AD reserved for radio-equipped ACFT.",
+    "Possible presence of wild animals all year long.",
+    "Presence of trees next to the refuelling station, caution recommended, reduced speed.",
+    "Refuelling station fence close to TWY, reduced speed, caution recommended.",
+    "Taxiing prohibited except on RWY and TWY.",
+    "Grass TWY usable during dry weather only.",
+    "TWY B: TKOF not recommended.",
+    "Reduced clearance on the TWY South bend.",
+    "Observe displaced engine testing point.",
+    "Anti noise bank along East paved TWY.",
+    "Gliders circuit into ACFT circuit, entry point via NE: hill d'entrée NE: colline de La Lègue à 1400 (1000). of La Lègue at 1400 (1000).",
+    "Coupling cable 60 m available.",
+    "QFU 310°: avoid overflying hill of \"la Lègue\" located at the NE of the AD.",
+    "Training patterns and touch and go prohibited between 1100 and 1300 and after 1730 (SUM: -1 HR) due to Hovering flights prohibited over and in the vicinity of the AD due to environment.",
+    "Preferred QFU 310° due to environment.",
+    "Non home-based ACFT trainings: tours de piste inférieurs à 1400 (1000) interdits, patterns below 1400 (1000) prohibited,",
+    "2 circuit patterns maximum."
+  ]
 }

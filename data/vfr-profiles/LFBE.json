@@ -1,8 +1,9 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBE (AIP France, chart dated 2026-06-11), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
+    "Read from the SIA chart set AD 2 LFBE (AIP France, chart dated 2026-06-11): the reporting points come from the coordinates table of the chart,",
+    "the notes from the English column of its text pages, both read by a script and checked (each point lies within 80 NM of the aerodrome).",
+    "Only what the chart prints is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text. Drawings (circuit, routes, radials) are not read.",
     "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
   ],
   "icao": "LFBE",
@@ -10,7 +11,7 @@
   "source": {
     "publication": "AIP France AD 2 LFBE",
     "chartDate": "2026-06-11",
-    "extraction": "automatic"
+    "extraction": "chart text, table and English column read by script, checked"
   },
   "referencePosition": {
     "latitude": 44.82444,
@@ -19,7 +20,10 @@
   "elevationFeet": 172,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "0700-1900. Extension possible pour tout vol régulier programmé, vols sanitaires (transfert d'organes) et pour tout trafic avec PN 48 HR, PPR à EGC AERO pendant les heures de bureau. Extension des horaires ATS au bénéfice des vols commerciaux programmés annoncée sur ATIS. Possible extension for any planned scheduled flight, air ambulances (organ transfer), and for any traffic with PN 48 HR, PPR from EGC AERO during of (UTC HIV ; HOR ETE : - 1 HR)",
+    "nightVfrApproved": true,
+    "radioMandatory": true
   },
   "frequencies": {
     "atis": 127.48,
@@ -42,5 +46,78 @@
         273
       ]
     }
+  ],
+  "reportingPoints": [
+    {
+      "name": "NA",
+      "spoken": {
+        "fr": "Novembre Alpha",
+        "en": "November Alpha"
+      },
+      "latitude": 44.87544,
+      "longitude": 0.54867,
+      "location": "Water tower, Village Pélissous"
+    },
+    {
+      "name": "NE",
+      "spoken": {
+        "fr": "Novembre Écho",
+        "en": "November Echo"
+      },
+      "latitude": 44.91942,
+      "longitude": 0.56075,
+      "location": "Crossing, Route N21 - Ligne HT"
+    },
+    {
+      "name": "NW",
+      "spoken": {
+        "fr": "Novembre Whisky",
+        "en": "November Whiskey"
+      },
+      "latitude": 44.93125,
+      "longitude": 0.43036,
+      "location": "Crossing, Route D709 - Ligne HT"
+    },
+    {
+      "name": "SA",
+      "spoken": {
+        "fr": "Sierra Alpha",
+        "en": "Sierra Alpha"
+      },
+      "latitude": 44.77519,
+      "longitude": 0.52186,
+      "location": "Water tower, Village Colombier"
+    },
+    {
+      "name": "SE",
+      "spoken": {
+        "fr": "Sierra Écho",
+        "en": "Sierra Echo"
+      },
+      "latitude": 44.73031,
+      "longitude": 0.60719,
+      "location": "Church, Village Issigeac"
+    },
+    {
+      "name": "SW",
+      "spoken": {
+        "fr": "Sierra Whisky",
+        "en": "Sierra Whiskey"
+      },
+      "latitude": 44.66769,
+      "longitude": 0.39642,
+      "location": "Church, Village Eymet"
+    }
+  ],
+  "notes": [
+    "AD reserved for radio-equipped ACFT.",
+    "Unpaved RWY reserved for home-based ACFT.",
+    "AEM SAINT AUBIN DE LANQUAIS (NR 9445): See AIP ENR 5.5 AEM SAINT JULIEN D'EYMET (NR 9417): See AIP ENR 5.5 Taxiing prohibited except on RWY and TWY.",
+    "No U-turn on the runway.",
+    "Vigilance is recommended when taxiing to stand because of reduced visibility for some stands from the tower.",
+    "TWY Air CD is private, for the exclusive use of the company Air CD.",
+    "Vigilance is required, due to the possible jet blast on stand D3, D31 and D4.",
+    "Route Height Without IFR traffic within the CTR: ACFT: VIS 1500 m - HEL: VIS 800 m.",
+    "Possible SW1 unusable if AEM 9417 active Divers / Miscellaneous: Assistance aviation générale / General aviation handling TRAFIC BERGERAC: GRF (service d'évaluation et de report de l'état de surface de piste) / GRF (global reporting format): HOR RFFS / RFFS SKED."
   ]
 }
