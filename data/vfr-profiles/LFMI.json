@@ -45,8 +45,8 @@
     {
       "name": "N4",
       "spoken": {
-        "fr": "Novembre",
-        "en": "November"
+        "fr": "Novembre quatre",
+        "en": "November four"
       },
       "latitude": 43.58611,
       "longitude": 4.88306,
@@ -55,8 +55,8 @@
     {
       "name": "N5",
       "spoken": {
-        "fr": "Novembre",
-        "en": "November"
+        "fr": "Novembre cinq",
+        "en": "November five"
       },
       "latitude": 43.64139,
       "longitude": 4.91667,
@@ -85,8 +85,8 @@
     {
       "name": "NW1",
       "spoken": {
-        "fr": "Novembre Whisky",
-        "en": "November Whiskey"
+        "fr": "Novembre Whisky un",
+        "en": "November Whiskey one"
       },
       "latitude": 43.55639,
       "longitude": 4.72056,
@@ -145,8 +145,8 @@
     {
       "name": "S3",
       "spoken": {
-        "fr": "Sierra",
-        "en": "Sierra"
+        "fr": "Sierra trois",
+        "en": "Sierra three"
       },
       "latitude": 43.45722,
       "longitude": 5.03222,
@@ -155,8 +155,8 @@
     {
       "name": "S4",
       "spoken": {
-        "fr": "Sierra",
-        "en": "Sierra"
+        "fr": "Sierra quatre",
+        "en": "Sierra four"
       },
       "latitude": 43.46417,
       "longitude": 4.98583,
@@ -175,8 +175,8 @@
     {
       "name": "W2",
       "spoken": {
-        "fr": "Whisky",
-        "en": "Whiskey"
+        "fr": "Whisky deux",
+        "en": "Whiskey two"
       },
       "latitude": 43.40722,
       "longitude": 5.0575,
@@ -185,8 +185,8 @@
     {
       "name": "W3",
       "spoken": {
-        "fr": "Whisky",
-        "en": "Whiskey"
+        "fr": "Whisky trois",
+        "en": "Whiskey three"
       },
       "latitude": 43.48167,
       "longitude": 4.8025,

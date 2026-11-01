@@ -55,8 +55,8 @@
     {
       "name": "E1",
       "spoken": {
-        "fr": "Écho",
-        "en": "Echo"
+        "fr": "Écho un",
+        "en": "Echo one"
       },
       "latitude": 49.16139,
       "longitude": 5.82389,
@@ -95,8 +95,8 @@
     {
       "name": "W1",
       "spoken": {
-        "fr": "Whisky",
-        "en": "Whiskey"
+        "fr": "Whisky un",
+        "en": "Whiskey one"
       },
       "latitude": 49.19889,
       "longitude": 5.53861,

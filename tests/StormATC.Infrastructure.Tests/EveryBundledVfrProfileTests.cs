@@ -106,6 +106,24 @@ public sealed class EveryBundledVfrProfileTests
                 }
             }
 
+            // What the controller says: every letter in the international spelling alphabet and every digit, in both languages.
+            if (point.TryGetProperty("spoken", out JsonElement spoken))
+            {
+                string letters = new string(name.Where(char.IsLetterOrDigit).ToArray());
+                foreach (string language in new[] { "fr", "en" })
+                {
+                    string said = spoken.GetProperty(language).GetString()!;
+                    Assert.Equal(letters.Length, said.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length);
+                    for (int i = 0; i < letters.Length; i++)
+                    {
+                        string word = said.Split(' ', StringSplitOptions.RemoveEmptyEntries)[i];
+                        Assert.True(
+                            char.IsDigit(letters[i]) ? word.Length > 1 : word[0] == char.ToUpperInvariant(letters[i]) || (letters[i] is 'E' && word[0] is 'É') || (letters[i] is 'H' && word[0] is 'H') || (letters[i] is 'Q' && word[0] is 'Q') || (letters[i] is 'Z' && word[0] is 'Z') || (letters[i] is 'X' && word[0] is 'X'),
+                            $"{icao} {name}: \"{said}\" ({language}) does not spell the letter {letters[i]}.");
+                    }
+                }
+            }
+
             bool hasLatitude = point.TryGetProperty("latitude", out JsonElement latitude);
             bool hasLongitude = point.TryGetProperty("longitude", out JsonElement longitude);
             Assert.Equal(hasLatitude, hasLongitude);

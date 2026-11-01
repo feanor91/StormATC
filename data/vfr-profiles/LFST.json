@@ -61,8 +61,8 @@
     {
       "name": "N1",
       "spoken": {
-        "fr": "Novembre",
-        "en": "November"
+        "fr": "Novembre un",
+        "en": "November one"
       },
       "latitude": 48.57361,
       "longitude": 7.80167,
@@ -151,8 +151,8 @@
     {
       "name": "W1",
       "spoken": {
-        "fr": "Whisky",
-        "en": "Whiskey"
+        "fr": "Whisky un",
+        "en": "Whiskey one"
       },
       "latitude": 48.56944,
       "longitude": 7.52806,
@@ -161,8 +161,8 @@
     {
       "name": "W2",
       "spoken": {
-        "fr": "Whisky",
-        "en": "Whiskey"
+        "fr": "Whisky deux",
+        "en": "Whiskey two"
       },
       "latitude": 48.52,
       "longitude": 7.49778,

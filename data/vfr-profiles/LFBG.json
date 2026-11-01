@@ -51,8 +51,8 @@
     {
       "name": "E1",
       "spoken": {
-        "fr": "Écho",
-        "en": "Echo"
+        "fr": "Écho un",
+        "en": "Echo one"
       },
       "latitude": 45.65083,
       "longitude": -0.2525,
@@ -61,8 +61,8 @@
     {
       "name": "E2",
       "spoken": {
-        "fr": "Écho",
-        "en": "Echo"
+        "fr": "Écho deux",
+        "en": "Echo two"
       },
       "latitude": 45.61722,
       "longitude": -0.21889,
@@ -81,8 +81,8 @@
     {
       "name": "N1",
       "spoken": {
-        "fr": "Novembre",
-        "en": "November"
+        "fr": "Novembre un",
+        "en": "November one"
       },
       "latitude": 45.68556,
       "longitude": -0.39722,
@@ -111,8 +111,8 @@
     {
       "name": "S1",
       "spoken": {
-        "fr": "Sierra",
-        "en": "Sierra"
+        "fr": "Sierra un",
+        "en": "Sierra one"
       },
       "latitude": 45.57694,
       "longitude": -0.30528,
@@ -121,8 +121,8 @@
     {
       "name": "S2",
       "spoken": {
-        "fr": "Sierra",
-        "en": "Sierra"
+        "fr": "Sierra deux",
+        "en": "Sierra two"
       },
       "latitude": 45.62056,
       "longitude": -0.28222,
@@ -131,8 +131,8 @@
     {
       "name": "W1",
       "spoken": {
-        "fr": "Whisky",
-        "en": "Whiskey"
+        "fr": "Whisky un",
+        "en": "Whiskey one"
       },
       "latitude": 45.61778,
       "longitude": -0.33278,
@@ -141,8 +141,8 @@
     {
       "name": "W2",
       "spoken": {
-        "fr": "Whisky",
-        "en": "Whiskey"
+        "fr": "Whisky deux",
+        "en": "Whiskey two"
       },
       "latitude": 45.54167,
       "longitude": -0.4425,

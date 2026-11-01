@@ -82,8 +82,8 @@
     {
       "name": "E1",
       "spoken": {
-        "fr": "Écho",
-        "en": "Echo"
+        "fr": "Écho un",
+        "en": "Echo one"
       },
       "latitude": 44.47944,
       "longitude": 6.08333,
@@ -104,8 +104,8 @@
     {
       "name": "S1",
       "spoken": {
-        "fr": "Sierra",
-        "en": "Sierra"
+        "fr": "Sierra un",
+        "en": "Sierra one"
       },
       "latitude": 44.42083,
       "longitude": 6.02028,

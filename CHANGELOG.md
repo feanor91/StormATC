@@ -5,6 +5,12 @@ public releases.
 
 ## Unreleased
 
+### Fixed
+
+- **Spoken names of the reporting points with a digit** (N1, W2, HA3...): the digit was left out ("Whisky" for W1), so the
+  controller said the same name for W1 and W2. 47 points now say it in full ("Whisky un", "Whiskey one") in both languages.
+  A test checks that every letter and digit of a point is spoken.
+
 ## 0.28.4 - 2026-11-01
 
 ### Changed

@@ -60,8 +60,8 @@
     {
       "name": "E1",
       "spoken": {
-        "fr": "Écho",
-        "en": "Echo"
+        "fr": "Écho un",
+        "en": "Echo one"
       },
       "latitude": 48.89861,
       "longitude": 2.55722,
@@ -70,8 +70,8 @@
     {
       "name": "E2",
       "spoken": {
-        "fr": "Écho",
-        "en": "Echo"
+        "fr": "Écho deux",
+        "en": "Echo two"
       },
       "latitude": 48.93222,
       "longitude": 2.48083,
@@ -80,8 +80,8 @@
     {
       "name": "W2",
       "spoken": {
-        "fr": "Whisky",
-        "en": "Whiskey"
+        "fr": "Whisky deux",
+        "en": "Whiskey two"
       },
       "latitude": 48.97417,
       "longitude": 2.36583,
@@ -90,8 +90,8 @@
     {
       "name": "W1",
       "spoken": {
-        "fr": "Whisky",
-        "en": "Whiskey"
+        "fr": "Whisky un",
+        "en": "Whiskey one"
       },
       "latitude": 49.00139,
       "longitude": 2.185,

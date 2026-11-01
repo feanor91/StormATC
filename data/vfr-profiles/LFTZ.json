@@ -76,8 +76,8 @@
     {
       "name": "HA1",
       "spoken": {
-        "fr": "Hôtel Alpha",
-        "en": "Hotel Alpha"
+        "fr": "Hôtel Alpha un",
+        "en": "Hotel Alpha one"
       },
       "latitude": 43.25278,
       "longitude": 6.58639
@@ -85,8 +85,8 @@
     {
       "name": "HA2",
       "spoken": {
-        "fr": "Hôtel Alpha",
-        "en": "Hotel Alpha"
+        "fr": "Hôtel Alpha deux",
+        "en": "Hotel Alpha two"
       },
       "latitude": 43.23889,
       "longitude": 6.58417
@@ -94,8 +94,8 @@
     {
       "name": "HA3",
       "spoken": {
-        "fr": "Hôtel Alpha",
-        "en": "Hotel Alpha"
+        "fr": "Hôtel Alpha trois",
+        "en": "Hotel Alpha three"
       },
       "latitude": 43.22889,
       "longitude": 6.55944
@@ -103,8 +103,8 @@
     {
       "name": "HD1",
       "spoken": {
-        "fr": "Hôtel Delta",
-        "en": "Hotel Delta"
+        "fr": "Hôtel Delta un",
+        "en": "Hotel Delta one"
       },
       "latitude": 43.2225,
       "longitude": 6.55389
@@ -112,8 +112,8 @@
     {
       "name": "HD2",
       "spoken": {
-        "fr": "Hôtel Delta",
-        "en": "Hotel Delta"
+        "fr": "Hôtel Delta deux",
+        "en": "Hotel Delta two"
       },
       "latitude": 43.20667,
       "longitude": 6.62222
@@ -121,8 +121,8 @@
     {
       "name": "HD3",
       "spoken": {
-        "fr": "Hôtel Delta",
-        "en": "Hotel Delta"
+        "fr": "Hôtel Delta trois",
+        "en": "Hotel Delta three"
       },
       "latitude": 43.20139,
       "longitude": 6.66722

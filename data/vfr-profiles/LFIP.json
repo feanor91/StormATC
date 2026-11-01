@@ -44,8 +44,8 @@
     {
       "name": "N1",
       "spoken": {
-        "fr": "Novembre",
-        "en": "November"
+        "fr": "Novembre un",
+        "en": "November one"
       },
       "latitude": 42.90472,
       "longitude": 0.35944,
@@ -54,8 +54,8 @@
     {
       "name": "N2",
       "spoken": {
-        "fr": "Novembre",
-        "en": "November"
+        "fr": "Novembre deux",
+        "en": "November two"
       },
       "latitude": 42.80944,
       "longitude": 0.40861,
