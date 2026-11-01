@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.28.3 - 2026-11-01
+
 ### Fixed
 
 - **French text of the VFR profiles (`fr`)**: accents on capitals the charts print without them ("Equipement", "Eviter",
