@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.27.0 - 2026-11-01
+
 ### Changed
 
 - **Structured VFR procedures for seven large aerodromes** (Marseille Provence, Lyon-Saint-Exupéry, Bordeaux-Mérignac,
