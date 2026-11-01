@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBH (AIP France, chart dated 2026-07-09), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "Transcribed by hand from the SIA chart set AD 2 LFBH (AIP France, chart dated 2026-02-19): the text pages checked against the images of the pages.",
+    "Only what the chart states is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text; the reporting points, rules and notes were added by hand.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "No circuit height or circuit side is printed on this chart, so none is recorded; the published circuit is a drawing and is not read."
   ],
   "icao": "LFBH",
-  "name": "Rochelle - île de Ré",
+  "name": "La Rochelle - Île de Ré",
   "source": {
     "publication": "AIP France AD 2 LFBH",
-    "chartDate": "2026-07-09",
-    "extraction": "automatic"
+    "chartDate": "2026-02-19",
+    "extraction": "manual, from the chart text and images"
   },
   "referencePosition": {
     "latitude": 46.17917,
@@ -19,7 +20,9 @@
   "elevationFeet": 74,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "Monday to Sunday: summer 0530 to 2030, winter 0630 to 1930 (UTC in winter, local time minus 1 h in summer)",
+    "nightVfrApproved": true
   },
   "frequencies": {
     "fis": 124.205,
@@ -35,5 +38,100 @@
         272
       ]
     }
+  ],
+  "circuit": {
+    "lowHeight": "training flights only, with an instructor on board: minimum 300 ft AAL, on the north side of runway 09/27, and with ATC authorisation",
+    "restrictions": "to limit noise, the published circuit must be complied with, except for safety reasons or on ATC instruction"
+  },
+  "reportingPoints": [
+    {
+      "name": "N",
+      "spoken": {
+        "fr": "Novembre",
+        "en": "November"
+      },
+      "latitude": 46.295,
+      "longitude": -1.10639,
+      "location": "Charron village",
+      "purpose": "special VFR reporting point"
+    },
+    {
+      "name": "NA",
+      "spoken": {
+        "fr": "Novembre Alpha",
+        "en": "November Alpha"
+      },
+      "latitude": 46.23444,
+      "longitude": -1.15972,
+      "location": "La Pelle place",
+      "purpose": "special VFR reporting point"
+    },
+    {
+      "name": "E",
+      "spoken": {
+        "fr": "Écho",
+        "en": "Echo"
+      },
+      "latitude": 46.2025,
+      "longitude": -1.02778,
+      "location": "Usseau place, N137/N11 roundabout",
+      "purpose": "special VFR reporting point"
+    },
+    {
+      "name": "EA",
+      "spoken": {
+        "fr": "Écho Alpha",
+        "en": "Echo Alpha"
+      },
+      "latitude": 46.205,
+      "longitude": -1.10222,
+      "location": "Saint-Xandre village",
+      "purpose": "special VFR reporting point"
+    },
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 46.07556,
+      "longitude": -1.07667,
+      "location": "Châtelaillon racecourse",
+      "purpose": "special VFR reporting point"
+    },
+    {
+      "name": "SA",
+      "spoken": {
+        "fr": "Sierra Alpha",
+        "en": "Sierra Alpha"
+      },
+      "latitude": 46.12139,
+      "longitude": -1.11,
+      "location": "S-shaped curve of the N137 road",
+      "purpose": "special VFR reporting point"
+    }
+  ],
+  "withAts": {
+    "departures": [
+      {
+        "runway": "09",
+        "note": "climb straight ahead to at least 1000 ft ASFC, then intercept the ring road before Lagord and follow it; northbound departure: turn between Lagord and Puilboreau; southbound departure: follow the ring road"
+      }
+    ],
+    "arrivals": [
+      {
+        "note": "runway 27: make the final turn by intercepting and following the ring road to the runway centreline; PAPI is mandatory"
+      }
+    ]
+  },
+  "notes": [
+    "Special VFR meteorological minima with IFR flights, visibility on the routes: N-E 2400 m; S-E 3000 m; N-NA 1600 m; NA-EA 1500 m (1200 m for helicopters); E-EA 1500 m (1200 m for helicopters).",
+    "Class 2, 3, 4 and 6 ULM may use the aerodrome if they fly at least 100 km/h during take-off and climb and 120 km/h during arrival and landing; ULM that cannot respect these speeds must have left the CTR or landed 30 minutes before any IFR movement.",
+    "Platform and runway congestion must be limited: clear the axes as soon as possible after take-off and vacate the runway quickly after landing.",
+    "The aerodrome can be covered by sea haze within a few minutes.",
+    "TODA and ASDA of runway 09 are reduced: depart from the turn-around pad because of the localizer antenna. TORA, ASDA and LDA of runway 27 are reduced (RESA 90 x 90 m inside the aerodrome).",
+    "Hot spot: intersection between a taxiway and the helicopter translation taxiway; pay sharp attention. The main holding point A and the intermediate holding points B, C, D and G1 must never be crossed without ATC clearance.",
+    "Pilot-controlled lighting is reserved exclusively for home-based helicopters flying public service missions.",
+    "Aerobatics no. 6058 and parachuting no. 317: see AIP ENR 5.5."
   ]
 }

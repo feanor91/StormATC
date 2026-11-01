@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFBR (AIP France, chart dated 2026-10-01), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "Transcribed by hand from the SIA chart set AD 2 LFBR (AIP France, chart dated 2026-10-01): the text pages checked against the images of the pages.",
+    "Only what the chart states is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text; the reporting points, rules and notes were added by hand.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "No circuit height or circuit side is printed on this chart, so none is recorded."
   ],
   "icao": "LFBR",
   "name": "Muret - Lherm",
   "source": {
     "publication": "AIP France AD 2 LFBR",
     "chartDate": "2026-10-01",
-    "extraction": "automatic"
+    "extraction": "manual, from the chart text and images"
   },
   "referencePosition": {
     "latitude": 43.44917,
@@ -19,7 +20,11 @@
   "elevationFeet": 623,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "weeks 1 to 27 and 36 to 52: Monday and Thursday 0730 to 1900, Tuesday 0730 to 2130, Wednesday and Friday 0730 to 1930, Saturday 0800 to 1900; weeks 28 to 35: Monday to Friday 0730 to 1900, Saturday 0800 to 1900; not provided on Sundays and public holidays (UTC in winter, local time minus 1 h in summer)",
+    "outsideAtsHours": "air-air frequency: for all aircraft, apply the decree of 12 July 2019",
+    "radioMandatory": true,
+    "nightVfrApproved": true
   },
   "frequencies": {
     "atis": 124.58,
@@ -49,5 +54,56 @@
         295
       ]
     }
+  ],
+  "preferredQfu": 115,
+  "preferredQfuReason": "preferred QFU 115, due to the IFR procedure",
+  "circuit": {
+    "restrictions": "aeroplane circuit prohibited below 500 ft AAL",
+    "overheadTransit": "ULM circuit integration: fly overhead the aerodrome, higher than the aeroplane circuit, except ATC clearance; only one ULM in the circuit apart from arrivals and departures"
+  },
+  "reportingPoints": [
+    {
+      "name": "SA",
+      "spoken": {
+        "fr": "Sierra Alpha",
+        "en": "Sierra Alpha"
+      },
+      "latitude": 43.4,
+      "longitude": 1.44167,
+      "location": "Ariège loop"
+    },
+    {
+      "name": "SN",
+      "spoken": {
+        "fr": "Sierra Novembre",
+        "en": "Sierra November"
+      },
+      "latitude": 43.35833,
+      "longitude": 1.275,
+      "location": "town of Noé"
+    }
+  ],
+  "withAts": {
+    "radio": {
+      "arrival": "RMZ (procedure and aerodrome circuit), active during the published MURET TWR hours: radio contact with MURET TWR is mandatory 5 minutes before entering it"
+    }
+  },
+  "notes": [
+    "Possible IFR operations. Aerodrome reserved for radio-equipped aircraft.",
+    "Preferred QFU 115, due to the IFR procedure.",
+    "Simultaneous use of the aeroplane runways is prohibited.",
+    "Unpaved runways and taxiways may be unusable after heavy rain.",
+    "Helicopters: take-off and landing on runways only.",
+    "During ATS hours, special exercises are carried out on ATC authorisation.",
+    "LF-R 112: heavy aircraft perform airdropping in dropping area 318; VFR must avoid it when active; activity known by MURET TWR and TOULOUSE APP.",
+    "LF-D 178: Monday to Friday (except public holidays) pyrotechnic firing at the entry of runway 12 long final (St-Foy de Peyrolieres): permanent from the surface to 1300 ft AMSL, occasional from 1300 to 2300 ft AMSL; activity known by MURET TWR and TOULOUSE APP.",
+    "Bird hazard from October to May.",
+    "Road RD 43 lies in the runway axis 160 m from the threshold of runway 30; road clearance 634 ft AMSL.",
+    "ULM runway 12 final: a watering pivot (mobile in summer, fixed in winter), 605 m from the aerodrome reference point, 190 m long ramp, maximum height 7 m, galvanised grey.",
+    "The ULM manoeuvring area is only partly visible from the tower: Muret ATC does not issue landing or take-off clearances for the ULM runway; those manoeuvres are under the full responsibility of the pilot in command.",
+    "Radio failure: prefer arrivals overhead facing the control tower, lights on, at 2100 ft QNH minimum; beware of possible aerobatic activity.",
+    "Night VFR is approved; PAPI is mandatory on runway 30. At night only one movement is allowed on the manoeuvring area, so the holding point is the white safety line marking the aprons and taxiways.",
+    "Pilot-controlled lighting (low and high intensity) is usable outside ATS hours, for travel flights only.",
+    "Aerobatics no. 6702: see AIP ENR 5.5. Unmanned aircraft activity Muret-Rayat 31-003 and AEM no. 9230: see AIP ENR 5.5."
   ]
 }

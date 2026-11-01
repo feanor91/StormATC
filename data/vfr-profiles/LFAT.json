@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFAT (AIP France, chart dated 2026-09-03), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "Transcribed by hand from the SIA chart set AD 2 LFAT (AIP France, chart dated 2026-09-03): the text pages checked against the images of the pages.",
+    "Only what the chart states is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text; the reporting points, rules and notes were added by hand.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "No circuit height or circuit side is printed on this chart, so none is recorded. The radials and distances from BNE drawn beside the reporting points are not recorded."
   ],
   "icao": "LFAT",
   "name": "Le Touquet-Elizabeth II",
   "source": {
     "publication": "AIP France AD 2 LFAT",
     "chartDate": "2026-09-03",
-    "extraction": "automatic"
+    "extraction": "manual, from the chart text and images"
   },
   "referencePosition": {
     "latitude": 50.51472,
@@ -19,7 +20,11 @@
   "elevationFeet": 21,
   "magneticVariationDegrees": 2.0,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "summer 0700 to 1130 and 1300 to 1700, winter 0800 to 1230 and 1330 to 1800 (UTC in winter, local time minus 1 h in summer)",
+    "outsideAtsHours": "air-air frequency 118.455 only, French only",
+    "radioMandatory": true,
+    "nightVfrApproved": true
   },
   "frequencies": {
     "atis": 123.13,
@@ -34,5 +39,105 @@
         312
       ]
     }
+  ],
+  "preferredQfu": 132,
+  "preferredQfuReason": "preferred runway 13, due to the IFR procedure",
+  "reportingPoints": [
+    {
+      "name": "N",
+      "spoken": {
+        "fr": "Novembre",
+        "en": "November"
+      },
+      "latitude": 50.74056,
+      "longitude": 1.5675,
+      "location": "Boulogne-sur-Mer lighthouse",
+      "purpose": "on the N-NA-NB route, which avoids the coastal towns of Boulogne, Hardelot and Sainte-Cécile by the west"
+    },
+    {
+      "name": "NA",
+      "spoken": {
+        "fr": "Novembre Alpha",
+        "en": "November Alpha"
+      },
+      "latitude": 50.63528,
+      "longitude": 1.57667,
+      "location": "Hardelot beach",
+      "purpose": "on the N-NA-NB route, which avoids the coastal towns of Boulogne, Hardelot and Sainte-Cécile by the west"
+    },
+    {
+      "name": "NB",
+      "spoken": {
+        "fr": "Novembre Bravo",
+        "en": "November Bravo"
+      },
+      "latitude": 50.58083,
+      "longitude": 1.57889,
+      "location": "north of Sainte-Cécile beach, abeam west of the camping",
+      "purpose": "on the N-NA-NB route, which avoids the coastal towns of Boulogne, Hardelot and Sainte-Cécile by the west"
+    },
+    {
+      "name": "E",
+      "spoken": {
+        "fr": "Écho",
+        "en": "Echo"
+      },
+      "latitude": 50.44361,
+      "longitude": 1.84556,
+      "location": "pond of Marles sur Canche"
+    },
+    {
+      "name": "EA",
+      "spoken": {
+        "fr": "Écho Alpha",
+        "en": "Echo Alpha"
+      },
+      "latitude": 50.49056,
+      "longitude": 1.71944,
+      "location": "intersection of the high voltage line with the Canche"
+    },
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 50.41806,
+      "longitude": 1.64778,
+      "location": "town of Rang du Fliers"
+    },
+    {
+      "name": "NE",
+      "spoken": {
+        "fr": "Novembre Écho",
+        "en": "November Echo"
+      },
+      "latitude": 50.63556,
+      "longitude": 1.74278,
+      "location": "intersection of the road and the railway south of Samer",
+      "purpose": "reporting point on request"
+    }
+  ],
+  "withAts": {
+    "radio": {
+      "arrival": "on arrival and in transit, radio contact with Le Touquet TWR is recommended at least 5 minutes before entering the CTR"
+    }
+  },
+  "notes": [
+    "Aerodrome reserved for radio-equipped aircraft.",
+    "Preferred runway 13, due to the IFR procedure.",
+    "The aerodrome can be covered by sea haze within a few minutes.",
+    "Heavy VFR activity on Saturdays, Sundays and public holidays.",
+    "VFR flights may be given special VFR routes and reporting points by ATC.",
+    "Special VFR meteorological minima in the CTR when IFR traffic is present: ceiling 800 ft QNH for aeroplanes, 600 ft QNH for helicopters; visibility 2000 m.",
+    "Southern departures: avoid overflying Berck-sur-Mer aerodrome (LFAM).",
+    "Avoid overflying the private aerodrome Le Portel Alprech, whose traffic pattern is at 700 ft AMSL.",
+    "Take-off runway 31: when passing the runway end, and not before 300 ft ASFC, turn 10 degrees right to avoid the built-up areas; do not turn left before 1000 ft ASFC.",
+    "Crosswind limits on runway 13/31: 20 kt on a wet runway, 25 kt on a dry runway.",
+    "TORA, TODA, ASDA and LDA of runway 13 are reduced because of the localizer shelter.",
+    "Hot spot: holding point P1 is far from the runway, on the taxiway parallel to the runway; risk of runway incursion if it is not observed.",
+    "Night VFR is approved; on runway 31 the PAPI is compulsory.",
+    "Outside ATS hours the runway 31 pilot-controlled lighting and PAPI are set on the air-air frequency: 3 clicks on the microphone for low intensity, 5 for high intensity, 7 within 5 seconds to switch off; automatic shut-off after 15 minutes.",
+    "Radio failure: air traffic light signals and pyrotechnic signals are unserviceable."
   ]
 }

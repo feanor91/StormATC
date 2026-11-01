@@ -1,16 +1,17 @@
 {
   "$comment": [
-    "EXTRACTED AUTOMATICALLY from the text of the SIA chart AD 2 LFAQ (AIP France, chart dated 2026-04-16), not read by hand.",
-    "Only what the chart prints as text is recorded: services and frequencies, elevation, position, magnetic variation,",
-    "runway designators and QFU. Circuit rules and reporting points are drawings and are NOT extracted: the engine uses its defaults.",
-    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation."
+    "Transcribed by hand from the SIA chart set AD 2 LFAQ (AIP France, chart dated 2025-05-15): the text pages checked against the images of the pages.",
+    "Only what the chart states is recorded; nothing is deduced. Services, frequencies, elevation, position, magnetic variation and runways",
+    "were first extracted automatically from the chart text; the reporting points, rules and notes were added by hand.",
+    "The charts themselves are (c) SIA and are not redistributed. Flight simulation only: never use for real navigation.",
+    "No circuit height or circuit side is printed on this chart, so none is recorded. The chart is titled ALBERT BRAY."
   ],
   "icao": "LFAQ",
   "name": "International Amiens Henry Potez",
   "source": {
     "publication": "AIP France AD 2 LFAQ",
-    "chartDate": "2026-04-16",
-    "extraction": "automatic"
+    "chartDate": "2025-05-15",
+    "extraction": "manual, from the chart text and images"
   },
   "referencePosition": {
     "latitude": 49.97,
@@ -19,7 +20,11 @@
   "elevationFeet": 363,
   "magneticVariationDegrees": 1.0,
   "service": {
-    "kind": "Tower"
+    "kind": "Tower",
+    "atsHours": "TWR: winter Monday to Friday 0800 to 1800, Saturday 0830 to 1600; summer Monday to Friday 0700 to 1700, Saturday 0730 to 1600; not provided on Sundays and public holidays (UTC in winter, local time minus 1 h in summer). Extension on PPR from the aerodrome operator before 1300 on the previous working day",
+    "outsideAtsHours": "AFIS outside the TWR hours, on PPR from the aerodrome operator before 1000 on the previous working day",
+    "radioMandatory": true,
+    "nightVfrApproved": true
   },
   "frequencies": {
     "approach": 129.36,
@@ -41,5 +46,93 @@
         264
       ]
     }
+  ],
+  "preferredQfu": 264,
+  "preferredQfuReason": "preferred QFU 264, due to the IFR procedure",
+  "reportingPoints": [
+    {
+      "name": "N",
+      "spoken": {
+        "fr": "Novembre",
+        "en": "November"
+      },
+      "latitude": 50.06556,
+      "longitude": 2.66222,
+      "location": "Hamel village, on the D50 road",
+      "purpose": "special VFR reporting point"
+    },
+    {
+      "name": "NA",
+      "spoken": {
+        "fr": "Novembre Alpha",
+        "en": "November Alpha"
+      },
+      "latitude": 50.01611,
+      "longitude": 2.67333,
+      "location": "north end of the Henry Potez business park",
+      "purpose": "special VFR reporting point"
+    },
+    {
+      "name": "S",
+      "spoken": {
+        "fr": "Sierra",
+        "en": "Sierra"
+      },
+      "latitude": 49.87389,
+      "longitude": 2.83472,
+      "location": "D1029 and A1 motorway interchange",
+      "purpose": "special VFR reporting point"
+    },
+    {
+      "name": "SA",
+      "spoken": {
+        "fr": "Sierra Alpha",
+        "en": "Sierra Alpha"
+      },
+      "latitude": 49.92389,
+      "longitude": 2.75972,
+      "location": "Cappy village, on the Somme canal",
+      "purpose": "special VFR reporting point"
+    },
+    {
+      "name": "W",
+      "spoken": {
+        "fr": "Whisky",
+        "en": "Whiskey"
+      },
+      "latitude": 49.88694,
+      "longitude": 2.51167,
+      "location": "memorial south of Corbie",
+      "purpose": "special VFR reporting point"
+    },
+    {
+      "name": "WA",
+      "spoken": {
+        "fr": "Whisky Alpha",
+        "en": "Whiskey Alpha"
+      },
+      "latitude": 49.90556,
+      "longitude": 2.6325,
+      "location": "memorial west of Cerisy",
+      "purpose": "special VFR reporting point"
+    }
+  ],
+  "withAts": {
+    "radio": {
+      "arrival": "arrivals and transits in the CTR: first contact on ALBERT TWR at least 3 minutes before entering the CTR"
+    }
+  },
+  "notes": [
+    "Aerodrome reserved for radio-equipped aircraft.",
+    "The routes published on the VAC chart are likely to be imposed by ATC.",
+    "Preferred QFU 264, due to the IFR procedure.",
+    "Taxiing prohibited except on runways and taxiways. Taxiway B is 10.50 m wide and limited to aircraft with MTOW up to 5.7 t, or wingspan under 24 m and main gear overall width under 6 m.",
+    "Large aircraft \"Beluga\" are frequently present: crews are invited to make sure spacings are respected because of wake turbulence.",
+    "Special VFR minima with IFR traffic: visibility 3000 m, ceiling 600 ft. Without IFR traffic: aeroplanes visibility 1500 m and clear of clouds; helicopters visibility 800 m and clear of clouds.",
+    "Pilot-controlled lighting outside ATS hours: 3 clicks on the microphone for low intensity, 5 for high intensity, 7 within 5 seconds to switch off; automatic shut-off after 15 minutes.",
+    "Radio failure: air traffic light signals and pyrotechnic signals are unserviceable.",
+    "Radio failure on arrival: squawk 7600. Before receiving the CTR entry clearance, do not enter the CTR. Within the CTR, continue as cleared, or fly overhead the tower with lights on at 1700 ft and join the aerodrome circuit watching the approach axes.",
+    "Radio failure on departure: before take-off, do not take off. After take-off, squawk 7600 and leave the CTR.",
+    "Aerobatics on the aerodrome (no. 6012), during ATC hours only, on the axis of paved runway 08/26, 1000 m long, 1900 ft AMSL to 3500 ft AMSL (extension possible down to 900 ft AMSL under the protocol); reserved for authorised pilots; information on ALBERT TWR and LILLE INFO."
   ]
 }
