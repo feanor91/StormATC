@@ -37,6 +37,12 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
     /// <summary>The address of the chart list, and of the pages of each chart under it.</summary>
     public const string ChartsPath = "/api/charts";
 
+    /// <summary>NavVFR's route and aircraft, relayed for the map tab.</summary>
+    public const string NavVfrStatePath = "/api/navvfr/state";
+
+    /// <summary>NavVFR's airspaces and aerodromes in a rectangle (<c>minLat</c>, <c>minLon</c>, <c>maxLat</c>, <c>maxLon</c>).</summary>
+    public const string NavVfrMapPath = "/api/navvfr/map";
+
     /// <summary>The largest route accepted, in bytes: a real route is a few kilobytes.</summary>
     private const int MaximumRouteBytes = 512 * 1024;
 
@@ -60,6 +66,7 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
     private readonly IVoiceRejection? _voices;
     private readonly ISimRouteReceiver? _routes;
     private readonly IVacChartLibrary? _charts;
+    private readonly INavVfrFeed? _navVfr;
     private HttpListener? _listener;
     private CancellationTokenSource? _stopping;
     private Task? _loop;
@@ -72,6 +79,7 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
     /// <param name="voices">Sets the last controller voice aside; null when there is nothing to judge.</param>
     /// <param name="routes">Receives the flight plans the panel reads in the simulator; null when unused.</param>
     /// <param name="charts">The charts the pilot put in the charts folder; null when the panel shows none.</param>
+    /// <param name="navVfr">NavVFR's shared route, aircraft and airspaces; null when the map tab has no source.</param>
     public ToolbarPanelServer(
         IToolbarPanelStateSource state,
         IOptions<ToolbarPanelOptions> options,
@@ -79,8 +87,10 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
         string panelDirectory,
         IVoiceRejection? voices = null,
         ISimRouteReceiver? routes = null,
-        IVacChartLibrary? charts = null)
+        IVacChartLibrary? charts = null,
+        INavVfrFeed? navVfr = null)
     {
+        _navVfr = navVfr;
         _charts = charts;
         _voices = voices;
         _routes = routes;
@@ -240,6 +250,12 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
                 return;
             }
 
+            if (path is NavVfrStatePath or NavVfrMapPath)
+            {
+                await ServeNavVfrAsync(context, path, cancellationToken).ConfigureAwait(false);
+                return;
+            }
+
             switch (path)
             {
                 case "/api/state":
@@ -346,6 +362,44 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
         response.Headers["Cache-Control"] = "private, max-age=600";
         await WriteAsync(response, "image/png", drawn.Png, cancellationToken).ConfigureAwait(false);
     }
+
+    /// <summary>Relays NavVFR's feed: 503 when NavVFR is not running, so the tab can say so.</summary>
+    private async Task ServeNavVfrAsync(HttpListenerContext context, string path, CancellationToken cancellationToken)
+    {
+        HttpListenerResponse response = context.Response;
+        byte[]? bytes = null;
+        if (_navVfr is not null)
+        {
+            if (path == NavVfrStatePath)
+            {
+                bytes = await _navVfr.GetStateAsync(cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                var query = context.Request.QueryString;
+                if (!TryDegrees(query["minLat"], out double minLat) || !TryDegrees(query["minLon"], out double minLon)
+                    || !TryDegrees(query["maxLat"], out double maxLat) || !TryDegrees(query["maxLon"], out double maxLon)
+                    || minLat > maxLat || minLon > maxLon)
+                {
+                    response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return;
+                }
+
+                bytes = await _navVfr.GetMapAsync(minLat, minLon, maxLat, maxLon, cancellationToken).ConfigureAwait(false);
+            }
+        }
+
+        if (bytes is null)
+        {
+            response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
+            return;
+        }
+
+        await WriteAsync(response, "application/json; charset=utf-8", bytes, cancellationToken).ConfigureAwait(false);
+    }
+
+    private static bool TryDegrees(string? text, out double value) =>
+        double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out value) && double.IsFinite(value);
 
     /// <summary>The one change the panel may ask for: set the last controller voice aside.</summary>
     private async Task RejectVoiceAsync(HttpListenerContext context, CancellationToken cancellationToken)

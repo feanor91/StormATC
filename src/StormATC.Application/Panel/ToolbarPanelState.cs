@@ -154,6 +154,7 @@ public sealed record ToolbarPanelStage(string Key, string Title, IReadOnlyList<P
 /// <param name="NoVoiceYet">Shown while no local voice has spoken.</param>
 /// <param name="RejectFailed">Shown when the voice could not be set aside.</param>
 /// <param name="Charts">The charts tab and its labels.</param>
+/// <param name="Map">The map tab and its labels.</param>
 public sealed record ToolbarPanelLabels(
     string TabDialogue,
     string TabPhraseology,
@@ -173,7 +174,45 @@ public sealed record ToolbarPanelLabels(
     string VoiceInSettings = "",
     string NoVoiceYet = "",
     string RejectFailed = "",
-    ToolbarPanelChartLabels? Charts = null);
+    ToolbarPanelChartLabels? Charts = null,
+    ToolbarPanelMapLabels? Map = null);
+
+/// <summary>The texts of the map tab (the route, the airspaces and the aircraft, from NavVFR).</summary>
+/// <param name="Tab">Title of the tab.</param>
+/// <param name="NotRunning">Shown when NavVFR does not answer.</param>
+/// <param name="NoRoute">Shown when NavVFR has no route yet.</param>
+/// <param name="NoAircraft">Shown while NavVFR does not track the aircraft.</param>
+/// <param name="NoZones">Shown when NavVFR has no airspaces loaded (OpenAIP key).</param>
+/// <param name="Follow">The button that keeps the aircraft in the middle.</param>
+/// <param name="NorthUp">The button that turns the map north-up.</param>
+/// <param name="HeadingUp">The button that turns the map track-up.</param>
+/// <param name="FitRoute">The button that shows the whole route.</param>
+/// <param name="ZoomIn">Zoom in.</param>
+/// <param name="ZoomOut">Zoom out.</param>
+/// <param name="Inside">Title of the airspaces the aircraft is in.</param>
+/// <param name="Next">The next waypoint.</param>
+/// <param name="Altitude">Altitude word.</param>
+/// <param name="GroundSpeed">Ground speed word.</param>
+/// <param name="Heading">Heading word.</param>
+/// <param name="Truncated">Shown when the map is crowded and some airspaces are left out.</param>
+public sealed record ToolbarPanelMapLabels(
+    string Tab,
+    string NotRunning,
+    string NoRoute,
+    string NoAircraft,
+    string NoZones,
+    string Follow,
+    string NorthUp,
+    string HeadingUp,
+    string FitRoute,
+    string ZoomIn,
+    string ZoomOut,
+    string Inside,
+    string Next,
+    string Altitude,
+    string GroundSpeed,
+    string Heading,
+    string Truncated);
 
 /// <summary>The texts of the charts tab.</summary>
 /// <param name="Tab">Title of the tab.</param>
@@ -411,7 +450,25 @@ public static class ToolbarPanelStateBuilder
                 "Chargement de la carte…",
                 "Cette carte n'a pas pu être affichée.",
                 "StormATC ne peut pas lister les cartes.",
-                "Dernières cartes"))
+                "Dernières cartes"),
+            new ToolbarPanelMapLabels(
+                "Carte",
+                "NavVFR n'est pas lancé : ouvrez-le pour voir la route, les zones et votre avion ici.",
+                "Aucune route dans NavVFR : posez des points sur sa carte.",
+                "Avion non suivi : lancez MSFS (NavVFR le suit par SimConnect).",
+                "Zones non chargées dans NavVFR (clé OpenAIP).",
+                "Suivre",
+                "Nord en haut",
+                "Cap en haut",
+                "Route",
+                "+",
+                "−",
+                "Vous êtes dans",
+                "Prochain point",
+                "Alt",
+                "Vs",
+                "Cap",
+                "Carte chargée : certaines zones ne sont pas montrées, zoomez."))
         : new ToolbarPanelLabels(
             "ATC dialogue",
             "Phraseology",
@@ -447,5 +504,23 @@ public static class ToolbarPanelStateBuilder
                 "Loading the chart…",
                 "This chart could not be drawn.",
                 "StormATC cannot list the charts.",
-                "Last charts"));
+                "Last charts"),
+            new ToolbarPanelMapLabels(
+                "Map",
+                "NavVFR is not running: open it to see the route, the airspaces and your aircraft here.",
+                "No route in NavVFR: put points on its map.",
+                "Aircraft not tracked: start MSFS (NavVFR tracks it through SimConnect).",
+                "Airspaces are not loaded in NavVFR (OpenAIP key).",
+                "Follow",
+                "North up",
+                "Track up",
+                "Route",
+                "+",
+                "−",
+                "You are in",
+                "Next point",
+                "Alt",
+                "GS",
+                "Hdg",
+                "Crowded map: some airspaces are left out, zoom in."));
 }

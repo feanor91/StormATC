@@ -437,6 +437,10 @@ public sealed class ToolbarPanelOptions
     [Range(1024, 65535)]
     public int Port { get; init; } = DefaultPort;
 
+    /// <summary>The loopback port NavVFR shares its route, aircraft and airspaces on (the panel's map tab).</summary>
+    [Range(1024, 65535)]
+    public int NavVfrPort { get; init; } = 47731;
+
     /// <summary>
     /// The folder the chart PDFs the panel can show are read from. Empty: the <c>Cartes VAC</c> folder
     /// beside the application.

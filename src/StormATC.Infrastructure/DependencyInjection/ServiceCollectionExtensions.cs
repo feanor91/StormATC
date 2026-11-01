@@ -131,6 +131,7 @@ public static class ServiceCollectionExtensions
             client.Timeout = TimeSpan.FromSeconds(90);
             client.DefaultRequestHeaders.UserAgent.ParseAdd("StormATC-VAC-update (flight simulation)");
         });
+        services.AddHttpClient<INavVfrFeed, Panel.NavVfrFeedClient>();
         services.AddSingleton(sp => new ToolbarPanelServer(
             sp.GetRequiredService<IToolbarPanelStateSource>(),
             sp.GetRequiredService<IOptions<ToolbarPanelOptions>>(),
@@ -138,7 +139,8 @@ public static class ServiceCollectionExtensions
             Path.Combine(AppContext.BaseDirectory, "panel"),
             sp.GetService<IVoiceRejection>(),
             sp.GetService<ISimRouteReceiver>(),
-            sp.GetService<IVacChartLibrary>()));
+            sp.GetService<IVacChartLibrary>(),
+            sp.GetService<INavVfrFeed>()));
         services.AddSingleton<IHostedService>(sp => sp.GetRequiredService<ToolbarPanelServer>());
         services.AddSingleton<RadioActivityState>();
 

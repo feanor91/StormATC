@@ -1,6 +1,6 @@
 # Panneau StormATC dans MSFS (barre d'outils, réalité virtuelle)
 
-StormATC ajoute une fenêtre à la barre d'outils de Microsoft Flight Simulator. Elle a trois onglets, et un quatrième en régime militaire :
+StormATC ajoute une fenêtre à la barre d'outils de Microsoft Flight Simulator. Elle a quatre onglets, et un cinquième en régime militaire :
 
 - **Dialogue ATC** : les échanges avec le contrôleur, du plus ancien au plus récent (vous en vert,
   le contrôleur en bleu). La liste suit les nouveaux messages tant que vous n'avez pas remonté.
@@ -12,6 +12,8 @@ StormATC ajoute une fenêtre à la barre d'outils de Microsoft Flight Simulator.
   (« répétez », « quelle est la fréquence de la Tour ? »…). L'onglet change tout seul avec la phase.
 - **Cartes** : les cartes (fichiers PDF) que vous avez déposées dans le dossier des cartes de StormATC,
   affichées dans le simulateur, en VR comme à l'écran. Voir [les cartes](#les-cartes-pdf).
+- **Carte** : la route préparée dans [NavVFR](https://github.com/feanor91/NavVFR), les espaces aériens autour de vous et
+  votre avion en temps réel. Voir [la carte](#la-carte).
 - **Militaire** (seulement en CAM V ou CAM I) : le régime et la base, l'approche radar PAR/SRA en cours, les
   fréquences de la base que les radios de MSFS peuvent accorder (118 à 137 MHz) et les appels militaires par thème
   (roulage, arrivée et break, PAR et SRA, changement de régime).
@@ -41,6 +43,28 @@ l'indicatif de la session). Le libellé sous l'icône de la barre d'outils reste
 
 La langue des exemples est celle de la radio réglée dans StormATC. Les boutons **A−** et **A+** en
 haut à droite changent la taille du texte ; le choix est mémorisé.
+
+## La carte
+
+L'onglet **Carte** dessine, sans fond de carte ni téléchargement, ce que **NavVFR** connaît : la **route** (points et
+tracé, le prochain point en jaune), les **espaces aériens** autour de vous, les **terrains** et **votre avion** avec la
+trace de son vol. Les zones qui concernent votre altitude (celle de l'avion, ou l'altitude de croisière de NavVFR tant
+que l'avion n'est pas suivi) sont colorées et nommées avec leurs limites ; les zones plus hautes sont en pointillés
+discrets. En haut : altitude, vitesse sol, cap, le **prochain point** (distance et temps) et les zones dans lesquelles
+vous êtes.
+
+- **+ / −** zoom ; on déplace la carte en la faisant glisser (la molette zoome aussi).
+- **Suivre** garde l'avion au centre ; déplacer la carte à la main le désactive.
+- **Nord en haut / Cap en haut** : orientation de la carte.
+- **Route** : montre toute la route.
+
+**Il faut que NavVFR soit lancé** (avant ou après MSFS) : il partage sa route, la position de l'avion (qu'il lit par
+SimConnect) et ses zones sur le port local `47731`, réservé à l'ordinateur (127.0.0.1), et StormATC les relaie au
+panneau. Sans NavVFR, l'onglet le dit. Les zones sont celles que NavVFR affiche (clé OpenAIP, filtres de son panneau
+« Espaces aériens »). Pour un autre port : réglage `ToolbarPanel:NavVfrPort` de StormATC.
+
+Limite : les limites verticales sont comparées à l'altitude de l'avion telle que NavVFR les lit (le sol compte pour 0,
+une limite « AGL » est prise telle quelle) : c'est une aide, pas un contrôle réglementaire.
 
 ## Les cartes (PDF)
 

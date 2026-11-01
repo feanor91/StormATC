@@ -5,6 +5,15 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **A Map tab in the in-simulator panel**: the route drawn in NavVFR, the airspaces around (those at your altitude are
+  highlighted, with their limits), the aerodromes and your aircraft, followed in real time with its track. It tells which
+  airspaces you are in and the next point of the route with its distance and time. Zoom, drag, "Follow", "North up" /
+  "Track up" and "Route" (fit the whole route) buttons. The data comes from NavVFR, which now shares it on a local port
+  (47731, loopback only); StormATC relays it to the panel. The map is drawn without any tile, so nothing is downloaded
+  from the simulator. NavVFR must be running (the tab says so otherwise).
+
 ## 0.25.0 - 2026-11-01
 
 ## 0.24.0 - 2026-11-01
