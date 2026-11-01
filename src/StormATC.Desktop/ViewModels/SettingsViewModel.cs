@@ -316,15 +316,12 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         ILogger<SettingsViewModel> logger,
         StormATC.Application.Charts.IVacChartLibrary? charts = null,
         StormATC.Application.Charts.IVacChartUpdater? chartUpdater = null,
-        IOptions<StartPositionOptions>? startPositionOptions = null,
         IOptions<SimulatorLifecycleOptions>? lifecycleOptions = null)
     {
         _closeWithMsfs = lifecycleOptions?.Value.CloseWithMsfs ?? false;
         _launchWithMsfsAvailable = StormATC.Infrastructure.Simulator.MsfsAutoLaunch.IsAvailable();
         _launchWithMsfs = StormATC.Infrastructure.Simulator.MsfsAutoLaunch.IsEnabled();
         KeepLaunchWithMsfsPathCurrent();
-        _startAtParking = startPositionOptions?.Value.StartAtParking ?? false;
-        _coldAndDark = startPositionOptions?.Value.ColdAndDark ?? false;
         _charts = charts;
         _chartUpdater = chartUpdater;
         _chartsSource = ReadChartsSource();
@@ -1012,34 +1009,6 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException)
         {
             _logger.LogWarning(ex, "The MSFS EXE.xml could not be updated.");
-        }
-    }
-
-    /// <summary>Whether a flight that starts at the holding point or on the runway is moved to a parking stand.</summary>
-    [ObservableProperty]
-    private bool _startAtParking;
-
-    partial void OnStartAtParkingChanged(bool value) =>
-        _ = SaveStartPositionAsync(nameof(StartPositionOptions.StartAtParking), value);
-
-    /// <summary>Whether the aircraft of a flight that just started is shut down.</summary>
-    [ObservableProperty]
-    private bool _coldAndDark;
-
-    partial void OnColdAndDarkChanged(bool value) =>
-        _ = SaveStartPositionAsync(nameof(StartPositionOptions.ColdAndDark), value);
-
-    private async Task SaveStartPositionAsync(string key, bool value)
-    {
-        try
-        {
-            await _userSettings
-                .SaveAsync(StartPositionOptions.SectionName, key, JsonValue.Create(value), CancellationToken.None)
-                .ConfigureAwait(true);
-        }
-        catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException or JsonException)
-        {
-            _logger.LogWarning(ex, "The start position setting {Key} could not be saved.", key);
         }
     }
 

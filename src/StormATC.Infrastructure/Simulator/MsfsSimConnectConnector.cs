@@ -55,7 +55,7 @@ public enum SimulatorConnectionFailureKind
 /// facilities are read from the simulator; the only write is an explicit COM1 tuning event when
 /// a flight is loaded.
 /// </remarks>
-public sealed partial class MsfsSimConnectConnector : ISimulatorConnector, ISimulatorAircraftControl
+public sealed partial class MsfsSimConnectConnector : ISimulatorConnector
 {
     private readonly ILogger<MsfsSimConnectConnector> _logger;
     private readonly SimulatorOptions _options;

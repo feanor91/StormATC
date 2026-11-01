@@ -216,7 +216,7 @@ Rien n'est à configurer. Chaque partie décide pour elle-même, et dit ce qu'el
 
 | | Sans aucune configuration | Une fois configuré |
 | --- | --- | --- |
-| **Simulateur** | Un avion scripté vole la route fictive fournie STMR → STMD | MSFS est connecté automatiquement quand il tourne. Démarrez-le plus tard et StormATC bascule tout seul |
+| **Simulateur** | Un avion simulé vole la route fictive fournie STMR → STMD | MSFS est connecté automatiquement quand il tourne. Démarrez-le plus tard et StormATC bascule tout seul |
 | **Plan de vol** | Le vol d'exemple fictif fourni | Appuyez sur **Envoyer à l'ATC** dans l'EFB de MSFS (le module installé avec StormATC transmet le plan), chargez un fichier `.PLN`, ou saisissez votre identifiant SimBrief sur la page Plan de vol |
 | **Parole** | Utilisez la transmission écrite du tableau de bord | Installez Whisper et Piper (l'installeur sait le faire) pour une voix locale sans compte, ou ajoutez une clé Deepgram, puis maintenez le push-to-talk |
 | **Formulation** | Phraséologie déterministe, toujours disponible | Choisissez OpenRouter, OpenAI, Groq, DeepSeek ou Anthropic et ajoutez la clé et le modèle de ce fournisseur |

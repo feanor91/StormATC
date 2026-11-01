@@ -5,6 +5,17 @@ public releases.
 
 ## Unreleased
 
+### Removed
+
+- **"Start at a parking stand" and "Start cold and dark"** (Settings > "Start of the flight"): both options, the code that
+  moved the aircraft to a stand and switched its systems off at the start of a flight, and the part of the simulator
+  connector behind them are gone. The simulator does this itself.
+
+### Fixed
+
+- French wording: "scripté" and "managée" (anglicisms) replaced by "simulé", "programmé" and "SimConnect .NET" in the
+  interface and the French README.
+
 ## 0.28.0 - 2026-11-01
 
 ### Added
