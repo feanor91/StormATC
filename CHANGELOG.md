@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.29.0 - 2026-11-02
+
 ### Changed
 
 - **The panel's Map tab no longer needs NavVFR**: StormATC has its own map system. It draws the flight plan of its session,
