@@ -46,7 +46,24 @@ public sealed class MapServiceTests : IDisposable
 
     public MapServiceTests() => Directory.CreateDirectory(_folder);
 
-    public void Dispose() => Directory.Delete(_folder, recursive: true);
+    public void Dispose()
+    {
+        // The map warms its data up in the background the first time it is asked for the state: let that finish.
+        for (int attempt = 0; attempt < 30; attempt++)
+        {
+            try
+            {
+                Directory.Delete(_folder, recursive: true);
+                return;
+            }
+            catch (IOException)
+            {
+                Thread.Sleep(100);
+            }
+        }
+
+        Directory.Delete(_folder, recursive: true);
+    }
 
     private sealed class Paths(string root) : IStoragePaths
     {
