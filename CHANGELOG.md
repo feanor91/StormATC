@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.29.2 - 2026-11-02
+
 ### Fixed
 
 - **The base map disappeared at some scales on a wide panel**: the panel drew no tile at all when the screen needed more than
