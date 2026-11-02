@@ -546,6 +546,7 @@ var StormAtcPanel = (function () {
         var MAP_POLL_MS = 1000;
         var MAP_FETCH_MIN_MS = 2500;
         var MAP_TRAIL_MAX = 150;
+        var MAP_MAX_TILES = 90;
         var MAP_ZOOM_STEP = 1.5;
         var MAP_MIN_RANGE_NM = 1.5;
         var MAP_MAX_RANGE_NM = 400;
@@ -789,8 +790,8 @@ var StormAtcPanel = (function () {
             var key = base + '/' + layer + '/' + z + '/' + x + '/' + y;
             var tile = mapTiles[key];
             if (tile) { return tile.ready ? tile.image : null; }
-            if (mapTileKeys.length > 600) {
-                var old = mapTileKeys.splice(0, 200);
+            if (mapTileKeys.length > 2500) {
+                var old = mapTileKeys.splice(0, 800);
                 for (var i = 0; i < old.length; i++) { delete mapTiles[old[i]]; }
             }
             var image = new Image();
@@ -1191,15 +1192,21 @@ var StormAtcPanel = (function () {
             if (!base || !base.layers) { return; }
             var z = Math.round(Math.log(scaleX * 2 * Math.PI / 256) / Math.LN2);
             z = Math.max(0, Math.min(base.maxZoom, z));
-            var tiles = Math.pow(2, z);
-            var size = 256 * (scaleX * 2 * Math.PI / (256 * tiles));
-            var radius = Math.sqrt(w * w + h * h) / 2;
-            // The tiles that the screen (turned or not) can show.
-            var fx = function (px) { return ((mapCenter.lon + px / scaleX * 180 / Math.PI) + 180) / 360 * tiles; };
-            var fy = function (py) { return (1 - (centreY - py / scaleX) / Math.PI) / 2 * tiles; };
-            var x0 = Math.floor(fx(-radius)), x1 = Math.floor(fx(radius));
-            var y0 = Math.max(0, Math.floor(fy(-radius))), y1 = Math.min(tiles - 1, Math.floor(fy(radius)));
-            if ((x1 - x0 + 1) * (y1 - y0 + 1) > 120) { return; }
+            // The tiles that the screen can show: its two half-sizes, or its half-diagonal when the map is turned. When there
+            // would be too many (a wide panel), a coarser zoom is used rather than drawing nothing.
+            var halfW = rot ? Math.sqrt(w * w + h * h) / 2 : w / 2;
+            var halfH = rot ? Math.sqrt(w * w + h * h) / 2 : h / 2;
+            var tiles, size, x0, x1, y0, y1;
+            for (;;) {
+                tiles = Math.pow(2, z);
+                size = 256 * (scaleX * 2 * Math.PI / (256 * tiles));
+                var fx = function (px) { return ((mapCenter.lon + px / scaleX * 180 / Math.PI) + 180) / 360 * tiles; };
+                var fy = function (py) { return (1 - (centreY - py / scaleX) / Math.PI) / 2 * tiles; };
+                x0 = Math.floor(fx(-halfW)); x1 = Math.floor(fx(halfW));
+                y0 = Math.max(0, Math.floor(fy(-halfH))); y1 = Math.min(tiles - 1, Math.floor(fy(halfH)));
+                if ((x1 - x0 + 1) * (y1 - y0 + 1) <= MAP_MAX_TILES || z <= 0) { break; }
+                z -= 1;
+            }
             var cx = (mapCenter.lon + 180) / 360 * tiles;
             var cy = (1 - centreY / Math.PI) / 2 * tiles;
             ctx.save();

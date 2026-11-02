@@ -5,6 +5,13 @@ public releases.
 
 ## Unreleased
 
+### Fixed
+
+- **The base map disappeared at some scales on a wide panel**: the panel drew no tile at all when the screen needed more than
+  120 of them (a large window at a scale where the tiles are small). It now keeps the same scale with at most 90 tiles per
+  layer, using a coarser zoom when needed, and counts the tiles from the width and height of the panel (not its diagonal)
+  unless the map is turned. The tile memory is larger so that a wide view does not flush its own tiles.
+
 ## 0.29.1 - 2026-11-02
 
 ### Changed
