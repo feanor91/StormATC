@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.30.0 - 2026-11-02
+
 ### Added
 
 - **A menu to choose the base map in the Navigation tab** (light grey, streets, relief, CARTO light, CARTO Voyager; the CARTO
