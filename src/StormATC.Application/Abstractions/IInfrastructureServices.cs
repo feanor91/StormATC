@@ -46,6 +46,12 @@ public static class SecretKeys
 
     /// <summary>The Deepgram API key.</summary>
     public const string DeepgramApiKey = "deepgram.apiKey";
+
+    /// <summary>The OpenAIP key, which gives the airspaces of the map.</summary>
+    public const string OpenAipApiKey = "openaip.apiKey";
+
+    /// <summary>The CARTO key, for the CARTO base maps.</summary>
+    public const string CartoApiKey = "carto.apiKey";
 }
 
 /// <summary>

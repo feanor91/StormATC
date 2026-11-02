@@ -629,7 +629,7 @@
   "StormATC adds itself to the list of programs MSFS starts with the simulator (its EXE.xml file), and removes itself when you untick the box. The entries of your other add-ons are not touched; a copy of each file is kept the first time it is changed.": "StormATC s'ajoute à la liste des programmes que MSFS lance avec le simulateur (son fichier EXE.xml) et s'en retire quand vous décochez la case. Les entrées de vos autres add-ons ne sont pas touchées ; une copie de chaque fichier est gardée la première fois qu'il est modifié.",
   "Close StormATC when MSFS stops": "Fermer StormATC quand MSFS s'arrête",
   "StormATC closes about twenty seconds after MSFS has stopped. It only does so once it has seen MSFS running, so a StormATC opened on its own stays open.": "StormATC se ferme environ vingt secondes après l'arrêt de MSFS. Il ne le fait qu'après avoir vu MSFS tourner : un StormATC ouvert seul reste ouvert.",
-  "Start StormATC when MSFS starts":"Lancer StormATC quand MSFS démarre",
+  "Start StormATC when MSFS starts": "Lancer StormATC quand MSFS démarre",
   "Needs MSFS 2024 to have been run once on this PC, so that its EXE.xml file exists.": "Demande que MSFS 2024 ait été lancé une fois sur ce PC, pour que son fichier EXE.xml existe.",
   "StormATC will start with MSFS from its next launch.": "StormATC se lancera avec MSFS dès le prochain démarrage du simulateur.",
   "StormATC will no longer start with MSFS.": "StormATC ne se lancera plus avec MSFS.",
@@ -737,7 +737,7 @@
   "Traffic radio encountered an error; see Diagnostics.": "La radio du trafic a rencontré une erreur ; voir le Diagnostic.",
   "Traffic radio is armed and waiting for nearby aircraft.": "La radio du trafic est armée et attend des avions proches.",
   "Traffic radio is armed; no aircraft is working the frequency you are tuned to.": "La radio du trafic est armée ; aucun avion n'est en contact sur la fréquence affichée.",
-  "Traffic radio is armed; no suitable nearby aircraft are visible.":"La radio du trafic est armée ; aucun avion proche adapté n'est visible.",
+  "Traffic radio is armed; no suitable nearby aircraft are visible.": "La radio du trafic est armée ; aucun avion proche adapté n'est visible.",
   "Traffic radio is disabled.": "La radio du trafic est désactivée.",
   "Training challenge. Every structured value returned by the transcript parser is judged as intentional, and full callsign/readback discipline is enforced.": "Défi d'entraînement. Chaque valeur extraite de la transcription est considérée comme voulue, et la discipline complète d'indicatif et de collationnement est exigée.",
   "Transcript": "Transcription",
@@ -943,7 +943,6 @@
   "METAR of {0} from {1}.": "METAR de {0} (source : {1}).",
   "Weather and ATIS of any aerodrome": "Météo et ATIS de n'importe quel aérodrome",
   "Works from the simulator's menus. The weather is the real METAR, fetched from the internet when you ask.": "Fonctionne depuis les menus du simulateur. La météo est le METAR réel, récupéré sur internet quand vous le demandez.",
-  "AERODROME (ICAO)": "AÉRODROME (OACI)",
   "ATIS FREQUENCY (OPTIONAL)": "FRÉQUENCE ATIS (FACULTATIF)",
   "Read the weather": "Lire la météo",
   "Listen to the ATIS": "Écouter l'ATIS",
@@ -952,5 +951,11 @@
   "METAR": "METAR",
   "Frequency {0} is the {1} service of {2} ({3}).": "La fréquence {0} est celle du service {1} de {2} ({3}).",
   "No aerodrome of the VAC base uses {0}. Type its ICAO code.": "Aucun aérodrome de la base VAC n'utilise {0}. Saisissez son code OACI.",
-  "{0} is shared by {1} aerodromes, for example {2}. Type the ICAO code.": "{0} est partagée par {1} aérodromes, par exemple {2}. Saisissez le code OACI."
+  "{0} is shared by {1} aerodromes, for example {2}. Type the ICAO code.": "{0} est partagée par {1} aérodromes, par exemple {2}. Saisissez le code OACI.",
+  "BASE MAP": "FOND DE CARTE",
+  "CARTO": "CARTO",
+  "Map": "Carte",
+  "OPENAIP": "OPENAIP",
+  "Only for the CARTO base maps (carto-light, carto-voyager); without a key StormATC draws the light grey map.": "Seulement pour les fonds CARTO (carto-light, carto-voyager) ; sans clé, StormATC dessine le fond gris clair.",
+  "The Map tab of the in-simulator panel shows your flight plan, the airspaces and your aircraft on a base map. StormATC downloads and keeps the data itself. The airspaces come from OpenAIP and need your own free key (openaip.net, account, API client).": "L'onglet Carte du panneau dans le simulateur montre votre plan de vol, les espaces aériens et votre avion sur un fond de carte. StormATC télécharge et conserve lui-même les données. Les espaces aériens viennent d'OpenAIP et demandent votre propre clé gratuite (openaip.net, compte, client API)."
 }

@@ -437,10 +437,6 @@ public sealed class ToolbarPanelOptions
     [Range(1024, 65535)]
     public int Port { get; init; } = DefaultPort;
 
-    /// <summary>The loopback port NavVFR shares its route, aircraft and airspaces on (the panel's map tab).</summary>
-    [Range(1024, 65535)]
-    public int NavVfrPort { get; init; } = 47731;
-
     /// <summary>
     /// The folder the chart PDFs the panel can show are read from. Empty: the <c>Cartes VAC</c> folder
     /// beside the application.
@@ -468,6 +464,22 @@ public sealed class SimFlightPlanOptions
     /// sample. A plan the pilot imported is never replaced this way.
     /// </summary>
     public bool ImportOnFlightLoaded { get; init; } = true;
+}
+
+/// <summary>The map of the in-simulator panel.</summary>
+public sealed class MapOptions
+{
+    /// <summary>The configuration section name.</summary>
+    public const string SectionName = "Map";
+
+    /// <summary>The ISO country code of the airspaces, aerodromes and beacons shown.</summary>
+    public string Country { get; init; } = "FR";
+
+    /// <summary>The base map: <c>clair</c>, <c>carto-light</c>, <c>carto-voyager</c>, <c>relief</c> or <c>rues</c>.</summary>
+    public string BaseMap { get; init; } = "clair";
+
+    /// <summary>Airspaces whose floor is higher than this many feet are not shown; 0 or less shows them all.</summary>
+    public double MaxAirspaceFloorFeet { get; init; } = 11500;
 }
 
 /// <summary>What StormATC does when the simulator it works with stops.</summary>

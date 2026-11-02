@@ -322,6 +322,85 @@
               </StackPanel>
             </Border>
 
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,14">
+              <StackPanel>
+                <TextBlock Text="Map" Style="{StaticResource SectionHeaderStyle}" />
+                <TextBlock Text="The Map tab of the in-simulator panel shows your flight plan, the airspaces and your aircraft on a base map. StormATC downloads and keeps the data itself. The airspaces come from OpenAIP and need your own free key (openaip.net, account, API client)."
+                           Style="{StaticResource SecondaryTextStyle}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,12" />
+
+                <Grid Margin="0,0,0,14">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="*" />
+                  </Grid.ColumnDefinitions>
+                  <TextBlock Text="BASE MAP" Style="{StaticResource LabelTextStyle}" />
+                  <ComboBox Grid.Column="1"
+                            ItemsSource="{Binding MapBaseMapNames}"
+                            SelectedItem="{Binding MapBaseMap}"
+                            MaxWidth="300"
+                            HorizontalAlignment="Left" />
+                </Grid>
+
+                <Grid Margin="0,0,0,14">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="*" />
+                  </Grid.ColumnDefinitions>
+                  <StackPanel>
+                    <TextBlock Text="OPENAIP" Style="{StaticResource LabelTextStyle}" />
+                    <TextBlock Text="{Binding OpenAipKeyStatus}"
+                               Style="{StaticResource SecondaryTextStyle}"
+                               Margin="0,5,0,0" />
+                  </StackPanel>
+                  <StackPanel Grid.Column="1">
+                    <PasswordBox x:Name="OpenAipKeyBox"
+                                 MaxWidth="500"
+                                 HorizontalAlignment="Stretch" />
+                    <WrapPanel Margin="0,8,0,0">
+                      <Button Content="Save key"
+                              Style="{StaticResource PrimaryButtonStyle}"
+                              Click="OnSaveOpenAipKey"
+                              Margin="0,0,8,0" />
+                      <Button Content="Remove"
+                              Command="{Binding RemoveOpenAipKeyCommand}" />
+                    </WrapPanel>
+                  </StackPanel>
+                </Grid>
+
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="*" />
+                  </Grid.ColumnDefinitions>
+                  <StackPanel>
+                    <TextBlock Text="CARTO" Style="{StaticResource LabelTextStyle}" />
+                    <TextBlock Text="{Binding CartoKeyStatus}"
+                               Style="{StaticResource SecondaryTextStyle}"
+                               Margin="0,5,0,0" />
+                  </StackPanel>
+                  <StackPanel Grid.Column="1">
+                    <PasswordBox x:Name="CartoKeyBox"
+                                 MaxWidth="500"
+                                 HorizontalAlignment="Stretch" />
+                    <WrapPanel Margin="0,8,0,0">
+                      <Button Content="Save key"
+                              Style="{StaticResource PrimaryButtonStyle}"
+                              Click="OnSaveCartoKey"
+                              Margin="0,0,8,0" />
+                      <Button Content="Remove"
+                              Command="{Binding RemoveCartoKeyCommand}" />
+                    </WrapPanel>
+                    <TextBlock Text="Only for the CARTO base maps (carto-light, carto-voyager); without a key StormATC draws the light grey map."
+                               Style="{StaticResource SecondaryTextStyle}"
+                               TextWrapping="Wrap"
+                               Margin="0,8,0,0" />
+                  </StackPanel>
+                </Grid>
+              </StackPanel>
+            </Border>
+
             <Border Style="{StaticResource CardStyle}">
               <StackPanel>
                 <TextBlock Text="Provider configuration"

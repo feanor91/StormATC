@@ -79,6 +79,18 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     private bool _hasDeepgramKey;
 
     [ObservableProperty]
+    private bool _hasOpenAipKey;
+
+    [ObservableProperty]
+    private bool _hasCartoKey;
+
+    [ObservableProperty]
+    private string _openAipKeyStatus = UiText.T("No key stored");
+
+    [ObservableProperty]
+    private string _cartoKeyStatus = UiText.T("No key stored");
+
+    [ObservableProperty]
     private string _openRouterKeyStatus = UiText.T("No key stored");
 
     [ObservableProperty]
@@ -316,8 +328,10 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         ILogger<SettingsViewModel> logger,
         StormATC.Application.Charts.IVacChartLibrary? charts = null,
         StormATC.Application.Charts.IVacChartUpdater? chartUpdater = null,
-        IOptions<SimulatorLifecycleOptions>? lifecycleOptions = null)
+        IOptions<SimulatorLifecycleOptions>? lifecycleOptions = null,
+        IOptions<MapOptions>? mapOptions = null)
     {
+        _mapBaseMap = mapOptions?.Value.BaseMap ?? "clair";
         _closeWithMsfs = lifecycleOptions?.Value.CloseWithMsfs ?? false;
         _launchWithMsfsAvailable = StormATC.Infrastructure.Simulator.MsfsAutoLaunch.IsAvailable();
         _launchWithMsfs = StormATC.Infrastructure.Simulator.MsfsAutoLaunch.IsEnabled();
@@ -813,6 +827,14 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
     public async Task SaveAnthropicKeyAsync(string key) =>
         await SaveKeyAsync(SecretKeys.AnthropicApiKey, key, "Anthropic").ConfigureAwait(true);
 
+    /// <summary>Stores the OpenAIP key, which gives the airspaces of the map.</summary>
+    public async Task SaveOpenAipKeyAsync(string key) =>
+        await SaveKeyAsync(SecretKeys.OpenAipApiKey, key, "OpenAIP").ConfigureAwait(true);
+
+    /// <summary>Stores the CARTO key, for the CARTO base maps.</summary>
+    public async Task SaveCartoKeyAsync(string key) =>
+        await SaveKeyAsync(SecretKeys.CartoApiKey, key, "CARTO").ConfigureAwait(true);
+
     /// <summary>Stores the Deepgram key. Called from the view with the password box contents.</summary>
     public async Task SaveDeepgramKeyAsync(string key) =>
         await SaveKeyAsync(SecretKeys.DeepgramApiKey, key, "Deepgram").ConfigureAwait(true);
@@ -1128,6 +1150,39 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         catch (System.ComponentModel.Win32Exception ex)
         {
             _logger.LogWarning(ex, "Could not open {Guide}.", guide);
+        }
+    }
+
+    /// <summary>Deletes the stored OpenAIP key.</summary>
+    [RelayCommand]
+    private async Task RemoveOpenAipKeyAsync() =>
+        await RemoveKeyAsync(SecretKeys.OpenAipApiKey, "OpenAIP").ConfigureAwait(true);
+
+    /// <summary>Deletes the stored CARTO key.</summary>
+    [RelayCommand]
+    private async Task RemoveCartoKeyAsync() =>
+        await RemoveKeyAsync(SecretKeys.CartoApiKey, "CARTO").ConfigureAwait(true);
+
+    /// <summary>The base maps the pilot can choose.</summary>
+    public IReadOnlyList<string> MapBaseMapNames { get; } = StormATC.Application.Map.MapBaseMaps.Keys;
+
+    /// <summary>The base map of the panel's map tab.</summary>
+    [ObservableProperty]
+    private string _mapBaseMap = "clair";
+
+    partial void OnMapBaseMapChanged(string value) => _ = SaveMapSettingAsync(nameof(MapOptions.BaseMap), value);
+
+    private async Task SaveMapSettingAsync(string key, string value)
+    {
+        try
+        {
+            await _userSettings
+                .SaveAsync(MapOptions.SectionName, key, JsonValue.Create(value), CancellationToken.None)
+                .ConfigureAwait(true);
+        }
+        catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException or JsonException)
+        {
+            _logger.LogWarning(ex, "The map setting {Key} could not be saved.", key);
         }
     }
 
@@ -1598,6 +1653,14 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
             HasDeepgramKey = await _secretStore
                 .HasSecretAsync(SecretKeys.DeepgramApiKey, CancellationToken.None)
                 .ConfigureAwait(true);
+
+            HasOpenAipKey = await _secretStore
+                .HasSecretAsync(SecretKeys.OpenAipApiKey, CancellationToken.None)
+                .ConfigureAwait(true);
+
+            HasCartoKey = await _secretStore
+                .HasSecretAsync(SecretKeys.CartoApiKey, CancellationToken.None)
+                .ConfigureAwait(true);
         }
         catch (Exception ex)
         {
@@ -1608,6 +1671,8 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
             HasDeepSeekKey = false;
             HasAnthropicKey = false;
             HasDeepgramKey = false;
+            HasOpenAipKey = false;
+            HasCartoKey = false;
         }
 
         OpenRouterKeyStatus = HasOpenRouterKey ? UiText.T("A key is stored (hidden)") : UiText.T("No key stored");
@@ -1616,6 +1681,8 @@ public sealed partial class SettingsViewModel : ObservableObject, IRefreshablePa
         DeepSeekKeyStatus = HasDeepSeekKey ? UiText.T("A key is stored (hidden)") : UiText.T("No key stored");
         AnthropicKeyStatus = HasAnthropicKey ? UiText.T("A key is stored (hidden)") : UiText.T("No key stored");
         DeepgramKeyStatus = HasDeepgramKey ? UiText.T("A key is stored (hidden)") : UiText.T("No key stored");
+        OpenAipKeyStatus = HasOpenAipKey ? UiText.T("A key is stored (hidden)") : UiText.T("No key stored");
+        CartoKeyStatus = HasCartoKey ? UiText.T("A key is stored (hidden)") : UiText.T("No key stored");
     }
 
     // =====================================================================================

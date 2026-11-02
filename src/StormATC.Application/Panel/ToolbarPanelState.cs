@@ -177,12 +177,12 @@ public sealed record ToolbarPanelLabels(
     ToolbarPanelChartLabels? Charts = null,
     ToolbarPanelMapLabels? Map = null);
 
-/// <summary>The texts of the map tab (the route, the airspaces and the aircraft, from NavVFR).</summary>
+/// <summary>The texts of the map tab (the flight plan, the airspaces and the aircraft).</summary>
 /// <param name="Tab">Title of the tab.</param>
-/// <param name="NotRunning">Shown when NavVFR does not answer.</param>
-/// <param name="NoRoute">Shown when NavVFR has no route yet.</param>
-/// <param name="NoAircraft">Shown while NavVFR does not track the aircraft.</param>
-/// <param name="NoZones">Shown when NavVFR has no airspaces loaded (OpenAIP key).</param>
+/// <param name="NotRunning">Shown when the map does not answer.</param>
+/// <param name="NoRoute">Shown when there is no flight plan yet.</param>
+/// <param name="NoAircraft">Shown while the simulator does not report the aircraft.</param>
+/// <param name="NoZones">Shown when no airspaces are loaded (no OpenAIP key).</param>
 /// <param name="Follow">The button that keeps the aircraft in the middle.</param>
 /// <param name="NorthUp">The button that turns the map north-up.</param>
 /// <param name="HeadingUp">The button that turns the map track-up.</param>
@@ -453,10 +453,10 @@ public static class ToolbarPanelStateBuilder
                 "Dernières cartes"),
             new ToolbarPanelMapLabels(
                 "Carte",
-                "NavVFR n'est pas lancé : ouvrez-le pour voir la route, les zones et votre avion ici.",
-                "Aucune route dans NavVFR : posez des points sur sa carte.",
-                "Avion non suivi : lancez MSFS (NavVFR le suit par SimConnect).",
-                "Zones non chargées dans NavVFR (clé OpenAIP).",
+                "La carte n'est pas disponible pour le moment.",
+                "Aucun plan de vol dans StormATC : importez-en un ou activez-le dans le simulateur.",
+                "Avion non suivi : lancez MSFS.",
+                "Zones non chargées : saisissez votre clé OpenAIP dans les Paramètres de StormATC (Carte).",
                 "Suivre",
                 "Nord en haut",
                 "Cap en haut",
@@ -507,10 +507,10 @@ public static class ToolbarPanelStateBuilder
                 "Last charts"),
             new ToolbarPanelMapLabels(
                 "Map",
-                "NavVFR is not running: open it to see the route, the airspaces and your aircraft here.",
-                "No route in NavVFR: put points on its map.",
-                "Aircraft not tracked: start MSFS (NavVFR tracks it through SimConnect).",
-                "Airspaces are not loaded in NavVFR (OpenAIP key).",
+                "The map is not available right now.",
+                "No flight plan in StormATC: import one or activate it in the simulator.",
+                "Aircraft not tracked: start MSFS.",
+                "Airspaces are not loaded: enter your OpenAIP key in StormATC's Settings (Map).",
                 "Follow",
                 "North up",
                 "Track up",

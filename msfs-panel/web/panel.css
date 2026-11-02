@@ -190,7 +190,7 @@
 .sa-suggest-example { font-size: 1em; color: #9be59b; line-height: 1.3; }
 .sa-suggest-detail { font-size: 0.85em; color: #9fb3c8; }
 
-/* The map: NavVFR's route and airspaces and the aircraft, on a canvas. */
+/* The map: the flight plan, the airspaces and the aircraft, on a canvas. */
 .sa-map { flex-direction: column; padding: 0; overflow: hidden; }
 .sa-mapwrap { flex: 1 1 auto; position: relative; min-height: 0; background: #0d1620; }
 .sa-mapcanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block; cursor: grab; touch-action: none; }

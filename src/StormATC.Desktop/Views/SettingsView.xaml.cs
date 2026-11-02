@@ -86,6 +86,32 @@ public partial class SettingsView : UserControl
         await viewModel.SaveAnthropicKeyAsync(key).ConfigureAwait(true);
     }
 
+    private async void OnSaveOpenAipKey(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel is not SettingsViewModel viewModel)
+        {
+            return;
+        }
+
+        string key = OpenAipKeyBox.Password;
+        OpenAipKeyBox.Clear();
+
+        await viewModel.SaveOpenAipKeyAsync(key).ConfigureAwait(true);
+    }
+
+    private async void OnSaveCartoKey(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel is not SettingsViewModel viewModel)
+        {
+            return;
+        }
+
+        string key = CartoKeyBox.Password;
+        CartoKeyBox.Clear();
+
+        await viewModel.SaveCartoKeyAsync(key).ConfigureAwait(true);
+    }
+
     private async void OnSaveDeepgramKey(object sender, RoutedEventArgs e)
     {
         if (ViewModel is not SettingsViewModel viewModel)

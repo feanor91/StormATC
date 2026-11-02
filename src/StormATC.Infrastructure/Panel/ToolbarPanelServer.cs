@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StormATC.Application.Abstractions;
 using StormATC.Application.Charts;
+using StormATC.Application.Map;
 using StormATC.Application.Options;
 using StormATC.Application.Panel;
 
@@ -37,14 +38,14 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
     /// <summary>The address of the chart list, and of the pages of each chart under it.</summary>
     public const string ChartsPath = "/api/charts";
 
-    /// <summary>NavVFR's route and aircraft, relayed for the map tab.</summary>
-    public const string NavVfrStatePath = "/api/navvfr/state";
+    /// <summary>The flight plan route, the aircraft and the base map of the map tab.</summary>
+    public const string MapStatePath = "/api/map/state";
 
-    /// <summary>NavVFR's airspaces and aerodromes in a rectangle (<c>minLat</c>, <c>minLon</c>, <c>maxLat</c>, <c>maxLon</c>).</summary>
-    public const string NavVfrMapPath = "/api/navvfr/map";
+    /// <summary>The airspaces, aerodromes and beacons in a rectangle (<c>minLat</c>, <c>minLon</c>, <c>maxLat</c>, <c>maxLon</c>).</summary>
+    public const string MapDataPath = "/api/map/data";
 
-    /// <summary>NavVFR's base map tiles, <c>/api/navvfr/tile/{layer}/{zoom}/{x}/{y}</c>.</summary>
-    public const string NavVfrTilePath = "/api/navvfr/tile";
+    /// <summary>The base map tiles, <c>/api/map/tile/{layer}/{zoom}/{x}/{y}</c>.</summary>
+    public const string MapTilePath = "/api/map/tile";
 
     /// <summary>The largest route accepted, in bytes: a real route is a few kilobytes.</summary>
     private const int MaximumRouteBytes = 512 * 1024;
@@ -69,7 +70,7 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
     private readonly IVoiceRejection? _voices;
     private readonly ISimRouteReceiver? _routes;
     private readonly IVacChartLibrary? _charts;
-    private readonly INavVfrFeed? _navVfr;
+    private readonly IMapService? _map;
     private HttpListener? _listener;
     private CancellationTokenSource? _stopping;
     private Task? _loop;
@@ -82,7 +83,7 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
     /// <param name="voices">Sets the last controller voice aside; null when there is nothing to judge.</param>
     /// <param name="routes">Receives the flight plans the panel reads in the simulator; null when unused.</param>
     /// <param name="charts">The charts the pilot put in the charts folder; null when the panel shows none.</param>
-    /// <param name="navVfr">NavVFR's shared route, aircraft and airspaces; null when the map tab has no source.</param>
+    /// <param name="map">The map of the map tab (flight plan, aircraft, airspaces, tiles); null when the panel has none.</param>
     public ToolbarPanelServer(
         IToolbarPanelStateSource state,
         IOptions<ToolbarPanelOptions> options,
@@ -91,9 +92,9 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
         IVoiceRejection? voices = null,
         ISimRouteReceiver? routes = null,
         IVacChartLibrary? charts = null,
-        INavVfrFeed? navVfr = null)
+        IMapService? map = null)
     {
-        _navVfr = navVfr;
+        _map = map;
         _charts = charts;
         _voices = voices;
         _routes = routes;
@@ -253,15 +254,15 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
                 return;
             }
 
-            if (path.StartsWith(NavVfrTilePath + "/", StringComparison.Ordinal))
+            if (path.StartsWith(MapTilePath + "/", StringComparison.Ordinal))
             {
-                await ServeNavVfrTileAsync(context, path, cancellationToken).ConfigureAwait(false);
+                await ServeMapTileAsync(context, path, cancellationToken).ConfigureAwait(false);
                 return;
             }
 
-            if (path is NavVfrStatePath or NavVfrMapPath)
+            if (path is MapStatePath or MapDataPath)
             {
-                await ServeNavVfrAsync(context, path, cancellationToken).ConfigureAwait(false);
+                await ServeMapAsync(context, path, cancellationToken).ConfigureAwait(false);
                 return;
             }
 
@@ -372,46 +373,44 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
         await WriteAsync(response, "image/png", drawn.Png, cancellationToken).ConfigureAwait(false);
     }
 
-    /// <summary>Relays NavVFR's feed: 503 when NavVFR is not running, so the tab can say so.</summary>
-    private async Task ServeNavVfrAsync(HttpListenerContext context, string path, CancellationToken cancellationToken)
+    /// <summary>The map tab's state (the flight plan route, the aircraft) and its data (airspaces, aerodromes, beacons).</summary>
+    private async Task ServeMapAsync(HttpListenerContext context, string path, CancellationToken cancellationToken)
     {
         HttpListenerResponse response = context.Response;
-        byte[]? bytes = null;
-        if (_navVfr is not null)
-        {
-            if (path == NavVfrStatePath)
-            {
-                bytes = await _navVfr.GetStateAsync(cancellationToken).ConfigureAwait(false);
-            }
-            else
-            {
-                var query = context.Request.QueryString;
-                if (!TryDegrees(query["minLat"], out double minLat) || !TryDegrees(query["minLon"], out double minLon)
-                    || !TryDegrees(query["maxLat"], out double maxLat) || !TryDegrees(query["maxLon"], out double maxLon)
-                    || minLat > maxLat || minLon > maxLon)
-                {
-                    response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    return;
-                }
-
-                bytes = await _navVfr.GetMapAsync(minLat, minLon, maxLat, maxLon, cancellationToken).ConfigureAwait(false);
-            }
-        }
-
-        if (bytes is null)
+        if (_map is null)
         {
             response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
             return;
         }
 
+        byte[] bytes;
+        if (path == MapStatePath)
+        {
+            bytes = JsonSerializer.SerializeToUtf8Bytes(_map.GetState(), Json);
+        }
+        else
+        {
+            var query = context.Request.QueryString;
+            if (!TryDegrees(query["minLat"], out double minLat) || !TryDegrees(query["minLon"], out double minLon)
+                || !TryDegrees(query["maxLat"], out double maxLat) || !TryDegrees(query["maxLon"], out double maxLon)
+                || minLat > maxLat || minLon > maxLon)
+            {
+                response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return;
+            }
+
+            MapData data = await _map.GetDataAsync(minLat, minLon, maxLat, maxLon, cancellationToken).ConfigureAwait(false);
+            bytes = JsonSerializer.SerializeToUtf8Bytes(data, Json);
+        }
+
         await WriteAsync(response, "application/json; charset=utf-8", bytes, cancellationToken).ConfigureAwait(false);
     }
 
-    private async Task ServeNavVfrTileAsync(HttpListenerContext context, string path, CancellationToken cancellationToken)
+    private async Task ServeMapTileAsync(HttpListenerContext context, string path, CancellationToken cancellationToken)
     {
         HttpListenerResponse response = context.Response;
-        string[] parts = path[(NavVfrTilePath.Length + 1)..].Split('/');
-        if (_navVfr is null
+        string[] parts = path[(MapTilePath.Length + 1)..].Split('/');
+        if (_map is null
             || parts.Length != 4
             || !int.TryParse(parts[0], NumberStyles.None, CultureInfo.InvariantCulture, out int layer)
             || !int.TryParse(parts[1], NumberStyles.None, CultureInfo.InvariantCulture, out int zoom)
@@ -423,7 +422,7 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
             return;
         }
 
-        NavVfrTile? tile = await _navVfr.GetTileAsync(layer, zoom, x, y, cancellationToken).ConfigureAwait(false);
+        MapTile? tile = await _map.GetTileAsync(layer, zoom, x, y, cancellationToken).ConfigureAwait(false);
         if (tile is null)
         {
             response.StatusCode = (int)HttpStatusCode.NotFound;

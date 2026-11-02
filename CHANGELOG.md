@@ -5,6 +5,14 @@ public releases.
 
 ## Unreleased
 
+### Changed
+
+- **The panel's Map tab no longer needs NavVFR**: StormATC has its own map system. It draws the flight plan of its session,
+  the aircraft the simulator reports, the airspaces (OpenAIP, with your own free key), the aerodromes and the VOR/NDB beacons
+  (OurAirports) on the base map of your choice (light grey, CARTO, relief or streets), with the look of NavVFR's map. StormATC
+  downloads and keeps the data and the tiles itself (`map` and `map-tiles` folders), so the tab also works offline once seen.
+  New settings card *Map* (base map, OpenAIP key, CARTO key). The relay to NavVFR (`ToolbarPanel:NavVfrPort`) is removed.
+
 ## 0.28.7 - 2026-11-01
 
 ### Added

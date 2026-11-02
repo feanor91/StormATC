@@ -12,8 +12,8 @@ StormATC ajoute une fenêtre à la barre d'outils de Microsoft Flight Simulator.
   (« répétez », « quelle est la fréquence de la Tour ? »…). L'onglet change tout seul avec la phase.
 - **Cartes** : les cartes (fichiers PDF) que vous avez déposées dans le dossier des cartes de StormATC,
   affichées dans le simulateur, en VR comme à l'écran. Voir [les cartes](#les-cartes-pdf).
-- **Carte** : la route préparée dans [NavVFR](https://github.com/feanor91/NavVFR), les espaces aériens autour de vous et
-  votre avion en temps réel. Voir [la carte](#la-carte).
+- **Carte** : votre plan de vol, les espaces aériens autour de vous et votre avion en temps réel, sur un fond de carte.
+  Voir [la carte](#la-carte).
 - **Militaire** (seulement en CAM V ou CAM I) : le régime et la base, l'approche radar PAR/SRA en cours, les
   fréquences de la base que les radios de MSFS peuvent accorder (118 à 137 MHz) et les appels militaires par thème
   (roulage, arrivée et break, PAR et SRA, changement de régime).
@@ -46,25 +46,43 @@ haut à droite changent la taille du texte ; le choix est mémorisé.
 
 ## La carte
 
-L'onglet **Carte** montre, avec **le même fond de carte et le même style que NavVFR** (les tuiles passent par NavVFR, le simulateur ne télécharge rien), ce que **NavVFR** connaît : la **route** (points et
-tracé, le prochain point en jaune), les **espaces aériens** autour de vous, les **terrains** et **votre avion** avec la
-trace de son vol. Les zones qui concernent votre altitude (celle de l'avion, ou l'altitude de croisière de NavVFR tant
-que l'avion n'est pas suivi) sont colorées et nommées avec leurs limites ; les zones plus hautes sont en pointillés
-discrets. En haut : altitude, vitesse sol, cap, le **prochain point** (distance et temps) et les zones dans lesquelles
-vous êtes.
+L'onglet **Carte** est entièrement dans StormATC : il ne dépend d'aucune autre application. Il montre sur un **fond de
+carte** (gris clair par défaut) :
+
+- le **plan de vol** de la session StormATC (SimBrief, plan du simulateur, vol VFR local) : départ, points avec position,
+  arrivée, tracé rouge à liseré blanc, repères numérotés (bleus pour les terrains), prochain point en jaune ;
+- les **espaces aériens** autour de vous (CTR, TMA, zones réglementées, RMZ, zones de loisir) : contour coloré par famille,
+  bande intérieure (hachurée pour les zones réglementées), nom et limites écrits le long du contour ;
+- les **terrains** et les **balises VOR / NDB** (avec leur fréquence aux échelles de détail) ;
+- **votre avion**, lu dans le simulateur, avec la trace de son vol.
+
+En haut : altitude, vitesse sol, cap, le **prochain point** (distance et temps) et les zones dans lesquelles vous êtes
+(comparées à l'altitude de l'avion, ou à l'altitude de croisière du plan tant que l'avion n'est pas suivi).
 
 - **+ / −** zoom ; on déplace la carte en la faisant glisser (la molette zoome aussi).
 - **Suivre** garde l'avion au centre ; déplacer la carte à la main le désactive.
 - **Nord en haut / Cap en haut** : orientation de la carte.
 - **Route** : montre toute la route.
 
-**Il faut que NavVFR soit lancé** (avant ou après MSFS) : il partage sa route, la position de l'avion (qu'il lit par
-SimConnect) et ses zones sur le port local `47731`, réservé à l'ordinateur (127.0.0.1), et StormATC les relaie au
-panneau. Sans NavVFR, l'onglet le dit. Les zones sont celles que NavVFR affiche (clé OpenAIP, filtres de son panneau
-« Espaces aériens »). Pour un autre port : réglage `ToolbarPanel:NavVfrPort` de StormATC.
+**Réglages** (Paramètres → *Carte*) :
 
-Limite : les limites verticales sont comparées à l'altitude de l'avion telle que NavVFR les lit (le sol compte pour 0,
-une limite « AGL » est prise telle quelle) : c'est une aide, pas un contrôle réglementaire.
+- le **fond de carte** : `clair` (Esri, par défaut), `carto-light` et `carto-voyager` (CARTO, demandent une clé), `relief`
+  (OpenTopoMap) et `rues` (OpenStreetMap) ;
+- la **clé OpenAIP** (gratuite : compte sur openaip.net, puis un client API) : elle donne les espaces aériens. Sans clé, la
+  carte marche, avec le fond, le plan de vol, les terrains, les balises et l'avion, et le dit (« Zones non chargées ») ;
+- la **clé CARTO**, seulement pour les fonds CARTO.
+
+Les clés sont rangées dans le coffre du système (comme les autres clés de StormATC), jamais dans un fichier. D'autres
+réglages se changent dans `appsettings` : `Map:Country` (code pays ISO, `FR` par défaut) et `Map:MaxAirspaceFloorFeet`
+(les zones dont le plancher est plus haut ne sont pas montrées, 11500 ft par défaut, 0 pour tout montrer).
+
+**D'où viennent les données.** Le panneau du simulateur n'accède pas à internet : c'est StormATC qui télécharge, garde dans
+son dossier de données (`map\` et `map-tiles\`) et sert tout à l'onglet. Les terrains et les balises viennent d'OurAirports
+(domaine public), les espaces aériens d'OpenAIP (renouvelés tous les 30 jours), les tuiles du fond de carte du fournisseur
+choisi (gardées sur le disque). Une fois les tuiles vues, elles sont disponibles hors ligne.
+
+Limite : les limites verticales sont comparées à l'altitude de l'avion telle quelle (le sol compte pour 0, une limite
+« AGL » est prise telle quelle) : c'est une aide, pas un contrôle réglementaire.
 
 ## Les cartes (PDF)
 

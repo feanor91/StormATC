@@ -131,7 +131,22 @@ public static class ServiceCollectionExtensions
             client.Timeout = TimeSpan.FromSeconds(90);
             client.DefaultRequestHeaders.UserAgent.ParseAdd("StormATC-VAC-update (flight simulation)");
         });
-        services.AddHttpClient<INavVfrFeed, Panel.NavVfrFeedClient>();
+        // The map keeps what it downloaded in memory: one store and one tile service for the whole run.
+        services.AddHttpClient("storm-map", client => client.DefaultRequestHeaders.UserAgent.ParseAdd("StormATC (flight simulation)"));
+        services.AddSingleton(sp => new Map.MapDataStore(
+            sp.GetRequiredService<IHttpClientFactory>().CreateClient("storm-map"),
+            sp.GetRequiredService<IStoragePaths>(),
+            sp.GetRequiredService<ISecretStore>(),
+            sp.GetRequiredService<IOptionsMonitor<MapOptions>>(),
+            sp.GetRequiredService<TimeProvider>(),
+            sp.GetRequiredService<ILogger<Map.MapDataStore>>()));
+        services.AddSingleton(sp => new Map.MapTileService(
+            sp.GetRequiredService<IHttpClientFactory>().CreateClient("storm-map"),
+            sp.GetRequiredService<IStoragePaths>(),
+            sp.GetRequiredService<IOptionsMonitor<MapOptions>>(),
+            sp.GetRequiredService<Map.MapDataStore>(),
+            sp.GetRequiredService<ILogger<Map.MapTileService>>()));
+        services.AddSingleton<StormATC.Application.Map.IMapService, Map.FlightMapService>();
         services.AddSingleton(sp => new ToolbarPanelServer(
             sp.GetRequiredService<IToolbarPanelStateSource>(),
             sp.GetRequiredService<IOptions<ToolbarPanelOptions>>(),
@@ -140,7 +155,7 @@ public static class ServiceCollectionExtensions
             sp.GetService<IVoiceRejection>(),
             sp.GetService<ISimRouteReceiver>(),
             sp.GetService<IVacChartLibrary>(),
-            sp.GetService<INavVfrFeed>()));
+            sp.GetService<StormATC.Application.Map.IMapService>()));
         services.AddSingleton<IHostedService>(sp => sp.GetRequiredService<ToolbarPanelServer>());
         services.AddSingleton<RadioActivityState>();
 
@@ -166,6 +181,8 @@ public static class ServiceCollectionExtensions
         services.AddOptions<SimulatorLifecycleOptions>()
             .Bind(configuration.GetSection(SimulatorLifecycleOptions.SectionName));
 
+        services.AddOptions<MapOptions>()
+            .Bind(configuration.GetSection(MapOptions.SectionName));
         services.AddOptions<ToolbarPanelOptions>()
             .Bind(configuration.GetSection(ToolbarPanelOptions.SectionName))
             .ValidateDataAnnotations();

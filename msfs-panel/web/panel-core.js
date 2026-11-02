@@ -540,16 +540,16 @@ var StormAtcPanel = (function () {
             if (tab === 'charts' && !openedChart) { loadCharts(); }
         }, CHARTS_REFRESH_MS);
 
-        // ---- The map: NavVFR's route, the airspaces around and the aircraft, drawn on a canvas -----
-        // StormATC relays NavVFR's local feed (/api/navvfr/state, /api/navvfr/map). Nothing is fetched
-        // from the internet here: the map is vector only, so it works in the simulator and in VR.
+        // ---- The map: the flight plan, the airspaces around and the aircraft, drawn on a canvas -----
+        // StormATC itself serves the map (/api/map/state, /api/map/data, /api/map/tile): the flight plan of the session, the
+        // aircraft the simulator reports, the airspaces and the base map tiles. Nothing is fetched from the internet here.
         var MAP_POLL_MS = 1000;
         var MAP_FETCH_MIN_MS = 2500;
         var MAP_TRAIL_MAX = 150;
         var MAP_ZOOM_STEP = 1.5;
         var MAP_MIN_RANGE_NM = 1.5;
         var MAP_MAX_RANGE_NM = 400;
-        // The look of NavVFR's own map: colour, line width and dashes by kind of airspace.
+        // Colour, line width and dashes by kind of airspace.
         var MAP_ZONE_STYLE = {
             restricted: { colour: 'rgb(192, 40, 40)', width: 2, dashed: false },
             ctr: { colour: 'rgb(31, 90, 200)', width: 2, dashed: true },
@@ -582,8 +582,8 @@ var StormAtcPanel = (function () {
         function mapTexts() {
             var t = lastState && lastState.labels && lastState.labels.map;
             return t || {
-                tab: 'Map', notRunning: 'NavVFR is not running.', noRoute: 'No route in NavVFR.',
-                noAircraft: 'Aircraft not tracked.', noZones: 'Airspaces are not loaded in NavVFR.',
+                tab: 'Map', notRunning: 'The map is not available.', noRoute: 'No flight plan in StormATC.',
+                noAircraft: 'Aircraft not tracked.', noZones: 'Airspaces are not loaded (OpenAIP key).',
                 follow: 'Follow', northUp: 'North up', headingUp: 'Track up', fitRoute: 'Route', zoomIn: '+',
                 zoomOut: '−', inside: 'You are in', next: 'Next point', altitude: 'Alt', groundSpeed: 'GS',
                 heading: 'Hdg', truncated: 'Crowded map: zoom in.'
@@ -721,7 +721,7 @@ var StormAtcPanel = (function () {
 
         function pollMap() {
             if (tab !== 'map') { return; }
-            getJson('/api/navvfr/state', function (data) {
+            getJson('/api/map/state', function (data) {
                 mapOffline = !data;
                 mapState = data;
                 if (data) {
@@ -771,7 +771,7 @@ var StormAtcPanel = (function () {
                         minLon: view.minLon - dLon / 2, maxLon: view.maxLon + dLon / 2 };
             mapFetching = true;
             mapFetchedAt = now;
-            getJson('/api/navvfr/map?minLat=' + box.minLat.toFixed(4) + '&minLon=' + box.minLon.toFixed(4) +
+            getJson('/api/map/data?minLat=' + box.minLat.toFixed(4) + '&minLon=' + box.minLon.toFixed(4) +
                     '&maxLat=' + box.maxLat.toFixed(4) + '&maxLon=' + box.maxLon.toFixed(4), function (data) {
                 mapFetching = false;
                 if (data) { mapData = data; mapBox = box; drawMap(); }
@@ -784,7 +784,7 @@ var StormAtcPanel = (function () {
 
         function fromMercator(y) { return (2 * Math.atan(Math.exp(y)) - Math.PI / 2) * 180 / Math.PI; }
 
-        // A tile of NavVFR's base map, asked from StormATC once and kept; null while it is coming.
+        // A tile of the base map, asked from StormATC once and kept; null while it is coming.
         function mapTile(base, layer, z, x, y) {
             var key = base + '/' + layer + '/' + z + '/' + x + '/' + y;
             var tile = mapTiles[key];
@@ -797,7 +797,7 @@ var StormAtcPanel = (function () {
             tile = { image: image, ready: false };
             image.onload = function () { tile.ready = true; drawMap(); };
             image.onerror = function () { tile.ready = false; };
-            image.src = baseUrl() + '/api/navvfr/tile/' + layer + '/' + z + '/' + x + '/' + y;
+            image.src = baseUrl() + '/api/map/tile/' + layer + '/' + z + '/' + x + '/' + y;
             mapTiles[key] = tile;
             mapTileKeys.push(key);
             return null;
@@ -846,7 +846,7 @@ var StormAtcPanel = (function () {
             return best;
         }
 
-        // The diagonal hatching NavVFR uses inside restricted areas.
+        // The diagonal hatching inside restricted areas.
         function mapHatch(ctx, colour) {
             try {
                 var tile = document.createElement('canvas');
@@ -918,7 +918,7 @@ var StormAtcPanel = (function () {
             var inside = [];
             var labels = [];
 
-            // Airspaces, drawn as NavVFR draws them: a coloured outline, a band inside it (hatched for
+            // Airspaces: a coloured outline, a band inside it (hatched for
             // restricted areas) and the name and limits written along the longest visible side.
             var zones = (mapData && mapData.airspaces) || [];
             var hatch = null;
@@ -1005,7 +1005,42 @@ var StormAtcPanel = (function () {
                 }
             }
 
-            // Route: a white casing under a red line, numbered round markers (blue for aerodromes), as in NavVFR.
+            // Beacons (VOR, NDB).
+            var beacons = (mapData && mapData.navaids) || [];
+            if (mapRangeNm <= 40) {
+                ctx.font = (px - 1) + 'px sans-serif';
+                for (var bi = 0; bi < beacons.length; bi++) {
+                    var bp = project(beacons[bi].lat, beacons[bi].lon);
+                    if (bp[0] < 0 || bp[0] > w || bp[1] < 0 || bp[1] > h) { continue; }
+                    var vor = beacons[bi].kind === 'vor';
+                    ctx.strokeStyle = vor ? 'rgb(142, 68, 173)' : 'rgb(215, 125, 15)';
+                    ctx.fillStyle = vor ? 'rgba(142, 68, 173, 0.25)' : 'rgba(215, 125, 15, 0.25)';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    if (vor) {
+                        for (var hx = 0; hx < 6; hx++) {
+                            var ang = Math.PI / 3 * hx + Math.PI / 6;
+                            var hxp = bp[0] + 7 * Math.cos(ang), hyp = bp[1] + 7 * Math.sin(ang);
+                            if (hx === 0) { ctx.moveTo(hxp, hyp); } else { ctx.lineTo(hxp, hyp); }
+                        }
+                        ctx.closePath();
+                    } else {
+                        ctx.arc(bp[0], bp[1], 5, 0, Math.PI * 2);
+                    }
+                    ctx.fill();
+                    ctx.stroke();
+                    if (mapRangeNm <= 20) {
+                        var bt = beacons[bi].ident + ' ' + (vor ? (beacons[bi].frequencyKhz / 1000).toFixed(3) : Math.round(beacons[bi].frequencyKhz));
+                        ctx.strokeStyle = 'rgba(255, 255, 255, 0.92)';
+                        ctx.lineWidth = 3;
+                        ctx.fillStyle = vor ? 'rgb(100, 40, 130)' : 'rgb(150, 85, 10)';
+                        ctx.strokeText(bt, bp[0] + 10, bp[1]);
+                        ctx.fillText(bt, bp[0] + 10, bp[1]);
+                    }
+                }
+            }
+
+            // Route: a white casing under a red line, numbered round markers (blue for aerodromes).
             var route = (mapState && mapState.route) || [];
             var nextIndex = nextWaypoint(route, a);
             if (route.length > 1) {
@@ -1147,7 +1182,7 @@ var StormAtcPanel = (function () {
             renderMapInfo(t, a, live, inside, route, nextIndex);
         }
 
-        // The base map of NavVFR (same tiles, same style), drawn under everything else.
+        // The base map, drawn under everything else.
         function drawMapTiles(ctx, w, h, scaleX, centreY, rot) {
             var base = mapState && mapState.baseMap;
             if (!base || !base.layers) { return; }
