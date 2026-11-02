@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.29.1 - 2026-11-02
+
 ### Changed
 
 - **The panel's Map tab is renamed Navigation** and now comes before the Charts tab (the VAC charts), so the two are not mixed up.
