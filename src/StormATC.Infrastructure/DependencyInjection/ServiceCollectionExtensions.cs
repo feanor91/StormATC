@@ -132,7 +132,19 @@ public static class ServiceCollectionExtensions
             client.DefaultRequestHeaders.UserAgent.ParseAdd("StormATC-VAC-update (flight simulation)");
         });
         // The map keeps what it downloaded in memory: one store and one tile service for the whole run.
-        services.AddHttpClient("storm-map", client => client.DefaultRequestHeaders.UserAgent.ParseAdd("StormATC (flight simulation)"));
+        services.AddHttpClient("storm-map", client =>
+            {
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("StormATC (flight simulation)");
+                client.DefaultRequestVersion = System.Net.HttpVersion.Version20;
+                client.DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrLower;
+            })
+            .ConfigurePrimaryHttpMessageHandler(static () => new SocketsHttpHandler
+            {
+                MaxConnectionsPerServer = 24,
+                EnableMultipleHttp2Connections = true,
+                PooledConnectionLifetime = TimeSpan.FromMinutes(10),
+                AutomaticDecompression = System.Net.DecompressionMethods.All,
+            });
         services.AddSingleton(sp => new Map.MapDataStore(
             sp.GetRequiredService<IHttpClientFactory>().CreateClient("storm-map"),
             sp.GetRequiredService<IStoragePaths>(),

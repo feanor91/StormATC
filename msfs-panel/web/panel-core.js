@@ -786,7 +786,17 @@ var StormAtcPanel = (function () {
             getJson('/api/map/data?minLat=' + box.minLat.toFixed(4) + '&minLon=' + box.minLon.toFixed(4) +
                     '&maxLat=' + box.maxLat.toFixed(4) + '&maxLon=' + box.maxLon.toFixed(4), function (data) {
                 mapFetching = false;
-                if (data) { mapData = data; mapBox = box; drawMap(); }
+                if (data) {
+                    // The projection of a latitude is worked out once here, not at every redraw for every point of every airspace.
+                    var zs = data.airspaces || [];
+                    for (var zi = 0; zi < zs.length; zi++) {
+                        for (var ri = 0; ri < zs[zi].rings.length; ri++) {
+                            var rg = zs[zi].rings[ri];
+                            for (var pi2 = 0; pi2 < rg.length; pi2++) { rg[pi2][2] = mercator(rg[pi2][1]); }
+                        }
+                    }
+                    mapData = data; mapBox = box; drawMap();
+                }
             });
         }
 
@@ -834,6 +844,19 @@ var StormAtcPanel = (function () {
             }
         }
 
+        // Tiles arrive one by one: one redraw for the ones that arrive together, not one each.
+        var mapDrawTimer = null;
+        function scheduleMapDraw() {
+            if (mapDrawTimer) { return; }
+            mapDrawTimer = window.setTimeout(function () { mapDrawTimer = null; drawMap(); }, 40);
+        }
+
+        // A tile that is already there (no request).
+        function mapTileIfReady(base, layer, z, x, y) {
+            var tile = mapTiles[base + '/' + layer + '/' + z + '/' + x + '/' + y];
+            return tile && tile.ready ? tile.image : null;
+        }
+
         // A tile of the base map, asked from StormATC once and kept; null while it is coming.
         function mapTile(base, layer, z, x, y) {
             var key = base + '/' + layer + '/' + z + '/' + x + '/' + y;
@@ -845,10 +868,10 @@ var StormAtcPanel = (function () {
             }
             var image = new Image();
             tile = { image: image, ready: false };
-            image.onload = function () { tile.ready = true; drawMap(); };
+            image.onload = function () { tile.ready = true; scheduleMapDraw(); };
             image.onerror = function () {
                 tile.ready = false;
-                window.setTimeout(function () { if (mapTiles[key] === tile) { delete mapTiles[key]; drawMap(); } }, 4000);
+                window.setTimeout(function () { if (mapTiles[key] === tile) { delete mapTiles[key]; scheduleMapDraw(); } }, 4000);
             };
             image.src = baseUrl() + '/api/map/tile/' + base + '/' + layer + '/' + z + '/' + x + '/' + y;
             mapTiles[key] = tile;
@@ -953,11 +976,19 @@ var StormAtcPanel = (function () {
             var rot = mapHeadingUp && a && live ? toRad(a.headingTrue) : 0;
             mapGeometry = { w: w, h: h, ppd: ppd, cosLat: cosLat, rotation: rot, scale: scaleX };
             var centreY = mercator(mapCenter.lat);
+            var cosRot = Math.cos(rot), sinRot = Math.sin(rot);
 
             function project(lat, lon) {
                 var dx = toRad(lon - mapCenter.lon) * scaleX;
                 var dy = -(mercator(lat) - centreY) * scaleX;
-                return [w / 2 + dx * Math.cos(rot) + dy * Math.sin(rot), h / 2 - dx * Math.sin(rot) + dy * Math.cos(rot)];
+                return [w / 2 + dx * cosRot + dy * sinRot, h / 2 - dx * sinRot + dy * cosRot];
+            }
+
+            // The same for a point whose projected latitude is already known (the airspaces).
+            function projectMerc(lon, merc) {
+                var dx = toRad(lon - mapCenter.lon) * scaleX;
+                var dy = -(merc - centreY) * scaleX;
+                return [w / 2 + dx * cosRot + dy * sinRot, h / 2 - dx * sinRot + dy * cosRot];
             }
 
             var px = Math.max(10, Math.round(10 * scale));
@@ -985,7 +1016,7 @@ var StormAtcPanel = (function () {
                     var pts = [];
                     var minX = 1e9, maxX = -1e9, minY = 1e9, maxY = -1e9;
                     for (var k = 0; k < ring.length; k++) {
-                        var p = project(ring[k][1], ring[k][0]);
+                        var p = ring[k][2] !== undefined ? projectMerc(ring[k][0], ring[k][2]) : project(ring[k][1], ring[k][0]);
                         pts.push(p);
                         minX = Math.min(minX, p[0]); maxX = Math.max(maxX, p[0]);
                         minY = Math.min(minY, p[1]); maxY = Math.max(maxY, p[1]);
@@ -1258,20 +1289,53 @@ var StormAtcPanel = (function () {
             }
             var cx = (mapCenter.lon + 180) / 360 * tiles;
             var cy = (1 - centreY / Math.PI) / 2 * tiles;
+            // The tiles of the screen, the ones near the middle asked first (the browser asks a few at a time).
+            var wanted = [];
+            for (var ty = y0; ty <= y1; ty++) {
+                for (var tx = x0; tx <= x1; tx++) {
+                    wanted.push({ tx: tx, ty: ty, d: Math.pow(tx + 0.5 - cx, 2) + Math.pow(ty + 0.5 - cy, 2) });
+                }
+            }
+            wanted.sort(function (a, b) { return a.d - b.d; });
             ctx.save();
             ctx.translate(w / 2, h / 2);
             ctx.rotate(-rot);
+            var missing = 0;
             for (var layer = 0; layer < base.layers; layer++) {
-                for (var ty = y0; ty <= y1; ty++) {
-                    for (var tx = x0; tx <= x1; tx++) {
-                        var wrapped = ((tx % tiles) + tiles) % tiles;
-                        var image = mapTile(base.key, layer, z, wrapped, ty);
-                        if (!image) { continue; }
-                        ctx.drawImage(image, (tx - cx) * size - 0.5, (ty - cy) * size - 0.5, size + 1, size + 1);
+                for (var wi = 0; wi < wanted.length; wi++) {
+                    var tx2 = wanted[wi].tx, ty2 = wanted[wi].ty;
+                    var wrapped = ((tx2 % tiles) + tiles) % tiles;
+                    var image = mapTile(base.key, layer, z, wrapped, ty2);
+                    var dx = (tx2 - cx) * size - 0.5, dy = (ty2 - cy) * size - 0.5;
+                    if (image) {
+                        ctx.drawImage(image, dx, dy, size + 1, size + 1);
+                        continue;
+                    }
+                    missing++;
+                    // While it comes, the same place of a coarser tile that is already there, enlarged: never a hole.
+                    for (var k = 1; k <= 4 && z - k >= 0; k++) {
+                        var parent = mapTileIfReady(base.key, layer, z - k, wrapped >> k, ty2 >> k);
+                        if (parent) {
+                            var span = 256 / Math.pow(2, k);
+                            ctx.drawImage(parent, (wrapped & (Math.pow(2, k) - 1)) * span, (ty2 & (Math.pow(2, k) - 1)) * span, span, span,
+                                dx, dy, size + 1, size + 1);
+                            break;
+                        }
                     }
                 }
             }
             ctx.restore();
+            // Everything is there: ask for a ring of tiles around, so the next move finds them ready.
+            if (missing === 0) {
+                for (var pl = 0; pl < base.layers; pl++) {
+                    for (var py = y0 - 1; py <= y1 + 1; py++) {
+                        for (var px2 = x0 - 1; px2 <= x1 + 1; px2++) {
+                            if (py < 0 || py >= tiles || (px2 >= x0 && px2 <= x1 && py >= y0 && py <= y1)) { continue; }
+                            mapTile(base.key, pl, z, ((px2 % tiles) + tiles) % tiles, py);
+                        }
+                    }
+                }
+            }
         }
 
         function renderMapInfo(t, a, live, inside, route, nextIndex) {

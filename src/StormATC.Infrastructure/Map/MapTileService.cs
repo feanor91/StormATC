@@ -21,7 +21,7 @@ public sealed class MapTileService : IDisposable
     private readonly MapDataStore _store;
     private readonly ILogger<MapTileService> _logger;
     private readonly ConcurrentDictionary<string, MapTile> _memory = new(StringComparer.Ordinal);
-    private readonly SemaphoreSlim _downloads = new(6, 6);
+    private readonly SemaphoreSlim _downloads = new(16, 16);
 
     /// <summary>Creates the service.</summary>
     /// <param name="http">The HTTP client.</param>

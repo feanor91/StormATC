@@ -5,6 +5,14 @@ public releases.
 
 ## Unreleased
 
+### Changed
+
+- **The Navigation tab draws faster**: while a tile is coming, the same place of a coarser tile already there is drawn enlarged
+  (never a hole when zooming or moving); the tiles near the middle are asked first, and a ring of tiles around the screen is
+  fetched once everything is there, so the next move finds them ready; the redraws caused by the tiles that arrive together are
+  grouped; the projection of the airspaces' points is worked out once instead of at every redraw; StormATC downloads up to 16
+  tiles at a time over HTTP/2 (6 before).
+
 ## 0.30.0 - 2026-11-02
 
 ### Added
