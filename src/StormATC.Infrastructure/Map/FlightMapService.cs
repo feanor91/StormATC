@@ -95,7 +95,8 @@ public sealed class FlightMapService : IMapService
             age,
             _tiles.BaseMap(),
             plan?.DepartureIcao,
-            plan?.DestinationIcao);
+            plan?.DestinationIcao,
+            _tiles.Styles());
     }
 
     /// <inheritdoc />
@@ -111,8 +112,8 @@ public sealed class FlightMapService : IMapService
     }
 
     /// <inheritdoc />
-    public Task<MapTile?> GetTileAsync(int layer, int zoom, int x, int y, CancellationToken cancellationToken) =>
-        _tiles.GetAsync(layer, zoom, x, y, cancellationToken);
+    public Task<MapTile?> GetTileAsync(string? style, int layer, int zoom, int x, int y, CancellationToken cancellationToken) =>
+        _tiles.GetAsync(style, layer, zoom, x, y, cancellationToken);
 
     /// <summary>
     /// The route of a plan: its departure, the fixes that have a position, its destination. The aerodromes come from the

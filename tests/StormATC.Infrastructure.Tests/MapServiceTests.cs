@@ -130,6 +130,14 @@ public sealed class MapServiceTests : IDisposable
                 return Task.FromResult(Reply(AirspacePage));
             }
 
+            if (url.Contains("tile.openstreetmap.org", StringComparison.Ordinal))
+            {
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new ByteArrayContent([0x89, 0x50, 0x4E, 0x47, 9, 9, 9]),
+                });
+            }
+
             if (url.Contains("World_Light_Gray_Base", StringComparison.Ordinal))
             {
                 return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
@@ -311,8 +319,8 @@ public sealed class MapServiceTests : IDisposable
     {
         var (_, tiles, internet, _) = Build();
 
-        MapTile? first = await tiles.GetAsync(0, 8, 129, 90, CancellationToken.None);
-        MapTile? again = await tiles.GetAsync(0, 8, 129, 90, CancellationToken.None);
+        MapTile? first = await tiles.GetAsync(null, 0, 8, 129, 90, CancellationToken.None);
+        MapTile? again = await tiles.GetAsync(null, 0, 8, 129, 90, CancellationToken.None);
 
         Assert.NotNull(first);
         Assert.Equal("image/png", first!.ContentType);
@@ -321,8 +329,48 @@ public sealed class MapServiceTests : IDisposable
         Assert.Single(Directory.EnumerateFiles(Path.Combine(_folder, "map-tiles"), "*.tile", SearchOption.AllDirectories));
 
         (_, MapTileService fresh, Internet offline, _) = Build();
-        Assert.NotNull(await fresh.GetAsync(0, 8, 129, 90, CancellationToken.None));
+        Assert.NotNull(await fresh.GetAsync(null, 0, 8, 129, 90, CancellationToken.None));
         Assert.Empty(offline.Requests);
+    }
+
+    [Fact]
+    public async Task Each_base_map_has_its_own_tiles_and_its_own_files_so_maps_never_mix()
+    {
+        var (_, tiles, internet, _) = Build();
+
+        MapTile? grey = await tiles.GetAsync("clair", 0, 8, 129, 90, CancellationToken.None);
+        MapTile? streets = await tiles.GetAsync("rues", 0, 8, 129, 90, CancellationToken.None);
+        MapTile? greyAgain = await tiles.GetAsync("clair", 0, 8, 129, 90, CancellationToken.None);
+
+        Assert.NotEqual(grey!.Bytes, streets!.Bytes);
+        Assert.Same(grey, greyAgain);
+        Assert.Contains(internet.Requests, r => r.Contains("World_Light_Gray_Base", StringComparison.Ordinal));
+        Assert.Contains(internet.Requests, r => r.Contains("tile.openstreetmap.org/8/129/90.png", StringComparison.Ordinal));
+        Assert.Equal(2, Directory.GetDirectories(Path.Combine(_folder, "map-tiles")).Length);
+    }
+
+    [Fact]
+    public async Task A_carto_map_without_a_key_or_an_unknown_map_gives_no_tile_instead_of_another_maps()
+    {
+        var (_, tiles, internet, _) = Build();
+
+        Assert.Null(await tiles.GetAsync("carto-light", 0, 8, 129, 90, CancellationToken.None));
+        Assert.Null(await tiles.GetAsync("nonsense", 0, 8, 129, 90, CancellationToken.None));
+        Assert.Empty(internet.Requests);
+    }
+
+    [Fact]
+    public void The_state_lists_the_maps_to_choose_from_and_which_ones_can_be_drawn()
+    {
+        var (store, tiles, _, _) = Build();
+        var service = new FlightMapService(() => Session(null), store, tiles, new FixedTime(Now));
+
+        IReadOnlyList<MapStyle> styles = service.GetState().Styles!;
+
+        Assert.Equal(["clair", "carto-light", "carto-voyager", "relief", "rues"], styles.Select(x => x.Key));
+        Assert.Equal([true, false, false, true, true], styles.Select(x => x.Available));
+        Assert.Equal(2, styles[0].Layers);
+        Assert.Equal(17, styles[3].MaxZoom);
     }
 
     [Fact]
@@ -330,8 +378,8 @@ public sealed class MapServiceTests : IDisposable
     {
         var (_, tiles, internet, _) = Build();
 
-        Assert.Null(await tiles.GetAsync(0, 40, 0, 0, CancellationToken.None));
-        Assert.Null(await tiles.GetAsync(5, 5, 0, 0, CancellationToken.None));
+        Assert.Null(await tiles.GetAsync(null, 0, 40, 0, 0, CancellationToken.None));
+        Assert.Null(await tiles.GetAsync(null, 5, 5, 0, 0, CancellationToken.None));
         Assert.Empty(internet.Requests);
     }
 
@@ -361,8 +409,8 @@ public sealed class MapServiceTests : IDisposable
             return Task.FromResult(new MapData([], [new MapAirport("LFPN", "Toussus", 48.75, 2.11)], [], true, false));
         }
 
-        public Task<MapTile?> GetTileAsync(int layer, int zoom, int x, int y, CancellationToken cancellationToken) =>
-            Task.FromResult<MapTile?>(layer == 0 && zoom == 5 && x == 16 && y == 11 ? new MapTile([1, 2, 3], "image/png") : null);
+        public Task<MapTile?> GetTileAsync(string? style, int layer, int zoom, int x, int y, CancellationToken cancellationToken) =>
+            Task.FromResult<MapTile?>(layer == 0 && zoom == 5 && x == 16 && y == 11 ? new MapTile(Encoding.UTF8.GetBytes(style ?? "default"), "image/png") : null);
     }
 
     private sealed class FixedState : IToolbarPanelStateSource
@@ -446,7 +494,11 @@ public sealed class MapServiceTests : IDisposable
 
             Assert.Equal(HttpStatusCode.OK, found.StatusCode);
             Assert.Equal("image/png", found.Content.Headers.ContentType?.MediaType);
-            Assert.Equal(new byte[] { 1, 2, 3 }, await found.Content.ReadAsByteArrayAsync());
+            Assert.Equal("default", await found.Content.ReadAsStringAsync());
+            using HttpResponseMessage styled = await client.GetAsync("api/map/tile/rues/0/5/16/11");
+            using HttpResponseMessage unknownStyle = await client.GetAsync("api/map/tile/nonsense/0/5/16/11");
+            Assert.Equal("rues", await styled.Content.ReadAsStringAsync());
+            Assert.Equal(HttpStatusCode.NotFound, unknownStyle.StatusCode);
             Assert.Equal(HttpStatusCode.NotFound, missing.StatusCode);
             Assert.Equal(HttpStatusCode.NotFound, junk.StatusCode);
         }

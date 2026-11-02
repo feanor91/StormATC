@@ -63,6 +63,9 @@ En haut : altitude, vitesse sol, cap, le **prochain point** (distance et temps) 
 - **Suivre** garde l'avion au centre ; déplacer la carte à la main le désactive.
 - **Nord en haut / Cap en haut** : orientation de la carte.
 - **Route** : montre toute la route.
+- **Fond** (menu déroulant) : choisit le fond de carte directement dans le panneau : gris clair, rues, relief, CARTO clair
+  ou CARTO Voyager (ces deux-là sont grisés tant qu'aucune clé CARTO n'est enregistrée). Le choix est mémorisé par le
+  panneau ; à la première ouverture, c'est le fond des Paramètres.
 
 **Réglages** (Paramètres → *Carte*) :
 

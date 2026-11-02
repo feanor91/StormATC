@@ -44,7 +44,7 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
     /// <summary>The airspaces, aerodromes and beacons in a rectangle (<c>minLat</c>, <c>minLon</c>, <c>maxLat</c>, <c>maxLon</c>).</summary>
     public const string MapDataPath = "/api/map/data";
 
-    /// <summary>The base map tiles, <c>/api/map/tile/{layer}/{zoom}/{x}/{y}</c>.</summary>
+    /// <summary>The base map tiles, <c>/api/map/tile/{style}/{layer}/{zoom}/{x}/{y}</c> (without the style: the map of the settings).</summary>
     public const string MapTilePath = "/api/map/tile";
 
     /// <summary>The largest route accepted, in bytes: a real route is a few kilobytes.</summary>
@@ -418,8 +418,16 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
     {
         HttpListenerResponse response = context.Response;
         string[] parts = path[(MapTilePath.Length + 1)..].Split('/');
+        string? style = null;
+        if (parts.Length == 5)
+        {
+            style = parts[0];
+            parts = parts[1..];
+        }
+
         if (_map is null
             || parts.Length != 4
+            || (style is not null && !MapBaseMaps.Keys.Contains(style))
             || !int.TryParse(parts[0], NumberStyles.None, CultureInfo.InvariantCulture, out int layer)
             || !int.TryParse(parts[1], NumberStyles.None, CultureInfo.InvariantCulture, out int zoom)
             || !int.TryParse(parts[2], NumberStyles.None, CultureInfo.InvariantCulture, out int x)
@@ -430,7 +438,7 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
             return;
         }
 
-        MapTile? tile = await _map.GetTileAsync(layer, zoom, x, y, cancellationToken).ConfigureAwait(false);
+        MapTile? tile = await _map.GetTileAsync(style, layer, zoom, x, y, cancellationToken).ConfigureAwait(false);
         if (tile is null)
         {
             response.StatusCode = (int)HttpStatusCode.NotFound;

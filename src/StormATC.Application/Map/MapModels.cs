@@ -22,6 +22,13 @@ public sealed record MapAircraft(double Lat, double Lon, double AltitudeFt, doub
 /// <param name="MaxZoom">The deepest tile zoom.</param>
 public sealed record MapBaseMap(string Key, int Layers, int MaxZoom);
 
+/// <summary>A base map the pilot can choose in the panel.</summary>
+/// <param name="Key">Its key: <c>clair</c>, <c>carto-light</c>, <c>carto-voyager</c>, <c>relief</c> or <c>rues</c>.</param>
+/// <param name="Layers">How many tile layers it has.</param>
+/// <param name="MaxZoom">Its deepest tile zoom.</param>
+/// <param name="Available">False for a CARTO map while no CARTO key is stored.</param>
+public sealed record MapStyle(string Key, int Layers, int MaxZoom, bool Available);
+
 /// <summary>What the map shows of the flight right now.</summary>
 /// <param name="Version">The version of this format.</param>
 /// <param name="Route">The route: departure, the fixes of the plan that have a position, destination.</param>
@@ -31,6 +38,7 @@ public sealed record MapBaseMap(string Key, int Layers, int MaxZoom);
 /// <param name="BaseMap">The base map.</param>
 /// <param name="Departure">The departure aerodrome of the plan.</param>
 /// <param name="Destination">The destination aerodrome of the plan.</param>
+/// <param name="Styles">The base maps the pilot can choose from.</param>
 public sealed record MapState(
     int Version,
     IReadOnlyList<MapWaypoint> Route,
@@ -39,7 +47,8 @@ public sealed record MapState(
     long AircraftAgeMs,
     MapBaseMap? BaseMap,
     string? Departure,
-    string? Destination);
+    string? Destination,
+    IReadOnlyList<MapStyle>? Styles = null);
 
 /// <summary>An airspace: outer rings in (longitude, latitude), limits as printed and in feet.</summary>
 /// <param name="Name">Its name.</param>
@@ -115,11 +124,12 @@ public interface IMapService
         double maxLongitude,
         CancellationToken cancellationToken);
 
-    /// <summary>One tile of the base map; null when there is no such tile or it could not be fetched.</summary>
+    /// <summary>One tile of a base map; null when there is no such tile or it could not be fetched.</summary>
+    /// <param name="style">The base map; null for the one of the settings.</param>
     /// <param name="layer">The layer of the base map.</param>
     /// <param name="zoom">The tile zoom.</param>
     /// <param name="x">The tile column.</param>
     /// <param name="y">The tile row.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    Task<MapTile?> GetTileAsync(int layer, int zoom, int x, int y, CancellationToken cancellationToken);
+    Task<MapTile?> GetTileAsync(string? style, int layer, int zoom, int x, int y, CancellationToken cancellationToken);
 }

@@ -15,6 +15,11 @@ public static class MapBaseMaps
     /// <param name="key">The base map.</param>
     public static bool NeedsCartoKey(string key) => key is "carto-light" or "carto-voyager";
 
+    /// <summary>True when the map can be drawn: a CARTO map needs a key.</summary>
+    /// <param name="key">The base map.</param>
+    /// <param name="cartoKey">The CARTO key.</param>
+    public static bool IsAvailable(string key, string cartoKey) => Keys.Contains(key) && (!NeedsCartoKey(key) || cartoKey.Length > 0);
+
     /// <summary>The map really drawn: a CARTO map without a key falls back to the light grey one, an unknown name too.</summary>
     /// <param name="key">The base map asked for.</param>
     /// <param name="cartoKey">The CARTO key, empty when there is none.</param>

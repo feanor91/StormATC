@@ -577,6 +577,8 @@ var StormAtcPanel = (function () {
         var mapTimer = null;
         var mapGeometry = null;
         var mapTiles = {};
+        var mapStyleSelect = null;
+        var mapStyleSignature = '';
         var mapLabelsReady = false;
         var mapTileKeys = [];
 
@@ -619,6 +621,14 @@ var StormAtcPanel = (function () {
             });
             mapBar.appendChild(mapRotateButton);
             mapBar.appendChild(mapButton(t.fitRoute, function () { mapFollow = false; fitMapRoute(); drawMap(); }));
+            mapStyleSelect = document.createElement('select');
+            mapStyleSelect.className = 'sa-mapstyle';
+            mapStyleSelect.onchange = function () {
+                storageSet('stormatc.mapStyle', mapStyleSelect.value);
+                drawMap();
+            };
+            mapBar.appendChild(mapStyleSelect);
+            mapStyleSignature = '';
 
             mapWrap = el('div', 'sa-mapwrap');
             mapCanvas = document.createElement('canvas');
@@ -742,6 +752,7 @@ var StormAtcPanel = (function () {
                         if (mapFollow) { centerOnAircraft(); }
                     }
                 }
+                updateStyleMenu();
                 drawMap();
                 if (data) { fetchMap(); }
             });
@@ -785,6 +796,44 @@ var StormAtcPanel = (function () {
 
         function fromMercator(y) { return (2 * Math.atan(Math.exp(y)) - Math.PI / 2) * 180 / Math.PI; }
 
+        // The base map in use: the pilot's choice when it can be drawn, else the one of the settings.
+        function mapCurrentStyle() {
+            var styles = (mapState && mapState.styles) || [];
+            var wanted = storageGet('stormatc.mapStyle');
+            var fallback = null;
+            for (var i = 0; i < styles.length; i++) {
+                if (styles[i].available && styles[i].key === wanted) { return styles[i]; }
+                if (mapState.baseMap && styles[i].key === mapState.baseMap.key) { fallback = styles[i]; }
+            }
+            return fallback || (mapState && mapState.baseMap ? { key: mapState.baseMap.key, layers: mapState.baseMap.layers, maxZoom: mapState.baseMap.maxZoom, available: true } : null);
+        }
+
+        function mapStyleName(key, t) {
+            var names = { 'clair': t.styleClair, 'carto-light': t.styleCartoLight, 'carto-voyager': t.styleCartoVoyager, 'relief': t.styleRelief, 'rues': t.styleRues };
+            return names[key] || key;
+        }
+
+        // The menu of the base maps: rebuilt only when the list or the language changes.
+        function updateStyleMenu() {
+            if (!mapStyleSelect || !mapState || !mapState.styles) { return; }
+            var t = mapTexts();
+            var current = mapCurrentStyle();
+            var signature = JSON.stringify(mapState.styles) + '|' + t.styleLabel + '|' + (current ? current.key : '');
+            if (signature === mapStyleSignature) { return; }
+            mapStyleSignature = signature;
+            clear(mapStyleSelect);
+            mapStyleSelect.setAttribute('aria-label', t.styleLabel || 'Map');
+            for (var i = 0; i < mapState.styles.length; i++) {
+                var st = mapState.styles[i];
+                var option = document.createElement('option');
+                option.value = st.key;
+                option.textContent = mapStyleName(st.key, t) + (st.available ? '' : ' (' + (t.needsKey || 'key needed') + ')');
+                option.disabled = !st.available;
+                if (current && st.key === current.key) { option.selected = true; }
+                mapStyleSelect.appendChild(option);
+            }
+        }
+
         // A tile of the base map, asked from StormATC once and kept; null while it is coming.
         function mapTile(base, layer, z, x, y) {
             var key = base + '/' + layer + '/' + z + '/' + x + '/' + y;
@@ -801,7 +850,7 @@ var StormAtcPanel = (function () {
                 tile.ready = false;
                 window.setTimeout(function () { if (mapTiles[key] === tile) { delete mapTiles[key]; drawMap(); } }, 4000);
             };
-            image.src = baseUrl() + '/api/map/tile/' + layer + '/' + z + '/' + x + '/' + y;
+            image.src = baseUrl() + '/api/map/tile/' + base + '/' + layer + '/' + z + '/' + x + '/' + y;
             mapTiles[key] = tile;
             mapTileKeys.push(key);
             return null;
@@ -1188,7 +1237,7 @@ var StormAtcPanel = (function () {
 
         // The base map, drawn under everything else.
         function drawMapTiles(ctx, w, h, scaleX, centreY, rot) {
-            var base = mapState && mapState.baseMap;
+            var base = mapCurrentStyle();
             if (!base || !base.layers) { return; }
             var z = Math.round(Math.log(scaleX * 2 * Math.PI / 256) / Math.LN2);
             z = Math.max(0, Math.min(base.maxZoom, z));

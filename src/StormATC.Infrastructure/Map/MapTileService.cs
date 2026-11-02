@@ -59,17 +59,31 @@ public sealed class MapTileService : IDisposable
             MapBaseMaps.MaxZoom(key, carto));
     }
 
+    /// <summary>The base maps the pilot can choose from, each with its layers and its zoom.</summary>
+    public IReadOnlyList<MapStyle> Styles()
+    {
+        string carto = _store.CartoKey;
+        return [.. MapBaseMaps.Keys.Select(k => new MapStyle(k, MapBaseMaps.LayerCount(k, carto), MapBaseMaps.MaxZoom(k, carto), MapBaseMaps.IsAvailable(k, carto)))];
+    }
+
     /// <summary>One tile; null when it does not exist or could not be fetched.</summary>
+    /// <param name="style">The base map asked for; null for the one of the settings.</param>
     /// <param name="layer">The layer.</param>
     /// <param name="zoom">The zoom.</param>
     /// <param name="x">The column.</param>
     /// <param name="y">The row.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    public async Task<MapTile?> GetAsync(int layer, int zoom, int x, int y, CancellationToken cancellationToken)
+    public async Task<MapTile?> GetAsync(string? style, int layer, int zoom, int x, int y, CancellationToken cancellationToken)
     {
         await _store.RefreshKeysAsync(cancellationToken).ConfigureAwait(false);
-        string key = _options.CurrentValue.BaseMap;
         string carto = _store.CartoKey;
+        string key = style ?? _options.CurrentValue.BaseMap;
+        if (style is not null && !MapBaseMaps.IsAvailable(style, carto))
+        {
+            // An unknown map, or a CARTO map without its key: never another map's tile under this name.
+            return null;
+        }
+
         string? url = MapBaseMaps.TileUrl(key, carto, layer, zoom, x, y);
         if (url is null)
         {

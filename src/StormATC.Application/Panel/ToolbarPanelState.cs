@@ -195,6 +195,13 @@ public sealed record ToolbarPanelLabels(
 /// <param name="GroundSpeed">Ground speed word.</param>
 /// <param name="Heading">Heading word.</param>
 /// <param name="Truncated">Shown when the map is crowded and some airspaces are left out.</param>
+/// <param name="StyleLabel">The label of the base map menu.</param>
+/// <param name="StyleClair">The light grey map.</param>
+/// <param name="StyleCartoLight">The CARTO light map.</param>
+/// <param name="StyleCartoVoyager">The CARTO Voyager map.</param>
+/// <param name="StyleRelief">The relief map.</param>
+/// <param name="StyleRues">The street map.</param>
+/// <param name="NeedsKey">Added to a CARTO map that needs a key the pilot has not stored.</param>
 public sealed record ToolbarPanelMapLabels(
     string Tab,
     string NotRunning,
@@ -212,7 +219,14 @@ public sealed record ToolbarPanelMapLabels(
     string Altitude,
     string GroundSpeed,
     string Heading,
-    string Truncated);
+    string Truncated,
+    string StyleLabel = "",
+    string StyleClair = "",
+    string StyleCartoLight = "",
+    string StyleCartoVoyager = "",
+    string StyleRelief = "",
+    string StyleRues = "",
+    string NeedsKey = "");
 
 /// <summary>The texts of the charts tab.</summary>
 /// <param name="Tab">Title of the tab.</param>
@@ -468,7 +482,14 @@ public static class ToolbarPanelStateBuilder
                 "Alt",
                 "Vs",
                 "Cap",
-                "Carte chargée : certaines zones ne sont pas montrées, zoomez."))
+                "Carte chargée : certaines zones ne sont pas montrées, zoomez.",
+                "Fond",
+                "Gris clair",
+                "CARTO clair",
+                "CARTO Voyager",
+                "Relief",
+                "Rues",
+                "clé CARTO requise (Paramètres)"))
         : new ToolbarPanelLabels(
             "ATC dialogue",
             "Phraseology",
@@ -522,5 +543,12 @@ public static class ToolbarPanelStateBuilder
                 "Alt",
                 "GS",
                 "Hdg",
-                "Crowded map: some airspaces are left out, zoom in."));
+                "Crowded map: some airspaces are left out, zoom in.",
+                "Map",
+                "Light grey",
+                "CARTO light",
+                "CARTO Voyager",
+                "Relief",
+                "Streets",
+                "CARTO key needed (Settings)"));
 }

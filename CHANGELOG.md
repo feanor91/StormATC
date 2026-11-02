@@ -5,6 +5,18 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **A menu to choose the base map in the Navigation tab** (light grey, streets, relief, CARTO light, CARTO Voyager; the CARTO
+  ones are greyed out without a CARTO key). The choice is remembered by the panel; the setting only gives the first one.
+
+### Fixed
+
+- **Base maps could be mixed**: the tiles were asked without saying which map they belonged to, so after a change of map (or while
+  the CARTO key was being read) a tile of one map could be kept under another's name. A tile is now asked for a named map
+  (`/api/map/tile/{map}/{layer}/{zoom}/{x}/{y}`), kept on disk and in the panel under that name, and a map that cannot be drawn
+  (CARTO without its key, unknown name) gives no tile instead of another map's.
+
 ## 0.29.2 - 2026-11-02
 
 ### Fixed

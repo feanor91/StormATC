@@ -199,3 +199,5 @@
 .sa-mapinfo .sa-mapline { display: table; }
 .sa-mapnote { position: absolute; left: 0.4em; right: 0.4em; bottom: 1.8em; text-align: center; color: #ffd166; font-size: 0.85em; pointer-events: none; text-shadow: 0 0 4px #000; }
 .sa-btn.sa-on { background: #2c6bb0; border-color: #4aa3ff; color: #ffffff; }
+.sa-mapstyle { margin: 0.2em 0 0.2em 0.3em; padding: 0 0.4em; min-height: 2em; border-radius: 0.4em; border: 1px solid #34475a; background: #1b2a3a; color: #e6eef7; font-size: 0.9em; max-width: 14em; }
+.sa-mapstyle option:disabled { color: #6f8196; }
