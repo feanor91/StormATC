@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.30.1 - 2026-11-02
+
 ### Changed
 
 - **The Navigation tab draws faster**: while a tile is coming, the same place of a coarser tile already there is drawn enlarged
