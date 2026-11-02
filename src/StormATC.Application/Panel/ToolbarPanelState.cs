@@ -452,7 +452,7 @@ public static class ToolbarPanelStateBuilder
                 "StormATC ne peut pas lister les cartes.",
                 "Dernières cartes"),
             new ToolbarPanelMapLabels(
-                "Carte",
+                "Navigation",
                 "La carte n'est pas disponible pour le moment.",
                 "Aucun plan de vol dans StormATC : importez-en un ou activez-le dans le simulateur.",
                 "Avion non suivi : lancez MSFS.",
@@ -506,7 +506,7 @@ public static class ToolbarPanelStateBuilder
                 "StormATC cannot list the charts.",
                 "Last charts"),
             new ToolbarPanelMapLabels(
-                "Map",
+                "Navigation",
                 "The map is not available right now.",
                 "No flight plan in StormATC: import one or activate it in the simulator.",
                 "Aircraft not tracked: start MSFS.",

@@ -12,8 +12,8 @@ StormATC ajoute une fenêtre à la barre d'outils de Microsoft Flight Simulator.
   (« répétez », « quelle est la fréquence de la Tour ? »…). L'onglet change tout seul avec la phase.
 - **Cartes** : les cartes (fichiers PDF) que vous avez déposées dans le dossier des cartes de StormATC,
   affichées dans le simulateur, en VR comme à l'écran. Voir [les cartes](#les-cartes-pdf).
-- **Carte** : votre plan de vol, les espaces aériens autour de vous et votre avion en temps réel, sur un fond de carte.
-  Voir [la carte](#la-carte).
+- **Navigation** : votre plan de vol, les espaces aériens autour de vous et votre avion en temps réel, sur un fond de carte.
+  Voir [la navigation](#la-navigation).
 - **Militaire** (seulement en CAM V ou CAM I) : le régime et la base, l'approche radar PAR/SRA en cours, les
   fréquences de la base que les radios de MSFS peuvent accorder (118 à 137 MHz) et les appels militaires par thème
   (roulage, arrivée et break, PAR et SRA, changement de régime).
@@ -44,9 +44,9 @@ l'indicatif de la session). Le libellé sous l'icône de la barre d'outils reste
 La langue des exemples est celle de la radio réglée dans StormATC. Les boutons **A−** et **A+** en
 haut à droite changent la taille du texte ; le choix est mémorisé.
 
-## La carte
+## La navigation
 
-L'onglet **Carte** est entièrement dans StormATC : il ne dépend d'aucune autre application. Il montre sur un **fond de
+L'onglet **Navigation** (placé avant l'onglet **Cartes**, qui montre les cartes VAC en PDF) est entièrement dans StormATC : il ne dépend d'aucune autre application. Il montre sur un **fond de
 carte** (gris clair par défaut) :
 
 - le **plan de vol** de la session StormATC (SimBrief, plan du simulateur, vol VFR local) : départ, points avec position,

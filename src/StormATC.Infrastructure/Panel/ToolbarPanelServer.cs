@@ -189,15 +189,23 @@ public sealed class ToolbarPanelServer : IHostedService, IDisposable
                 return;
             }
 
-            try
-            {
-                await HandleAsync(context, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception ex) when (ex is HttpListenerException or IOException or InvalidOperationException or ObjectDisposedException)
-            {
-                // The panel closed the connection mid-reply; it will ask again.
-                _logger.LogDebug(ex, "A toolbar panel request failed.");
-            }
+            // One request does not wait for another: the map's tiles come from the internet and a slow one must not hold
+            // up the state of the panel or the tiles of the scale the pilot has just zoomed to.
+            _ = Task.Run(() => HandleSafelyAsync(context, cancellationToken), CancellationToken.None);
+        }
+    }
+
+    private async Task HandleSafelyAsync(HttpListenerContext context, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await HandleAsync(context, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex) when (ex is HttpListenerException or IOException or InvalidOperationException or ObjectDisposedException
+            or OperationCanceledException)
+        {
+            // The panel closed the connection mid-reply; it will ask again.
+            _logger.LogDebug(ex, "A toolbar panel request failed.");
         }
     }
 

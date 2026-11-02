@@ -5,6 +5,17 @@ public releases.
 
 ## Unreleased
 
+### Changed
+
+- **The panel's Map tab is renamed Navigation** and now comes before the Charts tab (the VAC charts), so the two are not mixed up.
+
+### Fixed
+
+- **The base map (CARTO in particular) did not always show at every scale**: the panel's server answered one request at a time,
+  so tiles coming slowly from the internet held up the tiles of the scale the pilot had just zoomed to (and the panel's state).
+  Requests are now handled in parallel (six tile downloads at a time), a tile that failed is asked again after a few seconds
+  instead of staying blank, and the CARTO key is read as soon as the tab asks for the state.
+
 ## 0.29.0 - 2026-11-02
 
 ### Changed

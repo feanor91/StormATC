@@ -11,7 +11,7 @@ namespace StormATC.Infrastructure.Map;
 /// The tiles of the base map. StormATC downloads them (the simulator's panel never reaches the internet), keeps them in
 /// memory and in its data folder, and serves them to the panel.
 /// </summary>
-public sealed class MapTileService
+public sealed class MapTileService : IDisposable
 {
     private const int MemoryTiles = 1500;
 
@@ -21,6 +21,7 @@ public sealed class MapTileService
     private readonly MapDataStore _store;
     private readonly ILogger<MapTileService> _logger;
     private readonly ConcurrentDictionary<string, MapTile> _memory = new(StringComparer.Ordinal);
+    private readonly SemaphoreSlim _downloads = new(6, 6);
 
     /// <summary>Creates the service.</summary>
     /// <param name="http">The HTTP client.</param>
@@ -43,6 +44,9 @@ public sealed class MapTileService
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _http.Timeout = TimeSpan.FromSeconds(15);
     }
+
+    /// <inheritdoc />
+    public void Dispose() => _downloads.Dispose();
 
     /// <summary>The base map shown, with the CARTO key as last read.</summary>
     public MapBaseMap BaseMap()
@@ -95,6 +99,7 @@ public sealed class MapTileService
             _logger.LogDebug(ex, "A kept map tile could not be read.");
         }
 
+        await _downloads.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, new Uri(url));
@@ -127,6 +132,10 @@ public sealed class MapTileService
         {
             _logger.LogDebug(ex, "A map tile could not be downloaded.");
             return null;
+        }
+        finally
+        {
+            _downloads.Release();
         }
     }
 

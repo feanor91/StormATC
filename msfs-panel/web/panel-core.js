@@ -114,8 +114,8 @@ var StormAtcPanel = (function () {
         tabMap.setAttribute('type', 'button');
         tabs.appendChild(tabDialogue);
         tabs.appendChild(tabPhraseology);
-        tabs.appendChild(tabCharts);
         tabs.appendChild(tabMap);
+        tabs.appendChild(tabCharts);
         tabs.appendChild(tabMilitary);
 
         var body = el('div', 'sa-body');
@@ -582,7 +582,7 @@ var StormAtcPanel = (function () {
         function mapTexts() {
             var t = lastState && lastState.labels && lastState.labels.map;
             return t || {
-                tab: 'Map', notRunning: 'The map is not available.', noRoute: 'No flight plan in StormATC.',
+                tab: 'Navigation', notRunning: 'The map is not available.', noRoute: 'No flight plan in StormATC.',
                 noAircraft: 'Aircraft not tracked.', noZones: 'Airspaces are not loaded (OpenAIP key).',
                 follow: 'Follow', northUp: 'North up', headingUp: 'Track up', fitRoute: 'Route', zoomIn: '+',
                 zoomOut: '−', inside: 'You are in', next: 'Next point', altitude: 'Alt', groundSpeed: 'GS',
@@ -796,7 +796,10 @@ var StormAtcPanel = (function () {
             var image = new Image();
             tile = { image: image, ready: false };
             image.onload = function () { tile.ready = true; drawMap(); };
-            image.onerror = function () { tile.ready = false; };
+            image.onerror = function () {
+                tile.ready = false;
+                window.setTimeout(function () { if (mapTiles[key] === tile) { delete mapTiles[key]; drawMap(); } }, 4000);
+            };
             image.src = baseUrl() + '/api/map/tile/' + layer + '/' + z + '/' + x + '/' + y;
             mapTiles[key] = tile;
             mapTileKeys.push(key);
@@ -1553,7 +1556,7 @@ var StormAtcPanel = (function () {
         tabDialogue.textContent = 'Dialogue ATC';
         tabPhraseology.textContent = 'Phraséologie';
         tabCharts.textContent = 'Cartes';
-        tabMap.textContent = 'Carte';
+        tabMap.textContent = 'Navigation';
         applyScale();
         fitToParent();
         var fitTimer = window.setInterval(fitToParent, 300);

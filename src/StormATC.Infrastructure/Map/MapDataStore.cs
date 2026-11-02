@@ -80,7 +80,11 @@ public sealed class MapDataStore : IDisposable
     public MapAirport? FindAirport(string icao) => _byIdent.TryGetValue(icao, out MapAirport? airport) ? airport : null;
 
     /// <summary>Starts loading the aerodromes in the background, so that the first route finds its aerodromes.</summary>
-    public void WarmUp() => _ = Task.Run(() => EnsureBasicAsync(CancellationToken.None));
+    public void WarmUp() => _ = Task.Run(async () =>
+    {
+        await RefreshKeysAsync(CancellationToken.None).ConfigureAwait(false);
+        await EnsureBasicAsync(CancellationToken.None).ConfigureAwait(false);
+    });
 
     /// <summary>Reads the keys again, at most every few seconds.</summary>
     /// <param name="cancellationToken">Cancellation token.</param>

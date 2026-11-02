@@ -65,6 +65,7 @@ public sealed class FlightMapService : IMapService
             _store.WarmUp();
         }
 
+        _ = _store.RefreshKeysAsync(CancellationToken.None); // the CARTO key reaches the base map within a second
         AtcSession session = _session();
         FlightPlan? plan = session.FlightPlan;
         MapAircraft? aircraft = null;
