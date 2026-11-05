@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.30.2 - 2026-11-05
+
 ### Fixed
 
 - **Navigation tab: the whole map moves when you zoom or drag it** in the simulator. The in-game browser only repainted the
