@@ -954,7 +954,18 @@ var StormAtcPanel = (function () {
             return [a[0] + t0 * dx, a[1] + t0 * dy, a[0] + t1 * dx, a[1] + t1 * dy];
         }
 
+        // The simulator's browser does not always repaint a canvas that was drawn on: only the places that something else
+        // (the info lines) invalidated showed the new map. A change of style after each drawing forces the whole canvas.
+        var mapFlip = false;
         function drawMap() {
+            drawMapNow();
+            if (mapCanvas) {
+                mapFlip = !mapFlip;
+                mapCanvas.style.opacity = mapFlip ? '0.999' : '1';
+            }
+        }
+
+        function drawMapNow() {
             if (tab !== 'map' || !mapCanvas) { return; }
             var t = mapTexts();
             var ratio = window.devicePixelRatio || 1;

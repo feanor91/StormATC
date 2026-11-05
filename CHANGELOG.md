@@ -5,6 +5,11 @@ public releases.
 
 ## Unreleased
 
+### Fixed
+
+- **Navigation tab: the whole map moves when you zoom or drag it** in the simulator. The in-game browser only repainted the
+  part of the canvas under the info lines, so the rest of the map seemed frozen; the canvas is now invalidated after each drawing.
+
 ## 0.30.1 - 2026-11-02
 
 ### Changed
