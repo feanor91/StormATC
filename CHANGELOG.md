@@ -5,6 +5,12 @@ public releases.
 
 ## Unreleased
 
+### Changed
+
+- **Navigation tab, made for VR**: the base map is chosen with a button that goes to the next map (a drop-down list cannot be
+  used in VR); a new "Affichage" button opens switches for the airspaces, aerodromes, beacons, flight plan, range rings and
+  track flown (kept between sessions); the map zooms in much further (down to 0.25 NM) and the aircraft is drawn twice as big.
+
 ## 0.30.2 - 2026-11-05
 
 ### Fixed

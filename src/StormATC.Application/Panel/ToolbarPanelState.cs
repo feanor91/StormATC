@@ -202,6 +202,13 @@ public sealed record ToolbarPanelLabels(
 /// <param name="StyleRelief">The relief map.</param>
 /// <param name="StyleRues">The street map.</param>
 /// <param name="NeedsKey">Added to a CARTO map that needs a key the pilot has not stored.</param>
+/// <param name="Layers">The button that opens the choice of what the map shows.</param>
+/// <param name="LayerZones">The airspaces.</param>
+/// <param name="LayerAirports">The aerodromes.</param>
+/// <param name="LayerBeacons">The VOR and NDB beacons.</param>
+/// <param name="LayerRoute">The flight plan.</param>
+/// <param name="LayerRings">The range rings around the aircraft.</param>
+/// <param name="LayerTrail">The track flown.</param>
 public sealed record ToolbarPanelMapLabels(
     string Tab,
     string NotRunning,
@@ -226,7 +233,14 @@ public sealed record ToolbarPanelMapLabels(
     string StyleCartoVoyager = "",
     string StyleRelief = "",
     string StyleRues = "",
-    string NeedsKey = "");
+    string NeedsKey = "",
+    string Layers = "",
+    string LayerZones = "",
+    string LayerAirports = "",
+    string LayerBeacons = "",
+    string LayerRoute = "",
+    string LayerRings = "",
+    string LayerTrail = "");
 
 /// <summary>The texts of the charts tab.</summary>
 /// <param name="Tab">Title of the tab.</param>
@@ -489,7 +503,14 @@ public static class ToolbarPanelStateBuilder
                 "CARTO Voyager",
                 "Relief",
                 "Rues",
-                "clé CARTO requise (Paramètres)"))
+                "clé CARTO requise (Paramètres)",
+                "Affichage",
+                "Zones",
+                "Aérodromes",
+                "Balises",
+                "Plan de vol",
+                "Cercles",
+                "Trace"))
         : new ToolbarPanelLabels(
             "ATC dialogue",
             "Phraseology",
@@ -550,5 +571,12 @@ public static class ToolbarPanelStateBuilder
                 "CARTO Voyager",
                 "Relief",
                 "Streets",
-                "CARTO key needed (Settings)"));
+                "CARTO key needed (Settings)",
+                "Display",
+                "Airspaces",
+                "Aerodromes",
+                "Beacons",
+                "Flight plan",
+                "Rings",
+                "Track"));
 }

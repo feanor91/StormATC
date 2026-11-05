@@ -548,7 +548,7 @@ var StormAtcPanel = (function () {
         var MAP_TRAIL_MAX = 150;
         var MAP_MAX_TILES = 90;
         var MAP_ZOOM_STEP = 1.5;
-        var MAP_MIN_RANGE_NM = 1.5;
+        var MAP_MIN_RANGE_NM = 0.25;
         var MAP_MAX_RANGE_NM = 400;
         // Colour, line width and dashes by kind of airspace.
         var MAP_ZONE_STYLE = {
@@ -577,7 +577,19 @@ var StormAtcPanel = (function () {
         var mapTimer = null;
         var mapGeometry = null;
         var mapTiles = {};
-        var mapStyleSelect = null;
+        var mapStyleButton = null, mapLayersButton = null, mapLayersRow = null;
+        // What the map shows, chosen by the pilot and kept.
+        var MAP_LAYER_KEYS = ['zones', 'airports', 'beacons', 'route', 'rings', 'trail'];
+        var mapLayers = (function () {
+            var chosen = {};
+            var saved = null;
+            try { saved = JSON.parse(storageGet('stormatc.mapLayers') || 'null'); } catch (e) { saved = null; }
+            for (var i = 0; i < MAP_LAYER_KEYS.length; i++) {
+                chosen[MAP_LAYER_KEYS[i]] = !(saved && saved[MAP_LAYER_KEYS[i]] === false);
+            }
+            return chosen;
+        })();
+        var mapLayersOpen = false;
         var mapStyleSignature = '';
         var mapLabelsReady = false;
         var mapTileKeys = [];
@@ -621,13 +633,15 @@ var StormAtcPanel = (function () {
             });
             mapBar.appendChild(mapRotateButton);
             mapBar.appendChild(mapButton(t.fitRoute, function () { mapFollow = false; fitMapRoute(); drawMap(); }));
-            mapStyleSelect = document.createElement('select');
-            mapStyleSelect.className = 'sa-mapstyle';
-            mapStyleSelect.onchange = function () {
-                storageSet('stormatc.mapStyle', mapStyleSelect.value);
+            // A button that goes to the next base map: a drop-down list cannot be used in VR.
+            mapStyleButton = mapButton('', function () { nextMapStyle(); });
+            mapBar.appendChild(mapStyleButton);
+            mapLayersButton = mapButton(t.layers || 'Display', function () {
+                mapLayersOpen = !mapLayersOpen;
+                updateLayersRow();
                 drawMap();
-            };
-            mapBar.appendChild(mapStyleSelect);
+            });
+            mapBar.appendChild(mapLayersButton);
             mapStyleSignature = '';
 
             mapWrap = el('div', 'sa-mapwrap');
@@ -638,8 +652,11 @@ var StormAtcPanel = (function () {
             mapWrap.appendChild(mapCanvas);
             mapWrap.appendChild(mapInfo);
             mapWrap.appendChild(mapNote);
+            mapLayersRow = el('div', 'sa-chartbar');
             mapPane.appendChild(mapBar);
+            mapPane.appendChild(mapLayersRow);
             mapPane.appendChild(mapWrap);
+            updateLayersRow();
             attachMapGestures();
         }
 
@@ -823,25 +840,54 @@ var StormAtcPanel = (function () {
             return names[key] || key;
         }
 
-        // The menu of the base maps: rebuilt only when the list or the language changes.
+        // The base map button: shows the map in use; a press goes to the next one that can be drawn.
         function updateStyleMenu() {
-            if (!mapStyleSelect || !mapState || !mapState.styles) { return; }
+            if (!mapStyleButton || !mapState || !mapState.styles) { return; }
             var t = mapTexts();
             var current = mapCurrentStyle();
-            var signature = JSON.stringify(mapState.styles) + '|' + t.styleLabel + '|' + (current ? current.key : '');
-            if (signature === mapStyleSignature) { return; }
-            mapStyleSignature = signature;
-            clear(mapStyleSelect);
-            mapStyleSelect.setAttribute('aria-label', t.styleLabel || 'Map');
-            for (var i = 0; i < mapState.styles.length; i++) {
-                var st = mapState.styles[i];
-                var option = document.createElement('option');
-                option.value = st.key;
-                option.textContent = mapStyleName(st.key, t) + (st.available ? '' : ' (' + (t.needsKey || 'key needed') + ')');
-                option.disabled = !st.available;
-                if (current && st.key === current.key) { option.selected = true; }
-                mapStyleSelect.appendChild(option);
+            var label = (t.styleLabel || 'Map') + ' : ' + (current ? mapStyleName(current.key, t) : '');
+            if (mapStyleButton.textContent !== label) { mapStyleButton.textContent = label; }
+        }
+
+        function nextMapStyle() {
+            var styles = (mapState && mapState.styles) || [];
+            var current = mapCurrentStyle();
+            var index = -1;
+            for (var i = 0; i < styles.length; i++) { if (current && styles[i].key === current.key) { index = i; } }
+            for (var step = 1; step <= styles.length; step++) {
+                var candidate = styles[(index + step) % styles.length];
+                if (candidate && candidate.available) {
+                    storageSet('stormatc.mapStyle', candidate.key);
+                    break;
+                }
             }
+            updateStyleMenu();
+            drawMap();
+        }
+
+        function layerName(key, t) {
+            var names = { zones: t.layerZones, airports: t.layerAirports, beacons: t.layerBeacons, route: t.layerRoute, rings: t.layerRings, trail: t.layerTrail };
+            return names[key] || key;
+        }
+
+        // The row of switches under the bar: one per kind of thing the map can show.
+        function updateLayersRow() {
+            if (!mapLayersRow) { return; }
+            var t = mapTexts();
+            clear(mapLayersRow);
+            mapLayersRow.style.display = mapLayersOpen ? '' : 'none';
+            if (mapLayersButton) { mapLayersButton.className = 'sa-btn sa-chartnav' + (mapLayersOpen ? ' sa-on' : ''); }
+            if (!mapLayersOpen) { return; }
+            MAP_LAYER_KEYS.forEach(function (key) {
+                var b = mapButton(layerName(key, t), function () {
+                    mapLayers[key] = !mapLayers[key];
+                    storageSet('stormatc.mapLayers', JSON.stringify(mapLayers));
+                    updateLayersRow();
+                    drawMap();
+                });
+                if (mapLayers[key]) { b.className = 'sa-btn sa-chartnav sa-on'; }
+                mapLayersRow.appendChild(b);
+            });
         }
 
         // Tiles arrive one by one: one redraw for the ones that arrive together, not one each.
@@ -1021,6 +1067,7 @@ var StormAtcPanel = (function () {
                 var zone = zones[z];
                 var look = MAP_ZONE_STYLE[zone.kind] || MAP_ZONE_STYLE.other;
                 if (a && zone.lowerFt <= altitude && zone.upperFt >= altitude && zoneContains(zone, a.lon, a.lat)) { inside.push(zone); }
+                if (!mapLayers.zones) { continue; }
                 for (var r = 0; r < zone.rings.length; r++) {
                     var ring = zone.rings[r];
                     if (ring.length < 4) { continue; }
@@ -1060,7 +1107,7 @@ var StormAtcPanel = (function () {
             }
 
             // Range rings around the aircraft.
-            if (a) {
+            if (a && mapLayers.rings) {
                 var centre = project(a.lat, a.lon);
                 var step = mapRangeNm > 60 ? 50 : (mapRangeNm > 25 ? 20 : (mapRangeNm > 10 ? 10 : 5));
                 ctx.strokeStyle = 'rgba(60, 80, 100, 0.35)';
@@ -1078,7 +1125,7 @@ var StormAtcPanel = (function () {
 
             // Aerodromes.
             var airports = (mapData && mapData.airports) || [];
-            if (mapRangeNm <= 60) {
+            if (mapLayers.airports && mapRangeNm <= 60) {
                 ctx.font = (px - 1) + 'px sans-serif';
                 for (var q = 0; q < airports.length; q++) {
                     var ap = project(airports[q].lat, airports[q].lon);
@@ -1102,7 +1149,7 @@ var StormAtcPanel = (function () {
 
             // Beacons (VOR, NDB).
             var beacons = (mapData && mapData.navaids) || [];
-            if (mapRangeNm <= 40) {
+            if (mapLayers.beacons && mapRangeNm <= 40) {
                 ctx.font = (px - 1) + 'px sans-serif';
                 for (var bi = 0; bi < beacons.length; bi++) {
                     var bp = project(beacons[bi].lat, beacons[bi].lon);
@@ -1136,7 +1183,7 @@ var StormAtcPanel = (function () {
             }
 
             // Route: a white casing under a red line, numbered round markers (blue for aerodromes).
-            var route = (mapState && mapState.route) || [];
+            var route = (mapLayers.route && mapState && mapState.route) || [];
             var nextIndex = nextWaypoint(route, a);
             if (route.length > 1) {
                 ctx.beginPath();
@@ -1227,7 +1274,7 @@ var StormAtcPanel = (function () {
             }
 
             // The track flown, then the aircraft.
-            if (mapTrail.length > 1) {
+            if (mapLayers.trail && mapTrail.length > 1) {
                 ctx.beginPath();
                 for (var m = 0; m < mapTrail.length; m++) {
                     var tp = project(mapTrail[m][0], mapTrail[m][1]);
@@ -1242,9 +1289,11 @@ var StormAtcPanel = (function () {
                 ctx.save();
                 ctx.translate(ap2[0], ap2[1]);
                 ctx.rotate(toRad(a.headingTrue) - rot);
+                var big = 2 * Math.max(1, scale / 1.2);
+                ctx.scale(big, big);
                 ctx.fillStyle = live ? '#ffffff' : '#9aa7b4';
                 ctx.strokeStyle = '#0d1620';
-                ctx.lineWidth = 2;
+                ctx.lineWidth = 1.5;
                 ctx.beginPath();
                 ctx.moveTo(0, -14); ctx.lineTo(3, -4); ctx.lineTo(13, 3); ctx.lineTo(13, 6); ctx.lineTo(3, 3);
                 ctx.lineTo(2, 10); ctx.lineTo(6, 13); ctx.lineTo(6, 15); ctx.lineTo(0, 13);
