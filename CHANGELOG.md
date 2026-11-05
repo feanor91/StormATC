@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.30.4 - 2026-11-05
+
 ### Added
 
 - **Navigation tab: the writing of the map can be enlarged on its own** ("Affichage" > "Texte −" / "Texte +", up to ×4,
