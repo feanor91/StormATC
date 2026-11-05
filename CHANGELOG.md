@@ -5,6 +5,12 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **Navigation tab: the writing of the map can be enlarged on its own** ("Affichage" > "Texte −" / "Texte +", up to ×4,
+  kept between sessions): the street names and labels of the base map no longer shrink as you zoom in, and the names written
+  by StormATC (aerodromes, beacons, flight plan, airspaces) grow too.
+
 ## 0.30.3 - 2026-11-05
 
 ### Changed

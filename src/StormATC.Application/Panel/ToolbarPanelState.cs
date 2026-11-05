@@ -209,6 +209,8 @@ public sealed record ToolbarPanelLabels(
 /// <param name="LayerRoute">The flight plan.</param>
 /// <param name="LayerRings">The range rings around the aircraft.</param>
 /// <param name="LayerTrail">The track flown.</param>
+/// <param name="TextSmaller">The button that makes the writing of the map smaller.</param>
+/// <param name="TextBigger">The button that makes the writing of the map bigger.</param>
 public sealed record ToolbarPanelMapLabels(
     string Tab,
     string NotRunning,
@@ -240,7 +242,9 @@ public sealed record ToolbarPanelMapLabels(
     string LayerBeacons = "",
     string LayerRoute = "",
     string LayerRings = "",
-    string LayerTrail = "");
+    string LayerTrail = "",
+    string TextSmaller = "",
+    string TextBigger = "");
 
 /// <summary>The texts of the charts tab.</summary>
 /// <param name="Tab">Title of the tab.</param>
@@ -510,7 +514,9 @@ public static class ToolbarPanelStateBuilder
                 "Balises",
                 "Plan de vol",
                 "Cercles",
-                "Trace"))
+                "Trace",
+                "Texte −",
+                "Texte +"))
         : new ToolbarPanelLabels(
             "ATC dialogue",
             "Phraseology",
@@ -578,5 +584,7 @@ public static class ToolbarPanelStateBuilder
                 "Beacons",
                 "Flight plan",
                 "Rings",
-                "Track"));
+                "Track",
+                "Text −",
+                "Text +"));
 }

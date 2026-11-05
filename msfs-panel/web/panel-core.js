@@ -590,6 +590,16 @@ var StormAtcPanel = (function () {
             return chosen;
         })();
         var mapLayersOpen = false;
+        // The size of the writing of the map (street names...): the tiles are drawn from a coarser zoom, which enlarges it.
+        var MAP_TEXT_SCALES = [1, 1.5, 2, 3, 4];
+        var mapTextIndex = Math.max(0, Math.min(MAP_TEXT_SCALES.length - 1, parseInt(storageGet('stormatc.mapText'), 10) || 0));
+        function mapTextScale() { return MAP_TEXT_SCALES[mapTextIndex]; }
+        function changeMapText(step) {
+            mapTextIndex = Math.max(0, Math.min(MAP_TEXT_SCALES.length - 1, mapTextIndex + step));
+            storageSet('stormatc.mapText', String(mapTextIndex));
+            updateLayersRow();
+            drawMap();
+        }
         var mapStyleSignature = '';
         var mapLabelsReady = false;
         var mapTileKeys = [];
@@ -878,6 +888,8 @@ var StormAtcPanel = (function () {
             mapLayersRow.style.display = mapLayersOpen ? '' : 'none';
             if (mapLayersButton) { mapLayersButton.className = 'sa-btn sa-chartnav' + (mapLayersOpen ? ' sa-on' : ''); }
             if (!mapLayersOpen) { return; }
+            mapLayersRow.appendChild(mapButton((t.textSmaller || 'Text −'), function () { changeMapText(-1); }));
+            mapLayersRow.appendChild(mapButton((t.textBigger || 'Text +') + (mapTextIndex ? ' ×' + mapTextScale() : ''), function () { changeMapText(1); }));
             MAP_LAYER_KEYS.forEach(function (key) {
                 var b = mapButton(layerName(key, t), function () {
                     mapLayers[key] = !mapLayers[key];
@@ -1048,7 +1060,7 @@ var StormAtcPanel = (function () {
                 return [w / 2 + dx * cosRot + dy * sinRot, h / 2 - dx * sinRot + dy * cosRot];
             }
 
-            var px = Math.max(10, Math.round(10 * scale));
+            var px = Math.max(10, Math.round(10 * scale * Math.min(mapTextScale(), 2.2)));
             ctx.fillStyle = '#e8ebee';
             ctx.fillRect(0, 0, w, h);
             drawMapTiles(ctx, w, h, scaleX, centreY, rot);
@@ -1330,7 +1342,7 @@ var StormAtcPanel = (function () {
         function drawMapTiles(ctx, w, h, scaleX, centreY, rot) {
             var base = mapCurrentStyle();
             if (!base || !base.layers) { return; }
-            var z = Math.round(Math.log(scaleX * 2 * Math.PI / 256) / Math.LN2);
+            var z = Math.round((Math.log(scaleX * 2 * Math.PI / 256) - Math.log(mapTextScale())) / Math.LN2);
             z = Math.max(0, Math.min(base.maxZoom, z));
             // The tiles that the screen can show: its two half-sizes, or its half-diagonal when the map is turned. When there
             // would be too many (a wide panel), a coarser zoom is used rather than drawing nothing.
