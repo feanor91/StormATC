@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.30.3 - 2026-11-05
+
 ### Changed
 
 - **Navigation tab, made for VR**: the base map is chosen with a button that goes to the next map (a drop-down list cannot be
