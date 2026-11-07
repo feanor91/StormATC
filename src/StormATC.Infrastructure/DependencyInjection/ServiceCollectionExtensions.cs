@@ -183,6 +183,9 @@ public static class ServiceCollectionExtensions
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
+        services.AddOptions<FlightIdentityOptions>()
+            .Bind(configuration.GetSection(FlightIdentityOptions.SectionName));
+
         services.AddOptions<VfrLocalOptions>()
             .Bind(configuration.GetSection(VfrLocalOptions.SectionName));
 

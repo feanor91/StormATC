@@ -45,8 +45,12 @@ public sealed class ApplicationStartupService(
     IOptions<AtcRealismOptions> realismOptions,
     IOptions<SimBriefOptions> simBriefOptions,
     IOptions<VfrLocalOptions> vfrLocalOptions,
+    IOptions<FlightIdentityOptions> flightIdentityOptions,
     ILogger<ApplicationStartupService> logger)
 {
+    private readonly FlightIdentityOptions _identity =
+        flightIdentityOptions?.Value ?? throw new ArgumentNullException(nameof(flightIdentityOptions));
+
     private readonly VfrLocalOptions _vfrLocal =
         vfrLocalOptions?.Value ?? throw new ArgumentNullException(nameof(vfrLocalOptions));
 
@@ -94,6 +98,7 @@ public sealed class ApplicationStartupService(
     /// <summary>Runs the startup sequence. Never throws.</summary>
     public async Task InitializeAsync(CancellationToken cancellationToken)
     {
+        _sessionContext.SetCallsignOverride(_identity.CallsignOverride);
         _warnings.Clear();
         _atisBroadcastService.Start();
 

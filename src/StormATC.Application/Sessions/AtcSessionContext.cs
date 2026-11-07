@@ -160,6 +160,49 @@ public sealed class AtcSessionContext(
         return updated;
     }
 
+    private string? _callsignOverride;
+
+    /// <summary>The callsign the pilot imposes on every flight plan (the registration is not used), or null.</summary>
+    public string? CallsignOverride => Volatile.Read(ref _callsignOverride);
+
+    /// <summary>
+    /// Sets the callsign to use whatever the registration the simulator reports, or goes back to the registration when
+    /// the value is empty. The plan in use takes it at once.
+    /// </summary>
+    /// <param name="value">The callsign, or null or empty for the registration.</param>
+    /// <returns>False when the value is not a usable callsign.</returns>
+    public bool SetCallsignOverride(string? value)
+    {
+        string? trimmed = string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+        Callsign? chosen = null;
+        if (trimmed is not null && !Callsign.TryCreate(trimmed, out chosen))
+        {
+            return false;
+        }
+
+        Volatile.Write(ref _callsignOverride, trimmed);
+        Mutate(session =>
+        {
+            if (session.FlightPlan is not FlightPlan plan)
+            {
+                return session;
+            }
+
+            Callsign? target = chosen;
+            if (target is null)
+            {
+                string registration = session.AircraftState.AtcIdentifier;
+                if (string.IsNullOrWhiteSpace(registration) || !Callsign.TryCreate(registration, out target))
+                {
+                    return session;
+                }
+            }
+
+            return session.WithFlightPlan(plan with { Callsign = target });
+        });
+        return true;
+    }
+
     /// <summary>Starts a fresh session, discarding the previous one.</summary>
     public AtcSession StartNewSession(SessionMode mode, AircraftState? initialState = null)
     {
@@ -191,6 +234,15 @@ public sealed class AtcSessionContext(
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(flightPlan);
+
+        // The callsign the pilot imposed wins for the plans of the simulator and of SimBrief (a local VFR flight
+        // carries the one typed for it).
+        if (CallsignOverride is string imposed
+            && flightPlan.SourceIdentifier != "VFR local"
+            && Callsign.TryCreate(imposed, out Callsign? imposedCallsign))
+        {
+            flightPlan = flightPlan with { Callsign = imposedCallsign };
+        }
 
         AirportData? departure = await GetAirportAsync(flightPlan.DepartureIcao, cancellationToken)
             .ConfigureAwait(false);
@@ -286,7 +338,8 @@ public sealed class AtcSessionContext(
     {
         string previous = before.AircraftState.AtcIdentifier;
         string current = state.AtcIdentifier;
-        if (string.IsNullOrWhiteSpace(previous) || string.IsNullOrWhiteSpace(current)
+        if (CallsignOverride is not null
+            || string.IsNullOrWhiteSpace(previous) || string.IsNullOrWhiteSpace(current)
             || Callsign.Normalize(previous) == Callsign.Normalize(current)
             || before.FlightPlan is not FlightPlan plan
             || Callsign.Normalize(plan.Callsign.Original) != Callsign.Normalize(previous)

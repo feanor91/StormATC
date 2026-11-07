@@ -396,6 +396,16 @@ public sealed class DeepgramOptions
 
 }
 
+/// <summary>The callsign the pilot wants for every flight, whatever the registration the simulator reports.</summary>
+public sealed class FlightIdentityOptions
+{
+    /// <summary>The configuration section name.</summary>
+    public const string SectionName = "FlightIdentity";
+
+    /// <summary>The callsign to use; empty means the aircraft's registration.</summary>
+    public string? CallsignOverride { get; init; }
+}
+
 /// <summary>
 /// The local VFR flight to start when StormATC opens with the simulator running: the aerodrome
 /// the pilot is on and the aircraft's callsign, remembered from the last time one was started.

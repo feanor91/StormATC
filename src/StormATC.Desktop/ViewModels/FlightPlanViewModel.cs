@@ -50,6 +50,41 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
     [ObservableProperty]
     private bool _vfrAutoStart = true;
 
+    /// <summary>The callsign the pilot imposes on every plan; empty means the aircraft's registration.</summary>
+    [ObservableProperty]
+    private string _callsignOverrideText = string.Empty;
+
+    /// <summary>What happened to the last callsign change.</summary>
+    [ObservableProperty]
+    private string _callsignOverrideMessage = string.Empty;
+
+    /// <summary>Keeps the callsign for every plan (the simulator's, SimBrief's) and applies it to the one in use.</summary>
+    [RelayCommand]
+    private async Task ApplyCallsignOverrideAsync()
+    {
+        string text = (CallsignOverrideText ?? string.Empty).Trim();
+        if (!_sessionContext.SetCallsignOverride(text))
+        {
+            CallsignOverrideMessage = UiText.T("This is not a usable callsign.");
+            return;
+        }
+
+        await _userSettings
+            .SaveAsync(FlightIdentityOptions.SectionName, "CallsignOverride", JsonValue.Create(text), CancellationToken.None)
+            .ConfigureAwait(true);
+        CallsignOverrideMessage = text.Length == 0
+            ? UiText.T("The aircraft's registration is used.")
+            : UiText.T("Callsign kept: ") + text;
+    }
+
+    /// <summary>Goes back to the registration the simulator reports.</summary>
+    [RelayCommand]
+    private async Task ClearCallsignOverrideAsync()
+    {
+        CallsignOverrideText = string.Empty;
+        await ApplyCallsignOverrideAsync().ConfigureAwait(true);
+    }
+
     /// <summary>The callsign of a local VFR flight; offered from the simulator's aircraft identifier.</summary>
     [ObservableProperty]
     private string _vfrCallsign = string.Empty;
@@ -293,6 +328,7 @@ public sealed partial class FlightPlanViewModel : ObservableObject, IRefreshable
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         _simBriefUserId = _simBriefOptions.UserId ?? string.Empty;
+        _callsignOverrideText = _sessionContext.CallsignOverride ?? string.Empty;
 
         RouteLegs = [];
         Warnings = [];

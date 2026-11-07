@@ -453,7 +453,9 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
         CancellationToken cancellationToken)
     {
         AtcSession current = _sessionContext.CurrentSession;
-        string? callsign = !string.IsNullOrWhiteSpace(current.AircraftState.AtcIdentifier)
+        string? callsign = _sessionContext.CallsignOverride is { Length: > 0 } imposed
+            ? imposed
+            : !string.IsNullOrWhiteSpace(current.AircraftState.AtcIdentifier)
             ? current.AircraftState.AtcIdentifier
             : current.FlightPlan is { SourceIdentifier: not ("Sample" or "Mock") } existing
                 ? existing.Callsign.Original

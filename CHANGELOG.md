@@ -5,6 +5,12 @@ public releases.
 
 ## Unreleased
 
+### Added
+
+- **A callsign of your own**: the Flight Plan page has a "Callsign" card. The callsign given there is kept and used for every
+  plan from the simulator or from SimBrief, and for the plan in use at once; before, the plans from the simulator always took
+  the aircraft's registration (F-HAST). "Use the registration" goes back to the old behaviour.
+
 ## 0.30.6 - 2026-11-07
 
 ### Fixed

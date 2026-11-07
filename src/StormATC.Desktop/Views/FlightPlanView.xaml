@@ -17,6 +17,29 @@
   <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,24">
     <StackPanel>
 
+      <!-- The callsign, whatever the registration. -->
+      <Border Style="{StaticResource CardStyle}">
+        <StackPanel>
+          <TextBlock Text="Callsign" Style="{StaticResource SectionHeaderStyle}" />
+          <TextBlock Text="StormATC uses the registration of the aircraft as callsign. Give another one (an airline's, for example) and it is used for every plan, from the simulator or from SimBrief."
+                     Style="{StaticResource SecondaryTextStyle}"
+                     TextWrapping="Wrap"
+                     Margin="0,0,0,10" />
+          <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+            <TextBox Text="{Binding CallsignOverrideText, UpdateSourceTrigger=PropertyChanged}"
+                     Width="200"
+                     Margin="0,0,10,0" />
+            <Button Content="Use this callsign"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Margin="0,0,10,0"
+                    Command="{Binding ApplyCallsignOverrideCommand}" />
+            <Button Content="Use the registration"
+                    Command="{Binding ClearCallsignOverrideCommand}" />
+          </StackPanel>
+          <TextBlock Text="{Binding CallsignOverrideMessage}" Style="{StaticResource SecondaryTextStyle}" />
+        </StackPanel>
+      </Border>
+
       <!-- A local VFR flight, with no flight plan. -->
       <Border Style="{StaticResource CardStyle}">
         <StackPanel>
