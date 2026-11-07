@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.30.5 - 2026-11-07
+
 ### Fixed
 
 - **Flight plan from the simulator**: the route filed with ATC or sent to the avionics can come back stripped to a few legs
