@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.30.6 - 2026-11-07
+
 ### Fixed
 
 - **Flight plan from the simulator**: a change of the cruise altitude (FL450 to FL230, for instance) was ignored, because
