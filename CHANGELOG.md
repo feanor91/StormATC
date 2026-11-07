@@ -5,6 +5,14 @@ public releases.
 
 ## Unreleased
 
+### Fixed
+
+- **Flight plan from the simulator**: the route filed with ATC or sent to the avionics can come back stripped to a few legs
+  ("FINAL PROJ") while the EFB holds the whole plan; StormATC then used the stripped one, and "Import from the simulator"
+  imported it again. The EFB's route is now used when it has more points between the same aerodromes, and the import button
+  takes the EFB's route first. The routes as the simulator gives them are written to the log, to help diagnose a plan that
+  does not arrive.
+
 ## 0.30.4 - 2026-11-05
 
 ### Added

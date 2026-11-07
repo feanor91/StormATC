@@ -46,6 +46,7 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
     private readonly IApproachProcedureSource? _approaches;
     private string? _lastAnnouncedFile;
     private SimFlightPlan? _lastRoute;
+    private readonly Dictionary<string, SimFlightPlan> _routesBySource = new(StringComparer.Ordinal);
     private readonly SemaphoreSlim _importGate = new(1, 1);
     private (string File, DateTime Written)? _lastLoadedPlan;
 
@@ -126,6 +127,7 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
         if (e.State != SimulatorConnectionState.Connected)
         {
             _lastRoute = null;
+            _routesBySource.Clear();
         }
 
         // The scripted aircraft also "connects": only the real simulator has a flight to read.
@@ -172,6 +174,7 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
             return false;
         }
 
+        _routesBySource[source] = plan;
         _lastRoute = plan;
         _logger.LogInformation(
             "StormATC received the {Source} route {Departure} to {Destination} ({Rules}) from the simulator{Initial}.",
@@ -184,7 +187,12 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
             "The {Source} route's points: {Points}.",
             source,
             plan.Waypoints.Count == 0 ? "none" : string.Join(" ", plan.Waypoints.Select(point => point.Identifier)));
-        _logger.LogDebug("The {Source} route as the simulator gave it: {Route}", source, routeJson.Length > 3000 ? routeJson[..3000] : routeJson);
+        _logger.LogInformation("The {Source} route as the simulator gave it: {Route}", source, routeJson.Length > 4000 ? routeJson[..4000] : routeJson);
+
+        // The route filed with ATC or sent to the avionics can come back stripped (only the last legs of an approach) while
+        // the EFB still holds the whole plan between the same aerodromes: the fuller plan is the pilot's.
+        plan = Fullest(source, plan);
+        _lastRoute = plan;
 
         if (!_options.CurrentValue.Enabled || source == SimRouteSources.Efb)
         {
@@ -203,6 +211,26 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
         return result.Imported;
     }
 
+    /// <summary>The EFB's route when it covers the same aerodromes with more points than the route just received.</summary>
+    private SimFlightPlan Fullest(string source, SimFlightPlan plan)
+    {
+        if (source != SimRouteSources.Efb
+            && _routesBySource.TryGetValue(SimRouteSources.Efb, out SimFlightPlan? efb)
+            && string.Equals(efb.DepartureIcao, plan.DepartureIcao, StringComparison.OrdinalIgnoreCase)
+            && string.Equals(efb.DestinationIcao, plan.DestinationIcao, StringComparison.OrdinalIgnoreCase)
+            && efb.Waypoints.Count > plan.Waypoints.Count)
+        {
+            _logger.LogInformation(
+                "The {Source} route has {Few} points and the EFB's has {Many}: the EFB's route is used.",
+                source,
+                plan.Waypoints.Count,
+                efb.Waypoints.Count);
+            return efb;
+        }
+
+        return plan;
+    }
+
     /// <summary>
     /// Imports the plan the simulator's panel sent last, or else the plan the simulator announced
     /// last, or else the newest plan file it wrote.
@@ -210,9 +238,11 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
     /// <param name="cancellationToken">Cancellation token.</param>
     public async Task<SimFlightPlanImportResult> ImportLatestAsync(CancellationToken cancellationToken)
     {
-        if (_lastRoute is not null)
+        // The plan the pilot sees in the EFB comes first; else the last route the panel read.
+        SimFlightPlan? route = _routesBySource.TryGetValue(SimRouteSources.Efb, out SimFlightPlan? efbRoute) ? efbRoute : _lastRoute;
+        if (route is not null)
         {
-            return await ImportPlanAsync(_lastRoute, "the simulator's panel", force: true, cancellationToken).ConfigureAwait(false);
+            return await ImportPlanAsync(route, "the simulator's panel", force: true, cancellationToken).ConfigureAwait(false);
         }
 
         // The folders where the simulator writes plans, then the places a plan saved from the EFB
