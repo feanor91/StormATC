@@ -5,6 +5,8 @@ public releases.
 
 ## Unreleased
 
+## 0.31.0 - 2026-11-07
+
 ### Added
 
 - **A callsign of your own**: the Flight Plan page has a "Callsign" card. The callsign given there is kept and used for every
