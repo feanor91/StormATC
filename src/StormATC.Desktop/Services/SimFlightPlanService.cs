@@ -238,11 +238,9 @@ public sealed class SimFlightPlanService : IDisposable, ISimRouteReceiver
     /// <param name="cancellationToken">Cancellation token.</param>
     public async Task<SimFlightPlanImportResult> ImportLatestAsync(CancellationToken cancellationToken)
     {
-        // The plan the pilot sees in the EFB comes first; else the last route the panel read.
-        SimFlightPlan? route = _routesBySource.TryGetValue(SimRouteSources.Efb, out SimFlightPlan? efbRoute) ? efbRoute : _lastRoute;
-        if (route is not null)
+        if (_lastRoute is not null)
         {
-            return await ImportPlanAsync(route, "the simulator's panel", force: true, cancellationToken).ConfigureAwait(false);
+            return await ImportPlanAsync(_lastRoute, "the simulator's panel", force: true, cancellationToken).ConfigureAwait(false);
         }
 
         // The folders where the simulator writes plans, then the places a plan saved from the EFB

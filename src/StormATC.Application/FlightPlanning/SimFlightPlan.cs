@@ -319,6 +319,7 @@ public static class SimFlightPlanComparison
             && current.StandardInstrumentDeparture == plan.StandardInstrumentDeparture
             && current.StandardTerminalArrival == plan.StandardTerminalArrival
             && current.Approach == plan.Approach
+            && current.CruiseAltitude?.Feet == plan.CruiseAltitude?.Feet
             && current.Callsign.Normalized == plan.Callsign.Normalized;
     }
 }

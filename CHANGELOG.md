@@ -5,6 +5,12 @@ public releases.
 
 ## Unreleased
 
+### Fixed
+
+- **Flight plan from the simulator**: a change of the cruise altitude (FL450 to FL230, for instance) was ignored, because
+  the plan was taken for the one already in use; the cruise altitude is now compared too. "Import from the simulator" takes
+  the last route the panel read again (the EFB's own route can be an old plan).
+
 ## 0.30.5 - 2026-11-07
 
 ### Fixed
